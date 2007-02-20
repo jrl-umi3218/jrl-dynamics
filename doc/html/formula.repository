@@ -1,0 +1,33 @@
+\form#0:$ q $
+\form#1:\[ q = \\ \left( \begin{matrix} {\bf c} \\ {\bf o} \\ q_0 \\ ... \\ q_{n-1}\\ \end{matrix} \right) \]
+\form#2:$ {\bf c} $
+\form#3:$ {\bf o}$ its orientation using the $
+\form#4:$ convention. $
+\form#5:$ is the value for each of the $
+\form#6:\[ \dot{q} = \\ \left( \begin{matrix} {\bf v} \\ {\bf w} \\ \dot{q}_0 \\ ... \\ \dot{q}_{n-1}\\ \end{matrix} \right) \]
+\form#7:\[ \dot{q} = \\ \left( \begin{matrix} {\bf V} \\ {\bf W} \\ \ddot{q}_0 \\ ... \\ \ddot{q}_{n-1}\\ \end{matrix} \right) \]
+\form#8:$ x y z $
+\form#9:$ \theta $
+\form#10:$ \psi $
+\form#11:$ \phi $
+\form#12:$ {\bf D} \equiv \left[ \begin{matrix} cos \; \phi & sin \; \phi & 0 \\ -sin \; \phi & cos \; \phi & 0 \\ 0 & 0 & 1 \\ \end{matrix} \right] $
+\form#13:$ {\bf C} \equiv \left[ \begin{matrix} cos \; \theta & 0 & -sin \; \theta \\ 0 & 1 & 0 \\ sin \; \theta & 0 & cos \; \theta \\ \end{matrix} \right] $
+\form#14:$ {\bf B} \equiv \left[ \begin{matrix} 1 & 0 & 0 \\ 0 & cos \; \psi & sin \; \psi \\ 0 & -sin \; \psi & cos \; \psi \\ \end{matrix} \right] $
+\form#15:$ {\bf A} = {\bf B} {\bf C} {\bf D} $
+\form#16:${\bf q}$
+\form#17:${\bf \dot{q}}$
+\form#18:${\bf \ddot{q}}$
+\form#19:${\bf {q}}$
+\form#20:$ R= \left[ \begin{matrix} r_{0} & r_{1} & r_{2} & r_{3} \\ r_{4} & r_{5} & r_{6} & r_{7} \\ r_{8} & r_{9} & r_{10} & r_{11} \\ r_{12} & r_{13} & r_{14} & r_{15} \\ \end{matrix} \right] $
+\form#21:$pose(i) = r_{i}$
+\form#22:$({\bf v}, {\bf \omega})$
+\form#23:$({\bf q},{\bf \dot{q}})$
+\form#24:${\bf v}$
+\form#25:${\bf \omega}$
+\form#26:$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})$
+\form#27:$J \in {\bf R}^{6\times n_{dof}}$
+\form#28:\[ J = \left(\begin{array}{llll} {\bf v_1} & {\bf v_2} & \cdots & {\bf v_{n_{dof}}} \\ {\bf \omega_1} & {\bf \omega_2} & \cdots & {\bf \omega_{n_{dof}}} \end{array}\right) \]
+\form#29:${\bf v_i}$
+\form#30:${\bf \omega_i}$
+\form#31:$q_i$
+\form#32:\[ \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}} \]
