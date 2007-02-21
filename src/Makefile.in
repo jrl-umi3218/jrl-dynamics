@@ -57,18 +57,16 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libjrlCIRdynamicsJRLJapan_la_LIBADD =
-am_libjrlCIRdynamicsJRLJapan_la_OBJECTS =  \
-	libjrlCIRdynamicsJRLJapan_la-fileReader.lo \
-	libjrlCIRdynamicsJRLJapan_la-Joint.lo \
-	libjrlCIRdynamicsJRLJapan_la-Body.lo \
-	libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo \
-	libjrlCIRdynamicsJRLJapan_la-MultiBody.lo \
-	libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo \
-	libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo \
-	libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo
-libjrlCIRdynamicsJRLJapan_la_OBJECTS =  \
-	$(am_libjrlCIRdynamicsJRLJapan_la_OBJECTS)
+libdynamicsJRLJapan_la_LIBADD =
+am_libdynamicsJRLJapan_la_OBJECTS =  \
+	libdynamicsJRLJapan_la-fileReader.lo \
+	libdynamicsJRLJapan_la-Joint.lo libdynamicsJRLJapan_la-Body.lo \
+	libdynamicsJRLJapan_la-DynamicBody.lo \
+	libdynamicsJRLJapan_la-MultiBody.lo \
+	libdynamicsJRLJapan_la-DynamicMultiBody.lo \
+	libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo \
+	libdynamicsJRLJapan_la-HumanoidSpecificities.lo
+libdynamicsJRLJapan_la_OBJECTS = $(am_libdynamicsJRLJapan_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -80,8 +78,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libjrlCIRdynamicsJRLJapan_la_SOURCES)
-DIST_SOURCES = $(libjrlCIRdynamicsJRLJapan_la_SOURCES)
+SOURCES = $(libdynamicsJRLJapan_la_SOURCES)
+DIST_SOURCES = $(libdynamicsJRLJapan_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -186,8 +184,8 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-lib_LTLIBRARIES = libjrlCIRdynamicsJRLJapan.la
-libjrlCIRdynamicsJRLJapan_la_SOURCES = \
+lib_LTLIBRARIES = libdynamicsJRLJapan.la
+libdynamicsJRLJapan_la_SOURCES = \
 	fileReader.cpp \
 	Joint.cpp \
 	Body.cpp \
@@ -197,9 +195,9 @@ libjrlCIRdynamicsJRLJapan_la_SOURCES = \
 	HumanoidDynamicMultiBody.cpp \
 	HumanoidSpecificities.cpp 
 
-libjrlCIRdynamicsJRLJapan_la_LDFLAGS = 
-libjrlCIRdynamicsJRLJapan_la_CPPFLAGS = \
-	-I$(srcdir)/../include/jrlCIRdynamicsJRLJapan/
+libdynamicsJRLJapan_la_LDFLAGS = 
+libdynamicsJRLJapan_la_CPPFLAGS = \
+	-I$(srcdir)/../include/dynamicsJRLJapan/
 
 all: all-am
 
@@ -261,8 +259,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libjrlCIRdynamicsJRLJapan.la: $(libjrlCIRdynamicsJRLJapan_la_OBJECTS) $(libjrlCIRdynamicsJRLJapan_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libjrlCIRdynamicsJRLJapan_la_LDFLAGS) $(libjrlCIRdynamicsJRLJapan_la_OBJECTS) $(libjrlCIRdynamicsJRLJapan_la_LIBADD) $(LIBS)
+libdynamicsJRLJapan.la: $(libdynamicsJRLJapan_la_OBJECTS) $(libdynamicsJRLJapan_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(libdynamicsJRLJapan_la_LDFLAGS) $(libdynamicsJRLJapan_la_OBJECTS) $(libdynamicsJRLJapan_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -270,14 +268,14 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Body.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicBody.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Joint.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-MultiBody.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-fileReader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-Body.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-DynamicBody.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-DynamicMultiBody.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidSpecificities.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-Joint.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-MultiBody.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdynamicsJRLJapan_la-fileReader.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -300,61 +298,61 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-libjrlCIRdynamicsJRLJapan_la-fileReader.lo: fileReader.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-fileReader.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-fileReader.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-fileReader.lo `test -f 'fileReader.cpp' || echo '$(srcdir)/'`fileReader.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-fileReader.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-fileReader.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-fileReader.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fileReader.cpp' object='libjrlCIRdynamicsJRLJapan_la-fileReader.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-fileReader.lo: fileReader.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-fileReader.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-fileReader.Tpo" -c -o libdynamicsJRLJapan_la-fileReader.lo `test -f 'fileReader.cpp' || echo '$(srcdir)/'`fileReader.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-fileReader.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-fileReader.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-fileReader.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fileReader.cpp' object='libdynamicsJRLJapan_la-fileReader.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-fileReader.lo `test -f 'fileReader.cpp' || echo '$(srcdir)/'`fileReader.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-fileReader.lo `test -f 'fileReader.cpp' || echo '$(srcdir)/'`fileReader.cpp
 
-libjrlCIRdynamicsJRLJapan_la-Joint.lo: Joint.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-Joint.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Joint.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-Joint.lo `test -f 'Joint.cpp' || echo '$(srcdir)/'`Joint.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Joint.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Joint.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Joint.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Joint.cpp' object='libjrlCIRdynamicsJRLJapan_la-Joint.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-Joint.lo: Joint.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-Joint.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-Joint.Tpo" -c -o libdynamicsJRLJapan_la-Joint.lo `test -f 'Joint.cpp' || echo '$(srcdir)/'`Joint.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-Joint.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-Joint.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-Joint.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Joint.cpp' object='libdynamicsJRLJapan_la-Joint.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-Joint.lo `test -f 'Joint.cpp' || echo '$(srcdir)/'`Joint.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-Joint.lo `test -f 'Joint.cpp' || echo '$(srcdir)/'`Joint.cpp
 
-libjrlCIRdynamicsJRLJapan_la-Body.lo: Body.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-Body.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Body.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-Body.lo `test -f 'Body.cpp' || echo '$(srcdir)/'`Body.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Body.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Body.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-Body.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Body.cpp' object='libjrlCIRdynamicsJRLJapan_la-Body.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-Body.lo: Body.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-Body.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-Body.Tpo" -c -o libdynamicsJRLJapan_la-Body.lo `test -f 'Body.cpp' || echo '$(srcdir)/'`Body.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-Body.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-Body.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-Body.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Body.cpp' object='libdynamicsJRLJapan_la-Body.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-Body.lo `test -f 'Body.cpp' || echo '$(srcdir)/'`Body.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-Body.lo `test -f 'Body.cpp' || echo '$(srcdir)/'`Body.cpp
 
-libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo: DynamicBody.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicBody.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo `test -f 'DynamicBody.cpp' || echo '$(srcdir)/'`DynamicBody.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicBody.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicBody.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicBody.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicBody.cpp' object='libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-DynamicBody.lo: DynamicBody.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-DynamicBody.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicBody.Tpo" -c -o libdynamicsJRLJapan_la-DynamicBody.lo `test -f 'DynamicBody.cpp' || echo '$(srcdir)/'`DynamicBody.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicBody.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicBody.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicBody.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicBody.cpp' object='libdynamicsJRLJapan_la-DynamicBody.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-DynamicBody.lo `test -f 'DynamicBody.cpp' || echo '$(srcdir)/'`DynamicBody.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-DynamicBody.lo `test -f 'DynamicBody.cpp' || echo '$(srcdir)/'`DynamicBody.cpp
 
-libjrlCIRdynamicsJRLJapan_la-MultiBody.lo: MultiBody.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-MultiBody.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-MultiBody.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-MultiBody.lo `test -f 'MultiBody.cpp' || echo '$(srcdir)/'`MultiBody.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-MultiBody.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-MultiBody.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-MultiBody.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MultiBody.cpp' object='libjrlCIRdynamicsJRLJapan_la-MultiBody.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-MultiBody.lo: MultiBody.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-MultiBody.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-MultiBody.Tpo" -c -o libdynamicsJRLJapan_la-MultiBody.lo `test -f 'MultiBody.cpp' || echo '$(srcdir)/'`MultiBody.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-MultiBody.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-MultiBody.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-MultiBody.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MultiBody.cpp' object='libdynamicsJRLJapan_la-MultiBody.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-MultiBody.lo `test -f 'MultiBody.cpp' || echo '$(srcdir)/'`MultiBody.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-MultiBody.lo `test -f 'MultiBody.cpp' || echo '$(srcdir)/'`MultiBody.cpp
 
-libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo: DynamicMultiBody.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo `test -f 'DynamicMultiBody.cpp' || echo '$(srcdir)/'`DynamicMultiBody.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicMultiBody.cpp' object='libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-DynamicMultiBody.lo: DynamicMultiBody.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-DynamicMultiBody.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicMultiBody.Tpo" -c -o libdynamicsJRLJapan_la-DynamicMultiBody.lo `test -f 'DynamicMultiBody.cpp' || echo '$(srcdir)/'`DynamicMultiBody.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicMultiBody.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicMultiBody.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-DynamicMultiBody.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicMultiBody.cpp' object='libdynamicsJRLJapan_la-DynamicMultiBody.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-DynamicMultiBody.lo `test -f 'DynamicMultiBody.cpp' || echo '$(srcdir)/'`DynamicMultiBody.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-DynamicMultiBody.lo `test -f 'DynamicMultiBody.cpp' || echo '$(srcdir)/'`DynamicMultiBody.cpp
 
-libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo: HumanoidDynamicMultiBody.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo `test -f 'HumanoidDynamicMultiBody.cpp' || echo '$(srcdir)/'`HumanoidDynamicMultiBody.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HumanoidDynamicMultiBody.cpp' object='libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo: HumanoidDynamicMultiBody.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo" -c -o libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo `test -f 'HumanoidDynamicMultiBody.cpp' || echo '$(srcdir)/'`HumanoidDynamicMultiBody.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HumanoidDynamicMultiBody.cpp' object='libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo `test -f 'HumanoidDynamicMultiBody.cpp' || echo '$(srcdir)/'`HumanoidDynamicMultiBody.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-HumanoidDynamicMultiBody.lo `test -f 'HumanoidDynamicMultiBody.cpp' || echo '$(srcdir)/'`HumanoidDynamicMultiBody.cpp
 
-libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo: HumanoidSpecificities.cpp
-@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo -MD -MP -MF "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.Tpo" -c -o libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo `test -f 'HumanoidSpecificities.cpp' || echo '$(srcdir)/'`HumanoidSpecificities.cpp; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.Tpo" "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.Plo"; else rm -f "$(DEPDIR)/libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HumanoidSpecificities.cpp' object='libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo' libtool=yes @AMDEPBACKSLASH@
+libdynamicsJRLJapan_la-HumanoidSpecificities.lo: HumanoidSpecificities.cpp
+@am__fastdepCXX_TRUE@	if $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libdynamicsJRLJapan_la-HumanoidSpecificities.lo -MD -MP -MF "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidSpecificities.Tpo" -c -o libdynamicsJRLJapan_la-HumanoidSpecificities.lo `test -f 'HumanoidSpecificities.cpp' || echo '$(srcdir)/'`HumanoidSpecificities.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidSpecificities.Tpo" "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidSpecificities.Plo"; else rm -f "$(DEPDIR)/libdynamicsJRLJapan_la-HumanoidSpecificities.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HumanoidSpecificities.cpp' object='libdynamicsJRLJapan_la-HumanoidSpecificities.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libjrlCIRdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libjrlCIRdynamicsJRLJapan_la-HumanoidSpecificities.lo `test -f 'HumanoidSpecificities.cpp' || echo '$(srcdir)/'`HumanoidSpecificities.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libdynamicsJRLJapan_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libdynamicsJRLJapan_la-HumanoidSpecificities.lo `test -f 'HumanoidSpecificities.cpp' || echo '$(srcdir)/'`HumanoidSpecificities.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo

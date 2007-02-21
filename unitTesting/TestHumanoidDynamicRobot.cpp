@@ -1,7 +1,7 @@
 #include <string>
 
-#include <jrlCIRdynamicsJRLJapan/Joint.h>
-#include <jrlCIRdynamicsJRLJapan/HumanoidDynamicMultiBody.h>
+#include <dynamicsJRLJapan/Joint.h>
+#include <dynamicsJRLJapan/HumanoidDynamicMultiBody.h>
 
 using namespace std;
 using namespace jrlCIRdynamicsJRLJapan;

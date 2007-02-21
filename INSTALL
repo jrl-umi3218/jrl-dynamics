@@ -11,3 +11,7 @@ cd build
 ../configure [OPTIONS]
 make 
 make install
+
+Make sure that you have specified a matrix library, and that you gave
+the correct path for the MatrixAbstractLayer:
+./configure --with-boost=/usr/include/boost --with-boost-sandbox=/usr/include/boost-sandbox CXX=g++-3.3 CC=gcc-3.3 --with-lapack=/usr/lib CXXFLAGS=-O3 CFLAGS=-O3 --with-MAL=/home/stasse/src/OpenHRP/JRL/ --prefix=/home/stasse/src/OpenHRP/JRL/

@@ -19231,7 +19231,7 @@ fi
 CXXFLAGS="${CXXFLAGS} -D_DEFAULT_MATRIX3x3_ -D_DEFAULT_VECTOR3D_"
 LDFLAGS="${LDFLAGS} -llapack"
 
-ac_config_files="$ac_config_files jrlCIRdynamicsJRLJapan.pc Makefile include/jrlCIRdynamicsJRLJapan/Makefile src/Makefile doc/Makefile doc/package.dox unitTesting/Makefile"
+ac_config_files="$ac_config_files dynamicsJRLJapan.pc Makefile include/dynamicsJRLJapan/Makefile src/Makefile doc/Makefile doc/package.dox unitTesting/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -19832,9 +19832,9 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
-    "jrlCIRdynamicsJRLJapan.pc") CONFIG_FILES="$CONFIG_FILES jrlCIRdynamicsJRLJapan.pc" ;;
+    "dynamicsJRLJapan.pc") CONFIG_FILES="$CONFIG_FILES dynamicsJRLJapan.pc" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "include/jrlCIRdynamicsJRLJapan/Makefile") CONFIG_FILES="$CONFIG_FILES include/jrlCIRdynamicsJRLJapan/Makefile" ;;
+    "include/dynamicsJRLJapan/Makefile") CONFIG_FILES="$CONFIG_FILES include/dynamicsJRLJapan/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
     "doc/package.dox") CONFIG_FILES="$CONFIG_FILES doc/package.dox" ;;

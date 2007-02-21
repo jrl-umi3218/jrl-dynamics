@@ -4,10 +4,10 @@
 
 SUBDIRS = \
 	src \
-	include/jrlCIRdynamicsJRLJapan \
+	include/dynamicsJRLJapan \
 	doc \
 	unitTesting
 
-jrlCIRdynamicsJRLJapandir = $(libdir)/pkgconfig
-jrlCIRdynamicsJRLJapan_DATA = jrlCIRdynamicsJRLJapan.pc
+dynamicsJRLJapandir = $(libdir)/pkgconfig
+dynamicsJRLJapan_DATA = dynamicsJRLJapan.pc
 

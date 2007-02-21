@@ -2,8 +2,8 @@
 #  Copyright 
 # 
 
-lib_LTLIBRARIES = libjrlCIRdynamicsJRLJapan.la
-libjrlCIRdynamicsJRLJapan_la_SOURCES = \
+lib_LTLIBRARIES = libdynamicsJRLJapan.la
+libdynamicsJRLJapan_la_SOURCES = \
 	fileReader.cpp \
 	Joint.cpp \
 	Body.cpp \
@@ -13,7 +13,7 @@ libjrlCIRdynamicsJRLJapan_la_SOURCES = \
 	HumanoidDynamicMultiBody.cpp \
 	HumanoidSpecificities.cpp 
 
-libjrlCIRdynamicsJRLJapan_la_LDFLAGS = 
+libdynamicsJRLJapan_la_LDFLAGS = 
 
-libjrlCIRdynamicsJRLJapan_la_CPPFLAGS = \
-	-I$(srcdir)/../include/jrlCIRdynamicsJRLJapan/
+libdynamicsJRLJapan_la_CPPFLAGS = \
+	-I$(srcdir)/../include/dynamicsJRLJapan/

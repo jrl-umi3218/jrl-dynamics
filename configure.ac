@@ -50,9 +50,9 @@ CXXFLAGS="${CXXFLAGS} -D_DEFAULT_MATRIX3x3_ -D_DEFAULT_VECTOR3D_"
 LDFLAGS="${LDFLAGS} -llapack"
 
 AC_OUTPUT(
-	jrlCIRdynamicsJRLJapan.pc
+	dynamicsJRLJapan.pc
 	Makefile
-	include/jrlCIRdynamicsJRLJapan/Makefile
+	include/dynamicsJRLJapan/Makefile
 	src/Makefile
 	doc/Makefile
 	doc/package.dox
