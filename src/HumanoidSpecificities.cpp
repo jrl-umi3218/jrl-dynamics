@@ -21,7 +21,7 @@
 
 #define ODEBUG6(x,y)
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 HumanoidSpecificities::HumanoidSpecificities()
 {

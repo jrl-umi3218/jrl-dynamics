@@ -1,6 +1,6 @@
 #include "fileReader.h"
 
-namespace jrlCIRdynamicsJRLJapan
+namespace dynamicsJRLJapan
 {
 
 // Search for string

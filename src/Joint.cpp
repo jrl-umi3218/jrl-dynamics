@@ -18,7 +18,7 @@
 #define ODEBUG4(x,y)
 #endif
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
 	     float lquantite, MAL_S4x4_MATRIX(,double) & lpose):

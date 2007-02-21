@@ -41,7 +41,7 @@
 
 #include <DynamicBody.h>
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 DynamicBody::DynamicBody():Body()
 {

@@ -42,7 +42,7 @@
 
 #include "Body.h"
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 /**************************************************/
 /* Implementation of constructors and destructors */

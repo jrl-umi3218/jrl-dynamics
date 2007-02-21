@@ -70,7 +70,7 @@
 #define ODEBUG4(x,y)
 #endif
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 DynamicMultiBody::DynamicMultiBody()
 {

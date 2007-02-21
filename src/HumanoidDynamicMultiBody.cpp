@@ -22,7 +22,7 @@
 
 #define ODEBUG3(x)  std::cout << x << endl;
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 
 
@@ -153,7 +153,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   std::vector<int> JointsForWaist = m_HS->GetWaistJoints();
   if (JointsForWaist.size()==1)
     m_WaistJoint = m_SDMB->GetJointFromVRMLID(JointsForWaist[0]);
-
+  
   
 }
 

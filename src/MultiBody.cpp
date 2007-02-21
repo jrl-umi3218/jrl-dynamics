@@ -40,11 +40,11 @@
 */
 #include "MultiBody.h"
 
-using namespace jrlCIRdynamicsJRLJapan;
+using namespace dynamicsJRLJapan;
 
 // surcharge operateur
-bool jrlCIRdynamicsJRLJapan::operator==(const jrlCIRdynamicsJRLJapan::appariement a1, 
-				        const jrlCIRdynamicsJRLJapan::appariement a2) 
+bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::appariement a1, 
+				        const dynamicsJRLJapan::appariement a2) 
 {
   return (a1.corps==a2.corps);
 }
