@@ -16,4 +16,4 @@ libdynamicsJRLJapan_la_SOURCES = \
 libdynamicsJRLJapan_la_LDFLAGS = 
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
-	-I$(srcdir)/../include/dynamicsJRLJapan/
+	-I$(srcdir)/../include/robotDynamicsJRLJapan/

@@ -25,6 +25,13 @@
 using namespace dynamicsJRLJapan;
 
 
+HumanoidDynamicMultiBody::HumanoidDynamicMultiBody()
+{
+
+  string aFileName = "HumanoidSpecificities.xml";
+  DynamicMultiBody *aDMB = new DynamicMultiBody();
+  m_DMB = aDMB;
+}
 
 HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(CjrlDynamicRobot<MAL_MATRIX(,double), 
 						   MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
@@ -32,7 +39,11 @@ HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(CjrlDynamicRobot<MAL_MATRIX(,
 						   string aFileNameForHumanoidSpecificities)
 {
   m_DMB = aDMB;
+  SetHumanoidSpecificitiesFile(aFileNameForHumanoidSpecificities);
+}
 
+void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameForHumanoidSpecificities)
+{
   string aHumanoidName="HRP2JRL";
   m_HS = new HumanoidSpecificities();
 

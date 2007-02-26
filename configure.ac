@@ -52,7 +52,7 @@ LDFLAGS="${LDFLAGS} -llapack"
 AC_OUTPUT(
 	dynamicsJRLJapan.pc
 	Makefile
-	include/dynamicsJRLJapan/Makefile
+	include/robotDynamicsJRLJapan/Makefile
 	src/Makefile
 	doc/Makefile
 	doc/package.dox

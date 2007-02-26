@@ -4,7 +4,7 @@
 
 SUBDIRS = \
 	src \
-	include/dynamicsJRLJapan \
+	include/robotDynamicsJRLJapan \
 	doc \
 	unitTesting
 

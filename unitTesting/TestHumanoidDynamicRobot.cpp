@@ -1,8 +1,7 @@
 #include <string>
-
-#include <dynamicsJRLJapan/Joint.h>
-#include <dynamicsJRLJapan/HumanoidDynamicMultiBody.h>
-
+#include <robotDynamicsJRLJapan/Joint.h>
+#include <robotDynamicsJRLJapan/HumanoidDynamicMultiBody.h>
+#include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
 using namespace std;
 using namespace dynamicsJRLJapan;
 
@@ -42,6 +41,7 @@ void RecursiveDisplayOfJoints(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,do
   cout << " Joint from root to here:" << endl;
   std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
     MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+
   cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
   for(int i=0;i<JointsFromRootToHere.size();i++)
     {
@@ -96,13 +96,46 @@ int main(int argc, char *argv[])
       exit(-1);
     }	
 
-  string aFileName = argv[3];
-  DynamicMultiBody * aDMB = new DynamicMultiBody();
+  DynamicMultiBody * aDMB=0;
+  string aSpecificitiesFileName = argv[3];
   string aPath=argv[1];
   string aName=argv[2];
-  aDMB->parserVRML(aPath,aName,"");
-  HumanoidDynamicMultiBody *aHDMB = new HumanoidDynamicMultiBody(aDMB,aFileName);
 
+#if 0
+  aDMB = new DynamicMultiBody();
+  aDMB->parserVRML(aPath,aName,"");
+  HumanoidDynamicMultiBody *aHDMB = new HumanoidDynamicMultiBody(aDMB,aSpecificitiesFileName);
+#else
+  CjrlRobotDynamicsObjectConstructor<
+  dynamicsJRLJapan::DynamicMultiBody, 
+    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
+    dynamicsJRLJapan::JointFreeflyer, 
+    dynamicsJRLJapan::JointRotation,
+    dynamicsJRLJapan::JointTranslation,
+    dynamicsJRLJapan::Body,
+    MAL_MATRIX(,double),
+    MAL_S4x4_MATRIX(,double),
+    MAL_S3x3_MATRIX(,double),
+    MAL_VECTOR(,double),
+    MAL_S3_VECTOR(,double)> aRobotDynamicsObjectConstructor;
+  
+  CjrlHumanoidDynamicRobot<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double), 
+    MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> *
+    aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  
+  HumanoidDynamicMultiBody *aHDMB;
+  aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody *)aHDR;
+
+  if (aHDMB==0)
+    { 
+      cerr<< "Dynamic cast on HDR failed " << endl;
+      exit(-1);
+    }
+  aDMB = (DynamicMultiBody *) aHDMB->getDynamicMultiBody();
+  aDMB->parserVRML(aPath,aName,"");
+  aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
+#endif
+  
   // Display tree of the joints.
   CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
     MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * rootJoint = aHDMB->rootJoint();  
@@ -175,6 +208,12 @@ int main(int argc, char *argv[])
 
   cout << "Name of the WAIST joint :" << aJoint << endl;
   cout << aJoint->getName() << endl;
+
+  aHDMB->computeJacobianCenterOfMass();
+  cout << "Value of the CoM's Jacobian:" << endl
+       << aHDMB->jacobianCenterOfMass() << endl;
+
+  
   delete aDMB;
   delete aHDMB;
   

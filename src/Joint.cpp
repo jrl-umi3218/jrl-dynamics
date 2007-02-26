@@ -71,6 +71,11 @@ Joint::Joint(const Joint &r)
 
 }
 
+Joint::Joint()
+{
+  m_type = FREE_JOINT;
+}
+
 Joint::~Joint() 
 {
 }
@@ -222,27 +227,59 @@ void Joint::computeJacobianJointWrtConfig()
       MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
 
       unsigned int lcol = aJoint->stateVectorPosition();
-
+      ODEBUG3("Joint: " << aJoint->getName() << " " << lcol);
       dp = pn - aBody->p;
 
       MAL_S3_VECTOR(,double) lv;
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
       
-      if (aJoint->type()==Joint::PRISMATIC_JOINT)
+      switch (aJoint->type())
 	{
+	  
+	case Joint::REVOLUTE_JOINT:
 	  for(int j=0;j<3;j++)
 	    {
 	      m_J(j,lcol) =  lv[j];
 	      m_J(j+3,lcol) = aRa[j+3];
 	    }
-	}
-      else 
-	{
+	  break;
+	case Joint::PRISMATIC_JOINT:
 	  for(int j=0;j<3;j++)
 	    {
 	      m_J(j,lcol) =  aRa[j];
 	      m_J(j+3,lcol) = 0;
 	    }
+	  break;
+	case Joint::FREE_JOINT:
+	  //J =  I M = J11 J12
+	  //     0 I   J21 J22
+	  //
+	  // with M = d(w x dp)/dw
+	  //
+	  for(int j=0;j<3;j++)
+	    {
+	      for(int k=0;k<3;k++)
+		{
+		  // Computation of J11, J12 and J21
+		  if (j!=k)
+		    {
+		      m_J(     j, lcol + k) =0.0;
+		      m_J( j + 3, lcol + k + 3) = 0.0;
+		    }
+		  else
+		    { 
+		      m_J(     j, lcol + k ) =1.0;
+		      m_J( j + 3, lcol + k + 3) = 1.0;
+		    }
+		  m_J(j+3,k) = 0.0;
+		
+		  // Compute M
+		  m_J( 0, lcol + 3 ) =      0; m_J( 0 , lcol + 1 ) =   dp(2); m_J( 0 , lcol + 2 ) = -dp(1);
+		  m_J( 1, lcol + 3 ) = -dp(2); m_J( 1 , lcol + 1 ) =      0 ; m_J( 1 , lcol + 2 ) =  dp(0);
+		  m_J( 2, lcol + 3 ) =  dp(1); m_J( 2 , lcol + 1 ) =  -dp(0); m_J( 2 , lcol + 2 ) =      0;
+		}
+	    }
+	  break;
 	}
     }
 }
@@ -358,4 +395,23 @@ void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelo
 {
   m_RigidVelocity.linearVelocity(aLinearVelocity);
   m_RigidVelocity.rotationVelocity(anAngularVelocity);
+}
+
+JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+{
+  type(Joint::FREE_JOINT);
+  pose(inInitialPosition);
+  
+}
+
+JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+{
+  type(Joint::REVOLUTE_JOINT);
+  pose(inInitialPosition);
+}
+
+JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+{
+  type(PRISMATIC_JOINT);
+  pose(inInitialPosition);
 }
