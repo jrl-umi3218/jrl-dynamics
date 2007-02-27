@@ -294,7 +294,14 @@ namespace dynamicsJRLJapan
        \brief Get the number of degrees of freedom of the joint.
     */
     unsigned int numberDof() const;
-    
+
+    /**
+       \brief Returns the rank of the Joint in the state vector.
+       If the Joint has several dimensions, it is the rank of the first dimension.
+    */
+    inline const unsigned int & rankInConfiguration() const
+      { return m_StateVectorPosition; }
+        
     
     /*! @} */
     
@@ -371,8 +378,9 @@ namespace dynamicsJRLJapan
     void SetFatherJoint(Joint *aFather);
 
     /*! Set the state vector position. */
-    inline unsigned int  stateVectorPosition()
+    inline const unsigned int & stateVectorPosition() const
       { return m_StateVectorPosition; }
+    
     
     inline void stateVectorPosition(unsigned aStateVectorPosition)
       { m_StateVectorPosition = aStateVectorPosition;}
