@@ -41,7 +41,7 @@ POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
 subdir = include/robotDynamicsJRLJapan
-DIST_COMMON = $(jrlCIRdynamicsJRLJapan_HEADERS) $(srcdir)/Makefile.am \
+DIST_COMMON = $(dynamicsJRLJapan_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -57,9 +57,9 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)"
-jrlCIRdynamicsJRLJapanHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(jrlCIRdynamicsJRLJapan_HEADERS)
+am__installdirs = "$(DESTDIR)$(dynamicsJRLJapandir)"
+dynamicsJRLJapanHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(dynamicsJRLJapan_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -164,9 +164,9 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-jrlCIRdynamicsJRLJapandir = ${prefix}/include/robotDynamicsJRLJapan
-jrlCIRdynamicsJRLJapan_HEADERS = \
-	jrlCIRdynamicsJRLJapan.h \
+dynamicsJRLJapandir = ${prefix}/include/robotDynamicsJRLJapan
+dynamicsJRLJapan_HEADERS = \
+	dynamicsJRLJapan.h \
 	fileReader.h \
 	Joint.h \
 	Body.h \
@@ -218,22 +218,22 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-jrlCIRdynamicsJRLJapanHEADERS: $(jrlCIRdynamicsJRLJapan_HEADERS)
+install-dynamicsJRLJapanHEADERS: $(dynamicsJRLJapan_HEADERS)
 	@$(NORMAL_INSTALL)
-	test -z "$(jrlCIRdynamicsJRLJapandir)" || $(mkdir_p) "$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)"
-	@list='$(jrlCIRdynamicsJRLJapan_HEADERS)'; for p in $$list; do \
+	test -z "$(dynamicsJRLJapandir)" || $(mkdir_p) "$(DESTDIR)$(dynamicsJRLJapandir)"
+	@list='$(dynamicsJRLJapan_HEADERS)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(jrlCIRdynamicsJRLJapanHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)/$$f'"; \
-	  $(jrlCIRdynamicsJRLJapanHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)/$$f"; \
+	  echo " $(dynamicsJRLJapanHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(dynamicsJRLJapandir)/$$f'"; \
+	  $(dynamicsJRLJapanHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(dynamicsJRLJapandir)/$$f"; \
 	done
 
-uninstall-jrlCIRdynamicsJRLJapanHEADERS:
+uninstall-dynamicsJRLJapanHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(jrlCIRdynamicsJRLJapan_HEADERS)'; for p in $$list; do \
+	@list='$(dynamicsJRLJapan_HEADERS)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(dynamicsJRLJapandir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(dynamicsJRLJapandir)/$$f"; \
 	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -315,7 +315,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(jrlCIRdynamicsJRLJapandir)"; do \
+	for dir in "$(DESTDIR)$(dynamicsJRLJapandir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -361,7 +361,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-jrlCIRdynamicsJRLJapanHEADERS
+install-data-am: install-dynamicsJRLJapanHEADERS
 
 install-exec-am:
 
@@ -387,20 +387,19 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am \
-	uninstall-jrlCIRdynamicsJRLJapanHEADERS
+uninstall-am: uninstall-dynamicsJRLJapanHEADERS uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool ctags distclean distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-jrlCIRdynamicsJRLJapanHEADERS \
-	install-man install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags uninstall uninstall-am uninstall-info-am \
-	uninstall-jrlCIRdynamicsJRLJapanHEADERS
+	install-data-am install-dynamicsJRLJapanHEADERS install-exec \
+	install-exec-am install-info install-info-am install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-dynamicsJRLJapanHEADERS \
+	uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -2,8 +2,8 @@
 #  Copyright 
 # 
 
-jrlCIRdynamicsJRLJapandir = @includedir@/robotDynamicsJRLJapan
-jrlCIRdynamicsJRLJapan_HEADERS = \
+dynamicsJRLJapandir = @includedir@/robotDynamicsJRLJapan
+dynamicsJRLJapan_HEADERS = \
 	dynamicsJRLJapan.h \
 	fileReader.h \
 	Joint.h \
