@@ -299,7 +299,7 @@ namespace dynamicsJRLJapan
        \brief Returns the rank of the Joint in the state vector.
        If the Joint has several dimensions, it is the rank of the first dimension.
     */
-    inline const unsigned int & rankInConfiguration() const
+    inline unsigned int rankInConfiguration() const
       { return m_StateVectorPosition; }
         
     

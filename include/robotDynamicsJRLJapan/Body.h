@@ -218,7 +218,20 @@ namespace dynamicsJRLJapan
     */
     const CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), 
       MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * joint() const;
-    
+
+        
+    /**
+    \brief Get mass.
+     */
+    inline double mass() const
+      {return masse;};
+
+    /**
+    \brief Set mass.
+     */
+    inline void mass(double inMass)
+      { masse=inMass;};
+
 
     /*! @} */
     
