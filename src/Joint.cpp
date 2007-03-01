@@ -206,7 +206,9 @@ const MAL_MATRIX(,double) & Joint::jacobianJointWrtConfig() const
 
 void Joint::resizeJacobianJointWrtConfig(int lNbDofs)
 {
-  m_J.resize(6,lNbDofs);
+  MAL_MATRIX_RESIZE(m_J,6,lNbDofs);
+  MAL_MATRIX_FILL(m_J,0.0);
+
 }
 
 void Joint::computeJacobianJointWrtConfig()
@@ -215,7 +217,7 @@ void Joint::computeJacobianJointWrtConfig()
   DynamicBody * FinalBody = (DynamicBody *)m_Body;
   MAL_S3_VECTOR(,double) pn = FinalBody->p;
 
-
+  ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size());
   for(int i=0;i<m_FromRootToThis.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
@@ -308,6 +310,11 @@ void Joint::setLinkedBody(CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double)
 void Joint::SetFatherJoint(Joint *aFather)
 {
   m_FatherJoint = aFather;
+
+  if (m_FatherJoint==0)
+    {
+      m_FromRootToThis.insert(m_FromRootToThis.begin(),this);
+    }
 
   if ((m_FromRootToThis.size()==0) &&
       (m_FatherJoint!=0))

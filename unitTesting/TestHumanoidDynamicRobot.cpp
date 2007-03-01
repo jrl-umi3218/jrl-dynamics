@@ -87,6 +87,22 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot<MAL_MATRIX(,double), MAL_S4
   
 }
 
+void DisplayMatrix(MAL_MATRIX(,double) &aJ)
+{
+  for(int i=0;i<6;i++)
+    {
+      for(int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
+	{
+	  if (aJ(i,j)==0.0)
+	    printf("0 ");
+	  else
+	    printf("%10.5f ",aJ(i,j));
+	}
+      printf("\n");
+    }
+
+}
+
 int main(int argc, char *argv[])
 {
   if (argc!=4)
@@ -192,21 +208,21 @@ int main(int argc, char *argv[])
 
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
   
-  for(int i=0;i<6;i++)
-    {
-      for(int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
-	{
-	  if (aJ(i,j)==0.0)
-	    printf("0 ");
-	  else
-	    printf("%10.5f ",aJ(i,j));
-	}
-      printf("\n");
-    }
+  DisplayMatrix(aJ);
   
+  cout << "Root: " << ((Joint *)rootJoint)->getName() << endl;
+
+  rootJoint->computeJacobianJointWrtConfig();
+
+  aJ = rootJoint->jacobianJointWrtConfig();
+  
+  cout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
+
+  DisplayMatrix(aJ);
+
   aJoint = (Joint *)aHDMB->waist();
 
-  cout << "Name of the WAIST joint :" << aJoint << endl;
+  cout << "Name of the WAIST joint :" << endl;
   cout << aJoint->getName() << endl;
 
   aHDMB->computeJacobianCenterOfMass();
