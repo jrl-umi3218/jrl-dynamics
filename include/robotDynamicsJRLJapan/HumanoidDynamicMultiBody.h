@@ -282,6 +282,15 @@ namespace dynamicsJRLJapan
       inline void gaze(MAL_S3_VECTOR(,double) & outVector, MAL_S3_VECTOR(,double) & outPoint ) const
 	{ outVector = m_LineVector; outPoint = m_LinePoint;};
 	
+      /**
+      \brief Get a point on the gaze straight line
+       */
+      MAL_S3_VECTOR(,double) & gazeOrigin()const {return m_LinePoint;}
+  
+  /**
+      \brief Get the direction of gaze
+   */
+      MAL_S3_VECTOR(,double) & gazeDirection()const {return m_LineVector;}
       
       /**
 	 \@}
@@ -309,6 +318,11 @@ namespace dynamicsJRLJapan
       void removeFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
 			    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inFixedJoint);
       
+      /** 
+            \brief Clear the list of fixed joints
+        */
+       void clearFixedJoints();
+       
        /** 
 	   \brief Return the fixed joint at rank inRank 
        */
