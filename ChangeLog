@@ -3,7 +3,8 @@
 	HumanoidDynamicMultiBody.h, Joint.h and MultiBody to define the matrix
 	and vector used have been replaced by the typedef: vectorN, matrixNxP, 
 	vector3d, matrix3d,vector4d and matrix4d.
-	4. The templates have been removed to fit the abstract interface.
+	4. The templates have been removed to fit the abstract interface at the
+	include, source and test files.
 	3. Changed configure.ac in such a way that option --with-t3d without
 	path provokes call to pkg-config.
 	2. In CrjlJoint& HumanoidDynamicMultiBody::fixedJoint, removed
