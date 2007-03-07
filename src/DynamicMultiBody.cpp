@@ -1501,8 +1501,7 @@ string DynamicMultiBody::GetName(int JointID)
     
 }
 
-CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * DynamicMultiBody::GetJointFromVRMLID(int JointID)
+CjrlJoint* DynamicMultiBody::GetJointFromVRMLID(int JointID)
 {
 #if 0
   if ((JointID>=0) && 
@@ -1833,23 +1832,20 @@ void DynamicMultiBody::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
 /***********************************************/
 
 // Set the root joint of the robot.
-void DynamicMultiBody::rootJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-				 MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & inJoint)
+void DynamicMultiBody::rootJoint(CjrlJoint& inJoint)
 {
   m_RootOfTheJointsTree = & (Joint &)inJoint;
   
 }
 
 // Get the robot joint of the robot.
-CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * DynamicMultiBody::rootJoint() const
+CjrlJoint* DynamicMultiBody::rootJoint() const
 {
   return m_RootOfTheJointsTree;
 }
 
 // Get a vector containning all the joints
-std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>*> DynamicMultiBody::jointVector()
+std::vector<CjrlJoint*> DynamicMultiBody::jointVector()
 {
   return m_JointVector;
 }

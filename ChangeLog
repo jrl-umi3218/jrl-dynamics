@@ -1,1 +1,13 @@
-Write in this file the modifications you commit.
+2007/03/07
+	5. The use macros used in Body.h, DynamicBody.h, DynamicMultiBody.h,
+	HumanoidDynamicMultiBody.h, Joint.h and MultiBody to define the matrix
+	and vector used have been replaced by the typedef: vectorN, matrixNxP, 
+	vector3d, matrix3d,vector4d and matrix4d.
+	4. The templates have been removed to fit the abstract interface.
+	3. Changed configure.ac in such a way that option --with-t3d without
+	path provokes call to pkg-config.
+	2. In CrjlJoint& HumanoidDynamicMultiBody::fixedJoint, removed
+	const to fit the abstract interface.
+	1. In CjrlJoint& HumanoidDynamicMultiBody::fixedJoint, removed
+	const to fit the abstract interface.
+	

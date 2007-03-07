@@ -42,9 +42,11 @@
 
 #include <string>
 
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
-#include <robotDynamics/jrlBody.h>
 #include "Body.h"
+
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include <robotDynamics/jrlBody.h>
+
 
 namespace dynamicsJRLJapan
 {
@@ -70,7 +72,7 @@ namespace dynamicsJRLJapan
       
     - \a R = orientation,
     */
-    MAL_S3x3_MATRIX(,double)  R;
+    matrix3d  R;
     
 
     /*! Here are the physical parameters
@@ -88,29 +90,29 @@ namespace dynamicsJRLJapan
       - \a cv, cw = cross velocity term,
       - \a pph, ppb = v x Iv 
     */
-    MAL_S3_VECTOR(,double) a, b, c, w_c, p,
+    vector3d a, b, c, w_c, p,
       v0,  dv,  w,  dw,
       sv,  sw,  cv, cw,
       hhv,  hhw,  pph,  ppb;
   
     /*! Linear and angular momentums. */
-    MAL_S3_VECTOR(,double) P,L;
+    vector3d P,L;
 
     /*!  Mass in the tree structure, cf Kajita IROS2003 p 1647 */
     double m_tildem;
     double m_tildem_sister;
 
     /*! Tilde Center of Mass, 2, cf Kajita IROS2003 p 1647 */
-    MAL_S3_VECTOR(,double) m_tildec;
-    MAL_S3_VECTOR(,double) m_tildec_sister;
+    vector3d m_tildec;
+    vector3d m_tildec_sister;
 
     /*! Tilde Inertia matrix , cf Kajita IROS2003 p 1647 */
-    MAL_S3x3_MATRIX(,double) m_tildeI, 
+    matrix3d m_tildeI, 
       m_tildeI_sister, m_Dsister;
 
     /*! Inertia vector for RMC. */
-    MAL_S3_VECTOR(,double) m_RMC_m;
-    MAL_S3_VECTOR(,double) m_RMC_h;
+    vector3d m_RMC_m;
+    vector3d m_RMC_h;
     int sister;
     int child;
     

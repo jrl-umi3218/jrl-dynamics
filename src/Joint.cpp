@@ -41,9 +41,9 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_IDinVRML(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_pose);
-  m_pose(0,3) = translationStatic[0];
-  m_pose(1,3) = translationStatic[1];
-  m_pose(2,3) = translationStatic[2];
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) = translationStatic[0];
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = translationStatic[1];
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = translationStatic[2];
 
   
 }
@@ -97,14 +97,12 @@ Joint & Joint::operator=(const Joint & r)
 /* Implementation of the generic JRL interface */
 /***********************************************/
 
-CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & Joint::parentJoint() const
+CjrlJoint & Joint::parentJoint() const
 {
   return *m_FatherJoint;
 }
 
-bool Joint::addChildJoint(const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & aJoint)
+bool Joint::addChildJoint(const CjrlJoint& aJoint)
 {
   Joint * pjoint = (Joint *)&aJoint;
   m_Children.push_back(pjoint);
@@ -116,8 +114,7 @@ unsigned int Joint::countChildJoints() const
   return m_Children.size();
 }
 
-const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & Joint::childJoint(unsigned int givenRank) const
+const CjrlJoint& Joint::childJoint(unsigned int givenRank) const
 {
   if ((givenRank>=0) && (givenRank<m_Children.size()))
     return *m_Children[givenRank];
@@ -125,8 +122,7 @@ const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,d
   return *m_Children[0];
 }
 
-std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		      MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> Joint::jointsFromRootToThis() const 
+std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const 
 {
   return m_FromRootToThis;
 }
@@ -144,20 +140,20 @@ const MAL_S4x4_MATRIX(,double) & Joint::currentTransformation() const
 
       for( unsigned int i=0;i<3;i++)
 	for(unsigned int j=0;j<3;j++)
-	  (*A)(i,j) = m_DBody->R(i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J((*A),i,j) = m_DBody->R(i,j);
       
       for( unsigned int i=0;i<3;i++)
-	(*A)(i,3) = m_DBody->p(i);
+	MAL_S4x4_MATRIX_ACCESS_I_J((*A),i,3) = m_DBody->p(i);
     }
   return *A;
 }
 
-CjrlRigidVelocity<MAL_S3_VECTOR(,double)> Joint::jointVelocity()
+CjrlRigidVelocity Joint::jointVelocity()
 {
   return m_RigidVelocity;
 }
 
-CjrlRigidAcceleration<MAL_S3_VECTOR(,double)> Joint::jointAcceleration()
+CjrlRigidAcceleration Joint::jointAcceleration()
 {
   // TODO : Update the member of this object
   // TODO : when calling ForwardDynamics.
@@ -171,7 +167,7 @@ CjrlRigidAcceleration<MAL_S3_VECTOR(,double)> Joint::jointAcceleration()
       a = m_DBody->dv;
       b = m_DBody->dw;
     }
-  CjrlRigidAcceleration<MAL_S3_VECTOR(,double)> ajrlRA(a,b);
+  CjrlRigidAcceleration ajrlRA(a,b);
   
   return ajrlRA;
 
@@ -295,14 +291,12 @@ MAL_MATRIX(,double) Joint::jacobianPointWrtConfig(const MAL_S3_VECTOR(,double) &
 
 }
 
-CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	 MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * Joint::linkedBody() const
+CjrlBody* Joint::linkedBody() const
 {
   return m_Body;
 }
 
-void Joint::setLinkedBody(CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & inBody)
+void Joint::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
 }
@@ -319,8 +313,7 @@ void Joint::SetFatherJoint(Joint *aFather)
   if ((m_FromRootToThis.size()==0) &&
       (m_FatherJoint!=0))
     {
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * aJoint;
+      CjrlJoint* aJoint;
       aJoint=m_FatherJoint;
       while(aJoint!=0)
 	{
@@ -339,9 +332,9 @@ const MAL_S4x4_MATRIX(,double) & Joint::initialPosition()
       ODEBUG("Joint Name " << m_Name << " " << m_Body);
       for(int i=0;i<3;i++)
 	for(int j=0;j<3;j++)
-	  m_pose(i,j) = aDB->R(i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j) = aDB->R(i,j);
       for(int i=0;i<3;i++)
-	m_pose(i,3) = aDB->p(i);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,3) = aDB->p(i);
       ODEBUG( m_pose);
 
     }
@@ -353,9 +346,9 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   // Update the orientation of the joint.
   // Takes the three euler joints 
 
-  m_pose(0,3) = a6DVector(0);
-  m_pose(1,3) = a6DVector(1);
-  m_pose(2,3) = a6DVector(2);  
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) = a6DVector(0);
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = a6DVector(1);
+  MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = a6DVector(2);  
   
   MAL_S3x3_MATRIX(,double) D,B,C,A;
   double CosTheta, SinTheta, 
@@ -387,7 +380,7 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   
   for(int i=0;i<3;i++)
     for(int j=0;j<3;j++)
-      m_pose(i,j) = A(i,j);
+      MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j) = A(i,j);
  
   ODEBUG("m_pose : " << m_pose << 
 	  " A: "<<endl << A << 

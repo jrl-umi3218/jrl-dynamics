@@ -58,8 +58,7 @@ namespace dynamicsJRLJapan
       This object is used to compute the Center Of Masse,
       and store some basic information of each body of the robot. 
   */    
-  class Body : public CjrlBody<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), 
-    MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), MAL_S3_VECTOR(,double)>
+  class Body : public CjrlBody
   {
   protected:
     
@@ -70,10 +69,10 @@ namespace dynamicsJRLJapan
     /*! \brief Mass */
     double masse;
     /*! \brief Position of the Center of Mass. */
-    MAL_S3_VECTOR(posCoM,double);
+    vector3d posCoM;
 
     /*! \brief Inertia Matrix. */
-    MAL_S3x3_MATRIX(inertie,double);
+    matrix3d inertie;
     //@}
   
     /*! \brief Number of objects. */
@@ -105,12 +104,12 @@ namespace dynamicsJRLJapan
 
     /*! \brief Constructor while parsing. */
     Body(double masse, 
-	 MAL_S3_VECTOR(positionCoM,double));
+	 vector3d positionCoM);
 
     /*! \brief Constructor while parsing. */
     Body(double masse, 
-	 MAL_S3_VECTOR(positionCoM,double), 
-	 MAL_S3x3_MATRIX(matriceInertie,double));
+	 vector3d positionCoM, 
+	 matrix3d matriceInertie);
      
     /*! \brief Destructor. */
     ~Body(void);
@@ -136,14 +135,14 @@ namespace dynamicsJRLJapan
     void setMasse(double);
     
     /*! \brief Get the inertia matrix of the body. */
-    inline const MAL_S3x3_MATRIX(,double) & getInertie(void) const
+    inline const matrix3d & getInertie(void) const
       { return inertie;}
     
     /*! \brief Set the inertia matrix of the body. */
     void setInertie(double mi[9]);
     
     /*! \brief Get the position of the center of Mass. */
-    MAL_S3_VECTOR(,double) getPositionCoM(void) const;
+    vector3d getPositionCoM(void) const;
     
     /*! \brief Set the position of the center of Mass. */
     void setPositionCoM(double cm[3]);
@@ -197,27 +196,26 @@ namespace dynamicsJRLJapan
     /**
        \brief Get position of center of mass in joint local reference frame.
     */
-    const MAL_S3_VECTOR(,double) & localCenterOfMass() const ;
+    const vector3d& localCenterOfMass() const ;
     /**
        \brief Set position of center of mass in joint reference frame.
     */
-    void localCenterOfMass(const MAL_S3_VECTOR(,double) & inlocalCenterOfMass);
+    void localCenterOfMass(const vector3d& inlocalCenterOfMass);
     
     /**
        \brief Get Intertia matrix expressed in joint local reference frame.
     */
-    const MAL_S3x3_MATRIX(,double) & inertiaMatrix() const;
+    const matrix3d& inertiaMatrix() const;
     
     /**
        \brief Set inertia matrix.
     */
-    void inertiaMatrix(const MAL_S3x3_MATRIX(,double) & inInertiaMatrix) ;
+    void inertiaMatrix(const matrix3d& inInertiaMatrix) ;
     
     /**
        \brief Get const pointer to the joint the body is attached to.
     */
-    const CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), 
-      MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * joint() const;
+    const CjrlJoint* joint() const;
 
         
     /**

@@ -33,9 +33,7 @@ HumanoidDynamicMultiBody::HumanoidDynamicMultiBody()
   m_DMB = aDMB;
 }
 
-HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(CjrlDynamicRobot<MAL_MATRIX(,double), 
-						   MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-						   MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *aDMB,
+HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(CjrlDynamicRobot* aDMB,
 						   string aFileNameForHumanoidSpecificities)
 {
   m_DMB = aDMB;
@@ -189,9 +187,7 @@ void HumanoidDynamicMultiBody::ComputingZeroMomentumPoint()
 
 /* Methods related to the fixed joints */
 
-void HumanoidDynamicMultiBody::addFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),
-					     MAL_S3x3_MATRIX(,double),
-					     MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *inFixedJoint)
+void HumanoidDynamicMultiBody::addFixedJoint(CjrlJoint *inFixedJoint)
 {
   m_VectorOfFixedJoints.insert(m_VectorOfFixedJoints.end(),inFixedJoint);
 }
@@ -201,12 +197,9 @@ unsigned int HumanoidDynamicMultiBody::countFixedJoints() const
   return m_VectorOfFixedJoints.size();
 }
 
-void HumanoidDynamicMultiBody::removeFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),
-						MAL_S3x3_MATRIX(,double),
-						MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * inFixedJoint)
+void HumanoidDynamicMultiBody::removeFixedJoint(CjrlJoint * inFixedJoint)
 {
-  std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *>::iterator it_Joint = m_VectorOfFixedJoints.begin();
+  std::vector<CjrlJoint *>::iterator it_Joint = m_VectorOfFixedJoints.begin();
   while((*it_Joint!= inFixedJoint) &&
 	(it_Joint!=m_VectorOfFixedJoints.end()))
     it_Joint++;
@@ -221,9 +214,7 @@ void HumanoidDynamicMultiBody::clearFixedJoints()
     m_VectorOfFixedJoints.clear();
 }
 
-const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & 
-HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank) const
+CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
   if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
       return *m_VectorOfFixedJoints[inJointRank];
@@ -236,23 +227,20 @@ HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank) const
 /* the part inherited from jrlDynamicRobot.        */
 /***************************************************/
 
-void HumanoidDynamicMultiBody::rootJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-					 MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> & inJoint)
+void HumanoidDynamicMultiBody::rootJoint(CjrlJoint &inJoint)
 {
   if (m_DMB!=0)
     m_DMB->rootJoint(inJoint);
 }
 
-CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * HumanoidDynamicMultiBody::rootJoint() const
+CjrlJoint *HumanoidDynamicMultiBody::rootJoint() const
 {
   if (m_DMB==0)
     return 0;
   return m_DMB->rootJoint();
 }
 
-std::vector< CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		       MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> HumanoidDynamicMultiBody::jointVector()
+std::vector< CjrlJoint* > HumanoidDynamicMultiBody::jointVector()
 {  
   return  m_DMB->jointVector();
 }
@@ -352,9 +340,7 @@ const MAL_MATRIX(,double) & HumanoidDynamicMultiBody::jacobianCenterOfMass() con
   return m_DMB->jacobianCenterOfMass();
 }
 
-bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint<MAL_MATRIX(,double), 
-							  MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-							  MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inJoint, 
+bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
 							  MAL_MATRIX(,double) & outJacobian)
 {
   cerr<< " The method HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint " <<endl
@@ -371,15 +357,12 @@ double HumanoidDynamicMultiBody::footHeight() const
 }
 
 
-void HumanoidDynamicMultiBody::waist(CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double),
-				     MAL_S3x3_MATRIX(,double),MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * inWaist)
+void HumanoidDynamicMultiBody::waist(CjrlJoint * inWaist)
 {
   // This method is ineffective regarding the internals.
 }
 
-CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),
-	  MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * 
-HumanoidDynamicMultiBody::waist()
+CjrlJoint* HumanoidDynamicMultiBody::waist()
 {
   return m_WaistJoint;
 }

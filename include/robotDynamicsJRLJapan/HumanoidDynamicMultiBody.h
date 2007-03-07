@@ -32,11 +32,13 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 #define _HUMANOID_DYNAMIC_MULTIBODY_H_
 #include <vector>
 
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include "HumanoidSpecificities.h"
+
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include <robotDynamics/jrlJoint.h>
 #include <robotDynamics/jrlDynamicRobot.h>
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
-#include "HumanoidSpecificities.h"
+
 
 namespace dynamicsJRLJapan
 {
@@ -55,53 +57,43 @@ namespace dynamicsJRLJapan
   This specific class is the specialization of the generic class CjrlHumanoidDynamicRobot.
 
   */
-  class HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot<MAL_MATRIX(,double), 
-    MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>
+  class HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot
     {
     private:
       
       /** \brief Store the implementation of Dynamic Multi Body */
-      CjrlDynamicRobot<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *m_DMB;
+      CjrlDynamicRobot *m_DMB;
 
       /** \brief Store the Left Hand Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_LeftHandJoint;
+      CjrlJoint *m_LeftHandJoint;
       
       /** \brief Store the Right Hand Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_RightHandJoint;
+      CjrlJoint *m_RightHandJoint;
       
       /** \brief Store the Left Foot Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_LeftFootJoint;
+      CjrlJoint *m_LeftFootJoint;
       
       /** \brief Store the Right Foot Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_RightFootJoint;
+      CjrlJoint *m_RightFootJoint;
       
       /** \brief Store the Gaze Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_GazeJoint;
+      CjrlJoint *m_GazeJoint;
 
       /** \brief Store the Waist Joint */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_WaistJoint;
+      CjrlJoint *m_WaistJoint;
 
       /** \name Gaze related store */
 
       /** \brief Set the direction of the line. */
-      MAL_S3_VECTOR(,double) m_LineVector;
+      vector3d m_LineVector;
 
       /** \brief Set the point through which the line is going. */
-      MAL_S3_VECTOR(,double) m_LinePoint;
+      vector3d m_LinePoint;
       
       /** @} */
       
       /** \brief Vector of fixed joints. */
-      std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> m_VectorOfFixedJoints;
+      std::vector<CjrlJoint*> m_VectorOfFixedJoints;
 
       /*! Object to store the specificities to an instance of a humanoid robot. */
       HumanoidSpecificities *m_HS;
@@ -110,7 +102,7 @@ namespace dynamicsJRLJapan
       double m_AnkleSoilDistance;
 
       /*! Distance between some axis of the hip. */
-      MAL_S3_VECTOR(,double) m_Dt;
+      vector3d m_Dt;
 
       /*! \name Parameters related to the distance
 	between the CoM and the hip. 
@@ -119,15 +111,15 @@ namespace dynamicsJRLJapan
       
       /*! Static translation from the CoM to the left
        hip. */
-      MAL_S3_VECTOR(,double) m_StaticToTheLeftHip,
+      vector3d m_StaticToTheLeftHip,
 	m_StaticToTheRightHip;
 
       /*! Static translation from the CoM to the right
        hip. */
-      MAL_S3_VECTOR(,double) m_TranslationToTheRightHip,
+      vector3d m_TranslationToTheRightHip,
 	m_TranslationToTheLeftHip;
 
-      MAL_S3_VECTOR(,double) m_ZeroMomentumPoint;
+      vector3d m_ZeroMomentumPoint;
       /*! @} */
 
     public:
@@ -145,8 +137,7 @@ namespace dynamicsJRLJapan
       HumanoidDynamicMultiBody(void);
 
       /*! Advanced constructor: */
-      HumanoidDynamicMultiBody(CjrlDynamicRobot<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			       MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * aDMB,
+      HumanoidDynamicMultiBody(CjrlDynamicRobot * aDMB,
 			       string aFileNameForHumanoidSpecificities);
       
       /*! Destructor */
@@ -171,8 +162,7 @@ namespace dynamicsJRLJapan
 	{return m_HS;};
 
       /*! Get pointer on the CjrlDynamicRobot used as a proxy. */
-      inline CjrlDynamicRobot<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * getDynamicMultiBody() const
+      inline CjrlDynamicRobot *getDynamicMultiBody() const
 	{return m_DMB;}
 
       /** \name jrlHumanoidDynamicRobot Interface */
@@ -184,57 +174,49 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Set the pointer to the left hand joint.
       */
-      inline void leftHand(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			   MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inLeftHand)
+      inline void leftHand(CjrlJoint *inLeftHand)
 	{ m_LeftHandJoint = (Joint *)inLeftHand;};
       
       /** 
 	  \brief Get a pointer to the left hand.
       */
-      inline CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* leftHand() 
+      inline CjrlJoint *leftHand() 
 	{ return m_LeftHandJoint;}
       
       /**
 	 \brief Set the pointer to the right hand joint.
       */
-      inline void rightHand(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inRightHand)
+      inline void rightHand(CjrlJoint *inRightHand)
 	{ m_RightHandJoint = (Joint *)inRightHand;}
       
       /** 
 	  \brief Get a pointer to the right hand.
       */
-      inline CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* rightHand()
+      inline CjrlJoint *rightHand()
 	{ return m_RightHandJoint;}
       
       /**
 	 \brief Set the pointer to the left foot joint.
       */
-      inline void leftFoot(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			   MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inLeftFoot)
+      inline void leftFoot(CjrlJoint *inLeftFoot)
 	{ m_LeftFootJoint = (Joint *)inLeftFoot;}
       
       /** 
 	  \brief Get a pointer to the left foot.
       */
-      inline CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* leftFoot() 
+      inline CjrlJoint *leftFoot() 
 	{ return m_LeftFootJoint;};
       
       /**
 	 \brief Set the pointer to the right foot joint.
       */
-      inline void rightFoot(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inRightFoot)
+      inline void rightFoot(CjrlJoint *inRightFoot)
 	{m_RightFootJoint = (Joint *) inRightFoot;}
       
       /** 
 	  \brief Get a pointer to the right foot.
       */
-      inline CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* rightFoot()
+      inline CjrlJoint *rightFoot()
 	{return m_RightFootJoint;}
       
       /** 
@@ -242,15 +224,13 @@ namespace dynamicsJRLJapan
 	  
 	  \note  For most humanoid robots, the gaze joint is the head.
       */
-      inline void gazeJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inGazeJoint)
+      inline void gazeJoint(CjrlJoint *inGazeJoint)
 	{ m_GazeJoint = (Joint *)inGazeJoint; }
       
       /**
 	 \brief Get gaze joint
       */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* gazeJoint()
+      CjrlJoint *gazeJoint()
 	{ return m_GazeJoint; }
       
       /**
@@ -265,10 +245,10 @@ namespace dynamicsJRLJapan
 	 a gaze direction.
 
       */
-      inline void gaze( MAL_S3_VECTOR(,double)& inVector, MAL_S3_VECTOR(,double) & inPoint)
+      inline void gaze( vector3d& inVector, vector3d & inPoint)
 	{ m_LineVector = inVector; m_LinePoint = inPoint;};
 
-      inline void gaze( const MAL_S3_VECTOR(,double)& inVector)
+      inline void gaze( const vector3d& inVector)
 	{ m_LineVector = inVector;};
       
       /** 
@@ -279,18 +259,18 @@ namespace dynamicsJRLJapan
 	  @return outPoint: The point by which the line is going through in the head reference frame.
 
       */
-      inline void gaze(MAL_S3_VECTOR(,double) & outVector, MAL_S3_VECTOR(,double) & outPoint ) const
+      inline void gaze(vector3d & outVector, vector3d & outPoint ) const
 	{ outVector = m_LineVector; outPoint = m_LinePoint;};
 	
       /**
       \brief Get a point on the gaze straight line
        */
-      MAL_S3_VECTOR(,double) & gazeOrigin()const {return m_LinePoint;}
+       const vector3d & gazeOrigin() const {return m_LinePoint;}
   
   /**
       \brief Get the direction of gaze
    */
-      MAL_S3_VECTOR(,double) & gazeDirection()const {return m_LineVector;}
+      const vector3d & gazeDirection() const {return m_LineVector;}
       
       /**
 	 \@}
@@ -303,8 +283,7 @@ namespace dynamicsJRLJapan
 	  \brief Add a joint to the vector of fixed joints.
 	  This Declares a joint as fixed in the world.
       */
-      void addFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			 MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inFixedJoint) ;
+      void addFixedJoint(CjrlJoint *inFixedJoint) ;
       
       /** 
 	  \brief Count joints that are fixed in the world.
@@ -315,8 +294,7 @@ namespace dynamicsJRLJapan
 	  \brief Remove a joint from the vector of fixed joints.
 	  The input joint will no longer be considered fixed in the world.
       */
-      void removeFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-			    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inFixedJoint);
+      void removeFixedJoint(CjrlJoint *inFixedJoint);
       
       /** 
             \brief Clear the list of fixed joints
@@ -326,8 +304,7 @@ namespace dynamicsJRLJapan
        /** 
 	   \brief Return the fixed joint at rank inRank 
        */
-      const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>& fixedJoint(unsigned int inJointRank) const ;
+       CjrlJoint& fixedJoint(unsigned int inJointRank);
 
       
       /**
@@ -336,9 +313,8 @@ namespace dynamicsJRLJapan
 	 Fixed joint is first fixed joint in vector.
 	 \return true if there is at least one fixed joint, false otherwise.  
       */
-      bool jacobianJointWrtFixedJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-				      MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* inJoint, 
-				      MAL_MATRIX(,double) & outJacobian);
+      bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint, 
+				      matrixNxP & outJacobian);
       
       /** 
 	  \brief Return the distance between the sole of a foot and its joint center
@@ -354,7 +330,7 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Compute the coordinates of the Zero Momentum Point.
       */
-      const MAL_S3_VECTOR(,double) & zeroMomentumPoint() const;
+      const vector3d & zeroMomentumPoint() const;
       
       /** 
 	  \brief Trigger the computation of the Zero Momentum Point.
@@ -377,21 +353,18 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Set the root joint of the robot.
       */
-      void rootJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		     MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>& inJoint);
+      void rootJoint(CjrlJoint& inJoint);
      
       
       /**
 	 \brief Get the root joint of the robot.
       */
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* rootJoint() const ;
+      CjrlJoint* rootJoint() const ;
       
       /**
 	 \brief Get a vector containing all the joints.
       */
-      std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> jointVector() ;
+      std::vector<CjrlJoint*> jointVector() ;
       
       /**
 	 \brief Get the number of degrees of freedom of the robot.
@@ -415,14 +388,14 @@ namespace dynamicsJRLJapan
 	 input vector does not fit the number of degrees of freedom of the
 	 robot).
       */
-      bool currentConfiguration(const MAL_VECTOR(,double)& inConfig) ;
+      bool currentConfiguration(const vectorN& inConfig) ;
 
       /**
 	 \brief Get the current configuration of the robot.
 
 	 \return the configuration vector \f${\bf q}\f$.
       */
-      const MAL_VECTOR(,double)& currentConfiguration() const ;
+      const vectorN& currentConfiguration() const ;
 
       /**
 	 \brief Set the current velocity of the robot.  
@@ -433,14 +406,14 @@ namespace dynamicsJRLJapan
 	 input vector does not fit the number of degrees of freedom of the
 	 robot).
       */
-      bool currentVelocity(const MAL_VECTOR(,double)& inVelocity) ;
+      bool currentVelocity(const vectorN& inVelocity) ;
 
       /**
 	 \brief Get the current velocity of the robot.
 
 	 \return the velocity vector \f${\bf \dot{q}}\f$.
       */
-      const MAL_VECTOR(,double)& currentVelocity() const ;
+      const vectorN& currentVelocity() const ;
       /**
 	 \brief Set the current acceleration of the robot.  
 
@@ -450,14 +423,14 @@ namespace dynamicsJRLJapan
 	 input vector does not fit the number of degrees of freedom of the
 	 robot).
       */
-      bool currentAcceleration(const MAL_VECTOR(,double)& inAcceleration) ;
+      bool currentAcceleration(const vectorN& inAcceleration) ;
 
       /**
 	 \brief Get the current acceleration of the robot.
 
 	 \return the acceleration vector \f${\bf \ddot{q}}\f$.
       */
-      const MAL_VECTOR(,double)& currentAcceleration() const ;
+      const vectorN& currentAcceleration() const ;
 
       /**
 	 @}
@@ -486,37 +459,37 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get the position of the center of mass.
       */
-      const MAL_S3_VECTOR(,double)& positionCenterOfMass() ;
+      const vector3d& positionCenterOfMass() ;
 
       /**
 	 \brief Get the velocity of the center of mass.
       */
-      const MAL_S3_VECTOR(,double)& velocityCenterOfMass() ;
+      const vector3d& velocityCenterOfMass() ;
 
       /**
 	 \brief Get the acceleration of the center of mass.
       */
-      const MAL_S3_VECTOR(,double)& accelerationCenterOfMass() ;
+      const vector3d& accelerationCenterOfMass() ;
 
       /**
 	 \brief Get the linear momentum of the robot.
       */
-      const MAL_S3_VECTOR(,double)& linearMomentumRobot() ;
+      const vector3d& linearMomentumRobot() ;
   
       /**
 	 \brief Get the time-derivative of the linear momentum.
       */
-      const MAL_S3_VECTOR(,double)& derivativeLinearMomentum() ;
+      const vector3d& derivativeLinearMomentum() ;
 
       /**
 	 \brief Get the angular momentum of the robot at the center of mass.
       */
-      const MAL_S3_VECTOR(,double)& angularMomentumRobot() ;
+      const vector3d& angularMomentumRobot() ;
   
       /**
 	 \brief Get the time-derivative of the angular momentum at the center of mass.
       */
-      const MAL_S3_VECTOR(,double)& derivativeAngularMomentum() ;
+      const vector3d& derivativeAngularMomentum() ;
 
       /**
 	 @}
@@ -534,14 +507,12 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
       */
-      const MAL_MATRIX(,double)& jacobianCenterOfMass() const ;
+      const matrixNxP& jacobianCenterOfMass() const ;
 
-      void waist(CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double),
-		 MAL_S3x3_MATRIX(,double),MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * inWaist);
+      void waist(CjrlJoint* inWaist);
 
       
-      CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),
-	MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * waist();
+      CjrlJoint* waist();
 
 	
       /**

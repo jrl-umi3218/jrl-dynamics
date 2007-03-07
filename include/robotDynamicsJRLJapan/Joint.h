@@ -30,10 +30,15 @@
 
 #ifndef _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
-#include <robotDynamics/jrlJoint.h>
+
 #include <vector>
+
+#include "robotDynamics/jrlJoint.h"
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+
+
 using namespace std;
+
 namespace dynamicsJRLJapan
 {  
 
@@ -44,9 +49,7 @@ namespace dynamicsJRLJapan
       - Translation of a vector : quantite*axe	(type = TRANSLATION)
       - Rotation through a homogeneous matrix : *rotation (type = FREE_LIBRE)
   */
-  class Joint: public CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>
-    
+  class Joint: public CjrlJoint
   {
 
   private:
@@ -55,28 +58,25 @@ namespace dynamicsJRLJapan
     
     /*! Axis of the transformation,
       for the link with one DoF. */
-    MAL_S3_VECTOR(,double) m_axe;	
+    vector3d m_axe;	
     
     /*! Quantity of the rotation . */
     float m_quantity;
 
     /*! 4x4 matrix for pose */
-    MAL_S4x4_MATRIX(,double) m_pose;
+    matrix4d m_pose;
 
     /*! Father joint */
     Joint * m_FatherJoint;
 
     /*! Vector of childs */
-    std::vector< CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double), 
-      MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> *> m_Children;
+    std::vector< CjrlJoint*> m_Children;
 
     /*! Vector of joints from the root to this joint. */
-    std::vector< CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double), 
-      MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> *> m_FromRootToThis;
+    std::vector< CjrlJoint*> m_FromRootToThis;
 
     /*! Pointer towards the body. */
-    CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-      MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * m_Body;
+    CjrlBody * m_Body;
 
     /*! Name */
     string m_Name;
@@ -85,10 +85,10 @@ namespace dynamicsJRLJapan
     int m_IDinVRML;
 
     /*! Rigid Velocity */
-    CjrlRigidVelocity<MAL_S3_VECTOR(,double)> m_RigidVelocity;
+    CjrlRigidVelocity m_RigidVelocity;
     
     /*! Jacobian with respect to the current configuration */
-    MAL_MATRIX(,double) m_J;
+    matrixNxP m_J;
 
     /*! First entry into the state vector */
     unsigned int m_StateVectorPosition;
@@ -103,13 +103,13 @@ namespace dynamicsJRLJapan
     static const int PRISMATIC_JOINT=2;
     
     /*! \brief Constructor with full initialization. */
-    Joint(int ltype, MAL_S3_VECTOR(,double)&  laxe, 
-	  float lquantite, MAL_S4x4_MATRIX(,double) & apose);
+    Joint(int ltype, vector3d&  laxe, 
+	  float lquantite, matrix4d & apose);
 
-    Joint(int ltype, MAL_S3_VECTOR(,double ) & laxe, 
-	  float lquantite, MAL_S3_VECTOR(,double) &translationStatic);
+    Joint(int ltype, vector3d& laxe, 
+	  float lquantite, vector3d &translationStatic);
     
-    Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
+    Joint(int ltype, vector3d& laxe, 
 	  float lquantite);
 
 	
@@ -142,21 +142,21 @@ namespace dynamicsJRLJapan
     float pose(unsigned r) ;
 
     /*! Returns the matrix corresponding to the rigid motion */
-    inline const MAL_S4x4_MATRIX(,double) & pose() const
+    inline const matrix4d & pose() const
       {return m_pose;};
 
     /*! Sets the matrix corresponding to the rigid motion */
-    inline void pose(const MAL_S4x4_MATRIX(,double) & pose ) 
+    inline void pose(const matrix4d & pose ) 
       {m_pose=pose;};
     
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i) 
-      {return m_pose(i/4,i%4);}
+      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i/4,i%4);}
 
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i,
 			       unsigned int j) 
-      {return m_pose(i,j);}
+      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j);}
     
     
     /*! \name Getter and setter for the parameter 
@@ -164,11 +164,11 @@ namespace dynamicsJRLJapan
      */    
     
     /*! Returns the axe of the rotation. */
-    inline const MAL_S3_VECTOR(,double ) & axe() const
+    inline const vector3d& axe() const
       { return m_axe; };
 
     /*! Set the axe of the rotation */
-    inline void axe(const MAL_S3_VECTOR(,double) &anaxe)
+    inline void axe(const vector3d &anaxe)
       { m_axe = anaxe; };
 
     /*! Quantity of the rotation */
@@ -206,23 +206,23 @@ namespace dynamicsJRLJapan
       { return m_IDinVRML;}
     
     /*! Get the static translation. */
-    inline void getStaticTranslation(MAL_S3_VECTOR(,double) & staticTranslation) 
-      { staticTranslation(0) = m_pose(0,3);
-	staticTranslation(1) = m_pose(1,3);
-	staticTranslation(2) = m_pose(2,3); }
+    inline void getStaticTranslation(vector3d & staticTranslation) 
+      { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3);
+	staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3);
+	staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3); }
 
     /*! Get the static translation. */
-    inline void setStaticTranslation(MAL_S3_VECTOR(,double) & staticTranslation) 
-      {  m_pose(0,3) =staticTranslation(0);
-	m_pose(1,3) = staticTranslation(1);
-	m_pose(2,3) = staticTranslation(2) ; }
+    inline void setStaticTranslation(vector3d & staticTranslation) 
+      { MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) =staticTranslation(0);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = staticTranslation(1);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = staticTranslation(2) ; }
 
     /*! Compute pose from a vector x,y,z, Theta, Psi, Phi. */
-    void UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector);
+    void UpdatePoseFrom6DOFsVector(vectorN a6DVector);
 
     /*! Compute velocity from two vectors (dx,dy,dz) (dTheta, dPsi, dPhi) */
-    void UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double)& alinearVelocity,
-					 MAL_S3_VECTOR(,double)& anAngularVelocity);
+    void UpdateVelocityFrom2x3DOFsVector(vector3d& alinearVelocity,
+					 vector3d& anAngularVelocity);
     
     /* @} */
 
@@ -233,23 +233,19 @@ namespace dynamicsJRLJapan
       @{
      */
     /*! \brief parent Joint */
-    CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double), MAL_VECTOR(,double), 
-      MAL_S3_VECTOR(,double)> &  parentJoint() const ;
+    CjrlJoint&  parentJoint() const ;
 
     /*! \brief Add a child Joint */
-    bool addChildJoint(const CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double),
-		       MAL_VECTOR(,double), MAL_S3_VECTOR(,double) >&);
+    bool addChildJoint(const CjrlJoint&);
     
     /*! \brief Count the number of child joints */
     unsigned int countChildJoints() const;
     
     /*! \brief Returns the child joint at the given rank */
-    const CjrlJoint<MAL_MATRIX(,double),MAL_S4x4_MATRIX(,double), MAL_S3x3_MATRIX(,double), 
-      MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> & childJoint(unsigned int givenRank) const;
+    const CjrlJoint& childJoint(unsigned int givenRank) const;
 
     /*! \brief Joints from root to this joint */
-    std::vector< CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-      MAL_VECTOR(,double), MAL_S3_VECTOR(,double)> * > jointsFromRootToThis() const ;
+    std::vector< CjrlJoint* > jointsFromRootToThis() const ;
     /*! @} */
     
     /*! \name Joint Kinematics 
@@ -260,7 +256,7 @@ namespace dynamicsJRLJapan
 	The initial position of the joint is the position
 	of the local frame of the joint.
      */
-    const MAL_S4x4_MATRIX(,double) & initialPosition();
+    const matrix4d & initialPosition();
     /**
        \brief Get the current transformation of the joint.
        
@@ -270,7 +266,7 @@ namespace dynamicsJRLJapan
        
        The current transformation is determined by the configuration \f${\bf q}\f$ of the robot.
     */
-    const MAL_S4x4_MATRIX(,double) &currentTransformation() const;
+    const matrix4d &currentTransformation() const;
     
     /**
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
@@ -280,7 +276,7 @@ namespace dynamicsJRLJapan
        \return the linear velocity \f${\bf v}\f$ of the origin of the joint frame
        and the angular velocity \f${\bf \omega}\f$ of the joint frame.
     */
-    CjrlRigidVelocity<MAL_S3_VECTOR(,double)> jointVelocity();
+    CjrlRigidVelocity jointVelocity();
     
     /**
        \brief Get the acceleration of the joint.
@@ -288,7 +284,7 @@ namespace dynamicsJRLJapan
        The acceleratoin is determined by the configuration of the robot 
        and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
-    CjrlRigidAcceleration<MAL_S3_VECTOR(,double)> jointAcceleration();
+    CjrlRigidAcceleration jointAcceleration();
     
     /**
        \brief Get the number of degrees of freedom of the joint.
@@ -329,7 +325,7 @@ namespace dynamicsJRLJapan
        \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}}
        \f]
     */
-    const MAL_MATRIX(,double) & jacobianJointWrtConfig() const;
+    const matrixNxP & jacobianJointWrtConfig() const;
     
     /**
        \brief Compute the joint's jacobian wrt the robot configuration.
@@ -340,7 +336,7 @@ namespace dynamicsJRLJapan
        \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
        
     */
-    MAL_MATRIX(,double) jacobianPointWrtConfig(const MAL_S3_VECTOR(,double) & inPointJointFrame) const ;
+    matrixNxP jacobianPointWrtConfig(const vector3d & inPointJointFrame) const ;
 
     /** 
 	\brief resize the Jacobian with the number of DOFs.
@@ -359,14 +355,12 @@ namespace dynamicsJRLJapan
     /**
        \brief Get a pointer to the linked body (if any).
     */
-    CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-      MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* linkedBody() const;
+    CjrlBody* linkedBody() const;
  	
     /**
        \brief Link a body to the joint.
     */
-    void setLinkedBody (CjrlBody<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-		       MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>& inBody);
+    void setLinkedBody (CjrlBody& inBody);
   
     /**
        @}
@@ -389,17 +383,17 @@ namespace dynamicsJRLJapan
 
   class JointFreeflyer : public Joint
   {
-    JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition);
+    JointFreeflyer(const matrix4d &inInitialPosition);
   };
 
   class JointRotation : public Joint
   {
-    JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition);
+    JointRotation(const matrix4d &inInitialPosition);
   };
 
   class JointTranslation : public Joint
   {
-    JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosition);
+    JointTranslation(const matrix4d &inInitialPosition);
   };
 
   

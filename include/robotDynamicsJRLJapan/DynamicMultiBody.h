@@ -41,7 +41,7 @@
 #ifndef _DYNAMIC_MULTI_BODY_H_
 #define _DYNAMIC_MULTI_BODY_H_
 #include <vector>
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include <robotDynamics/jrlDynamicRobot.h>
 #include "Joint.h"
 #include "MultiBody.h"
@@ -55,9 +55,7 @@ namespace dynamicsJRLJapan
   /** @ingroup forwardynamics
       This class simulates the dynamic of a multibody robot.
   */
-  class DynamicMultiBody : public  CjrlDynamicRobot<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),
-    MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>, 
+  class DynamicMultiBody : public  CjrlDynamicRobot,
     public MultiBody 
     
   {
@@ -77,43 +75,43 @@ namespace dynamicsJRLJapan
     void UpdateBodyParametersFromJoint(int cID, int lD, int LiaisonForFatherJoint);
     
     /** The skew matrix related to the CoM position. */
-    MAL_S3x3_MATRIX(,double) SkewCoM;
+    matrix3d SkewCoM;
 
     /** Weighted CoM position. */
-    MAL_S3_VECTOR(,double) positionCoMPondere;
+    vector3d positionCoMPondere;
     
     /** Splitted inertial matrices. */
-    MAL_MATRIX(m_MHStarB,double);
-    MAL_MATRIX(m_MHStarLeftFoot,double); 
-    MAL_MATRIX(m_MHStarRightFoot,double);
-    MAL_MATRIX(m_MHFree,double);
+    matrixNxP m_MHStarB;
+    matrixNxP m_MHStarLeftFoot; 
+    matrixNxP m_MHStarRightFoot;
+    matrixNxP m_MHFree;
     
     /** Inversed Jacobian for the left and right foot. */
-    MAL_MATRIX(m_ILeftJacobian,double);
-    MAL_MATRIX(m_IRightJacobian,double);
-    MAL_MATRIX(m_ERBFI_Left,double);
-    MAL_MATRIX(m_ERBFI_Right,double);
+    matrixNxP m_ILeftJacobian;
+    matrixNxP m_IRightJacobian;
+    matrixNxP m_ERBFI_Left;
+    matrixNxP m_ERBFI_Right;
 
     /*! \name Members related to the momentum 
       @{
     */
     /** \brief Linear momentum vector */
-    MAL_S3_VECTOR(,double) m_P;
+    vector3d m_P;
     
     /** \brief Derivative of the linear momentum */
-    MAL_S3_VECTOR(,double) m_dP;
+    vector3d m_dP;
 
     /** \brief Angular momentum vector. */
-    MAL_S3_VECTOR(,double) m_L;
+    vector3d m_L;
 
     /** \brief Derivative of the angular momentum */
-    MAL_S3_VECTOR(,double) m_dL;
+    vector3d m_dL;
     
     /** \brief Previous Linear momentum vector */
-    MAL_S3_VECTOR(,double) m_Prev_P;
+    vector3d m_Prev_P;
 
     /** \brief Previous Angular momentum vector. */
-    MAL_S3_VECTOR(,double) m_Prev_L;
+    vector3d m_Prev_L;
         
     
     /** @} */
@@ -124,10 +122,10 @@ namespace dynamicsJRLJapan
     Joint * m_RootOfTheJointsTree;
 
     /** \brief Velocity of the center of Mass */
-    MAL_S3_VECTOR(,double) m_VelocityCenterOfMass;
+    vector3d m_VelocityCenterOfMass;
 
     /** \brief Acceleration of the center of Mass */
-    MAL_S3_VECTOR(,double) m_AccelerationCenterOfMass;
+    vector3d m_AccelerationCenterOfMass;
 
     /** \brief Vector to store the global current configuration 
 
@@ -149,7 +147,7 @@ namespace dynamicsJRLJapan
       \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n\f$ joint.
     */
-    MAL_VECTOR(,double) m_Configuration;
+    vectorN m_Configuration;
 
     /** \brief Vector to store the global current velocity 
 
@@ -171,7 +169,7 @@ namespace dynamicsJRLJapan
       \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n \f$ joint.
     */
-    MAL_VECTOR(,double) m_Velocity;
+    vectorN m_Velocity;
 
     /** \brief Vector to store the global current velocity 
 
@@ -193,17 +191,16 @@ namespace dynamicsJRLJapan
       \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n \f$ joint.
     */
-    MAL_VECTOR(,double) m_Acceleration;
+    vectorN m_Acceleration;
 
     /** Time step used to compute momentum derivative. */
     double m_TimeStep;
 
     /** Store the current ZMP value . */
-    MAL_S3_VECTOR(,double) m_ZMP;
+    vector3d m_ZMP;
 
     /** Vector of pointers towards the joints. */
-    std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-      MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> m_JointVector;
+    std::vector<CjrlJoint*> m_JointVector;
 
     /**! \name Internal computation of Joints @{ */
     /*! \brief Method to compute the number of joints
@@ -247,7 +244,7 @@ namespace dynamicsJRLJapan
     unsigned int m_IterationNumber;
 
     /*! Jacobian of the CoM. */
-    MAL_MATRIX(m_JacobianOfTheCoM,double);
+    matrixNxP m_JacobianOfTheCoM;
 
   public:
     
@@ -272,10 +269,10 @@ namespace dynamicsJRLJapan
     /** \brief Computation the velocity following a tree like path.
 	It is assume that the value of the joint has been
 	correctly set. */
-    void ForwardVelocity(MAL_S3_VECTOR(,double) &PosForRoot, 
-			 MAL_S3x3_MATRIX(,double) &OrientationForRoot, 
-			 MAL_S3_VECTOR(,double) &v0ForRoot,
-			 MAL_S3_VECTOR(,double) &wForRoot);
+    void ForwardVelocity(vector3d &PosForRoot, 
+			 matrix3d &OrientationForRoot, 
+			 vector3d &v0ForRoot,
+			 vector3d &wForRoot);
     
     /** \brief Compute Inertia Matrices for Resolved Mometum Control
 	Fist pass for tilde m and tilde c */
@@ -292,8 +289,8 @@ namespace dynamicsJRLJapan
     /** \brief Calculate ZMP. */
     void CalculateZMP(double &px, 
 		      double &py,
-		      MAL_S3_VECTOR(,double) dP, 
-		      MAL_S3_VECTOR(,double) dL, 
+		      vector3d dP, 
+		      vector3d dL, 
 		      double zmpz);
 
     /** \brief Compute the matrices MH*B, MH*Fi,MHFree  (Kajita IROS 2003 p. 1645) */
@@ -303,19 +300,19 @@ namespace dynamicsJRLJapan
 					 vector<int> FreeJoints);
     
     /** \brief Build the linear system for Resolved Momentum Control. */
-    void BuildLinearSystemForRMC(MAL_MATRIX( &PLref, double),
-				 MAL_MATRIX(&XiLeftFootRef,double),
-				 MAL_MATRIX(&XiRightFootRef,double),
+    void BuildLinearSystemForRMC(matrixNxP &PLref,
+				 matrixNxP &XiLeftFootRef,
+				 matrixNxP &XiRightFootRef,
 				 int NbOfFreeJoints,
-				 MAL_MATRIX(&S,double),
-				 MAL_MATRIX(&XiBdThetaFreeRef,double),
-				 MAL_MATRIX(&XiBdThetaFree,double),
-				 MAL_MATRIX(&LeftLegVelocity,double),
-				 MAL_MATRIX(&RightLegVelocity,double));
+				 matrixNxP &S,
+				 matrixNxP &XiBdThetaFreeRef,
+				 matrixNxP &XiBdThetaFree,
+				 matrixNxP &LeftLegVelocity,
+				 matrixNxP &RightLegVelocity);
 
     
     /** \brief Compute the D operator (Kajita IROS 2003 p. 1647) */
-    MAL_S3x3_MATRIX(,double) D(MAL_S3_VECTOR(,double) &r);
+    matrix3d D(vector3d &r);
 
     /** @}
      */ 
@@ -326,12 +323,12 @@ namespace dynamicsJRLJapan
     
     /** \brief Computing the Jacobian. */
     int ComputeJacobian(int corps1, int corps2, 
-			MAL_S3_VECTOR(,double) coordLocales, 
+			vector3d coordLocales, 
 			double *jacobienne[6]);
 
     /** \brief Computing the Jacobian with a path (links) */
     void ComputeJacobianWithPath(vector<int> aPath,
-				 MAL_MATRIX(&J,double));
+				 matrixNxP &J);
 
     /** \brief Modifying the initial body. */
     void changerCorpsInitial(int nouveauCorps);
@@ -358,8 +355,8 @@ namespace dynamicsJRLJapan
     /** @} */
 
     /** Give the position of a body's point in a frame.  */
-    MAL_S3_VECTOR(,double) getPositionPointDansRepere(MAL_S3_VECTOR(,double) point, 
-						      int corpsDuPoint, int corpsDuRepere);
+    vector3d getPositionPointDansRepere(vector3d point, 
+				 	int corpsDuPoint, int corpsDuRepere);
 
     /** \name Getter and setter for dynamic bodies  */
 
@@ -378,34 +375,34 @@ namespace dynamicsJRLJapan
     void Setdq(int JointID, double dq);
         
     /** Get the linear velocity for the joint JointID in the VRML numbering system*/
-    MAL_S3_VECTOR(,double) Getv(int JointID);
+    vector3d Getv(int JointID);
     
     /** Get the linear velocity for the body JointID in the VRML numbering system. */
-    MAL_S3_VECTOR(,double) GetvBody(int BodyID);
+    vector3d GetvBody(int BodyID);
     
     /**  Set the orientation for the body JointID in the VRML numbering system. */
-    void SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R);
+    void SetRBody(int BodyID, matrix3d R);
     
     /** Set the linear velocity for the body JointID in the VRML numbering system. */
-    void Setv(int JointID, MAL_S3_VECTOR(,double) v0);
+    void Setv(int JointID, vector3d v0);
     
     /** Set the angular velocity. */
-    void Setw(int JointID, MAL_S3_VECTOR(,double) w);
+    void Setw(int JointID, vector3d w);
     
     /** Get the angular velocity for the body JointID in the VRML numbering system. */
-    MAL_S3_VECTOR(,double) Getw(int JointID);
+    vector3d Getw(int JointID);
     
     /** Get the angular velocity for the body JointID in the VRML numbering system . */
-    MAL_S3_VECTOR(,double) GetwBody(int BodyID);
+    vector3d GetwBody(int BodyID);
     
     /** Get the position for the body JointID in the VRML numbering system */
-    MAL_S3_VECTOR(,double) Getp(int JointID);
+    vector3d Getp(int JointID);
     
     /** Get the Angular Momentum for the body JointID in the VRML numbering system */
-    MAL_S3_VECTOR(,double) GetL(int JointID);
+    vector3d GetL(int JointID);
     
     /** Get the Linear Momentum for the body JointID in the VRML numbering system */
-    MAL_S3_VECTOR(,double) GetP(int JointID);
+    vector3d GetP(int JointID);
 
     /** Set the time step to compute the Momentum derivative */
     inline void SetTimeStep(double inTimeStep)
@@ -416,28 +413,27 @@ namespace dynamicsJRLJapan
       {return m_TimeStep ;};
     
     /** Set the position, to be used with the body JointID in the VRML numbering system. */
-    void Setp(int JointID, MAL_S3_VECTOR(,double) apos);
+    void Setp(int JointID, vector3d apos);
 
     /** Gives the two momentums vector. */
-    void GetPandL(MAL_S3_VECTOR(,double) &aP, 
-		  MAL_S3_VECTOR(,double) &aL);
+    void GetPandL(vector3d &aP, 
+		  vector3d &aL);
 
     /** Get the position of the center of Mass. */
-    MAL_S3_VECTOR(,double) getPositionCoM(void);
+    vector3d getPositionCoM(void);
         
     
     /** Returns the name of the body JointID in the VRML numbering system. */
     string GetName(int JointID);
 
     /** Returns a CjrlJoint corresponding to body JointID in the VRML numbering system . */
-    CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> * GetJointFromVRMLID(int JointID);
+    CjrlJoint* GetJointFromVRMLID(int JointID);
 
     /** Returns a vector to transfer from VRML ID to configuration ID . */
     void GetJointIDInConfigurationFromVRMLID(vector<int> & VectorFromVRMLIDToConfigurationID);
 
     /** Returns the ZMP value */
-    inline const MAL_S3_VECTOR(,double) getZMP() const
+    inline const vector3d getZMP() const
       {return m_ZMP;};
 
     /** @} */
@@ -471,20 +467,17 @@ namespace dynamicsJRLJapan
     /**
        \brief Set the root joint of the robot.
     */
-    void rootJoint(CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>& inJoint);
+    void rootJoint(CjrlJoint& inJoint);
     
     /**
        \brief Get the root joint of the robot.
     */
-    CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)>* rootJoint() const;
+    CjrlJoint* rootJoint() const;
     
     /**
        \brief Get a vector containing all the joints.
     */
-    std::vector<CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *> jointVector();
+    std::vector<CjrlJoint*> jointVector();
     
     /**
        \brief Get the number of degrees of freedom of the robot.
@@ -553,7 +546,7 @@ namespace dynamicsJRLJapan
        input vector does not fit the number of degrees of freedom of the
        robot).
     */
-    bool currentConfiguration(const MAL_VECTOR(,double)& inConfig);
+    bool currentConfiguration(const vectorN& inConfig);
     
     /**
        \brief Get the current configuration of the robot.
@@ -571,14 +564,14 @@ namespace dynamicsJRLJapan
        input vector does not fit the number of degrees of freedom of the
        robot).
     */
-    bool currentVelocity(const MAL_VECTOR(,double)& inVelocity);
+    bool currentVelocity(const vectorN& inVelocity);
     
     /**
        \brief Get the current velocity of the robot.
        
        \return the velocity vector \f${\bf \dot{q}}\f$.
     */
-    const MAL_VECTOR(,double)& currentVelocity() const;
+    const vectorN& currentVelocity() const;
     /**
        \brief Set the current acceleration of the robot.  
        
@@ -588,14 +581,14 @@ namespace dynamicsJRLJapan
        input vector does not fit the number of degrees of freedom of the
        robot).
     */
-    bool currentAcceleration(const MAL_VECTOR(,double)& inAcceleration) ;
+    bool currentAcceleration(const vectorN& inAcceleration) ;
     
     /**
        \brief Get the current acceleration of the robot.
 
        \return the acceleration vector \f${\bf \ddot{q}}\f$.
     */
-    const MAL_VECTOR(,double)& currentAcceleration() const ;
+    const vectorN& currentAcceleration() const ;
     
     /**
        @}
@@ -624,37 +617,37 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the position of the center of mass.
     */
-    const MAL_S3_VECTOR(,double)& positionCenterOfMass() ;
+    const vector3d& positionCenterOfMass() ;
     
     /**
        \brief Get the velocity of the center of mass.
     */
-    const MAL_S3_VECTOR(,double)& velocityCenterOfMass() ;
+    const vector3d& velocityCenterOfMass() ;
     
     /**
        \brief Get the acceleration of the center of mass.
     */
-    const MAL_S3_VECTOR(,double)& accelerationCenterOfMass() ;
+    const vector3d& accelerationCenterOfMass() ;
     
     /**
        \brief Get the linear momentum of the robot.
     */
-    const MAL_S3_VECTOR(,double)& linearMomentumRobot() ;
+    const vector3d& linearMomentumRobot() ;
     
     /**
        \brief Get the time-derivative of the linear momentum.
     */
-    const MAL_S3_VECTOR(,double)& derivativeLinearMomentum() ;
+    const vector3d& derivativeLinearMomentum() ;
     
     /**
        \brief Get the angular momentum of the robot at the center of mass.
     */
-    const MAL_S3_VECTOR(,double)& angularMomentumRobot() ;
+    const vector3d& angularMomentumRobot() ;
     
     /**
        \brief Get the time-derivative of the angular momentum at the center of mass.
     */
-    const MAL_S3_VECTOR(,double)& derivativeAngularMomentum() ;
+    const vector3d& derivativeAngularMomentum() ;
     
     /**
        @}
@@ -672,7 +665,7 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
-     const MAL_MATRIX(,double) & jacobianCenterOfMass() const ;
+     const matrixNxP & jacobianCenterOfMass() const ;
     
     /**
        @}

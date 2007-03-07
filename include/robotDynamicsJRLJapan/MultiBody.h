@@ -128,7 +128,7 @@ namespace dynamicsJRLJapan
     /*!  Robot's mass. */
     double masse;
     /*!  CoM of the robot */
-    MAL_S3_VECTOR(,double) positionCoMPondere;			//CoM*masse
+    vector3d positionCoMPondere;			//CoM*masse
     /*!  List of links. */
     vector<internalLink> listeLiaisons;
     /*!  List Of Bodies. */
@@ -156,14 +156,14 @@ namespace dynamicsJRLJapan
 
     /*!  Adds a fixed link. */
     void ajouterLiaisonFixe(Body &corps1, Body &corps2, 
-			    MAL_S3_VECTOR(,double) translationStat, 
-			    MAL_S3_VECTOR(,double) axeRotationStat, 
+			    vector3d translationStat, 
+			    vector3d axeRotationStat, 
 			    double angleRotationStat = 0);
     /*!  Adds a link with rotation. */
     void ajouterLiaisonRotation(Body &corps1, Body &corps2, 
-				MAL_S3_VECTOR(,double) axe , 
-				MAL_S3_VECTOR(,double) translationStat, 
-				MAL_S3_VECTOR(,double) axeRotationStat, 
+				vector3d axe , 
+				vector3d translationStat, 
+				vector3d axeRotationStat, 
 				double angleRotationStat = 0);
 
     /*!  Remove a link between body corps1 and body corps. */
@@ -188,7 +188,7 @@ namespace dynamicsJRLJapan
     void inverserLiaison(int i);
 
     /*!  Returns the CoM position. */ 
-    MAL_S3_VECTOR(,double) getPositionCoM(void);
+    vector3d getPositionCoM(void);
 
     //Construction a partir d'un fichier VRML
     virtual void parserVRML(string path, string nom, const char* option);
