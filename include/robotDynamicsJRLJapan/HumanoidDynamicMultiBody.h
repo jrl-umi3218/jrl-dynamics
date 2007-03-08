@@ -285,12 +285,12 @@ namespace dynamicsJRLJapan
       /**
       \brief Get a point on the gaze straight line
        */
-      MAL_S3_VECTOR(,double) & gazeOrigin()const {return m_LinePoint;}
-  
-  /**
-      \brief Get the direction of gaze
-   */
-      MAL_S3_VECTOR(,double) & gazeDirection()const {return m_LineVector;}
+      const MAL_S3_VECTOR(,double) & gazeOrigin()const {return m_LinePoint;}
+      
+      /**
+	 \brief Get the direction of gaze
+      */
+      const MAL_S3_VECTOR(,double) & gazeDirection()const {return m_LineVector;}
       
       /**
 	 \@}
