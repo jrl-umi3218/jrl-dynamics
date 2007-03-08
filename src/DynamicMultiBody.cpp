@@ -388,6 +388,34 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       m_L+= lL;
 
 
+
+      // ******************* Computes the angular acceleration. ******************** 
+      MAL_S3_VECTOR(,double) aRa; // Spong p.278
+      MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
+      // tmp2 = z_{i-1} * dqi
+      tmp2 = aRa * listOfBodies[currentNode].dq; 
+      // tmp3 = w^{(0)}_i x z_{i-1} * dqi
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2); 
+      // tmp2 = z_{i-1} * ddqi
+      tmp2 = aRa * listOfBodies[currentNode].ddq; 
+      listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
+
+      // ******************* Computes the linear acceleration. ******************** 
+      MAL_S3_VECTOR(,double) aRb; // Spong p. 279
+      MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
+      // tmp3 = w_i x (w_i x r_{i,i+1})
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRb);
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+
+      // tmp2 = dw_I x r_{i,i+1}
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRb);
+
+      // 
+      MAL_S3x3_MATRIX(Rot,double);
+      Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
+      listOfBodies[currentNode].dv = MAL_S3x3_RET_A_by_B(Rot,listOfBodies[lMother].dv) +
+	tmp2 + tmp3;
+
       // TO DO if necessary : cross velocity.
       
       int step=0;
