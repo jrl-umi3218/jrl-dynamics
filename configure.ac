@@ -45,39 +45,31 @@ AC_ARG_WITH(VNL,
 dnl
 dnl If configure is invoked --with-t3d without path, call pkg-config
 dnl
-
-AC_ARG_WITH(T3D,
-	for using T3D V3D and R3D as SmallMatrix and SmallVector,
-	WITH_T3D="1"
-	echo "Using t3d"
-	if test "x${withval}"="x" ; then
-		T3D_PKG=1
-		echo "Using pkg-config for t3d"
+AC_ARG_WITH(t3d,
+	AC_HELP_STRING([--with-t3d],[for using T3D V3D and R3D as SmallMatrix and SmallVector]))
+if test x$with_t3d = xno ; then
+	AC_MSG_NOTICE([not using T3D package])
+	T3D_REQUIRES=
+	T3D_CFLAGS=
+	T3D_LIBS=
+else
+	if test x$with_t3d = xyes ; then
+		T3D_REQUIRES="t3d >= 2.1,"
+		PKG_CHECK_MODULES(T3D, [t3d >= 2.1])
 	else
-		T3D_PKG=0
-		T3D_PREFIX="${withval}"
-		echo "t3d is at ${withval}"
-	fi
-	,
-	WITH_T3D="0"
-	echo "Not using t3d"
-	)
-
-if test "$WITH_T3D" = "1" ; then
-	echo "Using pkg-config for t3d"
-	if test "$T3D_PKG" = "1" ; then
-		echo "Using pkg-config for t3d"
-		PKG_CHECK_MODULES(T3D, t3d)
-		AC_SUBST(T3D_CFLAGS)
-		AC_SUBST(T3D_LIBS)
-	else
-		T3D_CFLAGS="-I${T3D_PREFIX}/include"
-		T3D_LIBS="-L${T3D_PREFIX}/lib -lt3d"
+		T3D_CFLAGS="-I${with_t3d}/include"
+		T3D_LIBS="-L${with_t3d}/lib -lt3d"
+		AC_MSG_NOTICE([using T3D package at ${with_t3d}])
 	fi
 	CXXFLAGS="${CXXFLAGS} ${T3D_CFLAGS} -D_T3D_R3D_V3D_"
 	LDFLAGS="${LDFLAGS} ${T3D_LIBS}"
 fi
 
+AC_SUBST(T3D_CFLAGS)
+AC_SUBST(T3D_LIBS)
+AC_SUBST(T3D_REQUIRES)
+
+dnl Create configuration files
 AC_OUTPUT(
 	dynamicsJRLJapan.pc
 	Makefile
