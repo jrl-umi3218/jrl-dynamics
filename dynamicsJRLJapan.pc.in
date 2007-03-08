@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: @PACKAGE@
 Description: Implementation of Abstract Interface abstractRobotDynamics
 Version: @VERSION@
-Requires: @PKG_T3D_REQUIRES@ abstractRobotDynamics, MatrixAbstractLayer
-Libs: -L${libdir} -ljrlCIRdynamicsJRLJapan @PKG_T3D_LIBS@
-Cflags: -I${includedir} @PKG_T3D_CFLAGS@
+Requires: abstractRobotDynamics
+Libs: -L${libdir} -ljrlCIRdynamicsJRLJapan
+Cflags: -I${includedir}
