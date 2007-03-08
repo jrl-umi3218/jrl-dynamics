@@ -54,8 +54,8 @@ if test x$with_t3d = xno ; then
 	T3D_LIBS=
 else
 	if test x$with_t3d = xyes ; then
-		T3D_REQUIRES="t3d >= 2.1,"
-		PKG_CHECK_MODULES(T3D, [t3d >= 2.1])
+		T3D_REQUIRES="t3d >= 2.2,"
+		PKG_CHECK_MODULES(T3D, [t3d >= 2.2])
 	else
 		T3D_CFLAGS="-I${with_t3d}/include"
 		T3D_LIBS="-L${with_t3d}/lib -lt3d"
