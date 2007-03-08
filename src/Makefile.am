@@ -13,7 +13,9 @@ libdynamicsJRLJapan_la_SOURCES = \
 	HumanoidDynamicMultiBody.cpp \
 	HumanoidSpecificities.cpp 
 
-libdynamicsJRLJapan_la_LDFLAGS = 
+libdynamicsJRLJapan_la_LDFLAGS = \
+	@ROBOTDYNAMICS_LIBS@
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
-	-I$(srcdir)/../include/robotDynamicsJRLJapan/
+	-I$(srcdir)/../include/robotDynamicsJRLJapan	\
+	@ROBOTDYNAMICS_CFLAGS@
