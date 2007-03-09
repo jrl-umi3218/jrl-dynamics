@@ -12,6 +12,13 @@ cd build
 make 
 make install
 
-Make sure that you have specified a matrix library, and that you gave
-the correct path for the MatrixAbstractLayer:
-./configure --with-boost=/usr/include/boost --with-boost-sandbox=/usr/include/boost-sandbox CXX=g++-3.3 CC=gcc-3.3 --with-lapack=/usr/lib CXXFLAGS=-O3 CFLAGS=-O3 --with-MAL=/home/stasse/src/OpenHRP/JRL/ --prefix=/home/stasse/src/OpenHRP/JRL/
+Notes of linear algebra and rigid-body motion computations
+----------------------------------------------------------
+
+Linear algebra computations are performed either by ublas and lapack
+or by VNL. 
+Rigid-body motion computations are performed either by a default ad-hoc implementation
+or by t3d.
+
+The choice of which package for which computation is done when configuring MatrixAbstractLayer 
+package.
