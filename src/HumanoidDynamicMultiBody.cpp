@@ -214,7 +214,7 @@ void HumanoidDynamicMultiBody::clearFixedJoints()
     m_VectorOfFixedJoints.clear();
 }
 
-const CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank) const
+CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
   if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
       return *m_VectorOfFixedJoints[inJointRank];

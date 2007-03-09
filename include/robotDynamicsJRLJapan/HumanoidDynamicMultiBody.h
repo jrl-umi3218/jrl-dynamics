@@ -304,7 +304,7 @@ namespace dynamicsJRLJapan
        /** 
 	   \brief Return the fixed joint at rank inRank 
        */
-       const CjrlJoint& fixedJoint(unsigned int inJointRank) const;
+       CjrlJoint& fixedJoint(unsigned int inJointRank);
 
       
       /**
