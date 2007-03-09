@@ -33,8 +33,8 @@
 
 #include <vector>
 
-#include "robotDynamics/jrlJoint.h"
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "robotDynamics/jrlJoint.h"
 
 
 using namespace std;

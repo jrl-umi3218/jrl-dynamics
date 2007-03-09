@@ -1,3 +1,10 @@
+2007/03/09
+	8. Removed Makefile.in and configure from version control.
+	7. Added @ROBOTDYNAMICS_CFLAGS@ and @ROBOTDYNAMICS_LIBS@ in unitTesting/Makefile.am
+	One symbol is still undefined:
+	undefined symbol: dgesvd_       (src/.libs/libdynamicsJRLJapan.so)
+	6. Moved inclusion of MatrixAbstractLayer.h before other inclusion to make sure 
+	matrices and vectors are defined.
 2007/03/07
 	5. The use macros used in Body.h, DynamicBody.h, DynamicMultiBody.h,
 	HumanoidDynamicMultiBody.h, Joint.h and MultiBody to define the matrix
