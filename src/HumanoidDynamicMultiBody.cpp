@@ -355,10 +355,9 @@ bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
 
 double HumanoidDynamicMultiBody::footHeight() const
 {
-  cerr<< " The method HumanoidDynamicMultiBody::footHeight() " <<endl
-      << " is not implemented yet. " << endl;
+  cerr<< " HumanoidDynamicMultiBody::footHeight() implementation specific to HRP2" <<endl;
   
-  return -1.0;
+  return 0.105;
 }
 
 
