@@ -371,6 +371,11 @@ CjrlJoint* HumanoidDynamicMultiBody::waist()
   return m_WaistJoint;
 }
 
+double HumanoidDynamicMultiBody::mass() const
+{
+    return m_DMB->mass();
+}
+
 /***************************************************/
 /* End of the implementation                       */
 /***************************************************/

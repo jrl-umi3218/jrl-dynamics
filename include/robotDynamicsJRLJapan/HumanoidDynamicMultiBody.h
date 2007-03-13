@@ -511,6 +511,7 @@ namespace dynamicsJRLJapan
 
       void waist(CjrlJoint* inWaist);
 
+      double mass() const;
       
       CjrlJoint* waist();
 

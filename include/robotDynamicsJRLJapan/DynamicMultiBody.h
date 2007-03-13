@@ -553,7 +553,7 @@ namespace dynamicsJRLJapan
        
        \return the configuration vector \f${\bf q}\f$.
     */
-    const MAL_VECTOR(,double)& currentConfiguration() const;
+    const vectorN& currentConfiguration() const;
     
     /**
        \brief Set the current velocity of the robot.  
@@ -671,8 +671,7 @@ namespace dynamicsJRLJapan
     */
      double mass() const
      {
-         double masse = getMasse();
-         return masse;
+          return masse;
      }
     /**
        @}
