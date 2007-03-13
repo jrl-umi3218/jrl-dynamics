@@ -85,6 +85,11 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
       m_StaticToTheRightHip(2) = WaistToHip[2];
       m_TranslationToTheRightHip = m_StaticToTheRightHip;      
       
+
+      // If the Dynamic Multibody object is already loaded
+      // create the link between the joints and the effector semantic.
+      if (m_DMB->numberDof()!=0)
+	LinkBetweenJointsAndEndEffectorSemantic();
     }
   else
     {
@@ -127,7 +132,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb = m_HS->GetArmJoints(-1);
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
-  if (m_DMB!=0)
+  if (m_SDMB!=0)
     m_RightHandJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
   
@@ -137,7 +142,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the left foot:" << EndIndex);
-  if (m_DMB!=0)
+  if (m_SDMB!=0)
     m_LeftFootJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
   // Get the right foot.
@@ -146,7 +151,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the right foot:" << EndIndex);
-  if (m_DMB!=0)
+  if (m_SDMB!=0)
     m_RightFootJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
 
   
@@ -155,7 +160,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb = m_HS->GetHeadJoints();
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
-  if (m_DMB!=0)
+  if (m_SDMB!=0)
     m_GazeJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
 
   // Get the waist joint of the humanoid.
