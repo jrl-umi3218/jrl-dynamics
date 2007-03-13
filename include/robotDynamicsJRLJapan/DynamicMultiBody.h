@@ -666,7 +666,14 @@ namespace dynamicsJRLJapan
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
      const matrixNxP & jacobianCenterOfMass() const ;
-    
+    /**
+       \brief Get the total mass
+    */
+     double mass() const
+     {
+         double masse = getMasse();
+         return masse;
+     }
     /**
        @}
     */
