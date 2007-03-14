@@ -165,7 +165,7 @@ void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, in
   // Update the translation vector
   listeLiaisons[JointID].aJoint.getStaticTranslation(listOfBodies[BodyID].b);
   // listOfBodies[cID].R = 
-  listeLiaisons[JointID].aJoint.setLinkedBody(listOfBodies[JointID]);
+  listeLiaisons[JointID].aJoint.setLinkedBody(listOfBodies[BodyID]);
   listOfBodies[BodyID].joint( &listeLiaisons[JointID].aJoint);
   
 }
@@ -333,7 +333,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 
       // Computes the linear velocity.
       MAL_S3x3_C_eq_A_by_B(tmp,listOfBodies[lMother].R,
-		      listOfBodies[currentNode].b);
+			   listOfBodies[currentNode].b);
 
       MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[lMother].w , tmp);
 
