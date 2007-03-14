@@ -221,7 +221,8 @@ void HumanoidDynamicMultiBody::clearFixedJoints()
 
 CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
-  if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
+  //if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
+  if (inJointRank<m_VectorOfFixedJoints.size())
       return *m_VectorOfFixedJoints[inJointRank];
 }
 /* End of Methods related to the fixed joints */
