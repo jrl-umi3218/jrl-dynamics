@@ -98,6 +98,19 @@ void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 
 }
 
+void GoDownTree(const CjrlJoint * startJoint)
+{
+  std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
+  std::cout << "Joint name :" << ((Joint *)startJoint)->getName() << std::endl;
+  std::cout << startJoint->currentTransformation() << std::endl;
+  
+  if (startJoint->countChildJoints()!=0)
+    {
+      const CjrlJoint * childJoint = &(startJoint->childJoint(0));
+      GoDownTree(childJoint);
+    }
+}
+
 int main(int argc, char *argv[])
 {
   if (argc!=4)
@@ -162,14 +175,14 @@ int main(int argc, char *argv[])
   };
 
   int NbOfDofs = aDMB->numberDof();
-  
+  std::cout << "NbOfDofs :" << NbOfDofs <<std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
 
-  for(int i=0;i<40;i++)
-    aCurrentConf[lindex++] = dInitPos[i];
+  for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
+    aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   
   aDMB->currentConfiguration(aCurrentConf);
 
@@ -211,11 +224,11 @@ int main(int argc, char *argv[])
   cout << "Name of the WAIST joint :" << endl;
   cout << aJoint->getName() << endl;
 
-  aHDMB->computeJacobianCenterOfMass();
-  cout << "Value of the CoM's Jacobian:" << endl
-       << aHDMB->jacobianCenterOfMass() << endl;
+  //  aHDMB->computeJacobianCenterOfMass();
+  //  cout << "Value of the CoM's Jacobian:" << endl
+  //       << aHDMB->jacobianCenterOfMass() << endl;
 
-  
+  GoDownTree(aDMB->rootJoint());
   delete aDMB;
   delete aHDMB;
   
