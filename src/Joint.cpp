@@ -214,12 +214,17 @@ void Joint::computeJacobianJointWrtConfig()
   MAL_S3_VECTOR(,double) pn = FinalBody->p;
 
   ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size());
-  for(int i=0;i<m_FromRootToThis.size();i++)
+  
+  //not forgetting the last joint
+  std::vector<CjrlJoint*> fullChain = m_FromRootToThis;
+  fullChain.push_back(this);
+  
+  for(int i=0;i<fullChain.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
-      DynamicBody * aBody=  (DynamicBody *) m_FromRootToThis[i]->linkedBody();
-      Joint * aJoint = (Joint *)m_FromRootToThis[i];
+      DynamicBody * aBody=  (DynamicBody *) fullChain[i]->linkedBody();
+      Joint * aJoint = (Joint *)fullChain[i];
       
       MAL_S3_VECTOR(,double) aRa,dp;
       MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
@@ -238,7 +243,7 @@ void Joint::computeJacobianJointWrtConfig()
 	  for(int j=0;j<3;j++)
 	    {
 	      m_J(j,lcol) =  lv[j];
-	      m_J(j+3,lcol) = aRa[j+3];
+	      m_J(j+3,lcol) = aRa[j];
 	    }
 	  break;
 	case Joint::PRISMATIC_JOINT:
