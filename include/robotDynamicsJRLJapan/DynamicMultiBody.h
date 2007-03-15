@@ -274,6 +274,11 @@ namespace dynamicsJRLJapan
 			 vector3d &v0ForRoot,
 			 vector3d &wForRoot);
     
+    /** \brief Compute the backward part of the dynamics
+	to get the force and the torques of the bodies.
+     */
+    void BackwardDynamics(DynamicBody & CurrentBody);
+
     /** \brief Compute Inertia Matrices for Resolved Mometum Control
 	Fist pass for tilde m and tilde c */
     void InertiaMatricesforRMCFirstStep();

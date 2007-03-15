@@ -102,6 +102,10 @@ void GoDownTree(const CjrlJoint * startJoint)
 {
   std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
   std::cout << "Joint name :" << ((Joint *)startJoint)->getName() << std::endl;
+  std::cout << "Force on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Force << std::endl;
+  std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
+  std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
+  std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
   std::cout << startJoint->currentTransformation() << std::endl;
   
   if (startJoint->countChildJoints()!=0)
@@ -158,7 +162,7 @@ int main(int argc, char *argv[])
   bool ok=true;
 
   // Test the tree.
-  RecursiveDisplayOfJoints(rootJoint);
+  //RecursiveDisplayOfJoints(rootJoint);
 
 
   // Tes the computation of the jacobian.
@@ -180,9 +184,10 @@ int main(int argc, char *argv[])
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
-
+  
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
+  //aCurrentConf[lindex++] = 0.0;
   
   aDMB->currentConfiguration(aCurrentConf);
 
@@ -207,7 +212,7 @@ int main(int argc, char *argv[])
 
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
   
-  DisplayMatrix(aJ);
+  //  DisplayMatrix(aJ);
   
   cout << "Root: " << ((Joint *)rootJoint)->getName() << endl;
 
@@ -217,7 +222,7 @@ int main(int argc, char *argv[])
   
   cout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
 
-  DisplayMatrix(aJ);
+  //  DisplayMatrix(aJ);
 
   aJoint = (Joint *)aHDMB->waist();
 
@@ -229,6 +234,9 @@ int main(int argc, char *argv[])
   //       << aHDMB->jacobianCenterOfMass() << endl;
 
   GoDownTree(aDMB->rootJoint());
+
+  cout << "Mass of the robot " << aDMB->getMasse() << endl;
+  cout << "Force " << aDMB->getMasse()*9.81 << endl;
   delete aDMB;
   delete aHDMB;
   

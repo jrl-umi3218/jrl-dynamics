@@ -121,14 +121,15 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
   int lVRMLID = m_RootOfTheJointsTree->getIDinVRML();
   if (m_NbOfVRMLIDs < lVRMLID)
     m_NbOfVRMLIDs = lVRMLID;
-
       
   // Find out the next body to be examine.
+  /*
   int NewBody = listeLiaisons[ld].indexCorps1;
   if (NewBody == ID)
     NewBody = listeLiaisons[ld].indexCorps2;
 
-  ReLabelling(NewBody,ld);   
+    ReLabelling(NewBody,ld);   */
+  ReLabelling(ID,ld);
   
   // Once finished we initialize the child and the sister.
   for(unsigned int i=0;i<listOfBodies.size();i++)
@@ -226,6 +227,82 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
     }
 }
 
+
+
+void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
+{
+  MAL_S3x3_MATRIX(,double) aRt;
+  
+  MAL_S3x3_MATRIX(,double) currentBodyR;
+  currentBodyR = MAL_S3x3_RET_TRANSPOSE(CurrentBody.R);
+ 
+  MAL_S3_VECTOR(,double) lg;
+  lg(0) = 0.0;
+  lg(1) = 0.0;
+  lg(2) = -9.81;
+  
+  /* Compute the torque 
+   * with eq. (7.147) Spong RMC p. 277
+   * 
+   *
+   */
+  MAL_S3_VECTOR(,double) firstterm,
+    sndterm, thirdterm, fifthterm,tmp; 
+  // Do not fourth term because it is the angular acceleration.
+  /* Constant part */
+  /* 2nd term : -f_i x r_{i,ci} */
+  MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, CurrentBody.c);
+
+  /* 5th term : w_i x (I_i w_i)*/
+  MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
+  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.w);
+  tmp = MAL_S3x3_RET_A_by_B(lI,tmp);
+  MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.w,tmp);
+  
+  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm -sndterm;
+
+  /* Compute with the force 
+   * eq. (7.146) Spong RMC p. 277
+   * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
+   * g_i is the gravity express in the i reference frame.
+   */
+
+  /* Constant part. */
+  tmp = CurrentBody.dv_c - lg;
+  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,tmp);
+  CurrentBody.m_Force =  tmp * CurrentBody.mass();
+  
+  int IndexChild = CurrentBody.child;
+  cout << "Body : " << CurrentBody.getName() << endl;
+  DynamicBody *Child = &listOfBodies[IndexChild];
+  while(IndexChild!=-1)
+    {
+      cout << "Child Bodies : " << Child->getName() << endl;
+      aRt = Child->Riip1;
+      cout << "Riip1: " << aRt << endl;
+      /* Force computation. */
+      // Other immediate child are sisters of the other immediate childs.
+      cout << "Force: " << Child->m_Force << endl;
+      tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);
+      CurrentBody.m_Force += tmp;
+
+      /* Torque computation. */
+      /* 1st term : R^i_{i+1} t_{i+1} */
+      firstterm = MAL_S3x3_RET_A_by_B(aRt, Child->m_Torque);
+      
+      /* 3rd term : R_i_{i+1} f_{i+1} */
+      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, CurrentBody.w_c);
+  
+      CurrentBody.m_Torque += firstterm + thirdterm;
+
+      /* Body selection. */
+      IndexChild = listOfBodies[IndexChild].sister;
+      if (IndexChild!=-1)
+	Child=&listOfBodies[IndexChild];
+    }
+  
+}
+
 void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double), 
 				       MAL_S3x3_MATRIX(&OrientationForRoot,double),
 				       MAL_S3_VECTOR(&v0ForRoot,double),
@@ -315,6 +392,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       listOfBodies[currentNode].p = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R , aDB.b )
 	+ listOfBodies[lMother].p;
       MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode].R ,listOfBodies[lMother].R , Ro);
+      listOfBodies[currentNode].Riip1 = Ro;
 
       ODEBUG("q: "<< aDB.q );
       ODEBUG("p: " << listOfBodies[currentNode].p[0] << " " 
@@ -387,9 +465,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       listOfBodies[currentNode].w_c = lw_c;
       m_L+= lL;
 
-
-
-      // ******************* Computes the angular acceleration. ******************** 
+      // ******************* Computes the angular acceleration for joint i. ******************** 
       MAL_S3_VECTOR(,double) aRa; // Spong p.278
       MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
       // tmp2 = z_{i-1} * dqi
@@ -400,7 +476,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       tmp2 = aRa * listOfBodies[currentNode].ddq; 
       listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
 
-      // ******************* Computes the linear acceleration. ******************** 
+      // ******************* Computes the linear acceleration for joint i. ******************** 
       MAL_S3_VECTOR(,double) aRb; // Spong p. 279
       MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
       // tmp3 = w_i x (w_i x r_{i,i+1})
@@ -413,9 +489,22 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       // 
       MAL_S3x3_MATRIX(Rot,double);
       Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
-      listOfBodies[currentNode].dv = MAL_S3x3_RET_A_by_B(Rot,listOfBodies[lMother].dv) +
-	tmp2 + tmp3;
+      MAL_S3_VECTOR(,double) RotByMotherdv;
+      MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
+      listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
 
+      // *******************  Acceleration for the center of mass of body  i ************************
+      MAL_S3_VECTOR(,double) aRc; // Spong p. 279
+      MAL_S3x3_C_eq_A_by_B(aRc, listOfBodies[currentNode].R, aDB.c);
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRc);
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+
+      // tmp2 = dw_I x r_{i,i+1}
+      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRc);
+      // 
+      listOfBodies[currentNode].dv_c = RotByMotherdv + tmp2 + tmp3;
+
+      
       // TO DO if necessary : cross velocity.
       
       int step=0;
@@ -437,6 +526,14 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 	    NextNode = listOfBodies[currentNode].getLabelMother();
 	    if (NextNode>=0)
 	      {
+		/* Test if current node is leaf, 
+		   because in this case the force are not set properly. */
+		if ((listOfBodies[currentNode].sister==-1) &&
+		    (listOfBodies[currentNode].child==-1))
+		  BackwardDynamics(listOfBodies[currentNode]);
+
+		/* Compute backward dynamics */
+		BackwardDynamics(listOfBodies[NextNode]);
 		currentNode = NextNode;
 		NextNode = listOfBodies[currentNode].sister;
 	      }
