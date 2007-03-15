@@ -59,6 +59,10 @@ namespace dynamicsJRLJapan
     
   public:
     
+      vector3d m_Force;
+      vector3d m_Torque;
+      vector3d dv_c;
+      matrix3d Riip1;
     
     /*! This relationship does make sense only if we are considering the
       relationship between this body and its mother in a given oriented

@@ -2,7 +2,8 @@
 #include "DynamicBody.h"
 
 #define ODEBUG2(x)
-#define ODEBUG3(x) cerr << "Joint :" << x << endl
+#define ODEBUG3(x) 
+//cerr << "Joint :" << x << endl
 
 #if 0
 #define ODEBUG(x) cerr << "Joint :" <<  x << endl
@@ -360,24 +361,25 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
     CosPhi, SinPhi,
     CosPsi, SinPsi;
   
-  CosTheta = cos(a6DVector(3));
-  SinTheta = sin(a6DVector(3));
-  CosPsi = cos(a6DVector(4));
-  SinPsi = sin(a6DVector(4));
+  
+  CosPsi = cos(a6DVector(3));
+  SinPsi = sin(a6DVector(3));
+  CosTheta = cos(a6DVector(4));
+  SinTheta = sin(a6DVector(4));
   CosPhi = cos(a6DVector(5));
   SinPhi = sin(a6DVector(5));
   
-  D(0,0) =  CosPhi; D(0,1) = SinPhi; D(0,2) = 0;
-  D(1,0) = -SinPhi; D(1,1) = CosPhi; D(1,2) = 0;
+  D(0,0) =  CosPhi; D(0,1) = -SinPhi; D(0,2) = 0;
+  D(1,0) =  SinPhi; D(1,1) = CosPhi; D(1,2) = 0;
   D(2,0) =       0; D(2,1) =      0; D(2,2) = 1;
   
-  C(0,0) =  CosTheta; C(0,1) =        0; C(0,2) = -SinTheta;
+  C(0,0) =  CosTheta; C(0,1) =        0; C(0,2) = SinTheta;
   C(1,0) =         0; C(1,1) =        1; C(1,2) = 0;
   C(2,0) = -SinTheta; C(2,1) =        0; C(2,2) = CosTheta;
   
   B(0,0) =       1; B(0,1) =        0; B(0,2) = 0;
-  B(1,0) =       0; B(1,1) =   CosPsi; B(1,2) = SinPsi;
-  B(2,0) =       0; B(2,1) =  -SinPsi; B(2,2) = CosPsi;
+  B(1,0) =       0; B(1,1) =   CosPsi; B(1,2) = -SinPsi;
+  B(2,0) =       0; B(2,1) =   SinPsi; B(2,2) = CosPsi;
   
   MAL_S3x3_MATRIX(,double) tmp;
   MAL_S3x3_C_eq_A_by_B(tmp,C,D);

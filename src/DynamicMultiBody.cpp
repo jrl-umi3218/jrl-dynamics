@@ -273,16 +273,16 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
   
   int IndexChild = CurrentBody.child;
-  cout << "Body : " << CurrentBody.getName() << endl;
+  //cout << "Body : " << CurrentBody.getName() << endl;
   DynamicBody *Child = &listOfBodies[IndexChild];
   while(IndexChild!=-1)
     {
-      cout << "Child Bodies : " << Child->getName() << endl;
+      //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = Child->Riip1;
-      cout << "Riip1: " << aRt << endl;
-      /* Force computation. */
-      // Other immediate child are sisters of the other immediate childs.
-      cout << "Force: " << Child->m_Force << endl;
+      //cout << "Riip1: " << aRt << endl;
+      // /* Force computation. */
+      //// Other immediate child are sisters of the other immediate childs.
+      //cout << "Force: " << Child->m_Force << endl;
       tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);
       CurrentBody.m_Force += tmp;
 
