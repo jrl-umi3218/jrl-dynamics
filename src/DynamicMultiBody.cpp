@@ -40,8 +40,14 @@
 
 #include <DynamicMultiBody.h>
 
-#define RESETDEBUG5(y) { ofstream DebugFile; DebugFile.open(y,ofstream::out); DebugFile.close();}
-#define ODEBUG5(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); DebugFile << "DMB: " << x << endl; DebugFile.close();}
+#define RESETDEBUG5(y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::out); \
+    DebugFile.close();}
+
+#define ODEBUG5(x,y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::app); \
+    DebugFile << "DMB: " << x << endl; \
+    DebugFile.close();}
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << "DynamicMultiBody :" << x << endl
@@ -90,6 +96,7 @@ DynamicMultiBody::DynamicMultiBody()
   m_NbOfVRMLIDs = -1;
   RESETDEBUG4("DebugDataPL.dat");
   RESETDEBUG4("DebugDataZMP.dat");
+  RESETDEBUG5("DebugDataDMB_ZMP.dat");
 }
 
 DynamicMultiBody::~DynamicMultiBody()
@@ -226,8 +233,6 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
       UpdateBodyParametersFromJoint(corpsSon,liaisonDestination,liaisonDeProvenance);
     }
 }
-
-
 
 void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
 {
@@ -395,7 +400,8 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       listOfBodies[currentNode].Riip1 = Ro;
 
       ODEBUG("q: "<< aDB.q );
-      ODEBUG("p: " << listOfBodies[currentNode].p[0] << " " 
+      ODEBUG("p: " 
+	     << listOfBodies[currentNode].p[0] << " " 
 	     << listOfBodies[currentNode].p[1] << " " 
 	     << listOfBodies[currentNode].p[2] << " " );
       ODEBUG("R: "<< aDB.R );
@@ -431,7 +437,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       lw_c = cl + listOfBodies[currentNode].p;
       positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
       ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
-      ODEBUG("MAsse " << listOfBodies[currentNode].getMasse());
+      ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
       ODEBUG("positionCoMPondere " << positionCoMPondere);
 
       // Computes momentum matrix P.
@@ -506,7 +512,6 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 
       
       // TO DO if necessary : cross velocity.
-      
       int step=0;
       int NextNode=0;
       do{
@@ -556,7 +561,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
   
   ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
   // Update the momentum derivative 
-  if (m_IterationNumber>2)
+  if (m_IterationNumber>1)
     {
       m_dP = (m_P - m_Prev_P)/m_TimeStep;
       m_dL = (m_L - m_Prev_L)/m_TimeStep;
@@ -575,7 +580,14 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
     }
   else 
     m_ZMP = positionCoMPondere;
-  
+
+  ODEBUG5( m_IterationNumber << " " 
+	   << m_ZMP(0) << " " 
+	   << m_ZMP(1) << " " 
+	   << m_ZMP(2) << " " 
+	   << m_P << " " 
+	   << m_L ,"DebugDataDMB_ZMP.dat" );
+
   // Update the store previous value.
   if (m_IterationNumber>=1)
     {
@@ -583,11 +595,8 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
       m_Prev_L = m_L;
     }
 
-  
-
   ODEBUG("Position of the CoM = " << positionCoMPondere <<endl <<
-	 "Weighted Com = "<< lpComP
-	 );
+	 "Weighted Com = "<< lpComP );
 
   SkewCoM(0,0) =         0; SkewCoM(0,1) = - lpComP[2]; SkewCoM(0,2) = lpComP[1];
   SkewCoM(1,0) = lpComP[2]; SkewCoM(1,1) =           0; SkewCoM(1,2) =-lpComP[0];
@@ -1041,7 +1050,8 @@ inline void DynamicMultiBody::empilerTransformationsLiaisonInverse(int liaison)
 {
 }
 
-void DynamicMultiBody::parserVRML(string path, string nom, 
+void DynamicMultiBody::parserVRML(string path, 
+				  string nom, 
 				  const char *option)
 {
   listOfBodies.clear();
@@ -1053,6 +1063,7 @@ void DynamicMultiBody::parserVRML(string path, string nom,
   ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
+  ReadSpecificities(option);
   BuildStateVectorToJointAndDOFs();
   UpdateTheSizeOfJointsJacobian();
 
@@ -1248,10 +1259,11 @@ int DynamicMultiBody::ComputeJacobian(int corps1, int corps2,
   double translationInit[3];
   double axe[3],angle=0.0;
   int l = chemin.size();
-  if (l == 0) {
-    jacobienne = NULL;
-    return 1;
-  }
+  if (l == 0) 
+    {
+      jacobienne = NULL;
+      return 1;
+    }
 
   double *matrice = new double[16];
 
@@ -1638,7 +1650,11 @@ CjrlJoint* DynamicMultiBody::GetJointFromVRMLID(int JointID)
     {
       Joint * r;
       if (((r=(Joint *)m_JointVector[i])->getIDinVRML())==JointID)
-	return r;
+	{
+	  ODEBUG("Joint : "<< r->getName() << " " << JointID );
+	  
+	  return r;
+	}
     }
 #endif
   return 0;
@@ -1996,29 +2012,102 @@ void DynamicMultiBody::ComputeNumberOfJoints()
   
 }
 
-void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
+void DynamicMultiBody::ReadSpecificities(string aFileName)
+{
+  FILE *fp;
+  fp = fopen((char *)aFileName.c_str(),"r");
+  
+  if (fp==0)
+    {
+      cerr << "Unable to read " << aFileName << endl;
+      return;
+    }
+  
+  if (look_for(fp,"LinkJointNameAndRank"))
+    {
+      NameAndRank_t aNameAndRank;
+
+      if (look_for(fp,"Nb"))
+	{
+	  fscanf(fp,"%d", &m_LinksBetweenJointNamesAndRankNb);
+	  ODEBUG("Links: " << m_LinksBetweenJointNamesAndRankNb);
+	}
+      for(int j=0;j<m_LinksBetweenJointNamesAndRankNb;j++)
+	{
+	  if(look_for(fp,"Link"))
+	    {
+	      char Buffer[128];
+	      memset(Buffer,0,128);
+	      fscanf(fp,"%s",Buffer);
+		  
+	      aNameAndRank.LinkName = Buffer;
+	      fscanf(fp,"%d", &aNameAndRank.RankInConfiguration);
+
+	      look_for(fp,"</Link>");
+	      m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
+						     aNameAndRank);
+	    }
+
+	  ODEBUG( aNameAndRank.LinkName << " " << aNameAndRank.RankInConfiguration);
+	}
+    }
+  fclose(fp);
+}
+
+int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 {
 
+  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+    {
+      if (m_LinksBetweenJointNamesAndRank[i].LinkName == aJoint->getName())
+	return m_LinksBetweenJointNamesAndRank[i].RankInConfiguration;
+    }
+  return -1;
+}
+
+Joint * DynamicMultiBody::JointFromRank(int aRank)
+{
+  string JointName;
+  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+    {
+      if (m_LinksBetweenJointNamesAndRank[i].RankInConfiguration==aRank)
+	JointName = m_LinksBetweenJointNamesAndRank[i].LinkName;
+    }
+  for(int i=0;i<m_JointVector.size();i++)
+    {
+      if (((Joint *)m_JointVector[i])->getName()==JointName)
+	return (Joint *)m_JointVector[i];
+    }
+}
+void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
+{
   m_StateVectorToJoint.resize(m_NbDofs);
   int lindex=0;
   for(int i=0;i<m_JointVector.size();i++)
-    for(int j=0;j<m_JointVector[i]->numberDof();j++)
-      m_StateVectorToJoint[lindex++]=i;
-
+    {
+      lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      for(int j=0;j<m_JointVector[i]->numberDof();j++)
+	m_StateVectorToJoint[lindex++]=i;
+    }
+  
+  
   m_StateVectorToDOFs.clear();
   m_StateVectorToDOFs.resize(m_NbDofs);
   lindex=0;
   for(int i=0;i<m_JointVector.size();i++)
-    for(int j=0;j<m_JointVector[i]->numberDof();j++)
-      m_StateVectorToDOFs[lindex++]=j;
-    
-  
+    {
+      lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      ODEBUG(((Joint *)m_JointVector[i])->getName() << " " << lindex);
+      for(int j=0;j<m_JointVector[i]->numberDof();j++)
+	m_StateVectorToDOFs[lindex++]=j;
+    }
+
   m_VRMLIDToConfiguration.resize(m_NbOfVRMLIDs+1);
   for(int i=0;i<m_StateVectorToJoint.size();)
     {
       int r;
       Joint * aJoint = (Joint *)m_JointVector[m_StateVectorToJoint[i]];
-
+      
       // ASSUMPTION: The joint in the VRML have only one degree of freedom.
       if ((r=aJoint->getIDinVRML())!=-1)
 	{
