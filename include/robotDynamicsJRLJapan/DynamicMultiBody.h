@@ -51,6 +51,10 @@
 using namespace::std;
 namespace dynamicsJRLJapan
 {
+  typedef struct 
+  { string LinkName;
+    unsigned int RankInConfiguration;
+  } NameAndRank_t;
 
   /** @ingroup forwardynamics
       This class simulates the dynamic of a multibody robot.
@@ -246,6 +250,12 @@ namespace dynamicsJRLJapan
     /*! Jacobian of the CoM. */
     matrixNxP m_JacobianOfTheCoM;
 
+    /*! \brief Link between joint and state vector position */
+    std::vector<NameAndRank_t> m_LinksBetweenJointNamesAndRank;
+
+    /*! \brief Number of links */
+    int m_LinksBetweenJointNamesAndRankNb;
+    
   public:
     
     /** \brief Default constructor. */
@@ -261,7 +271,8 @@ namespace dynamicsJRLJapan
     
     /** Parse a vrml file which describes the robot. The format
      should be compatible with the one specified by OpenHRP. */
-    virtual void parserVRML(string path, string nom, const char *option);
+    virtual void parserVRML(string path, string nom, 
+			    const char *option);
 
     /** \name Dynamic parameters computation related methods 
      */
@@ -409,6 +420,9 @@ namespace dynamicsJRLJapan
     /** Get the Linear Momentum for the body JointID in the VRML numbering system */
     vector3d GetP(int JointID);
 
+    /*! \brief Read the specificities for the link between joint names and rank. */
+    void ReadSpecificities(string aFileName);
+    
     /** Set the time step to compute the Momentum derivative */
     inline void SetTimeStep(double inTimeStep)
       {m_TimeStep = inTimeStep;};
@@ -427,7 +441,12 @@ namespace dynamicsJRLJapan
     /** Get the position of the center of Mass. */
     vector3d getPositionCoM(void);
         
-    
+    /** Returns the rank of the joint from the name. */
+    int JointRankFromName(Joint *aJoint);    
+
+    /** Returns the joint according to the rank. */
+    Joint * JointFromRank(int aRank);
+
     /** Returns the name of the body JointID in the VRML numbering system. */
     string GetName(int JointID);
 
