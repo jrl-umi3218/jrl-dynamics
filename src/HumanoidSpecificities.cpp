@@ -26,6 +26,7 @@ using namespace dynamicsJRLJapan;
 HumanoidSpecificities::HumanoidSpecificities()
 {
 
+  m_FootDepth[0] = m_FootDepth[1] = 0.14;
   m_FootHeight[0] = 0.137;
   m_FootHeight[1] = 0.137;
   m_FootWidth[0] = 0.24;
@@ -64,20 +65,20 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		  ODEBUG("Found Feet Side: " << Side[i]);
 		  if (look_for(fp,"SizeX"))
 		    {
-		      fscanf(fp,"%lf",&m_FootWidth[i]);
-		      ODEBUG("Found SizeX: " << m_FootWidth[i]);
+		      fscanf(fp,"%lf",&m_FootDepth[i]);
+		      ODEBUG("Found SizeX: " << m_FootDepth[i]);
 		    }
 		  
 		  if (look_for(fp,"SizeY"))
 		    {
-		      fscanf(fp,"%lf",&m_FootHeight[i]);
-		      ODEBUG("Found SizeY: " << m_FootHeight[i]);
+		      fscanf(fp,"%lf",&m_FootWidth[i]);
+		      ODEBUG("Found SizeY: " << m_FootWidth[i]);
 		    }
 		  
 		  if (look_for(fp,"SizeZ"))
 		    {
-		      fscanf(fp,"%lf",&m_FootDepth[i]);
-		      ODEBUG("Found SizeZ: " << m_FootDepth[i]);
+		      fscanf(fp,"%lf",&m_FootHeight[i]);
+		      ODEBUG("Found SizeZ: " << m_FootHeight[i]);
 		    }
 		  
 		  if (look_for(fp,"AnklePosition"))
@@ -249,6 +250,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 	    }
 	}
 
+
       // Look for the head information.
       if (look_for(fp,"Head"))
 	{
@@ -300,7 +302,6 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 	      
 	    }
 	}
-
     }
   fclose(fp);
   return 0;
@@ -364,18 +365,22 @@ void HumanoidSpecificities::Display()
   
 }
 
-int HumanoidSpecificities::GetFootSize(int WhichFoot, double & Width, double &Height)
+int HumanoidSpecificities::GetFootSize(int WhichFoot, double &Depth,
+				       double & Width, double &Height)
 {
   Width = 0.0;
   Height = 0.0;
+  Depth = 0.0;
 
   if (WhichFoot==-1)
     {
+      Depth = m_FootDepth[0];
       Width = m_FootWidth[0];
       Height = m_FootHeight[0];
     }
   else if (WhichFoot==1)
     {
+      Depth = m_FootDepth[1];
       Width = m_FootWidth[1];
       Height = m_FootHeight[1];
     }
@@ -570,3 +575,4 @@ const std::vector<int> & HumanoidSpecificities::GetWaistJoints()
 {
   return m_WaistJoints;
 }
+
