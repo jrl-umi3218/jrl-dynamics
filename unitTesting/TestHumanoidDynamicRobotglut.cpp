@@ -18,7 +18,7 @@ using namespace dynamicsJRLJapan;
 #define ANGLE_STEP 10
 
 //GLdouble view_h = 270, view_v = 0, head_angle = 0;
-GLdouble view_h = 0, view_v = 0, head_angle = 0;
+GLdouble view_h = 230, view_v = 270, head_angle = 0;
 
 DynamicMultiBody * aDMB=0;
 HumanoidDynamicMultiBody *aHDMB=0;
@@ -91,6 +91,7 @@ special(int key, int x, int y)
   default:
     return;
   }
+  cout << "view_h : " << view_h << " view_v: " << view_v << endl;
   glutPostRedisplay();
 }
 
@@ -114,41 +115,42 @@ void DrawRecursiveJoint(CjrlJoint *aJoint)
       DynamicBody * lDB = (DynamicBody *)(aJoint->childJoint(i).linkedBody());
       glColor4f(1.0, 0.5, 0.9/(a2Joint->rankInConfiguration()+1), 1.0);
 
+      double Ray=0.01;
+
       glBegin(GL_QUADS);
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)+0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)+0.05, aDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)+Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)+Ray, aDB->p(2));
       glEnd();
 
       glBegin(GL_QUADS);
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(lDB->p(0)+0.05,lDB->p(1)-0.05, lDB->p(2));
-      glVertex3f(lDB->p(0)-0.05,lDB->p(1)-0.05, lDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(lDB->p(0)+Ray,lDB->p(1)-Ray, lDB->p(2));
+      glVertex3f(lDB->p(0)-Ray,lDB->p(1)-Ray, lDB->p(2));
       glEnd();
 
       glBegin(GL_QUADS);
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)+0.05, aDB->p(2));
-      glVertex3f(lDB->p(0)+0.05,lDB->p(1)+0.05, lDB->p(2));
-      glVertex3f(lDB->p(0)+0.05,lDB->p(1)-0.05, lDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)+Ray, aDB->p(2));
+      glVertex3f(lDB->p(0)+Ray,lDB->p(1)+Ray, lDB->p(2));
+      glVertex3f(lDB->p(0)+Ray,lDB->p(1)-Ray, lDB->p(2));
       glEnd();
 
       glBegin(GL_QUADS);
-      glVertex3f(aDB->p(0)+0.05,aDB->p(1)+0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)+0.05, aDB->p(2));
-      glVertex3f(lDB->p(0)-0.05,lDB->p(1)+0.05, lDB->p(2));
-      glVertex3f(lDB->p(0)+0.05,lDB->p(1)+0.05, lDB->p(2));
+      glVertex3f(aDB->p(0)+Ray,aDB->p(1)+Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)+Ray, aDB->p(2));
+      glVertex3f(lDB->p(0)-Ray,lDB->p(1)+Ray, lDB->p(2));
+      glVertex3f(lDB->p(0)+Ray,lDB->p(1)+Ray, lDB->p(2));
       glEnd();
 
       glBegin(GL_QUADS);
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)+0.05, aDB->p(2));
-      glVertex3f(aDB->p(0)-0.05,aDB->p(1)-0.05, aDB->p(2));
-      glVertex3f(lDB->p(0)-0.05,lDB->p(1)-0.05, lDB->p(2));
-      glVertex3f(lDB->p(0)-0.05,lDB->p(1)+0.05, lDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)+Ray, aDB->p(2));
+      glVertex3f(aDB->p(0)-Ray,aDB->p(1)-Ray, aDB->p(2));
+      glVertex3f(lDB->p(0)-Ray,lDB->p(1)-Ray, lDB->p(2));
+      glVertex3f(lDB->p(0)-Ray,lDB->p(1)+Ray, lDB->p(2));
       glEnd();
-
       
     }
   
