@@ -52,7 +52,7 @@ using namespace::std;
 namespace dynamicsJRLJapan
 {
   typedef struct 
-  { string LinkName;
+  { char LinkName[1028];
     unsigned int RankInConfiguration;
   } NameAndRank_t;
 
