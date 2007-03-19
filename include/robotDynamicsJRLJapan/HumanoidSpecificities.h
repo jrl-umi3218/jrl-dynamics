@@ -38,6 +38,7 @@
 
 namespace dynamicsJRLJapan
 {
+    
   /*@! This Object here implements the constants 
     and the specificities of HRP-2.
     */
@@ -53,11 +54,13 @@ namespace dynamicsJRLJapan
     
     // Returns the width of the foot given in parameter:
     // @param WhichFoot : -1 Right foot 1 Left foot.
-    // @paran Width: width of the foot, 
-    // @param Height: height of the foot,
+    // @paran Depth: depth of the foot (X)
+    // @param Width: width of the foot (Y), 
+    // @param Height: height of the foot (Z),
+    // @param 
     // @return -1 if an error occured,
     //  0 otherwise.
-    int GetFootSize(int WhichFoot, double &Width,double &Height);
+    int GetFootSize(int WhichFoot, double &Depth, double &Width,double &Height);
     
     // Returns the width of the foot given in parameter:
     // @param aFileName : Name of the file where the humanoid parameters are stored.
@@ -145,8 +148,8 @@ namespace dynamicsJRLJapan
     // Returns the number of joints for the Waist.
     int GetWaistJointNb();
 
-    // Returns the vector of joints index for the
-    // waist.
+    /*! \brief Returns the vector of joints index for the
+      waist. */
     const std::vector<int> & GetWaistJoints();
 
     /*! @} */
@@ -156,9 +159,9 @@ namespace dynamicsJRLJapan
     int InitUpperBodyJoints();
     
     /*! \brief  Store foot's height, width and depth. */
-    double m_FootHeight[2];
-    double m_FootWidth[2];
-    double m_FootDepth[2];
+    double m_FootHeight[2]; // (Z)
+    double m_FootWidth[2]; // (Y)
+    double m_FootDepth[2]; // (X)
 
     /*! \brief Number of joints for each feet */
     int m_FeetJointNb[2];
@@ -229,7 +232,6 @@ namespace dynamicsJRLJapan
     /*! \brief List of waist joints. */
     std::vector<int> m_WaistJoints;
 
-    
   };
 
 };
