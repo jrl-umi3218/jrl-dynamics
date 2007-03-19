@@ -18,7 +18,9 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   if (a2Joint==0)
     return;
 
-  cout << "Name : " << a2Joint->getName() << endl;
+  cout << a2Joint->getName() << " rank : " << a2Joint->rankInConfiguration() << endl;
+
+#if 0
   cout << "Number of child  :" << NbChildren << endl;
   for(int i=0;i<NbChildren;i++)
     {
@@ -59,12 +61,13 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 
   cout << "***********************************************" << endl;
   cout << " Display Now information related to children :" << endl;
+#endif
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
       RecursiveDisplayOfJoints((CjrlJoint *)&aJoint->childJoint(i)); 
     }
-  cout << " End for Joint: " << a2Joint->getName() << endl;
+  //cout << " End for Joint: " << a2Joint->getName() << endl;
 }
 
 
@@ -106,6 +109,7 @@ void GoDownTree(const CjrlJoint * startJoint)
   std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
   std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
   std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
+
   std::cout << startJoint->currentTransformation() << std::endl;
   
   if (startJoint->countChildJoints()!=0)
@@ -153,8 +157,11 @@ int main(int argc, char *argv[])
       exit(-1);
     }
   aDMB = (DynamicMultiBody *) aHDMB->getDynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,"");
+  aDMB->parserVRML(aPath,aName,
+		   "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml");
+  cout << "Here in between" << endl;
   aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
+  cout << " Finished the initialization"<< endl;
 #endif
   
   // Display tree of the joints.
@@ -162,7 +169,7 @@ int main(int argc, char *argv[])
   bool ok=true;
 
   // Test the tree.
-  //RecursiveDisplayOfJoints(rootJoint);
+  RecursiveDisplayOfJoints(rootJoint);
 
 
   // Tes the computation of the jacobian.
@@ -179,7 +186,7 @@ int main(int argc, char *argv[])
   };
 
   int NbOfDofs = aDMB->numberDof();
-  std::cout << "NbOfDofs :" << NbOfDofs <<std::endl;
+  std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
   for(int i=0;i<6;i++)
@@ -197,7 +204,6 @@ int main(int argc, char *argv[])
     aCurrentVel[lindex++] = 0.0;
   
   aDMB->currentVelocity(aCurrentVel);
-
   aDMB->computeForwardKinematics();
 
   aHDMB->LinkBetweenJointsAndEndEffectorSemantic();
@@ -205,38 +211,42 @@ int main(int argc, char *argv[])
   std::vector<CjrlJoint *> aVec = aDMB->jointVector();
   
   Joint  * aJoint = (Joint *)aVec[22]; // Try to get the hand.
-
-  cout << aJoint->getName() << endl;
-  
+  cout << aJoint->getName() << endl;  
   aJoint->computeJacobianJointWrtConfig();
 
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
   
   //  DisplayMatrix(aJ);
-  
+  cout << "****************************" << endl;
   cout << "Root: " << ((Joint *)rootJoint)->getName() << endl;
-
   rootJoint->computeJacobianJointWrtConfig();
-
-  aJ = rootJoint->jacobianJointWrtConfig();
-  
+  aJ = rootJoint->jacobianJointWrtConfig();  
   cout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
 
   //  DisplayMatrix(aJ);
 
   aJoint = (Joint *)aHDMB->waist();
-
   cout << "Name of the WAIST joint :" << endl;
   cout << aJoint->getName() << endl;
-
-  //  aHDMB->computeJacobianCenterOfMass();
-  //  cout << "Value of the CoM's Jacobian:" << endl
-  //       << aHDMB->jacobianCenterOfMass() << endl;
-
+  cout << "****************************" << endl;
+  aHDMB->computeJacobianCenterOfMass();
+  cout << "Value of the CoM's Jacobian:" << endl
+       << aHDMB->jacobianCenterOfMass() << endl;
+  cout << "****************************" << endl;
   GoDownTree(aDMB->rootJoint());
 
   cout << "Mass of the robot " << aDMB->getMasse() << endl;
   cout << "Force " << aDMB->getMasse()*9.81 << endl;
+
+  cout << "****************************" << endl;
+  // Test rank of the left hand.
+  cout << "Rank of the left hand "<< endl;
+  cout << aHDMB->leftHand()->rankInConfiguration() << endl;
+  cout << ((Joint *)aHDMB->leftHand())->getName() << endl;
+  cout << ((Joint *)aHDMB->leftHand())->getIDinVRML() << endl;
+
+  // Height of the foot. 
+  cout << "Height foot: "<< aHDMB->footHeight() << endl;
   delete aDMB;
   delete aHDMB;
   
