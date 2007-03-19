@@ -2236,6 +2236,9 @@ bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
   int lindex=0;
   for (int i=0;i<m_JointVector.size();i++)
     {
+
+      lindex = m_JointVector[i]->rankInConfiguration();
+
       // Update the pose of the joint when it is a free joint
       if (m_JointVector[i]->numberDof()==6)
 	{
