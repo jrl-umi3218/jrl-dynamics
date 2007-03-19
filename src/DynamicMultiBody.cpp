@@ -101,7 +101,7 @@ DynamicMultiBody::DynamicMultiBody()
 
 DynamicMultiBody::~DynamicMultiBody()
 {
-  
+  cout << "Just tell the problem." << endl;
 }
 
 void DynamicMultiBody::SpecifyTheRootLabel(int ID)
@@ -2040,7 +2040,7 @@ void DynamicMultiBody::ReadSpecificities(string aFileName)
 	      memset(Buffer,0,128);
 	      fscanf(fp,"%s",Buffer);
 		  
-	      aNameAndRank.LinkName = Buffer;
+	      strcpy(aNameAndRank.LinkName,Buffer);
 	      fscanf(fp,"%d", &aNameAndRank.RankInConfiguration);
 
 	      look_for(fp,"</Link>");
@@ -2059,7 +2059,7 @@ int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 
   for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
-      if (m_LinksBetweenJointNamesAndRank[i].LinkName == aJoint->getName())
+      if (!strcmp(m_LinksBetweenJointNamesAndRank[i].LinkName,(char *)aJoint->getName().c_str()))
 	return m_LinksBetweenJointNamesAndRank[i].RankInConfiguration;
     }
   return -1;
@@ -2168,6 +2168,8 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
   int lindex=0;
   for (int i=0;i<m_JointVector.size();i++)
     {
+      lindex = m_JointVector[i]->rankInConfiguration();
+
       // Update the pose of the joint when it is a free joint
       if (m_JointVector[i]->numberDof()==6)
 	{
@@ -3624,3 +3626,5 @@ const MAL_MATRIX(,double) &DynamicMultiBody::jacobianCenterOfMass() const
   return m_JacobianOfTheCoM;
   
 }
+
+
