@@ -2,18 +2,35 @@
 #include <HumanoidDynamicMultiBody.h>
 
 #if 0
-#define RESETDEBUG4(y) { ofstream DebugFile; DebugFile.open(y,ofstream::out); DebugFile.close();}
-#define ODEBUG4(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); DebugFile << "HumanoidDynamicMultiBody: " << x << endl; DebugFile.close();}
+
+#define RESETDEBUG4(y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::out); \
+    DebugFile.close();}
+
+#define ODEBUG4(x,y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::app); \
+    DebugFile << "HumanoidDynamicMultiBody: " << x << endl; \
+    DebugFile.close();}
+
 #else
+
 #define RESETDEBUG4(y) 
 #define ODEBUG4(x,y) 
+
 #endif
 
 #define RESETDEBUG6(y) 
 #define ODEBUG6(x,y) 
 
-#define RESETDEBUG5(y) { ofstream DebugFile; DebugFile.open(y,ofstream::out); DebugFile.close();}
-#define ODEBUG5(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); DebugFile << "HumanoidDynamicMultiBody: " << x << endl; DebugFile.close();}
+#define RESETDEBUG5(y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::out); \
+    DebugFile.close();}
+
+#define ODEBUG5(x,y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::app); \
+    DebugFile << "HumanoidDynamicMultiBody: " << x << endl; \
+    DebugFile.close();}
+
 #if 1
 #define ODEBUG(x)
 #else
@@ -356,9 +373,10 @@ bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
 
 double HumanoidDynamicMultiBody::footHeight() const
 {
-  cerr<< " HumanoidDynamicMultiBody::footHeight() implementation specific to HRP2" <<endl;
+  double lWidth, lHeight, lDepth;
+  m_HS->GetFootSize(1, lDepth, lWidth, lHeight);
   
-  return 0.105;
+  return lHeight;
 }
 
 
