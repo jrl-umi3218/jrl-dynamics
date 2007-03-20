@@ -356,6 +356,11 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = a6DVector(1);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = a6DVector(2);  
   
+  DynamicBody* body = dynamic_cast<DynamicBody*>(m_Body);
+  body->p[0] = a6DVector(0);
+  body->p[1] = a6DVector(1);
+  body->p[2] = a6DVector(2);
+  
   MAL_S3x3_MATRIX(,double) D,B,C,A;
   double CosTheta, SinTheta, 
     CosPhi, SinPhi,
@@ -384,6 +389,8 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   MAL_S3x3_MATRIX(,double) tmp;
   MAL_S3x3_C_eq_A_by_B(tmp,C,D);
   MAL_S3x3_C_eq_A_by_B(A,B,tmp);
+  
+  body->R = A;
   
   for(int i=0;i<3;i++)
     for(int j=0;j<3;j++)

@@ -441,6 +441,16 @@ namespace dynamicsJRLJapan
       */
   
       /**
+      \brief Apply a configuration
+
+      This method updates the joints transformations only, according to the passed configuration vector.
+      \return true if success, false if failure (the dimension of the
+      input vector does not fit the number of degrees of freedom of the
+      robot).
+       */
+      bool applyConfiguration(const vectorN& inConfiguration);
+      
+      /**
 	 \brief Compute forward kinematics.
 
 	 Update the position, velocity and accelerations of each

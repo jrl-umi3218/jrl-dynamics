@@ -256,6 +256,17 @@ namespace dynamicsJRLJapan
     /*! \brief Number of links */
     int m_LinksBetweenJointNamesAndRankNb;
     
+    /**
+    \brief Recursive emthod to update the kinematic tree transformations starting from the given joint
+     */
+    void forwardTransformation(Joint* inJoint);
+    void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
+    /**
+    \brief Convenient variables to avoid online matrix/vector allocation
+     */
+    matrix3d localR;//used by intensively-called method forwardTransformation
+    vector3d wn3d;//used by intensively-called method RodriguesRotation
+    
   public:
     
     /** \brief Default constructor. */
@@ -622,6 +633,17 @@ namespace dynamicsJRLJapan
 	\name Forward kinematics and dynamics
     */
     
+    
+    /**
+    \brief Apply a configuration
+
+    This method updates the joints transformations only, according to the passed configuration vector.
+    \return true if success, false if failure (the dimension of the
+    input vector does not fit the number of degrees of freedom of the
+    robot).
+     */
+     bool applyConfiguration(const vectorN& inConfiguration);
+     
     /**
        \brief Compute forward kinematics.
        

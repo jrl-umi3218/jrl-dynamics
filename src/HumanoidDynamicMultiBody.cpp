@@ -312,6 +312,11 @@ bool HumanoidDynamicMultiBody::computeForwardKinematics()
 
 }
 
+bool HumanoidDynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
+{
+    return m_DMB->applyConfiguration(inConfiguration);
+}
+
 bool HumanoidDynamicMultiBody::computeCenterOfMassDynamics()
 {
   return m_DMB->computeCenterOfMassDynamics();

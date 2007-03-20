@@ -2300,8 +2300,7 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentVelocity() const
 */
 bool DynamicMultiBody::currentAcceleration(const MAL_VECTOR(,double)& inAcceleration) 
 {
-  if (MAL_VECTOR_SIZE(inAcceleration)!=
-      MAL_VECTOR_SIZE(m_Acceleration))
+  
     MAL_VECTOR_RESIZE(m_Acceleration,MAL_VECTOR_SIZE(inAcceleration));
   
   return true;
@@ -2325,6 +2324,73 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentAcceleration() const
 /** 
     \name Forward kinematics and dynamics
 */
+
+/**
+    \brief Apply a configuration
+
+    This method updates the joints transformations only, according to the passed configuration vector.
+    \return true if success, false if failure (the dimension of the
+    input vector does not fit the number of degrees of freedom of the
+    robot).
+ */
+bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
+{
+    if (MAL_VECTOR_SIZE(inConfiguration)!=
+        MAL_VECTOR_SIZE(m_Configuration))
+        return false;
+    
+    currentConfiguration(inConfiguration);
+    forwardTransformation(m_RootOfTheJointsTree);
+}
+/**
+\brief Recursive emthod to update the kinematic tree transformations starting from the given joint
+*/
+void DynamicMultiBody::forwardTransformation(Joint* inJoint)
+{
+    if (inJoint != m_RootOfTheJointsTree)
+    {
+        DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
+
+        RodriguesRotation(body->a,body->q,localR);
+        
+        DynamicBody* parentbody = dynamic_cast<DynamicBody*>(inJoint->parentJoint().linkedBody());
+
+        MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
+        body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
+    }
+    for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
+    {
+        CjrlJoint* jrlchildJoint = const_cast<CjrlJoint*>(&(inJoint->childJoint(i)));
+        Joint* childJoint = dynamic_cast<Joint*>(jrlchildJoint);
+        forwardTransformation(childJoint);
+    }
+}
+
+void DynamicMultiBody::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
+{
+    double norm_w = MAL_S3_VECTOR_NORM(inAxis);
+    if (norm_w < 10e-7)
+    {
+        MAL_S3x3_MATRIX_SET_IDENTITY(outRotation);
+    }
+    else
+    {
+        double th = norm_w * inAngle;
+        wn3d = inAxis / norm_w;
+        double ct = cos(th);
+        double lct= (1-ct);
+        double st = sin(th);
+        outRotation(0,0) = ct + wn3d[0]*wn3d[0]* lct;
+        outRotation(0,1) = wn3d[0]*wn3d[1]*lct-wn3d[2]*st;
+        outRotation(0,2) = wn3d[1] * st+wn3d[0]*wn3d[2]*lct;
+        outRotation(1,0) = wn3d[2]*st +wn3d[0]*wn3d[1]*lct;
+        outRotation(1,1) = ct + wn3d[1]*wn3d[1]*lct;
+        outRotation(1,2) = -wn3d[0]*st+wn3d[1]*wn3d[2]*lct;
+        outRotation(2,0) = -wn3d[1]*st+wn3d[0]*wn3d[2]*lct;
+        outRotation(2,1) = wn3d[0]*st + wn3d[1]*wn3d[2]*lct;
+        outRotation(2,2) = ct + wn3d[2]*wn3d[2]*lct;
+    }
+}
 
 /**
    \brief Compute forward kinematics.
