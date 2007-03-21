@@ -203,8 +203,13 @@ int main(int argc, char *argv[])
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
   
-  aDMB->currentVelocity(aCurrentVel);
-  aDMB->computeForwardKinematics();
+  MAL_S3_VECTOR(ZMPval,double);
+
+  aHDMB->currentVelocity(aCurrentVel);
+  aHDMB->computeForwardKinematics();
+  ZMPval = aHDMB->zeroMomentumPoint();
+  cout << "First value of ZMP : " << ZMPval <<endl;
+  cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
 
   aHDMB->LinkBetweenJointsAndEndEffectorSemantic();
 
@@ -229,7 +234,7 @@ int main(int argc, char *argv[])
   cout << "Name of the WAIST joint :" << endl;
   cout << aJoint->getName() << endl;
   cout << "****************************" << endl;
-  aHDMB->computeJacobianCenterOfMass();
+  //  aHDMB->computeJacobianCenterOfMass();
   cout << "Value of the CoM's Jacobian:" << endl
        << aHDMB->jacobianCenterOfMass() << endl;
   cout << "****************************" << endl;
@@ -244,6 +249,23 @@ int main(int argc, char *argv[])
   cout << aHDMB->leftHand()->rankInConfiguration() << endl;
   cout << ((Joint *)aHDMB->leftHand())->getName() << endl;
   cout << ((Joint *)aHDMB->leftHand())->getIDinVRML() << endl;
+
+  MAL_VECTOR_FILL(aCurrentVel,0.0);
+  MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
+  MAL_VECTOR_FILL(aCurrentAcc,0.0);
+
+  // This is mandatory for this implementation of computeForwardKinematics
+  // to compute the derivative of the momentum.
+  aDMB->SetTimeStep(0.005);
+  for(int i=0;i<4;i++)
+    {
+      aHDMB->currentVelocity(aCurrentVel);
+      aHDMB->currentAcceleration(aCurrentAcc);
+      aHDMB->computeForwardKinematics();
+      ZMPval = aHDMB->zeroMomentumPoint();
+      cout << i << "-th value of ZMP : " << ZMPval <<endl;
+      cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
+    }
 
   // Height of the foot. 
   cout << "Height foot: "<< aHDMB->footHeight() << endl;
