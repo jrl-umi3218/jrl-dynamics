@@ -101,7 +101,7 @@ DynamicMultiBody::DynamicMultiBody()
 
 DynamicMultiBody::~DynamicMultiBody()
 {
-  cout << "Just tell the problem." << endl;
+
 }
 
 void DynamicMultiBody::SpecifyTheRootLabel(int ID)
@@ -579,7 +579,10 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 
     }
   else 
-    m_ZMP = positionCoMPondere;
+    {
+      m_ZMP = positionCoMPondere;
+      m_ZMP(2) = 0.0;
+    }
 
   ODEBUG5( m_IterationNumber << " " 
 	   << m_ZMP(0) << " " 
