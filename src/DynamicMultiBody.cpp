@@ -3688,7 +3688,7 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
       for(int j=0;j<30;j++)
 	m_JacobianOfTheCoM(i,j+6) = L[i*36+j];
       
-      for(int j=36;j<46;j++)
+      for(int j=36;j<m_NbDofs;j++)
 	m_JacobianOfTheCoM(i,j) = 0.0;
     }
 }
