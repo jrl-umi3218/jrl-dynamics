@@ -2474,8 +2474,13 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
     positionCoMPondere = positionCoMPondere/masse;
 }
 /**
+<<<<<<< master
 \brief Recursive method to update the kinematic tree transformations starting from the given joint
  */
+=======
+\brief Recursive method to update the kinematic tree transformations starting from the given joint
+*/
+>>>>>>> origin
 void DynamicMultiBody::forwardTransformation(Joint* inJoint)
 {
     DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());

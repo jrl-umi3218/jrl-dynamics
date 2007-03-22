@@ -98,13 +98,13 @@ namespace dynamicsJRLJapan
       v0,  dv,  w,  dw,
       sv,  sw,  cv, cw,
       hhv,  hhw,  pph,  ppb;
-      
+
     /**
     Used for Finite difference computations
     */
     vector3d pastv0, pastp, pastw;
     matrix3d pastR;
-  
+
     /*! Linear and angular momentums. */
     vector3d P,L;
 

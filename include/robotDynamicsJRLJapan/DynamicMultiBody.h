@@ -257,15 +257,17 @@ namespace dynamicsJRLJapan
     int m_LinksBetweenJointNamesAndRankNb;
     
     /**
-    \brief Recursive emthod to update the kinematic tree transformations starting from the given joint
+    \brief Recursive emthod to update the kinematic tree transformations starting from the given joint. This method update p, R and w_c for every Body
      */
     void forwardTransformation(Joint* inJoint);
     void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
     /**
     \brief Convenient variables to avoid online matrix/vector allocation
      */
-    matrix3d localR;//used by intensively-called method forwardTransformation
-    vector3d wn3d;//used by intensively-called method RodriguesRotation
+    matrix3d localR;//used by recursive method forwardTransformation
+    vector3d wn3d;//used by frequently-called method RodriguesRotation
+    vector3d vek;//used as a temporary vector in the recursive method forwardTransformation 
+    
     
   public:
     
@@ -637,13 +639,14 @@ namespace dynamicsJRLJapan
    /**
     \brief Apply a configuration
 
+
     Based on the entered configuration, this method computes:
     for every joint:
-    the new transformation
-    the new position of the center of mass in world frame
+        the new transformation
+        the new position of the center of mass in world frame
     for the robot
-    position of the center of mass in world frame
-        
+        position of the center of mass in world frame
+
     \return true if success, false if failure (the dimension of the
     input vector does not fit the number of degrees of freedom of the
     robot).
