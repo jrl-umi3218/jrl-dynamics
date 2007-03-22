@@ -151,7 +151,10 @@ const MAL_S4x4_MATRIX(,double) & Joint::currentTransformation() const
 
 CjrlRigidVelocity Joint::jointVelocity()
 {
-  return m_RigidVelocity;
+  
+    DynamicBody *m_DBody = dynamic_cast<DynamicBody *>(m_Body);
+    CjrlRigidVelocity ajrlRV(m_DBody->v0,m_DBody->w);
+    return ajrlRV;
 }
 
 CjrlRigidAcceleration Joint::jointAcceleration()

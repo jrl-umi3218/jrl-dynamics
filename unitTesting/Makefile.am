@@ -3,7 +3,7 @@
 # 
 
 
-noinst_PROGRAMS = TestHumanoidDynamicRobot TestHumanoidDynamicRobotglut TestPb1
+noinst_PROGRAMS = TestHumanoidDynamicRobot
 
 TestHumanoidDynamicRobot_SOURCES = TestHumanoidDynamicRobot.cpp 
 

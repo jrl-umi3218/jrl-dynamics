@@ -53,6 +53,7 @@ DynamicBody::DynamicBody():Body()
   ddq = 0.0;
 
   MAL_S3x3_MATRIX_SET_IDENTITY(R);
+  MAL_S3x3_MATRIX_SET_IDENTITY(pastR);
 
   a[0] = a[1] = a[2] = 0;
   b[0] = b[1] = b[2] = 0;
@@ -72,6 +73,9 @@ DynamicBody::DynamicBody():Body()
   pph[0] = pph[1] = pph[2] = 0;
   ppb[0] = ppb[1] = ppb[2] = 0;
   
+  pastp[0] = pastp[1] = pastp[2] = 0;
+  pastv0[0] = pastv0[1] = pastv0[2] = 0;
+  pastw[0] = pastw[1] = pastw[2] = 0;
 }
 
 DynamicBody::~DynamicBody()
@@ -91,7 +95,6 @@ DynamicBody & DynamicBody::operator=(const DynamicBody & r)
 
   // Inertia related.
   R = r.R;
-
   a = r.a;
   b = r.b;
   c = r.c;
@@ -109,6 +112,11 @@ DynamicBody & DynamicBody::operator=(const DynamicBody & r)
   hhw = r.hhw;
   pph = r.pph;
   ppb = r.ppb;
+  
+  pastR = r.pastR;
+  pastp = r.pastp;
+  pastv0 = r.pastv0;
+  pastw = r.pastw;
   
   sister = r.sister;
   child = r.child;

@@ -90,8 +90,8 @@ DynamicMultiBody::DynamicMultiBody()
 
   m_RootOfTheJointsTree = 0;
 
-  m_Prev_P(0) =   m_Prev_P(1) =   m_Prev_P(2) = -1.0;
-  m_Prev_L(0) =   m_Prev_L(1) =   m_Prev_L(2) = -1.0;
+  m_Prev_P(0) =   m_Prev_P(1) =   m_Prev_P(2) = 0.0;
+  m_Prev_L(0) =   m_Prev_L(1) =   m_Prev_L(2) = 0.0;
 
   m_NbOfVRMLIDs = -1;
   RESETDEBUG4("DebugDataPL.dat");
@@ -308,306 +308,429 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
   
 }
 
+
+
 void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double), 
-				       MAL_S3x3_MATRIX(&OrientationForRoot,double),
-				       MAL_S3_VECTOR(&v0ForRoot,double),
-				       MAL_S3_VECTOR(&wForRoot,double))
+                                       MAL_S3x3_MATRIX(&OrientationForRoot,double),
+                                               MAL_S3_VECTOR(&v0ForRoot,double),
+                                                       MAL_S3_VECTOR(&wForRoot,double))
 {
-  double norm_w, th;
+    double norm_w, th;
  //  int NbOfNodes=1;
-  int currentNode = labelTheRoot;
-  int lMother=0;
-  MAL_S3x3_MATRIX( Ro,double);
-  MAL_S3x3_MATRIX( w_wedge,double);
-  MAL_S3_VECTOR( wn,double);
-  double NORME_EPSILON=10e-7;
+    int currentNode = labelTheRoot;
+    int lMother=0;
+    MAL_S3x3_MATRIX( Ro,double);
+    MAL_S3x3_MATRIX( w_wedge,double);
+    MAL_S3_VECTOR( wn,double);
+    double NORME_EPSILON=10e-7;
 
-  listOfBodies[labelTheRoot].p = PosForRoot;
-  listOfBodies[labelTheRoot].v0 = v0ForRoot;
-  listOfBodies[labelTheRoot].R = OrientationForRoot;
-  listOfBodies[labelTheRoot].w = wForRoot;
+    listOfBodies[labelTheRoot].p = PosForRoot;
+    listOfBodies[labelTheRoot].v0 = v0ForRoot;
+    listOfBodies[labelTheRoot].R = OrientationForRoot;
+    listOfBodies[labelTheRoot].w = wForRoot;
 
-  currentNode = listOfBodies[labelTheRoot].child;
+    currentNode = listOfBodies[labelTheRoot].child;
   //  cout << "STARTING FORWARD VELOCITY " << v0ForRoot << endl;
   
-  MAL_S3_VECTOR_FILL(m_P,0);
-  MAL_S3_VECTOR_FILL(m_L,0);
-  MAL_S3_VECTOR(lP,double);
-  MAL_S3_VECTOR(lL,double);
+    MAL_S3_VECTOR_FILL(m_P,0);
+    MAL_S3_VECTOR_FILL(m_L,0);
+    MAL_S3_VECTOR(lP,double);
+    MAL_S3_VECTOR(lL,double);
 
-  currentNode = listOfBodies[labelTheRoot].child;
-  positionCoMPondere[0] = 0;
-  positionCoMPondere[1] = 0;
-  positionCoMPondere[2] = 0;
+    currentNode = listOfBodies[labelTheRoot].child;
+    positionCoMPondere[0] = 0;
+    positionCoMPondere[1] = 0;
+    positionCoMPondere[2] = 0;
   
-  MAL_S3_VECTOR(tmp,double);
-  MAL_S3_VECTOR(tmp2,double);
-  ODEBUG("PosForRoot: " << PosForRoot );
-  ODEBUG("v0ForRoot: " << v0ForRoot );
-  ODEBUG("OrientationForRoot: " << OrientationForRoot );
-  do
+    MAL_S3_VECTOR(tmp,double);
+    MAL_S3_VECTOR(tmp2,double);
+    ODEBUG("PosForRoot: " << PosForRoot );
+    ODEBUG("v0ForRoot: " << v0ForRoot );
+    ODEBUG("OrientationForRoot: " << OrientationForRoot );
+    do
     {
 
-      DynamicBody aDB = listOfBodies[currentNode];
+        DynamicBody aDB = listOfBodies[currentNode];
 
-      norm_w = MAL_S3_VECTOR_NORM(aDB.a);
-      lMother = aDB.getLabelMother();
+        norm_w = MAL_S3_VECTOR_NORM(aDB.a);
+        lMother = aDB.getLabelMother();
 
-      ODEBUG("CurrentBody " << listOfBodies[currentNode].getName());
+        ODEBUG("CurrentBody " << listOfBodies[currentNode].getName());
       
       // ----------------------------------
       // Rodrigues formula. (p33)
-      if (norm_w< NORME_EPSILON)
-	{
-	  MAL_S3x3_MATRIX_SET_IDENTITY(Ro);
-	}
-      else 
-	{
-	  th = norm_w * aDB.q;
- 	  wn = aDB.a / norm_w;
-	  w_wedge(0,0) =   0.0;w_wedge(0,1)= -wn[2]; w_wedge(0,2)=  wn[1]; // Cross product
-	  w_wedge(1,0) = wn[2];w_wedge(1,1)=    0.0; w_wedge(1,2)= -wn[0];
-	  w_wedge(2,0) =-wn[1];w_wedge(2,1)=  wn[0]; w_wedge(2,2)=    0.0;
+        if (norm_w< NORME_EPSILON)
+        {
+            MAL_S3x3_MATRIX_SET_IDENTITY(Ro);
+        }
+        else 
+        {
+            th = norm_w * aDB.q;
+            wn = aDB.a / norm_w;
+            w_wedge(0,0) =   0.0;w_wedge(0,1)= -wn[2]; w_wedge(0,2)=  wn[1]; // Cross product
+            w_wedge(1,0) = wn[2];w_wedge(1,1)=    0.0; w_wedge(1,2)= -wn[0];
+            w_wedge(2,0) =-wn[1];w_wedge(2,1)=  wn[0]; w_wedge(2,2)=    0.0;
 	  
-	  ODEBUG("w_wedge : " << w_wedge);
-	  ODEBUG("aDB.a :" << aDB.a );
-	  ODEBUG("norm_w:" << norm_w);
+            ODEBUG("w_wedge : " << w_wedge);
+            ODEBUG("aDB.a :" << aDB.a );
+            ODEBUG("norm_w:" << norm_w);
 
-	  double ct = cos(th); double lct= (1-ct);
-	  double st = sin(th);
-	  Ro(0,0) = ct + wn[0]*wn[0]* lct;  
-	  Ro(0,1) = wn[0]*wn[1]*lct-wn[2]*st; 
-	  Ro(0,2) = wn[1] * st+wn[0]*wn[2]*lct;
-	  Ro(1,0) = wn[2]*st +wn[0]*wn[1]*lct; 
-	  Ro(1,1) = ct + wn[1]*wn[1]*lct;    
-	  Ro(1,2) = -wn[0]*st+wn[1]*wn[2]*lct;
-	  Ro(2,0) = -wn[1]*st+wn[0]*wn[2]*lct; 
-	  Ro(2,1) = wn[0]*st + wn[1]*wn[2]*lct; 
-	  Ro(2,2) = ct + wn[2]*wn[2]*lct;
-	}
+            double ct = cos(th); double lct= (1-ct);
+            double st = sin(th);
+            Ro(0,0) = ct + wn[0]*wn[0]* lct;  
+            Ro(0,1) = wn[0]*wn[1]*lct-wn[2]*st; 
+            Ro(0,2) = wn[1] * st+wn[0]*wn[2]*lct;
+            Ro(1,0) = wn[2]*st +wn[0]*wn[1]*lct; 
+            Ro(1,1) = ct + wn[1]*wn[1]*lct;    
+            Ro(1,2) = -wn[0]*st+wn[1]*wn[2]*lct;
+            Ro(2,0) = -wn[1]*st+wn[0]*wn[2]*lct; 
+            Ro(2,1) = wn[0]*st + wn[1]*wn[2]*lct; 
+            Ro(2,2) = ct + wn[2]*wn[2]*lct;
+        }
       
-      ODEBUG("Ro:" << endl << Ro );
-      ODEBUG("MR:" << listOfBodies[lMother].R );
-      ODEBUG("b: " << aDB.b);
-      ODEBUG("Mp: " << listOfBodies[lMother].p);
+        ODEBUG("Ro:" << endl << Ro );
+        ODEBUG("MR:" << listOfBodies[lMother].R );
+        ODEBUG("b: " << aDB.b);
+        ODEBUG("Mp: " << listOfBodies[lMother].p);
       // End Rodrigues formula
       //-------------------------------
 
       // Position and orientation in reference frame
-      listOfBodies[currentNode].p = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R , aDB.b )
-	+ listOfBodies[lMother].p;
-      MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode].R ,listOfBodies[lMother].R , Ro);
-      listOfBodies[currentNode].Riip1 = Ro;
+        listOfBodies[currentNode].p = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R , aDB.b )
+                + listOfBodies[lMother].p;
+        MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode].R ,listOfBodies[lMother].R , Ro);
+        listOfBodies[currentNode].Riip1 = Ro;
 
-      ODEBUG("q: "<< aDB.q );
-      ODEBUG("p: " 
-	     << listOfBodies[currentNode].p[0] << " " 
-	     << listOfBodies[currentNode].p[1] << " " 
-	     << listOfBodies[currentNode].p[2] << " " );
-      ODEBUG("R: "<< aDB.R );
+        ODEBUG("q: "<< aDB.q );
+        ODEBUG("p: " 
+                << listOfBodies[currentNode].p[0] << " " 
+                << listOfBodies[currentNode].p[1] << " " 
+                << listOfBodies[currentNode].p[2] << " " );
+        ODEBUG("R: "<< aDB.R );
       // Computes the angular velocity. 
 
-      ODEBUG("dq: "<< aDB.dq );
-      tmp = listOfBodies[currentNode].a * listOfBodies[currentNode].dq;
-      tmp = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R,tmp);
+        ODEBUG("dq: "<< aDB.dq );
+        tmp = listOfBodies[currentNode].a * listOfBodies[currentNode].dq;
+        tmp = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R,tmp);
 
-      listOfBodies[currentNode].w  = listOfBodies[lMother].w  + tmp;
+        listOfBodies[currentNode].w  = listOfBodies[lMother].w  + tmp;
 
-      ODEBUG("w: " << listOfBodies[currentNode].w );
+        ODEBUG("w: " << listOfBodies[currentNode].w );
 
       // Computes the linear velocity.
-      MAL_S3x3_C_eq_A_by_B(tmp,listOfBodies[lMother].R,
-			   listOfBodies[currentNode].b);
+        MAL_S3x3_C_eq_A_by_B(tmp,listOfBodies[lMother].R,
+                             listOfBodies[currentNode].b);
 
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[lMother].w , tmp);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[lMother].w , tmp);
 
-      listOfBodies[currentNode].v0 = listOfBodies[lMother].v0 + tmp2;
+        listOfBodies[currentNode].v0 = listOfBodies[lMother].v0 + tmp2;
 
-      ODEBUG("v0: " 
-	      << listOfBodies[currentNode].v0[0] << " " 
-	      << listOfBodies[currentNode].v0[1] << " " 
-	      << listOfBodies[currentNode].v0[2] << " " );
+        ODEBUG("v0: " 
+                << listOfBodies[currentNode].v0[0] << " " 
+                << listOfBodies[currentNode].v0[1] << " " 
+                << listOfBodies[currentNode].v0[2] << " " );
 	
       // Computes also the center of mass in the reference frame.
 
-      MAL_S3_VECTOR( cl , double);
-      ODEBUG("c: " << listOfBodies[currentNode].c);
-      MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
-      MAL_S3_VECTOR(lw_c,double);
-      lw_c = cl + listOfBodies[currentNode].p;
-      positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
-      ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
-      ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
-      ODEBUG("positionCoMPondere " << positionCoMPondere);
+        MAL_S3_VECTOR( cl , double);
+        ODEBUG("c: " << listOfBodies[currentNode].c);
+        MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
+        MAL_S3_VECTOR(lw_c,double);
+        lw_c = cl + listOfBodies[currentNode].p;
+        positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
+        ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
+        ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
+        ODEBUG("positionCoMPondere " << positionCoMPondere);
 
       // Computes momentum matrix P.
-      tmp2 = cl;
-      ODEBUG("w: " << listOfBodies[currentNode].w );
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp, tmp2 , listOfBodies[currentNode].w);
-      ODEBUG("cl^w: " << tmp);
-      ODEBUG("masse: " << listOfBodies[currentNode].getMasse());
-      ODEBUG("v0: " << listOfBodies[currentNode].v0 );
-      lP=  (listOfBodies[currentNode].v0 + 
-	    tmp )* listOfBodies[currentNode].getMasse();
-      listOfBodies[currentNode].P = lP;
-      ODEBUG("P: " << lP );
-      m_P += lP;
+        tmp2 = cl;
+        ODEBUG("w: " << listOfBodies[currentNode].w );
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp, tmp2 , listOfBodies[currentNode].w);
+        ODEBUG("cl^w: " << tmp);
+        ODEBUG("masse: " << listOfBodies[currentNode].getMasse());
+        ODEBUG("v0: " << listOfBodies[currentNode].v0 );
+        lP=  (listOfBodies[currentNode].v0 + 
+                tmp )* listOfBodies[currentNode].getMasse();
+        listOfBodies[currentNode].P = lP;
+        ODEBUG("P: " << lP );
+        m_P += lP;
       
       // Computes angular momentum matrix L
-      MAL_S3x3_MATRIX( Rt,double);
-      Rt = listOfBodies[currentNode].R;
-      Rt = MAL_S3x3_RET_TRANSPOSE(Rt);
+        MAL_S3x3_MATRIX( Rt,double);
+        Rt = listOfBodies[currentNode].R;
+        Rt = MAL_S3x3_RET_TRANSPOSE(Rt);
 
-      MAL_S3_VECTOR(tmp3,double);
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,lw_c,lP);
+        MAL_S3_VECTOR(tmp3,double);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,lw_c,lP);
 
-      MAL_S3x3_C_eq_A_by_B(tmp2,Rt , listOfBodies[currentNode].w);
-      MAL_S3x3_C_eq_A_by_B(tmp, listOfBodies[currentNode].getInertie(),tmp2);
-      MAL_S3x3_C_eq_A_by_B(tmp2, listOfBodies[currentNode].R,tmp);
-      lL = tmp3 + tmp2; 
-      ODEBUG("L: " << lL);
+        MAL_S3x3_C_eq_A_by_B(tmp2,Rt , listOfBodies[currentNode].w);
+        MAL_S3x3_C_eq_A_by_B(tmp, listOfBodies[currentNode].getInertie(),tmp2);
+        MAL_S3x3_C_eq_A_by_B(tmp2, listOfBodies[currentNode].R,tmp);
+        lL = tmp3 + tmp2; 
+        ODEBUG("L: " << lL);
       
-      listOfBodies[currentNode].L = lL;
-      listOfBodies[currentNode].w_c = lw_c;
-      m_L+= lL;
+        listOfBodies[currentNode].L = lL;
+        listOfBodies[currentNode].w_c = lw_c;
+        m_L+= lL;
 
       // ******************* Computes the angular acceleration for joint i. ******************** 
-      MAL_S3_VECTOR(,double) aRa; // Spong p.278
-      MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
+        MAL_S3_VECTOR(,double) aRa; // Spong p.278
+        MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
       // tmp2 = z_{i-1} * dqi
-      tmp2 = aRa * listOfBodies[currentNode].dq; 
+        tmp2 = aRa * listOfBodies[currentNode].dq; 
       // tmp3 = w^{(0)}_i x z_{i-1} * dqi
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2); 
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2); 
       // tmp2 = z_{i-1} * ddqi
-      tmp2 = aRa * listOfBodies[currentNode].ddq; 
-      listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
+        tmp2 = aRa * listOfBodies[currentNode].ddq; 
+        listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
 
       // ******************* Computes the linear acceleration for joint i. ******************** 
-      MAL_S3_VECTOR(,double) aRb; // Spong p. 279
-      MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
+        MAL_S3_VECTOR(,double) aRb; // Spong p. 279
+        MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
       // tmp3 = w_i x (w_i x r_{i,i+1})
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRb);
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRb);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
 
       // tmp2 = dw_I x r_{i,i+1}
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRb);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRb);
 
-      // 
-      MAL_S3x3_MATRIX(Rot,double);
-      Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
-      MAL_S3_VECTOR(,double) RotByMotherdv;
-      MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
-      listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
+        // 
+        MAL_S3x3_MATRIX(Rot,double);
+        Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
+        MAL_S3_VECTOR(,double) RotByMotherdv;
+        MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
+        listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
 
       // *******************  Acceleration for the center of mass of body  i ************************
-      MAL_S3_VECTOR(,double) aRc; // Spong p. 279
-      MAL_S3x3_C_eq_A_by_B(aRc, listOfBodies[currentNode].R, aDB.c);
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRc);
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+        MAL_S3_VECTOR(,double) aRc; // Spong p. 279
+        MAL_S3x3_C_eq_A_by_B(aRc, listOfBodies[currentNode].R, aDB.c);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRc);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
 
       // tmp2 = dw_I x r_{i,i+1}
-      MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRc);
-      // 
-      listOfBodies[currentNode].dv_c = RotByMotherdv + tmp2 + tmp3;
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRc);
+        // 
+        listOfBodies[currentNode].dv_c = RotByMotherdv + tmp2 + tmp3;
 
       
       // TO DO if necessary : cross velocity.
-      int step=0;
-      int NextNode=0;
-      do{
+        int step=0;
+        int NextNode=0;
+        do{
        
-	if (step==0)
-	  {
-	    NextNode = listOfBodies[currentNode].child;
-	    step++;
-	  }
-	else if(step==1)
-	  {
-	    NextNode = listOfBodies[currentNode].sister;
-	    step++;
-	  }
-	else if (step==2)
-	  {
-	    NextNode = listOfBodies[currentNode].getLabelMother();
-	    if (NextNode>=0)
-	      {
+            if (step==0)
+            {
+                NextNode = listOfBodies[currentNode].child;
+                step++;
+            }
+            else if(step==1)
+            {
+                NextNode = listOfBodies[currentNode].sister;
+                step++;
+            }
+            else if (step==2)
+            {
+                NextNode = listOfBodies[currentNode].getLabelMother();
+                if (NextNode>=0)
+                {
 		/* Test if current node is leaf, 
-		   because in this case the force are not set properly. */
-		if ((listOfBodies[currentNode].sister==-1) &&
-		    (listOfBodies[currentNode].child==-1))
-		  BackwardDynamics(listOfBodies[currentNode]);
+                    because in this case the force are not set properly. */
+                    if ((listOfBodies[currentNode].sister==-1) &&
+                         (listOfBodies[currentNode].child==-1))
+                        BackwardDynamics(listOfBodies[currentNode]);
 
-		/* Compute backward dynamics */
-		BackwardDynamics(listOfBodies[NextNode]);
-		currentNode = NextNode;
-		NextNode = listOfBodies[currentNode].sister;
-	      }
-	    else 
-	      NextNode=labelTheRoot;
-	  }
+                    /* Compute backward dynamics */
+                    BackwardDynamics(listOfBodies[NextNode]);
+                    currentNode = NextNode;
+                    NextNode = listOfBodies[currentNode].sister;
+                }
+                else 
+                    NextNode=labelTheRoot;
+            }
 
 	  
-      } 
-      while (NextNode==-1);
-      currentNode = NextNode;
+        } 
+        while (NextNode==-1);
+        currentNode = NextNode;
       
     }
-  while(currentNode!=labelTheRoot);
+    while(currentNode!=labelTheRoot);
 
   // Compute the skew matrix related to the weighted CoM.
-  MAL_S3_VECTOR(,double) lpComP = positionCoMPondere/masse;
+    MAL_S3_VECTOR(,double) lpComP = positionCoMPondere/masse;
 
-  positionCoMPondere = lpComP;
+    positionCoMPondere = lpComP;
   
-  ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
+    ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
   // Update the momentum derivative 
-  if (m_IterationNumber>1)
+    if (m_IterationNumber>1)
     {
-      m_dP = (m_P - m_Prev_P)/m_TimeStep;
-      m_dL = (m_L - m_Prev_L)/m_TimeStep;
+        m_dP = (m_P - m_Prev_P)/m_TimeStep;
+        m_dL = (m_L - m_Prev_L)/m_TimeStep;
       
       // Update the ZMP value.
-      double px,py,pz=0.0;
-      CalculateZMP(px,py,
-		   m_dP, m_dL,pz);
+        double px,py,pz=0.0;
+        CalculateZMP(px,py,
+                     m_dP, m_dL,pz);
 
-      m_ZMP(0) = px;
-      m_ZMP(1) = py;
-      m_ZMP(2) = pz;
+        m_ZMP(0) = px;
+        m_ZMP(1) = py;
+        m_ZMP(2) = pz;
       
-      ODEBUG4(m_ZMP<< " | " << m_dP << " | " << m_dL << "|" << m_IterationNumber,"DebugDataZMP.dat");
+        ODEBUG4(m_ZMP<< " | " << m_dP << " | " << m_dL << "|" << m_IterationNumber,"DebugDataZMP.dat");
 
     }
-  else 
+    else 
     {
-      m_ZMP = positionCoMPondere;
-      m_ZMP(2) = 0.0;
+        m_ZMP = positionCoMPondere;
+        m_ZMP(2) = 0.0;
     }
 
-  ODEBUG5( m_IterationNumber << " " 
-	   << m_ZMP(0) << " " 
-	   << m_ZMP(1) << " " 
-	   << m_ZMP(2) << " " 
-	   << m_P << " " 
-	   << m_L ,"DebugDataDMB_ZMP.dat" );
+    ODEBUG5( m_IterationNumber << " " 
+            << m_ZMP(0) << " " 
+            << m_ZMP(1) << " " 
+            << m_ZMP(2) << " " 
+            << m_P << " " 
+            << m_L ,"DebugDataDMB_ZMP.dat" );
 
   // Update the store previous value.
-  if (m_IterationNumber>=1)
+    if (m_IterationNumber>=1)
     {
-      m_Prev_P = m_P;
-      m_Prev_L = m_L;
+        m_Prev_P = m_P;
+        m_Prev_L = m_L;
     }
 
-  ODEBUG("Position of the CoM = " << positionCoMPondere <<endl <<
-	 "Weighted Com = "<< lpComP );
+    ODEBUG("Position of the CoM = " << positionCoMPondere <<endl <<
+            "Weighted Com = "<< lpComP );
 
-  SkewCoM(0,0) =         0; SkewCoM(0,1) = - lpComP[2]; SkewCoM(0,2) = lpComP[1];
-  SkewCoM(1,0) = lpComP[2]; SkewCoM(1,1) =           0; SkewCoM(1,2) =-lpComP[0];
-  SkewCoM(2,0) =-lpComP[1]; SkewCoM(2,1) =   lpComP[0]; SkewCoM(2,2) =         0;
+    SkewCoM(0,0) =         0; SkewCoM(0,1) = - lpComP[2]; SkewCoM(0,2) = lpComP[1];
+    SkewCoM(1,0) = lpComP[2]; SkewCoM(1,1) =           0; SkewCoM(1,2) =-lpComP[0];
+    SkewCoM(2,0) =-lpComP[1]; SkewCoM(2,1) =   lpComP[0]; SkewCoM(2,2) =         0;
 
-  m_IterationNumber++;
+    m_IterationNumber++;
 }
 
+
+
+void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset)
+{
+//     Joint* joint = 0;
+            
+    if (reset)
+    {
+        vector3d zeros3;
+        MAL_S3_VECTOR_FILL(zeros3,0); 
+        for (unsigned int i=0;i<listOfBodies.size();i++)
+        {
+            DynamicBody& body = listOfBodies[i];
+          
+            body.pastp = body.p;
+            body.pastR = body.R;
+            body.pastv0 = body.v0;
+            body.pastw = body.w;
+            
+            body.v0 = zeros3;
+            body.w = zeros3;
+            body.dv = zeros3;
+            body.dw = zeros3;
+            body.P = zeros3;
+            body.L = zeros3;
+            
+            /*//(temporary ?) update of CjrlRigidVelocity member of Joints
+            joint = (Joint*)body.joint();
+            joint->UpdateVelocityFrom2x3DOFsVector(zeros3, zeros3);
+            */
+            m_P = zeros3;
+            m_Prev_P = zeros3;
+            m_L = zeros3;
+            m_Prev_L = zeros3;
+            m_ZMP = positionCoMPondere;
+            m_ZMP(2) = 0.0;
+        }
+        return;
+    }
+    
+    matrix3d Ro,Roo,Rt;
+    vector3d vek;
+
+    //for momenta and ZMP computation
+    vector3d lP;
+    vector3d lL;
+    MAL_S3_VECTOR_FILL(m_P,0);
+    MAL_S3_VECTOR_FILL(m_L,0);
+
+    vector3d tmp,tmp2,tmp3;
+    vector3d wlc; //from joint to joint com in world frame
+
+    for (unsigned int i=0;i<listOfBodies.size();i++)
+    {
+        DynamicBody& body = listOfBodies[i];
+
+        // Linear velocity.
+        body.v0 = (body.p - body.pastp)/inTimeStep;
+        body.pastp = body.p;
+
+        // Angular velocity.
+        Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
+        Roo = (body.R - body.pastR);
+        MAL_S3x3_C_eq_A_by_B(Ro , Roo, Rt);
+        body.w[0]  = Ro(1,2)/inTimeStep;
+        body.w[1]  = Ro(0,2)/inTimeStep;
+        body.w[2]  = Ro(1,0)/inTimeStep;
+        body.pastR = body.R;
+
+        /*//(temporary ?) update of CjrlRigidVelocity member of Joints
+        joint = (Joint*)body.joint();
+        joint->UpdateVelocityFrom2x3DOFsVector(body.v0, body.w);
+        */
+        // Linear acceleration
+        body.dv = (body.v0 - body.pastv0)/inTimeStep;
+        body.pastv0 = body.v0;
+        
+        // Angular acceleration
+        body.dw = (body.w - body.pastw)/inTimeStep;
+        body.pastw = body.w;
+
+        
+        // contribution of this body to the linear momentum.
+        
+        MAL_S3x3_C_eq_A_by_B(wlc, body.R, body.c);
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp, body.w, wlc);
+        lP =  (body.v0 + tmp)* body.getMasse();
+        body.P = lP;
+        m_P += lP;
+
+        // contribution of this body to the angular momentum.
+        Rt = MAL_S3x3_RET_TRANSPOSE(body.R);
+        
+        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,body.w_c,lP);
+        
+        MAL_S3x3_C_eq_A_by_B(tmp2,Rt , body.w);
+        MAL_S3x3_C_eq_A_by_B(tmp, body.getInertie(),tmp2);
+        MAL_S3x3_C_eq_A_by_B(tmp2, body.R,tmp);
+        lL = tmp3 + tmp2;
+        body.L = lL;
+        m_L += lL;
+
+    }
+
+    // Update the momentum derivative
+
+    m_dP = (m_P - m_Prev_P)/inTimeStep;
+    m_dL = (m_L - m_Prev_L)/inTimeStep;
+
+    // Update the ZMP value.
+    double px,py, pz = 0.0;
+    CalculateZMP(px, py, m_dP, m_dL, pz);
+
+    m_ZMP(0) = px;
+    m_ZMP(1) = py;
+    m_ZMP(2) = pz;
+
+    m_Prev_P = m_P;
+    m_Prev_L = m_L;
+
+}
 
 void DynamicMultiBody::InertiaMatricesforRMCFirstStep()
 {
@@ -2343,16 +2466,22 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
         return false;
     
     currentConfiguration(inConfiguration);
+    
+    MAL_S3_VECTOR_FILL(positionCoMPondere,0);
+    
     forwardTransformation(m_RootOfTheJointsTree);
+    
+    positionCoMPondere = positionCoMPondere/masse;
 }
 /**
-\brief Recursive emthod to update the kinematic tree transformations starting from the given joint
-*/
+\brief Recursive method to update the kinematic tree transformations starting from the given joint
+ */
 void DynamicMultiBody::forwardTransformation(Joint* inJoint)
 {
+    DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
+
     if (inJoint != m_RootOfTheJointsTree)
     {
-        DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
 
         RodriguesRotation(body->a,body->q,localR);
         
@@ -2361,6 +2490,12 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint)
         MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
         body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
     }
+    
+    //update position of center of mass in world frame
+    MAL_S3x3_C_eq_A_by_B(wn3d, body->R, body->c);
+    body->w_c = wn3d + body->p;
+    positionCoMPondere += body->w_c * body->getMasse();
+    
     for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
     {
         CjrlJoint* jrlchildJoint = const_cast<CjrlJoint*>(&(inJoint->childJoint(i)));
@@ -2368,6 +2503,7 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint)
         forwardTransformation(childJoint);
     }
 }
+
 
 void DynamicMultiBody::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
 {
