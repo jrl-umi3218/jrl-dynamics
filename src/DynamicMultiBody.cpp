@@ -2343,16 +2343,22 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
         return false;
     
     currentConfiguration(inConfiguration);
+    
+    MAL_S3_VECTOR_FILL(positionCoMPondere,0);
+    
     forwardTransformation(m_RootOfTheJointsTree);
+    
+    positionCoMPondere = positionCoMPondere/masse;
 }
 /**
-\brief Recursive emthod to update the kinematic tree transformations starting from the given joint
+\brief Recursive method to update the kinematic tree transformations starting from the given joint
 */
 void DynamicMultiBody::forwardTransformation(Joint* inJoint)
 {
+    DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
+
     if (inJoint != m_RootOfTheJointsTree)
     {
-        DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
 
         RodriguesRotation(body->a,body->q,localR);
         
@@ -2361,6 +2367,12 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint)
         MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
         body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
     }
+    
+    //update position of center of mass in world frame
+    MAL_S3x3_C_eq_A_by_B(vek, body->R, body->c);
+    body->w_c = vek + body->p;
+    positionCoMPondere += body->w_c * body->getMasse();
+    
     for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
     {
         CjrlJoint* jrlchildJoint = const_cast<CjrlJoint*>(&(inJoint->childJoint(i)));

@@ -98,7 +98,7 @@ namespace dynamicsJRLJapan
       v0,  dv,  w,  dw,
       sv,  sw,  cv, cw,
       hhv,  hhw,  pph,  ppb;
-  
+
     /*! Linear and angular momentums. */
     vector3d P,L;
 
