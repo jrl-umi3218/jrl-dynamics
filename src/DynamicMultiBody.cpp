@@ -309,11 +309,21 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
 }
 
 
-
+/*! Kept for backward compatibility. */
 void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double), 
                                        MAL_S3x3_MATRIX(&OrientationForRoot,double),
-                                               MAL_S3_VECTOR(&v0ForRoot,double),
-                                                       MAL_S3_VECTOR(&wForRoot,double))
+				       MAL_S3_VECTOR(&v0ForRoot,double),
+				       MAL_S3_VECTOR(&wForRoot,double))
+{
+  NewtonEulerAlgorithm(PosForRoot,OrientationForRoot,v0ForRoot,wForRoot);
+}
+
+
+/*! Implementation of the Newton-Euler algorithm */
+void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double), 
+					    MAL_S3x3_MATRIX(&OrientationForRoot,double),
+					    MAL_S3_VECTOR(&v0ForRoot,double),
+					    MAL_S3_VECTOR(&wForRoot,double))
 {
     double norm_w, th;
  //  int NbOfNodes=1;
@@ -409,109 +419,132 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
         ODEBUG("R: "<< aDB.R );
       // Computes the angular velocity. 
 
-        ODEBUG("dq: "<< aDB.dq );
-        tmp = listOfBodies[currentNode].a * listOfBodies[currentNode].dq;
-        tmp = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R,tmp);
+      if (m_ComputeVelocity)
+	{
 
-        listOfBodies[currentNode].w  = listOfBodies[lMother].w  + tmp;
-
-        ODEBUG("w: " << listOfBodies[currentNode].w );
-
-      // Computes the linear velocity.
-        MAL_S3x3_C_eq_A_by_B(tmp,listOfBodies[lMother].R,
-                             listOfBodies[currentNode].b);
-
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[lMother].w , tmp);
-
-        listOfBodies[currentNode].v0 = listOfBodies[lMother].v0 + tmp2;
-
-        ODEBUG("v0: " 
+	  ODEBUG("dq: "<< aDB.dq );
+	  tmp = listOfBodies[currentNode].a * listOfBodies[currentNode].dq;
+	  tmp = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R,tmp);
+	  
+	  listOfBodies[currentNode].w  = listOfBodies[lMother].w  + tmp;
+	  
+	  ODEBUG("w: " << listOfBodies[currentNode].w );
+	  
+	  // Computes the linear velocity.
+	  MAL_S3x3_C_eq_A_by_B(tmp,listOfBodies[lMother].R,
+			       listOfBodies[currentNode].b);
+	  
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[lMother].w , tmp);
+	  
+	  listOfBodies[currentNode].v0 = listOfBodies[lMother].v0 + tmp2;
+	  
+	  ODEBUG("v0: " 
                 << listOfBodies[currentNode].v0[0] << " " 
                 << listOfBodies[currentNode].v0[1] << " " 
                 << listOfBodies[currentNode].v0[2] << " " );
-	
+	}
+      
       // Computes also the center of mass in the reference frame.
+      
+      MAL_S3_VECTOR( cl , double);
+      MAL_S3_VECTOR(lw_c,double);
+      if (m_ComputeCoM)
+	{
+	  
+	  MAL_S3_VECTOR( cl , double);
+	  ODEBUG("c: " << listOfBodies[currentNode].c);
+	  MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
+	  MAL_S3_VECTOR(lw_c,double);
+	  lw_c = cl + listOfBodies[currentNode].p;
+	  positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
+	  ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
+	  ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
+	  ODEBUG("positionCoMPondere " << positionCoMPondere);
+	}
+      MAL_S3_VECTOR(tmp3,double);
+      if (m_ComputeMomentum)
+	{
 
-        MAL_S3_VECTOR( cl , double);
-        ODEBUG("c: " << listOfBodies[currentNode].c);
-        MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
-        MAL_S3_VECTOR(lw_c,double);
-        lw_c = cl + listOfBodies[currentNode].p;
-        positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
-        ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
-        ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
-        ODEBUG("positionCoMPondere " << positionCoMPondere);
-
-      // Computes momentum matrix P.
-        tmp2 = cl;
-        ODEBUG("w: " << listOfBodies[currentNode].w );
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp, tmp2 , listOfBodies[currentNode].w);
-        ODEBUG("cl^w: " << tmp);
-        ODEBUG("masse: " << listOfBodies[currentNode].getMasse());
-        ODEBUG("v0: " << listOfBodies[currentNode].v0 );
-        lP=  (listOfBodies[currentNode].v0 + 
+	  // Computes momentum matrix P.
+	  tmp2 = cl;
+	  ODEBUG("w: " << listOfBodies[currentNode].w );
+	  // Fixed a bug found by Oussama regarding the computation of P.
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp, listOfBodies[currentNode].w,tmp2);
+	  ODEBUG("cl^w: " << tmp);
+	  ODEBUG("masse: " << listOfBodies[currentNode].getMasse());
+	  ODEBUG("v0: " << listOfBodies[currentNode].v0 );
+	  lP=  (listOfBodies[currentNode].v0 + 
                 tmp )* listOfBodies[currentNode].getMasse();
-        listOfBodies[currentNode].P = lP;
-        ODEBUG("P: " << lP );
-        m_P += lP;
+	  listOfBodies[currentNode].P = lP;
+	  ODEBUG("P: " << lP );
+	  m_P += lP;
+	  
+	  // Computes angular momentum matrix L
+	  MAL_S3x3_MATRIX( Rt,double);
+	  Rt = listOfBodies[currentNode].R;
+	  Rt = MAL_S3x3_RET_TRANSPOSE(Rt);
+	  
+	  MAL_S3_VECTOR(tmp3,double);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,lw_c,lP);
+	  
+	  MAL_S3x3_C_eq_A_by_B(tmp2,Rt , listOfBodies[currentNode].w);
+	  MAL_S3x3_C_eq_A_by_B(tmp, listOfBodies[currentNode].getInertie(),tmp2);
+	  MAL_S3x3_C_eq_A_by_B(tmp2, listOfBodies[currentNode].R,tmp);
+	  lL = tmp3 + tmp2; 
+	  ODEBUG("L: " << lL);
       
-      // Computes angular momentum matrix L
-        MAL_S3x3_MATRIX( Rt,double);
-        Rt = listOfBodies[currentNode].R;
-        Rt = MAL_S3x3_RET_TRANSPOSE(Rt);
+	  listOfBodies[currentNode].L = lL;
+	  listOfBodies[currentNode].w_c = lw_c;
+	  m_L+= lL;
+	}
 
-        MAL_S3_VECTOR(tmp3,double);
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,lw_c,lP);
-
-        MAL_S3x3_C_eq_A_by_B(tmp2,Rt , listOfBodies[currentNode].w);
-        MAL_S3x3_C_eq_A_by_B(tmp, listOfBodies[currentNode].getInertie(),tmp2);
-        MAL_S3x3_C_eq_A_by_B(tmp2, listOfBodies[currentNode].R,tmp);
-        lL = tmp3 + tmp2; 
-        ODEBUG("L: " << lL);
+      MAL_S3_VECTOR(,double) RotByMotherdv;
+      if (m_ComputeAcceleration)
+	{
+	  
+	  // ******************* Computes the angular acceleration for joint i. ******************** 
+	  MAL_S3_VECTOR(,double) aRa; // Spong p.278
+	  MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
+	  // tmp2 = z_{i-1} * dqi
+	  tmp2 = aRa * listOfBodies[currentNode].dq; 
+	  // tmp3 = w^{(0)}_i x z_{i-1} * dqi
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2); 
+	  // tmp2 = z_{i-1} * ddqi
+	  tmp2 = aRa * listOfBodies[currentNode].ddq; 
+	  listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
+	  
+	  // ******************* Computes the linear acceleration for joint i. ******************** 
+	  MAL_S3_VECTOR(,double) aRb; // Spong p. 279
+	  MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
+	  // tmp3 = w_i x (w_i x r_{i,i+1})
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRb);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+	  
+	  // tmp2 = dw_I x r_{i,i+1}
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRb);
+	  
+	  // 
+	  MAL_S3x3_MATRIX(Rot,double);
+	  Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
+	  MAL_S3_VECTOR(,double) RotByMotherdv;
+	  MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
+	  listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
+	}
       
-        listOfBodies[currentNode].L = lL;
-        listOfBodies[currentNode].w_c = lw_c;
-        m_L+= lL;
-
-      // ******************* Computes the angular acceleration for joint i. ******************** 
-        MAL_S3_VECTOR(,double) aRa; // Spong p.278
-        MAL_S3x3_C_eq_A_by_B(aRa,listOfBodies[currentNode].R, aDB.a);
-      // tmp2 = z_{i-1} * dqi
-        tmp2 = aRa * listOfBodies[currentNode].dq; 
-      // tmp3 = w^{(0)}_i x z_{i-1} * dqi
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2); 
-      // tmp2 = z_{i-1} * ddqi
-        tmp2 = aRa * listOfBodies[currentNode].ddq; 
-        listOfBodies[currentNode].dw = tmp2 + tmp3 + listOfBodies[lMother].dw;
-
-      // ******************* Computes the linear acceleration for joint i. ******************** 
-        MAL_S3_VECTOR(,double) aRb; // Spong p. 279
-        MAL_S3x3_C_eq_A_by_B(aRb, listOfBodies[currentNode].R, aDB.b);
-      // tmp3 = w_i x (w_i x r_{i,i+1})
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRb);
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
-
-      // tmp2 = dw_I x r_{i,i+1}
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRb);
-
-        // 
-        MAL_S3x3_MATRIX(Rot,double);
-        Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
-        MAL_S3_VECTOR(,double) RotByMotherdv;
-        MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
-        listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
-
-      // *******************  Acceleration for the center of mass of body  i ************************
-        MAL_S3_VECTOR(,double) aRc; // Spong p. 279
-        MAL_S3x3_C_eq_A_by_B(aRc, listOfBodies[currentNode].R, aDB.c);
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRc);
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
-
-      // tmp2 = dw_I x r_{i,i+1}
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRc);
-        // 
-        listOfBodies[currentNode].dv_c = RotByMotherdv + tmp2 + tmp3;
-
+      if (m_ComputeAccCoM)
+	{
+	  
+	  // *******************  Acceleration for the center of mass of body  i ************************
+	  MAL_S3_VECTOR(,double) aRc; // Spong p. 279
+	  MAL_S3x3_C_eq_A_by_B(aRc, listOfBodies[currentNode].R, aDB.c);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].w,aRc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,listOfBodies[currentNode].w,tmp2);
+	  
+	  // tmp2 = dw_I x r_{i,i+1}
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,listOfBodies[currentNode].dw,aRc);
+	  // 
+	  listOfBodies[currentNode].dv_c = RotByMotherdv + tmp2 + tmp3;
+	}
       
       // TO DO if necessary : cross velocity.
         int step=0;
@@ -533,16 +566,19 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
                 NextNode = listOfBodies[currentNode].getLabelMother();
                 if (NextNode>=0)
                 {
-		/* Test if current node is leaf, 
-                    because in this case the force are not set properly. */
-                    if ((listOfBodies[currentNode].sister==-1) &&
-                         (listOfBodies[currentNode].child==-1))
+		  /* Test if current node is leaf, 
+		     because in this case the force are not set properly. */
+		  if (m_ComputeBackwardDynamics)
+		    {
+		      if ((listOfBodies[currentNode].sister==-1) &&
+			  (listOfBodies[currentNode].child==-1))
                         BackwardDynamics(listOfBodies[currentNode]);
-
-                    /* Compute backward dynamics */
-                    BackwardDynamics(listOfBodies[NextNode]);
-                    currentNode = NextNode;
-                    NextNode = listOfBodies[currentNode].sister;
+		      
+		      /* Compute backward dynamics */
+		      BackwardDynamics(listOfBodies[NextNode]);
+		    }
+		  currentNode = NextNode;
+		  NextNode = listOfBodies[currentNode].sister;
                 }
                 else 
                     NextNode=labelTheRoot;
@@ -556,56 +592,65 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
     }
     while(currentNode!=labelTheRoot);
 
-  // Compute the skew matrix related to the weighted CoM.
-    MAL_S3_VECTOR(,double) lpComP = positionCoMPondere/masse;
+    if (m_ComputeCoM)
+      {
+	// Compute the skew matrix related to the weighted CoM.
+	MAL_S3_VECTOR(,double) lpComP = positionCoMPondere/masse;
+	
+	positionCoMPondere = lpComP;
+	ODEBUG("Position of the CoM = " << positionCoMPondere <<endl <<
+	       "Weighted Com = "<< lpComP );
+	
+	SkewCoM(0,0) =         0; SkewCoM(0,1) = - lpComP[2]; SkewCoM(0,2) = lpComP[1];
+	SkewCoM(1,0) = lpComP[2]; SkewCoM(1,1) =           0; SkewCoM(1,2) =-lpComP[0];
+	SkewCoM(2,0) =-lpComP[1]; SkewCoM(2,1) =   lpComP[0]; SkewCoM(2,2) =         0;
+	
+      }
 
-    positionCoMPondere = lpComP;
-  
-    ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
-  // Update the momentum derivative 
-    if (m_IterationNumber>1)
-    {
-        m_dP = (m_P - m_Prev_P)/m_TimeStep;
-        m_dL = (m_L - m_Prev_L)/m_TimeStep;
-      
-      // Update the ZMP value.
-        double px,py,pz=0.0;
-        CalculateZMP(px,py,
-                     m_dP, m_dL,pz);
+    // Zero Momentum Point Computation.
+    if (m_ComputeZMP)
+      {
+    
+	ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
+	// Update the momentum derivative 
+	if (m_IterationNumber>1)
+	  {
+	    m_dP = (m_P - m_Prev_P)/m_TimeStep;
+	    m_dL = (m_L - m_Prev_L)/m_TimeStep;
+	    
+	    // Update the ZMP value.
+	    double px,py,pz=0.0;
+	    CalculateZMP(px,py,
+			 m_dP, m_dL,pz);
+	    
+	    m_ZMP(0) = px;
+	    m_ZMP(1) = py;
+	    m_ZMP(2) = pz;
+	    
+	    ODEBUG4(m_ZMP<< " | " << m_dP << " | " << m_dL << "|" << m_IterationNumber,"DebugDataZMP.dat");
+	    
+	  }
+	else 
+	  {
+	    m_ZMP = positionCoMPondere;
+	    m_ZMP(2) = 0.0;
+	  }
+	
+	ODEBUG5( m_IterationNumber << " " 
+		 << m_ZMP(0) << " " 
+		 << m_ZMP(1) << " " 
+		 << m_ZMP(2) << " " 
+		 << m_P << " " 
+		 << m_L ,"DebugDataDMB_ZMP.dat" );
+	
+	// Update the store previous value.
+	if (m_IterationNumber>=1)
+	  {
+	    m_Prev_P = m_P;
+	    m_Prev_L = m_L;
+	  }
+      }
 
-        m_ZMP(0) = px;
-        m_ZMP(1) = py;
-        m_ZMP(2) = pz;
-      
-        ODEBUG4(m_ZMP<< " | " << m_dP << " | " << m_dL << "|" << m_IterationNumber,"DebugDataZMP.dat");
-
-    }
-    else 
-    {
-        m_ZMP = positionCoMPondere;
-        m_ZMP(2) = 0.0;
-    }
-
-    ODEBUG5( m_IterationNumber << " " 
-            << m_ZMP(0) << " " 
-            << m_ZMP(1) << " " 
-            << m_ZMP(2) << " " 
-            << m_P << " " 
-            << m_L ,"DebugDataDMB_ZMP.dat" );
-
-  // Update the store previous value.
-    if (m_IterationNumber>=1)
-    {
-        m_Prev_P = m_P;
-        m_Prev_L = m_L;
-    }
-
-    ODEBUG("Position of the CoM = " << positionCoMPondere <<endl <<
-            "Weighted Com = "<< lpComP );
-
-    SkewCoM(0,0) =         0; SkewCoM(0,1) = - lpComP[2]; SkewCoM(0,2) = lpComP[1];
-    SkewCoM(1,0) = lpComP[2]; SkewCoM(1,1) =           0; SkewCoM(1,2) =-lpComP[0];
-    SkewCoM(2,0) =-lpComP[1]; SkewCoM(2,1) =   lpComP[0]; SkewCoM(2,2) =         0;
 
     m_IterationNumber++;
 }
@@ -2474,13 +2519,8 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
     positionCoMPondere = positionCoMPondere/masse;
 }
 /**
-<<<<<<< master
 \brief Recursive method to update the kinematic tree transformations starting from the given joint
  */
-=======
-\brief Recursive method to update the kinematic tree transformations starting from the given joint
-*/
->>>>>>> origin
 void DynamicMultiBody::forwardTransformation(Joint* inJoint)
 {
     DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
