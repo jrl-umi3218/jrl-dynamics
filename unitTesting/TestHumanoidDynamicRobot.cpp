@@ -206,6 +206,7 @@ int main(int argc, char *argv[])
   MAL_S3_VECTOR(ZMPval,double);
 
   aHDMB->currentVelocity(aCurrentVel);
+  aDMB->setComputeBackwardDynamics(true);
   aHDMB->computeForwardKinematics();
   ZMPval = aHDMB->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
@@ -257,6 +258,9 @@ int main(int argc, char *argv[])
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
   aDMB->SetTimeStep(0.005);
+  aDMB->setComputeAcceleration(false);
+  aDMB->setComputeBackwardDynamics(false);
+  aDMB->setComputeZMP(true);
   for(int i=0;i<4;i++)
     {
       aHDMB->currentVelocity(aCurrentVel);
