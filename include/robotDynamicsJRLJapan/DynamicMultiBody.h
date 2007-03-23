@@ -268,6 +268,34 @@ namespace dynamicsJRLJapan
     vector3d wn3d;//used by frequently-called method RodriguesRotation
     vector3d vek;//used as a temporary vector in the recursive method forwardTransformation 
     
+
+    /*! \brief Boolean control variables. 
+      @{
+     */
+
+    /*! Computing velocity for each joint. */
+    bool m_ComputeVelocity;
+
+    /*! Computing acceleration for each joint. */
+    bool m_ComputeAcceleration;
+
+    /*! Computing CoM according to the position of each joint. */
+    bool m_ComputeCoM;
+
+    /*! Computing momentum using the velocity, i.e. 
+      setting the m_ComputeMomentum to true will set m_ComputeVelocity to true. */
+    bool m_ComputeMomentum;
+
+    /*! Compute the acceleration of the CoM. */
+    bool m_ComputeAccCoM;
+
+    /*! Compute backward dynamics, according to the Newton-Euler algorithm. */
+    bool m_ComputeBackwardDynamics;
+
+    /*! Compute ZMP. */
+    bool m_ComputeZMP;
+
+    /* @} */
     
   public:
     
@@ -289,15 +317,28 @@ namespace dynamicsJRLJapan
 
     /** \name Dynamic parameters computation related methods 
      */
-    
-    /** \brief Computation the velocity following a tree like path.
-	It is assume that the value of the joint has been
+
+
+    /** \brief Computation of the dynamics according to the Newton-Euler 
+	algorithm. Can be controlled by the methods
+	setComputeVelocity, setComputeAcceleration, setComputeCoM,
+	setcomputeBackwardDynamics, according to the needs.
+	It is assume that the value of the joints (position, velocity, acceleration) has been
 	correctly set. */
+    void NewtonEulerAlgorithm(vector3d &PosForRoot, 
+			      matrix3d &OrientationForRoot, 
+			      vector3d &v0ForRoot,
+			      vector3d &wForRoot);
+
+
+    /** \brief Call the previous function, kept for backward compatibility,
+     this method is doom to be deleted soon. */
     void ForwardVelocity(vector3d &PosForRoot, 
 			 matrix3d &OrientationForRoot, 
 			 vector3d &v0ForRoot,
 			 vector3d &wForRoot);
     
+        
     /** \brief Compute the backward part of the dynamics
 	to get the force and the torques of the bodies.
      */
@@ -762,6 +803,79 @@ namespace dynamicsJRLJapan
      /*! GetIndex */
      const unsigned int & GetIterationNumber() const
        { return m_IterationNumber;} 
+
+          /*! \brief Setting the velocity. */
+     void setComputeVelocity(const bool & abool)
+     { m_ComputeVelocity = abool; }
+     
+     /*! \brief Getting the computation status for the velocity. */
+     bool getComputeVelocity()
+     { return m_ComputeVelocity; }
+
+     /*! \brief Setting the acceleration. */
+     void setComputeAcceleration(const bool & abool)
+     { if (abool) m_ComputeVelocity=true;
+       m_ComputeAcceleration = abool; }
+     
+     /*! \brief Getting the computation status for the acceleration. */
+     bool getComputeAcceleration()
+     { return m_ComputeAcceleration; }
+
+     /*! \brief Compute the CoM. */
+     void setComputeCoM(const bool & abool)
+     { m_ComputeCoM = abool; }
+     
+     /*! \brief Getting the computation status for the CoM. */
+     bool getComputeCoM()
+     { return m_ComputeCoM; }
+
+     /*! \brief Compute the Momentum. */
+     void setComputeMomentum(const bool & abool)
+     { 
+       if (abool)
+	 {
+	   m_ComputeVelocity = true;
+	 }
+       m_ComputeMomentum = abool; 
+     }
+     
+     /*! \brief Getting the computation status for the Momentum. */
+     bool getComputeMomentum()
+     { return m_ComputeMomentum; }
+
+     /*! \brief Compute the CoM acceleration. */
+     void setComputeAccelerationCoM(const bool & abool)
+     { m_ComputeAccCoM = abool; }
+     
+     /*! \brief Getting the computation status for the CoM. */
+     bool getComputeAccelerationCoM()
+     { return m_ComputeAccCoM; }
+     
+      /*! \brief Compute the backward dynamics. */
+     void setComputeBackwardDynamics(const bool & abool)
+     { if (abool)
+	 setComputeAcceleration(true);
+       m_ComputeBackwardDynamics = abool; }
+     
+     /*! \brief Getting the computation status for the CoM. */
+     bool getComputeBackwardDynamics()
+     { return m_ComputeBackwardDynamics; }
+
+      /*! \brief Compute the ZMP. */
+     void setComputeZMP(const bool & abool)
+     {
+       if (abool)
+	 {
+	   m_ComputeVelocity = true;
+	   m_ComputeCoM = true;
+	   m_ComputeMomentum = true;
+	 }
+       m_ComputeZMP = abool; 
+     }
+     
+     /*! \brief Getting the computation status for the ZMP. */
+     bool getComputeZMP()
+     { return m_ComputeZMP; }
    
   };
 };
