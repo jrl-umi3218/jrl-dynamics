@@ -367,14 +367,14 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 
         ODEBUG("CurrentBody " << listOfBodies[currentNode].getName());
       
-      // ----------------------------------
-      // Rodrigues formula. (p33)
+	// ----------------------------------
+	// Rodrigues formula. (p33)
         if (norm_w< NORME_EPSILON)
-        {
+	  {
             MAL_S3x3_MATRIX_SET_IDENTITY(Ro);
-        }
+	  }
         else 
-        {
+	  {
             th = norm_w * aDB.q;
             wn = aDB.a / norm_w;
             w_wedge(0,0) =   0.0;w_wedge(0,1)= -wn[2]; w_wedge(0,2)=  wn[1]; // Cross product
@@ -396,16 +396,16 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
             Ro(2,0) = -wn[1]*st+wn[0]*wn[2]*lct; 
             Ro(2,1) = wn[0]*st + wn[1]*wn[2]*lct; 
             Ro(2,2) = ct + wn[2]*wn[2]*lct;
-        }
+	  }
       
         ODEBUG("Ro:" << endl << Ro );
         ODEBUG("MR:" << listOfBodies[lMother].R );
         ODEBUG("b: " << aDB.b);
         ODEBUG("Mp: " << listOfBodies[lMother].p);
-      // End Rodrigues formula
-      //-------------------------------
-
-      // Position and orientation in reference frame
+	// End Rodrigues formula
+	//-------------------------------
+	
+	// Position and orientation in reference frame
         listOfBodies[currentNode].p = MAL_S3x3_RET_A_by_B(listOfBodies[lMother].R , aDB.b )
                 + listOfBodies[lMother].p;
         MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode].R ,listOfBodies[lMother].R , Ro);
@@ -417,7 +417,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
                 << listOfBodies[currentNode].p[1] << " " 
                 << listOfBodies[currentNode].p[2] << " " );
         ODEBUG("R: "<< aDB.R );
-      // Computes the angular velocity. 
+	// Computes the angular velocity. 
 
       if (m_ComputeVelocity)
 	{
@@ -451,10 +451,8 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
       if (m_ComputeCoM)
 	{
 	  
-	  MAL_S3_VECTOR( cl , double);
 	  ODEBUG("c: " << listOfBodies[currentNode].c);
 	  MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
-	  MAL_S3_VECTOR(lw_c,double);
 	  lw_c = cl + listOfBodies[currentNode].p;
 	  positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
 	  ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
@@ -469,7 +467,8 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  tmp2 = cl;
 	  ODEBUG("w: " << listOfBodies[currentNode].w );
 	  // Fixed a bug found by Oussama regarding the computation of P.
-	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp, listOfBodies[currentNode].w,tmp2);
+	  //	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp, listOfBodies[currentNode].w,tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp,tmp2, listOfBodies[currentNode].w);
 	  ODEBUG("cl^w: " << tmp);
 	  ODEBUG("masse: " << listOfBodies[currentNode].getMasse());
 	  ODEBUG("v0: " << listOfBodies[currentNode].v0 );
@@ -484,7 +483,6 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  Rt = listOfBodies[currentNode].R;
 	  Rt = MAL_S3x3_RET_TRANSPOSE(Rt);
 	  
-	  MAL_S3_VECTOR(tmp3,double);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,lw_c,lP);
 	  
 	  MAL_S3x3_C_eq_A_by_B(tmp2,Rt , listOfBodies[currentNode].w);
@@ -526,7 +524,6 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  // 
 	  MAL_S3x3_MATRIX(Rot,double);
 	  Rot = MAL_S3x3_RET_TRANSPOSE(Ro);
-	  MAL_S3_VECTOR(,double) RotByMotherdv;
 	  MAL_S3x3_C_eq_A_by_B(RotByMotherdv,Rot,listOfBodies[lMother].dv);
 	  listOfBodies[currentNode].dv = RotByMotherdv + tmp2 + tmp3;
 	}
