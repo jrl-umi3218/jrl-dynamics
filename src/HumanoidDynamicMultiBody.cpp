@@ -317,10 +317,15 @@ bool HumanoidDynamicMultiBody::applyConfiguration(const vectorN& inConfiguration
     return m_DMB->applyConfiguration(inConfiguration);
 }
 
-void HumanoidDynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset)
+void HumanoidDynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
 {
-    m_DMB->FiniteDifferenceStateUpdate(inTimeStep, reset);
+    m_DMB->FiniteDifferenceStateUpdate(inTimeStep);
     ComputingZeroMomentumPoint();
+}
+
+void HumanoidDynamicMultiBody::staticState(const vectorN& inConfiguration)
+{
+    m_DMB->staticState(inConfiguration);
 }
 
 bool HumanoidDynamicMultiBody::computeCenterOfMassDynamics()

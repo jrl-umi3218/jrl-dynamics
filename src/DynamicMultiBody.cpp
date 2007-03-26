@@ -652,46 +652,42 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
     m_IterationNumber++;
 }
 
-
-
-void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset)
+void DynamicMultiBody::staticState(const vectorN& inConfiguration)
 {
-//     Joint* joint = 0;
-            
-    if (reset)
+    //Apply the given configuration
+    applyConfiguration( inConfiguration );
+    //Make the robot static
+    vector3d zeros3;
+    MAL_S3_VECTOR_FILL(zeros3,0);
+    for (unsigned int i=0;i<listOfBodies.size();i++)
     {
-        vector3d zeros3;
-        MAL_S3_VECTOR_FILL(zeros3,0); 
-        for (unsigned int i=0;i<listOfBodies.size();i++)
-        {
-            DynamicBody& body = listOfBodies[i];
-          
-            body.pastp = body.p;
-            body.pastR = body.R;
-            body.pastv0 = body.v0;
-            body.pastw = body.w;
-            
-            body.v0 = zeros3;
-            body.w = zeros3;
-            body.dv = zeros3;
-            body.dw = zeros3;
-            body.P = zeros3;
-            body.L = zeros3;
-            
-            /*//(temporary ?) update of CjrlRigidVelocity member of Joints
-            joint = (Joint*)body.joint();
-            joint->UpdateVelocityFrom2x3DOFsVector(zeros3, zeros3);
-            */
-            m_P = zeros3;
-            m_Prev_P = zeros3;
-            m_L = zeros3;
-            m_Prev_L = zeros3;
-            m_ZMP = positionCoMPondere;
-            m_ZMP(2) = 0.0;
-        }
-        return;
+        DynamicBody& body = listOfBodies[i];
+
+        body.pastp = body.p;
+        body.pastR = body.R;
+        body.pastv0 = body.v0;
+        body.pastw = body.w;
+
+        body.v0 = zeros3;
+        body.w = zeros3;
+        body.dv = zeros3;
+        body.dw = zeros3;
+        body.P = zeros3;
+        body.L = zeros3;
+
+        m_P = zeros3;
+        m_Prev_P = zeros3;
+        m_L = zeros3;
+        m_Prev_L = zeros3;
+        m_ZMP = positionCoMPondere;
+        m_ZMP(2) = 0.0;
     }
-    
+    return;
+}
+
+void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
+{
+
     matrix3d Ro,Roo,Rt;
     vector3d vek;
 
@@ -721,10 +717,6 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset
         body.w[2]  = Ro(1,0)/inTimeStep;
         body.pastR = body.R;
 
-        /*//(temporary ?) update of CjrlRigidVelocity member of Joints
-        joint = (Joint*)body.joint();
-        joint->UpdateVelocityFrom2x3DOFsVector(body.v0, body.w);
-        */
         // Linear acceleration
         body.dv = (body.v0 - body.pastv0)/inTimeStep;
         body.pastv0 = body.v0;
@@ -732,10 +724,8 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset
         // Angular acceleration
         body.dw = (body.w - body.pastw)/inTimeStep;
         body.pastw = body.w;
-
         
         // contribution of this body to the linear momentum.
-        
         MAL_S3x3_C_eq_A_by_B(wlc, body.R, body.c);
         MAL_S3_VECTOR_CROSS_PRODUCT(tmp, body.w, wlc);
         lP =  (body.v0 + tmp)* body.getMasse();
@@ -757,7 +747,6 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep, bool reset
     }
 
     // Update the momentum derivative
-
     m_dP = (m_P - m_Prev_P)/inTimeStep;
     m_dL = (m_L - m_Prev_L)/inTimeStep;
 
