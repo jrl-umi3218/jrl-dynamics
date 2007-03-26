@@ -7,5 +7,5 @@ Name: @PACKAGE@
 Description: Implementation of Abstract Interface abstractRobotDynamics
 Version: @VERSION@
 Requires: abstractRobotDynamics
-Libs: -L${libdir} -ljrlCIRdynamicsJRLJapan
+Libs: -L${libdir} -ldynamicsJRLJapan
 Cflags: -I${includedir}
