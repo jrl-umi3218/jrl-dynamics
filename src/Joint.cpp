@@ -377,6 +377,7 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   CosPhi = cos(a6DVector(5));
   SinPhi = sin(a6DVector(5));
   
+  /*
   D(0,0) =       1; D(0,1) =        0; D(0,2) = 0;
   D(1,0) =       0; D(1,1) =   CosPsi; D(1,2) = -SinPsi;
   D(2,0) =       0; D(2,1) =   SinPsi; D(2,2) = CosPsi;
@@ -388,15 +389,29 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   B(0,0) =  CosPhi; B(0,1) = -SinPhi; B(0,2) = 0;
   B(1,0) =  SinPhi; B(1,1) = CosPhi;  B(1,2) = 0;
   B(2,0) =       0; B(2,1) =      0;  B(2,2) = 1;
-  
-  
-  
+
   MAL_S3x3_MATRIX(,double) tmp;
   MAL_S3x3_C_eq_A_by_B(tmp,C,D);
   MAL_S3x3_C_eq_A_by_B(A,B,tmp);
+
+  body->R = A;
+  */
+  
+  //Formulae for the above commented rotation composition
+  A(0,0) = CosTheta * CosPhi ;
+  A(1,0) = CosTheta * SinPhi;
+  A(2,0) = -SinTheta;
+
+  A(0,1) = CosPhi * SinPsi * SinTheta - CosPsi * SinPhi;
+  A(1,1) = CosPsi * CosPhi + SinPsi * SinTheta * SinPhi;
+  A(2,1) = CosTheta * SinPsi;
+
+  A(0,2) = CosPsi * CosPhi * SinTheta + SinPhi * SinPsi;
+  A(1,2) = - CosPhi * SinPsi + CosPsi * SinTheta * SinPhi;
+  A(2,2) = CosPsi * CosTheta;
   
   body->R = A;
-  
+
   for(int i=0;i<3;i++)
     for(int j=0;j<3;j++)
       MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j) = A(i,j);
