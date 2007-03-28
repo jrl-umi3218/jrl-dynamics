@@ -397,6 +397,8 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
   FILE *fichier;
   int cptCorps = 0;
   int profondeur,jointID;
+
+  double JointULimit, JointLLimit;
   bool childDescription = false;
   double cm[3], lmasse, mi[9];
   //  double r[4], tr[3];
@@ -561,7 +563,7 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
       CurrentLink.aJoint.type(typeOfJoint(fichier));
       CurrentLink.label = cptLiaison++;
 
-      for (int k=0; k<((CurrentLink.aJoint.type()==1)?3:1); k++) {
+      for (int k=0; k<((CurrentLink.aJoint.type()==1)?6:1); k++) {
 	switch (nextJointKeyWord(fichier)) {
 	case AXE_X :
 	  {
@@ -603,6 +605,22 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
 	    fscanf(fichier,"%d",&jointID);
 		      
 	    CurrentLink.aJoint.setIDinVRML(jointID);
+	  }
+	  break;
+	case JOINT_ULIMIT:
+	  {
+	    double ajulimit;
+	    fscanf(fichier," [%lf]",&ajulimit);
+	    cout << "Detection of JOINT_ULIMIT " << ajulimit << endl;
+	    CurrentLink.aJoint.setJointULimit(ajulimit,0);
+	  }
+	  break;
+	case JOINT_LLIMIT:
+	  {
+	    double ajllimit;
+	    fscanf(fichier," [%lf]",&ajllimit);
+	    cout << "Detection of JOINT_LLIMIT " << ajllimit << endl;
+	    CurrentLink.aJoint.setJointLLimit(ajllimit,0);
 	  }
 	  break;
 	}

@@ -109,7 +109,8 @@ void GoDownTree(const CjrlJoint * startJoint)
   std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
   std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
   std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
-
+  std::cout << "llimit: " << ((Joint *)startJoint)->getJointLLimit(0)*180/M_PI << " " 
+	    << "ulimit: " << ((Joint *)startJoint)->getJointULimit(0)*180/M_PI << " " << endl;
   std::cout << startJoint->currentTransformation() << std::endl;
   
   if (startJoint->countChildJoints()!=0)
@@ -206,7 +207,7 @@ int main(int argc, char *argv[])
   MAL_S3_VECTOR(ZMPval,double);
 
   aHDMB->currentVelocity(aCurrentVel);
-  aDMB->setComputeBackwardDynamics(true);
+  aDMB->setComputeZMP(true);
   aHDMB->computeForwardKinematics();
   ZMPval = aHDMB->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
@@ -235,7 +236,7 @@ int main(int argc, char *argv[])
   cout << "Name of the WAIST joint :" << endl;
   cout << aJoint->getName() << endl;
   cout << "****************************" << endl;
-  //  aHDMB->computeJacobianCenterOfMass();
+  aHDMB->computeJacobianCenterOfMass();
   cout << "Value of the CoM's Jacobian:" << endl
        << aHDMB->jacobianCenterOfMass() << endl;
   cout << "****************************" << endl;

@@ -30,7 +30,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_FatherJoint(0),
   m_IDinVRML(-1)
 {
-
+  CreateLimitsArray();
 }
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
@@ -40,13 +40,14 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_quantity(lquantite),
   m_FatherJoint(0),
   m_IDinVRML(-1)
+
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_pose);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) = translationStatic[0];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = translationStatic[1];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = translationStatic[2];
 
-  
+  CreateLimitsArray();
 }
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
@@ -58,6 +59,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_IDinVRML(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_pose);
+  CreateLimitsArray();
 }
 
 Joint::Joint(const Joint &r)
@@ -70,17 +72,36 @@ Joint::Joint(const Joint &r)
   m_Name=r.getName();
   m_IDinVRML=r.getIDinVRML();
 
+  CreateLimitsArray();
+
+  for(int i=0;i<numberDof();i++)
+    {
+      m_LowerLimits[i] = r.getJointLLimit(i);
+      m_UpperLimits[i] = r.getJointULimit(i);
+    }
+
 }
 
 Joint::Joint()
 {
   m_type = FREE_JOINT;
+  CreateLimitsArray();
 }
 
 Joint::~Joint() 
 {
+  if (m_LowerLimits!=0)
+    delete m_LowerLimits;
+  
+  if (m_UpperLimits!=0)
+    delete m_UpperLimits;
 }
 
+void Joint::CreateLimitsArray()
+{
+  m_LowerLimits = new double[numberDof()];
+  m_UpperLimits = new double[numberDof()];
+}
 
 Joint & Joint::operator=(const Joint & r) 
 {
@@ -90,6 +111,12 @@ Joint & Joint::operator=(const Joint & r)
   m_pose=r.pose();
   m_Name = r.getName();
   m_IDinVRML = r.getIDinVRML();
+  CreateLimitsArray();
+  for(int i=0;i<numberDof();i++)
+    {
+      m_LowerLimits[i] = r.getJointLLimit(i);
+      m_UpperLimits[i] = r.getJointULimit(i);
+    }
   return *this;
 };
 

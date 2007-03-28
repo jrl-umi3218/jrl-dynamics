@@ -60,6 +60,8 @@ namespace dynamicsJRLJapan
   const static int JOINT_TRANSLATION=3;
   const static int JOINT_ROTATION=4;
   const static int JOINT_ID=5;
+  const static int JOINT_LLIMIT = 6;
+  const static int JOINT_ULIMIT = 7;
 
   /// Function to look for an object.
   char look_for(FILE* fichier, const char *str);

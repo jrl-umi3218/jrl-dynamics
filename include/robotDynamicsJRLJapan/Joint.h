@@ -93,6 +93,13 @@ namespace dynamicsJRLJapan
     /*! First entry into the state vector */
     unsigned int m_StateVectorPosition;
 
+    /*! Limits of the joint. */
+    double * m_LowerLimits;
+    double * m_UpperLimits;
+    
+    /*! Create the arrays (when the type is known). */
+    void CreateLimitsArray();
+
   public: 
     
     /*! \brief Static constant to define the kind of joints
@@ -204,6 +211,22 @@ namespace dynamicsJRLJapan
       the VRML file. */
     inline const int & getIDinVRML() const
       { return m_IDinVRML;}
+
+    /*! Set Joint Upper Limit for i-th DOF. */
+    inline void setJointULimit(double ulimit, int i)
+      { m_UpperLimits[i] = ulimit; }
+
+    /*! Set Joint Lower Limit for i-th DOF. */
+    inline void setJointLLimit(double llimit, int i)
+      { m_LowerLimits[i] = llimit; }
+    
+    /*! Get Joint Upper Limit for i-th DOF. */
+    inline double getJointULimit(int i) const
+      { return m_UpperLimits[i];}
+    
+    /*! Get Joint Lower Limit for i-th DOF. */
+    inline double getJointLLimit(int i) const
+      { return m_LowerLimits[i]; }
     
     /*! Get the static translation. */
     inline void getStaticTranslation(vector3d & staticTranslation) 

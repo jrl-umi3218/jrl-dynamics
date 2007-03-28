@@ -134,6 +134,19 @@ int nextJointKeyWord(FILE* fichier)
 	return JOINT_ROTATION;
       }
       break;
+    case 'u' :
+      if (immediatlyAppears(fichier, "limit"))
+	{
+	  cout << "nextJointKeyWord : Detect ulimit " << endl;
+	  return JOINT_ULIMIT;
+	}
+      break;
+    case 'l' :
+      if (immediatlyAppears(fichier, "limit"))
+	{
+	  cout << "nextJointKeyWord : Detect llimit " << endl;
+	  return JOINT_LLIMIT;
+	}
       break;
     }
 
