@@ -707,6 +707,15 @@ namespace dynamicsJRLJapan
     void FiniteDifferenceStateUpdate(double inTimeStep);
     
     /**
+    \brief vectors and matrices used in FiniteDifferenceStateUpdate declared here to avoid dynamic allocation
+    */
+    vector3d FD_tmp,FD_tmp2,FD_tmp3;
+    vector3d FD_wlc; //from joint to joint com in world frame
+    vector3d FD_lP;
+    vector3d FD_lL;
+    matrix3d FD_Ro,FD_Roo,FD_Rt;
+    
+    /**
     \brief Set the robot in the static state described by the given configuration vector.
      */
     void staticState(const vectorN& inConfiguration);

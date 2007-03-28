@@ -690,16 +690,8 @@ void DynamicMultiBody::staticState(const vectorN& inConfiguration)
 void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
 {
 
-    matrix3d Ro,Roo,Rt;
-
-    //for momenta and ZMP computation
-    vector3d lP;
-    vector3d lL;
     MAL_S3_VECTOR_FILL(m_P,0);
     MAL_S3_VECTOR_FILL(m_L,0);
-
-    vector3d tmp,tmp2,tmp3;
-    vector3d wlc; //from joint to joint com in world frame
 
     for (unsigned int i=0;i<listOfBodies.size();i++)
     {
@@ -710,12 +702,12 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
         body.pastp = body.p;
 
         // Angular velocity.
-        Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
-        Roo = (body.R - body.pastR);
-        MAL_S3x3_C_eq_A_by_B(Ro , Roo, Rt);
-        body.w[0]  = Ro(1,2)/inTimeStep;
-        body.w[1]  = Ro(0,2)/inTimeStep;
-        body.w[2]  = Ro(1,0)/inTimeStep;
+        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
+        FD_Roo = (body.R - body.pastR);
+        MAL_S3x3_C_eq_A_by_B(FD_Ro , FD_Roo, FD_Rt);
+        body.w[0]  = FD_Ro(1,2)/inTimeStep;
+        body.w[1]  = FD_Ro(0,2)/inTimeStep;
+        body.w[2]  = FD_Ro(1,0)/inTimeStep;
         body.pastR = body.R;
 
         // Linear acceleration
@@ -727,23 +719,23 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
         body.pastw = body.w;
         
         // contribution of this body to the linear momentum.
-        MAL_S3x3_C_eq_A_by_B(wlc, body.R, body.c);
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp, body.w, wlc);
-        lP =  (body.v0 + tmp)* body.getMasse();
-        body.P = lP;
-        m_P += lP;
+        MAL_S3x3_C_eq_A_by_B(FD_wlc, body.R, body.c);
+        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp, body.w, FD_wlc);
+        FD_lP =  (body.v0 + FD_tmp)* body.getMasse();
+        body.P = FD_lP;
+        m_P += FD_lP;
 
         // contribution of this body to the angular momentum.
-        Rt = MAL_S3x3_RET_TRANSPOSE(body.R);
+        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.R);
         
-        MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,body.w_c,lP);
+        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp3,body.w_c,FD_lP);
         
-        MAL_S3x3_C_eq_A_by_B(tmp2,Rt , body.w);
-        MAL_S3x3_C_eq_A_by_B(tmp, body.getInertie(),tmp2);
-        MAL_S3x3_C_eq_A_by_B(tmp2, body.R,tmp);
-        lL = tmp3 + tmp2;
-        body.L = lL;
-        m_L += lL;
+        MAL_S3x3_C_eq_A_by_B(FD_tmp2, FD_Rt , body.w);
+        MAL_S3x3_C_eq_A_by_B(FD_tmp, body.getInertie(),FD_tmp2);
+        MAL_S3x3_C_eq_A_by_B(FD_tmp2, body.R, FD_tmp);
+        FD_lL = FD_tmp3 + FD_tmp2;
+        body.L = FD_lL;
+        m_L += FD_lL;
 
     }
 
