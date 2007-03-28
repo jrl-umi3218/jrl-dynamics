@@ -611,7 +611,7 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
 	  {
 	    double ajulimit;
 	    fscanf(fichier," [%lf]",&ajulimit);
-	    cout << "Detection of JOINT_ULIMIT " << ajulimit << endl;
+	    //cout << "Detection of JOINT_ULIMIT " << ajulimit << endl;
 	    CurrentLink.aJoint.setJointULimit(ajulimit,0);
 	  }
 	  break;
@@ -619,7 +619,7 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
 	  {
 	    double ajllimit;
 	    fscanf(fichier," [%lf]",&ajllimit);
-	    cout << "Detection of JOINT_LLIMIT " << ajllimit << endl;
+	    //cout << "Detection of JOINT_LLIMIT " << ajllimit << endl;
 	    CurrentLink.aJoint.setJointLLimit(ajllimit,0);
 	  }
 	  break;

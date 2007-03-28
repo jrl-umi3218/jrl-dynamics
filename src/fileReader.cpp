@@ -137,14 +137,14 @@ int nextJointKeyWord(FILE* fichier)
     case 'u' :
       if (immediatlyAppears(fichier, "limit"))
 	{
-	  cout << "nextJointKeyWord : Detect ulimit " << endl;
+	  //cout << "nextJointKeyWord : Detect ulimit " << endl;
 	  return JOINT_ULIMIT;
 	}
       break;
     case 'l' :
       if (immediatlyAppears(fichier, "limit"))
 	{
-	  cout << "nextJointKeyWord : Detect llimit " << endl;
+	  //cout << "nextJointKeyWord : Detect llimit " << endl;
 	  return JOINT_LLIMIT;
 	}
       break;

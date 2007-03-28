@@ -244,18 +244,14 @@ void Joint::computeJacobianJointWrtConfig()
   DynamicBody * FinalBody = (DynamicBody *)m_Body;
   MAL_S3_VECTOR(,double) pn = FinalBody->p;
 
-  ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size());
-  
-  //not forgetting the last joint
-  std::vector<CjrlJoint*> fullChain = m_FromRootToThis;
-  fullChain.push_back(this);
-  
-  for(int i=0;i<fullChain.size();i++)
+  ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size()-1);
+   
+  for(int i=0;i<m_FromRootToThis.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
-      DynamicBody * aBody=  (DynamicBody *) fullChain[i]->linkedBody();
-      Joint * aJoint = (Joint *)fullChain[i];
+      DynamicBody * aBody=  (DynamicBody *) m_FromRootToThis[i]->linkedBody();
+      Joint * aJoint = (Joint *)m_FromRootToThis[i];
       
       MAL_S3_VECTOR(,double) aRa,dp;
       MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
@@ -341,11 +337,14 @@ void Joint::SetFatherJoint(Joint *aFather)
 {
   m_FatherJoint = aFather;
 
+  /*
   if (m_FatherJoint==0)
     {
       m_FromRootToThis.insert(m_FromRootToThis.begin(),this);
     }
-
+  
+  m_FromRootToThis.insert(m_FromRootToThis.begin(),this);
+  
   if ((m_FromRootToThis.size()==0) &&
       (m_FatherJoint!=0))
     {
@@ -357,7 +356,20 @@ void Joint::SetFatherJoint(Joint *aFather)
 	  aJoint = &(aJoint->parentJoint());
 	}
     }
+  
+  */
+  
+  // modified march 2007 oussama
+  m_FromRootToThis.clear();
+  
+  m_FromRootToThis.push_back(this);
 
+    CjrlJoint* aJoint = m_FatherJoint;
+    while(aJoint!=0)
+    {
+        m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
+        aJoint = &(aJoint->parentJoint());
+    }
 }
 
 const MAL_S4x4_MATRIX(,double) & Joint::initialPosition()
@@ -458,11 +470,57 @@ void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelo
   m_RigidVelocity.rotationVelocity(anAngularVelocity);
 }
 
+
+void Joint::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
+{
+    double norm_w = MAL_S3_VECTOR_NORM(inAxis);
+    if (norm_w < 10e-7)
+    {
+        MAL_S3x3_MATRIX_SET_IDENTITY(outRotation);
+    }
+    else
+    {
+        double th = norm_w * inAngle;
+        wn3d = inAxis / norm_w;
+        double ct = cos(th);
+        double lct= (1-ct);
+        double st = sin(th);
+        outRotation(0,0) = ct + wn3d[0]*wn3d[0]* lct;
+        outRotation(0,1) = wn3d[0]*wn3d[1]*lct-wn3d[2]*st;
+        outRotation(0,2) = wn3d[1] * st+wn3d[0]*wn3d[2]*lct;
+        outRotation(1,0) = wn3d[2]*st +wn3d[0]*wn3d[1]*lct;
+        outRotation(1,1) = ct + wn3d[1]*wn3d[1]*lct;
+        outRotation(1,2) = -wn3d[0]*st+wn3d[1]*wn3d[2]*lct;
+        outRotation(2,0) = -wn3d[1]*st+wn3d[0]*wn3d[2]*lct;
+        outRotation(2,1) = wn3d[0]*st + wn3d[1]*wn3d[2]*lct;
+        outRotation(2,2) = ct + wn3d[2]*wn3d[2]*lct;
+    }
+}
+
 JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(Joint::FREE_JOINT);
   pose(inInitialPosition);
   
+}
+
+bool JointFreeflyer::updateTransformation(const vectorN& inDofVector)
+{
+    if (rankInConfiguration()+5 > inDofVector.size() -1 )
+    {
+        std::cout << "JointFreeflyer::updateTransformation(). Inappropriate configuration vector.\n";
+        return false;
+    }
+    
+    if (dof6D.size() != 6)
+        dof6D.resize(6,false);
+    
+    for (unsigned int i=0; i<6; i++)
+        dof6D(i) = inDofVector(rankInConfiguration() + i);
+
+    UpdatePoseFrom6DOFsVector(dof6D);
+    
+    return true;
 }
 
 JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
@@ -471,8 +529,115 @@ JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
   pose(inInitialPosition);
 }
 
+bool JointRotation::updateTransformation(const vectorN& inDofVector)
+{
+    if (rankInConfiguration() > inDofVector.size() -1 )
+    {
+        std::cout << "JointRotation::updateTransformation(). Inappropriate configuration vector .\n";
+        return false;
+    }
+    
+    DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
+    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+
+    body->q = inDofVector(rankInConfiguration());
+    
+    RodriguesRotation(body->a, body->q, localR);
+
+    MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
+    body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
+
+    return true;
+}
+
 JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(PRISMATIC_JOINT);
   pose(inInitialPosition);
 }
+
+bool JointTranslation::updateTransformation(const vectorN& inDofVector)
+{
+    if (rankInConfiguration() > inDofVector.size() -1 )
+    {
+        std::cout << "JointTranslation::updateTransformation(). Inappropriate configuration vector.\n";
+        return false;
+    }
+    DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
+    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+    
+    body->q = inDofVector(rankInConfiguration());
+    
+    for (unsigned int i = 0; i<3; i++)
+        vek[i] *= body->q;
+    
+    body->R = parentbody->R;
+    
+    MAL_S3x3_C_eq_A_by_B(wn3d, body->R, vek);
+
+    body->p = parentbody->p+ MAL_S3x3_RET_A_by_B(parentbody->R,body->b) + wn3d;
+}
+
+
+/************************************************************************************/
+//Note: the following switch-implementation of the updateTransformation() method should not exist. The robot construction must be reviwed to construct freeflyer, rotation or translation joints as such and not as generic Joints with a type-telling member. For now, this method compiles the code specific to each type of joint
+/************************************************************************************/
+bool Joint::updateTransformation(const vectorN& inDofVector)
+{
+    if (rankInConfiguration() > inDofVector.size() -1 )
+    {
+        std::cout << "JointTranslation::updateTransformation(). Inappropriate configuration vector.\n";
+        return false;
+    }
+    
+    switch (type())
+    {
+        case Joint::REVOLUTE_JOINT :
+        {
+            DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
+            DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+
+            body->q = inDofVector(rankInConfiguration());
+            quantity( body->q);
+    
+            RodriguesRotation(body->a, body->q, localR);
+
+            MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
+            body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
+        }
+        break;
+        
+        case Joint::FREE_JOINT :
+        {
+            if (dof6D.size() != 6)
+                dof6D.resize(6,false);
+    
+            for (unsigned int i=0; i<6; i++)
+                dof6D(i) = inDofVector(rankInConfiguration() + i);
+
+            UpdatePoseFrom6DOFsVector(dof6D);
+        }
+        break;
+        
+        case Joint::PRISMATIC_JOINT :
+        {
+            DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
+            DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+    
+            body->q = inDofVector(rankInConfiguration());
+            quantity( body->q);
+    
+            for (unsigned int i = 0; i<3; i++)
+                vek[i] *= body->q;
+    
+            body->R = parentbody->R;
+    
+            MAL_S3x3_C_eq_A_by_B(wn3d, body->R, vek);
+
+            body->p = parentbody->p+ MAL_S3x3_RET_A_by_B(parentbody->R,body->b) + wn3d;
+        }
+        break;
+    }
+    
+}
+/************************************************************************************/

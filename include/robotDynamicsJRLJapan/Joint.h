@@ -291,6 +291,12 @@ namespace dynamicsJRLJapan
     */
     const matrix4d &currentTransformation() const;
     
+     /**
+    \brief Update this joint's transformation according to the given vector of DoF values, and the parent joint's transformation if this is not a free flyer joint.
+    \return false if the required number of dof values is not met in given paramter
+      */
+    virtual bool updateTransformation(const vectorN& inRobotConfigVector);
+    
     /**
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
        
@@ -320,7 +326,6 @@ namespace dynamicsJRLJapan
     */
     inline unsigned int rankInConfiguration() const
       { return m_StateVectorPosition; }
-        
     
     /*! @} */
     
@@ -371,6 +376,18 @@ namespace dynamicsJRLJapan
     */
 
     /**
+    \brief compute the rotation matrix correponding to axis of rotation inAxis and angle inAngle.
+    */
+    void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
+    
+    /**
+    \brief Convenient variables to avoid online matrix/vector allocation
+     */
+    matrix3d localR;
+    vector3d wn3d, vek;
+    vectorN dof6D;
+    
+    /**
        \name Body linked to the joint
        @{
     */
@@ -407,18 +424,20 @@ namespace dynamicsJRLJapan
   class JointFreeflyer : public Joint
   {
     JointFreeflyer(const matrix4d &inInitialPosition);
+    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointRotation : public Joint
   {
     JointRotation(const matrix4d &inInitialPosition);
+    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointTranslation : public Joint
   {
     JointTranslation(const matrix4d &inInitialPosition);
+    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
-  
 };
 #endif

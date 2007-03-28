@@ -122,6 +122,8 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
   int ld = liaisons[ID][0].liaison;
   m_RootOfTheJointsTree = & listeLiaisons[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(listOfBodies[ID]);
+  //speecify the type of the root joint
+  m_RootOfTheJointsTree->type( Joint::FREE_JOINT );
   // Start the vector of joints.
   m_JointVector.clear();
   m_JointVector.insert(m_JointVector.end(),m_RootOfTheJointsTree);
@@ -689,7 +691,6 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
 {
 
     matrix3d Ro,Roo,Rt;
-    vector3d vek;
 
     //for momenta and ZMP computation
     vector3d lP;
@@ -2496,71 +2497,37 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
         MAL_VECTOR_SIZE(m_Configuration))
         return false;
     
-    currentConfiguration(inConfiguration);
+    //currentConfiguration( inConfiguration );
+    m_Configuration = inConfiguration;
     
     MAL_S3_VECTOR_FILL(positionCoMPondere,0);
     
-    forwardTransformation(m_RootOfTheJointsTree);
+    forwardTransformation(m_RootOfTheJointsTree, inConfiguration);
     
     positionCoMPondere = positionCoMPondere/masse;
 }
 /**
 \brief Recursive method to update the kinematic tree transformations starting from the given joint
  */
-void DynamicMultiBody::forwardTransformation(Joint* inJoint)
+void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inConfiguration)
 {
     DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
 
-    if (inJoint != m_RootOfTheJointsTree)
-    {
+    inJoint->updateTransformation(inConfiguration);
 
-        RodriguesRotation(body->a,body->q,localR);
-        
-        DynamicBody* parentbody = dynamic_cast<DynamicBody*>(inJoint->parentJoint().linkedBody());
-
-        MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
-        body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
-    }
-    
     //update position of center of mass in world frame
-    MAL_S3x3_C_eq_A_by_B(wn3d, body->R, body->c);
-    body->w_c = wn3d + body->p;
+    MAL_S3x3_C_eq_A_by_B(vek, body->R, body->c);
+    body->w_c = vek + body->p;
     positionCoMPondere += body->w_c * body->getMasse();
     
     for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
     {
         CjrlJoint* jrlchildJoint = const_cast<CjrlJoint*>(&(inJoint->childJoint(i)));
         Joint* childJoint = dynamic_cast<Joint*>(jrlchildJoint);
-        forwardTransformation(childJoint);
+        forwardTransformation(childJoint,inConfiguration);
     }
 }
 
-
-void DynamicMultiBody::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
-{
-    double norm_w = MAL_S3_VECTOR_NORM(inAxis);
-    if (norm_w < 10e-7)
-    {
-        MAL_S3x3_MATRIX_SET_IDENTITY(outRotation);
-    }
-    else
-    {
-        double th = norm_w * inAngle;
-        wn3d = inAxis / norm_w;
-        double ct = cos(th);
-        double lct= (1-ct);
-        double st = sin(th);
-        outRotation(0,0) = ct + wn3d[0]*wn3d[0]* lct;
-        outRotation(0,1) = wn3d[0]*wn3d[1]*lct-wn3d[2]*st;
-        outRotation(0,2) = wn3d[1] * st+wn3d[0]*wn3d[2]*lct;
-        outRotation(1,0) = wn3d[2]*st +wn3d[0]*wn3d[1]*lct;
-        outRotation(1,1) = ct + wn3d[1]*wn3d[1]*lct;
-        outRotation(1,2) = -wn3d[0]*st+wn3d[1]*wn3d[2]*lct;
-        outRotation(2,0) = -wn3d[1]*st+wn3d[0]*wn3d[2]*lct;
-        outRotation(2,1) = wn3d[0]*st + wn3d[1]*wn3d[2]*lct;
-        outRotation(2,2) = ct + wn3d[2]*wn3d[2]*lct;
-    }
-}
 
 /**
    \brief Compute forward kinematics.
