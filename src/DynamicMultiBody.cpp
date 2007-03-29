@@ -2520,6 +2520,29 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inCo
     }
 }
 
+/**
+    \brief Get the upper bound for ith dof.
+ */
+double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
+{
+    if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
+        return 0;
+    
+    return JointFromRank(inRankInConfiguration)->getJointULimit(0);
+    //WARNING: this code does not work if the joints have more than a single degree of freedom
+}
+/**
+\brief Get the lower bound for ith dof.
+ */
+double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
+{
+    if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
+        return 0;
+    
+    return JointFromRank(inRankInConfiguration)->getJointLLimit(0);
+    //WARNING: this code does not work if the joints have more than a single degree of freedom
+}
+
 
 /**
    \brief Compute forward kinematics.

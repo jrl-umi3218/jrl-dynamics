@@ -367,6 +367,15 @@ namespace dynamicsJRLJapan
       std::vector<CjrlJoint*> jointVector() ;
       
       /**
+        \brief Get the upper bound for ith dof.
+      */
+      double upperBoundDof(unsigned int inRankInConfiguration);
+      /**
+        \brief Get the lower bound for ith dof.
+      */
+      double lowerBoundDof(unsigned int inRankInConfiguration);
+      
+      /**
 	 \brief Get the number of degrees of freedom of the robot.
       */
       unsigned int numberDof() const ;

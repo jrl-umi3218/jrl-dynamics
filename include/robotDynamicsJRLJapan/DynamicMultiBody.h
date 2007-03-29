@@ -716,6 +716,15 @@ namespace dynamicsJRLJapan
     matrix3d FD_Ro,FD_Roo,FD_Rt;
     
     /**
+        \brief Get the upper bound for ith dof.
+    */
+    double upperBoundDof(unsigned int inRankInConfiguration);
+    /**
+        \brief Get the lower bound for ith dof.
+    */
+    double lowerBoundDof(unsigned int inRankInConfiguration);
+    
+    /**
     \brief Set the robot in the static state described by the given configuration vector.
      */
     void staticState(const vectorN& inConfiguration);

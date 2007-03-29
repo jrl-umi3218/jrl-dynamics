@@ -396,6 +396,16 @@ double HumanoidDynamicMultiBody::footHeight() const
 }
 
 
+double HumanoidDynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
+{
+    return m_DMB->upperBoundDof(inRankInConfiguration);
+}
+
+double HumanoidDynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
+{
+    return m_DMB->lowerBoundDof(inRankInConfiguration);
+}
+
 void HumanoidDynamicMultiBody::waist(CjrlJoint * inWaist)
 {
   // This method is ineffective regarding the internals.
