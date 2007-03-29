@@ -361,10 +361,11 @@ namespace dynamicsJRLJapan
     void computeJacobianJointWrtConfig();
     
     /**
-       \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
-       
-    */
-    matrixNxP jacobianPointWrtConfig(const vector3d & inPointJointFrame) const ;
+        \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
+    The output matrix outjacobian is automatically resized if necessary
+
+     */
+    void getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outjacobian) const;
 
     /** 
 	\brief resize the Jacobian with the number of DOFs.

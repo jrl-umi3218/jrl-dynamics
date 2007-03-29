@@ -243,6 +243,8 @@ void Joint::computeJacobianJointWrtConfig()
 
   DynamicBody * FinalBody = (DynamicBody *)m_Body;
   MAL_S3_VECTOR(,double) pn = FinalBody->p;
+  
+  vector3d aRa,dp,lv;
 
   ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size()-1);
    
@@ -253,14 +255,12 @@ void Joint::computeJacobianJointWrtConfig()
       DynamicBody * aBody=  (DynamicBody *) m_FromRootToThis[i]->linkedBody();
       Joint * aJoint = (Joint *)m_FromRootToThis[i];
       
-      MAL_S3_VECTOR(,double) aRa,dp;
       MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
 
       unsigned int lcol = aJoint->stateVectorPosition();
       ODEBUG3("Joint: " << aJoint->getName() << " " << lcol);
       dp = pn - aBody->p;
 
-      MAL_S3_VECTOR(,double) lv;
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
       
       switch (aJoint->type())
@@ -314,15 +314,90 @@ void Joint::computeJacobianJointWrtConfig()
     }
 }
 
-MAL_MATRIX(,double) Joint::jacobianPointWrtConfig(const MAL_S3_VECTOR(,double) & inPointJointFrame) const
+/**
+        \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
+    The output matrix outjacobian is automatically resized if necessary
+
+ */
+void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
 {
-  cerr << "MAL_MATRIX(,double) Joint::jacobianPointWrtConfig() " << endl;
-  cerr << "This function should be implemented" << endl;
-  MAL_MATRIX(,double) A;
-  return A;
+    if (outJ.size1() !=6 || outJ.size2() != m_J.size2())
+    {
+        outJ.resize(6,m_J.size2(),false);
+    }
+    outJ.clear();
+    
+    DynamicBody * FinalBody = (DynamicBody *)m_Body;
+    vector3d pn = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inPointJointFrame);
+    vector3d aRa,dp,lv;
 
+    for(int i=0;i<m_FromRootToThis.size();i++)
+    {
+        MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
+
+        DynamicBody * aBody=  (DynamicBody *) m_FromRootToThis[i]->linkedBody();
+        Joint * aJoint = (Joint *)m_FromRootToThis[i];
+      
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+
+        unsigned int lcol = aJoint->stateVectorPosition();
+
+        dp = pn - aBody->p;
+        
+        MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+      
+        switch (aJoint->type())
+        {
+	  
+            case Joint::REVOLUTE_JOINT:
+                for(int j=0;j<3;j++)
+                {
+                    outJ(j,lcol) =  lv[j];
+                    outJ(j+3,lcol) = aRa[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                for(int j=0;j<3;j++)
+                {
+                    outJ(j,lcol) =  aRa[j];
+                    outJ(j+3,lcol) = 0;
+                }
+                break;
+            case Joint::FREE_JOINT:
+	  //J =  I M = J11 J12
+	  //     0 I   J21 J22
+                //
+	  // with M = d(w x dp)/dw
+                //
+                for(int j=0;j<3;j++)
+                {
+                    for(int k=0;k<3;k++)
+                    {
+		  // Computation of J11, J12 and J21
+                        if (j!=k)
+                        {
+                            outJ(     j, lcol + k) =0.0;
+                            outJ( j + 3, lcol + k + 3) = 0.0;
+                        }
+                        else
+                        { 
+                            outJ(     j, lcol + k ) =1.0;
+                            outJ( j + 3, lcol + k + 3) = 1.0;
+                        }
+                        outJ(j+3,k) = 0.0;
+		
+		  // Compute M
+                        outJ( 0, lcol + 3 ) =      0; outJ( 0 , lcol + 1 ) =   dp(2); outJ( 0 , lcol + 2 ) = -dp(1);
+                        outJ( 1, lcol + 3 ) = -dp(2); outJ( 1 , lcol + 1 ) =      0 ; outJ( 1 , lcol + 2 ) =  dp(0);
+                        outJ( 2, lcol + 3 ) =  dp(1); outJ( 2 , lcol + 1 ) =  -dp(0); outJ( 2 , lcol + 2 ) =      0;
+                    }
+                }
+                break;
+        }
+    }
 }
-
+    
+    
 CjrlBody* Joint::linkedBody() const
 {
   return m_Body;
