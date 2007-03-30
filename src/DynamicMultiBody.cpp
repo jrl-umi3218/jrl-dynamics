@@ -654,107 +654,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
     m_IterationNumber++;
 }
 
-void DynamicMultiBody::staticState(const vectorN& inConfiguration)
-{
-    //Apply the given configuration
-    applyConfiguration( inConfiguration );
-    //Make the robot static
-    vector3d zeros3;
-    MAL_S3_VECTOR_FILL(zeros3,0);
-    for (unsigned int i=0;i<listOfBodies.size();i++)
-    {
-        DynamicBody& body = listOfBodies[i];
 
-        body.pastp = body.p;
-        body.pastR = body.R;
-        body.pastv0 = body.v0;
-        body.pastw = body.w;
-
-        body.v0 = zeros3;
-        body.w = zeros3;
-        body.dv = zeros3;
-        body.dw = zeros3;
-        body.P = zeros3;
-        body.L = zeros3;
-
-        m_P = zeros3;
-        m_Prev_P = zeros3;
-        m_L = zeros3;
-        m_Prev_L = zeros3;
-        m_ZMP = positionCoMPondere;
-        m_ZMP(2) = 0.0;
-    }
-    return;
-}
-
-void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
-{
-
-    MAL_S3_VECTOR_FILL(m_P,0);
-    MAL_S3_VECTOR_FILL(m_L,0);
-
-    for (unsigned int i=0;i<listOfBodies.size();i++)
-    {
-        DynamicBody& body = listOfBodies[i];
-
-        // Linear velocity.
-        body.v0 = (body.p - body.pastp)/inTimeStep;
-        body.pastp = body.p;
-
-        // Angular velocity.
-        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
-        FD_Roo = (body.R - body.pastR);
-        MAL_S3x3_C_eq_A_by_B(FD_Ro , FD_Roo, FD_Rt);
-        body.w[0]  = FD_Ro(1,2)/inTimeStep;
-        body.w[1]  = FD_Ro(0,2)/inTimeStep;
-        body.w[2]  = FD_Ro(1,0)/inTimeStep;
-        body.pastR = body.R;
-
-        // Linear acceleration
-        body.dv = (body.v0 - body.pastv0)/inTimeStep;
-        body.pastv0 = body.v0;
-        
-        // Angular acceleration
-        body.dw = (body.w - body.pastw)/inTimeStep;
-        body.pastw = body.w;
-        
-        // contribution of this body to the linear momentum.
-        MAL_S3x3_C_eq_A_by_B(FD_wlc, body.R, body.c);
-        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp, body.w, FD_wlc);
-        FD_lP =  (body.v0 + FD_tmp)* body.getMasse();
-        body.P = FD_lP;
-        m_P += FD_lP;
-
-        // contribution of this body to the angular momentum.
-        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.R);
-        
-        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp3,body.w_c,FD_lP);
-        
-        MAL_S3x3_C_eq_A_by_B(FD_tmp2, FD_Rt , body.w);
-        MAL_S3x3_C_eq_A_by_B(FD_tmp, body.getInertie(),FD_tmp2);
-        MAL_S3x3_C_eq_A_by_B(FD_tmp2, body.R, FD_tmp);
-        FD_lL = FD_tmp3 + FD_tmp2;
-        body.L = FD_lL;
-        m_L += FD_lL;
-
-    }
-
-    // Update the momentum derivative
-    m_dP = (m_P - m_Prev_P)/inTimeStep;
-    m_dL = (m_L - m_Prev_L)/inTimeStep;
-
-    // Update the ZMP value.
-    double px,py, pz = 0.0;
-    CalculateZMP(px, py, m_dP, m_dL, pz);
-
-    m_ZMP(0) = px;
-    m_ZMP(1) = py;
-    m_ZMP(2) = pz;
-
-    m_Prev_P = m_P;
-    m_Prev_L = m_L;
-
-}
 
 void DynamicMultiBody::InertiaMatricesforRMCFirstStep()
 {
@@ -1216,6 +1116,7 @@ void DynamicMultiBody::parserVRML(string path,
   ReadSpecificities(option);
   BuildStateVectorToJointAndDOFs();
   UpdateTheSizeOfJointsJacobian();
+  
 
   MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);
@@ -2229,6 +2130,8 @@ Joint * DynamicMultiBody::JointFromRank(int aRank)
 	return (Joint *)m_JointVector[i];
     }
 }
+
+
 void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 {
   m_StateVectorToJoint.resize(m_NbDofs);
@@ -2268,6 +2171,10 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
       i+= aJoint->numberDof();
     }
 
+    //added by oussama 30.03.2007 
+    //build m_ConfigurationToJoints (supposes the robot structure remains the same)
+    for (unsigned int i=0;i<m_NbDofs;i++)
+        m_ConfigurationToJoints.push_back(JointFromRank(i));
 }
 
 void DynamicMultiBody::UpdateTheSizeOfJointsJacobian()
@@ -2474,74 +2381,6 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentAcceleration() const
 /** 
     \name Forward kinematics and dynamics
 */
-
-/**
-    \brief Apply a configuration
-
-    This method updates the joints transformations only, according to the passed configuration vector.
-    \return true if success, false if failure (the dimension of the
-    input vector does not fit the number of degrees of freedom of the
-    robot).
- */
-bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
-{
-    if (MAL_VECTOR_SIZE(inConfiguration)!=
-        MAL_VECTOR_SIZE(m_Configuration))
-        return false;
-    
-    //currentConfiguration( inConfiguration );
-    m_Configuration = inConfiguration;
-    
-    MAL_S3_VECTOR_FILL(positionCoMPondere,0);
-    
-    forwardTransformation(m_RootOfTheJointsTree, inConfiguration);
-    
-    positionCoMPondere = positionCoMPondere/masse;
-}
-/**
-\brief Recursive method to update the kinematic tree transformations starting from the given joint
- */
-void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inConfiguration)
-{
-    DynamicBody* body = dynamic_cast<DynamicBody*>(inJoint->linkedBody());
-
-    inJoint->updateTransformation(inConfiguration);
-
-    //update position of center of mass in world frame
-    MAL_S3x3_C_eq_A_by_B(vek, body->R, body->c);
-    body->w_c = vek + body->p;
-    positionCoMPondere += body->w_c * body->getMasse();
-    
-    for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
-    {
-        CjrlJoint* jrlchildJoint = const_cast<CjrlJoint*>(&(inJoint->childJoint(i)));
-        Joint* childJoint = dynamic_cast<Joint*>(jrlchildJoint);
-        forwardTransformation(childJoint,inConfiguration);
-    }
-}
-
-/**
-    \brief Get the upper bound for ith dof.
- */
-double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
-{
-    if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
-        return 0;
-    
-    return JointFromRank(inRankInConfiguration)->getJointULimit(0);
-    //WARNING: this code does not work if the joints have more than a single degree of freedom
-}
-/**
-\brief Get the lower bound for ith dof.
- */
-double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
-{
-    if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
-        return 0;
-    
-    return JointFromRank(inRankInConfiguration)->getJointLLimit(0);
-    //WARNING: this code does not work if the joints have more than a single degree of freedom
-}
 
 
 /**
@@ -3849,3 +3688,157 @@ const MAL_MATRIX(,double) &DynamicMultiBody::jacobianCenterOfMass() const
 }
 
 
+
+bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
+{
+    if (MAL_VECTOR_SIZE(inConfiguration)!=
+        MAL_VECTOR_SIZE(m_Configuration))
+        return false;
+    
+    //currentConfiguration( inConfiguration );
+    m_Configuration = inConfiguration;
+    
+    MAL_S3_VECTOR_FILL(positionCoMPondere,0);
+    
+    forwardTransformation(m_RootOfTheJointsTree, inConfiguration);
+    
+    positionCoMPondere = positionCoMPondere/masse;
+}
+
+void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inConfiguration)
+{
+    DynamicBody* body = (DynamicBody*)(inJoint->linkedBody());
+
+    inJoint->updateTransformation(inConfiguration);
+
+    //update position of center of mass in world frame
+    MAL_S3x3_C_eq_A_by_B(vek, body->R, body->c);
+    body->w_c = vek + body->p;
+    positionCoMPondere += body->w_c * body->getMasse();
+    
+    for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
+    {
+        Joint* childJoint = (Joint*)(&(inJoint->childJoint(i)));
+        forwardTransformation(childJoint,inConfiguration);
+    }
+}
+
+void DynamicMultiBody::staticState(const vectorN& inConfiguration)
+{
+    //Apply the given configuration
+    applyConfiguration( inConfiguration );
+    //Make the robot static
+    vector3d zeros3;
+    MAL_S3_VECTOR_FILL(zeros3,0);
+    for (unsigned int i=0;i<listOfBodies.size();i++)
+    {
+        DynamicBody& body = listOfBodies[i];
+
+        body.pastp = body.p;
+        body.pastR = body.R;
+        body.pastv0 = body.v0;
+        body.pastw = body.w;
+
+        body.v0 = zeros3;
+        body.w = zeros3;
+        body.dv = zeros3;
+        body.dw = zeros3;
+        body.P = zeros3;
+        body.L = zeros3;
+
+        m_P = zeros3;
+        m_Prev_P = zeros3;
+        m_L = zeros3;
+        m_Prev_L = zeros3;
+        m_ZMP = positionCoMPondere;
+        m_ZMP(2) = 0.0;
+    }
+    return;
+}
+
+void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
+{
+
+    MAL_S3_VECTOR_FILL(m_P,0);
+    MAL_S3_VECTOR_FILL(m_L,0);
+
+    for (unsigned int i=0;i<listOfBodies.size();i++)
+    {
+        DynamicBody& body = listOfBodies[i];
+
+        // Linear velocity.
+        body.v0 = (body.p - body.pastp)/inTimeStep;
+        body.pastp = body.p;
+
+        // Angular velocity.
+        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
+        FD_Roo = (body.R - body.pastR);
+        MAL_S3x3_C_eq_A_by_B(FD_Ro , FD_Roo, FD_Rt);
+        body.w[0]  = FD_Ro(1,2)/inTimeStep;
+        body.w[1]  = FD_Ro(0,2)/inTimeStep;
+        body.w[2]  = FD_Ro(1,0)/inTimeStep;
+        body.pastR = body.R;
+
+        // Linear acceleration
+        body.dv = (body.v0 - body.pastv0)/inTimeStep;
+        body.pastv0 = body.v0;
+        
+        // Angular acceleration
+        body.dw = (body.w - body.pastw)/inTimeStep;
+        body.pastw = body.w;
+        
+        // contribution of this body to the linear momentum.
+        MAL_S3x3_C_eq_A_by_B(FD_wlc, body.R, body.c);
+        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp, body.w, FD_wlc);
+        FD_lP =  (body.v0 + FD_tmp)* body.getMasse();
+        body.P = FD_lP;
+        m_P += FD_lP;
+
+        // contribution of this body to the angular momentum.
+        FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.R);
+        
+        MAL_S3_VECTOR_CROSS_PRODUCT(FD_tmp3,body.w_c,FD_lP);
+        
+        MAL_S3x3_C_eq_A_by_B(FD_tmp2, FD_Rt , body.w);
+        MAL_S3x3_C_eq_A_by_B(FD_tmp, body.getInertie(),FD_tmp2);
+        MAL_S3x3_C_eq_A_by_B(FD_tmp2, body.R, FD_tmp);
+        FD_lL = FD_tmp3 + FD_tmp2;
+        body.L = FD_lL;
+        m_L += FD_lL;
+
+    }
+
+    // Update the momentum derivative
+    m_dP = (m_P - m_Prev_P)/inTimeStep;
+    m_dL = (m_L - m_Prev_L)/inTimeStep;
+
+    // Update the ZMP value.
+    double px,py, pz = 0.0;
+    CalculateZMP(px, py, m_dP, m_dL, pz);
+
+    m_ZMP(0) = px;
+    m_ZMP(1) = py;
+    m_ZMP(2) = pz;
+
+    m_Prev_P = m_P;
+    m_Prev_L = m_L;
+
+}
+
+double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
+{
+//     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
+//         return 0;
+    
+    return m_ConfigurationToJoints[inRankInConfiguration]->getJointULimit(0);
+    //WARNING: this code does not work if the joints have more than a single degree of freedom
+}
+
+double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
+{
+//     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
+//         return 0;
+    
+    return m_ConfigurationToJoints[inRankInConfiguration]->getJointLLimit(0);
+    //WARNING: this code does not work if the joints have more than a single degree of freedom
+}

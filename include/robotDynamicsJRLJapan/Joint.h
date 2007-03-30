@@ -265,9 +265,11 @@ namespace dynamicsJRLJapan
     unsigned int countChildJoints() const;
     
     /*! \brief Returns the child joint at the given rank */
-    const CjrlJoint& childJoint(unsigned int givenRank) const;
+    CjrlJoint& childJoint(unsigned int givenRank) const;
 
-    /*! \brief Joints from root to this joint */
+    /**
+    ! \brief Get a vector containing references of the joints between the rootJoint and this joint. The root Joint and this Joint are included in the vector.
+     */
     std::vector< CjrlJoint* > jointsFromRootToThis() const ;
     /*! @} */
     

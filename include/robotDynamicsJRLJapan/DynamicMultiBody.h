@@ -252,6 +252,9 @@ namespace dynamicsJRLJapan
 
     /*! \brief Link between joint and state vector position */
     std::vector<NameAndRank_t> m_LinksBetweenJointNamesAndRank;
+    
+    /*! \brief The ith element of this vector is the joint corrsponding to the ith element of the configuration of the robot (dofs)*/
+    std::vector<Joint*> m_ConfigurationToJoints;
 
     /*! \brief Number of links */
     int m_LinksBetweenJointNamesAndRankNb;

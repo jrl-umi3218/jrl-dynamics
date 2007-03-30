@@ -142,7 +142,7 @@ unsigned int Joint::countChildJoints() const
   return m_Children.size();
 }
 
-const CjrlJoint& Joint::childJoint(unsigned int givenRank) const
+CjrlJoint& Joint::childJoint(unsigned int givenRank) const
 {
   if ((givenRank>=0) && (givenRank<m_Children.size()))
     return *m_Children[givenRank];
@@ -412,29 +412,6 @@ void Joint::SetFatherJoint(Joint *aFather)
 {
   m_FatherJoint = aFather;
 
-  /*
-  if (m_FatherJoint==0)
-    {
-      m_FromRootToThis.insert(m_FromRootToThis.begin(),this);
-    }
-  
-  m_FromRootToThis.insert(m_FromRootToThis.begin(),this);
-  
-  if ((m_FromRootToThis.size()==0) &&
-      (m_FatherJoint!=0))
-    {
-      CjrlJoint* aJoint;
-      aJoint=m_FatherJoint;
-      while(aJoint!=0)
-	{
-	  m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
-	  aJoint = &(aJoint->parentJoint());
-	}
-    }
-  
-  */
-  
-  // modified march 2007 oussama
   m_FromRootToThis.clear();
   
   m_FromRootToThis.push_back(this);
@@ -669,8 +646,8 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
     {
         case Joint::REVOLUTE_JOINT :
         {
-            DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
-            DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+            DynamicBody* body = (DynamicBody*)(linkedBody());
+            DynamicBody* parentbody = (DynamicBody*)(parentJoint().linkedBody());
 
             body->q = inDofVector(rankInConfiguration());
             quantity( body->q);
@@ -696,8 +673,8 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
         
         case Joint::PRISMATIC_JOINT :
         {
-            DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
-            DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+            DynamicBody* body = (DynamicBody*)(linkedBody());
+            DynamicBody* parentbody = (DynamicBody*)(parentJoint().linkedBody());
     
             body->q = inDofVector(rankInConfiguration());
             quantity( body->q);
