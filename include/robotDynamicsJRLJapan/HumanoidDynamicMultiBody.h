@@ -245,12 +245,10 @@ namespace dynamicsJRLJapan
 	 a gaze direction.
 
       */
-      inline void gaze( vector3d& inVector, vector3d & inPoint)
+      inline void gaze( const vector3d& inVector, const vector3d & inPoint)
 	{ m_LineVector = inVector; m_LinePoint = inPoint;};
 
-      inline void gaze( const vector3d& inVector)
-	{ m_LineVector = inVector;};
-      
+     
       /** 
 	  \brief Get the gaze orientation in the local frame of the gaze joint.
 	  
