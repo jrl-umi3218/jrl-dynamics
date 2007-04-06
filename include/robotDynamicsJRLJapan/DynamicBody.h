@@ -102,6 +102,7 @@ namespace dynamicsJRLJapan
     /**
     Used for Finite difference computations
     */
+    double   pastq, pastdq;
     vector3d pastv0, pastp, pastw;
     matrix3d pastR;
 

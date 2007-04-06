@@ -53,7 +53,6 @@ DynamicBody::DynamicBody():Body()
   ddq = 0.0;
 
   MAL_S3x3_MATRIX_SET_IDENTITY(R);
-  MAL_S3x3_MATRIX_SET_IDENTITY(pastR);
 
   a[0] = a[1] = a[2] = 0;
   b[0] = b[1] = b[2] = 0;
@@ -73,9 +72,12 @@ DynamicBody::DynamicBody():Body()
   pph[0] = pph[1] = pph[2] = 0;
   ppb[0] = ppb[1] = ppb[2] = 0;
   
+  
+  MAL_S3x3_MATRIX_SET_IDENTITY(pastR);
   pastp[0] = pastp[1] = pastp[2] = 0;
   pastv0[0] = pastv0[1] = pastv0[2] = 0;
   pastw[0] = pastw[1] = pastw[2] = 0;
+  pastq = pastdq = 0;
 }
 
 DynamicBody::~DynamicBody()
@@ -117,6 +119,8 @@ DynamicBody & DynamicBody::operator=(const DynamicBody & r)
   pastp = r.pastp;
   pastv0 = r.pastv0;
   pastw = r.pastw;
+  pastq =r.pastq;
+  pastdq =r.pastdq;
   
   sister = r.sister;
   child = r.child;

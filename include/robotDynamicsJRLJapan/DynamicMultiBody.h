@@ -197,6 +197,16 @@ namespace dynamicsJRLJapan
     */
     vectorN m_Acceleration;
 
+    /**
+    This is m_Velocity a sampling period ago (used by FiniteDifferenceStateUpdate)
+    */
+    vectorN m_pastVelocity;
+    
+    /**
+    This is m_Configuration a sampling period ago (used by FiniteDifferenceStateUpdate)
+     */
+    vectorN m_pastConfiguration;
+    
     /** Time step used to compute momentum derivative. */
     double m_TimeStep;
 
