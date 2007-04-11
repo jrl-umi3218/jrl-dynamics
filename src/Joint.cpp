@@ -387,9 +387,9 @@ void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixN
                         outJ(j+3,k) = 0.0;
 		
 		  // Compute M
-                        outJ( 0, lcol + 3 ) =      0; outJ( 0 , lcol + 1 ) =   dp(2); outJ( 0 , lcol + 2 ) = -dp(1);
-                        outJ( 1, lcol + 3 ) = -dp(2); outJ( 1 , lcol + 1 ) =      0 ; outJ( 1 , lcol + 2 ) =  dp(0);
-                        outJ( 2, lcol + 3 ) =  dp(1); outJ( 2 , lcol + 1 ) =  -dp(0); outJ( 2 , lcol + 2 ) =      0;
+                        outJ( 0, lcol + 3 ) =      0; outJ( 0 , lcol + 4 ) =   dp(2); outJ( 0 , lcol + 5 ) = -dp(1);
+                        outJ( 1, lcol + 3 ) = -dp(2); outJ( 1 , lcol + 4 ) =      0 ; outJ( 1 , lcol + 5 ) =  dp(0);
+                        outJ( 2, lcol + 3 ) =  dp(1); outJ( 2 , lcol + 4 ) =  -dp(0); outJ( 2 , lcol + 5 ) =      0; 
                     }
                 }
                 break;
