@@ -2218,7 +2218,7 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 {
   if (MAL_VECTOR_SIZE(inConfig)!=
       MAL_VECTOR_SIZE(m_Configuration))
-    MAL_VECTOR_RESIZE(m_Configuration,MAL_VECTOR_SIZE(inConfig));
+    return false;
 
   // Copy the configuration
   for(unsigned int i=0;i<MAL_VECTOR_SIZE(inConfig);i++)
