@@ -92,7 +92,7 @@ namespace dynamicsJRLJapan
   by the field \a liaison.
   - \a liaison is the corresponding link.   
 
-  The equality operator is used with the find function of <algorithm>.
+  The equality operator is used with the find function of \<algorithm\>.
   */
   struct appariement {
     int corps;
