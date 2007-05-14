@@ -148,7 +148,7 @@ namespace dynamicsJRLJapan
       \f]
       
       where \f$ {\bf c} \f$ is the position of the free flying body,
-      \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
+      \f$ {\bf  o} \f$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n\f$ joint.
     */
     vectorN m_Configuration;
@@ -170,7 +170,7 @@ namespace dynamicsJRLJapan
       \f]
       
       where \f$ {\bf c} \f$ is the position of the free flying body,
-      \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
+      \f$ {\bf  o} \f$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n \f$ joint.
     */
     vectorN m_Velocity;
@@ -192,7 +192,7 @@ namespace dynamicsJRLJapan
       \f]
       
       where \f$ {\bf c} \f$ is the position of the free flying body,
-      \f$ {\bf  o}$ its orientation using the \f$ xyz \f$ convention.
+      \f$ {\bf  o} \f$ its orientation using the \f$ xyz \f$ convention.
       \f$q_0, ..., q_{n-1}\f$ is the value for each of the \f$ n \f$ joint.
     */
     vectorN m_Acceleration;
