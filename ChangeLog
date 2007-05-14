@@ -1,3 +1,5 @@
+dynamics-JRLJapan 1.1 released May 14, 2007
+
 2007/03/09
 	8. Removed Makefile.in and configure from version control.
 	7. Added @ROBOTDYNAMICS_CFLAGS@ and @ROBOTDYNAMICS_LIBS@ in unitTesting/Makefile.am
@@ -18,4 +20,3 @@
 	const to fit the abstract interface.
 	1. In CjrlJoint& HumanoidDynamicMultiBody::fixedJoint, removed
 	const to fit the abstract interface.
-	
