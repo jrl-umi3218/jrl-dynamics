@@ -8,6 +8,7 @@ dynamicsJRLJapan_HEADERS = \
 	fileReader.h \
 	Joint.h \
 	Body.h \
+	Hand.h \
 	MultiBody.h \
 	DynamicBody.h \
 	DynamicMultiBody.h \

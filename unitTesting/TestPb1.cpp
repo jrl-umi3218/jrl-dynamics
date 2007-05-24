@@ -76,18 +76,18 @@ int main(void)
     }
 
 
-  CjrlJoint* lefthand= attRobot->leftHand();
-  root2jointVector = lefthand->jointsFromRootToThis();
-  cout << "lefthand joints:" << endl;
+    CjrlJoint* leftwrist= attRobot->leftWrist();
+  root2jointVector = leftwrist->jointsFromRootToThis();
+  cout << "leftwrist joints:" << endl;
   for(int i=0;i<root2jointVector.size();i++)
     {
       Joint * aJoint = (Joint *) root2jointVector[i];
       cout << i << " : " << aJoint->getName();
     }
 
-  CjrlJoint* righthand= attRobot->rightHand();
-  root2jointVector = lefthand->jointsFromRootToThis();
-  cout << "righthand joints:" << endl;
+    CjrlJoint* rightwrist= attRobot->rightWrist();
+    root2jointVector = rightwrist->jointsFromRootToThis();
+    cout << "rightwrist joints:" << endl;
   for(int i=0;i<root2jointVector.size();i++)
     {
       Joint * aJoint = (Joint *) root2jointVector[i];

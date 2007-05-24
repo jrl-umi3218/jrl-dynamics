@@ -1,4 +1,5 @@
 #include <DynamicMultiBody.h>
+#include "Hand.h"
 #include <HumanoidDynamicMultiBody.h>
 
 #if 0
@@ -48,6 +49,7 @@ HumanoidDynamicMultiBody::HumanoidDynamicMultiBody()
   string aFileName = "HumanoidSpecificities.xml";
   DynamicMultiBody *aDMB = new DynamicMultiBody();
   m_DMB = aDMB;
+  m_rightHand = m_leftHand = 0;
 }
 
 HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(CjrlDynamicRobot* aDMB,
@@ -107,6 +109,25 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
       // create the link between the joints and the effector semantic.
       if (m_DMB->numberDof()!=0)
 	LinkBetweenJointsAndEndEffectorSemantic();
+      
+      //hard-coding HRP2 hand specificities
+      vector3d center,okayAxis,showingAxis,palmAxis;
+      center[0] = 0;
+      center[1] = 0;
+      center[2] = -0.17;
+      okayAxis[0] = 1;
+      okayAxis[1] = 0;
+      okayAxis[2] = 0;
+      showingAxis[0] = 0;
+      showingAxis[1] = 0;
+      showingAxis[2] = -1;
+      palmAxis[0] = 0;
+      palmAxis[1] = 1;
+      palmAxis[2] = 0;
+  
+      m_rightHand = new Hand(rightWrist(), center, okayAxis, showingAxis, palmAxis);
+      palmAxis[1] = -1;
+      m_leftHand = new Hand(leftWrist(), center, okayAxis, showingAxis, palmAxis);
     }
   else
     {
@@ -120,13 +141,16 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
       m_Dt(2) = 0.0;
 
     }
-  
+
 }
 
 HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
 {
   if (m_HS!=0)
     delete m_HS;
+  
+  delete m_rightHand, m_leftHand;
+  //why isn't m_DMB deleted ?
 }
 
 void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
@@ -142,7 +166,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   int EndIndex = JointForOneLimb[ListeJointsSize-1];
   DynamicMultiBody *m_SDMB = dynamic_cast<DynamicMultiBody *>(m_DMB);
   if (m_DMB!=0)
-    m_LeftHandJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+      m_LeftWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
   // Get the right hand.
   JointForOneLimb.clear();
@@ -150,7 +174,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   if (m_SDMB!=0)
-    m_RightHandJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+      m_RightWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
   
   // Get the left foot.
@@ -421,6 +445,53 @@ double HumanoidDynamicMultiBody::mass() const
     return m_DMB->mass();
 }
 
+double HumanoidDynamicMultiBody::getHandClench(CjrlHand* inHand)
+{
+    
+    //Designed for the parallel mechanism of HRP2 two-jaw hands
+    unsigned int dof = inHand->associatedWrist()->childJoint(0).rankInConfiguration();
+    double upperLimit = m_DMB->upperBoundDof(dof);
+    double lowerLimit = m_DMB->lowerBoundDof(dof);
+    double curVal = m_DMB->currentConfiguration()(dof);
+    
+    return (upperLimit - curVal)/(upperLimit-lowerLimit);
+}
+
+bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchingValue)
+{
+    //Designed for the parallel mechanism of HRP2 two-jaw hands
+    if (inClenchingValue > 1 || inClenchingValue < 0)
+    {
+        std::cout << "HumanoidDynamicMultiBody::setHandClench(): argument 2 should be between 0 and 1\n";
+        return false;
+    }
+    
+    unsigned int dof = inHand->associatedWrist()->childJoint(0).rankInConfiguration();
+    double upperLimit = m_DMB->upperBoundDof(dof);
+    double lowerLimit = m_DMB->lowerBoundDof(dof);
+    double wantedVal =  upperLimit - inClenchingValue*(upperLimit-lowerLimit);
+    
+    vectorN config = m_DMB->currentConfiguration();
+    
+    config(dof) = wantedVal;
+    
+    unsigned int parallelDofStart;
+    if (inHand = m_rightHand)
+        parallelDofStart = 36;
+    else
+        parallelDofStart = 41;
+    
+    int coef = -1;
+    for (unsigned int i = parallelDofStart ;i<parallelDofStart+5; i++)
+    {
+        config(i) = coef * wantedVal;
+        coef *= -1;
+    }
+    
+    m_DMB->currentConfiguration( config );
+    return true;
+}
+      
 /***************************************************/
 /* End of the implementation                       */
 /***************************************************/

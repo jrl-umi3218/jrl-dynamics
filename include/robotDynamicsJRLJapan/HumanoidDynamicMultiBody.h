@@ -39,7 +39,6 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 #include <robotDynamics/jrlDynamicRobot.h>
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
 
-
 namespace dynamicsJRLJapan
 {
 
@@ -64,17 +63,23 @@ namespace dynamicsJRLJapan
       /** \brief Store the implementation of Dynamic Multi Body */
       CjrlDynamicRobot *m_DMB;
 
-      /** \brief Store the Left Hand Joint */
-      CjrlJoint *m_LeftHandJoint;
+      /** \brief Store the Left Wrist Joint */
+      CjrlJoint *m_LeftWristJoint;
       
-      /** \brief Store the Right Hand Joint */
-      CjrlJoint *m_RightHandJoint;
+      /** \brief Store the Right Wrist Joint */
+      CjrlJoint *m_RightWristJoint;
       
       /** \brief Store the Left Foot Joint */
       CjrlJoint *m_LeftFootJoint;
       
       /** \brief Store the Right Foot Joint */
       CjrlJoint *m_RightFootJoint;
+      
+      /** \brief Store the Left hand */
+      CjrlHand*  m_leftHand;
+      
+      /** \brief Store the Right hand */
+      CjrlHand*  m_rightHand;
       
       /** \brief Store the Gaze Joint */
       CjrlJoint *m_GazeJoint;
@@ -172,28 +177,52 @@ namespace dynamicsJRLJapan
       */
       
       /**
-	 \brief Set the pointer to the left hand joint.
+      \brief Set the pointer to the left Wrist joint.
       */
-      inline void leftHand(CjrlJoint *inLeftHand)
-	{ m_LeftHandJoint = (Joint *)inLeftHand;};
+      inline void leftWrist(CjrlJoint *inLeftWrist)
+      { m_LeftWristJoint = (Joint *)inLeftWrist;};
       
       /** 
-	  \brief Get a pointer to the left hand.
+      \brief Get a pointer to the left Wrist.
       */
-      inline CjrlJoint *leftHand() 
-	{ return m_LeftHandJoint;}
+      inline CjrlJoint *leftWrist() 
+      { return m_LeftWristJoint;}
       
       /**
-	 \brief Set the pointer to the right hand joint.
+      \brief Set the pointer to the right Wrist joint.
       */
-      inline void rightHand(CjrlJoint *inRightHand)
-	{ m_RightHandJoint = (Joint *)inRightHand;}
+      inline void rightWrist(CjrlJoint *inRightWrist)
+      { m_RightWristJoint = (Joint *)inRightWrist;}
       
       /** 
-	  \brief Get a pointer to the right hand.
+      \brief Get a pointer to the right Wrist.
       */
-      inline CjrlJoint *rightHand()
-	{ return m_RightHandJoint;}
+      inline CjrlJoint *rightWrist()
+      { return m_RightWristJoint;}
+      
+      /**
+        \brief Get a pointer to the left hand
+      */
+      virtual CjrlHand* rightHand()
+      { return m_rightHand;}
+  
+      /**
+        \brief Get a pointer to the left hand
+      */
+      virtual CjrlHand* leftHand()
+      { return m_leftHand;}
+      
+        /**
+      \brief Get the hand clench value. This is a scalar value ranging between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand)
+      This method is customized for HRP2 with two-jaw hands (parallel mechanism)
+         */
+      virtual double getHandClench(CjrlHand* inHand);
+
+    /**
+      \brief Set the hand clench value. This is a scalar value ranging between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand).
+      This method is customized for HRP2 with two-jaw hands (parallel mechanism)
+   */
+      virtual bool  setHandClench(CjrlHand* inHand, double inClenchingValue);
       
       /**
 	 \brief Set the pointer to the left foot joint.

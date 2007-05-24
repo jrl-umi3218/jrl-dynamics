@@ -7,6 +7,7 @@ libdynamicsJRLJapan_la_SOURCES = \
 	fileReader.cpp \
 	Joint.cpp \
 	Body.cpp \
+	Hand.cpp \
 	DynamicBody.cpp \
 	MultiBody.cpp \
 	DynamicMultiBody.cpp \

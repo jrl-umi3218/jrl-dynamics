@@ -248,9 +248,9 @@ int main(int argc, char *argv[])
   cout << "****************************" << endl;
   // Test rank of the left hand.
   cout << "Rank of the left hand "<< endl;
-  cout << aHDMB->leftHand()->rankInConfiguration() << endl;
-  cout << ((Joint *)aHDMB->leftHand())->getName() << endl;
-  cout << ((Joint *)aHDMB->leftHand())->getIDinVRML() << endl;
+  cout << aHDMB->leftWrist()->rankInConfiguration() << endl;
+  cout << ((Joint *)aHDMB->leftWrist())->getName() << endl;
+  cout << ((Joint *)aHDMB->leftWrist())->getIDinVRML() << endl;
 
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
