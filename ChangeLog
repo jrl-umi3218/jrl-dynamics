@@ -1,3 +1,13 @@
+dynamics-JRLJapan 1.2 released June 14, 2007
+
+	12. renamed hand related methods to wrist related methods
+	(according to abstract interface).
+	11. Implemented Hand (CjrlHand) and added attributes m_righthand
+	and m_lefthand.
+	10. Hard-coded HRP2's hands parallel- mechanism joint update in
+	configuration
+	9. Removed generated autotools files to avoid conflicts.
+	
 dynamics-JRLJapan 1.1 released May 14, 2007
 
 2007/03/09
