@@ -4913,7 +4913,7 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
         FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
         FD_Roo = (body.R - body.pastR);
         MAL_S3x3_C_eq_A_by_B(FD_Ro , FD_Roo, FD_Rt);
-        body.w[0]  = FD_Ro(1,2)/inTimeStep;
+        body.w[0]  = FD_Ro(2,1)/inTimeStep;
         body.w[1]  = FD_Ro(0,2)/inTimeStep;
         body.w[2]  = FD_Ro(1,0)/inTimeStep;
         body.pastR = body.R;
