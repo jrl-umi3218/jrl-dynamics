@@ -4899,7 +4899,7 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
         DynamicBody& body = listOfBodies[i];
 
         //dot q
-        body.dq = (body.q - body.pastdq)/inTimeStep;
+        body.dq = (body.q - body.pastq)/inTimeStep;
         body.pastq = body.q;
         //dot dot q
         body.ddq = (body.dq - body.pastdq)/inTimeStep;
