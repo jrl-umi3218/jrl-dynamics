@@ -148,6 +148,14 @@ int nextJointKeyWord(FILE* fichier)
 	  return JOINT_LLIMIT;
 	}
       break;
+    case '#':
+      {
+	char *buf=NULL;
+	size_t n=256;
+	getline(&buf, &n, fichier);
+	free(buf);
+      }
+      break;
     }
 
   } while (!feof(fichier));
