@@ -1,3 +1,10 @@
+dynamics-JRLJapan 1.3 released June 27, 2007
+
+	15. Added separate doc and install-doc targets.
+	14. skips comment lines in VRML files.
+	13. fix bug in calculation of w and dq in
+	DynamicMultiBody::FiniteDifferenceStateUpdate().
+
 dynamics-JRLJapan 1.2 released June 14, 2007
 
 	12. renamed hand related methods to wrist related methods
@@ -7,7 +14,7 @@ dynamics-JRLJapan 1.2 released June 14, 2007
 	10. Hard-coded HRP2's hands parallel- mechanism joint update in
 	configuration
 	9. Removed generated autotools files to avoid conflicts.
-	
+
 dynamics-JRLJapan 1.1 released May 14, 2007
 
 2007/03/09
@@ -15,15 +22,15 @@ dynamics-JRLJapan 1.1 released May 14, 2007
 	7. Added @ROBOTDYNAMICS_CFLAGS@ and @ROBOTDYNAMICS_LIBS@ in unitTesting/Makefile.am
 	One symbol is still undefined:
 	undefined symbol: dgesvd_       (src/.libs/libdynamicsJRLJapan.so)
-	6. Moved inclusion of MatrixAbstractLayer.h before other inclusion to make sure 
+	6. Moved inclusion of MatrixAbstractLayer.h before other inclusion to make sure
 	matrices and vectors are defined.
 2007/03/07
 	5. The use macros used in Body.h, DynamicBody.h, DynamicMultiBody.h,
 	HumanoidDynamicMultiBody.h, Joint.h and MultiBody to define the matrix
-	and vector used have been replaced by the typedef: vectorN, matrixNxP, 
+	and vector used have been replaced by the typedef: vectorN, matrixNxP,
 	vector3d, matrix3d,vector4d and matrix4d.
 	4. The templates have been removed to fit the abstract interface at the
-	include, source and test files.
+	include, source and test files.
 	3. Changed configure.ac in such a way that option --with-t3d without
 	path provokes call to pkg-config.
 	2. In CrjlJoint& HumanoidDynamicMultiBody::fixedJoint, removed
