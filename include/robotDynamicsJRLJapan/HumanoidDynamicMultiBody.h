@@ -506,7 +506,27 @@ namespace dynamicsJRLJapan
       ZMP
 
      */
+      void FiniteDifferenceStateEstimate(double inTimeStep);
+      /**
+      \brief Compute kinematics and dynamics following a finite difference scheme and update past values
+      */
       void FiniteDifferenceStateUpdate(double inTimeStep);
+      /**
+      \brief Store current values as past values
+
+      Following values are stored:
+      for every joint:
+      	joint value and velocity
+	linear and angular velocities
+	position and orientation
+      for the robot:
+      	configuration vector
+	velocity vector
+	linear and angular momentums
+      */
+      void SaveCurrentStateAsPastState();
+      
+
       
       /**
       \brief Set the robot in the static state described by the given configuration vector.

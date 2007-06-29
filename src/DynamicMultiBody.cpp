@@ -4888,7 +4888,32 @@ void DynamicMultiBody::staticState(const vectorN& inConfiguration)
     return;
 }
 
+
+void DynamicMultiBody::SaveCurrentStateAsPastState()
+{
+    for (unsigned int i=0;i<listOfBodies.size();i++)
+    {
+        DynamicBody& body = listOfBodies[i];
+        body.pastq  = body.q;
+        body.pastdq = body.dq;
+        body.pastp  = body.p;
+        body.pastR  = body.R;
+        body.pastv0 = body.v0;
+        body.pastw  = body.w;
+    }
+    m_pastConfiguration = m_Configuration;
+    m_pastVelocity = m_Velocity;
+    m_Prev_P = m_P;
+    m_Prev_L = m_L;
+} 
+
 void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
+{
+    FiniteDifferenceStateEstimate(inTimeStep);
+    SaveCurrentStateAsPastState();
+}
+
+void DynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
 {
 
     MAL_S3_VECTOR_FILL(m_P,0);
@@ -4900,14 +4925,11 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
 
         //dot q
         body.dq = (body.q - body.pastq)/inTimeStep;
-        body.pastq = body.q;
         //dot dot q
         body.ddq = (body.dq - body.pastdq)/inTimeStep;
-        body.pastdq = body.dq;
         
         // Linear velocity.
         body.v0 = (body.p - body.pastp)/inTimeStep;
-        body.pastp = body.p;
 
         // Angular velocity.
         FD_Rt = MAL_S3x3_RET_TRANSPOSE(body.pastR);
@@ -4916,15 +4938,12 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
         body.w[0]  = FD_Ro(2,1)/inTimeStep;
         body.w[1]  = FD_Ro(0,2)/inTimeStep;
         body.w[2]  = FD_Ro(1,0)/inTimeStep;
-        body.pastR = body.R;
 
         // Linear acceleration
         body.dv = (body.v0 - body.pastv0)/inTimeStep;
-        body.pastv0 = body.v0;
         
         // Angular acceleration
         body.dw = (body.w - body.pastw)/inTimeStep;
-        body.pastw = body.w;
         
         // contribution of this body to the linear momentum.
         MAL_S3x3_C_eq_A_by_B(FD_wlc, body.R, body.c);
@@ -4951,13 +4970,11 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
     m_Velocity = (m_Configuration - m_pastConfiguration)/inTimeStep;
     for (unsigned int i = 3;i<6;i++)
         m_Velocity(i) = listOfBodies[labelTheRoot].w[i-3];
-    m_pastConfiguration = m_Configuration;
     
     //update Acceleration vector returned by method from abstract interface
     m_Acceleration = (m_Velocity - m_pastVelocity)/inTimeStep;
     for (unsigned int i = 3;i<6;i++)
         m_Acceleration(i) = listOfBodies[labelTheRoot].dw[i-3];
-    m_pastVelocity = m_Velocity;
     
     
     
@@ -4973,9 +4990,6 @@ void DynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
     m_ZMP(0) = px;
     m_ZMP(1) = py;
     m_ZMP(2) = pz;
-
-    m_Prev_P = m_P;
-    m_Prev_L = m_L;
 
 }
 

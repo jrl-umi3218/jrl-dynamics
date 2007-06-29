@@ -347,6 +347,17 @@ void HumanoidDynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
     ComputingZeroMomentumPoint();
 }
 
+void HumanoidDynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
+{
+    m_DMB->FiniteDifferenceStateEstimate(inTimeStep);
+    ComputingZeroMomentumPoint();
+}
+
+void HumanoidDynamicMultiBody::SaveCurrentStateAsPastState()
+{
+    m_DMB->SaveCurrentStateAsPastState();
+}
+
 void HumanoidDynamicMultiBody::staticState(const vectorN& inConfiguration)
 {
     m_DMB->staticState(inConfiguration);

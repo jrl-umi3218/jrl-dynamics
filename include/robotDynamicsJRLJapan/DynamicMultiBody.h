@@ -704,6 +704,11 @@ namespace dynamicsJRLJapan
          */
     bool applyConfiguration(const vectorN& inConfiguration);
     /**
+    \brief Compute kinematics and dynamics following a finite difference scheme and update past values
+     */
+    void FiniteDifferenceStateUpdate(double inTimeStep);
+
+    /**
     \brief Compute kinematics and dynamics following a finite difference scheme.
 
     Based on previously stored values, this method computes:
@@ -717,7 +722,22 @@ namespace dynamicsJRLJapan
         angular momentum
         ZMP
      */
-    void FiniteDifferenceStateUpdate(double inTimeStep);
+    void FiniteDifferenceStateEstimate(double inTimeStep);
+
+    /**
+    \brief Store current values as past values
+
+    Following values are stored:
+    for every joint:
+    	joint value and velocity
+	linear and angular velocities
+	position and orientation
+    for the robot:
+    	configuration vector
+	velocity vector
+	linear and angular momentums
+     */
+    void SaveCurrentStateAsPastState();
     
     /**
     \brief vectors and matrices used in FiniteDifferenceStateUpdate declared here to avoid dynamic allocation
