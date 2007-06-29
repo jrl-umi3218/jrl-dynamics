@@ -15,7 +15,8 @@ libdynamicsJRLJapan_la_SOURCES = \
 	HumanoidSpecificities.cpp 
 
 libdynamicsJRLJapan_la_LDFLAGS = \
-	@ROBOTDYNAMICS_LIBS@
+	@ROBOTDYNAMICS_LIBS@	\
+	-release ${PACKAGE_VERSION}
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
 	-I$(srcdir)/../include/robotDynamicsJRLJapan	\

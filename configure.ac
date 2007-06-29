@@ -3,7 +3,7 @@ dnl
 dnl configure.ac file for package jrlCIRdynamicsJRLJapan 
 dnl
 
-AC_INIT([dynamics-JRLJapan], [1.2], [olivier.stasse@aist.go.jp])
+AC_INIT([dynamics-JRLJapan], [1.3], [olivier.stasse@aist.go.jp])
 AC_PREREQ(2.59)
 
 AM_INIT_AUTOMAKE
