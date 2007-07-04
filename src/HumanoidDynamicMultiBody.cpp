@@ -163,16 +163,18 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   // Get the left hand.
   std::vector<int> JointForOneLimb = m_HS->GetArmJoints(1);
   int ListeJointsSize = JointForOneLimb.size();
-  int EndIndex = JointForOneLimb[ListeJointsSize-1];
+  //int EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
+  int EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
   DynamicMultiBody *m_SDMB = dynamic_cast<DynamicMultiBody *>(m_DMB);
-  if (m_DMB!=0)
+  if (m_SDMB!=0)
       m_LeftWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
   // Get the right hand.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetArmJoints(-1);
   ListeJointsSize = JointForOneLimb.size();
-  EndIndex = JointForOneLimb[ListeJointsSize-1];
+  //EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
+  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
   if (m_SDMB!=0)
       m_RightWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
   
