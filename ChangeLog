@@ -1,3 +1,9 @@
+dynamics-JRLJapan 1.3.1 released July 6, 2007
+
+	16. (oussama) Use the wrist joint in
+	LinkBetweenJointsAndEndEffectorSemantic() instead of the hand
+	joint.
+	
 dynamics-JRLJapan 1.3 released June 27, 2007
 
 	15. Added separate doc and install-doc targets.
