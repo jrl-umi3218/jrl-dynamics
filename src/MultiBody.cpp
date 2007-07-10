@@ -381,6 +381,31 @@ void MultiBody::afficherLiaisons(void) {
   cout << "\n";
 }
 
+void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
+{
+    const double c = cos(aQuantity);
+    const double s = sin(aQuantity);
+    const double v = 1.0-c;
+    const double xv  = AnAxis[0]*AnAxis[0]*v;
+    const double yv  = AnAxis[1]*AnAxis[1]*v;
+    const double zv  = AnAxis[2]*AnAxis[2]*v;
+    const double xyv = AnAxis[0]*AnAxis[1]*v;
+    const double yzv = AnAxis[1]*AnAxis[2]*v;
+    const double zxv = AnAxis[2]*AnAxis[0]*v;
+    const double xs  = AnAxis[0]*s;
+    const double ys  = AnAxis[1]*s;
+    const double zs  = AnAxis[2]*s;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,0,0) = xv+c;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,0,1) = xyv - zs;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,0,2) = zxv + ys;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,1,0) = xyv + zs;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,1,1) = yv + c;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,1,2) = yzv - xs;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,2,0) = zxv - ys;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,2,1) = yzv + xs;
+    MAL_S3x3_MATRIX_ACCESS_I_J(R,2,2) = zv + c;
+}
+
 void MultiBody::parserVRML(string path, string nom, const char* option)
 {
   //-----------------------------------------
@@ -596,8 +621,9 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
 	    double aQuantity;
 	    fscanf(fichier," %lf %lf %lf %lf", & AnAxis(0),
 		   &AnAxis(1), &AnAxis(2), &aQuantity);
-	    CurrentLink.aJoint.axe(AnAxis);
-	    CurrentLink.aJoint.quantity(aQuantity);
+	    matrix3d R;
+	    AxeAngle2Matrix(AnAxis, aQuantity, R);
+	    CurrentLink.aJoint.setStaticRotation(R);
 	  }
 	  break;
 	case JOINT_ID :

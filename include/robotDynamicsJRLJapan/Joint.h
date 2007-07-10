@@ -234,11 +234,31 @@ namespace dynamicsJRLJapan
 	staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3);
 	staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3); }
 
-    /*! Get the static translation. */
+    /*! Set the static translation. */
     inline void setStaticTranslation(vector3d & staticTranslation) 
       { MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) =staticTranslation(0);
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = staticTranslation(1);
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = staticTranslation(2) ; }
+
+    /*! Get the static rotation. */
+    inline void getStaticRotation(matrix3d & staticRotation) 
+      { for (int i=0; i<3; i++){
+	  for (int j=0; j<3; j++){
+	    MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation,i,j) 
+	      = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose, i,j);
+	  }
+	}
+      }
+
+    /*! Set the static rotation. */
+    inline void setStaticRotation(matrix3d & staticRotation) 
+      { for (int i=0; i<3; i++){
+	  for (int j=0; j<3; j++){
+	    MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j) 
+	      = MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation, i,j);
+	  }
+	}
+      }
 
     /*! Compute pose from a vector x,y,z, Theta, Psi, Phi. */
     void UpdatePoseFrom6DOFsVector(vectorN a6DVector);
