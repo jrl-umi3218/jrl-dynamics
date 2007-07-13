@@ -758,6 +758,17 @@ namespace dynamicsJRLJapan
     double lowerBoundDof(unsigned int inRankInConfiguration);
     
     /**
+        \brief Get the upper bound for ith dof.
+    */
+    double upperBoundDof(unsigned int inRankInConfiguration, 
+			 const vectorN& inConfig);
+    /**
+        \brief Get the lower bound for ith dof.
+    */
+    double lowerBoundDof(unsigned int inRankInConfiguration,
+			 const vectorN& inConfig);
+    
+    /**
     \brief Set the robot in the static state described by the given configuration vector.
      */
     void staticState(const vectorN& inConfiguration);

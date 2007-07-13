@@ -443,6 +443,16 @@ double HumanoidDynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguratio
     return m_DMB->lowerBoundDof(inRankInConfiguration);
 }
 
+double HumanoidDynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration, const vectorN& inConfig)
+{
+    return m_DMB->upperBoundDof(inRankInConfiguration, inConfig);
+}
+
+double HumanoidDynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration, const vectorN& inConfig)
+{
+    return m_DMB->lowerBoundDof(inRankInConfiguration, inConfig);
+}
+
 void HumanoidDynamicMultiBody::waist(CjrlJoint * inWaist)
 {
   // This method is ineffective regarding the internals.
@@ -504,7 +514,7 @@ bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchin
     m_DMB->currentConfiguration( config );
     return true;
 }
-      
+
 /***************************************************/
 /* End of the implementation                       */
 /***************************************************/

@@ -5010,3 +5010,15 @@ double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
     return m_ConfigurationToJoints[inRankInConfiguration]->getJointLLimit(0);
     //WARNING: this code does not work if the joints have more than a single degree of freedom
 }
+
+double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration,
+				       const vectorN& inConfig)
+{
+    return upperBoundDof(inRankInConfiguration);
+}
+
+double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration,
+				       const vectorN& inConfig)
+{
+    return lowerBoundDof(inRankInConfiguration);
+}

@@ -403,6 +403,17 @@ namespace dynamicsJRLJapan
       double lowerBoundDof(unsigned int inRankInConfiguration);
       
       /**
+        \brief Get the upper bound for ith dof.
+      */
+      virtual double upperBoundDof(unsigned int inRankInConfiguration,
+				   const vectorN& inConfig);
+      /**
+        \brief Get the lower bound for ith dof.
+      */
+      virtual double lowerBoundDof(unsigned int inRankInConfiguration,
+				   const vectorN& inConfig);
+      
+      /**
 	 \brief Get the number of degrees of freedom of the robot.
       */
       unsigned int numberDof() const ;
@@ -614,5 +625,6 @@ namespace dynamicsJRLJapan
       */
 
     };
+
 };
 #endif
