@@ -13,13 +13,15 @@ EXTRA_DIST = \
 	additionalDoc/package.h 
 
 
-install-doc: 
+install: html-doc
 	mkdir -p $(jrlCIRdynamicsJRLJapandir)
 	$(INSTALL_DATA) html/* $(jrlCIRdynamicsJRLJapandir)
 	mkdir -p $(jrlCIRdynamicsJRLJapandir)/pictures
 	$(INSTALL_DATA) $(srcdir)/pictures/* $(jrlCIRdynamicsJRLJapandir)/pictures
+	mkdir -p $(datadir)/doc/doxytag
+	$(INSTALL_DATA) dynamicsJRLJapan.doxytag $(datadir)/doc/doxytag
 
-doc: package.dox
+html-doc: package.dox
 	doxygen $<
 
 clean-local:

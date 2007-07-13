@@ -14,8 +14,10 @@ AC_PROG_LIBTOOL
 
 dnl Dynamic Robot Abstract Interface
 PKG_CHECK_MODULES(ROBOTDYNAMICS, [abstractRobotDynamics >= 1.4])
+ROBOTDYNAMICS_PREFIX=`$PKG_CONFIG abstractRobotDynamics --variable=prefix`
 AC_SUBST(ROBOTDYNAMICS_CFLAGS)
 AC_SUBST(ROBOTDYNAMICS_LIBS)
+AC_SUBST(ROBOTDYNAMICS_PREFIX)
 
 dnl Create configuration files
 AC_OUTPUT(
