@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: @PACKAGE@
 Description: Implementation of Abstract Interface abstractRobotDynamics
 Version: @VERSION@
-Requires: abstractRobotDynamics >= 1.4
+Requires: abstractRobotDynamics >= 1.5
 Libs: -L${libdir} -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@
 Cflags: -I${includedir} @ROBOTDYNAMICS_CFLAGS@
