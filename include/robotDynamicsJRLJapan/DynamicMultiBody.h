@@ -216,8 +216,11 @@ namespace dynamicsJRLJapan
     /** Vector of pointers towards the joints. */
     std::vector<CjrlJoint*> m_JointVector;
 
-    /**! \name Internal computation of Joints @{ */
-    /*! \brief Method to compute the number of joints
+    /** \brief Vector of fixed joints. */
+    std::vector<CjrlJoint*> m_VectorOfFixedJoints;
+
+    /*! \name Internal computation of Joints */
+    /*! Method to compute the number of joints
       and btw the size of the configuration.
     */
     void ComputeNumberOfJoints();
@@ -227,8 +230,7 @@ namespace dynamicsJRLJapan
     
     /** @} */
 
-    /*! \name Methods related to the building
-      of proxy values. */
+    /*! \name Methods related to the building of proxy values */
     /*! @{ */
     /*! Interface between the state vector and the joints. */
     std::vector<int> m_StateVectorToJoint; 
@@ -320,8 +322,12 @@ namespace dynamicsJRLJapan
     // Forward model computation
     //-----------------------------
     
-    /** Parse a vrml file which describes the robot. The format
-     should be compatible with the one specified by OpenHRP. */
+    /** \brief Parse a vrml file which describes the robot. The format
+	should be compatible with the one specified by OpenHRP. 
+	\param path directory where following files are located
+	\param nom filename of VRML file
+	\param option filename of XML file which contains information on associations between joint names and ranks
+    */
     virtual void parserVRML(string path, string nom, 
 			    const char *option);
 
@@ -526,8 +532,7 @@ namespace dynamicsJRLJapan
 
     /** @} */
 
-    /** \name Methods related to the construction of a tree,
-	by specifying a root among the vertices of the undirected graph.
+    /** \name Methods related to the construction of a tree, by specifying a root among the vertices of the undirected graph.
 	@{ 
     */
 
@@ -572,6 +577,37 @@ namespace dynamicsJRLJapan
     */
     unsigned int numberDof() const;
     
+    /** \name Methods related to fixed joints
+	@{
+    */
+    /** 
+	\brief Add a joint to the vector of fixed joints.
+	This Declares a joint as fixed in the world.
+    */
+    void addFixedJoint(CjrlJoint *inFixedJoint) ;
+    
+    /** 
+	\brief Count joints that are fixed in the world.
+    */
+    unsigned int countFixedJoints() const;
+    
+    /** 
+	\brief Remove a joint from the vector of fixed joints.
+	The input joint will no longer be considered fixed in the world.
+    */
+    void removeFixedJoint(CjrlJoint *inFixedJoint);
+      
+    /** 
+	\brief Clear the list of fixed joints
+    */
+    void clearFixedJoints();
+       
+    /** 
+	\brief Return the fixed joint at rank inRank 
+    */
+    CjrlJoint& fixedJoint(unsigned int inJointRank);
+
+      
     /**
        @}
     */

@@ -5022,3 +5022,40 @@ double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration,
 {
     return lowerBoundDof(inRankInConfiguration);
 }
+
+/* Methods related to the fixed joints */
+
+void DynamicMultiBody::addFixedJoint(CjrlJoint *inFixedJoint)
+{
+  m_VectorOfFixedJoints.insert(m_VectorOfFixedJoints.end(),inFixedJoint);
+}
+
+unsigned int DynamicMultiBody::countFixedJoints() const
+{
+  return m_VectorOfFixedJoints.size();
+}
+
+void DynamicMultiBody::removeFixedJoint(CjrlJoint * inFixedJoint)
+{
+  std::vector<CjrlJoint *>::iterator it_Joint = m_VectorOfFixedJoints.begin();
+  while((*it_Joint!= inFixedJoint) &&
+	(it_Joint!=m_VectorOfFixedJoints.end()))
+    it_Joint++;
+
+  if (it_Joint!=m_VectorOfFixedJoints.end())
+    m_VectorOfFixedJoints.erase(it_Joint);
+
+}
+
+void DynamicMultiBody::clearFixedJoints()
+{
+    m_VectorOfFixedJoints.clear();
+}
+
+CjrlJoint& DynamicMultiBody::fixedJoint(unsigned int inJointRank)
+{
+  //if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
+  if (inJointRank<m_VectorOfFixedJoints.size())
+      return *m_VectorOfFixedJoints[inJointRank];
+}
+/* End of Methods related to the fixed joints */

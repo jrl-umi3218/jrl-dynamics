@@ -237,36 +237,27 @@ void HumanoidDynamicMultiBody::ComputingZeroMomentumPoint()
 
 void HumanoidDynamicMultiBody::addFixedJoint(CjrlJoint *inFixedJoint)
 {
-  m_VectorOfFixedJoints.insert(m_VectorOfFixedJoints.end(),inFixedJoint);
+  m_DMB->addFixedJoint(inFixedJoint);
 }
 
 unsigned int HumanoidDynamicMultiBody::countFixedJoints() const
 {
-  return m_VectorOfFixedJoints.size();
+  return m_DMB->countFixedJoints();
 }
 
 void HumanoidDynamicMultiBody::removeFixedJoint(CjrlJoint * inFixedJoint)
 {
-  std::vector<CjrlJoint *>::iterator it_Joint = m_VectorOfFixedJoints.begin();
-  while((*it_Joint!= inFixedJoint) &&
-	(it_Joint!=m_VectorOfFixedJoints.end()))
-    it_Joint++;
-
-  if (it_Joint!=m_VectorOfFixedJoints.end())
-    m_VectorOfFixedJoints.erase(it_Joint);
-
+  m_DMB->removeFixedJoint(inFixedJoint);
 }
 
 void HumanoidDynamicMultiBody::clearFixedJoints()
 {
-    m_VectorOfFixedJoints.clear();
+  m_DMB->clearFixedJoints();
 }
 
 CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
-  //if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
-  if (inJointRank<m_VectorOfFixedJoints.size())
-      return *m_VectorOfFixedJoints[inJointRank];
+  m_DMB->fixedJoint(inJointRank);
 }
 /* End of Methods related to the fixed joints */
 

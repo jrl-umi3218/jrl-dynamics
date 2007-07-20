@@ -97,9 +97,6 @@ namespace dynamicsJRLJapan
       
       /** @} */
       
-      /** \brief Vector of fixed joints. */
-      std::vector<CjrlJoint*> m_VectorOfFixedJoints;
-
       /*! Object to store the specificities to an instance of a humanoid robot. */
       HumanoidSpecificities *m_HS;
 
@@ -150,11 +147,11 @@ namespace dynamicsJRLJapan
 
       /** @} */
       
-      /**! This method creates the link between the Humanoid Specificities
+      /*! This method creates the link between the Humanoid Specificities
 	 object and the Dynamic MultiBody fields. */
       void LinkBetweenJointsAndEndEffectorSemantic();
 
-      /**! This method is a proxy for a Dynamic Multi Body object 
+      /*! This method is a proxy for a Dynamic Multi Body object 
 	 It gives an index transformation from VRMLID to Configuration.
        */
       void GetJointIDInConfigurationFromVRMLID(std::vector<int>  & aVector);
@@ -176,6 +173,16 @@ namespace dynamicsJRLJapan
 	 \name Joints specific to humanoid robots
       */
       
+      /**
+	\brief Set the pointer to the Waist joint
+      */
+      void waist(CjrlJoint* inWaist);
+
+      /**
+	 \brief Get a pointer to the Waist
+      */
+      CjrlJoint* waist();
+
       /**
       \brief Set the pointer to the left Wrist joint.
       */
@@ -291,14 +298,20 @@ namespace dynamicsJRLJapan
 	
       /**
       \brief Get a point on the gaze straight line
-       */
-       const vector3d & gazeOrigin() const {return m_LinePoint;}
+      */
+      const vector3d & gazeOrigin() const {return m_LinePoint;}
   
-  /**
-      \brief Get the direction of gaze
-   */
+      /**
+	 \brief Get the direction of gaze
+      */
       const vector3d & gazeDirection() const {return m_LineVector;}
       
+      /** 
+	  \brief Return the distance between the sole of a foot and its joint center
+      */
+      double footHeight() const;
+
+
       /**
 	 \@}
       */
@@ -335,21 +348,9 @@ namespace dynamicsJRLJapan
 
       
       /**
-	 \brief Get the jacobian of a joint wrt to internal configuration variables assuming a joint is fixed.
-	 
-	 Fixed joint is first fixed joint in vector.
-	 \return true if there is at least one fixed joint, false otherwise.  
+	 \@}
       */
-      bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint, 
-				      matrixNxP & outJacobian);
-      
-      /** 
-	  \brief Return the distance between the sole of a foot and its joint center
-      */
-      double footHeight() const;
 
-
-      /** @} */
       /**
 	 \name Zero momentum point
       */
@@ -613,11 +614,16 @@ namespace dynamicsJRLJapan
       */
       const matrixNxP& jacobianCenterOfMass() const ;
 
-      void waist(CjrlJoint* inWaist);
-
-      double mass() const;
+      /**
+	 \brief Get the jacobian of a joint wrt to internal configuration variables assuming a joint is fixed.
+	 
+	 Fixed joint is first fixed joint in vector.
+	 \return true if there is at least one fixed joint, false otherwise.  
+      */
+      bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint, 
+				      matrixNxP & outJacobian);
       
-      CjrlJoint* waist();
+      double mass() const;
 
 	
       /**
