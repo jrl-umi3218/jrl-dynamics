@@ -30,6 +30,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_FatherJoint(0),
   m_IDinVRML(-1)
 {
+  m_FromRootToThis.push_back(this);
   CreateLimitsArray();
 }
 
@@ -46,6 +47,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) = translationStatic[0];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = translationStatic[1];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = translationStatic[2];
+  m_FromRootToThis.push_back(this);
 
   CreateLimitsArray();
 }
@@ -59,6 +61,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_IDinVRML(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_pose);
+  m_FromRootToThis.push_back(this);
   CreateLimitsArray();
 }
 
@@ -71,6 +74,7 @@ Joint::Joint(const Joint &r)
   m_FatherJoint = 0;
   m_Name=r.getName();
   m_IDinVRML=r.getIDinVRML();
+  m_FromRootToThis.push_back(this);
 
   CreateLimitsArray();
 
@@ -85,6 +89,7 @@ Joint::Joint(const Joint &r)
 Joint::Joint()
 {
   m_type = FREE_JOINT;
+  m_FromRootToThis.push_back(this);
   CreateLimitsArray();
 }
 
@@ -364,16 +369,16 @@ void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixN
                 }
                 break;
             case Joint::FREE_JOINT:
-	  //J =  I M = J11 J12
-	  //     0 I   J21 J22
+		// J =  I M = J11 J12
+		//      0 I   J21 J22
                 //
-	  // with M = d(w x dp)/dw
+		// with M = d(w x dp)/dw
                 //
+		// Computation of J11, J12 and J21
                 for(int j=0;j<3;j++)
                 {
                     for(int k=0;k<3;k++)
                     {
-		  // Computation of J11, J12 and J21
                         if (j!=k)
                         {
                             outJ(     j, lcol + k) =0.0;
@@ -385,11 +390,12 @@ void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixN
                             outJ( j + 3, lcol + k + 3) = 1.0;
                         }
                         outJ(j+3,k) = 0.0;
-		
-		  // Compute M
-                        outJ( 0, lcol + 3 ) =      0; outJ( 0 , lcol + 4 ) =   dp(2); outJ( 0 , lcol + 5 ) = -dp(1);
-                        outJ( 1, lcol + 3 ) = -dp(2); outJ( 1 , lcol + 4 ) =      0 ; outJ( 1 , lcol + 5 ) =  dp(0);
-                        outJ( 2, lcol + 3 ) =  dp(1); outJ( 2 , lcol + 4 ) =  -dp(0); outJ( 2 , lcol + 5 ) =      0; 
+		    }
+		}
+		// Compute M
+		outJ( 0, lcol + 3 ) =      0; outJ( 0 , lcol + 4 ) =   dp(2); outJ( 0 , lcol + 5 ) = -dp(1);
+		outJ( 1, lcol + 3 ) = -dp(2); outJ( 1 , lcol + 4 ) =      0 ; outJ( 1 , lcol + 5 ) =  dp(0);
+		outJ( 2, lcol + 3 ) =  dp(1); outJ( 2 , lcol + 4 ) =  -dp(0); outJ( 2 , lcol + 5 ) =      0; 
                     }
                 }
                 break;
