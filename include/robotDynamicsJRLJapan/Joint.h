@@ -389,6 +389,14 @@ namespace dynamicsJRLJapan
      */
     void getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outjacobian) const;
 
+    /**
+        \brief Get the jacobian of the point specified in world frame by inPointWorldFrame.
+	The output matrix outjacobian must have appropriate size.
+
+     */
+    void getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame, 
+					matrixNxP& outjacobian) const;
+
     /** 
 	\brief resize the Jacobian with the number of DOFs.
     */
