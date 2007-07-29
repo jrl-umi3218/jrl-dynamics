@@ -1,3 +1,11 @@
+	20. Export in dynamicsJRLJapan.pc name of classes implementing 
+	  - abstractRobotDynamics::CjrlDynamicRobot,
+	  - abstractRobotDynamics::CjrlHumanoidDynamicRobot
+	  - freeFlying joint,
+	  - rotation joint,
+	  - translation joint.
+	19. Use name "dynamicsJRLJapan" as package name and documentation directory installation.
+	
 dynamics-JRLJapan 1.4 released July 16, 2007
 
 	18. (fumio) bug fix for values of rotation field in VRML.

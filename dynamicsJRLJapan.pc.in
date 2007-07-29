@@ -9,3 +9,9 @@ Version: @VERSION@
 Requires: abstractRobotDynamics >= 1.5
 Libs: -L${libdir} -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@
 Cflags: -I${includedir} @ROBOTDYNAMICS_CFLAGS@
+
+CimplDynamicRobot=dynamicsJRLJapan::DynamicMultiBody
+CimplHumanoidDynamicRobot=dynamicsJRLJapan::HumanoidDynamicMultiBody
+CimplJointFreeFlyer=dynamicsJRLJapan::JointFreeflyer
+CimplJointRotation=dynamicsJRLJapan::JointRotation
+CimplJointTranslation=dynamicsJRLJapan::JointTranslation

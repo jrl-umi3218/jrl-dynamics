@@ -3,7 +3,7 @@
 # 
 
 
-jrlCIRdynamicsJRLJapandir = $(datadir)/doc/jrlCIRdynamicsJRLJapan
+jrlCIRdynamicsJRLJapandir = $(datadir)/doc/dynamicsJRLJapan
 
 EXTRA_DIST = \
 	header.html \
