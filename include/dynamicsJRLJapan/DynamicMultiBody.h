@@ -40,15 +40,12 @@
 
 #ifndef _DYNAMIC_MULTI_BODY_H_
 #define _DYNAMIC_MULTI_BODY_H_
-
-#warning This file is deprecated: use #include "dynamicsJRLJapan/DynamicMultiBody.h" instead
-
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include <robotDynamics/jrlDynamicRobot.h>
-#include "Joint.h"
-#include "MultiBody.h"
-#include "DynamicBody.h"
+#include "robotDynamics/jrlDynamicRobot.h"
+#include "dynamicsJRLJapan/Joint.h"
+#include "dynamicsJRLJapan/MultiBody.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
 
 
 using namespace::std;

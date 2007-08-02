@@ -19,5 +19,5 @@ libdynamicsJRLJapan_la_LDFLAGS = \
 	-release ${PACKAGE_VERSION}
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
-	-I$(srcdir)/../include/robotDynamicsJRLJapan	\
+	-I$(srcdir)/../include	\
 	@ROBOTDYNAMICS_CFLAGS@

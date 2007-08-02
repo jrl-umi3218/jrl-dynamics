@@ -1,8 +1,6 @@
 #ifndef HAND_H
 #define HAND_H
 
-#warning This file is deprecated: use #include "dynamicsJRLJapan/Hand.h" instead
-
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 
 #include "robotDynamics/jrlHand.h"

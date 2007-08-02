@@ -42,14 +42,12 @@
 #ifndef _JRLCIRDYNAMICS_BODY_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_BODY_JRL_JAPAN_H_
 
-#warning This file is deprecated: use #include "dynamicsJRLJapan/Body.h" instead
-
 #include <iostream>
 #include <string>
 //#include "linalg.h"
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
-#include <robotDynamics/jrlBody.h>
-#include "Joint.h"
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "robotDynamics/jrlBody.h"
+#include "dynamicsJRLJapan/Joint.h"
 
 using namespace::std;
 

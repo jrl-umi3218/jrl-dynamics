@@ -1,4 +1,4 @@
-#include <HumanoidSpecificities.h>
+#include "dynamicsJRLJapan/HumanoidSpecificities.h"
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << "HumanoidSpecificities :" << x << endl

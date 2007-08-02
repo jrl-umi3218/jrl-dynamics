@@ -5,6 +5,8 @@
 #ifndef jrlCIRdynamicsJRLJapan_H
 #define jrlCIRdynamicsJRLJapan_H
 
+#warning This file is deprecated: use #include "dynamicsJRLJapan/dynamicsJRLJapan.h" instead
+
 #include <fileReader.h>
 #include <Joint.h>
 #include <Body.h>

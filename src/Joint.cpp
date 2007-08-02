@@ -1,6 +1,6 @@
 // -*- mode: c++; indent-tabs-mode: t; tab-width: 2; c-basic-offset: 2; -*-
-#include "Joint.h"
-#include "DynamicBody.h"
+#include "dynamicsJRLJapan/Joint.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) 

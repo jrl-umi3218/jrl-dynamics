@@ -40,14 +40,12 @@
 #ifndef _HRP2_DYNAMIQUE_H_
 #define _HRP2_DYNAMIQUE_H_
 
-#warning This file is deprecated: use #include \"dynamicsJRLJapan/DynamicBody.h\" instead
-
 #include <string>
 
-#include "Body.h"
+#include "dynamicsJRLJapan/Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include <robotDynamics/jrlBody.h>
+#include "robotDynamics/jrlBody.h"
 
 
 namespace dynamicsJRLJapan

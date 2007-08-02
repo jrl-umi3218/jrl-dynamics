@@ -1,6 +1,6 @@
-#include <DynamicMultiBody.h>
-#include "Hand.h"
-#include <HumanoidDynamicMultiBody.h>
+#include "dynamicsJRLJapan/DynamicMultiBody.h"
+#include "dynamicsJRLJapan/Hand.h"
+#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 
 #if 0
 

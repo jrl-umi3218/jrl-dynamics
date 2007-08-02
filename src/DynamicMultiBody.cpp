@@ -38,7 +38,7 @@
 */
 #include <fstream>
 
-#include <DynamicMultiBody.h>
+#include "dynamicsJRLJapan/DynamicMultiBody.h"
 
 #define RESETDEBUG5(y) { ofstream DebugFile; \
     DebugFile.open(y,ofstream::out); \

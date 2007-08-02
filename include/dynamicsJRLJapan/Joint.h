@@ -31,8 +31,6 @@
 #ifndef _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
 
-#warning This file is deprecated: use #include dynamicsJRLJapan/Joint.h instead
-
 #include <vector>
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"

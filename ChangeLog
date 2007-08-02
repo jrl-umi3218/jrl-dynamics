@@ -1,3 +1,6 @@
+	23. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
+	22. Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
+	21. Undo item 20
 	20. Export in dynamicsJRLJapan.pc name of classes implementing 
 	  - abstractRobotDynamics::CjrlDynamicRobot,
 	  - abstractRobotDynamics::CjrlHumanoidDynamicRobot

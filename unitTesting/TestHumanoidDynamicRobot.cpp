@@ -1,6 +1,6 @@
 #include <string>
-#include "robotDynamicsJRLJapan/Joint.h"
-#include "robotDynamicsJRLJapan/HumanoidDynamicMultiBody.h"
+#include "dynamicsJRLJapan/Joint.h"
+#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 using namespace std;
 using namespace dynamicsJRLJapan;

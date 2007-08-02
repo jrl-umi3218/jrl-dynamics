@@ -24,6 +24,7 @@ AC_OUTPUT(
 	dynamicsJRLJapan.pc
 	Makefile
 	include/robotDynamicsJRLJapan/Makefile
+	include/Makefile
 	src/Makefile
 	doc/Makefile
 	doc/package.dox

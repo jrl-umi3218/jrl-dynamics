@@ -30,17 +30,14 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 
 #ifndef _HUMANOID_DYNAMIC_MULTIBODY_H_
 #define _HUMANOID_DYNAMIC_MULTIBODY_H_
-
-#warning This file is deprecated: use #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h" instead
-
 #include <vector>
 
 #include "HumanoidSpecificities.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include <robotDynamics/jrlJoint.h>
-#include <robotDynamics/jrlDynamicRobot.h>
-#include <robotDynamics/jrlHumanoidDynamicRobot.h>
+#include "robotDynamics/jrlJoint.h"
+#include "robotDynamics/jrlDynamicRobot.h"
+#include "robotDynamics/jrlHumanoidDynamicRobot.h"
 
 namespace dynamicsJRLJapan
 {

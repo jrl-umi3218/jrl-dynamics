@@ -33,11 +33,8 @@
 */
 #ifndef _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
-
-#warning This file is deprecated: use #include "dynamicsJRLJapan/HumanoidSpecificities.h" instead
-
 #include <vector>
-#include "DynamicMultiBody.h"
+#include "dynamicsJRLJapan/DynamicMultiBody.h"
 
 namespace dynamicsJRLJapan
 {

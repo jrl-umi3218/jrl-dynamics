@@ -41,12 +41,10 @@
 #ifndef MULTIBODY_H
 #define MULTIBODY_H
 
-#warning This file is deprecated: use #include "dynamicsJRLJapan/MultiBody.h" instead
-
 #define INTERFACE
-#include "Joint.h"
-#include "Body.h"
-#include "fileReader.h"
+#include "dynamicsJRLJapan/Joint.h"
+#include "dynamicsJRLJapan/Body.h"
+#include "dynamicsJRLJapan/fileReader.h"
 #include <vector>
 #include <algorithm>	//pour utiliser la fonction find
 #include <iostream>

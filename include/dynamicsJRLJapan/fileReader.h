@@ -44,9 +44,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-
-#warning This file is deprecated: use #include "dynamicsJRLJapan/fileReader.h" instead
-
 using namespace std;
 
 namespace dynamicsJRLJapan
