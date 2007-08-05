@@ -1,4 +1,5 @@
-	12. Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
+	25. Remove const in Joint::addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.Remove const in addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.
+	24. Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
 	23. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
 	22. Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
 	21. Undo item 20

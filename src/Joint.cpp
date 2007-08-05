@@ -136,7 +136,7 @@ CjrlJoint* Joint::parentJoint() const
   return m_FatherJoint;
 }
 
-bool Joint::addChildJoint(const CjrlJoint& aJoint)
+bool Joint::addChildJoint(CjrlJoint& aJoint)
 {
   Joint * pjoint = (Joint *)&aJoint;
   m_Children.push_back(pjoint);

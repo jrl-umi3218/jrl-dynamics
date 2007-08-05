@@ -279,7 +279,7 @@ namespace dynamicsJRLJapan
     CjrlJoint*  parentJoint() const ;
 
     /*! \brief Add a child Joint */
-    bool addChildJoint(const CjrlJoint&);
+    bool addChildJoint(CjrlJoint&);
     
     /*! \brief Count the number of child joints */
     unsigned int countChildJoints() const;
