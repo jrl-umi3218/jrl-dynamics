@@ -131,9 +131,9 @@ Joint & Joint::operator=(const Joint & r)
 /* Implementation of the generic JRL interface */
 /***********************************************/
 
-CjrlJoint & Joint::parentJoint() const
+CjrlJoint* Joint::parentJoint() const
 {
-  return *m_FatherJoint;
+  return m_FatherJoint;
 }
 
 bool Joint::addChildJoint(const CjrlJoint& aJoint)
@@ -148,12 +148,12 @@ unsigned int Joint::countChildJoints() const
   return m_Children.size();
 }
 
-CjrlJoint& Joint::childJoint(unsigned int givenRank) const
+CjrlJoint* Joint::childJoint(unsigned int givenRank) const
 {
   if ((givenRank>=0) && (givenRank<m_Children.size()))
-    return *m_Children[givenRank];
+    return m_Children[givenRank];
   
-  return *m_Children[0];
+  return m_Children[0];
 }
 
 std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const 
@@ -365,7 +365,7 @@ void Joint::SetFatherJoint(Joint *aFather)
     while(aJoint!=0)
     {
         m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
-        aJoint = &(aJoint->parentJoint());
+        aJoint = aJoint->parentJoint();
     }
 }
 
@@ -535,7 +535,7 @@ bool JointRotation::updateTransformation(const vectorN& inDofVector)
     }
     
     DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
-    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint()->linkedBody());
 
     body->q = inDofVector(rankInConfiguration());
     
@@ -561,7 +561,7 @@ bool JointTranslation::updateTransformation(const vectorN& inDofVector)
         return false;
     }
     DynamicBody* body = dynamic_cast<DynamicBody*>(linkedBody());
-    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint().linkedBody());
+    DynamicBody* parentbody = dynamic_cast<DynamicBody*>(parentJoint()->linkedBody());
     
     body->q = inDofVector(rankInConfiguration());
     
@@ -592,7 +592,7 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
         case Joint::REVOLUTE_JOINT :
         {
             DynamicBody* body = (DynamicBody*)(linkedBody());
-            DynamicBody* parentbody = (DynamicBody*)(parentJoint().linkedBody());
+            DynamicBody* parentbody = (DynamicBody*)(parentJoint()->linkedBody());
 
             body->q = inDofVector(rankInConfiguration());
             quantity( body->q);
@@ -619,7 +619,7 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
         case Joint::PRISMATIC_JOINT :
         {
             DynamicBody* body = (DynamicBody*)(linkedBody());
-            DynamicBody* parentbody = (DynamicBody*)(parentJoint().linkedBody());
+            DynamicBody* parentbody = (DynamicBody*)(parentJoint()->linkedBody());
     
             body->q = inDofVector(rankInConfiguration());
             quantity( body->q);

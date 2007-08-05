@@ -24,7 +24,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   cout << "Number of child  :" << NbChildren << endl;
   for(int i=0;i<NbChildren;i++)
     {
-      a2Joint = (Joint *)&aJoint->childJoint(i);
+      a2Joint = (Joint *)aJoint->childJoint(i);
 
       cout << " Child " << i << " " <<a2Joint->getName() << endl;
     }
@@ -65,7 +65,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints((CjrlJoint *)&aJoint->childJoint(i)); 
+      RecursiveDisplayOfJoints((CjrlJoint *)aJoint->childJoint(i)); 
     }
   //cout << " End for Joint: " << a2Joint->getName() << endl;
 }
@@ -115,7 +115,7 @@ void GoDownTree(const CjrlJoint * startJoint)
   
   if (startJoint->countChildJoints()!=0)
     {
-      const CjrlJoint * childJoint = &(startJoint->childJoint(0));
+      const CjrlJoint * childJoint = startJoint->childJoint(0);
       GoDownTree(childJoint);
     }
 }

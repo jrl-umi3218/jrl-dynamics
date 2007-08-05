@@ -177,7 +177,7 @@ SEARCHENGINE           = NO
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = "jrlCIRdynamicsJRLJapan library documentation"
+PROJECT_NAME           = "@PACKAGE@ library documentation"
 PROJECT_NUMBER         = @VERSION@
 
 #---------------------------------------------------------------------------
@@ -207,7 +207,7 @@ SHOW_DIRECTORIES       = NO
 #---------------------------------------------------------------------------
 FILE_PATTERNS          = *.h *.idl
 EXCLUDE_PATTERNS       = 
-INPUT                  = @top_srcdir@/include \
+INPUT                  = @top_srcdir@/include/dynamicsJRLJapan \
                          @srcdir@/additionalDoc
 
 #---------------------------------------------------------------------------

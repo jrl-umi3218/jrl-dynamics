@@ -463,7 +463,7 @@ double HumanoidDynamicMultiBody::getHandClench(CjrlHand* inHand)
 {
     
     //Designed for the parallel mechanism of HRP2 two-jaw hands
-    unsigned int dof = inHand->associatedWrist()->childJoint(0).rankInConfiguration();
+    unsigned int dof = inHand->associatedWrist()->childJoint(0)->rankInConfiguration();
     double upperLimit = m_DMB->upperBoundDof(dof);
     double lowerLimit = m_DMB->lowerBoundDof(dof);
     double curVal = m_DMB->currentConfiguration()(dof);
@@ -480,7 +480,7 @@ bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchin
         return false;
     }
     
-    unsigned int dof = inHand->associatedWrist()->childJoint(0).rankInConfiguration();
+    unsigned int dof = inHand->associatedWrist()->childJoint(0)->rankInConfiguration();
     double upperLimit = m_DMB->upperBoundDof(dof);
     double lowerLimit = m_DMB->lowerBoundDof(dof);
     double wantedVal =  upperLimit - inClenchingValue*(upperLimit-lowerLimit);

@@ -4837,7 +4837,7 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inCo
     
     for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
     {
-        Joint* childJoint = (Joint*)(&(inJoint->childJoint(i)));
+        Joint* childJoint = (Joint*)(inJoint->childJoint(i));
         forwardTransformation(childJoint,inConfiguration);
     }
 }

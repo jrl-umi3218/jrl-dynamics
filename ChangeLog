@@ -1,3 +1,4 @@
+	12. Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
 	23. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
 	22. Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
 	21. Undo item 20
