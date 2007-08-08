@@ -165,9 +165,9 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   int ListeJointsSize = JointForOneLimb.size();
   //int EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   int EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
-  DynamicMultiBody *m_SDMB = dynamic_cast<DynamicMultiBody *>(m_DMB);
-  if (m_SDMB!=0)
-      m_LeftWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+  DynamicMultiBody *SDMB = dynamic_cast<DynamicMultiBody *>(m_DMB);
+  if (SDMB!=0)
+      m_LeftWristJoint = SDMB->GetJointFromVRMLID(EndIndex);
   
   // Get the right hand.
   JointForOneLimb.clear();
@@ -175,8 +175,8 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   //EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
-  if (m_SDMB!=0)
-      m_RightWristJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+  if (SDMB!=0)
+      m_RightWristJoint = SDMB->GetJointFromVRMLID(EndIndex);
   
   
   // Get the left foot.
@@ -185,8 +185,8 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the left foot:" << EndIndex);
-  if (m_SDMB!=0)
-    m_LeftFootJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+  if (SDMB!=0)
+    m_LeftFootJoint = SDMB->GetJointFromVRMLID(EndIndex);
   
   // Get the right foot.
   JointForOneLimb.clear();
@@ -194,8 +194,8 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the right foot:" << EndIndex);
-  if (m_SDMB!=0)
-    m_RightFootJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+  if (SDMB!=0)
+    m_RightFootJoint = SDMB->GetJointFromVRMLID(EndIndex);
 
   
   // Get the gaze joint (head) of the humanoid.
@@ -203,13 +203,13 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb = m_HS->GetHeadJoints();
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
-  if (m_SDMB!=0)
-    m_GazeJoint = m_SDMB->GetJointFromVRMLID(EndIndex);
+  if (SDMB!=0)
+    m_GazeJoint = SDMB->GetJointFromVRMLID(EndIndex);
 
   // Get the waist joint of the humanoid.
   std::vector<int> JointsForWaist = m_HS->GetWaistJoints();
   if (JointsForWaist.size()==1)
-    m_WaistJoint = m_SDMB->GetJointFromVRMLID(JointsForWaist[0]);
+    m_WaistJoint = SDMB->GetJointFromVRMLID(JointsForWaist[0]);
   
   
 }

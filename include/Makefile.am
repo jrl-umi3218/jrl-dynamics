@@ -14,4 +14,5 @@ dynamicsJRLJapan_HEADERS = \
 	dynamicsJRLJapan/DynamicMultiBody.h \
 	dynamicsJRLJapan/HumanoidDynamicMultiBody.h \
 	dynamicsJRLJapan/HumanoidSpecificities.h \
-	dynamicsJRLJapan/robotDynamicsImpl.h
+	dynamicsJRLJapan/robotDynamicsImpl.h \
+	dynamicsJRLJapan/SpiritVRMLReader.h
