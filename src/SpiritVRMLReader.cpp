@@ -276,9 +276,6 @@ namespace dynamicsJRLJapan
 	if (m_DataForParsing->Depth!=0)
 	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1].getLabel());
 	m_MultiBody->ajouterCorps(*lCurrentBody);
-	if (m_DataForParsing->CurrentLink.aJoint.getIDinVRML()==-1)
-	  std::cout << "Name (-1):" << m_DataForParsing->CurrentLink.aJoint.getName() << " " 
-		    << "Body Name " << lCurrentBody->getName() << endl;
 	m_MultiBody->ajouterLiaison(m_DataForParsing->CurrentBody[lDepth-1],
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
@@ -1210,7 +1207,7 @@ namespace dynamicsJRLJapan
       // get length of file:
       aif.seekg (0, ios::end);
       length = aif.tellg();
-      cout << "Read the file named :" <<aFileName << " " << length << endl;
+
       aif.seekg (0, ios::beg);
   
       // allocate memory:
