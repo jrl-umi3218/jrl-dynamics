@@ -454,18 +454,21 @@ namespace dynamicsJRLJapan
 
   class JointFreeflyer : public Joint
   {
+  public:
     JointFreeflyer(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointRotation : public Joint
   {
+  public:
     JointRotation(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointTranslation : public Joint
   {
+  public:
     JointTranslation(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
