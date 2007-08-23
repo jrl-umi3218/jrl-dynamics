@@ -165,6 +165,8 @@ namespace dynamicsJRLJapan
 				vector3d translationStat, 
 				vector3d axeRotationStat, 
 				double angleRotationStat = 0);
+    /*! Return last body. */
+    Body * dernierCorps();
 
     /*!  Remove a link between body corps1 and body corps. */
     void supprimerLiaisonEntre(Body &corps1, Body &corps2);
@@ -207,6 +209,11 @@ namespace dynamicsJRLJapan
     int NbOfJoints() const;
     
   };
+
+  // Create a matrix from an axis and a rotation around
+  // this axis.
+  void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
+  
 };
 
 #endif

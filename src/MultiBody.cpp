@@ -39,6 +39,7 @@
    IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "dynamicsJRLJapan/MultiBody.h"
+#include "dynamicsJRLJapan/SpiritVRMLReader.h"
 
 using namespace dynamicsJRLJapan;
 
@@ -151,8 +152,14 @@ MultiBody::~MultiBody(void)
 
 void MultiBody::ajouterCorps(Body &b)
 {
+  masse += b.getMasse();
   listeCorps.push_back(b);
   liaisons.push_back(vector<appariement>());
+}
+
+Body * MultiBody::dernierCorps()
+{
+  return &listeCorps[listeCorps.size()-1];
 }
 
 void MultiBody::ajouterLiaison(Body &corps1, Body &corps2, internalLink & l)
@@ -381,7 +388,7 @@ void MultiBody::afficherLiaisons(void) {
   cout << "\n";
 }
 
-void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
+void dynamicsJRLJapan::AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
 {
     const double c = cos(aQuantity);
     const double s = sin(aQuantity);
@@ -408,274 +415,9 @@ void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
 
 void MultiBody::parserVRML(string path, string nom, const char* option)
 {
-  //-----------------------------------------
-  // Declaration des variables
-
-  MAL_S3_VECTOR(lxaxis,double);
-  MAL_S3_VECTOR(lyaxis,double);
-  MAL_S3_VECTOR(lzaxis,double);
-  MAL_S3_VECTOR(lnull,double);
-  lxaxis[0]=1.0;lxaxis[1]=0.0;lxaxis[2]=0.0;
-  lyaxis[0]=0.0;lyaxis[1]=1.0;lyaxis[2]=0.0;
-  lzaxis[0]=0.0;lzaxis[1]=0.0;lzaxis[2]=1.0;
-  lnull[0]=0.0;lnull[1]=0.0;lnull[2]=0.0;
-  FILE *fichier;
-  int cptCorps = 0;
-  int profondeur,jointID;
-
-  double JointULimit, JointLLimit;
-  bool childDescription = false;
-  double cm[3], lmasse, mi[9];
-  //  double r[4], tr[3];
-  Body *dernierCorps = NULL;
   string nomWRML = path;
   nomWRML += nom;
-
-  masse = 0;
-  //  Body * aCC=0;
-  vector<Body> corpsCourant;// = new Body [PROFONDEUR_MAX];
-  corpsCourant.resize(PROFONDEUR_MAX);
-
-  // Fin declaration des variables
-  //-----------------------------------------
-
-  //-----------------------------------------
-  // Ouverture du fichier
-  fichier = fopen(nomWRML.c_str(), "r");
-  if (fichier == NULL)
-    {
-      cout << "File" << nom << " not find." << endl;
-      return;
-    }
-  //  cout << "Fichier " << nom << " trouve." << endl;
-
-  // Fin ouverture du fichier
-  //-----------------------------------------
-
-  // Deplacement jusqu'au debut de la description
-  if (!look_for(fichier,"DEF")) {
-    return;
-  }
-
-  // Creation du corps de reference
-  corpsCourant[0].setLabel(cptCorps++);
-  ajouterCorps(corpsCourant[0]);
-  profondeur = 0;
-  dernierCorps = &listeCorps[listeCorps.size()-1];
-  MAL_S3_VECTOR(,double) dummy;
-  internalLink CurrentLink={ 0, Joint(Joint::FIX_JOINT,dummy,0.0), 0,0};
-
-  char BufferDEFNAME[1024];
-  static int counter=0;
-  do {
-    switch (nextKeyWord(fichier)) {
-    case CROCHET_OUVRANT :
-      //cout << "[";
-      profondeur++;
-      break;
-    case CROCHET_FERMANT :
-      //cout << "]";
-      profondeur--;
-      break;
-    case DEF :
-      bzero(BufferDEFNAME,1024);
-      fscanf(fichier," %s",BufferDEFNAME);
-      break;
-
-    case CHILDREN :
-      counter++;
-      //      cout << "Children "<<counter << endl;
-      if (childDescription) {	//On arrive a l'url du fichier VRML du corps courant
-
-
-	if(look_for(fichier,"url"))	//a modifier eventuellement
-	  {
-#if 0	    	
-	    char nomWRL[50];
-
-	    //string path = "C:/user/Adrien/Code/HRP2 United Workspace/Geometrie/";
-	    fscanf(fichier, "%s", nomWRL);
-	    int l = (int)(strlen(nomWRL));
-	    nomWRL[l-4] = 'b';
-	    nomWRL[l-3] = 'o';
-	    nomWRL[l-2] = 'd';
-	    
-	    basic_string <char> nomBOD(nomWRL, 1, l-2);
-	    geometrieCorps g = lireBOD(path, nomBOD, option);
-	    if (g.liste && g.couleur) {
-	      dernierCorps->setNbObjets(g.nb);
-	      dernierCorps->setCouleurs(g.couleur);
-	      dernierCorps->setLabelGLList(g.liste);
-	    }
-
-	    else {
-	      corpsCourant[profondeur-1].setNbObjets(0);
-	    }
-#endif
-	    childDescription = !childDescription;
-	  }
-	else
-	  {
-	    cout << " Anomalie : balise url manquante" << endl;
-	    return;
-	  }
-
-	if(look_for(fichier,"]"))	//a modifier eventuellement
-	  {
-					
-	  }
-	else
-	  {
-	    cout << " Anomalie : ] manquant" << endl;
-	    return;
-	  }
-      }
-      else {	//nouveau corps, qu'on lie a son pere
-	counter++;
-	//	cout << "newChildren "<<counter << endl;
-	// Centres de masses
-	if (look_for(fichier,"DEF"))
-	  {
-	    bzero(BufferDEFNAME,1024);
-	    fscanf(fichier," %s",BufferDEFNAME);
-	  }
-	else
-	  return;
-	if (look_for(fichier,"centerOfMass"))
-	  fscanf(fichier," %lf %lf %lf",&cm[0],&cm[1],&cm[2]);
-	else
-	  return;
-	// Masses
-	if (look_for(fichier,"mass"))
-	  fscanf(fichier,"%lf",&lmasse);
-	else
-	  return;
-	// Moments d'inertie
-	if (look_for(fichier,"momentsOfInertia"))
-	  fscanf(fichier," [%lf %lf %lf %lf %lf %lf %lf %lf %lf]",
-		 &mi[0],&mi[1],&mi[2],&mi[3],&mi[4],&mi[5],&mi[6],&mi[7],&mi[8]);
-	else
-	  return;
-	if (profondeur < PROFONDEUR_MAX)
-	  {
-	    //	    corpsCourant[profondeur] = Body(masse, MAL_VECTOR(,double)(cm[0], cm[1], cm[2]), mi);
-	    corpsCourant[profondeur].setLabel(cptCorps++);
-	    corpsCourant[profondeur].setName(BufferDEFNAME);
-	    corpsCourant[profondeur].setInertie(mi);
-	    corpsCourant[profondeur].setMasse(lmasse);
-	    masse += lmasse;
-	    corpsCourant[profondeur].setPositionCoM(cm);
-	    if (profondeur!=0)
-	      corpsCourant[profondeur].setLabelMother(corpsCourant[profondeur-1].getLabel());
-	    
-	    //	    corpsCourant[profondeur].Display();
-	    ajouterCorps(corpsCourant[profondeur]);
-	    dernierCorps = &listeCorps[listeCorps.size()-1];
-	    ajouterLiaison(corpsCourant[profondeur-1], corpsCourant[profondeur], CurrentLink);
-	    profondeur++;
-	    childDescription = !childDescription;
-
-	  }
-	else
-	  {
-	    cout << "Profondeur Max depassee" << endl;
-	    return;
-	  }
-      }
-      break;
-    case JOINT :
-      
-      CurrentLink.aJoint.type(typeOfJoint(fichier));
-      CurrentLink.label = cptLiaison++;
-
-      for (int k=0; k<((CurrentLink.aJoint.type()==1)?6:1); k++) {
-	switch (nextJointKeyWord(fichier)) {
-	case AXE_X :
-	  {
-	    CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	    CurrentLink.aJoint.axe(lxaxis);
-	  }
-	  break;
-	case AXE_Y :
-	  {
-	    CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	    CurrentLink.aJoint.axe(lyaxis);
-	  }
-	  break;
-	case AXE_Z :
-	  {
-	    CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	    CurrentLink.aJoint.axe(lzaxis);
-	  }
-	  break;
-	case JOINT_TRANSLATION :
-	  {
-	    MAL_S3_VECTOR(,double) aVec;
-	    fscanf(fichier," %lf %lf %lf",&aVec(0),&aVec(1), &aVec(2));
-	    CurrentLink.aJoint.setStaticTranslation(aVec);
-	  }
-	  break;
-	case JOINT_ROTATION :
-	  {
-	    MAL_S3_VECTOR(,double) AnAxis;
-	    double aQuantity;
-	    fscanf(fichier," %lf %lf %lf %lf", & AnAxis(0),
-		   &AnAxis(1), &AnAxis(2), &aQuantity);
-	    matrix3d R;
-	    AxeAngle2Matrix(AnAxis, aQuantity, R);
-	    CurrentLink.aJoint.setStaticRotation(R);
-	  }
-	  break;
-	case JOINT_ID :
-	  {
-	    fscanf(fichier,"%d",&jointID);
-		      
-	    CurrentLink.aJoint.setIDinVRML(jointID);
-	  }
-	  break;
-	case JOINT_ULIMIT:
-	  {
-	    double ajulimit;
-	    fscanf(fichier," [%lf]",&ajulimit);
-	    //cout << "Detection of JOINT_ULIMIT " << ajulimit << endl;
-	    CurrentLink.aJoint.setJointULimit(ajulimit,0);
-	  }
-	  break;
-	case JOINT_LLIMIT:
-	  {
-	    double ajllimit;
-	    fscanf(fichier," [%lf]",&ajllimit);
-	    //cout << "Detection of JOINT_LLIMIT " << ajllimit << endl;
-	    CurrentLink.aJoint.setJointLLimit(ajllimit,0);
-	  }
-	  break;
-	}
-      }
-      if (CurrentLink.aJoint.type() == Joint::FREE_JOINT) 
-	{	//liaison FREE
-	  
-	  Joint transDyn4(Joint::FREE_JOINT, lnull, 0);
-	  CurrentLink.aJoint= transDyn4;
-	}
-      
-      {
-	string sas(BufferDEFNAME);
-	CurrentLink.aJoint.setName(sas);
-      }
-      
-      break;
-    case -1:
-      cout << "Anomalie -1" << endl;
-      break;
-    case -2:
-      fclose(fichier);
-      profondeur = -4;
-      break;
-    }
-  } while (profondeur != -4);
-  //  afficherCorps();
-  //  afficherLiaisons();
-  //  cout << "Masse du robot "<< masse << endl;
+  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,nomWRML);
 }
 
 

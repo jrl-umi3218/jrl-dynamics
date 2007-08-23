@@ -1,6 +1,6 @@
 #include <string>
-#include "robotDynamicsJRLJapan/Joint.h"
-#include "robotDynamicsJRLJapan/HumanoidDynamicMultiBody.h"
+#include "dynamicsJRLJapan/Joint.h"
+#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include <GL/glut.h>
 
@@ -112,7 +112,7 @@ void DrawRecursiveJoint(CjrlJoint *aJoint)
   
   for(int i=0;i<NbChildren;i++)
     {
-      DynamicBody * lDB = (DynamicBody *)(aJoint->childJoint(i).linkedBody());
+      DynamicBody * lDB = (DynamicBody *)(((Joint *)a2Joint->childJoint(i))->linkedBody());
       glColor4f(1.0, 0.5, 0.9/(a2Joint->rankInConfiguration()+1), 1.0);
 
       double Ray=0.01;
@@ -157,7 +157,7 @@ void DrawRecursiveJoint(CjrlJoint *aJoint)
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      DrawRecursiveJoint((CjrlJoint *)&aJoint->childJoint(i)); 
+      DrawRecursiveJoint((CjrlJoint *)aJoint->childJoint(i)); 
     }
 
 }
@@ -428,7 +428,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints((CjrlJoint *)&aJoint->childJoint(i)); 
+      RecursiveDisplayOfJoints((CjrlJoint *)aJoint->childJoint(i)); 
     }
   //cout << " End for Joint: " << a2Joint->getName() << endl;
 }
@@ -478,7 +478,7 @@ void GoDownTree(const CjrlJoint * startJoint)
   
   if (startJoint->countChildJoints()!=0)
     {
-      const CjrlJoint * childJoint = &(startJoint->childJoint(0));
+      const CjrlJoint * childJoint = startJoint->childJoint(0);
       GoDownTree(childJoint);
     }
 }

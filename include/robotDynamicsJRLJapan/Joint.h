@@ -278,16 +278,16 @@ namespace dynamicsJRLJapan
       @{
      */
     /*! \brief parent Joint */
-    CjrlJoint&  parentJoint() const ;
+    CjrlJoint*  parentJoint() const ;
 
     /*! \brief Add a child Joint */
-    bool addChildJoint(const CjrlJoint&);
+    bool addChildJoint(CjrlJoint&);
     
     /*! \brief Count the number of child joints */
     unsigned int countChildJoints() const;
     
     /*! \brief Returns the child joint at the given rank */
-    CjrlJoint& childJoint(unsigned int givenRank) const;
+    CjrlJoint* childJoint(unsigned int givenRank) const;
 
     /**
     ! \brief Get a vector containing references of the joints between the rootJoint and this joint. The root Joint and this Joint are included in the vector.

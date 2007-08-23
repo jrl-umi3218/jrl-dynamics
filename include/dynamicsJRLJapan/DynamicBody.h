@@ -59,10 +59,13 @@ namespace dynamicsJRLJapan
     
   public:
     
-      vector3d m_Force;
-      vector3d m_Torque;
-      vector3d dv_c;
-      matrix3d Riip1;
+    /*! Force vector applied to the body. */
+    vector3d m_Force;
+    /*! Torque vector applied to the body.  */
+    vector3d m_Torque;
+
+    vector3d dv_c;
+    matrix3d Riip1;
     
     /*! This relationship does make sense only if we are considering the
       relationship between this body and its mother in a given oriented
@@ -74,9 +77,10 @@ namespace dynamicsJRLJapan
     
     /*! Information coded as matrices:
       
-    - \a R = orientation,
+    - \a R = current body's orientation,
+    - \a R_static = static body's orientation (related to its mother).
     */
-    matrix3d  R;
+    matrix3d  R,R_static;
     
 
     /*! Here are the physical parameters

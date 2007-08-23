@@ -19,6 +19,15 @@ AC_SUBST(ROBOTDYNAMICS_CFLAGS)
 AC_SUBST(ROBOTDYNAMICS_LIBS)
 AC_SUBST(ROBOTDYNAMICS_PREFIX)
 
+AC_SUBST(BOOST_PATH,	[])
+
+AC_ARG_WITH(boost, AC_HELP_STRING([--with-boost],
+        [use boost for generic NxP matrix implementation]),,with_boost=no)
+
+if test x${with_boost} = xno ; then
+	AC_ERROR([please configure --with-boost])
+fi
+
 dnl Create configuration files
 AC_OUTPUT(
 	dynamicsJRLJapan.pc
