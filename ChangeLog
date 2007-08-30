@@ -1,15 +1,19 @@
-	25. Remove const in Joint::addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.Remove const in addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.
-	24. Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
-	23. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
-	22. Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
-	21. Undo item 20
-	20. Export in dynamicsJRLJapan.pc name of classes implementing 
-	  - abstractRobotDynamics::CjrlDynamicRobot,
-	  - abstractRobotDynamics::CjrlHumanoidDynamicRobot
-	  - freeFlying joint,
-	  - rotation joint,
-	  - translation joint.
-	19. Use name "dynamicsJRLJapan" as package name and documentation directory installation.
+$Id: ChangeLog 2007/08/30 14:41:26 mallet $
+	
+dynamics-JRLJapan 1.5 released August 30, 2007
+
+	24. Added the files necessary for the Spirit VRML reader.
+	23. Remove const in Joint::addChildJoint (const CjrlJoint&
+	    inJoint) in order to be able to modify joints in kinematic
+	    chain. Remove const in addChildJoint (const CjrlJoint& inJoint) in
+	    order to be able to modify joints in kinematic chain.
+	22. Joint::parentJoint() and Joint::childJoint(unsigned int
+ 	    inJointRank) return pointer to CjrlJoint instead of reference.
+	21. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
+	20. Move headers to include/dynamicsJRLJapan instead of
+	    include/robotDynamicsJRLJapan
+	19. Use name "dynamicsJRLJapan" as package name and documentation
+	    directory installation.
 	
 dynamics-JRLJapan 1.4 released July 16, 2007
 
