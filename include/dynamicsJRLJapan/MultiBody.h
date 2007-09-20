@@ -79,7 +79,7 @@ namespace dynamicsJRLJapan
   */
   struct internalLink {
     int label;
-    Joint aJoint;
+    Joint * aJoint;
     int indexCorps1;
     int indexCorps2;
   };

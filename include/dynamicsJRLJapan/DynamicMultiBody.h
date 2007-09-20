@@ -265,14 +265,16 @@ namespace dynamicsJRLJapan
     /*! \brief Link between joint and state vector position */
     std::vector<NameAndRank_t> m_LinksBetweenJointNamesAndRank;
     
-    /*! \brief The ith element of this vector is the joint corrsponding to the ith element of the configuration of the robot (dofs)*/
+    /*! \brief The ith element of this vector is the joint corrsponding 
+      to the ith element of the configuration of the robot (dofs)*/
     std::vector<Joint*> m_ConfigurationToJoints;
 
     /*! \brief Number of links */
     int m_LinksBetweenJointNamesAndRankNb;
     
     /**
-    \brief Recursive emthod to update the kinematic tree transformations starting from the given joint. This method update p, R and w_c for every Body
+    \brief Recursive emthod to update the kinematic tree transformations 
+    starting from the given joint. This method update p, R and w_c for every Body
      */
     void forwardTransformation(Joint* inJoint, const vectorN& inConfiguration);
 
@@ -330,6 +332,22 @@ namespace dynamicsJRLJapan
     */
     virtual void parserVRML(string path, string nom, 
 			    const char *option);
+
+    /** \brief Initialize the complete structure from a tree description
+	based on Joints.  The link between joints and their rank in
+	the state vector should be specify using setLinksBetweenJointNamesAndRank. */
+    virtual void InitializeFromJointsTree();
+	
+    /** \brief Creates the tree structure from the undirected graph
+	structure build upon the VRML file, or the Joints tree structure. 
+	It is very important to have either correctly set the
+	links between joint names and rank in the state vector,
+	or to provide a file name which specify those links.
+
+	\param option: Read from a file the relationship between Joint Name and rank
+	in the state vector.
+    */
+    virtual void CreatesTreeStructure(const char * option);
 
     /** \name Dynamic parameters computation related methods 
      */
@@ -974,6 +992,18 @@ namespace dynamicsJRLJapan
      /*! \brief Getting the computation status for the ZMP. */
      bool getComputeZMP()
      { return m_ComputeZMP; }
+
+     /* \name Methods related to the links between the joints and their
+       rank in the state vector. 
+       @{
+     */
+     /** \brief Set the relation between the joints and their rank in the state vector. */
+     int setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks);
+
+     /** \brief Get the relation between the joints and their rank in the state vector. */
+     int getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks);
+
+     /* @} */
    
   };
 };

@@ -120,7 +120,7 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
       return;
     }
   int ld = liaisons[ID][0].liaison;
-  m_RootOfTheJointsTree = & listeLiaisons[ld].aJoint;
+  m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(listOfBodies[ID]);
   //speecify the type of the root joint
   m_RootOfTheJointsTree->type( Joint::FREE_JOINT );
@@ -170,15 +170,18 @@ void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, in
   // lD : liaison destination
 {
 
+  ODEBUG( "Update body :" << BodyID << " from Joint " << JointID);
   // Update the rotation axis.
-  listOfBodies[BodyID].a =  listeLiaisons[JointID].aJoint.axe();
+  listOfBodies[BodyID].a =  listeLiaisons[JointID].aJoint->axe();
+  ODEBUG(" axe: " << listOfBodies[BodyID].a);
   // Update the translation vector
-  listeLiaisons[JointID].aJoint.getStaticTranslation(listOfBodies[BodyID].b);
+  listeLiaisons[JointID].aJoint->getStaticTranslation(listOfBodies[BodyID].b);
+  ODEBUG(" static translation: " << listOfBodies[BodyID].b);
   // Update the rotation matrix
-  listeLiaisons[JointID].aJoint.getStaticRotation(listOfBodies[BodyID].R_static);
-
-  listeLiaisons[JointID].aJoint.setLinkedBody(listOfBodies[BodyID]);
-  listOfBodies[BodyID].joint( &listeLiaisons[JointID].aJoint);
+  listeLiaisons[JointID].aJoint->getStaticRotation(listOfBodies[BodyID].R_static);
+  ODEBUG(" Rotation matrix: " << endl << listOfBodies[BodyID].R_static);
+  listeLiaisons[JointID].aJoint->setLinkedBody(listOfBodies[BodyID]);
+  listOfBodies[BodyID].joint( listeLiaisons[JointID].aJoint);
   
 }
 
@@ -195,7 +198,7 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
       int corps1 = listeLiaisons[liaisonDestination].indexCorps1;
       int corps2 = listeLiaisons[liaisonDestination].indexCorps2;
       int corpsMother,corpsSon;
-      
+
       if ((corpsCourant == corps1) && (corpsCourant != corps2)) 
 	{
 	  corpsSon = corps2;
@@ -207,35 +210,41 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 	  corpsMother = corps2;
 	}
       listOfBodies[corpsSon].setLabelMother(corpsMother);
-      
-      if( listeLiaisons[liaisonDestination].aJoint.getIDinVRML()!=-1)
+
+      if(listeLiaisons[liaisonDestination].aJoint->getIDinVRML()!=-1)
 	{
 
+
 	  // Update the connections between the Joints.
-	  int lIDinVRML = listeLiaisons[liaisonDestination].aJoint.getIDinVRML();
+	  int lIDinVRML = listeLiaisons[liaisonDestination].aJoint->getIDinVRML();
 	  if (lIDinVRML!=-1)
 	    {
 	      ConvertIDINVRMLToBodyID[lIDinVRML] = corpsSon;
-	      
 	    }
 
-	  listeLiaisons[liaisonDeProvenance].aJoint.addChildJoint(listeLiaisons[liaisonDestination].aJoint);
-	  listeLiaisons[liaisonDestination].aJoint.SetFatherJoint(&listeLiaisons[liaisonDeProvenance].aJoint);
+
+	  listeLiaisons[liaisonDeProvenance].aJoint->addChildJoint(*listeLiaisons[liaisonDestination].aJoint);
+
+	  listeLiaisons[liaisonDestination].aJoint->SetFatherJoint(listeLiaisons[liaisonDeProvenance].aJoint);
 	  
+
 	  // Update the vector of joints.
-	  m_JointVector.insert(m_JointVector.end(),&listeLiaisons[liaisonDestination].aJoint);
-	  int lVRMLID = listeLiaisons[liaisonDestination].aJoint.getIDinVRML();
+	  m_JointVector.insert(m_JointVector.end(),listeLiaisons[liaisonDestination].aJoint);
+	  int lVRMLID = listeLiaisons[liaisonDestination].aJoint->getIDinVRML();
 	  if (m_NbOfVRMLIDs < lVRMLID)
 	    m_NbOfVRMLIDs = lVRMLID;
 
 
 	}
+
       // TODO : It is important to do the relabelling after the 
       // TODO : recursive call to the relabelling as set father build
       // TODO : up the JointFromRootToThis vector. Should be fixed at the Joint object level.
       ReLabelling(corpsSon, liaisonDestination);
       UpdateBodyParametersFromJoint(corpsSon,liaisonDestination,liaisonDeProvenance);
+
     }
+
 }
 
 void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
@@ -886,7 +895,7 @@ void DynamicMultiBody::InertiaMatricesforRMCSecondStep()
       do{
 
 	Ec=false; Es=false;
-	// Test if the node should be compute.
+	// Test if the node should be computed.
 	Ic = aDB.child;
 	Is = aDB.sister;
 	//cout << "Ic : "<< Ic << " Is:" << Is << endl;
@@ -1104,12 +1113,8 @@ inline void DynamicMultiBody::empilerTransformationsLiaisonInverse(int liaison)
 {
 }
 
-void DynamicMultiBody::parserVRML(string path, 
-				  string nom, 
-				  const char *option)
+void DynamicMultiBody::CreatesTreeStructure(const char * option)
 {
-  listOfBodies.clear();
-  MultiBody::parserVRML(path, nom, option);
   listOfBodies.resize(listeCorps.size());
   for(unsigned int i=0;i<listeCorps.size();i++)
     listOfBodies[i] = listeCorps[i];
@@ -1117,17 +1122,140 @@ void DynamicMultiBody::parserVRML(string path,
   ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
-  ReadSpecificities(option);
+  if (option!=0)
+    ReadSpecificities(option);
   BuildStateVectorToJointAndDOFs();
   UpdateTheSizeOfJointsJacobian();
   
-
   MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Acceleration,m_NbDofs);
   
   MAL_VECTOR_RESIZE(m_pastConfiguration,m_NbDofs);
-  MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);
+  MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);  
+}
+
+void DynamicMultiBody::InitializeFromJointsTree()
+{
+  /* The goal of this method is to recreate the undirected
+     graph, to restart the sequence of initialization. */
+  vector<Body> CurrentBody;
+  int Depth=0;
+  int NbOfBodies=0;
+  internalLink CurrentLink ;
+  
+  /* Initialize the reading. */
+
+  // Default initialization to 30 bodies for one branch.
+  CurrentBody.resize(30); 
+  CurrentBody[0].setLabel(NbOfBodies++);
+  ajouterCorps(CurrentBody[0]);
+  Depth++;
+
+  MAL_S3_VECTOR(,double) dummy;
+
+  
+  // Go through the Joints tree.
+  Joint *CurrentJoint = m_RootOfTheJointsTree;
+  Joint *NextCurrentJoint=0,*FatherJoint;
+  double mi[9]={ 1.0,1.0,1.0, 1.0,1.0,1.0, 1.0,1.0,1.0};
+  double cm[3] = { 0.0,0.0,0.0};
+
+  CurrentLink.label = 0;
+  CurrentLink.aJoint = m_RootOfTheJointsTree;
+  CurrentLink.indexCorps1 = 0;
+  CurrentLink.indexCorps2 = 0;
+
+  while(CurrentJoint!=0)
+    {
+      // Deal with the current joint.
+
+      // Update the joint value of the current link.
+      CurrentLink.aJoint = CurrentJoint;
+
+      // Take care of the body.
+      // extend the size of CurrentBody if necessary.
+      if (Depth>CurrentBody.size())
+	{
+	  Body aBody;
+	  CurrentBody.push_back(aBody);
+	}
+
+      Body * lCurrentBody = &CurrentBody[Depth];
+      lCurrentBody->setLabel(NbOfBodies++);
+      string lCurrentBodyName=CurrentJoint->getName();
+      lCurrentBodyName = "BODY_" + lCurrentBodyName;
+      lCurrentBody->setName((char *)lCurrentBodyName.c_str());
+      lCurrentBody->setInertie(mi);
+      lCurrentBody->setMasse(1.0);// 1 kg per default.
+      lCurrentBody->setPositionCoM(cm);
+      lCurrentBody->setLabelMother(CurrentBody[Depth-1].getLabel());
+
+      ajouterCorps(*lCurrentBody);
+      ajouterLiaison(CurrentBody[Depth-1],
+		     *lCurrentBody,
+		     CurrentLink);
+	
+      // Find the next one.      
+      // 1. A children.
+      NextCurrentJoint = (dynamicsJRLJapan::Joint *)CurrentJoint->childJoint(0);
+      Depth++;
+
+      // No child.
+      if (NextCurrentJoint==0)
+	{
+	  // If a father exist.
+	  FatherJoint = (dynamicsJRLJapan::Joint *)CurrentJoint->parentJoint();	  
+	  Depth--;
+
+	  while( (FatherJoint!=0) &&
+		 (NextCurrentJoint==0))
+	    {
+	      // Find the location of the current node
+	      // in the father tree.
+	      int NbOfChildren= FatherJoint->countChildJoints();
+	      int CurrentJointPosition=-1;
+	      for(int li=0;li<NbOfChildren;li++)
+		if (FatherJoint->childJoint(li)==CurrentJoint)
+		  {
+		    CurrentJointPosition = li;
+		    break;
+		  }
+
+	      // If a sibling has not been explored
+	      if(CurrentJointPosition<NbOfChildren-1)
+		{
+		  // take it !
+		  NextCurrentJoint = (dynamicsJRLJapan::Joint *)FatherJoint->childJoint(CurrentJointPosition+1);
+		  Depth++;
+		}
+	      else
+		{
+		  // otherwise move upward.
+		  CurrentJoint =FatherJoint;
+		  FatherJoint=(dynamicsJRLJapan::Joint *)FatherJoint->parentJoint();
+		  Depth--;
+		}
+	    }
+	  // If finally FatherJoint==0 then NextCurrentJoint too is equal to 0.
+	    
+	}
+
+      CurrentJoint=NextCurrentJoint;
+
+    }
+  
+  /* Initialize the data structures needed for the Newton-Euler algorithm. */
+  CreatesTreeStructure(0);
+}
+
+void DynamicMultiBody::parserVRML(string path, 
+				  string nom, 
+				  const char *option)
+{
+  listOfBodies.clear();
+  MultiBody::parserVRML(path, nom, option);
+  CreatesTreeStructure(option);
 }
 
 void DynamicMultiBody::calculerMatriceTransformationEntre(int corps1, int corps2, float *matrice)
@@ -1341,7 +1469,7 @@ int DynamicMultiBody::ComputeJacobian(int corps1, int corps2,
     if (corpsCourant == listeLiaisons[chemin[i]].indexCorps1) {
       // on est dans le bon sens
       //				cout << "bon sens" << endl;
-      Joint t = listeLiaisons[chemin[i]].aJoint;
+      Joint t = *listeLiaisons[chemin[i]].aJoint;
       switch (t.type()) {
       case Joint::REVOLUTE_JOINT :
 	//					cout << "rotation : " << t.quantite << endl;
@@ -1373,7 +1501,7 @@ int DynamicMultiBody::ComputeJacobian(int corps1, int corps2,
       {
 	// il faut "lire" la liaison a l'envers
 	//				cout << "sens inverse" << endl;
-	Joint t = listeLiaisons[chemin[i]].aJoint;
+	Joint t = *listeLiaisons[chemin[i]].aJoint;
 	switch (t.type()) {
 	case Joint::REVOLUTE_JOINT :
 	  //	  ve = matrice*(t.axe);
@@ -5063,3 +5191,29 @@ CjrlJoint& DynamicMultiBody::fixedJoint(unsigned int inJointRank)
     return *m_VectorOfFixedJoints[inJointRank];
 }
 /* End of Methods related to the fixed joints */
+
+int DynamicMultiBody::setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
+{
+  if (m_LinksBetweenJointNamesAndRank.size()!=
+      aLinks.size())
+    m_LinksBetweenJointNamesAndRank.resize(aLinks.size());
+  
+  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+    {
+      m_LinksBetweenJointNamesAndRank[i] = aLinks[i];
+    }
+  
+}
+
+int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
+{
+ if (m_LinksBetweenJointNamesAndRank.size()!=
+      aLinks.size())
+    aLinks.resize(m_LinksBetweenJointNamesAndRank.size());
+  
+  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+    {
+      aLinks[i] = m_LinksBetweenJointNamesAndRank[i];
+    }
+ 
+}

@@ -7,6 +7,23 @@
 #define DEPTH_MAX 30
 #include <map>
 
+#define ODEBUG2(x)
+#define ODEBUG3(x) cerr << "SpiritVRML :" << x << endl
+
+#if 0
+#define ODEBUG(x) cerr << "SpiritVRML :" <<  x << endl
+#else
+#define ODEBUG(x) 
+#endif
+
+#if 0
+
+#define ODEBUG4(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); DebugFile << "WalkGenJRLIntegrate: " << x << endl; DebugFile.close();}
+#define _DEBUG_4_ACTIVATED_ 1 
+#else
+#define ODEBUG4(x,y)
+#endif
+
 #if 0
 #include <boost/spirit.hpp>
 #include <boost/spirit/core.hpp>
@@ -72,9 +89,6 @@ namespace dynamicsJRLJapan
 
        // Vector of current branch
       vector<Body> CurrentBody;
-
-      // Last body.
-      Body * LastBody;
 
       // CurrentTranslation.
       MAL_S3_VECTOR(,double) JointTranslation;
@@ -294,15 +308,19 @@ namespace dynamicsJRLJapan
       {
 	string s(str,end);
 	m_DataForParsing->aName=s;
-	m_DataForParsing->CurrentLink.aJoint.setName(s);
-	m_DataForParsing->CurrentLink.aJoint.setIDinVRML(-1);
+	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->CurrentLink.aJoint->setName(s);
+	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
+		
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the Joint: |" << s<<"|" << endl;
       }
 
       void fJointSubBlockName() const
       {
-	m_DataForParsing->CurrentLink.aJoint.setName(m_DataForParsing->aName);
+	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
+	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the Joint SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
       }
@@ -352,17 +370,17 @@ namespace dynamicsJRLJapan
 
 	// IMPORTANT POLICY: all the free joint have their static 
 	// translation set to zero.
-	if (m_DataForParsing->CurrentLink.aJoint.type()!=Joint::FREE_JOINT)
-	  m_DataForParsing->CurrentLink.aJoint.setStaticTranslation(m_DataForParsing->JointTranslation);
+	if (m_DataForParsing->CurrentLink.aJoint->type()!=Joint::FREE_JOINT)
+	  m_DataForParsing->CurrentLink.aJoint->setStaticTranslation(m_DataForParsing->JointTranslation);
 	else
 	  {
 	    MAL_S3_VECTOR(,double) lnull;
 	    lnull(0) = lnull(1) = lnull(2) = 0.0;
-	    m_DataForParsing->CurrentLink.aJoint.setStaticTranslation(lnull);
+	    m_DataForParsing->CurrentLink.aJoint->setStaticTranslation(lnull);
 	  }
 	  
 	if (m_Verbose>1)
-	  cout << "Joint" << m_DataForParsing->CurrentLink.aJoint.getName()
+	  cout << "Joint" << m_DataForParsing->CurrentLink.aJoint->getName()
 	       << ":" << m_DataForParsing->JointTranslation << endl;
       }
     
@@ -386,7 +404,7 @@ namespace dynamicsJRLJapan
 	double lQuantity = lQ;
 	matrix3d R;
 	AxeAngle2Matrix(m_DataForParsing->RotationAxis, lQuantity, R);
-	m_DataForParsing->CurrentLink.aJoint.setStaticRotation(R);
+	m_DataForParsing->CurrentLink.aJoint->setStaticRotation(R);
 	if (m_Verbose>1)
 	  std::cerr<< "JointRotation:" <<R << endl;
       }
@@ -438,18 +456,18 @@ namespace dynamicsJRLJapan
 	if (s=="free")
 	  {
 	    Joint transDyn4(Joint::FREE_JOINT, lnull, 0);
-	    m_DataForParsing->CurrentLink.aJoint.type(Joint::FREE_JOINT);
+	    m_DataForParsing->CurrentLink.aJoint->type(Joint::FREE_JOINT);
 	  }
 	else if (s=="rotate")
 	  {
-	    m_DataForParsing->CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
+	    m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
 	  }
 	  
       }
 
       void fJointID(int aJointID)  const
       {
-	m_DataForParsing->CurrentLink.aJoint.setIDinVRML(aJointID);
+	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(aJointID);
 	if (m_Verbose>1)
 	  std::cout << "JointID :" << aJointID << endl;
       }
@@ -458,8 +476,8 @@ namespace dynamicsJRLJapan
       {
 	MAL_S3_VECTOR(lxaxis,double);
 	lxaxis[0]=1.0;lxaxis[1]=0.0;lxaxis[2]=0.0;
-	m_DataForParsing->CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint.axe(lxaxis);
+	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->axe(lxaxis);
       }
 
       void fJointYAxis(char const end)  const
@@ -467,8 +485,8 @@ namespace dynamicsJRLJapan
 	
 	MAL_S3_VECTOR(lyaxis,double);
 	lyaxis[0]=0.0;lyaxis[1]=1.0;lyaxis[2]=0.0;
-	m_DataForParsing->CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint.axe(lyaxis);
+	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->axe(lyaxis);
 
       }
       
@@ -476,14 +494,14 @@ namespace dynamicsJRLJapan
       {
 	MAL_S3_VECTOR(lzaxis,double);
 	lzaxis[0]=0.0;lzaxis[1]=0.0;lzaxis[2]=1.0;
-	m_DataForParsing->CurrentLink.aJoint.type(Joint::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint.axe(lzaxis);
+	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->axe(lzaxis);
 
       }
 
       void fJointLLimit(double r) const
       {
-	m_DataForParsing->CurrentLink.aJoint.setJointLLimit(r,0);
+	m_DataForParsing->CurrentLink.aJoint->setJointLLimit(r,0);
 	if (m_Verbose>1)
 	  std::cout << "fJointLLimit: "  << r << endl;
       }
@@ -491,7 +509,7 @@ namespace dynamicsJRLJapan
 
       void fJointULimit(double r) const
       {
-	m_DataForParsing->CurrentLink.aJoint.setJointULimit(r,0);
+	m_DataForParsing->CurrentLink.aJoint->setJointULimit(r,0);
 	if (m_Verbose>1)
 	  std::cout << "fJointULimit: "  << r << endl;
       }
@@ -1164,10 +1182,9 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->CurrentBody[0].setLabel(m_DataForParsing->NbOfBodies++);
 	m_MultiBody->ajouterCorps(m_DataForParsing->CurrentBody[0]);
 	m_DataForParsing->Depth = 0;
-	m_DataForParsing->LastBody = m_MultiBody->dernierCorps();
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;
-	m_DataForParsing->CurrentLink.aJoint = Joint(Joint::FIX_JOINT,dummy,0.0);
+	m_DataForParsing->CurrentLink.aJoint = new Joint(Joint::FIX_JOINT,dummy,0.0);
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
 	m_DataForParsing->CurrentLink.indexCorps2 = 0;
 	m_DataForParsing->index_mi = 0;

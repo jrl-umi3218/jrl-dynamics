@@ -288,7 +288,9 @@ namespace dynamicsJRLJapan
     CjrlJoint* childJoint(unsigned int givenRank) const;
 
     /**
-    ! \brief Get a vector containing references of the joints between the rootJoint and this joint. The root Joint and this Joint are included in the vector.
+    ! \brief Get a vector containing references of the joints 
+    between the rootJoint and this joint. 
+    The root Joint and this Joint are included in the vector.
      */
     std::vector< CjrlJoint* > jointsFromRootToThis() const ;
     /*! @} */
@@ -454,18 +456,21 @@ namespace dynamicsJRLJapan
 
   class JointFreeflyer : public Joint
   {
+  public:
     JointFreeflyer(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointRotation : public Joint
   {
+  public:
     JointRotation(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointTranslation : public Joint
   {
+  public:
     JointTranslation(const matrix4d &inInitialPosition);
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };

@@ -148,6 +148,8 @@ MultiBody::MultiBody(void)
 
 MultiBody::~MultiBody(void)
 {
+  for(int li=0;li<listeLiaisons.size();li++)
+    delete listeLiaisons[li].aJoint;
 }
 
 void MultiBody::ajouterCorps(Body &b)
@@ -214,8 +216,9 @@ void MultiBody::ajouterLiaisonFixe(Body &corps1, Body &corps2,
   }
 
   //creation de la liaison
-  internalLink l = {cptLiaison++,
-		    Joint(Joint::FIX_JOINT,axeRotationStat,angleRotationStat,translationStat), index1, index2};
+  Joint * aJoint= new Joint(Joint::FIX_JOINT,axeRotationStat,angleRotationStat,translationStat);
+
+  internalLink l = {cptLiaison++,aJoint,index1, index2};
   listeLiaisons.push_back(l);		//ajout de la liaison a la liste
   //creation de l'appariement corps2, liaison
   appariement a2 = {index2, listeLiaisons.size()-1};
@@ -367,21 +370,21 @@ void MultiBody::afficherCorps()
 
 void MultiBody::afficherLiaisons(void) {
   for (unsigned int i=0; i<listeLiaisons.size(); i++) {
-    cout << "Name: "<< listeLiaisons[i].aJoint.getName()
+    cout << "Name: "<< listeLiaisons[i].aJoint->getName()
 	 << " JointID in VRML " 
-	 << listeLiaisons[i].aJoint.getIDinVRML() << " " ;
-    cout << "liaison de type " << listeLiaisons[i].aJoint.type()
+	 << listeLiaisons[i].aJoint->getIDinVRML() << " " ;
+    cout << "liaison de type " << listeLiaisons[i].aJoint->type()
 	 << "  label "<< listeLiaisons[i].label 
 	 << "  liant le corps " 
 	 << listeLiaisons[i].indexCorps1 
 	 << " au corps " << listeLiaisons[i].indexCorps2 << "\n";
     cout << "translationStatique : " << endl;
     MAL_S3_VECTOR(,double) aStaticTranslation;
-    listeLiaisons[i].aJoint.getStaticTranslation(aStaticTranslation);
+    listeLiaisons[i].aJoint->getStaticTranslation(aStaticTranslation);
     cout << aStaticTranslation << endl;
-    if (listeLiaisons[i].aJoint.type() > 0) {
+    if (listeLiaisons[i].aJoint->type() > 0) {
       cout << "    axe : " << endl;
-      cout << listeLiaisons[i].aJoint.axe();
+      cout << listeLiaisons[i].aJoint->axe();
       cout << endl;
     }
   }

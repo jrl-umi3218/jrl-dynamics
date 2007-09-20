@@ -3,8 +3,7 @@
 #include "dynamicsJRLJapan/DynamicBody.h"
 
 #define ODEBUG2(x)
-#define ODEBUG3(x) 
-//cerr << "Joint :" << x << endl
+#define ODEBUG3(x) cerr << "Joint :" << x << endl
 
 #if 0
 #define ODEBUG(x) cerr << "Joint :" <<  x << endl
@@ -87,8 +86,17 @@ Joint::Joint(const Joint &r)
 
 }
 
-Joint::Joint()
+Joint::Joint():  
+  m_quantity(0.0),
+  m_FatherJoint(0),
+  m_IDinVRML(-1)
+  
 {
+  MAL_S3_VECTOR_ACCESS(m_axe,0) = 0.0;
+  MAL_S3_VECTOR_ACCESS(m_axe,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(m_axe,2) = 0.0;
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_pose);
+
   m_type = FREE_JOINT;
   m_FromRootToThis.push_back(this);
   CreateLimitsArray();
@@ -153,7 +161,7 @@ CjrlJoint* Joint::childJoint(unsigned int givenRank) const
   if ((givenRank>=0) && (givenRank<m_Children.size()))
     return m_Children[givenRank];
   
-  return m_Children[0];
+  return 0; // Previously return m_Children[0] (potential problem)
 }
 
 std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const 
@@ -255,7 +263,7 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 {
   vector3d aRa,dp,lv;
 
-  ODEBUG3("Size of the jacobian :" << m_FromRootToThis.size()-1);
+  ODEBUG("Size of the jacobian :" << m_FromRootToThis.size()-1);
    
   for(int i=0;i<m_FromRootToThis.size();i++)
     {
@@ -267,7 +275,7 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
       MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
 
       unsigned int lcol = aJoint->stateVectorPosition();
-      ODEBUG3("Joint: " << aJoint->getName() << " " << lcol);
+      ODEBUG("Joint: " << aJoint->getName() << " " << lcol);
       dp = (vector3d)inPointWorldFrame - aBody->p;
 
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
@@ -361,11 +369,11 @@ void Joint::SetFatherJoint(Joint *aFather)
   
   m_FromRootToThis.push_back(this);
 
-    CjrlJoint* aJoint = m_FatherJoint;
-    while(aJoint!=0)
+  CjrlJoint* aJoint = m_FatherJoint;
+  while(aJoint!=0)
     {
-        m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
-        aJoint = aJoint->parentJoint();
+      m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
+      aJoint = aJoint->parentJoint();
     }
 }
 

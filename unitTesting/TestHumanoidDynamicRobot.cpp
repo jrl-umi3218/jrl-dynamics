@@ -274,7 +274,6 @@ int main(int argc, char *argv[])
 
   // Height of the foot. 
   cout << "Height foot: "<< aHDMB->footHeight() << endl;
-  delete aDMB;
   delete aHDMB;
   
 }

@@ -121,13 +121,37 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
   string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
   string aName="HRP2JRLmain.wrl";
   string JointToRank = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml";
   string aSpecificitiesFileName =
     "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";
+
+  int argindex=1;
+  if (argc>1)
+    {
+      aPath=argv[argindex++];
+      argc--;
+    }
+  if (argc>1)
+    {
+      aName=argv[argindex++];
+      argc--;
+    }
+  if (argc>1)
+    {
+      JointToRank=argv[argindex++];
+      argc--;
+    }
+  if (argc>1)
+    {
+      aSpecificitiesFileName=argv[argindex++];
+      argc--;
+    }
+
+  
 
   CjrlRobotDynamicsObjectConstructor <
   dynamicsJRLJapan::DynamicMultiBody, 
