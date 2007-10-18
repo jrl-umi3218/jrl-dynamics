@@ -127,7 +127,7 @@ namespace dynamicsJRLJapan
     Joint();
 
     /*! \brief default destructor */
-    ~Joint();
+    virtual ~Joint();
     
     /*! \brief Affectation operator */
     Joint & operator=(const Joint &r);
@@ -458,6 +458,7 @@ namespace dynamicsJRLJapan
   {
   public:
     JointFreeflyer(const matrix4d &inInitialPosition);
+    virtual ~JointFreeflyer();
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
@@ -465,6 +466,7 @@ namespace dynamicsJRLJapan
   {
   public:
     JointRotation(const matrix4d &inInitialPosition);
+    virtual ~JointRotation();
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
@@ -472,6 +474,7 @@ namespace dynamicsJRLJapan
   {
   public:
     JointTranslation(const matrix4d &inInitialPosition);
+    virtual ~JointTranslation();
     bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 

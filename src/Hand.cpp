@@ -12,6 +12,10 @@ Hand::Hand(CjrlJoint* inWristJoint, const vector3d& inCenterInwristFrame, const 
     
 }
 
+Hand::~Hand()
+{
+}
+
 CjrlJoint* Hand::associatedWrist()
 {
     return attAssociatedWrist;
@@ -37,5 +41,3 @@ vector3d& Hand::palmAxisInWristFrame()
     return attPalmAxis;
 }
 
-Hand::~Hand()
-{}

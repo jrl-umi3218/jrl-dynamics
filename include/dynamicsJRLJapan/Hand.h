@@ -19,6 +19,9 @@ namespace dynamicsJRLJapan
         \brief Constructor
         */
         Hand(CjrlJoint* inWristJoint, const vector3d& centerInwristFrame, const vector3d& okayAxisInWristFrame, const vector3d& showingAxisInWristFrame, const vector3d& palmAxisInWristFrame);
+
+	/*!\brief Destructor */
+	virtual ~Hand();
     
         /**
             \brief Get the wrist joint to which the hand is attached
@@ -45,7 +48,6 @@ namespace dynamicsJRLJapan
         */
         virtual vector3d& palmAxisInWristFrame();
     
-        ~Hand();
     
     private:
     

@@ -914,7 +914,7 @@ namespace dynamicsJRLJapan
       */
      /*! Reset the iterationNumber. */
      bool ResetIterationNumber()
-     { m_IterationNumber = 0;} ;
+     { m_IterationNumber = 0; return true;} ;
 
      /*! GetIndex */
      const unsigned int & GetIterationNumber() const

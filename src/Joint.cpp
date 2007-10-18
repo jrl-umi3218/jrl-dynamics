@@ -78,7 +78,7 @@ Joint::Joint(const Joint &r)
 
   CreateLimitsArray();
 
-  for(int i=0;i<numberDof();i++)
+  for(unsigned int i=0;i<numberDof();i++)
     {
       m_LowerLimits[i] = r.getJointLLimit(i);
       m_UpperLimits[i] = r.getJointULimit(i);
@@ -126,7 +126,7 @@ Joint & Joint::operator=(const Joint & r)
   m_Name = r.getName();
   m_IDinVRML = r.getIDinVRML();
   CreateLimitsArray();
-  for(int i=0;i<numberDof();i++)
+  for(unsigned int i=0;i<numberDof();i++)
     {
       m_LowerLimits[i] = r.getJointLLimit(i);
       m_UpperLimits[i] = r.getJointULimit(i);
@@ -265,7 +265,7 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 
   ODEBUG("Size of the jacobian :" << m_FromRootToThis.size()-1);
    
-  for(int i=0;i<m_FromRootToThis.size();i++)
+  for(unsigned int i=0;i<m_FromRootToThis.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
@@ -509,6 +509,11 @@ JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition
   
 }
 
+JointFreeflyer::~JointFreeflyer()
+{
+
+}
+
 bool JointFreeflyer::updateTransformation(const vectorN& inDofVector)
 {
     if (rankInConfiguration()+5 > inDofVector.size() -1 )
@@ -532,6 +537,11 @@ JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(Joint::REVOLUTE_JOINT);
   pose(inInitialPosition);
+}
+
+JointRotation::~JointRotation()
+{
+
 }
 
 bool JointRotation::updateTransformation(const vectorN& inDofVector)
@@ -561,6 +571,10 @@ JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosi
   pose(inInitialPosition);
 }
 
+JointTranslation::~JointTranslation()
+{
+}
+
 bool JointTranslation::updateTransformation(const vectorN& inDofVector)
 {
     if (rankInConfiguration() > inDofVector.size() -1 )
@@ -581,6 +595,8 @@ bool JointTranslation::updateTransformation(const vectorN& inDofVector)
     MAL_S3x3_C_eq_A_by_B(wn3d, body->R, vek);
 
     body->p = parentbody->p+ MAL_S3x3_RET_A_by_B(parentbody->R,body->b) + wn3d;
+    
+    return true;
 }
 
 
@@ -643,6 +659,6 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
         }
         break;
     }
-    
+    return true;
 }
 /************************************************************************************/

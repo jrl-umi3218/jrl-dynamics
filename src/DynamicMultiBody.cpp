@@ -1175,7 +1175,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
 
       // Take care of the body.
       // extend the size of CurrentBody if necessary.
-      if (Depth>CurrentBody.size())
+      if (Depth>(int)CurrentBody.size())
 	{
 	  Body aBody;
 	  CurrentBody.push_back(aBody);
@@ -1832,7 +1832,7 @@ CjrlJoint* DynamicMultiBody::GetJointFromVRMLID(int JointID)
     return (CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
 	    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *)listOfBodies[ConvertIDINVRMLToBodyID[JointID]].joint();
 #else
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       Joint * r;
       if (((r=(Joint *)m_JointVector[i])->getIDinVRML())==JointID)
@@ -2179,9 +2179,9 @@ std::vector<CjrlJoint*> DynamicMultiBody::jointVector()
 
 void DynamicMultiBody::ComputeNumberOfJoints()
 {
-  int r=0;
+  unsigned int r=0;
   ODEBUG("JointVector :" << m_JointVector.size());
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       ODEBUG("Joint " << i << " : " 
 	     << m_JointVector[i]->numberDof() <<  " "
@@ -2243,7 +2243,7 @@ void DynamicMultiBody::ReadSpecificities(string aFileName)
 int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 {
 
-  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+  for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
       if (!strcmp(m_LinksBetweenJointNamesAndRank[i].LinkName,(char *)aJoint->getName().c_str()))
 	return m_LinksBetweenJointNamesAndRank[i].RankInConfiguration;
@@ -2254,16 +2254,17 @@ int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 Joint * DynamicMultiBody::JointFromRank(int aRank)
 {
   string JointName;
-  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+  for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
-      if (m_LinksBetweenJointNamesAndRank[i].RankInConfiguration==aRank)
+      if (m_LinksBetweenJointNamesAndRank[i].RankInConfiguration==(unsigned int)aRank)
 	JointName = m_LinksBetweenJointNamesAndRank[i].LinkName;
     }
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       if (((Joint *)m_JointVector[i])->getName()==JointName)
 	return (Joint *)m_JointVector[i];
     }
+  return (Joint *)0;
 }
 
 
@@ -2271,10 +2272,10 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 {
   m_StateVectorToJoint.resize(m_NbDofs);
   int lindex=0;
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       lindex = JointRankFromName((Joint *)m_JointVector[i]);
-      for(int j=0;j<m_JointVector[i]->numberDof();j++)
+      for(unsigned int j=0;j<m_JointVector[i]->numberDof();j++)
 	m_StateVectorToJoint[lindex++]=i;
     }
   
@@ -2282,16 +2283,16 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
   m_StateVectorToDOFs.clear();
   m_StateVectorToDOFs.resize(m_NbDofs);
   lindex=0;
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       lindex = JointRankFromName((Joint *)m_JointVector[i]);
       ODEBUG(((Joint *)m_JointVector[i])->getName() << " " << lindex);
-      for(int j=0;j<m_JointVector[i]->numberDof();j++)
+      for(unsigned int j=0;j<m_JointVector[i]->numberDof();j++)
 	m_StateVectorToDOFs[lindex++]=j;
     }
 
   m_VRMLIDToConfiguration.resize(m_NbOfVRMLIDs+1);
-  for(int i=0;i<m_StateVectorToJoint.size();)
+  for(unsigned int i=0;i<m_StateVectorToJoint.size();)
     {
       int r;
       Joint * aJoint = (Joint *)m_JointVector[m_StateVectorToJoint[i]];
@@ -2314,7 +2315,7 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 
 void DynamicMultiBody::UpdateTheSizeOfJointsJacobian()
 {
-  for(int i=0;i<m_JointVector.size();i++)
+  for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       ((Joint *)m_JointVector[i])->resizeJacobianJointWrtConfig(m_NbDofs);
     }
@@ -2358,7 +2359,7 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 
   ODEBUG("Went through here");
   int lindex=0;
-  for (int i=0;i<m_JointVector.size();i++)
+  for (unsigned int i=0;i<m_JointVector.size();i++)
     {
       lindex = m_JointVector[i]->rankInConfiguration();
 
@@ -2385,7 +2386,7 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 
   if (0)
     {
-      for(int i=0;i<listOfBodies.size();i++)
+      for(unsigned int i=0;i<listOfBodies.size();i++)
 	{
 	  cout << listOfBodies[i].q * 180/M_PI << endl;
 	}
@@ -2426,7 +2427,7 @@ bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
     }
 
   int lindex=0;
-  for (int i=0;i<m_JointVector.size();i++)
+  for (unsigned int i=0;i<m_JointVector.size();i++)
     {
 
       lindex = m_JointVector[i]->rankInConfiguration();
@@ -4927,7 +4928,7 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
       for(int j=0;j<30;j++)
 	m_JacobianOfTheCoM(i,j+6) = L[i*36+j];
       
-      for(int j=36;j<m_NbDofs;j++)
+      for(unsigned int j=36;j<m_NbDofs;j++)
 	m_JacobianOfTheCoM(i,j) = 0.0;
     }
 }
@@ -4954,6 +4955,7 @@ bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)
   forwardTransformation(m_RootOfTheJointsTree, inConfiguration);
     
   positionCoMPondere = positionCoMPondere/masse;
+  return true;
 }
 
 void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inConfiguration)
@@ -5186,6 +5188,7 @@ void DynamicMultiBody::clearFixedJoints()
 
 CjrlJoint& DynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
+  
   //if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
   if (inJointRank<m_VectorOfFixedJoints.size())
     return *m_VectorOfFixedJoints[inJointRank];
@@ -5198,11 +5201,11 @@ int DynamicMultiBody::setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t
       aLinks.size())
     m_LinksBetweenJointNamesAndRank.resize(aLinks.size());
   
-  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+  for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
       m_LinksBetweenJointNamesAndRank[i] = aLinks[i];
     }
-  
+  return 0;
 }
 
 int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
@@ -5211,9 +5214,9 @@ int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t
       aLinks.size())
     aLinks.resize(m_LinksBetweenJointNamesAndRank.size());
   
-  for(int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+  for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
       aLinks[i] = m_LinksBetweenJointNamesAndRank[i];
     }
- 
+  return 0;
 }

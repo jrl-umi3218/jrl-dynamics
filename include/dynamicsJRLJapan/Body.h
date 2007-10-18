@@ -112,7 +112,7 @@ namespace dynamicsJRLJapan
 	 matrix3d matriceInertie);
      
     /*! \brief Destructor. */
-    ~Body(void);
+    virtual ~Body(void);
     
     /* @} */
 

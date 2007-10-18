@@ -149,8 +149,9 @@ HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
   if (m_HS!=0)
     delete m_HS;
   
-  delete m_rightHand, m_leftHand;
-  //why isn't m_DMB deleted ?
+  delete m_rightHand;
+  delete m_leftHand;
+  delete m_DMB;
 }
 
 void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
@@ -257,7 +258,7 @@ void HumanoidDynamicMultiBody::clearFixedJoints()
 
 CjrlJoint& HumanoidDynamicMultiBody::fixedJoint(unsigned int inJointRank)
 {
-  m_DMB->fixedJoint(inJointRank);
+  return m_DMB->fixedJoint(inJointRank);
 }
 /* End of Methods related to the fixed joints */
 
@@ -490,7 +491,7 @@ bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchin
     config(dof) = wantedVal;
     
     unsigned int parallelDofStart;
-    if (inHand = m_rightHand)
+    if (inHand == m_rightHand)
         parallelDofStart = 36;
     else
         parallelDofStart = 41;

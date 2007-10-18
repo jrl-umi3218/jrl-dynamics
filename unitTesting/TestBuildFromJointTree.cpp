@@ -110,7 +110,7 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
       std::cout << "Problem while copying the joints. " <<endl;
       exit(-1);
     }
-  for(int i=0;i<VecOfInitJoints.size();i++)
+  for(unsigned int i=0;i<VecOfInitJoints.size();i++)
     {
       if ((VecOfCopyJoints[i]!=0) &&
 	  (VecOfInitJoints[i]!=0))

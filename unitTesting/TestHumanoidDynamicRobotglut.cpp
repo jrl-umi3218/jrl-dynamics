@@ -255,6 +255,9 @@ create_menu(void)
   glutCreateMenu(menu);
   glutAttachMenu(GLUT_LEFT_BUTTON);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
+  glutAddMenuEntry("Shaded", 1);
+  glutAddMenuEntry("Texture", 3);
+
 }
 
 void DrawLineRobot()
@@ -453,7 +456,7 @@ void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 {
   for(int i=0;i<6;i++)
     {
-      for(int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
+      for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
 	{
 	  if (aJ(i,j)==0.0)
 	    printf("0 ");
@@ -465,6 +468,11 @@ void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 
 }
 
+void processMouse(int button, int state, int x, int y) 
+{
+  
+  
+}
 void GoDownTree(const CjrlJoint * startJoint)
 {
   std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
@@ -485,16 +493,18 @@ void GoDownTree(const CjrlJoint * startJoint)
 
 int main(int argc, char *argv[])
 {
-  if (argc!=4)
+  if (argc!=5)
     {
-      cerr << " This program takes 3 arguments: " << endl;
-      cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME PATH_TO_SPECIFICITIES_XML" << endl;
+      cerr << " This program takes 4 arguments: " << endl;
+      cerr << "./TestHumanoidDynamicRobotglut PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
+      cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
       exit(-1);
     }	
 
   string aSpecificitiesFileName = argv[3];
   string aPath=argv[1];
   string aName=argv[2];
+  string aMapFromJointToRank=argv[4];
 
 #if 0
   aDMB = new DynamicMultiBody();
@@ -519,14 +529,12 @@ int main(int argc, char *argv[])
       exit(-1);
     }
   aDMB = (DynamicMultiBody *) aHDMB->getDynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,
-		   "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml");
+  aDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
   aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
 #endif
   
   // Display tree of the joints.
   CjrlJoint* rootJoint = aHDMB->rootJoint();  
-  bool ok=true;
 
   // Tes the computation of the jacobian.
   double dInitPos[40] = { 
@@ -613,6 +621,7 @@ int main(int argc, char *argv[])
   glutDisplayFunc(display);
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(special);
+  //  glutMouseFunc(processMouse);
   create_menu();
 
   myinit();

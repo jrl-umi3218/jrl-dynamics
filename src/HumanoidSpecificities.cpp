@@ -105,7 +105,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 			  m_FeetJoints[i].insert( m_FeetJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
-		      for(int j=0;j<m_FeetJoints[i].size();j++)
+		      for(unsigned int j=0;j<m_FeetJoints[i].size();j++)
 			{
 			  ODEBUG(m_FeetJoints[i][j]);
 			}
@@ -146,7 +146,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		  m_WaistJoints.insert( m_WaistJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
-	      for(int j=0;j<m_WaistJoints.size();j++)
+	      for(unsigned int j=0;j<m_WaistJoints.size();j++)
 		{
 		  ODEBUG(m_WaistJoints[j]);
 		}
@@ -197,7 +197,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 			  m_LegsJoints[i].insert( m_LegsJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
-		      for(int j=0;j<m_LegsJoints[i].size();j++)
+		      for(unsigned int j=0;j<m_LegsJoints[i].size();j++)
 			{
 			  ODEBUG(m_LegsJoints[i][j]);
 			}
@@ -240,7 +240,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 			  m_ArmsJoints[i].insert( m_ArmsJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
-		      for(int j=0;j<m_ArmsJoints[i].size();j++)
+		      for(unsigned int j=0;j<m_ArmsJoints[i].size();j++)
 			{
 			  ODEBUG(m_ArmsJoints[i][j]);
 			}
@@ -269,7 +269,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		  m_HeadJoints.insert( m_HeadJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
-	      for(int j=0;j<m_HeadJoints.size();j++)
+	      for(unsigned int j=0;j<m_HeadJoints.size();j++)
 		{
 		  ODEBUG(m_HeadJoints[j]);
 		}
@@ -295,7 +295,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		  m_ChestJoints.insert( m_ChestJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
-	      for(int j=0;j<m_ChestJoints.size();j++)
+	      for(unsigned int j=0;j<m_ChestJoints.size();j++)
 		{
 		  ODEBUG(m_ChestJoints[j]);
 		}
@@ -544,7 +544,8 @@ int HumanoidSpecificities::InitUpperBodyJoints()
   
   for(int i=0;i<m_ArmsJointNb[1];i++)
     m_UpperBodyJoints[lindex++] = m_ArmsJoints[1][i];
-
+  
+  return 0;
 }
 
 int HumanoidSpecificities::GetUpperBodyJointNb()

@@ -148,7 +148,7 @@ MultiBody::MultiBody(void)
 
 MultiBody::~MultiBody(void)
 {
-  for(int li=0;li<listeLiaisons.size();li++)
+  for(unsigned int li=0;li<listeLiaisons.size();li++)
     delete listeLiaisons[li].aJoint;
 }
 

@@ -5,7 +5,6 @@
 SUBDIRS = \
 	src \
 	include \
-	include/robotDynamicsJRLJapan \
 	doc \
 	unitTesting
 
