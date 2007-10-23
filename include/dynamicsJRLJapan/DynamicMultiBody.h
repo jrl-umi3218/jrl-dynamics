@@ -59,7 +59,7 @@ namespace dynamicsJRLJapan
   /** @ingroup forwardynamics
       This class simulates the dynamic of a multibody robot.
   */
-  class DynamicMultiBody : public  CjrlDynamicRobot,
+  class DynamicMultiBody : public virtual CjrlDynamicRobot,
     public MultiBody 
     
   {
@@ -332,6 +332,12 @@ namespace dynamicsJRLJapan
     */
     virtual void parserVRML(string path, string nom, 
 			    const char *option);
+
+    /**
+       \brief Initialization of the kinematic chain
+       \return true if success, false otherwise
+    */
+    virtual bool initialize();
 
     /** \brief Initialize the complete structure from a tree description
 	based on Joints.  The link between joints and their rank in
@@ -760,7 +766,7 @@ namespace dynamicsJRLJapan
     /**
     \brief Compute kinematics and dynamics following a finite difference scheme and update past values
      */
-    void FiniteDifferenceStateUpdate(double inTimeStep);
+    virtual void FiniteDifferenceStateUpdate(double inTimeStep);
 
     /**
     \brief Compute kinematics and dynamics following a finite difference scheme.
@@ -776,7 +782,7 @@ namespace dynamicsJRLJapan
         angular momentum
         ZMP
      */
-    void FiniteDifferenceStateEstimate(double inTimeStep);
+    virtual void FiniteDifferenceStateEstimate(double inTimeStep);
 
     /**
     \brief Store current values as past values
@@ -834,7 +840,7 @@ namespace dynamicsJRLJapan
        joint wrt \f${\bf {q}}\f$, \f${\bf \dot{q}}\f$, \f${\bf \ddot{q}}\f$.
        
     */
-    bool computeForwardKinematics() ;
+    virtual bool computeForwardKinematics() ;
     
     /**
        \brief Compute the dynamics of the center of mass.

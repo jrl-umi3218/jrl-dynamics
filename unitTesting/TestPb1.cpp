@@ -21,8 +21,7 @@ int main(void)
   dynamicsJRLJapan::HumanoidDynamicMultiBody *aHDMB;
   aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody*) attRobot;
   
-  dynamicsJRLJapan::DynamicMultiBody* aDMB = (dynamicsJRLJapan::DynamicMultiBody *) aHDMB->getDynamicMultiBody();
-  aDMB->parserVRML("/home/stasse/src/OpenHRP/etc/HRP2JRL/","HRP2JRLmain.wrl","");
+  aHDMB->parserVRML("/home/stasse/src/OpenHRP/etc/HRP2JRL/","HRP2JRLmain.wrl","");
   std::string aName = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";
   aHDMB->SetHumanoidSpecificitiesFile(aName);
   unsigned int nDof = attRobot->numberDof();

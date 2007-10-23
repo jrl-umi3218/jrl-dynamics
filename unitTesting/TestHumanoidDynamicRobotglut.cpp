@@ -20,7 +20,6 @@ using namespace dynamicsJRLJapan;
 //GLdouble view_h = 270, view_v = 0, head_angle = 0;
 GLdouble view_h = 230, view_v = 270, head_angle = 0;
 
-DynamicMultiBody * aDMB=0;
 HumanoidDynamicMultiBody *aHDMB=0;
 
 GLshort shaded = TRUE, anim = FALSE;
@@ -506,11 +505,6 @@ int main(int argc, char *argv[])
   string aName=argv[2];
   string aMapFromJointToRank=argv[4];
 
-#if 0
-  aDMB = new DynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,"");
-  HumanoidDynamicMultiBody *aHDMB = new HumanoidDynamicMultiBody(aDMB,aSpecificitiesFileName);
-#else
   CjrlRobotDynamicsObjectConstructor<
   dynamicsJRLJapan::DynamicMultiBody, 
     dynamicsJRLJapan::HumanoidDynamicMultiBody, 
@@ -528,10 +522,8 @@ int main(int argc, char *argv[])
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
     }
-  aDMB = (DynamicMultiBody *) aHDMB->getDynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
+  aHDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
   aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-#endif
   
   // Display tree of the joints.
   CjrlJoint* rootJoint = aHDMB->rootJoint();  
@@ -549,7 +541,7 @@ int main(int argc, char *argv[])
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
   };
 
-  int NbOfDofs = aDMB->numberDof();
+  int NbOfDofs = aHDMB->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -560,22 +552,22 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
   
-  aDMB->currentConfiguration(aCurrentConf);
+  aHDMB->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
   
-  aDMB->currentVelocity(aCurrentVel);
-  aDMB->computeForwardKinematics();
+  aHDMB->currentVelocity(aCurrentVel);
+  aHDMB->computeForwardKinematics();
 
   // Test the tree.
   RecursiveDisplayOfJoints(rootJoint);
 
   aHDMB->LinkBetweenJointsAndEndEffectorSemantic();
 
-  std::vector<CjrlJoint *> aVec = aDMB->jointVector();
+  std::vector<CjrlJoint *> aVec = aHDMB->jointVector();
   
   Joint  * aJoint = (Joint *)aVec[22]; // Try to get the hand.
   cout << aJoint->getName() << endl;  
@@ -600,10 +592,10 @@ int main(int argc, char *argv[])
   //  cout << "Value of the CoM's Jacobian:" << endl
   //       << aHDMB->jacobianCenterOfMass() << endl;
 
-  //  GoDownTree(aDMB->rootJoint());
+  //  GoDownTree(aHDMB->rootJoint());
 
-  cout << "Mass of the robot " << aDMB->getMasse() << endl;
-  cout << "Force " << aDMB->getMasse()*9.81 << endl;
+  cout << "Mass of the robot " << aHDMB->getMasse() << endl;
+  cout << "Force " << aHDMB->getMasse()*9.81 << endl;
 
   // Test rank of the left hand.
   cout << "Rank of the left hand "<< endl;

@@ -1135,6 +1135,12 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
   MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);  
 }
 
+bool DynamicMultiBody::initialize()
+{
+  InitializeFromJointsTree();
+  return true;
+}
+
 void DynamicMultiBody::InitializeFromJointsTree()
 {
   /* The goal of this method is to recreate the undirected

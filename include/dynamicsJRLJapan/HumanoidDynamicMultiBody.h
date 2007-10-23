@@ -56,13 +56,10 @@ namespace dynamicsJRLJapan
   This specific class is the specialization of the generic class CjrlHumanoidDynamicRobot.
 
   */
-  class HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot
+  class HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot, public virtual DynamicMultiBody
     {
     private:
       
-      /** \brief Store the implementation of Dynamic Multi Body */
-      CjrlDynamicRobot *m_DMB;
-
       /** \brief Store the Left Wrist Joint */
       CjrlJoint *m_LeftWristJoint;
       
@@ -139,7 +136,7 @@ namespace dynamicsJRLJapan
       HumanoidDynamicMultiBody(void);
 
       /*! Advanced constructor: */
-      HumanoidDynamicMultiBody(CjrlDynamicRobot * aDMB,
+      HumanoidDynamicMultiBody(const DynamicMultiBody& inDynamicMultiBody,
 			       string aFileNameForHumanoidSpecificities);
       
       /*! Destructor */
@@ -151,11 +148,6 @@ namespace dynamicsJRLJapan
 	 object and the Dynamic MultiBody fields. */
       void LinkBetweenJointsAndEndEffectorSemantic();
 
-      /*! This method is a proxy for a Dynamic Multi Body object 
-	 It gives an index transformation from VRMLID to Configuration.
-       */
-      void GetJointIDInConfigurationFromVRMLID(std::vector<int>  & aVector);
-
       /*! Set Humanoid Specificties file. */
       void SetHumanoidSpecificitiesFile(string &aFileName);
 
@@ -163,9 +155,11 @@ namespace dynamicsJRLJapan
       inline HumanoidSpecificities * getHumanoidSpecificities() const
 	{return m_HS;};
 
+#if 0
       /*! Get pointer on the CjrlDynamicRobot used as a proxy. */
       inline CjrlDynamicRobot *getDynamicMultiBody() const
-	{return m_DMB;}
+	{return this;}
+#endif
 
       /** \name jrlHumanoidDynamicRobot Interface */
       
@@ -319,33 +313,6 @@ namespace dynamicsJRLJapan
       /** \name Methods related to fixed joints.
 	  @{
       */
-      /** 
-	  \brief Add a joint to the vector of fixed joints.
-	  This Declares a joint as fixed in the world.
-      */
-      void addFixedJoint(CjrlJoint *inFixedJoint) ;
-      
-      /** 
-	  \brief Count joints that are fixed in the world.
-      */
-      unsigned int countFixedJoints() const;
-      
-      /** 
-	  \brief Remove a joint from the vector of fixed joints.
-	  The input joint will no longer be considered fixed in the world.
-      */
-      void removeFixedJoint(CjrlJoint *inFixedJoint);
-      
-      /** 
-            \brief Clear the list of fixed joints
-        */
-       void clearFixedJoints();
-       
-       /** 
-	   \brief Return the fixed joint at rank inRank 
-       */
-       CjrlJoint& fixedJoint(unsigned int inJointRank);
-
       
       /**
 	 \@}
@@ -373,136 +340,10 @@ namespace dynamicsJRLJapan
       @}
       */
 
-      /**
-	 \name Kinematic chain
-	 @{
-      */
-      
-      /**
-	 \brief Set the root joint of the robot.
-      */
-      void rootJoint(CjrlJoint& inJoint);
-     
-      
-      /**
-	 \brief Get the root joint of the robot.
-      */
-      CjrlJoint* rootJoint() const ;
-      
-      /**
-	 \brief Get a vector containing all the joints.
-      */
-      std::vector<CjrlJoint*> jointVector() ;
-      
-      /**
-        \brief Get the upper bound for ith dof.
-      */
-      double upperBoundDof(unsigned int inRankInConfiguration);
-      /**
-        \brief Get the lower bound for ith dof.
-      */
-      double lowerBoundDof(unsigned int inRankInConfiguration);
-      
-      /**
-        \brief Get the upper bound for ith dof.
-      */
-      virtual double upperBoundDof(unsigned int inRankInConfiguration,
-				   const vectorN& inConfig);
-      /**
-        \brief Get the lower bound for ith dof.
-      */
-      virtual double lowerBoundDof(unsigned int inRankInConfiguration,
-				   const vectorN& inConfig);
-      
-      /**
-	 \brief Get the number of degrees of freedom of the robot.
-      */
-      unsigned int numberDof() const ;
-
-      /**
-	 @}
-      */
-
-      /** 
-	  \name Configuration, velocity and acceleration
-      */
-  
-      /**
-	 \brief Set the current configuration of the robot.  
-
-	 \param inConfig the configuration vector \f${\bf q}\f$.
-     
-	 \return true if success, false if failure (the dimension of the
-	 input vector does not fit the number of degrees of freedom of the
-	 robot).
-      */
-      bool currentConfiguration(const vectorN& inConfig) ;
-
-      /**
-	 \brief Get the current configuration of the robot.
-
-	 \return the configuration vector \f${\bf q}\f$.
-      */
-      const vectorN& currentConfiguration() const ;
-
-      /**
-	 \brief Set the current velocity of the robot.  
-
-	 \param inVelocity the velocity vector \f${\bf \dot{q}}\f$.
-
-	 \return true if success, false if failure (the dimension of the
-	 input vector does not fit the number of degrees of freedom of the
-	 robot).
-      */
-      bool currentVelocity(const vectorN& inVelocity) ;
-
-      /**
-	 \brief Get the current velocity of the robot.
-
-	 \return the velocity vector \f${\bf \dot{q}}\f$.
-      */
-      const vectorN& currentVelocity() const ;
-      /**
-	 \brief Set the current acceleration of the robot.  
-
-	 \param inAcceleration the acceleration vector \f${\bf \ddot{q}}\f$.
-
-	 \return true if success, false if failure (the dimension of the
-	 input vector does not fit the number of degrees of freedom of the
-	 robot).
-      */
-      bool currentAcceleration(const vectorN& inAcceleration) ;
-
-      /**
-	 \brief Get the current acceleration of the robot.
-
-	 \return the acceleration vector \f${\bf \ddot{q}}\f$.
-      */
-      const vectorN& currentAcceleration() const ;
-
-      /**
-	 @}
-      */
-
       /** 
 	  \name Forward kinematics and dynamics
       */
   
-   /**
-      \brief Apply a configuration
-
-    Based on the entered configuration, this method computes:
-    for every joint:
-      the new transformation
-      the new position of the center of mass in world frame
-      for the robot
-      position of the center of mass in world frame
-        
-      \return true if success, false if failure (the dimension of the
-      input vector does not fit the number of degrees of freedom of the
-      robot).
-    */
-      bool applyConfiguration(const vectorN& inConfiguration);
     /**
       \brief Compute kinematics and dynamics following a finite difference scheme.
 
@@ -523,27 +364,6 @@ namespace dynamicsJRLJapan
       \brief Compute kinematics and dynamics following a finite difference scheme and update past values
       */
       void FiniteDifferenceStateUpdate(double inTimeStep);
-      /**
-      \brief Store current values as past values
-
-      Following values are stored:
-      for every joint:
-      	joint value and velocity
-	linear and angular velocities
-	position and orientation
-      for the robot:
-      	configuration vector
-	velocity vector
-	linear and angular momentums
-      */
-      void SaveCurrentStateAsPastState();
-      
-
-      
-      /**
-      \brief Set the robot in the static state described by the given configuration vector.
-       */
-      void staticState(const vectorN& inConfiguration);
       
       /**
 	 \brief Compute forward kinematics.
@@ -551,50 +371,10 @@ namespace dynamicsJRLJapan
 	 Update the position, velocity and accelerations of each
 	 joint wrt \f${\bf {q}}\f$, \f${\bf \dot{q}}\f$, \f${\bf \ddot{q}}\f$.
 
+	 Computes the ZMP position.
+
       */
       bool computeForwardKinematics() ;
-
-      /**
-	 \brief Compute the dynamics of the center of mass.
-
-	 Compute the linear and  angular momentum and their time derivatives, at the center of mass.
-      */
-      bool computeCenterOfMassDynamics() ;
-
-      /**
-	 \brief Get the position of the center of mass.
-      */
-      const vector3d& positionCenterOfMass() ;
-
-      /**
-	 \brief Get the velocity of the center of mass.
-      */
-      const vector3d& velocityCenterOfMass() ;
-
-      /**
-	 \brief Get the acceleration of the center of mass.
-      */
-      const vector3d& accelerationCenterOfMass() ;
-
-      /**
-	 \brief Get the linear momentum of the robot.
-      */
-      const vector3d& linearMomentumRobot() ;
-  
-      /**
-	 \brief Get the time-derivative of the linear momentum.
-      */
-      const vector3d& derivativeLinearMomentum() ;
-
-      /**
-	 \brief Get the angular momentum of the robot at the center of mass.
-      */
-      const vector3d& angularMomentumRobot() ;
-  
-      /**
-	 \brief Get the time-derivative of the angular momentum at the center of mass.
-      */
-      const vector3d& derivativeAngularMomentum() ;
 
       /**
 	 @}
@@ -605,16 +385,6 @@ namespace dynamicsJRLJapan
       */
 
       /**
-	 \brief Compute the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-      */
-      void computeJacobianCenterOfMass() ;
-
-      /**
-	 \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-      */
-      const matrixNxP& jacobianCenterOfMass() const ;
-
-      /**
 	 \brief Get the jacobian of a joint wrt to internal configuration variables assuming a joint is fixed.
 	 
 	 Fixed joint is first fixed joint in vector.
@@ -623,9 +393,6 @@ namespace dynamicsJRLJapan
       bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint, 
 				      matrixNxP & outJacobian);
       
-      double mass() const;
-
-	
       /**
 	 @}
       */

@@ -7,9 +7,7 @@ using namespace std;
 using namespace dynamicsJRLJapan;
 
 void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
-			       DynamicMultiBody *aDMB,
-			       HumanoidDynamicMultiBody *a2HDR,
-			       DynamicMultiBody *a2DMB )
+			       HumanoidDynamicMultiBody *a2HDR)
 {
   Joint * InitJoint = (Joint *)aHDR->rootJoint(),
     * NextInitJoint = 0;
@@ -92,15 +90,15 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
   // Initialize the second humanoid from the joint tree.
 
   std::vector<NameAndRank_t> LinkJointNameAndRank;
-  aDMB->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
-  a2DMB->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
+  aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
+  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   
-  a2DMB->InitializeFromJointsTree();
+  a2HDR->InitializeFromJointsTree();
 
 
   // Copy the bodies.
-  std::vector<CjrlJoint *> VecOfInitJoints = aDMB->jointVector();
-  std::vector<CjrlJoint *> VecOfCopyJoints = a2DMB->jointVector();
+  std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
+  std::vector<CjrlJoint *> VecOfCopyJoints = a2HDR->jointVector();
 
 
   std::cout << VecOfInitJoints.size()<< " " << VecOfCopyJoints.size() << endl;
@@ -165,9 +163,7 @@ int main(int argc, char *argv[])
   HumanoidDynamicMultiBody * aHDR = (HumanoidDynamicMultiBody *)
     aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
 
-  DynamicMultiBody *aDMB =(DynamicMultiBody *)aHDR->getDynamicMultiBody();
-
-  aDMB->parserVRML(aPath,
+  aHDR->parserVRML(aPath,
 		   aName,
 		   (char *)JointToRank.c_str());
   
@@ -178,9 +174,7 @@ int main(int argc, char *argv[])
   HumanoidDynamicMultiBody * a2HDR = (HumanoidDynamicMultiBody *)
     aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
-  DynamicMultiBody *a2DMB= (DynamicMultiBody *)a2HDR->getDynamicMultiBody();
-
-  PerformCopyFromJointsTree(aHDR, aDMB, a2HDR, a2DMB);
+  PerformCopyFromJointsTree(aHDR, a2HDR);
 
   // Test the new humanoid structure.
   double dInitPos[40] = { 
@@ -197,17 +191,17 @@ int main(int argc, char *argv[])
 
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
-  aDMB->SetTimeStep(0.005);
-  aDMB->setComputeAcceleration(false);
-  aDMB->setComputeBackwardDynamics(false);
-  aDMB->setComputeZMP(true);
+  aHDR->SetTimeStep(0.005);
+  aHDR->setComputeAcceleration(false);
+  aHDR->setComputeBackwardDynamics(false);
+  aHDR->setComputeZMP(true);
   
-  a2DMB->SetTimeStep(0.005);
-  a2DMB->setComputeAcceleration(false);
-  a2DMB->setComputeBackwardDynamics(false);
-  a2DMB->setComputeZMP(true);
+  a2HDR->SetTimeStep(0.005);
+  a2HDR->setComputeAcceleration(false);
+  a2HDR->setComputeBackwardDynamics(false);
+  a2HDR->setComputeZMP(true);
 
-  int NbOfDofs = a2DMB->numberDof();
+  int NbOfDofs = a2HDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -217,8 +211,8 @@ int main(int argc, char *argv[])
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   
-  aDMB->currentConfiguration(aCurrentConf);
-  a2DMB->currentConfiguration(aCurrentConf);
+  aHDR->currentConfiguration(aCurrentConf);
+  a2HDR->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   lindex=0;
@@ -237,14 +231,14 @@ int main(int argc, char *argv[])
       aHDR->computeForwardKinematics();
       ZMPval = aHDR->zeroMomentumPoint();
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
+      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
 
       a2HDR->currentVelocity(aCurrentVel);
       a2HDR->currentAcceleration(aCurrentAcc);
       a2HDR->computeForwardKinematics();
       ZMPval = a2HDR->zeroMomentumPoint();
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
+      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
 
     }
 

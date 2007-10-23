@@ -159,8 +159,7 @@ int main(int argc, char *argv[])
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
     }
-  aDMB = (DynamicMultiBody *) aHDMB->getDynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
+  aHDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
   cout << "Here in between" << endl;
   aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
   cout << " Finished the initialization"<< endl;
@@ -186,7 +185,7 @@ int main(int argc, char *argv[])
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
   };
 
-  int NbOfDofs = aDMB->numberDof();
+  int NbOfDofs = aHDMB->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -197,7 +196,7 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
   
-  aDMB->currentConfiguration(aCurrentConf);
+  aHDMB->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   lindex=0;
@@ -207,15 +206,15 @@ int main(int argc, char *argv[])
   MAL_S3_VECTOR(ZMPval,double);
 
   aHDMB->currentVelocity(aCurrentVel);
-  aDMB->setComputeZMP(true);
+  aHDMB->setComputeZMP(true);
   aHDMB->computeForwardKinematics();
   ZMPval = aHDMB->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
-  cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
+  cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
 
   aHDMB->LinkBetweenJointsAndEndEffectorSemantic();
 
-  std::vector<CjrlJoint *> aVec = aDMB->jointVector();
+  std::vector<CjrlJoint *> aVec = aHDMB->jointVector();
   
   Joint  * aJoint = (Joint *)aVec[22]; // Try to get the hand.
   cout << aJoint->getName() << endl;  
@@ -240,10 +239,10 @@ int main(int argc, char *argv[])
   cout << "Value of the CoM's Jacobian:" << endl
        << aHDMB->jacobianCenterOfMass() << endl;
   cout << "****************************" << endl;
-  GoDownTree(aDMB->rootJoint());
+  GoDownTree(aHDMB->rootJoint());
 
-  cout << "Mass of the robot " << aDMB->getMasse() << endl;
-  cout << "Force " << aDMB->getMasse()*9.81 << endl;
+  cout << "Mass of the robot " << aHDMB->getMasse() << endl;
+  cout << "Force " << aHDMB->getMasse()*9.81 << endl;
 
   cout << "****************************" << endl;
   // Test rank of the left hand.
@@ -258,10 +257,10 @@ int main(int argc, char *argv[])
 
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
-  aDMB->SetTimeStep(0.005);
-  aDMB->setComputeAcceleration(false);
-  aDMB->setComputeBackwardDynamics(false);
-  aDMB->setComputeZMP(true);
+  aHDMB->SetTimeStep(0.005);
+  aHDMB->setComputeAcceleration(false);
+  aHDMB->setComputeBackwardDynamics(false);
+  aHDMB->setComputeZMP(true);
   for(int i=0;i<4;i++)
     {
       aHDMB->currentVelocity(aCurrentVel);
@@ -269,7 +268,7 @@ int main(int argc, char *argv[])
       aHDMB->computeForwardKinematics();
       ZMPval = aHDMB->zeroMomentumPoint();
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aDMB->positionCenterOfMass() << endl;
+      cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
     }
 
   // Height of the foot. 

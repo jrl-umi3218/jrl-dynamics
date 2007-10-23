@@ -1,4 +1,12 @@
+2007/10/23
+	28. Class HumanoidDynamicMultiBody now virtually derives from DynamicMultiBody.
+	    Changes for users:
+	      - HumanoidDynamicMultiBody::getDynamicMultiBody() has been removed.
+	      - Prototypes of HumanoidDynamicMultiBody constructors have been slightly modified.
+	    
 
+2007/09/20
+	
 	27. Added the files necessary for the Spirit VRML reader.
 	26. Make constructors of JointFreeflyer, JointRotation and JointTranslation public.
 	25. Remove const in Joint::addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.
