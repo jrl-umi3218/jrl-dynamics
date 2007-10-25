@@ -212,22 +212,6 @@ namespace dynamicsJRLJapan
     inline const int & getIDinVRML() const
       { return m_IDinVRML;}
 
-    /*! Set Joint Upper Limit for i-th DOF. */
-    inline void setJointULimit(double ulimit, int i)
-      { m_UpperLimits[i] = ulimit; }
-
-    /*! Set Joint Lower Limit for i-th DOF. */
-    inline void setJointLLimit(double llimit, int i)
-      { m_LowerLimits[i] = llimit; }
-    
-    /*! Get Joint Upper Limit for i-th DOF. */
-    inline double getJointULimit(int i) const
-      { return m_UpperLimits[i];}
-    
-    /*! Get Joint Lower Limit for i-th DOF. */
-    inline double getJointLLimit(int i) const
-      { return m_LowerLimits[i]; }
-    
     /*! Get the static translation. */
     inline void getStaticTranslation(vector3d & staticTranslation) 
       { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3);
@@ -351,6 +335,56 @@ namespace dynamicsJRLJapan
     inline unsigned int rankInConfiguration() const
       { return m_StateVectorPosition; }
     
+    /**
+       @}
+    */
+
+    /**
+       \name Bounds of the degrees of freedom
+       @{
+    */
+    /**
+       \brief Get the lower bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double lowerBound(unsigned int inDofRank) const
+    {
+      return m_LowerLimits[inDofRank];
+    };
+
+    /**
+       \brief Get the upper bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double upperBound(unsigned int inDofRank) const
+    {
+      return m_UpperLimits[inDofRank];
+    };
+
+    /**
+       \brief Set the lower bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inLowerBound lower bound
+    */
+    inline void lowerBound(unsigned int inDofRank, double inLowerBound) 
+    {
+      m_LowerLimits[inDofRank] = inLowerBound;
+    };
+
+    /**
+       \brief Set the upper bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inUpperBound Upper bound.
+    */
+    inline void upperBound(unsigned int inDofRank, double inUpperBound)
+    {
+      m_UpperLimits[inDofRank] = inUpperBound;
+    };
+
     /*! @} */
     
     /**

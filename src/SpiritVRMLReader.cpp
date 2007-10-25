@@ -501,7 +501,7 @@ namespace dynamicsJRLJapan
 
       void fJointLLimit(double r) const
       {
-	m_DataForParsing->CurrentLink.aJoint->setJointLLimit(r,0);
+	m_DataForParsing->CurrentLink.aJoint->lowerBound(0,r);
 	if (m_Verbose>1)
 	  std::cout << "fJointLLimit: "  << r << endl;
       }
@@ -509,7 +509,7 @@ namespace dynamicsJRLJapan
 
       void fJointULimit(double r) const
       {
-	m_DataForParsing->CurrentLink.aJoint->setJointULimit(r,0);
+	m_DataForParsing->CurrentLink.aJoint->upperBound(0,r);
 	if (m_Verbose>1)
 	  std::cout << "fJointULimit: "  << r << endl;
       }

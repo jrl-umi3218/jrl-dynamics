@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
   
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
-  aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody *)aHDR;
+  aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
 
   if (aHDMB==0)
     { 

@@ -5138,7 +5138,7 @@ double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
   //     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
   //         return 0;
     
-  return m_ConfigurationToJoints[inRankInConfiguration]->getJointULimit(0);
+  return m_ConfigurationToJoints[inRankInConfiguration]->upperBound(0);
   //WARNING: this code does not work if the joints have more than a single degree of freedom
 }
 
@@ -5147,7 +5147,7 @@ double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
   //     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
   //         return 0;
     
-  return m_ConfigurationToJoints[inRankInConfiguration]->getJointLLimit(0);
+  return m_ConfigurationToJoints[inRankInConfiguration]->lowerBound(0);
   //WARNING: this code does not work if the joints have more than a single degree of freedom
 }
 

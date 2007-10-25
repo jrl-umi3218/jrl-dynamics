@@ -277,18 +277,6 @@ namespace dynamicsJRLJapan
       */
       inline void gaze( const vector3d& inVector, const vector3d & inPoint)
 	{ m_LineVector = inVector; m_LinePoint = inPoint;};
-
-     
-      /** 
-	  \brief Get the gaze orientation in the local frame of the gaze joint.
-	  
-	  \note Returns the line along which the head is oriented.
-	  @return outVector: The direction of the line.
-	  @return outPoint: The point by which the line is going through in the head reference frame.
-
-      */
-      inline void gaze(vector3d & outVector, vector3d & outPoint ) const
-	{ outVector = m_LineVector; outPoint = m_LinePoint;};
 	
       /**
       \brief Get a point on the gaze straight line

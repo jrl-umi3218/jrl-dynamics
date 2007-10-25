@@ -109,8 +109,8 @@ void GoDownTree(const CjrlJoint * startJoint)
   std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
   std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
   std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
-  std::cout << "llimit: " << ((Joint *)startJoint)->getJointLLimit(0)*180/M_PI << " " 
-	    << "ulimit: " << ((Joint *)startJoint)->getJointULimit(0)*180/M_PI << " " << endl;
+  std::cout << "llimit: " << ((Joint *)startJoint)->lowerBound(0)*180/M_PI << " " 
+	    << "ulimit: " << ((Joint *)startJoint)->upperBound(0)*180/M_PI << " " << endl;
   std::cout << startJoint->currentTransformation() << std::endl;
   
   if (startJoint->countChildJoints()!=0)
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
   HumanoidDynamicMultiBody *aHDMB;
-  aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody *)aHDR;
+  aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
 
   if (aHDMB==0)
     { 

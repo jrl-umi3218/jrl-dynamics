@@ -1,3 +1,14 @@
+2007/10/25
+	30. Removed unused and misleading function
+              inline void HumanoidDynamicMultiBody::gaze(vector3d& outVector, vector3d& outPoint) const
+
+	29. Changed name of functions setting and getting joint bounds to fit abstract interface latest changes.
+	    void Joint::setJointULimit(double ulimit, int i) becomes void Joint::upperBound(unsigned int inDofRank, double inUpperBound)
+	    void Joint::setJointLLimit(double llimit, int i) becomes void Joint::lowerBound(unsigned int inDofRank, double inLowerBound)
+	    double Joint::getJointULimit(int i) const becomes double Joint::upperBound(unsigned int inDofRank) const
+	    double Joint::getJointLLimit (int i) const becomes double Joint::lowerBound(unsigned int inDofRank) const
+
+
 2007/10/23
 	28. Class HumanoidDynamicMultiBody now virtually derives from DynamicMultiBody.
 	    Changes for users:

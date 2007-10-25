@@ -80,8 +80,8 @@ Joint::Joint(const Joint &r)
 
   for(unsigned int i=0;i<numberDof();i++)
     {
-      m_LowerLimits[i] = r.getJointLLimit(i);
-      m_UpperLimits[i] = r.getJointULimit(i);
+      m_LowerLimits[i] = r.lowerBound(i);
+      m_UpperLimits[i] = r.upperBound(i);
     }
 
 }
@@ -128,8 +128,8 @@ Joint & Joint::operator=(const Joint & r)
   CreateLimitsArray();
   for(unsigned int i=0;i<numberDof();i++)
     {
-      m_LowerLimits[i] = r.getJointLLimit(i);
-      m_UpperLimits[i] = r.getJointULimit(i);
+      m_LowerLimits[i] = r.lowerBound(i);
+      m_UpperLimits[i] = r.upperBound(i);
     }
   return *this;
 };

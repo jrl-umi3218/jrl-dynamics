@@ -160,8 +160,8 @@ int main(int argc, char *argv[])
     dynamicsJRLJapan::Body >  aRobotDynamicsObjectConstructor;
   
   // Read the first humanoid.
-  HumanoidDynamicMultiBody * aHDR = (HumanoidDynamicMultiBody *)
-    aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  HumanoidDynamicMultiBody * aHDR = 
+    dynamic_cast<HumanoidDynamicMultiBody*>(aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot());
 
   aHDR->parserVRML(aPath,
 		   aName,
@@ -171,8 +171,8 @@ int main(int argc, char *argv[])
 
 
   // Pretend to build the second humanoid.
-  HumanoidDynamicMultiBody * a2HDR = (HumanoidDynamicMultiBody *)
-    aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  HumanoidDynamicMultiBody *a2HDR = 
+    dynamic_cast<HumanoidDynamicMultiBody*>(aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot());
   
   PerformCopyFromJointsTree(aHDR, a2HDR);
 
