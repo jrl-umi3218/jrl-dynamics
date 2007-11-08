@@ -1,29 +1,26 @@
-2007/10/25
+$Id: ChangeLog 2007/11/08 17:07:56 mallet $
+
+dynamic-JRLJapan 1.6 released November 8, 2007
+
 	30. Removed unused and misleading function
-              inline void HumanoidDynamicMultiBody::gaze(vector3d& outVector, vector3d& outPoint) const
-
-	29. Changed name of functions setting and getting joint bounds to fit abstract interface latest changes.
-	    void Joint::setJointULimit(double ulimit, int i) becomes void Joint::upperBound(unsigned int inDofRank, double inUpperBound)
-	    void Joint::setJointLLimit(double llimit, int i) becomes void Joint::lowerBound(unsigned int inDofRank, double inLowerBound)
-	    double Joint::getJointULimit(int i) const becomes double Joint::upperBound(unsigned int inDofRank) const
-	    double Joint::getJointLLimit (int i) const becomes double Joint::lowerBound(unsigned int inDofRank) const
-
-
-2007/10/23
+              inline void HumanoidDynamicMultiBody::gaze() const
+	29. Changed name of functions setting and getting joint bounds to
+	    fit abstract interface latest changes.
 	28. Class HumanoidDynamicMultiBody now virtually derives from DynamicMultiBody.
 	    Changes for users:
 	      - HumanoidDynamicMultiBody::getDynamicMultiBody() has been removed.
-	      - Prototypes of HumanoidDynamicMultiBody constructors have been slightly modified.
-	    
-
-2007/09/20
-	
+	      - Prototypes of HumanoidDynamicMultiBody constructors have
+	    been slightly modified.
 	27. Added the files necessary for the Spirit VRML reader.
-	26. Make constructors of JointFreeflyer, JointRotation and JointTranslation public.
-	25. Remove const in Joint::addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.
-	24. Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
+	26. Make constructors of JointFreeflyer, JointRotation and
+	    JointTranslation public.
+	25. Remove const in Joint::addChildJoint (const CjrlJoint&
+	    inJoint) in order to be able to modify joints in kinematic chain.
+	24. Joint::parentJoint() and Joint::childJoint(unsigned int
+	    inJointRank) return pointer to CjrlJoint instead of reference.
 	23. Added file include/dynamicsJRLJapan/robotDynamicsImpl.h
-	22. Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
+	22. Move headers to include/dynamicsJRLJapan instead of
+	    include/robotDynamicsJRLJapan
 	21. Undo item 20
 	20. Export in dynamicsJRLJapan.pc name of classes implementing 
 	  - abstractRobotDynamics::CjrlDynamicRobot,
@@ -31,7 +28,8 @@
 	  - freeFlying joint,
 	  - rotation joint,
 	  - translation joint.
-	19. Use name "dynamicsJRLJapan" as package name and documentation directory installation.
+	19. Use name "dynamicsJRLJapan" as package name and documentation
+	directory installation.
 	
 dynamics-JRLJapan 1.4 released July 16, 2007
 
