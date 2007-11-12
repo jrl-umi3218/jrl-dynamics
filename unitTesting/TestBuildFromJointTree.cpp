@@ -6,6 +6,57 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
+void DisplayBody(CjrlBody *aBody)
+{
+  matrix3d InertiaMatrix = aBody->inertiaMatrix();
+  
+  cout << "Attached body:" << endl;
+  cout << "Mass of the attached body: " << aBody->mass() << endl;
+  cout << "Local center of mass: " << aBody->localCenterOfMass() << endl;
+  cout << "Inertia matrix:" << endl;
+  cout << InertiaMatrix << endl;
+  
+}
+void DisplayJoint(Joint * aJoint)
+{
+  cout << "Joint : " << aJoint->getName() << endl;
+  unsigned int NbCJ = aJoint->countChildJoints();
+  if (aJoint->parentJoint()!=0)
+    cout << "Father: " << ((Joint *)(aJoint->parentJoint()))->getName() << endl;
+  cout << "Number of children : " << NbCJ << endl;
+  for(unsigned int li=0;li<NbCJ;li++)
+    cout << "Child("<<li<<")=" 
+	 << ((Joint*)(aJoint->childJoint(li)))->getName() << endl;
+  
+  cout << "Current transformation " << aJoint->currentTransformation() << endl;
+
+}
+
+void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
+{
+  if (aJoint==0)
+    return;
+
+  Joint *a2Joint=0;
+
+  int NbChildren = aJoint->countChildJoints();
+
+  a2Joint = dynamic_cast<Joint *>( aJoint);
+  if (a2Joint==0)
+    return;
+
+  DisplayJoint(a2Joint);
+  DisplayBody(aJoint->linkedBody());
+  for(int i=0;i<NbChildren;i++)
+    {
+      // Returns a const so we have to force the casting/
+      RecursiveDisplayOfJoints((CjrlJoint *)a2Joint->childJoint(i)); 
+    }
+  //cout << " End for Joint: " << a2Joint->getName() << endl;
+}
+
+
+
 void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 			       HumanoidDynamicMultiBody *a2HDR)
 {
@@ -92,16 +143,13 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
   std::vector<NameAndRank_t> LinkJointNameAndRank;
   aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
-  
+
   a2HDR->InitializeFromJointsTree();
 
 
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
   std::vector<CjrlJoint *> VecOfCopyJoints = a2HDR->jointVector();
-
-
-  std::cout << VecOfInitJoints.size()<< " " << VecOfCopyJoints.size() << endl;
   
   if (VecOfInitJoints.size()!=VecOfCopyJoints.size())
     {
@@ -121,6 +169,8 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 
 int main(int argc, char *argv[])
 {
+  int VerboseMode = 3;
+
   string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
   string aName="HRP2JRLmain.wrl";
   string JointToRank = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml";
@@ -202,7 +252,9 @@ int main(int argc, char *argv[])
   a2HDR->setComputeZMP(true);
 
   int NbOfDofs = a2HDR->numberDof();
-  std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+  if (VerboseMode>2)
+    std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
   for(int i=0;i<6;i++)
@@ -230,19 +282,26 @@ int main(int argc, char *argv[])
       aHDR->currentAcceleration(aCurrentAcc);
       aHDR->computeForwardKinematics();
       ZMPval = aHDR->zeroMomentumPoint();
-      cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+      if (VerboseMode>4)
+	{
+	  cout << i << "-th value of ZMP : " << ZMPval <<endl;
+	  cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+	}
 
       a2HDR->currentVelocity(aCurrentVel);
       a2HDR->currentAcceleration(aCurrentAcc);
       a2HDR->computeForwardKinematics();
       ZMPval = a2HDR->zeroMomentumPoint();
-      cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+      if(VerboseMode>4)
+	{
+	  cout << i << "-th value of ZMP : " << ZMPval <<endl;
+	  cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+	}
 
     }
 
-  
+  if (VerboseMode>2)
+    RecursiveDisplayOfJoints(a2HDR->rootJoint());
   delete aHDR;
   delete a2HDR;
 }
