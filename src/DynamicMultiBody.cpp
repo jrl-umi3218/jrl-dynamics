@@ -1172,6 +1172,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
   CurrentLink.indexCorps1 = 0;
   CurrentLink.indexCorps2 = 0;
 
+
   while(CurrentJoint!=0)
     {
       // Deal with the current joint.
@@ -1179,6 +1180,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
       // Update the joint value of the current link.
       CurrentLink.aJoint = CurrentJoint;
 
+      
       // Take care of the body.
       // extend the size of CurrentBody if necessary.
       if (Depth>(int)CurrentBody.size())
@@ -1233,7 +1235,6 @@ void DynamicMultiBody::InitializeFromJointsTree()
 		{
 		  // take it !
 		  NextCurrentJoint = (dynamicsJRLJapan::Joint *)FatherJoint->childJoint(CurrentJointPosition+1);
-		  Depth++;
 		}
 	      else
 		{
@@ -5198,6 +5199,7 @@ CjrlJoint& DynamicMultiBody::fixedJoint(unsigned int inJointRank)
   //if ((inJointRank>0) & (inJointRank<=m_VectorOfFixedJoints.size()))
   if (inJointRank<m_VectorOfFixedJoints.size())
     return *m_VectorOfFixedJoints[inJointRank];
+  return *m_VectorOfFixedJoints[0];
 }
 /* End of Methods related to the fixed joints */
 
