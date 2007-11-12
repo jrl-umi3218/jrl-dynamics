@@ -147,6 +147,11 @@ CjrlJoint* Joint::parentJoint() const
 bool Joint::addChildJoint(CjrlJoint& aJoint)
 {
   Joint * pjoint = (Joint *)&aJoint;
+  for(unsigned int li =0; li < m_Children.size();li++)
+    {
+      if (m_Children[li]==pjoint)
+	return true;
+    }
   m_Children.push_back(pjoint);
   return true;
 }
