@@ -3,7 +3,7 @@
 # 
 
 
-noinst_PROGRAMS = TestHumanoidDynamicRobot TestHumanoidDynamicRobotglut TestBuildFromJointTree 
+noinst_PROGRAMS = TestHumanoidDynamicRobot TestHumanoidDynamicRobotglut TestBuildFromJointTree TestBuildFromJointTreeMathieu
 
 TestHumanoidDynamicRobot_SOURCES = TestHumanoidDynamicRobot.cpp 
 
@@ -23,6 +23,11 @@ TestBuildFromJointTree_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@
 
 TestBuildFromJointTree_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ -lglut -lGL
 
+TestBuildFromJointTreeMathieu_SOURCES = TestBuildFromJointTreeMathieu.cpp 
+
+TestBuildFromJointTreeMathieu_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@
+
+TestBuildFromJointTreeMathieu_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ -lglut -lGL
 
 #TestPb1_SOURCES = TestPb1.cpp 
 
