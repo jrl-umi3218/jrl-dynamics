@@ -86,9 +86,9 @@ void recursiveMultibodyCopy(Joint *initJoint, Joint * copyJoint)
 void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 			       HumanoidDynamicMultiBody *a2HDR)
 {
-  Joint * InitJoint = (Joint *)aHDR->rootJoint(),
+  Joint * InitJoint = (Joint *)aHDR->rootJoint() ;
   
-  Joint * CopyJoint = new Joint(*InitJoint),
+  Joint * CopyJoint = new Joint(*InitJoint);
   
   a2HDR->rootJoint(*CopyJoint);
   
@@ -105,6 +105,14 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 
   cout << " ============================== AT END 1 ======================================= " <<
     endl << endl << endl ;
+
+
+  for(unsigned int i=0 ; i < LinkJointNameAndRank.size() ; i++ )
+    {
+      cout << "NAME : " << LinkJointNameAndRank[i].LinkName << "\t rank : " << LinkJointNameAndRank[i].RankInConfiguration << endl ;
+    }
+
+
 
   a2HDR->InitializeFromJointsTree();
   
