@@ -1,5 +1,10 @@
 $Id: ChangeLog 2007/11/08 17:07:56 mallet $
 
+dynamic-JRLJapan 1.6.99 current version
+
+	32. correct make file to compile untesting using the current (devel) version
+	31. made new version number
+	
 dynamic-JRLJapan 1.6 released November 8, 2007
 
 	30. Removed unused and misleading function
