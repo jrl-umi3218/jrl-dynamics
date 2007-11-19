@@ -40,9 +40,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   Joint *a2Joint=0;
 
   int NbChildren = aJoint->countChildJoints();
-  if (NbChildren == 0) 
-    return ;
-
+ 
   a2Joint = dynamic_cast<Joint *>( aJoint);
   if (a2Joint==0)
     return;
@@ -285,10 +283,7 @@ int main(int argc, char *argv[])
 
 #endif
   if (VerboseMode>2)
-    RecursiveDisplayOfJoints(a2HDR->rootJoint());
-
-
-
+    // RecursiveDisplayOfJoints(a2HDR->rootJoint());
   delete aHDR;
   delete a2HDR;
 
