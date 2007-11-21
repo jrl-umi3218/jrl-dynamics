@@ -56,11 +56,9 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 }
 
 
-void recursiveMultibodyCopy(Joint *initJoint, Joint * copyJoint)
+void recursiveMultibodyCopy(Joint *initJoint, Joint *newJoint)
 {
   int lNbOfChildren= initJoint->countChildJoints();
-
-  cout << "nbre of childs : " << lNbOfChildren << endl ; 
 
   // stop test
   if (lNbOfChildren == 0) return ;
@@ -68,15 +66,24 @@ void recursiveMultibodyCopy(Joint *initJoint, Joint * copyJoint)
   for(int li=0;li<lNbOfChildren;li++)
     {
 
-      Joint *Child = (Joint *)initJoint->childJoint(li);
-      if (Child!=0)
-	{
-	  Joint *a2CopyJoint ;
-	  a2CopyJoint = new Joint(*Child);
-	  copyJoint->addChildJoint(*a2CopyJoint);
-	  a2CopyJoint->SetFatherJoint(copyJoint);
-	  recursiveMultibodyCopy(Child, a2CopyJoint) ;
-	}
+      Joint *Child = dynamic_cast<Joint *> (initJoint->childJoint(li)) ;
+           
+      if (Child != 0) {
+	
+	int type = Child->type();
+	vector3d axe = Child->axe();
+	float q = Child->quantity();
+	matrix4d pose = Child->pose();
+	string name = Child->getName() ;
+
+	Joint *a2newJoint = new Joint(type, axe, q, pose);
+	a2newJoint->setName(name) ;
+	
+	newJoint->addChildJoint(*a2newJoint);
+	a2newJoint->SetFatherJoint(newJoint);
+	recursiveMultibodyCopy(Child, a2newJoint) ;
+      }
+	
     }
 }
 
@@ -84,49 +91,44 @@ void recursiveMultibodyCopy(Joint *initJoint, Joint * copyJoint)
 void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 			       HumanoidDynamicMultiBody *a2HDR)
 {
-  Joint * InitJoint = (Joint *)aHDR->rootJoint() ;
+  Joint *InitJoint = dynamic_cast<Joint *>( aHDR->rootJoint()) ;
   
-  Joint * CopyJoint = new Joint(*InitJoint);
+  int type =  InitJoint->type();
+  vector3d axe = InitJoint->axe();
+  float q = InitJoint->quantity();
+  matrix4d pose = InitJoint->pose();
+  string name = InitJoint->getName() ;
   
-  a2HDR->rootJoint(*CopyJoint);
+  Joint *newJoint = new Joint(type, axe, q, pose);
+  newJoint->setName(name) ;
   
-  recursiveMultibodyCopy(InitJoint, CopyJoint) ;
+  a2HDR->rootJoint(*newJoint);
+  
+  recursiveMultibodyCopy(InitJoint, newJoint) ;
  
+  
+  
+  cout << " ================== COPY BY CONSTRUCTOR  =================== " << endl ;
+  RecursiveDisplayOfJoints(a2HDR->rootJoint());
+
   // Initialize the second humanoid from the joint tree.
 
   std::vector<NameAndRank_t> LinkJointNameAndRank;
   aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
-
-  RecursiveDisplayOfJoints(a2HDR->rootJoint());
-
-  cout << " ============================== AT END 1 ======================================= " <<
-    endl << endl << endl ;
-
-
-  for(unsigned int i=0 ; i < LinkJointNameAndRank.size() ; i++ )
-    {
-      cout << "NAME : " << LinkJointNameAndRank[i].LinkName << "\t rank : " << LinkJointNameAndRank[i].RankInConfiguration << endl ;
-    }
-
-
-
+ 
   a2HDR->InitializeFromJointsTree();
   
-  RecursiveDisplayOfJoints(a2HDR->rootJoint());
-
-  cout << " ============================== AT END 2 ======================================= " <<
-    endl << endl << endl ; 
-
-
+ 
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
   std::vector<CjrlJoint *> VecOfCopyJoints = a2HDR->jointVector();
   
   if (VecOfInitJoints.size()!=VecOfCopyJoints.size())
     {
-      std::cout << "Problem while copying the joints. " <<endl;
+      std::cout << "Problem while copying the joints. size : " <<VecOfInitJoints.size() << " size copy : " << VecOfCopyJoints.size()  <<endl;
+      cout << endl << endl << "There is a probleme the new joints vector is not updated" << endl << endl ;
       exit(-1);
     }
 
@@ -201,12 +203,6 @@ int main(int argc, char *argv[])
   PerformCopyFromJointsTree(aHDR, a2HDR);
 
 
-
-
-
-
-
-#if 0
   // Test the new humanoid structure.
   double dInitPos[40] = { 
     0.0, 0.0, -26.0, 50.0, -24.0, 0.0, 0.0, 0.0, -26.0, 50.0, -24.0, 0.0,  // legs
@@ -281,9 +277,9 @@ int main(int argc, char *argv[])
 
     }
 
-#endif
   if (VerboseMode>2)
-    // RecursiveDisplayOfJoints(a2HDR->rootJoint());
+    cout << " ================== AFTER PATGEN  =================== " << endl ;
+     RecursiveDisplayOfJoints(a2HDR->rootJoint());
   delete aHDR;
   delete a2HDR;
 
