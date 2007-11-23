@@ -150,18 +150,10 @@ int main(int argc, char *argv[])
 {
   int VerboseMode = 3;
 
-#if 0
   string aPath="/home/mpoirier/openrobots/OpenHRP/etc/HRP2JRL/";
   string aName="HRP2JRLmain.wrl";
   string JointToRank = "/home/mpoirier/openrobots/share/walkgenjrl/HRP2LinkJointRank.xml";
   string aSpecificitiesFileName =  "/home/mpoirier/openrobots/share/walkgenjrl/HRP2Specificities.xml";
-#else
-  string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
-  string aName="HRP2JRLmain.wrl";
-  string JointToRank = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml";
-  string aSpecificitiesFileName =
-    "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";
-#endif
 
   int argindex=1;
   if (argc>1)
