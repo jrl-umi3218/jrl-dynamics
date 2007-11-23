@@ -4,8 +4,8 @@ dnl configure.ac file for package jrlCIRdynamicsJRLJapan
 dnl
 AC_PREREQ(2.59)
 
-dnl define([dynamicsJRLJapan_version],[1.6.99])
-define([dynamicsJRLJapan_version], [esyscmd([/usr/bin/git log -n 1 | /bin/grep commit | /usr/bin/awk '{print $2}' | /usr/bin/git describe | /usr/bin/tr -d '\n'])])
+define([dynamicsJRLJapan_version],[1.6.99])
+dnl define([dynamicsJRLJapan_version], [esyscmd([/usr/bin/git log -n 1 | /bin/grep commit | /usr/bin/awk '{print $2}' | /usr/bin/git describe | /usr/bin/tr -d '\n'])])
 
 AC_INIT([dynamicsJRLJapan], [dynamicsJRLJapan_version], [olivier.stasse@aist.go.jp])
 undefine([dynamicsJRLJapan_version])
