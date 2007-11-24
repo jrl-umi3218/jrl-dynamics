@@ -17,8 +17,10 @@ libdynamicsJRLJapan_la_SOURCES = \
 
 libdynamicsJRLJapan_la_LDFLAGS = \
 	@ROBOTDYNAMICS_LIBS@	\
+	@MAL_LIBS@ \
 	-release ${PACKAGE_VERSION}
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
 	-I$(srcdir)/../include	\
-	@ROBOTDYNAMICS_CFLAGS@
+	@ROBOTDYNAMICS_CFLAGS@ \
+	@MAL_CFLAGS@
