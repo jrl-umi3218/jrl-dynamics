@@ -142,7 +142,7 @@ void Matrix2AxeAngle(float R[16],double Axis[3], double & Angle)
 
 MultiBody::MultiBody(void)
 {
-
+    masse = 0.0;
 }
 
 
