@@ -1171,7 +1171,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
   CurrentLink.aJoint = m_RootOfTheJointsTree;
   CurrentLink.indexCorps1 = 0;
   CurrentLink.indexCorps2 = 0;
-
+  int lIDinVRML=-1;
 
   while(CurrentJoint!=0)
     {
@@ -1179,6 +1179,13 @@ void DynamicMultiBody::InitializeFromJointsTree()
 
       // Update the joint value of the current link.
       CurrentLink.aJoint = CurrentJoint;
+
+      
+      // Update the joint ID value in case there is none.
+      if (CurrentLink.aJoint->getIDinVRML()==-1)
+	CurrentLink.aJoint->setIDinVRML(lIDinVRML);
+
+      lIDinVRML++;
 
       
       // Take care of the body.
