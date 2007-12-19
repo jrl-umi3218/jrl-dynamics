@@ -75,11 +75,11 @@ void recursiveMultibodyCopy(Joint *initJoint, Joint *newJoint)
 	float q = Child->quantity();
 	matrix4d pose = Child->pose();
 	string name = Child->getName() ;
-	int IDinVRML = Child->getIDinVRML();
+	//	int IDinVRML = Child->getIDinVRML();
 
 	Joint *a2newJoint = new Joint(type, axe, q, pose);
 	a2newJoint->setName(name) ;
-	a2newJoint->setIDinVRML(IDinVRML);
+	//	a2newJoint->setIDinVRML(IDinVRML);
 	
 	newJoint->addChildJoint(*a2newJoint);
 	a2newJoint->SetFatherJoint(newJoint);
@@ -149,11 +149,18 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
 int main(int argc, char *argv[])
 {
   int VerboseMode = 3;
-
+#if 0
   string aPath="/home/mpoirier/openrobots/OpenHRP/etc/HRP2JRL/";
   string aName="HRP2JRLmain.wrl";
   string JointToRank = "/home/mpoirier/openrobots/share/walkgenjrl/HRP2LinkJointRank.xml";
   string aSpecificitiesFileName =  "/home/mpoirier/openrobots/share/walkgenjrl/HRP2Specificities.xml";
+#else
+  string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
+  string aName="HRP2JRLmain.wrl";
+  string JointToRank = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml";
+  string aSpecificitiesFileName =  "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";
+
+#endif
 
   int argindex=1;
   if (argc>1)
