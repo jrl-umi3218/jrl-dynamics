@@ -244,6 +244,12 @@ void HumanoidDynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
     ComputingZeroMomentumPoint();
 }
 
+void HumanoidDynamicMultiBody::staticState( const vectorN& inConfiguration )
+{
+    DynamicMultiBody::staticState(inConfiguration);
+    ComputingZeroMomentumPoint();
+}
+
 bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
 							  MAL_MATRIX(,double) & outJacobian)
 {

@@ -354,6 +354,11 @@ namespace dynamicsJRLJapan
       void FiniteDifferenceStateUpdate(double inTimeStep);
       
       /**
+      \brief Set the robot in the static state described by the given configuration vector.
+      */
+      void staticState( const vectorN& inConfiguration );
+      
+      /**
 	 \brief Compute forward kinematics.
 
 	 Update the position, velocity and accelerations of each

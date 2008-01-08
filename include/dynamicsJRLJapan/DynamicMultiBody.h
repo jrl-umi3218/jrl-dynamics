@@ -831,7 +831,7 @@ namespace dynamicsJRLJapan
     /**
     \brief Set the robot in the static state described by the given configuration vector.
      */
-    void staticState(const vectorN& inConfiguration);
+    virtual void staticState(const vectorN& inConfiguration);
      
     /**
        \brief Compute forward kinematics.
