@@ -757,18 +757,10 @@ void DynamicMultiBody::InertiaMatricesforRMCFirstStep()
 
 	  } 
 	aDB = listOfBodies[currentNode];
-	//	cout << aDB.getName()<< " " << currentNode << endl;
-	//	cout << aDB.sister << endl;
       }
       while (lContinue);
 
       double ltotaltildem = aDB.getMasse();      
-      /*      cout << "FirstStep:currentNode : " << currentNode << " " << listOfBodies[currentNode].getLabelMother() 
-	      << " " << aDB.getName() << endl;
-	      cout << "ltotaltiledm " << ltotaltildem << " " << listOfBodies[currentNode].getName()<< endl;
-	      cout << "Ic " << Ic << " Is :" <<Is << " Ec :" << (int)Ec << " Es :" << (int)Es << endl;
-      */
-
       // Compute tilde m
       aDB.m_tildem = ltotaltildem;
       
@@ -784,7 +776,6 @@ void DynamicMultiBody::InertiaMatricesforRMCFirstStep()
 	    listOfBodies[Is].m_tildem_sister;
 	}
 	
-      //      cout << "Up here" << endl;
       // Compute Tilde CoM (Eq 24 on Kajita IROS 2003 p1647)
       MAL_S3_VECTOR(ltildec,double);
       ltildec =   aDB.w_c *ltotaltildem ;
@@ -1118,7 +1109,7 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
   listOfBodies.resize(listeCorps.size());
   for(unsigned int i=0;i<listeCorps.size();i++)
     listOfBodies[i] = listeCorps[i];
-
+    
   ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
@@ -2267,17 +2258,33 @@ int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 
 Joint * DynamicMultiBody::JointFromRank(int aRank)
 {
-  string JointName;
-  for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+  if (m_LinksBetweenJointNamesAndRank.size()!=0)
     {
-      if (m_LinksBetweenJointNamesAndRank[i].RankInConfiguration==(unsigned int)aRank)
-	JointName = m_LinksBetweenJointNamesAndRank[i].LinkName;
+      string JointName;
+      for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
+	{
+	  if (m_LinksBetweenJointNamesAndRank[i].RankInConfiguration==(unsigned int)aRank)
+	    JointName = m_LinksBetweenJointNamesAndRank[i].LinkName;
+	}
+      for(unsigned int i=0;i<m_JointVector.size();i++)
+	{
+	  if (((Joint *)m_JointVector[i])->getName()==JointName)
+	    return (Joint *)m_JointVector[i];
+	}
     }
+
+  int CurrentTestRank=0;
+  
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      if (((Joint *)m_JointVector[i])->getName()==JointName)
+      int RankRangeBegin=CurrentTestRank;
+      int RankRangeEnd=RankRangeBegin+((Joint *)m_JointVector[i])->numberDof();
+      if((aRank>=RankRangeBegin) &&
+	 (aRank<=RankRangeEnd))
 	return (Joint *)m_JointVector[i];
+      CurrentTestRank=RankRangeEnd+1;
     }
+  ODEBUG3("Looking for rank " << aRank << " failed " << m_LinksBetweenJointNamesAndRank.size());
   return (Joint *)0;
 }
 
@@ -2285,25 +2292,39 @@ Joint * DynamicMultiBody::JointFromRank(int aRank)
 void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 {
   m_StateVectorToJoint.resize(m_NbDofs);
-  int lindex=0;
+  int lindex=0,StateVectorIndexDefault=0;
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      if (lindex==-1)
+	lindex = StateVectorIndexDefault;
+
       for(unsigned int j=0;j<m_JointVector[i]->numberDof();j++)
-	m_StateVectorToJoint[lindex++]=i;
+	{
+	  m_StateVectorToJoint[lindex++]=i;
+	  StateVectorIndexDefault++;
+	}
     }
   
   
   m_StateVectorToDOFs.clear();
   m_StateVectorToDOFs.resize(m_NbDofs);
   lindex=0;
+  StateVectorIndexDefault=0;
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      if (lindex==-1)
+	lindex = StateVectorIndexDefault;
+
       ODEBUG(((Joint *)m_JointVector[i])->getName() << " " << lindex);
       for(unsigned int j=0;j<m_JointVector[i]->numberDof();j++)
-	m_StateVectorToDOFs[lindex++]=j;
+	{
+	  m_StateVectorToDOFs[lindex++]=j;
+	  StateVectorIndexDefault++;
+	}
     }
+  cout << "BuildStateVectorFromJoints : " << StateVectorIndexDefault << endl;
 
   m_VRMLIDToConfiguration.resize(m_NbOfVRMLIDs+1);
   for(unsigned int i=0;i<m_StateVectorToJoint.size();)

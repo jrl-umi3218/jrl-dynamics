@@ -106,22 +106,19 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
   
   a2HDR->rootJoint(*newJoint);
   
+  cout << " ================== BEGIN COPY BY CONSTRUCTOR  =================== " << endl ;
+
   recursiveMultibodyCopy(InitJoint, newJoint) ;
  
-  
-  
-  cout << " ================== COPY BY CONSTRUCTOR  =================== " << endl ;
+  cout << " ================== END COPY BY CONSTRUCTOR  =================== " << endl ;
   RecursiveDisplayOfJoints(a2HDR->rootJoint());
 
   // Initialize the second humanoid from the joint tree.
-
   std::vector<NameAndRank_t> LinkJointNameAndRank;
   aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
-  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
+  //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
- 
   a2HDR->InitializeFromJointsTree();
-  
  
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
