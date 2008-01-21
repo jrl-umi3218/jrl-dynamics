@@ -2,9 +2,74 @@
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
+#include "dynamicsJRLJapan/robotDynamicsImpl.h"
+
+static CjrlRobotDynamicsObjectConstructor <
+  CimplDynamicRobot, 
+  CimplHumanoidDynamicRobot, 
+  CimplJointFreeFlyer, 
+  CimplJointRotation,
+  CimplJointTranslation,
+  CimplBody >  robotDynamicsObjectConstructor;
+
 
 using namespace std;
 using namespace dynamicsJRLJapan;
+
+static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d inCenter)
+{
+  matrix4d outPose;
+  vector3d x(inAxis);
+  vector3d y(0., 0., 0.);
+  vector3d z;
+  int smallestComponent(0);
+
+  x.normalize();
+
+  if((fabs(x[0]) <= fabs(x[1])) && (fabs(x[0]) <= fabs(x[2]))) {
+    smallestComponent = 0;
+  }
+  else if((fabs(x[1]) <= fabs(x[0])) && (fabs(x[1]) <= fabs(x[2]))) {
+    smallestComponent = 1;
+  }
+  else if((fabs(x[2]) <= fabs(x[0])) && (fabs(x[2]) <= fabs(x[1]))) {
+    smallestComponent = 2;
+  }
+
+  y[smallestComponent] = 1.;
+
+  // we just built a y vector that is neither colinear nor nearly colinear with inAxis
+  
+  z = x * y;
+  z.normalize();
+  
+  y = z * x;
+  
+  // (inAxis, y, z) is now a directly-oriented orthonormal frame
+  
+  outPose.matrix(0,0) = x[0];
+  outPose.matrix(1,0) = x[1];
+  outPose.matrix(2,0) = x[2];
+  outPose.matrix(3,0) = inCenter[0];
+
+  outPose.matrix(0,1) = y[0];
+  outPose.matrix(1,1) = y[1];
+  outPose.matrix(2,1) = y[2];
+  outPose.matrix(3,1) = inCenter[1];
+
+  outPose.matrix(0,2) = z[0];
+  outPose.matrix(1,2) = z[1];
+  outPose.matrix(2,2) = z[2];
+  outPose.matrix(3,2) = inCenter[2];
+
+  outPose.matrix(0,3) = 0;
+  outPose.matrix(1,3) = 0;
+  outPose.matrix(2,3) = 0;
+  outPose.matrix(3,3) = 1;
+
+  return outPose;
+}
+
 
 void DisplayBody(CjrlBody *aBody)
 {
@@ -56,53 +121,74 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 }
 
 
-void recursiveMultibodyCopy(Joint *initJoint, Joint *newJoint)
+void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
 {
   int lNbOfChildren= initJoint->countChildJoints();
 
   // stop test
   if (lNbOfChildren == 0) return ;
 
-  for(int li=0;li<lNbOfChildren;li++)
-    {
+  for(int li=0;li<lNbOfChildren;li++) {
+    Joint *Child = dynamic_cast<Joint*> (initJoint->childJoint(li)) ;
 
-      Joint *Child = dynamic_cast<Joint *> (initJoint->childJoint(li)) ;
-           
-      if (Child != 0) {
-	
-	int type = Child->type();
-	vector3d axe = Child->axe();
-	float q = Child->quantity();
-	matrix4d pose = Child->pose();
-	string name = Child->getName() ;
-	//	int IDinVRML = Child->getIDinVRML();
+    if (Child != 0) {
+      int type =  Child->type();
+      vector3d axisInLocalFrame = Child->axe();
+      vector3d staticTrans; 
+      Child->getStaticTranslation(staticTrans);
+      matrix3d staticRotation;
+      Child->getStaticRotation(staticRotation);
+      vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
+      matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
+      
+      CjrlJoint* a2newJoint;
 
-	Joint *a2newJoint = new Joint(type, axe, q, pose);
-	a2newJoint->setName(name) ;
-	//	a2newJoint->setIDinVRML(IDinVRML);
-	
-	newJoint->addChildJoint(*a2newJoint);
-	a2newJoint->SetFatherJoint(newJoint);
-	recursiveMultibodyCopy(Child, a2newJoint) ;
+      switch (type) {
+      case Joint::REVOLUTE_JOINT:
+	a2newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
+	break;
+      case Joint::FREE_JOINT:
+	a2newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
+	break;
       }
-	
+           
+      newJoint->addChildJoint(*a2newJoint);
+#if 0
+      // 
+      // This function is not in the abstract interface. MAybe a source of bug.
+      a2newJoint->SetFatherJoint(newJoint);
+#endif
+      recursiveMultibodyCopy(Child, a2newJoint) ;
     }
+  }
 }
 
 
-void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
-			       HumanoidDynamicMultiBody *a2HDR)
+void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
+			       CjrlHumanoidDynamicRobot* a2HDR)
 {
-  Joint *InitJoint = dynamic_cast<Joint *>( aHDR->rootJoint()) ;
+  Joint* InitJoint = dynamic_cast<Joint *>( aHDR->rootJoint()) ;
   
   int type =  InitJoint->type();
-  vector3d axe = InitJoint->axe();
+  vector3d axisInLocalFrame = InitJoint->axe();
   float q = InitJoint->quantity();
-  matrix4d pose = InitJoint->pose();
   string name = InitJoint->getName() ;
-  
-  Joint *newJoint = new Joint(type, axe, q, pose);
-  newJoint->setName(name) ;
+  vector3d staticTrans; 
+  InitJoint->getStaticTranslation(staticTrans);
+  matrix3d staticRotation;
+  InitJoint->getStaticRotation(staticRotation);
+  vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
+  matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
+  CjrlJoint* newJoint;
+
+  switch (type) {
+  case Joint::REVOLUTE_JOINT:
+    newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
+    break;
+  case Joint::FREE_JOINT:
+    newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
+    break;
+  }
   
   a2HDR->rootJoint(*newJoint);
   
@@ -118,7 +204,7 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody *aHDR,
   aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
-  a2HDR->InitializeFromJointsTree();
+  a2HDR->initialize();
  
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
@@ -181,19 +267,9 @@ int main(int argc, char *argv[])
       argc--;
     }
 
-  
-
-  CjrlRobotDynamicsObjectConstructor <
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body >  aRobotDynamicsObjectConstructor;
-  
   // Read the first humanoid.
   HumanoidDynamicMultiBody * aHDR = 
-    dynamic_cast<HumanoidDynamicMultiBody*>(aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot());
+    dynamic_cast<HumanoidDynamicMultiBody*>(robotDynamicsObjectConstructor.createhumanoidDynamicRobot());
 
   aHDR->parserVRML(aPath,
 		   aName,
@@ -202,9 +278,10 @@ int main(int argc, char *argv[])
   aHDR->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
 
 
-  // Pretend to build the second humanoid.
-  HumanoidDynamicMultiBody *a2HDR = 
-    dynamic_cast<HumanoidDynamicMultiBody*>(aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot());
+  // 
+  // The second humanoid is constructed through the abstract interface
+  //
+  CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
   PerformCopyFromJointsTree(aHDR, a2HDR);
 
@@ -228,11 +305,16 @@ int main(int argc, char *argv[])
   aHDR->setComputeAcceleration(false);
   aHDR->setComputeBackwardDynamics(false);
   aHDR->setComputeZMP(true);
-  
+
+#if 0
+  // 
+  // These functions are not in the abstract interface. Might be a source of bug.
+  //
   a2HDR->SetTimeStep(0.005);
+  a2HDR->setComputeZMP(true);
   a2HDR->setComputeAcceleration(false);
   a2HDR->setComputeBackwardDynamics(false);
-  a2HDR->setComputeZMP(true);
+#endif
 
   int NbOfDofs = a2HDR->numberDof();
   if (VerboseMode>2)

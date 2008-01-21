@@ -1128,7 +1128,9 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
 
 bool DynamicMultiBody::initialize()
 {
+  std::cout << "DynamicMultiBody::initialize()" << std::endl;
   InitializeFromJointsTree();
+  computeForwardKinematics();
   return true;
 }
 
