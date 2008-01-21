@@ -1130,6 +1130,9 @@ bool DynamicMultiBody::initialize()
 {
   std::cout << "DynamicMultiBody::initialize()" << std::endl;
   InitializeFromJointsTree();
+  unsigned int nbDof = numberDof();
+  vectorN config(nbDof);
+  currentConfiguration(config);
   computeForwardKinematics();
   return true;
 }

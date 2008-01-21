@@ -47,25 +47,25 @@ static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d i
   
   // (inAxis, y, z) is now a directly-oriented orthonormal frame
   
-  outPose(0,0) = x[0];
-  outPose(1,0) = x[1];
-  outPose(2,0) = x[2];
-  outPose(3,0) = inCenter[0];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,0) = x[0];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,0) = x[1];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,0) = x[2];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,0) = inCenter[0];
 
-  outPose(0,1) = y[0];
-  outPose(1,1) = y[1];
-  outPose(2,1) = y[2];
-  outPose(3,1) = inCenter[1];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,1) = y[0];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,1) = y[1];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,1) = y[2];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,1) = inCenter[1];
 
-  outPose(0,2) = z[0];
-  outPose(1,2) = z[1];
-  outPose(2,2) = z[2];
-  outPose(3,2) = inCenter[2];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,2) = z[0];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,2) = z[1];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,2) = z[2];
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,2) = inCenter[2];
 
-  outPose(0,3) = 0;
-  outPose(1,3) = 0;
-  outPose(2,3) = 0;
-  outPose(3,3) = 1;
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,3) = 0;
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,3) = 0;
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,3) = 0;
+  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,3) = 1;
 
   return outPose;
 }
