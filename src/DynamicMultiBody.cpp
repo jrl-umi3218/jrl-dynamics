@@ -2326,7 +2326,6 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 	  StateVectorIndexDefault++;
 	}
     }
-  cout << "BuildStateVectorFromJoints : " << StateVectorIndexDefault << endl;
 
   m_VRMLIDToConfiguration.resize(m_NbOfVRMLIDs+1);
   for(unsigned int i=0;i<m_StateVectorToJoint.size();)

@@ -1,4 +1,3 @@
-// -*- mode: c++; indent-tabs-mode: t; tab-width: 2; c-basic-offset: 2; -*-
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/DynamicBody.h"
 
@@ -152,6 +151,10 @@ bool Joint::addChildJoint(CjrlJoint& aJoint)
       if (m_Children[li]==pjoint)
 	return true;
     }
+  // Make sure I went through this part.
+  ODEBUG("Set father joint : " << pjoint->getName() 
+	  << " "  << getName());
+  pjoint->SetFatherJoint(this);
   m_Children.push_back(pjoint);
   return true;
 }

@@ -20,7 +20,7 @@ static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d i
 {
   matrix4d outPose;
   vector3d x(inAxis);
-  vector3d y(0., 0., 0.);
+  vector3d y;
   vector3d z;
   int smallestComponent(0);
 
@@ -47,25 +47,25 @@ static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d i
   
   // (inAxis, y, z) is now a directly-oriented orthonormal frame
   
-  outPose.matrix(0,0) = x[0];
-  outPose.matrix(1,0) = x[1];
-  outPose.matrix(2,0) = x[2];
-  outPose.matrix(3,0) = inCenter[0];
+  outPose(0,0) = x[0];
+  outPose(1,0) = x[1];
+  outPose(2,0) = x[2];
+  outPose(3,0) = inCenter[0];
 
-  outPose.matrix(0,1) = y[0];
-  outPose.matrix(1,1) = y[1];
-  outPose.matrix(2,1) = y[2];
-  outPose.matrix(3,1) = inCenter[1];
+  outPose(0,1) = y[0];
+  outPose(1,1) = y[1];
+  outPose(2,1) = y[2];
+  outPose(3,1) = inCenter[1];
 
-  outPose.matrix(0,2) = z[0];
-  outPose.matrix(1,2) = z[1];
-  outPose.matrix(2,2) = z[2];
-  outPose.matrix(3,2) = inCenter[2];
+  outPose(0,2) = z[0];
+  outPose(1,2) = z[1];
+  outPose(2,2) = z[2];
+  outPose(3,2) = inCenter[2];
 
-  outPose.matrix(0,3) = 0;
-  outPose.matrix(1,3) = 0;
-  outPose.matrix(2,3) = 0;
-  outPose.matrix(3,3) = 1;
+  outPose(0,3) = 0;
+  outPose(1,3) = 0;
+  outPose(2,3) = 0;
+  outPose(3,3) = 1;
 
   return outPose;
 }
@@ -154,9 +154,10 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
            
       newJoint->addChildJoint(*a2newJoint);
 #if 0
+      Joint *a2newJointdc = dynamic_cast<Joint*>(a2newJoint);
       // 
       // This function is not in the abstract interface. MAybe a source of bug.
-      a2newJoint->SetFatherJoint(newJoint);
+      a2newJointdc->SetFatherJoint(dynamic_cast<Joint*>(newJoint));
 #endif
       recursiveMultibodyCopy(Child, a2newJoint) ;
     }
