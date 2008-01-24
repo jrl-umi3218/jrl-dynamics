@@ -16,6 +16,12 @@ static CjrlRobotDynamicsObjectConstructor <
 using namespace std;
 using namespace dynamicsJRLJapan;
 
+/*
+  This function computes an homogeneous matrix moving 
+    (0,0,0) to inCenter and
+    x-axis to vector inAxis
+*/
+
 static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d inCenter)
 {
   matrix4d outPose;

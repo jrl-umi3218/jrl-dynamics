@@ -1,7 +1,7 @@
 /* Class to implement a Joint object.
 
    Copyright (c) 2007, 
-   @author Olivier Stasse
+   @author Olivier Stasse, Florent Lamiraux
    
    JRL-Japan, CNRS/AIST
 
@@ -48,9 +48,25 @@ namespace dynamicsJRLJapan
       - Rotation around an axis with a quantity (type = ROTATION)
       - Translation of a vector : quantite*axe	(type = TRANSLATION)
       - Rotation through a homogeneous matrix : *rotation (type = FREE_LIBRE)
+
+      \note Two ways of constructing a kinematic chain are supported.
+        \li through VRML parser VRMLReader::ParseVRMLFile
+        \li through abstract robot dynamics interfaces. When using this solution, 
+	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
   class Joint: public CjrlJoint
   {
+  protected:
+    /** 
+	\brief Whether pose was specified in global frame or not 
+	If true, the position of the joint has been defined in the global frame. By convention, the axis of the joint is X-axis in joint frame.
+    */
+    bool m_inGlobalFrame;
+
+    /**
+       \brief Position of the joint in the global frame at construction (joint value is equal to 0).
+    */
+    matrix4d m_globalPoseAtConstruction;
 
   private:
     /*!  Type of the transformation */ 
@@ -63,8 +79,11 @@ namespace dynamicsJRLJapan
     /*! Quantity of the rotation . */
     float m_quantity;
 
-    /*! 4x4 matrix for pose */
-    matrix4d m_pose;
+    /*! 
+      \brief 4x4 matrix for pose 
+      This homogeneous matrix represents the position of this joint frame in the frame of the parent joint.
+    */
+    matrix4d m_poseInParentFrame;
 
     /*! Father joint */
     Joint * m_FatherJoint;
@@ -99,6 +118,22 @@ namespace dynamicsJRLJapan
     
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
+
+    /**
+       \brief Compute the pose of the joint in the global frame or in local frame of parent
+       The relation between poses in the global frame and in local frame of parent joint is the following:
+       \f[
+       R^{global}_{joint} = R^{global}_{parent} R^{parent}_{joint}
+       \f]
+       where
+       \li \f$R^{global}_{joint}\f$ is the pose of the joint in global frame,
+       \li \f$R^{global}_{parent}\f$ is the pose of the parent joint in global frame,
+       \li \f$R^{parent}_{joint}\f$ is the pose of the joint in parent joint local frame.
+
+       If the pose of the joint has been defined in global frame at construction, the local pose in parent frame is computed. 
+       If the pose of the joint has been defined in local frame of parent joint at construction, the global pose is computed.
+    */
+    void computeLocalAndGlobalPose();
 
   public: 
     
@@ -150,20 +185,20 @@ namespace dynamicsJRLJapan
 
     /*! Returns the matrix corresponding to the rigid motion */
     inline const matrix4d & pose() const
-      {return m_pose;};
+      {return m_poseInParentFrame;};
 
     /*! Sets the matrix corresponding to the rigid motion */
     inline void pose(const matrix4d & pose ) 
-      {m_pose=pose;};
+      {m_poseInParentFrame=pose;};
     
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i) 
-      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i/4,i%4);}
+      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i/4,i%4);}
 
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i,
 			       unsigned int j) 
-      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j);}
+      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);}
     
     
     /*! \name Getter and setter for the parameter 
@@ -214,22 +249,22 @@ namespace dynamicsJRLJapan
 
     /*! Get the static translation. */
     inline void getStaticTranslation(vector3d & staticTranslation) 
-      { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3);
-	staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3);
-	staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3); }
+      { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3);
+	staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3);
+	staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3); }
 
     /*! Set the static translation. */
     inline void setStaticTranslation(vector3d & staticTranslation) 
-      { MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,0,3) =staticTranslation(0);
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,1,3) = staticTranslation(1);
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,2,3) = staticTranslation(2) ; }
+      { MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) =staticTranslation(0);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = staticTranslation(1);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = staticTranslation(2) ; }
 
     /*! Get the static rotation. */
     inline void getStaticRotation(matrix3d & staticRotation) 
       { for (int i=0; i<3; i++){
 	  for (int j=0; j<3; j++){
 	    MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation,i,j) 
-	      = MAL_S4x4_MATRIX_ACCESS_I_J(m_pose, i,j);
+	      = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame, i,j);
 	  }
 	}
       }
@@ -238,7 +273,7 @@ namespace dynamicsJRLJapan
     inline void setStaticRotation(matrix3d & staticRotation) 
       { for (int i=0; i<3; i++){
 	  for (int j=0; j<3; j++){
-	    MAL_S4x4_MATRIX_ACCESS_I_J(m_pose,i,j) 
+	    MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j) 
 	      = MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation, i,j);
 	  }
 	}
@@ -493,7 +528,6 @@ namespace dynamicsJRLJapan
   public:
     JointFreeflyer(const matrix4d &inInitialPosition);
     virtual ~JointFreeflyer();
-    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointRotation : public Joint
@@ -501,7 +535,6 @@ namespace dynamicsJRLJapan
   public:
     JointRotation(const matrix4d &inInitialPosition);
     virtual ~JointRotation();
-    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
   class JointTranslation : public Joint
@@ -509,7 +542,6 @@ namespace dynamicsJRLJapan
   public:
     JointTranslation(const matrix4d &inInitialPosition);
     virtual ~JointTranslation();
-    bool updateTransformation(const vectorN& inRobotConfigVector);
   };
 
 };

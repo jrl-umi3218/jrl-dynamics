@@ -1,5 +1,10 @@
+2008/01/24
+	35. Implementation of the joint construction through the abstract interfaces.
+	  A dynamic model of robot can now be built using either of two methods:
+	   1. through VRML parser,
+	   2. through the robot dynamics abstract interface. See documentation of DynamicMultiBody for information.
+	
 2008/01/21
-
 	34. Unit test TestBuildFromJointTreeMathieu now integrally builds the copy of the humanoid robot through the abstract interface.
 	
 2007/11/24

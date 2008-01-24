@@ -39,6 +39,7 @@
 #include <fstream>
 
 #include "dynamicsJRLJapan/DynamicMultiBody.h"
+#include "robotDynamics/jrlBody.h"
 
 #define RESETDEBUG5(y) { ofstream DebugFile; \
     DebugFile.open(y,ofstream::out); \
@@ -80,7 +81,11 @@ using namespace dynamicsJRLJapan;
 
 DynamicMultiBody::DynamicMultiBody()
 {
+  m_ComputeVelocity = true;
+  m_ComputeCoM = true;
+  m_ComputeMomentum = true;
   m_IterationNumber = 0;
+  m_TimeStep = 0.005;
 
   labelTheRoot=1;  
 
@@ -1128,10 +1133,11 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
 
 bool DynamicMultiBody::initialize()
 {
-  std::cout << "DynamicMultiBody::initialize()" << std::endl;
+  setComputeZMP(true);
   InitializeFromJointsTree();
   unsigned int nbDof = numberDof();
-  vectorN config(nbDof);
+  MAL_VECTOR_DIM(config, double, nbDof);
+  MAL_VECTOR_FILL(config, 0);
   currentConfiguration(config);
   computeForwardKinematics();
   return true;
@@ -1141,7 +1147,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
 {
   /* The goal of this method is to recreate the undirected
      graph, to restart the sequence of initialization. */
-  vector<Body> CurrentBody;
+  vector<Body> vectorOfBodies;
   int Depth=0;
   int NbOfBodies=0;
   internalLink CurrentLink ;
@@ -1149,9 +1155,9 @@ void DynamicMultiBody::InitializeFromJointsTree()
   /* Initialize the reading. */
 
   // Default initialization to 30 bodies for one branch.
-  CurrentBody.resize(30); 
-  CurrentBody[0].setLabel(NbOfBodies++);
-  ajouterCorps(CurrentBody[0]);
+  vectorOfBodies.resize(30); 
+  vectorOfBodies[0].setLabel(NbOfBodies++);
+  ajouterCorps(vectorOfBodies[0]);
   Depth++;
 
   MAL_S3_VECTOR(,double) dummy;
@@ -1185,25 +1191,52 @@ void DynamicMultiBody::InitializeFromJointsTree()
 
       
       // Take care of the body.
-      // extend the size of CurrentBody if necessary.
-      if (Depth>(int)CurrentBody.size())
+      // extend the size of vectorOfBodies if necessary.
+      if (Depth>(int)vectorOfBodies.size())
 	{
 	  Body aBody;
-	  CurrentBody.push_back(aBody);
+	  vectorOfBodies.push_back(aBody);
 	}
 
-      Body * lCurrentBody = &CurrentBody[Depth];
+      Body * lCurrentBody = &vectorOfBodies[Depth];
       lCurrentBody->setLabel(NbOfBodies++);
       string lCurrentBodyName=CurrentJoint->getName();
       lCurrentBodyName = "BODY_" + lCurrentBodyName;
       lCurrentBody->setName((char *)lCurrentBodyName.c_str());
-      lCurrentBody->setInertie(mi);
-      lCurrentBody->setMasse(1.0);// 1 kg per default.
-      lCurrentBody->setPositionCoM(cm);
-      lCurrentBody->setLabelMother(CurrentBody[Depth-1].getLabel());
+      lCurrentBody->setLabelMother(vectorOfBodies[Depth-1].getLabel());
 
+      /* 
+	 If a body has already been attached to the joint, 
+	 keep inertial information
+      */
+      CjrlBody* jrlBody = CurrentJoint->linkedBody();
+      if (jrlBody != NULL) {
+	double inertiaVector[9];
+	MAL_S3x3_MATRIX(inertiaMatrix, double);
+	inertiaMatrix = jrlBody->inertiaMatrix();
+	for (unsigned int iRow=0; iRow<3; iRow++){
+	  for (unsigned int iCol=0; iCol<3; iCol++) {
+	    inertiaVector[iRow+3*iCol] = inertiaMatrix(iRow, iCol);
+	  }
+	}
+	lCurrentBody->setInertie(inertiaVector);
+	lCurrentBody->setMasse(jrlBody->mass());
+
+	double com[3];
+	MAL_S3_VECTOR(comVector,double);
+	comVector = jrlBody->localCenterOfMass();
+	com[0] = MAL_S3_VECTOR_ACCESS(comVector, 0);
+	com[1] = MAL_S3_VECTOR_ACCESS(comVector, 1);
+	com[2] = MAL_S3_VECTOR_ACCESS(comVector, 2);
+	lCurrentBody->setPositionCoM(com);
+      }
+      else {
+	lCurrentBody->setInertie(mi);
+	lCurrentBody->setMasse(1.0);// 1 kg per default.
+	lCurrentBody->setPositionCoM(cm);
+      }
       ajouterCorps(*lCurrentBody);
-      ajouterLiaison(CurrentBody[Depth-1],
+      ajouterLiaison(vectorOfBodies[Depth-1],
 		     *lCurrentBody,
 		     CurrentLink);
 	

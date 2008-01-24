@@ -58,6 +58,11 @@ namespace dynamicsJRLJapan
 
   /** @ingroup forwardynamics
       This class simulates the dynamic of a multibody robot.
+
+      \note Two ways of constructing a kinematic chain are supported.
+        \li through VRML parser VRMLReader::ParseVRMLFile
+        \li through abstract robot dynamics interfaces. When using this solution, 
+	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
   class DynamicMultiBody : public virtual CjrlDynamicRobot,
     public MultiBody 
