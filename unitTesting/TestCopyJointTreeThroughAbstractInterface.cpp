@@ -239,41 +239,28 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
 int main(int argc, char *argv[])
 {
   int VerboseMode = 3;
-#if 0
-  string aPath="/home/mpoirier/openrobots/OpenHRP/etc/HRP2JRL/";
-  string aName="HRP2JRLmain.wrl";
-  string JointToRank = "/home/mpoirier/openrobots/share/walkgenjrl/HRP2LinkJointRank.xml";
-  string aSpecificitiesFileName =  "/home/mpoirier/openrobots/share/walkgenjrl/HRP2Specificities.xml";
-#else
   string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
   string aName="HRP2JRLmain.wrl";
-  string JointToRank = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2LinkJointRank.xml";
-  string aSpecificitiesFileName =  "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";
-
-#endif
+  string pathToWalkGenJRL = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/";
 
   int argindex=1;
   if (argc>1)
     {
       aPath=argv[argindex++];
       argc--;
+      if (aPath == "--help") {
+	std::cout << "TestCopyJointTreeThroughAbstractInterface .../OpenHRP/etc/HRP2JRL/ .../share/walkgenjrl/" << std::endl;
+	exit (0);
+      }
     }
   if (argc>1)
     {
-      aName=argv[argindex++];
-      argc--;
-    }
-  if (argc>1)
-    {
-      JointToRank=argv[argindex++];
-      argc--;
-    }
-  if (argc>1)
-    {
-      aSpecificitiesFileName=argv[argindex++];
+      pathToWalkGenJRL=argv[argindex++];
       argc--;
     }
 
+  string JointToRank = pathToWalkGenJRL+"HRP2LinkJointRank.xml";
+  string aSpecificitiesFileName = pathToWalkGenJRL+"HRP2Specificities.xml";
   // Read the first humanoid.
   HumanoidDynamicMultiBody * aHDR = 
     dynamic_cast<HumanoidDynamicMultiBody*>(robotDynamicsObjectConstructor.createhumanoidDynamicRobot());
