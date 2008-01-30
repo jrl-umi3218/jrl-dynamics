@@ -2318,9 +2318,9 @@ Joint * DynamicMultiBody::JointFromRank(int aRank)
       int RankRangeBegin=CurrentTestRank;
       int RankRangeEnd=RankRangeBegin+((Joint *)m_JointVector[i])->numberDof();
       if((aRank>=RankRangeBegin) &&
-	 (aRank<=RankRangeEnd))
+	 (aRank<RankRangeEnd))
 	return (Joint *)m_JointVector[i];
-      CurrentTestRank=RankRangeEnd+1;
+      CurrentTestRank=RankRangeEnd;
     }
   ODEBUG3("Looking for rank " << aRank << " failed " << m_LinksBetweenJointNamesAndRank.size());
   return (Joint *)0;
