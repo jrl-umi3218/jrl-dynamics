@@ -130,17 +130,11 @@ int main(int argc, char *argv[])
       exit(-1);
     }	
 
-  DynamicMultiBody * aDMB=0;
   string aSpecificitiesFileName = argv[3];
   string aPath=argv[1];
   string aName=argv[2];
   string aMapFromJointToRank=argv[4];
 
-#if 0
-  aDMB = new DynamicMultiBody();
-  aDMB->parserVRML(aPath,aName,"");
-  HumanoidDynamicMultiBody *aHDMB = new HumanoidDynamicMultiBody(aDMB,aSpecificitiesFileName);
-#else
   CjrlRobotDynamicsObjectConstructor<
   dynamicsJRLJapan::DynamicMultiBody, 
     dynamicsJRLJapan::HumanoidDynamicMultiBody, 
@@ -163,7 +157,6 @@ int main(int argc, char *argv[])
   cout << "Here in between" << endl;
   aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
   cout << " Finished the initialization"<< endl;
-#endif
   
   // Display tree of the joints.
   CjrlJoint* rootJoint = aHDMB->rootJoint();  

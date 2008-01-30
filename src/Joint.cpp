@@ -51,11 +51,11 @@ using namespace dynamicsJRLJapan;
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
 	     float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
+  m_inGlobalFrame(false),
   m_type(ltype),
   m_axe(laxe),
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
-  m_inGlobalFrame(false),
   m_FatherJoint(0),
   m_IDinVRML(-1)
 {
@@ -65,10 +65,10 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
 	     float lquantite, MAL_S3_VECTOR(,double) & translationStatic):
+  m_inGlobalFrame(false),
   m_type(ltype),
   m_axe(laxe),
   m_quantity(lquantite),
-  m_inGlobalFrame(false),
   m_FatherJoint(0),
   m_IDinVRML(-1)
 
@@ -84,10 +84,10 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
 
 Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe, 
 	     float lquantite):
+  m_inGlobalFrame(false),
   m_type(ltype),
   m_axe(laxe),
   m_quantity(lquantite),
-  m_inGlobalFrame(false),
   m_FatherJoint(0),
   m_IDinVRML(-1)
 {
@@ -118,8 +118,8 @@ Joint::Joint(const Joint &r)
 }
 
 Joint::Joint():  
-  m_quantity(0.0),
   m_inGlobalFrame(false),
+  m_quantity(0.0),
   m_FatherJoint(0),
   m_IDinVRML(-1)
   

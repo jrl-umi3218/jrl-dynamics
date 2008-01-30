@@ -178,7 +178,6 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
   
   int type =  InitJoint->type();
   vector3d axisInLocalFrame = InitJoint->axe();
-  float q = InitJoint->quantity();
   string name = InitJoint->getName() ;
   vector3d staticTrans; 
   InitJoint->getStaticTranslation(staticTrans);

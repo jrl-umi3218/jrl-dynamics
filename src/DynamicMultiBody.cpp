@@ -181,7 +181,7 @@ void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, in
   ODEBUG(" axe: " << listOfBodies[BodyID].a);
   // Update the translation vector
   listeLiaisons[JointID].aJoint->getStaticTranslation(listOfBodies[BodyID].b);
-  ODEBUG(" static translation: " << listOfBodies[BodyID].b);
+  ODEBUG(" JointID: " << JointID << "BodyID: " << BodyID << ", static translation: " << listOfBodies[BodyID].b);
   // Update the rotation matrix
   listeLiaisons[JointID].aJoint->getStaticRotation(listOfBodies[BodyID].R_static);
   ODEBUG(" Rotation matrix: " << endl << listOfBodies[BodyID].R_static);
