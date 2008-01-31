@@ -2713,8 +2713,6 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
   CjrlBody* body;
   CjrlJoint* joint;
 
-  vector3d localCOM, P2COM;
-  
   double weight;
   unsigned int rank,i,k,l,line,col;
   
@@ -2725,18 +2723,11 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
           continue;
 
       body = joint->linkedBody();
-      localCOM = body->localCenterOfMass();
-      const matrix4d& mJoint = joint->currentTransformation();
-      for (line = 0; line <3; line++)
-      {
-          P2COM[line] = 0;
-          for (col = 0; col <3; col++)
-              P2COM[line] +=                      MAL_S4x4_MATRIX_ACCESS_I_J(mJoint,line,col)*MAL_S3_VECTOR_ACCESS(localCOM,col);
-      }
+      const vector3d& localCOM = body->localCenterOfMass();
 
       weight = body->mass()/mass();
 
-      joint->getJacobianPointWrtConfig( P2COM, attCalcJointJacobian );
+      joint->getJacobianPointWrtConfig( localCOM, attCalcJointJacobian );
       routeJoints = joint->jointsFromRootToThis();
       for (k= 1; k< routeJoints.size(); k++)
       {
