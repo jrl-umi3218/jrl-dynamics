@@ -121,9 +121,9 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
       palmAxis[1] = 1;
       palmAxis[2] = 0;
   
-      m_rightHand = new Hand(rightWrist(), center, okayAxis, showingAxis, palmAxis);
+      rightHand(new Hand(rightWrist(), center, okayAxis, showingAxis, palmAxis));
       palmAxis[1] = -1;
-      m_leftHand = new Hand(leftWrist(), center, okayAxis, showingAxis, palmAxis);
+      leftHand(new Hand(leftWrist(), center, okayAxis, showingAxis, palmAxis));
     }
   else
     {

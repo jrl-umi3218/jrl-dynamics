@@ -181,7 +181,7 @@ namespace dynamicsJRLJapan
       \brief Set the pointer to the left Wrist joint.
       */
       inline void leftWrist(CjrlJoint *inLeftWrist)
-      { m_LeftWristJoint = (Joint *)inLeftWrist;};
+      { m_LeftWristJoint = inLeftWrist;};
       
       /** 
       \brief Get a pointer to the left Wrist.
@@ -193,7 +193,7 @@ namespace dynamicsJRLJapan
       \brief Set the pointer to the right Wrist joint.
       */
       inline void rightWrist(CjrlJoint *inRightWrist)
-      { m_RightWristJoint = (Joint *)inRightWrist;}
+      { m_RightWristJoint = inRightWrist;}
       
       /** 
       \brief Get a pointer to the right Wrist.
@@ -202,10 +202,22 @@ namespace dynamicsJRLJapan
       { return m_RightWristJoint;}
       
       /**
-        \brief Get a pointer to the left hand
+        \brief Set the pointer to the right hand
+      */
+      virtual void rightHand(CjrlHand* inRightHand)
+      { m_rightHand = inRightHand;}
+  
+      /**
+        \brief Get a pointer to the right hand
       */
       virtual CjrlHand* rightHand()
       { return m_rightHand;}
+  
+      /**
+        \brief Set the pointer to the left hand
+      */
+      virtual void leftHand(CjrlHand* inLeftHand)
+      { m_leftHand = inLeftHand;}
   
       /**
         \brief Get a pointer to the left hand
