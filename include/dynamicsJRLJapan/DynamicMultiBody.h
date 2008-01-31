@@ -268,7 +268,7 @@ namespace dynamicsJRLJapan
     matrixNxP m_JacobianOfTheCoM;
     
     /*! Computation matrix */
-    matrixNxP attCalcJointJacobian;
+    matrixNxP m_attCalcJointJacobian;
 
     /*! \brief Link between joint and state vector position */
     std::vector<NameAndRank_t> m_LinksBetweenJointNamesAndRank;
@@ -289,7 +289,7 @@ namespace dynamicsJRLJapan
     /**
     \brief a temporary vector used in forwardTransformation, to avoid dynamic allocation in a recursive method
     */
-    vector3d vek;
+    vector3d m_vek;
     
     /*! \brief Boolean control variables. 
       @{

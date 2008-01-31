@@ -2245,7 +2245,7 @@ void DynamicMultiBody::ComputeNumberOfJoints()
 
   // Resize the jacobian of the CoM.
   MAL_MATRIX_RESIZE(m_JacobianOfTheCoM,3,m_NbDofs);
-  MAL_MATRIX_RESIZE(attCalcJointJacobian,6,m_NbDofs);
+  MAL_MATRIX_RESIZE(m_attCalcJointJacobian,6,m_NbDofs);
 }
 
 void DynamicMultiBody::ReadSpecificities(string aFileName)
@@ -2721,7 +2721,7 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
   CjrlJoint* joint;
 
   double weight;
-  unsigned int rank,i,k,l,line,col;
+  unsigned int rank,i,k,l;
   
   for (i=0; i < m_JointVector.size(); i++)
   {
@@ -2734,23 +2734,26 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
 
       weight = body->mass()/mass();
 
-      joint->getJacobianPointWrtConfig( localCOM, attCalcJointJacobian );
+      joint->getJacobianPointWrtConfig( localCOM, m_attCalcJointJacobian );
       routeJoints = joint->jointsFromRootToThis();
       for (k= 1; k< routeJoints.size(); k++)
       {
           rank = routeJoints[k]->rankInConfiguration(); 
           for (l=0; l<3;l++)
-              m_JacobianOfTheCoM(l,rank) += weight * attCalcJointJacobian(l,rank);
+              m_JacobianOfTheCoM(l,rank) += weight * m_attCalcJointJacobian(l,rank);
       }
       
-      ublas::noalias(ublas::subrange(m_JacobianOfTheCoM,0,3,0,6)) += weight * ublas::subrange(attCalcJointJacobian,0,3,0,6);
       /*
+      ublas::noalias(ublas::subrange(m_JacobianOfTheCoM,0,3,0,6)) += weight * 
+      ublas::subrange(m_attCalcJointJacobian,0,3,0,6);
+      */
+      
       for (k= 0; k<6;k++)
       {
           for (l=0; l<3;l++)
-              m_JacobianOfTheCoM(l,k) += weight * attCalcJointJacobian(l,k);
+              m_JacobianOfTheCoM(l,k) += weight * m_attCalcJointJacobian(l,k);
       }
-      */
+
   }
   
 }
@@ -2787,8 +2790,8 @@ void DynamicMultiBody::forwardTransformation(Joint* inJoint, const vectorN& inCo
   inJoint->updateTransformation(inConfiguration);
 
   //update position of center of mass in world frame
-  MAL_S3x3_C_eq_A_by_B(vek, body->R, body->c);
-  body->w_c = vek + body->p;
+  MAL_S3x3_C_eq_A_by_B(m_vek, body->R, body->c);
+  body->w_c = m_vek + body->p;
   positionCoMPondere += body->w_c * body->getMasse();
     
   for (unsigned int i = 0; i<inJoint->countChildJoints(); i++)
