@@ -669,8 +669,10 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
       quantity( body->q);
       
       RodriguesRotation(body->a, body->q, localR);
-      
-      MAL_S3x3_C_eq_A_by_B(body->R ,parentbody->R , localR);
+
+      MAL_S3x3_MATRIX(,double) Rtmp;
+      MAL_S3x3_C_eq_A_by_B(Rtmp ,parentbody->R , body->R_static);
+      MAL_S3x3_C_eq_A_by_B(body->R , Rtmp, localR);
       body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
     }
     break;
