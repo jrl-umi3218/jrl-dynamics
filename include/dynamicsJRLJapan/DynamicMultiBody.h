@@ -266,6 +266,9 @@ namespace dynamicsJRLJapan
 
     /*! Jacobian of the CoM. */
     matrixNxP m_JacobianOfTheCoM;
+    
+    /*! Computation matrix */
+    matrixNxP attCalcJointJacobian;
 
     /*! \brief Link between joint and state vector position */
     std::vector<NameAndRank_t> m_LinksBetweenJointNamesAndRank;
