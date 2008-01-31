@@ -431,6 +431,13 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
       MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode].R ,Rtmp , Ro);
       listOfBodies[currentNode].Riip1 = Ro;
 
+      for( unsigned int i=0;i<3;i++)
+	for(unsigned int j=0;j<3;j++)
+	  MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode].m_transformation,i,j) = listOfBodies[currentNode].R(i,j);
+      
+      for( unsigned int i=0;i<3;i++)
+	MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode].m_transformation,i,3) = listOfBodies[currentNode].p(i);
+
       ODEBUG("q: "<< aDB.q );
       ODEBUG("p: " 
 	     << listOfBodies[currentNode].p[0] << " " 
