@@ -103,6 +103,11 @@ namespace dynamicsJRLJapan
       sv,  sw,  cv, cw,
       hhv,  hhw,  pph,  ppb;
 
+    /*! Transformation
+      (It is redundant, but required to implement CjrlJoint::currentTransformation)
+     */
+    matrix4d m_transformation;
+
     /**
     Used for Finite difference computations
     */

@@ -53,6 +53,7 @@ DynamicBody::DynamicBody():Body()
   ddq = 0.0;
 
   MAL_S3x3_MATRIX_SET_IDENTITY(R);
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_transformation);
 
   a[0] = a[1] = a[2] = 0;
   b[0] = b[1] = b[2] = 0;

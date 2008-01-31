@@ -255,22 +255,8 @@ std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const
 
 const MAL_S4x4_MATRIX(,double) & Joint::currentTransformation() const
 {
-  MAL_S4x4_MATRIX(,double) * A = new MAL_S4x4_MATRIX(,double);
-
-  MAL_S4x4_MATRIX_SET_IDENTITY((*A));
-
-  if (m_Body!=0)
-    {
-      DynamicBody *m_DBody = (DynamicBody *) m_Body;
-
-      for( unsigned int i=0;i<3;i++)
-	for(unsigned int j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J((*A),i,j) = m_DBody->R(i,j);
-      
-      for( unsigned int i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J((*A),i,3) = m_DBody->p(i);
-    }
-  return *A;
+  DynamicBody *m_DBody = (DynamicBody *) m_Body;
+  return m_DBody->m_transformation;
 }
 
 CjrlRigidVelocity Joint::jointVelocity()
@@ -674,6 +660,13 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
       MAL_S3x3_C_eq_A_by_B(Rtmp ,parentbody->R , body->R_static);
       MAL_S3x3_C_eq_A_by_B(body->R , Rtmp, localR);
       body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
+
+      for( unsigned int i=0;i<3;i++)
+	for(unsigned int j=0;j<3;j++)
+	  MAL_S4x4_MATRIX_ACCESS_I_J(body->m_transformation,i,j) = body->R(i,j);
+      
+      for( unsigned int i=0;i<3;i++)
+	MAL_S4x4_MATRIX_ACCESS_I_J(body->m_transformation,i,3) = body->p(i);
     }
     break;
     
