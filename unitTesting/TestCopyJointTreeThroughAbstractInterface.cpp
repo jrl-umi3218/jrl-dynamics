@@ -147,7 +147,7 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
       vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
       matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
       
-      CjrlJoint* a2newJoint;
+      CjrlJoint* a2newJoint=0;
 
       switch (type) {
       case Joint::REVOLUTE_JOINT:
@@ -185,7 +185,7 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
   InitJoint->getStaticRotation(staticRotation);
   vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
   matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
-  CjrlJoint* newJoint;
+  CjrlJoint* newJoint=0;
 
   switch (type) {
   case Joint::REVOLUTE_JOINT:

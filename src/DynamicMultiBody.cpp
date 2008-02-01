@@ -101,7 +101,7 @@ DynamicMultiBody::DynamicMultiBody()
   m_NbOfVRMLIDs = -1;
   RESETDEBUG4("DebugDataPL.dat");
   RESETDEBUG4("DebugDataZMP.dat");
-  RESETDEBUG5("DebugDataDMB_ZMP.dat");
+  RESETDEBUG4("DebugDataDMB_ZMP.dat");
 }
 
 DynamicMultiBody::~DynamicMultiBody()
@@ -660,7 +660,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  m_ZMP(2) = 0.0;
 	}
 	
-      ODEBUG5( m_IterationNumber << " " 
+      ODEBUG4( m_IterationNumber << " " 
 	       << m_ZMP(0) << " " 
 	       << m_ZMP(1) << " " 
 	       << m_ZMP(2) << " " 
