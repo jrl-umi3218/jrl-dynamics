@@ -264,9 +264,6 @@ namespace dynamicsJRLJapan
     /*! Iteration number */
     unsigned int m_IterationNumber;
 
-    /*! Jacobian of the CoM. */
-    matrixNxP m_JacobianOfTheCoM;
-    
     /*! Computation matrix */
     matrixNxP m_attCalcJointJacobian;
 
@@ -318,6 +315,10 @@ namespace dynamicsJRLJapan
     bool m_ComputeZMP;
 
     /* @} */
+
+  protected:
+    /*! Jacobian of the CoM. */
+    matrixNxP m_JacobianOfTheCoM;
     
   public:
     
