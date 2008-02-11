@@ -2764,6 +2764,11 @@ const MAL_MATRIX(,double) &DynamicMultiBody::jacobianCenterOfMass() const
   
 }
 
+MAL_MATRIX(,double) &DynamicMultiBody::getJacobianOfTheCoM()
+{
+  return m_JacobianOfTheCoM;
+}
+
 
 
 bool DynamicMultiBody::applyConfiguration(const vectorN& inConfiguration)

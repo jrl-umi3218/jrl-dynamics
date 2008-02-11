@@ -264,6 +264,9 @@ namespace dynamicsJRLJapan
     /*! Iteration number */
     unsigned int m_IterationNumber;
 
+    /*! Jacobian of the CoM. */
+    matrixNxP m_JacobianOfTheCoM;
+    
     /*! Computation matrix */
     matrixNxP m_attCalcJointJacobian;
 
@@ -316,10 +319,6 @@ namespace dynamicsJRLJapan
 
     /* @} */
 
-  protected:
-    /*! Jacobian of the CoM. */
-    matrixNxP m_JacobianOfTheCoM;
-    
   public:
     
     /** \brief Default constructor. */
@@ -910,6 +909,12 @@ namespace dynamicsJRLJapan
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
      const matrixNxP & jacobianCenterOfMass() const ;
+
+    /**
+       \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
+    */
+     matrixNxP & getJacobianOfTheCoM() ;
+
     /**
        \brief Get the total mass
     */
