@@ -279,49 +279,14 @@ CjrlJoint* HumanoidDynamicMultiBody::waist()
 
 double HumanoidDynamicMultiBody::getHandClench(CjrlHand* inHand)
 {
-    
-    //Designed for the parallel mechanism of HRP2 two-jaw hands
-    unsigned int dof = inHand->associatedWrist()->childJoint(0)->rankInConfiguration();
-    double upperLimit = upperBoundDof(dof);
-    double lowerLimit = lowerBoundDof(dof);
-    double curVal = currentConfiguration()(dof);
-    
-    return (upperLimit - curVal)/(upperLimit-lowerLimit);
+    // default implementation. always returns 0
+    return 0;
 }
 
 bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchingValue)
 {
-    //Designed for the parallel mechanism of HRP2 two-jaw hands
-    if (inClenchingValue > 1 || inClenchingValue < 0)
-    {
-        std::cout << "HumanoidDynamicMultiBody::setHandClench(): argument 2 should be between 0 and 1\n";
-        return false;
-    }
-    
-    unsigned int dof = inHand->associatedWrist()->childJoint(0)->rankInConfiguration();
-    double upperLimit = upperBoundDof(dof);
-    double lowerLimit = lowerBoundDof(dof);
-    double wantedVal =  upperLimit - inClenchingValue*(upperLimit-lowerLimit);
-    
-    vectorN config = currentConfiguration();
-    
-    config(dof) = wantedVal;
-    
-    unsigned int parallelDofStart;
-    if (inHand == m_rightHand)
-        parallelDofStart = 36;
-    else
-        parallelDofStart = 41;
-    
-    int coef = -1;
-    for (unsigned int i = parallelDofStart ;i<parallelDofStart+5; i++)
-    {
-        config(i) = coef * wantedVal;
-        coef *= -1;
-    }
-    
-    currentConfiguration( config );
-    return true;
+    // default implementation. always returns false
+    return false;
 }
 
 
