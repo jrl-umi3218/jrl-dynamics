@@ -481,6 +481,11 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  ODEBUG("c: " << listOfBodies[currentNode].c);
 	  MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode].R, listOfBodies[currentNode].c);
 	  lw_c = cl + listOfBodies[currentNode].p;
+	  double cm[3];
+	  for(int i=0; i<3; i++)
+	    cm[i] = lw_c[i];
+	  listOfBodies[currentNode].setPositionCoM(cm);
+	  ODEBUG("com: "<<currentNode<<" "<< cm[0] << " " << cm[1] << " " << cm[2]);
 	  positionCoMPondere +=  lw_c * listOfBodies[currentNode].getMasse();
 	  ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
 	  ODEBUG("Masse " << listOfBodies[currentNode].getMasse());
