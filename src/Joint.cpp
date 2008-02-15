@@ -536,6 +536,7 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 	  "C " << endl << C <<
 	  "D " << endl << D << 
 	  "B " << endl << B );
+  body->m_transformation = m_poseInParentFrame; 
 }
 
 void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelocity,
