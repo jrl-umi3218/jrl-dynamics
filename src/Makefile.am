@@ -22,5 +22,6 @@ libdynamicsJRLJapan_la_LDFLAGS = \
 
 libdynamicsJRLJapan_la_CPPFLAGS = \
 	-I$(srcdir)/../include	\
-	@ROBOTDYNAMICS_CFLAGS@ \
+	-I$(top_builddir)	\
+	@ROBOTDYNAMICS_CFLAGS@ 	\
 	@MAL_CFLAGS@
