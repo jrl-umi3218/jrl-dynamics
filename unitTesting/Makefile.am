@@ -2,8 +2,14 @@
 #  Copyright 
 # 
 
+noinst_PROGRAMS=\
+			TestHumanoidDynamicRobot	\
+			TestBuildFromJointTree		\
+			TestCopyJointTreeThroughAbstractInterface
 
-noinst_PROGRAMS = TestHumanoidDynamicRobot TestHumanoidDynamicRobotglut TestBuildFromJointTree TestCopyJointTreeThroughAbstractInterface
+if HAVE_GLUT
+noinst_PROGRAMS+=	TestHumanoidDynamicRobotglut
+endif
 
 TestHumanoidDynamicRobot_SOURCES = TestHumanoidDynamicRobot.cpp 
 
@@ -20,15 +26,21 @@ TestHumanoidDynamicRobotglut_LDADD = ../src/libdynamicsJRLJapan.la @ROBOTDYNAMIC
 
 TestBuildFromJointTree_SOURCES = TestBuildFromJointTree.cpp 
 
-TestBuildFromJointTree_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@ @MAL_CFLAGS@
+TestBuildFromJointTree_CPPFLAGS=\
+			-I$(srcdir)/../include		\
+			@ROBOTDYNAMICS_CFLAGS@		\
+			@MAL_CFLAGS@
 
-TestBuildFromJointTree_LDADD = ../src/libdynamicsJRLJapan.la @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@ -lglut -lGL
+TestBuildFromJointTree_LDADD = ../src/libdynamicsJRLJapan.la @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@
 
 TestCopyJointTreeThroughAbstractInterface_SOURCES = TestCopyJointTreeThroughAbstractInterface.cpp 
 
 TestCopyJointTreeThroughAbstractInterface_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@ @MAL_CFLAGS@
 
-TestCopyJointTreeThroughAbstractInterface_LDADD = ../src/libdynamicsJRLJapan.la @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@ -lglut -lGL
+TestCopyJointTreeThroughAbstractInterface_LDADD=\
+			../src/libdynamicsJRLJapan.la	\
+			@ROBOTDYNAMICS_LIBS@		\
+			@MAL_LIBS@
 
 #TestPb1_SOURCES = TestPb1.cpp 
 
