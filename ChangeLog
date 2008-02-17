@@ -1,17 +1,14 @@
-2008/01/24
+
+dynamic-JRLJapan 1.7 released February 17, 2008
+
 	35. Implementation of the joint construction through the abstract interfaces.
 	  A dynamic model of robot can now be built using either of two methods:
 	   1. through VRML parser,
-	   2. through the robot dynamics abstract interface. See documentation of DynamicMultiBody for information.
-	
-2008/01/21
-	34. Unit test TestBuildFromJointTreeMathieu now integrally builds the copy of the humanoid robot through the abstract interface.
-	
-2007/11/24
+	   2. through the robot dynamics abstract interface. See
+	      documentation of DynamicMultiBody for information.
+	34. Unit test TestBuildFromJointTreeMathieu now integrally builds
+	    the copy of the humanoid robot through the abstract interface.
 	33. Added dependence to MatrixAbstractLayer (removed from abstractRobotDynamics).
-
-dynamic-JRLJapan 1.6.99 current version
-
 	32. correct make file to compile untesting using the current (devel) version
 	31. made new version number
 	
