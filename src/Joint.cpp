@@ -474,6 +474,9 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = a6DVector(2);  
   
   DynamicBody* body = dynamic_cast<DynamicBody*>(m_Body);
+  if (!body){
+      std::cerr << "m_Body is not an instance of DynamicBody" << std::endl;
+  }
   body->p[0] = a6DVector(0);
   body->p[1] = a6DVector(1);
   body->p[2] = a6DVector(2);
@@ -536,6 +539,7 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 	  "C " << endl << C <<
 	  "D " << endl << D << 
 	  "B " << endl << B );
+  body->m_transformation = m_poseInParentFrame; 
 }
 
 void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelocity,

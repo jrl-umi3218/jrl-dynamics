@@ -1,3 +1,7 @@
+#include "dynamics-config.h"
+
+#include <err.h>
+
 #include "dynamicsJRLJapan/fileReader.h"
 
 namespace dynamicsJRLJapan
@@ -152,8 +156,16 @@ int nextJointKeyWord(FILE* fichier)
       {
 	char *buf=NULL;
 	size_t n=256;
+#ifdef HAVE_GETLINE
 	getline(&buf, &n, fichier);
-	free(buf);
+#else
+	buf = (char *)malloc(n);
+	if (!buf)
+	  warnx("cannot allocate memory");
+	else
+	  fgets(buf, n, fichier);
+#endif /* HAVE_GETLINE */
+	if (buf) free(buf);
       }
       break;
     }

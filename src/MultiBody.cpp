@@ -155,13 +155,13 @@ MultiBody::~MultiBody(void)
 void MultiBody::ajouterCorps(Body &b)
 {
   masse += b.getMasse();
-  listeCorps.push_back(b);
+  listeCorps.push_back(&b);
   liaisons.push_back(vector<appariement>());
 }
 
 Body * MultiBody::dernierCorps()
 {
-  return &listeCorps[listeCorps.size()-1];
+  return listeCorps[listeCorps.size()-1];
 }
 
 void MultiBody::ajouterLiaison(Body &corps1, Body &corps2, internalLink & l)
@@ -169,7 +169,7 @@ void MultiBody::ajouterLiaison(Body &corps1, Body &corps2, internalLink & l)
   //recherche de l'index du premier corps dans listeCorps
   unsigned int index1;
   for (index1 = 0; index1<listeCorps.size(); index1++) {
-    if (corps1.getLabel() == listeCorps[index1].getLabel()) {
+    if (corps1.getLabel() == listeCorps[index1]->getLabel()) {
       break;
     }
   }
@@ -177,7 +177,7 @@ void MultiBody::ajouterLiaison(Body &corps1, Body &corps2, internalLink & l)
   //recherche de l'index du deuxieme corps dans listeCorps
   unsigned int index2;
   for (index2 = 0; index2<listeCorps.size(); index2++) {
-    if (corps2.getLabel() == listeCorps[index2].getLabel()) {
+    if (corps2.getLabel() == listeCorps[index2]->getLabel()) {
       break;
     }
   }
@@ -202,7 +202,7 @@ void MultiBody::ajouterLiaisonFixe(Body &corps1, Body &corps2,
   //recherche de l'index du premier corps dans listeCorps
   unsigned int index1;
   for (index1 = 0; index1<listeCorps.size(); index1++) {
-    if (corps1.getLabel() == listeCorps[index1].getLabel()) {
+    if (corps1.getLabel() == listeCorps[index1]->getLabel()) {
       break;
     }
   }
@@ -210,7 +210,7 @@ void MultiBody::ajouterLiaisonFixe(Body &corps1, Body &corps2,
   //recherche de l'index du deuxieme corps dans listeCorps
   unsigned int index2;
   for (index2 = 0; index2<listeCorps.size(); index2++) {
-    if (corps2.getLabel() == listeCorps[index2].getLabel()) {
+    if (corps2.getLabel() == listeCorps[index2]->getLabel()) {
       break;
     }
   }
@@ -233,7 +233,7 @@ void MultiBody::supprimerLiaisonEntre(Body &corps1, Body &corps2)
   //recherche de l'index du premier corps dans listeCorps
   unsigned int c1;
   for (c1 = 0; c1<listeCorps.size(); c1++) {
-    if (corps1.getLabel() == listeCorps[c1].getLabel()) {
+    if (corps1.getLabel() == listeCorps[c1]->getLabel()) {
       break;
     }
   }
@@ -241,7 +241,7 @@ void MultiBody::supprimerLiaisonEntre(Body &corps1, Body &corps2)
   //recherche de l'index du deuxieme corps dans listeCorps
   unsigned int c2;
   for (c2 = 0; c2<listeCorps.size(); c2++) {
-    if (corps2.getLabel() == listeCorps[c2].getLabel()) {
+    if (corps2.getLabel() == listeCorps[c2]->getLabel()) {
       break;
     }
   }
@@ -295,7 +295,7 @@ void MultiBody::supprimerCorps(Body &b)
 {
   unsigned int i;
   for (i=0; i<listeCorps.size(); i++) {
-    if (listeCorps[i].getLabel() == b.getLabel())
+    if (listeCorps[i]->getLabel() == b.getLabel())
       break;
   }
   if (i==listeCorps.size())
@@ -310,14 +310,14 @@ void MultiBody::supprimerCorps(int index)
     supprimerLiaison(liaisons[index][i].liaison);
     cout << "suppression liaison\n";
   }
-  listeCorps[index].setLabel(-1);
+  listeCorps[index]->setLabel(-1);
 
 }
 void MultiBody::supprimerCorpsLabel(int label)
 {
   unsigned int i;
   for (i=0; i<listeCorps.size(); i++) {
-    if (listeCorps[i].getLabel() == label)
+    if (listeCorps[i]->getLabel() == label)
       break;
   }
   if (i==listeCorps.size())
@@ -358,7 +358,7 @@ void MultiBody::afficherCorps()
 {
   for (unsigned int i=0; i<listeCorps.size(); i++) {
     cout << "corps "<< i << " : \n";
-    listeCorps[i].Display();
+    listeCorps[i]->Display();
     for (unsigned int j=0; j<liaisons[i].size(); j++) {
       cout << "    lie a corps " << liaisons[i][j].corps << " par liaison " 
 	   << liaisons[i][j].liaison << " (label " << listeLiaisons[liaisons[i][j].liaison].label <<")\n";

@@ -8,4 +8,4 @@ depcomp
 install-sh
 ltmain.sh
 missing
-
+dynamics-config.h.in

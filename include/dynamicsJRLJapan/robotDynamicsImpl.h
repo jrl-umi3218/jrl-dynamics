@@ -15,7 +15,7 @@ typedef dynamicsJRLJapan::JointFreeflyer CimplJointFreeFlyer;
 typedef dynamicsJRLJapan::JointRotation CimplJointRotation;
 typedef dynamicsJRLJapan::JointTranslation CimplJointTranslation;
 typedef dynamicsJRLJapan::Joint CimplJoint;
-typedef dynamicsJRLJapan::Body CimplBody;
+typedef dynamicsJRLJapan::DynamicBody CimplBody;
 typedef dynamicsJRLJapan::Hand CimplHand;
 
 #endif

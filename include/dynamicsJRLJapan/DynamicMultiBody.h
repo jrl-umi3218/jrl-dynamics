@@ -74,7 +74,7 @@ namespace dynamicsJRLJapan
     int labelTheRoot;
     
     /**  List of bodies with dynamical properties */
-    vector<DynamicBody> listOfBodies;
+    vector<DynamicBody *> listOfBodies;
     
     /** Array to convert Joint Id from VRL file to Body array index. */
     vector<int> ConvertIDINVRMLToBodyID;
@@ -264,6 +264,9 @@ namespace dynamicsJRLJapan
     /*! Iteration number */
     unsigned int m_IterationNumber;
 
+    /*! Jacobian of the CoM. */
+    matrixNxP m_JacobianOfTheCoM;
+    
     /*! Computation matrix */
     matrixNxP m_attCalcJointJacobian;
 
@@ -316,10 +319,6 @@ namespace dynamicsJRLJapan
 
     /* @} */
 
-  protected:
-    /*! Jacobian of the CoM. */
-    matrixNxP m_JacobianOfTheCoM;
-    
   public:
     
     /** \brief Default constructor. */
@@ -363,6 +362,16 @@ namespace dynamicsJRLJapan
 	in the state vector.
     */
     virtual void CreatesTreeStructure(const char * option);
+
+    /**
+       \brief Set the joint ordering in the configuration vector
+       
+       \param inJointVector Vector of the robot joints
+       
+       Specifies the order of the joints in the configuration vector. 
+       The vector should contain all the joints of the current robot.
+    */
+    virtual void setJointOrderInConfig(std::vector<CjrlJoint*> inJointVector);
 
     /** \name Dynamic parameters computation related methods 
      */
@@ -910,6 +919,12 @@ namespace dynamicsJRLJapan
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
      const matrixNxP & jacobianCenterOfMass() const ;
+
+    /**
+       \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
+    */
+     matrixNxP & getJacobianOfTheCoM() ;
+
     /**
        \brief Get the total mass
     */
