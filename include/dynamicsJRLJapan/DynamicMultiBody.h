@@ -363,6 +363,16 @@ namespace dynamicsJRLJapan
     */
     virtual void CreatesTreeStructure(const char * option);
 
+    /**
+       \brief Set the joint ordering in the configuration vector
+       
+       \param inJointVector Vector of the robot joints
+       
+       Specifies the order of the joints in the configuration vector. 
+       The vector should contain all the joints of the current robot.
+    */
+    virtual void setJointOrderInConfig(std::vector<CjrlJoint*> inJointVector);
+
     /** \name Dynamic parameters computation related methods 
      */
 

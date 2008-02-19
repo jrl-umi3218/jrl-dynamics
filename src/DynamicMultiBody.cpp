@@ -3048,3 +3048,22 @@ int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t
     }
   return 0;
 }
+
+void DynamicMultiBody::setJointOrderInConfig(std::vector<CjrlJoint *>inJointVector)
+{
+ if (m_LinksBetweenJointNamesAndRank.size()!=inJointVector.size())
+   m_LinksBetweenJointNamesAndRank.resize(inJointVector.size());
+ 
+ unsigned int LocalRank = 0;
+ for(unsigned int i=0;i<inJointVector.size();i++)
+   {
+
+     char Buffer[128];
+     memset(Buffer,0,128);
+     sprintf(Buffer,"JOINT_%2d",i);
+     strcpy(m_LinksBetweenJointNamesAndRank[i].LinkName,Buffer);
+     m_LinksBetweenJointNamesAndRank[i].RankInConfiguration=LocalRank;
+     LocalRank+= inJointVector[i]->numberDof();
+   }
+
+}
