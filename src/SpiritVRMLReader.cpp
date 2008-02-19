@@ -88,7 +88,7 @@ namespace dynamicsJRLJapan
       internalLink CurrentLink;
 
        // Vector of current branch
-      vector<Body> CurrentBody;
+      vector<Body *> CurrentBody;
 
       // CurrentTranslation.
       MAL_S3_VECTOR(,double) JointTranslation;
@@ -281,16 +281,16 @@ namespace dynamicsJRLJapan
       void fAddBody() const
       {
 	int lDepth = m_DataForParsing->Depth;
-	Body * lCurrentBody = &m_DataForParsing->CurrentBody[lDepth];
+	Body * lCurrentBody = m_DataForParsing->CurrentBody[lDepth];
 	lCurrentBody->setLabel(m_DataForParsing->NbOfBodies++);
 	lCurrentBody->setName((char *)(m_DataForParsing->aName).c_str());
 	lCurrentBody->setInertie(m_DataForParsing->mi);
 	lCurrentBody->setMasse(m_DataForParsing->mass);
 	lCurrentBody->setPositionCoM(m_DataForParsing->cm);
 	if (m_DataForParsing->Depth!=0)
-	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1].getLabel());
+	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
 	m_MultiBody->ajouterCorps(*lCurrentBody);
-	m_MultiBody->ajouterLiaison(m_DataForParsing->CurrentBody[lDepth-1],
+	m_MultiBody->ajouterLiaison(*m_DataForParsing->CurrentBody[lDepth-1],
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
 	
@@ -327,7 +327,8 @@ namespace dynamicsJRLJapan
 
       void fBodySubBlockName() const
       {
-	m_DataForParsing->CurrentBody[m_DataForParsing->Depth].setName((char *)m_DataForParsing->aName.c_str());
+	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
+	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the Joint: |" << m_DataForParsing->aName<<"|" << endl;
       }
@@ -1179,8 +1180,9 @@ namespace dynamicsJRLJapan
 
 	// Creation du corps de reference
 	m_DataForParsing->CurrentBody.resize(DEPTH_MAX);
-	m_DataForParsing->CurrentBody[0].setLabel(m_DataForParsing->NbOfBodies++);
-	m_MultiBody->ajouterCorps(m_DataForParsing->CurrentBody[0]);
+	m_DataForParsing->CurrentBody[0] = new Body();
+	m_DataForParsing->CurrentBody[0]->setLabel(m_DataForParsing->NbOfBodies++);
+	m_MultiBody->ajouterCorps(*m_DataForParsing->CurrentBody[0]);
 	m_DataForParsing->Depth = 0;
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;

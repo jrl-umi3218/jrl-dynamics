@@ -74,7 +74,7 @@ namespace dynamicsJRLJapan
     int labelTheRoot;
     
     /**  List of bodies with dynamical properties */
-    vector<DynamicBody> listOfBodies;
+    vector<DynamicBody *> listOfBodies;
     
     /** Array to convert Joint Id from VRL file to Body array index. */
     vector<int> ConvertIDINVRMLToBodyID;

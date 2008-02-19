@@ -132,7 +132,7 @@ namespace dynamicsJRLJapan
     /*!  List of links. */
     vector<internalLink> listeLiaisons;
     /*!  List Of Bodies. */
-    vector<Body> listeCorps;
+    vector<Body *> listeCorps;
     /*!  Links with other bodies. */
     vector<vector<appariement> > liaisons;
     /*!  Counter for links. */
