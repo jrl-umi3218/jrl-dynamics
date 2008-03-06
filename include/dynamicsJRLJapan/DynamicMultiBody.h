@@ -1035,6 +1035,40 @@ namespace dynamicsJRLJapan
 
      /* @} */
    
+     /*! \brief Implementation of properties. 
+       @{
+      */
+     /*! \brief Returns true if the property is supported.
+       \param inProperty The valid value are:
+       \li ComputeVelocity : Compute velocity for the bodies.
+       \li ComputeCoM: Compute global CoM.
+       \li ComputeAccelerationCoM: Compute the CoM acceleration.
+       \li ComputeMomentum: Compute the global momentum and the momentum for each body.
+       \li ComputeZMP: Compute ZMP.
+       \li ComputeBackwardDynamics: Compute the force and the torque of each joint.
+       \retval 
+      */
+     bool isSupported(const std::string &inProperty );
+       
+     /*! \brief Get property corresponding to command name.
+
+     \param inProperty name of the property (cf isSupported) .
+     \retval outValue value of the property.
+
+     \note The returned string needs to be cast into boolean .*/ 
+     bool getProperty(const std::string &inProperty,std::string &outValue);
+
+     /**
+	\brief Set property corresponding to command name.
+	
+	\param inProperty name of the property.
+	\param inValue value of the property.
+	
+	\note The value string should contain either true or false.
+       */
+     bool setProperty(std::string &inProperty, const std::string& inValue); 
+
+     /*! @} */
   };
 };
 #endif

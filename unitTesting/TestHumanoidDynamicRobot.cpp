@@ -199,8 +199,10 @@ int main(int argc, char *argv[])
   MAL_S3_VECTOR(ZMPval,double);
 
   aHDMB->currentVelocity(aCurrentVel);
-  aHDMB->setComputeZMP(true);
-  aHDMB->computeForwardKinematics();
+  //  aHDMB->setComputeZMP(true);
+  string inProperty="ComputeZMP"; string aValue="true";
+  aHDR->setProperty(inProperty,aValue);
+  aHDR->computeForwardKinematics();
   ZMPval = aHDMB->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
   cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
