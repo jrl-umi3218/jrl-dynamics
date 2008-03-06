@@ -1,24 +1,64 @@
 #
-#  Copyright
+# Copyright
+#      IS/AIST-ST2I/CNRS Joint Japanese-French Robotics Laboratory (JRL).
 #
 
-Installation instructions for library jrlCIRdynamicsJRLJapan
-----------------------------------------------
+Installation instructions for library dynamicsJRLJapan
+------------------------------------------------------
 
-It is recommended to create a specific directory to install this package.
+--- Booststraping the sources.
+
+This package must be compiled using the GNU build system.
+If you downloaded a packaged archive, it comes with a bootstraped
+compilation environment. See the next paragraph 'building the
+sources'. If you are tracking the git repository, you have to boostrap
+manually the source tree. This can be done by invoking, in the root
+directory of the source tree, the autogen script:
+
+./autogen.sh
+
+Note that you should have autoconf>=2.59, automake>=1.8 and libtool>=1.5
+for this to work. Once the autogen script has run successfuly, you can
+build the sources.
+
+
+--- Building the sources.
+
+It is recommended that you build the sources in a separate build
+directory. This prevent from poisoning your source tree with object files
+and other architecture-dependent objects.
+
+From the root of the source tree, you can
+
 mkdir build
 cd build
 ../configure [OPTIONS]
-make 
+make
+
+The configure script takes several options, see the output of
+../configure --help for an exhaustive list. One option of importance is
+--prefix=/path/to/install that specify that this package will be
+installed in the "/path/to/install" directory.
+
+
+--- Installing
+
+Simply invoke the following command from the build directory:
+
 make install
+
+The package will be installed in the prefix you passed to configure, or
+in /usr/local if you didn't specify any prefix.
+
+
 
 Notes of linear algebra and rigid-body motion computations
 ----------------------------------------------------------
 
 Linear algebra computations are performed either by ublas and lapack
 or by VNL. 
-Rigid-body motion computations are performed either by a default ad-hoc implementation
-or by t3d.
+Rigid-body motion computations are performed either by a default ad-hoc
+implementation or by t3d.
 
-The choice of which package for which computation is done when configuring MatrixAbstractLayer 
-package.
+The choice of which package for which computation is done when
+configuring MatrixAbstractLayer package.
