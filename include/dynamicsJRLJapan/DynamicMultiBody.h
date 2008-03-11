@@ -1035,7 +1035,7 @@ namespace dynamicsJRLJapan
 
      /* @} */
    
-     /*! \brief Implementation of properties. 
+     /*! \name Implementation of properties. 
        @{
       */
      /*! \brief Returns true if the property is supported.
