@@ -451,7 +451,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 
 	  ODEBUG("dq: "<< aDB->dq );
 	  tmp = listOfBodies[currentNode]->a * listOfBodies[currentNode]->dq;
-	  tmp = MAL_S3x3_RET_A_by_B(listOfBodies[lMother]->R,tmp);
+	  tmp = MAL_S3x3_RET_A_by_B(listOfBodies[currentNode]->R,tmp);
 	  
 	  listOfBodies[currentNode]->w  = listOfBodies[lMother]->w  + tmp;
 	  
@@ -481,7 +481,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	  ODEBUG("c: " << listOfBodies[currentNode]->c);
 	  MAL_S3x3_C_eq_A_by_B(cl,listOfBodies[currentNode]->R, listOfBodies[currentNode]->c);
 	  lw_c = cl + listOfBodies[currentNode]->p;
-	  ODEBUG("com: "<<currentNode<<" "<< cm[0] << " " << cm[1] << " " << cm[2]);
+	  ODEBUG("lw_c: "<<currentNode<<" "<< lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
 	  positionCoMPondere +=  lw_c * listOfBodies[currentNode]->getMasse();
 	  ODEBUG("w_c: " << lw_c[0] << " " << lw_c[1] << " " << lw_c[2]);
 	  ODEBUG("Masse " << listOfBodies[currentNode]->getMasse());
@@ -492,11 +492,8 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 	{
 
 	  // Computes momentum matrix P.
-	  tmp2 = cl;
 	  ODEBUG("w: " << listOfBodies[currentNode]->w );
-	  // Fixed a bug found by Oussama regarding the computation of P.
-	  //	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp, listOfBodies[currentNode].w,tmp2);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp,tmp2, listOfBodies[currentNode]->w);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(tmp,listOfBodies[currentNode]->w, cl);
 	  ODEBUG("cl^w: " << tmp);
 	  ODEBUG("masse: " << listOfBodies[currentNode]->getMasse());
 	  ODEBUG("v0: " << listOfBodies[currentNode]->v0 );
@@ -2930,12 +2927,12 @@ void DynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
   //update Velocity vector returned by method from abstract interface
   m_Velocity = (m_Configuration - m_pastConfiguration)/inTimeStep;
   for (unsigned int i = 3;i<6;i++)
-    m_Velocity(i) = listOfBodies[labelTheRoot]->w[i-3];
+    m_Velocity(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->w[i-3];
     
   //update Acceleration vector returned by method from abstract interface
   m_Acceleration = (m_Velocity - m_pastVelocity)/inTimeStep;
   for (unsigned int i = 3;i<6;i++)
-    m_Acceleration(i) = listOfBodies[labelTheRoot]->dw[i-3];
+    m_Acceleration(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->dw[i-3];
     
     
     
