@@ -1211,7 +1211,13 @@ void DynamicMultiBody::InitializeFromJointsTree()
       // Create a relation between the name and the rank.
       {
 	NameAndRank_t aNameAndRank;
-	
+
+	if (CurrentLink.aJoint->getName() == ""){
+	    char buf[64];
+	    sprintf(buf, "JOINT_%02d", lRank);
+	    string name(buf); 
+	    CurrentLink.aJoint->setName(name);
+	}	    
 	strcpy(aNameAndRank.LinkName,
 	       (char *)CurrentLink.aJoint->getName().c_str());
 	
@@ -2365,7 +2371,7 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
 	{
 	  m_StateVectorToJoint[lindex++]=i;
 	  StateVectorIndexDefault++;
-	}
+ 	}
     }
   
   
