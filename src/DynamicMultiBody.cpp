@@ -234,7 +234,11 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 	  
 
 	  // Update the vector of joints.
-	  m_JointVector.insert(m_JointVector.end(),listeLiaisons[liaisonDestination].aJoint);
+	  ODEBUG("Inside Relabelling :" << listeLiaisons[liaisonDestination].aJoint->getName().c_str());
+	  ODEBUG("JointRankFromName :" << JointRankFromName(listeLiaisons[liaisonDestination].aJoint));
+	  if (JointRankFromName(listeLiaisons[liaisonDestination].aJoint)!=-1)
+	    m_JointVector.insert(m_JointVector.end(),listeLiaisons[liaisonDestination].aJoint);
+
 	  int lVRMLID = listeLiaisons[liaisonDestination].aJoint->getIDinVRML();
 	  if (m_NbOfVRMLIDs < lVRMLID)
 	    m_NbOfVRMLIDs = lVRMLID;
@@ -1126,12 +1130,13 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
       }
       listOfBodies[i] = dbody;
   }
+
+  if (option!=0)
+    ReadSpecificities(option);
     
   ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
-  if (option!=0)
-    ReadSpecificities(option);
   BuildStateVectorToJointAndDOFs();
   UpdateTheSizeOfJointsJacobian();
   
@@ -1187,6 +1192,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
   CurrentLink.indexCorps1 = 0;
   CurrentLink.indexCorps2 = 0;
   int lIDinVRML=-1;
+  unsigned int lRank=0;
 
   while(CurrentJoint!=0)
     {
@@ -1201,6 +1207,20 @@ void DynamicMultiBody::InitializeFromJointsTree()
 	CurrentLink.aJoint->setIDinVRML(lIDinVRML);
 
       lIDinVRML++;
+
+      // Create a relation between the name and the rank.
+      {
+	NameAndRank_t aNameAndRank;
+	
+	strcpy(aNameAndRank.LinkName,
+	       (char *)CurrentLink.aJoint->getName().c_str());
+	
+	aNameAndRank.RankInConfiguration = lRank;
+	m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
+					       aNameAndRank);
+
+	lRank+= CurrentLink.aJoint->numberDof();
+      }
 
       
       // Take care of the body.
@@ -2280,6 +2300,8 @@ void DynamicMultiBody::ReadSpecificities(string aFileName)
 
 	  ODEBUG( aNameAndRank.LinkName << " " << aNameAndRank.RankInConfiguration);
 	}
+      //     ODEBUG((char *)((Joint *)m_JointVector[0])->getName().c_str() 
+      // << " "  << m_JointVector[0]->rankInConfiguration());
     }
   fclose(fp);
 }
@@ -2287,6 +2309,7 @@ void DynamicMultiBody::ReadSpecificities(string aFileName)
 int DynamicMultiBody::JointRankFromName(Joint *aJoint)
 {
 
+  ODEBUG("m_LinksBetweenJointNamesAndRank.size():" << m_LinksBetweenJointNamesAndRank.size());
   for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
       if (!strcmp(m_LinksBetweenJointNamesAndRank[i].LinkName,(char *)aJoint->getName().c_str()))
@@ -2323,7 +2346,7 @@ Joint * DynamicMultiBody::JointFromRank(int aRank)
 	return (Joint *)m_JointVector[i];
       CurrentTestRank=RankRangeEnd;
     }
-  ODEBUG3("Looking for rank " << aRank << " failed " << m_LinksBetweenJointNamesAndRank.size());
+  ODEBUG("Looking for rank " << aRank << " failed " << m_LinksBetweenJointNamesAndRank.size());
   return (Joint *)0;
 }
 
@@ -2449,8 +2472,16 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
       else 
 	{
 	  int lIDinVRML = ((Joint *)m_JointVector[i])->getIDinVRML();
-	  ((Joint *)m_JointVector[i])->quantity(inConfig[lindex]);
-	  listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = inConfig[lindex];
+	  if (lIDinVRML!=-1)
+	    {
+	      ((Joint *)m_JointVector[i])->quantity(inConfig[lindex]);
+	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = inConfig[lindex];
+	    }
+	  else 
+	    {
+	      ((Joint *)m_JointVector[i])->quantity(0.0);
+	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = 0.0;
+	    }
 
 	  lindex++;
 	}
@@ -2535,6 +2566,8 @@ bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 		 << " Id (Body): " << ConvertIDINVRMLToBodyID[lIDinVRML]
 		 << " dq: " << listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
 	    }
+	  else 
+	    listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq = 0.0;
 
 	  lindex++;
 	}

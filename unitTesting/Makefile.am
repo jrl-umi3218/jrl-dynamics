@@ -5,7 +5,8 @@
 noinst_PROGRAMS=\
 			TestHumanoidDynamicRobot	\
 			TestBuildFromJointTree		\
-			TestCopyJointTreeThroughAbstractInterface
+			TestCopyJointTreeThroughAbstractInterface \
+			Test2Models
 
 if HAVE_GLUT
 noinst_PROGRAMS+=	TestHumanoidDynamicRobotglut
@@ -41,6 +42,16 @@ TestCopyJointTreeThroughAbstractInterface_LDADD=\
 			../src/libdynamicsJRLJapan.la	\
 			@ROBOTDYNAMICS_LIBS@		\
 			@MAL_LIBS@
+
+
+Test2Models_SOURCES = Test2Models.cpp 
+
+Test2Models_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@ @MAL_CFLAGS@
+
+Test2Models_LDADD=\
+		../src/libdynamicsJRLJapan.la	\
+		@ROBOTDYNAMICS_LIBS@		\
+		@MAL_LIBS@
 
 #TestPb1_SOURCES = TestPb1.cpp 
 

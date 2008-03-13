@@ -328,7 +328,7 @@ void Joint::computeJacobianJointWrtConfig()
 }
 
 void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
-																					 matrixNxP& outJ) const
+					   matrixNxP& outJ) const
 {
   vector3d aRa,dp,lv;
 
@@ -406,17 +406,17 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
  */
 void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
 {
-	if (outJ.size1() !=6 || outJ.size2() != m_J.size2())
+  if (outJ.size1() !=6 || outJ.size2() != m_J.size2())
     {
-			outJ.resize(6,m_J.size2(),false);
+      outJ.resize(6,m_J.size2(),false);
     }
-	outJ.clear();
-    
-
-	DynamicBody * FinalBody = (DynamicBody *)m_Body;
+  outJ.clear();
   
-	vector3d pn = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inPointJointFrame);
-	getJacobianWorldPointWrtConfig(pn, outJ);
+  
+  DynamicBody * FinalBody = (DynamicBody *)m_Body;
+  
+  vector3d pn = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inPointJointFrame);
+  getJacobianWorldPointWrtConfig(pn, outJ);
 }
 
     
