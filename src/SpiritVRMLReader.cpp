@@ -904,9 +904,9 @@ namespace dynamicsJRLJapan
 	    (real_p)[SVRBIND2(fJointRotationAngle,(self,arg1))];
     
 	  // Type of the joint.
-	  JointType_r = str_p("jointType") >> str_p('"')
+	  JointType_r = str_p("jointType") >> ch_p('"')
 					   >> (+alpha_p)[SVRBIND2(fJointType,(self,arg1,arg2))]
-					   >> str_p('"');
+					   >> ch_p('"');
 
 	  // Identifient of the joint.
 	  JointID_r = str_p("jointId") >> (int_p)[SVRBIND2(fJointID,(self,arg1))];
