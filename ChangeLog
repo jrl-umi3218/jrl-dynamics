@@ -1,4 +1,14 @@
 
+dynamic-JRLJapan 1.8 released April 4, 2008
+
+        41. Joint::m_Name is set automatically if it is empty.
+        40. Handle reduced map between the command vector and the joint space.
+        39. Fixed bugs in DynamicMultiBody::NewtonEulerAlgorithm()
+        38. Added property management.
+        37. Implement setJointOrderInConfig()
+        36. Bodies in DynamicMultiBody and MultiBody are managed by
+            pointers.
+
 dynamic-JRLJapan 1.7 released February 17, 2008
 
 	35. Implementation of the joint construction through the abstract interfaces.
@@ -11,7 +21,7 @@ dynamic-JRLJapan 1.7 released February 17, 2008
 	33. Added dependence to MatrixAbstractLayer (removed from abstractRobotDynamics).
 	32. correct make file to compile untesting using the current (devel) version
 	31. made new version number
-	
+
 dynamic-JRLJapan 1.6 released November 8, 2007
 
 	30. Removed unused and misleading function
@@ -34,7 +44,7 @@ dynamic-JRLJapan 1.6 released November 8, 2007
 	22. Move headers to include/dynamicsJRLJapan instead of
 	    include/robotDynamicsJRLJapan
 	21. Undo item 20
-	20. Export in dynamicsJRLJapan.pc name of classes implementing 
+	20. Export in dynamicsJRLJapan.pc name of classes implementing
 	  - abstractRobotDynamics::CjrlDynamicRobot,
 	  - abstractRobotDynamics::CjrlHumanoidDynamicRobot
 	  - freeFlying joint,
@@ -42,7 +52,7 @@ dynamic-JRLJapan 1.6 released November 8, 2007
 	  - translation joint.
 	19. Use name "dynamicsJRLJapan" as package name and documentation
 	directory installation.
-	
+
 dynamics-JRLJapan 1.4 released July 16, 2007
 
 	18. (fumio) bug fix for values of rotation field in VRML.
@@ -55,7 +65,7 @@ dynamics-JRLJapan 1.3.1 released July 6, 2007
 	16. (oussama) Use the wrist joint in
 	LinkBetweenJointsAndEndEffectorSemantic() instead of the hand
 	joint.
-	
+
 dynamics-JRLJapan 1.3 released June 27, 2007
 
 	15. Added separate doc and install-doc targets.
