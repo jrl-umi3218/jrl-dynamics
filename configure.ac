@@ -4,7 +4,7 @@ dnl configure.ac file for package jrlCIRdynamicsJRLJapan
 dnl
 AC_PREREQ(2.59)
 
-AC_INIT([dynamicsJRLJapan], [1.8], [olivier.stasse@aist.go.jp])
+AC_INIT([dynamicsJRLJapan], [1.8.99], [olivier.stasse@aist.go.jp])
 AM_INIT_AUTOMAKE([foreign no-define])
 AC_CONFIG_HEADERS([dynamics-config.h])
 
