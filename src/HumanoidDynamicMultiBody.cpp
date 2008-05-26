@@ -260,10 +260,14 @@ bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
 
 double HumanoidDynamicMultiBody::footHeight() const
 {
-  double lWidth, lHeight, lDepth;
-  m_HS->GetFootSize(1, lDepth, lWidth, lHeight);
+  if (m_HS){
+    double lWidth, lHeight, lDepth;
+    m_HS->GetFootSize(1, lDepth, lWidth, lHeight);
   
-  return lHeight;
+    return lHeight;
+  }else{
+    return 0;
+  }  
 }
 
 
