@@ -128,7 +128,7 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
   m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(*listOfBodies[ID]);
   //specify the type of the root joint
-  m_RootOfTheJointsTree->type( Joint::FREE_JOINT );
+  //m_RootOfTheJointsTree->type( Joint::FREE_JOINT );
   // Start the vector of joints.
   m_JointVector.clear();
   m_JointVector.insert(m_JointVector.end(),m_RootOfTheJointsTree);
@@ -1214,7 +1214,11 @@ void DynamicMultiBody::InitializeFromJointsTree()
 
 	if (CurrentLink.aJoint->getName() == ""){
 	    char buf[64];
-	    sprintf(buf, "JOINT_%02d", lRank);
+	    if (CurrentLink.aJoint->type() == Joint::FIX_JOINT){
+		sprintf(buf, "FIXED_%02d", lRank);
+	    }else{
+		sprintf(buf, "JOINT_%02d", lRank);
+	    }
 	    string name(buf); 
 	    CurrentLink.aJoint->setName(name);
 	}	    
@@ -2473,6 +2477,10 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 	    a6DPose(j) = inConfig[lindex++];
 	  
 	  ((Joint *)m_JointVector[i])->UpdatePoseFrom6DOFsVector(a6DPose);	  
+	}
+      else if (m_JointVector[i]->numberDof()==0)
+	{
+	  // do nothing  
 	}
       // Update only the quantity when it is a revolute or a prismatic joint.
       else 

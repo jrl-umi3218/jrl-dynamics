@@ -597,6 +597,27 @@ JointFreeflyer::~JointFreeflyer()
 
 }
 
+JointAnchor::JointAnchor(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+{
+  type(Joint::FIX_JOINT);  
+  m_inGlobalFrame = true;
+  m_globalPoseAtConstruction = inInitialPosition;
+  
+  ODEBUG2("anchor: inInitialPosition" << inInitialPosition);
+  MAL_S3_VECTOR(axis, double);
+
+  MAL_S3_VECTOR_ACCESS(axis,0) = 1.0;
+  MAL_S3_VECTOR_ACCESS(axis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(axis,2) = 0.0;
+
+  axe(axis);
+}
+
+JointAnchor::~JointAnchor()
+{
+
+}
+
 JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(Joint::REVOLUTE_JOINT);

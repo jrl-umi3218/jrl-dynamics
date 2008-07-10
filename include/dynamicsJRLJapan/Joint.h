@@ -544,5 +544,11 @@ namespace dynamicsJRLJapan
     virtual ~JointTranslation();
   };
 
+  class JointAnchor : public Joint
+  {
+  public:
+    JointAnchor(const matrix4d &inInitialPosition);
+    virtual ~JointAnchor();
+  };
 };
 #endif

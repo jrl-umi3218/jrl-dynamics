@@ -12,6 +12,7 @@
 typedef dynamicsJRLJapan::DynamicMultiBody CimplDynamicRobot;
 typedef dynamicsJRLJapan::HumanoidDynamicMultiBody CimplHumanoidDynamicRobot;
 typedef dynamicsJRLJapan::JointFreeflyer CimplJointFreeFlyer;
+typedef dynamicsJRLJapan::JointAnchor CimplJointAnchor;
 typedef dynamicsJRLJapan::JointRotation CimplJointRotation;
 typedef dynamicsJRLJapan::JointTranslation CimplJointTranslation;
 typedef dynamicsJRLJapan::Joint CimplJoint;
