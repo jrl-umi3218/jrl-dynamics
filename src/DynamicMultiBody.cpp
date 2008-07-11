@@ -2973,13 +2973,17 @@ void DynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
     
   //update Velocity vector returned by method from abstract interface
   m_Velocity = (m_Configuration - m_pastConfiguration)/inTimeStep;
-  for (unsigned int i = 3;i<6;i++)
-    m_Velocity(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->w[i-3];
+  if (rootJoint()->numberDof() == 6){
+    for (unsigned int i = 3;i<6;i++)
+      m_Velocity(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->w[i-3];
+  }
     
   //update Acceleration vector returned by method from abstract interface
   m_Acceleration = (m_Velocity - m_pastVelocity)/inTimeStep;
-  for (unsigned int i = 3;i<6;i++)
-    m_Acceleration(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->dw[i-3];
+  if (rootJoint()->numberDof() == 6){
+    for (unsigned int i = 3;i<6;i++)
+      m_Acceleration(i) = listOfBodies[listOfBodies[labelTheRoot]->child]->dw[i-3];
+  }
     
     
     
