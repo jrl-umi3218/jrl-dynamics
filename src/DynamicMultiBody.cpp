@@ -81,9 +81,14 @@ using namespace dynamicsJRLJapan;
 
 DynamicMultiBody::DynamicMultiBody()
 {
+  m_NbDofs=0;
   m_ComputeVelocity = true;
   m_ComputeCoM = true;
   m_ComputeMomentum = true;
+  m_ComputeZMP = false;
+  m_ComputeAcceleration=false;
+  m_ComputeAccCoM = false;
+  m_ComputeBackwardDynamics=false;
   m_IterationNumber = 0;
   m_TimeStep = 0.005;
 
@@ -353,6 +358,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
   int lMother=0;
   MAL_S3x3_MATRIX( Rtmp,double);
   MAL_S3x3_MATRIX( Ro,double);
+  MAL_S3x3_MATRIX_SET_IDENTITY(Ro);
   MAL_S3x3_MATRIX( w_wedge,double);
   MAL_S3_VECTOR( wn,double);
   double NORME_EPSILON=10e-7;

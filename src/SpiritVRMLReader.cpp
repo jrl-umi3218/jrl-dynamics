@@ -456,7 +456,6 @@ namespace dynamicsJRLJapan
 
 	if (s=="free")
 	  {
-	    Joint transDyn4(Joint::FREE_JOINT, lnull, 0);
 	    m_DataForParsing->CurrentLink.aJoint->type(Joint::FREE_JOINT);
 	  }
 	else if (s=="rotate")

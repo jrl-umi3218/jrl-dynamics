@@ -145,8 +145,16 @@ Joint::~Joint()
 
 void Joint::CreateLimitsArray()
 {
-  m_LowerLimits = new double[numberDof()];
-  m_UpperLimits = new double[numberDof()];
+  if (numberDof()!=0)
+    {
+      m_LowerLimits = new double[numberDof()];
+      m_UpperLimits = new double[numberDof()];
+    }
+  else
+    {
+      m_LowerLimits = 0;
+      m_UpperLimits = 0;
+    }
 }
 
 
