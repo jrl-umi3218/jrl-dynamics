@@ -111,7 +111,9 @@ DynamicMultiBody::DynamicMultiBody()
 
 DynamicMultiBody::~DynamicMultiBody()
 {
-
+  for(unsigned int li=0;
+      li<listOfBodies.size();li++)
+    delete listOfBodies[li];
 }
 
 void DynamicMultiBody::SpecifyTheRootLabel(int ID)
@@ -1522,8 +1524,8 @@ int DynamicMultiBody::ComputeJacobian(int corps1, int corps2,
 {
   vector<int> chemin = trouverCheminEntre(corps1, corps2);
   MAL_VECTOR(ve,double);
-  double translationInit[3];
-  double axe[3],angle=0.0;
+  double translationInit[3]={0.0,0.0,0.0};
+  double axe[3]={0.0,0.0,0.0},angle=0.0;
   int l = chemin.size();
   if (l == 0) 
     {

@@ -150,6 +150,9 @@ MultiBody::~MultiBody(void)
 {
   for(unsigned int li=0;li<listeLiaisons.size();li++)
     delete listeLiaisons[li].aJoint;
+
+  for(unsigned int li=0;li<listeCorps.size();li++)
+    delete listeCorps[li];
 }
 
 void MultiBody::ajouterCorps(Body &b)

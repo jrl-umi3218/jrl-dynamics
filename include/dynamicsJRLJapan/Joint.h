@@ -103,6 +103,10 @@ namespace dynamicsJRLJapan
     /*! Identifier in the VRML file. */
     int m_IDinVRML;
 
+    /*! Limits of the joint. */
+    double * m_LowerLimits;
+    double * m_UpperLimits;
+
     /*! Rigid Velocity */
     CjrlRigidVelocity m_RigidVelocity;
     
@@ -111,10 +115,6 @@ namespace dynamicsJRLJapan
 
     /*! First entry into the state vector */
     unsigned int m_StateVectorPosition;
-
-    /*! Limits of the joint. */
-    double * m_LowerLimits;
-    double * m_UpperLimits;
     
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();

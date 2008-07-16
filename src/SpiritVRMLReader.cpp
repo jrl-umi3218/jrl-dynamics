@@ -109,6 +109,19 @@ namespace dynamicsJRLJapan
       // Center of Mass.
       double cm[3];
 
+      // Destructor
+      ~s_DataForParsing()
+      {
+	if (CurrentLink.aJoint!=0)
+	  delete CurrentLink.aJoint;
+	if (CurrentBody.size()>0)
+	  {
+	    if (CurrentBody[0]!=0)
+	      delete CurrentBody[0];
+	  }
+		
+      }
+
     };
 
     struct SkipGrammar : public grammar<SkipGrammar>
@@ -791,7 +804,6 @@ namespace dynamicsJRLJapan
       {
 	m_Verbose = 0;
       }
-
           
       template <typename ScannerT>
       struct definition
@@ -1230,7 +1242,7 @@ namespace dynamicsJRLJapan
   
       // allocate memory:
       char * buffer = new char [length];
-  
+      char * pbuffer = buffer;
       // read data as a block:
       aif.read(buffer,length);
       aif.close();
@@ -1242,6 +1254,7 @@ namespace dynamicsJRLJapan
       
       
       parse(buffer,aSpiritOpenHRP,aSkipGrammar).full;
+      delete pbuffer;
       return 1;
 
     };
