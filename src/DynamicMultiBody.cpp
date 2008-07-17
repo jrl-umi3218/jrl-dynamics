@@ -2670,14 +2670,18 @@ bool DynamicMultiBody::computeForwardKinematics()
   for(unsigned int i=0;i<3;i++)
     for(unsigned int j=0;j<3;j++)
       lOrientationForRoot(i,j)=(*m_RootOfTheJointsTree)(i,j);
-  
-  for(unsigned int i=0;i<3;i++)
-    lLinearVelocityForRoot(i)  = m_Velocity(i);
 
-  for(unsigned int i=3;i<6;i++)
-    lAngularVelocityForRoot(i-3)  = m_Velocity(i);
-    
-  
+  if (rootJoint()->numberDof() == 6){
+    for(unsigned int i=0;i<3;i++)
+      lLinearVelocityForRoot(i)  = m_Velocity(i);
+      
+    for(unsigned int i=3;i<6;i++)
+      lAngularVelocityForRoot(i-3)  = m_Velocity(i);
+  }else{
+    MAL_S3_VECTOR_FILL(lLinearVelocityForRoot, 0);
+    MAL_S3_VECTOR_FILL(lAngularVelocityForRoot, 0);
+  }
+      
   ODEBUG(" Position for Root: " << lPositionForRoot);
   ForwardVelocity(lPositionForRoot,
 		  lOrientationForRoot,
