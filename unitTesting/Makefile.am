@@ -16,7 +16,7 @@ TestHumanoidDynamicRobot_SOURCES = TestHumanoidDynamicRobot.cpp
 
 TestHumanoidDynamicRobot_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@ @MAL_CFLAGS@
 
-TestHumanoidDynamicRobot_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@
+TestHumanoidDynamicRobot_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@ 
 
 
 TestHumanoidDynamicRobotglut_SOURCES = TestHumanoidDynamicRobotglut.cpp 

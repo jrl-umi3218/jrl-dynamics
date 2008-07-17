@@ -84,6 +84,9 @@ namespace dynamicsJRLJapan
       // Depth
       int Depth;
 
+      // Joint memory allocation done for new depth.
+      bool JointMemoryAllocationForNewDepth;
+
       // Current Link.
       internalLink CurrentLink;
 
@@ -109,17 +112,10 @@ namespace dynamicsJRLJapan
       // Center of Mass.
       double cm[3];
 
-      // Destructor
-      ~s_DataForParsing()
+      // Constructor
+      s_DataForParsing()
       {
-	if (CurrentLink.aJoint!=0)
-	  delete CurrentLink.aJoint;
-	if (CurrentBody.size()>0)
-	  {
-	    if (CurrentBody[0]!=0)
-	      delete CurrentBody[0];
-	  }
-		
+	CurrentLink.aJoint = 0;
       }
 
     };
@@ -306,6 +302,7 @@ namespace dynamicsJRLJapan
 	m_MultiBody->ajouterLiaison(*m_DataForParsing->CurrentBody[lDepth-1],
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
+	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
 	
       }
       void fJCDEFBlocks(char const *str, char const *end) const
@@ -321,7 +318,13 @@ namespace dynamicsJRLJapan
       {
 	string s(str,end);
 	m_DataForParsing->aName=s;
+
+	
+	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
+	  delete m_DataForParsing->CurrentLink.aJoint;
+	
 	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
 	m_DataForParsing->CurrentLink.aJoint->setName(s);
 	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
 		
@@ -331,15 +334,25 @@ namespace dynamicsJRLJapan
 
       void fJointSubBlockName() const
       {
+	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
+	  delete m_DataForParsing->CurrentLink.aJoint;
+
 	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
 	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
 	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 	if (m_Verbose>1)
-	  std::cout<< "Reading the name of the Joint SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
+	  std::cout<< "Reading the `name of the Joint SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
       }
 
       void fBodySubBlockName() const
       {
+	/*
+	if (m_DataForParsing->CurrentBody[m_DataForParsing->Depth]!=0)
+	  {
+	    delete m_DataForParsing->CurrentBody[m_DataForParsing->Depth];
+	    std::cout << "Current depth :" << m_DataForParsing->Depth << std::endl;
+	    }*/
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
 	if (m_Verbose>1)
@@ -1198,6 +1211,7 @@ namespace dynamicsJRLJapan
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;
 	m_DataForParsing->CurrentLink.aJoint = new Joint(Joint::FIX_JOINT,dummy,0.0);
+	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
 	m_DataForParsing->CurrentLink.indexCorps2 = 0;
 	m_DataForParsing->index_mi = 0;
@@ -1241,8 +1255,7 @@ namespace dynamicsJRLJapan
       aif.seekg (0, ios::beg);
   
       // allocate memory:
-      char * buffer = new char [length];
-      char * pbuffer = buffer;
+      char * buffer = new char [length+1];
       // read data as a block:
       aif.read(buffer,length);
       aif.close();
@@ -1252,9 +1265,8 @@ namespace dynamicsJRLJapan
       aSpiritOpenHRP.Init();
       aSpiritOpenHRP.setVerbose(0);
       
-      
       parse(buffer,aSpiritOpenHRP,aSkipGrammar).full;
-      delete pbuffer;
+      delete [] buffer;
       return 1;
 
     };

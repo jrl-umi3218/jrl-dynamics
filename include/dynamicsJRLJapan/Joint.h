@@ -104,8 +104,8 @@ namespace dynamicsJRLJapan
     int m_IDinVRML;
 
     /*! Limits of the joint. */
-    double * m_LowerLimits;
-    double * m_UpperLimits;
+    vector<double> m_LowerLimits;
+    vector<double> m_UpperLimits;
 
     /*! Rigid Velocity */
     CjrlRigidVelocity m_RigidVelocity;
