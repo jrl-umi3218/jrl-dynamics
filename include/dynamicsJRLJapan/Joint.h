@@ -107,6 +107,10 @@ namespace dynamicsJRLJapan
     vector<double> m_LowerLimits;
     vector<double> m_UpperLimits;
 
+    /*! Limits of the joint velocity. */
+    vector<double> m_LowerVelocityLimits;
+    vector<double> m_UpperVelocityLimits;
+
     /*! Rigid Velocity */
     CjrlRigidVelocity m_RigidVelocity;
     
@@ -418,6 +422,48 @@ namespace dynamicsJRLJapan
     inline void upperBound(unsigned int inDofRank, double inUpperBound)
     {
       m_UpperLimits[inDofRank] = inUpperBound;
+    };
+
+    /**
+       \brief Set the upper velocity bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inUpperVelocityBound Upper bound.
+    */
+    inline void upperVelocityBound(unsigned int inDofRank, double inUpperVelocityBound)
+    {
+      m_UpperVelocityLimits[inDofRank] = inUpperVelocityBound;
+    };
+
+    /**
+       \brief Get the lower velocity bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double lowerVelocityBound(unsigned int inDofRank) const
+    {
+      return m_LowerVelocityLimits[inDofRank];
+    };
+
+    /**
+       \brief Get the upper velocity bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double upperVelocityBound(unsigned int inDofRank) const
+    {
+      return m_UpperVelocityLimits[inDofRank];
+    };
+
+    /**
+       \brief Set the lower velocity bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inLowerVelocityBound lower bound
+    */
+    inline void lowerVelocityBound(unsigned int inDofRank, double inLowerVelocityBound) 
+    {
+      m_LowerVelocityLimits[inDofRank] = inLowerVelocityBound;
     };
 
     /*! @} */

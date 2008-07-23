@@ -142,11 +142,15 @@ void Joint::CreateLimitsArray()
     {
       m_LowerLimits.resize(numberDof());
       m_UpperLimits.resize(numberDof());
+      m_LowerVelocityLimits.resize(numberDof());
+      m_UpperVelocityLimits.resize(numberDof());
     }
   else
     {
       m_LowerLimits.clear();
       m_UpperLimits.clear();
+      m_LowerVelocityLimits.clear();
+      m_UpperVelocityLimits.clear();
     }
 }
 
