@@ -112,6 +112,8 @@ Joint::Joint(const Joint &r)
     {
       m_LowerLimits[i] = r.lowerBound(i);
       m_UpperLimits[i] = r.upperBound(i);
+      m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
+      m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
     }
 
 }
@@ -144,6 +146,12 @@ void Joint::CreateLimitsArray()
       m_UpperLimits.resize(numberDof());
       m_LowerVelocityLimits.resize(numberDof());
       m_UpperVelocityLimits.resize(numberDof());
+      for (unsigned int i=0; i<numberDof(); i++){
+	m_LowerLimits[i] = 0;
+	m_UpperLimits[i] = 0;
+	m_LowerVelocityLimits[i] = 0;
+	m_UpperVelocityLimits[i] = 0;
+      }
     }
   else
     {
@@ -213,6 +221,8 @@ Joint & Joint::operator=(const Joint & r)
     {
       m_LowerLimits[i] = r.lowerBound(i);
       m_UpperLimits[i] = r.upperBound(i);
+      m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
+      m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
     }
   return *this;
 };
