@@ -46,6 +46,7 @@ using namespace dynamicsJRLJapan;
 HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynamicMultiBody()
 {
   m_rightHand = m_leftHand = 0;
+  m_RightFootJoint = m_LeftFootJoint = 0;
   m_HS = NULL;
 }
 
