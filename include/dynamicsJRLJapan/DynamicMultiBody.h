@@ -386,7 +386,9 @@ namespace dynamicsJRLJapan
     void NewtonEulerAlgorithm(vector3d &PosForRoot, 
 			      matrix3d &OrientationForRoot, 
 			      vector3d &v0ForRoot,
-			      vector3d &wForRoot);
+			      vector3d &wForRoot,
+			      vector3d &dvForRoot,
+			      vector3d &dwForRoot);
 
 
     /** \brief Call the previous function, kept for backward compatibility,
@@ -394,7 +396,9 @@ namespace dynamicsJRLJapan
     void ForwardVelocity(vector3d &PosForRoot, 
 			 matrix3d &OrientationForRoot, 
 			 vector3d &v0ForRoot,
-			 vector3d &wForRoot);
+			 vector3d &wForRoot,
+			 vector3d &dvForRoot,
+			 vector3d &dwForRoot);
     
         
     /** \brief Compute the backward part of the dynamics

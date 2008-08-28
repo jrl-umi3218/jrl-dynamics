@@ -4,13 +4,11 @@
 
 noinst_PROGRAMS=\
 			TestHumanoidDynamicRobot	\
+			TestHumanoidDynamicRobot2	\
 			TestBuildFromJointTree		\
 			TestCopyJointTreeThroughAbstractInterface \
 			Test2Models
 
-if HAVE_GLUT
-noinst_PROGRAMS+=	TestHumanoidDynamicRobotglut
-endif
 
 TestHumanoidDynamicRobot_SOURCES = TestHumanoidDynamicRobot.cpp 
 
@@ -18,6 +16,12 @@ TestHumanoidDynamicRobot_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS
 
 TestHumanoidDynamicRobot_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@ 
 
+
+TestHumanoidDynamicRobot2_SOURCES = TestHumanoidDynamicRobot2.cpp 
+
+TestHumanoidDynamicRobot2_CPPFLAGS = -I$(srcdir)/../include @ROBOTDYNAMICS_CFLAGS@ @MAL_CFLAGS@
+
+TestHumanoidDynamicRobot2_LDADD = -L../src -ldynamicsJRLJapan @ROBOTDYNAMICS_LIBS@ @MAL_LIBS@ 
 
 TestHumanoidDynamicRobotglut_SOURCES = TestHumanoidDynamicRobotglut.cpp 
 

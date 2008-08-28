@@ -342,9 +342,13 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
 void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double), 
                                        MAL_S3x3_MATRIX(&OrientationForRoot,double),
 				       MAL_S3_VECTOR(&v0ForRoot,double),
-				       MAL_S3_VECTOR(&wForRoot,double))
+				       MAL_S3_VECTOR(&wForRoot,double),
+				       MAL_S3_VECTOR(&dvForRoot,double),
+				       MAL_S3_VECTOR(&dwForRoot,double))
 {
-  NewtonEulerAlgorithm(PosForRoot,OrientationForRoot,v0ForRoot,wForRoot);
+  NewtonEulerAlgorithm(PosForRoot,OrientationForRoot,
+		       v0ForRoot,wForRoot,
+		       dvForRoot,dwForRoot);
 }
 
 
@@ -352,7 +356,9 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double), 
 					    MAL_S3x3_MATRIX(&OrientationForRoot,double),
 					    MAL_S3_VECTOR(&v0ForRoot,double),
-					    MAL_S3_VECTOR(&wForRoot,double))
+					    MAL_S3_VECTOR(&wForRoot,double),
+					    MAL_S3_VECTOR(&dvForRoot,double),
+					    MAL_S3_VECTOR(&dwForRoot,double))
 {
   double norm_w, th;
   //  int NbOfNodes=1;
@@ -369,6 +375,8 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
   listOfBodies[labelTheRoot]->v0 = v0ForRoot;
   listOfBodies[labelTheRoot]->R = OrientationForRoot;
   listOfBodies[labelTheRoot]->w = wForRoot;
+  listOfBodies[labelTheRoot]->dv = dvForRoot;
+  listOfBodies[labelTheRoot]->dw = dwForRoot;
 
   currentNode = listOfBodies[labelTheRoot]->child;
   //  cout << "STARTING FORWARD VELOCITY " << v0ForRoot << endl;
@@ -2621,9 +2629,61 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentVelocity() const
 */
 bool DynamicMultiBody::currentAcceleration(const MAL_VECTOR(,double)& inAcceleration) 
 {
-  
-  MAL_VECTOR_RESIZE(m_Acceleration,MAL_VECTOR_SIZE(inAcceleration));
-  
+  if (MAL_VECTOR_SIZE(inAcceleration)!=
+      MAL_VECTOR_SIZE(m_Acceleration))
+    MAL_VECTOR_RESIZE(m_Acceleration,MAL_VECTOR_SIZE(inAcceleration));
+
+  // Copy the configuration
+  for(unsigned int i=0;i<MAL_VECTOR_SIZE(inAcceleration);i++)
+    {
+      // ODEBUG("Velocity : " << i << " " << inVelocity(i) );
+      m_Acceleration(i)= inAcceleration(i);
+    }
+
+  int lindex=0;
+  for (unsigned int i=0;i<m_JointVector.size();i++)
+    {
+
+      lindex = m_JointVector[i]->rankInConfiguration();
+
+      // Update the pose of the joint when it is a free joint
+      if (m_JointVector[i]->numberDof()==6)
+	{
+	  MAL_S3_VECTOR(,double) alinearAcceleration;
+	  MAL_S3_VECTOR(,double) anAngularAcceleration;
+	  for(int j=0;j<3;j++)
+	    {
+	      alinearAcceleration(j) = inAcceleration[lindex];
+	      anAngularAcceleration(j) = inAcceleration[lindex+3];
+	      lindex++;
+	    }
+	  
+	  //((Joint *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
+	  //								       anAngularVelocity);	  
+	  lindex+=3;
+	}
+      // Update only the quantity when it is a revolute or a prismatic joint.
+      else 
+	{
+	  int lIDinVRML = ((Joint *)m_JointVector[i])->getIDinVRML();
+	  if (lIDinVRML>=0)
+	    {
+	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = inAcceleration[lindex];
+	      // Update dq.
+	      /* ODEBUG(" Id (Vs) :" << lindex 
+		 << " Id (JV) : " << i 
+		 << " Id (VRML): " << lIDinVRML 
+		 << " Id (Body): " << ConvertIDINVRMLToBodyID[lIDinVRML]
+		 << " dq: " << listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
+	    }
+	  else 
+	    listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = 0.0;
+
+	  lindex++;
+	}
+      
+    } 
+
   return true;
 }
 
@@ -2660,6 +2720,8 @@ bool DynamicMultiBody::computeForwardKinematics()
   MAL_S3x3_MATRIX(,double) lOrientationForRoot;
   MAL_S3_VECTOR(,double) lLinearVelocityForRoot;
   MAL_S3_VECTOR(,double) lAngularVelocityForRoot;
+  MAL_S3_VECTOR(,double) lLinearAccelerationForRoot;
+  MAL_S3_VECTOR(,double) lAngularAccelerationForRoot;
 
   for(unsigned int i=0;i<3;i++)
     {
@@ -2681,12 +2743,24 @@ bool DynamicMultiBody::computeForwardKinematics()
     MAL_S3_VECTOR_FILL(lLinearVelocityForRoot, 0);
     MAL_S3_VECTOR_FILL(lAngularVelocityForRoot, 0);
   }
+   
+  if (rootJoint()->numberDof() == 6){
+    for(unsigned int i=0;i<3;i++)
+      lLinearAccelerationForRoot(i)  = m_Acceleration(i);
       
+    for(unsigned int i=3;i<6;i++)
+      lAngularAccelerationForRoot(i-3)  = m_Acceleration(i);
+  }else{
+    MAL_S3_VECTOR_FILL(lLinearVelocityForRoot, 0);
+    MAL_S3_VECTOR_FILL(lAngularVelocityForRoot, 0);
+  }   
   ODEBUG(" Position for Root: " << lPositionForRoot);
   ForwardVelocity(lPositionForRoot,
 		  lOrientationForRoot,
 		  lLinearVelocityForRoot,
-		  lAngularVelocityForRoot);
+		  lAngularVelocityForRoot,
+		  lLinearAccelerationForRoot,
+		  lAngularAccelerationForRoot);
 
   return true;
 }
