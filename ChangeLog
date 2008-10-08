@@ -1,4 +1,14 @@
 
+dynamic-JRLJapan 1.9 released October 8, 2008
+
+	46. Modified internal computations to include properly the acceleration
+	    vector and added corresponding unit test.
+	45. Added implementations of CjrlJoint::{upper|lower}VelocityBound()
+	44. Fixed wrong computation of free-flyer contribution in jacobian of
+	    center of mass.
+	43. Plugged memory leaks and supressed valgrind warnings.
+	42. Modifications to use fixed joints and fixed robots.
+
 dynamic-JRLJapan 1.8 released April 4, 2008
 
         41. Joint::m_Name is set automatically if it is empty.

@@ -4,7 +4,7 @@ dnl configure.ac file for package jrlCIRdynamicsJRLJapan
 dnl
 AC_PREREQ(2.59)
 
-AC_INIT([dynamicsJRLJapan], [1.8.99], [olivier.stasse@aist.go.jp])
+AC_INIT([dynamicsJRLJapan], [1.9], [olivier.stasse@aist.go.jp])
 AM_INIT_AUTOMAKE([foreign no-define])
 AC_CONFIG_HEADERS([dynamics-config.h])
 
@@ -20,7 +20,7 @@ AC_SUBST(MAL_CFLAGS)
 AC_SUBST(MAL_LIBS)
 
 dnl Dynamic Robot Abstract Interface
-define(robotdynamics_reqd, [abstractRobotDynamics >= 1.9])
+define(robotdynamics_reqd, [abstractRobotDynamics >= 1.11])
 AC_SUBST(ROBOTDYNAMICS_REQD, "robotdynamics_reqd")
 PKG_CHECK_MODULES(ROBOTDYNAMICS, robotdynamics_reqd)
 ROBOTDYNAMICS_PREFIX=`$PKG_CONFIG abstractRobotDynamics --variable=prefix`
