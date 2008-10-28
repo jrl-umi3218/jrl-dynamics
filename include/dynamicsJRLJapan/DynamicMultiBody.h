@@ -212,6 +212,13 @@ namespace dynamicsJRLJapan
      */
     vectorN m_pastConfiguration;
     
+
+    /** Vector of forces. */
+    matrixNxP m_Forces;
+
+    /** Vector of torques. */
+    matrixNxP m_Torques;
+	
     /** Time step used to compute momentum derivative. */
     double m_TimeStep;
 
@@ -759,6 +766,22 @@ namespace dynamicsJRLJapan
        \return the acceleration vector \f${\bf \ddot{q}}\f$.
     */
     const vectorN& currentAcceleration() const ;
+    
+    /**
+       \brief Get the current forces of the robot.
+       
+       \return the force vector \f${\bf f}\f$.
+    */
+    virtual const matrixNxP& currentForces() const;
+    
+    /**
+       \brief Get the current torques of the robot.
+       
+       \return the torque vector \f${\bf \tau }\f$.
+    */
+    virtual const matrixNxP& currentTorques() const;
+    
+
     
     /**
        @}

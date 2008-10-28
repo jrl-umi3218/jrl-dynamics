@@ -334,7 +334,37 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
       if (IndexChild!=-1)
 	Child=listOfBodies[IndexChild];
     }
-  
+
+  // Update the vector related to the computed quantities.
+  for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
+    {
+      unsigned int StateRankComputed=false;
+
+      Joint * aJoint = (Joint *)m_JointVector[m_StateVectorToJoint[i]];
+      if (aJoint!=0)
+	{
+	  DynamicBody *aDB = (DynamicBody *) aJoint->linkedBody();
+	  if (aDB!=0)
+	    {
+	      StateRankComputed = true;
+	      for(unsigned int k=0;k<3;k++)
+		{
+		  m_Forces(i,k)=aDB->m_Force[k];
+		  m_Torques(i,k) = aDB->m_Torque[k];
+		}
+	      
+	    }
+	}
+
+      if (!StateRankComputed)
+	{
+	  for(unsigned int k=0;k<3;k++)
+	    {
+	      m_Forces(i,k)=0.0;
+	      m_Torques(i,k)=0.0;
+	    }
+	}
+    }
 }
 
 
@@ -1159,6 +1189,9 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
   MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Acceleration,m_NbDofs);
+
+  MAL_MATRIX_RESIZE(m_Forces ,m_NbDofs,3);
+  MAL_MATRIX_RESIZE(m_Torques,m_NbDofs,3);
   
   MAL_VECTOR_RESIZE(m_pastConfiguration,m_NbDofs);
   MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);  
@@ -3217,6 +3250,16 @@ bool DynamicMultiBody::isSupported(const std::string &aName)
   else if (aName=="ComputeZMP")
     return true;
   return false;
+}
+
+const matrixNxP & DynamicMultiBody::currentTorques() const
+{
+  return m_Torques;
+}
+
+const matrixNxP & DynamicMultiBody::currentForces() const
+{
+  return m_Forces;
 }
 
 bool DynamicMultiBody::getProperty(const std::string &inProperty,std::string &outValue)
