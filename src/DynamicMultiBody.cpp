@@ -111,9 +111,17 @@ DynamicMultiBody::DynamicMultiBody()
 
 DynamicMultiBody::~DynamicMultiBody()
 {
-  for(unsigned int li=0;
-      li<listOfBodies.size();li++)
+  for(unsigned int li=0; li<listOfBodies.size();li++){
+    Body *body = listOfBodies[li];      
+    std::vector<Body *>::iterator it;
+    for (it = listeCorps.begin(); it != listeCorps.end(); it++){ 
+      if (*it == body){
+	listeCorps.erase(it);
+	break;
+      }
+    }
     delete listOfBodies[li];
+  }
 }
 
 void DynamicMultiBody::SpecifyTheRootLabel(int ID)
