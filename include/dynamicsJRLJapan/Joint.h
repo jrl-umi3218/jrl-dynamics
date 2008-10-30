@@ -111,6 +111,8 @@ namespace dynamicsJRLJapan
     vector<double> m_LowerVelocityLimits;
     vector<double> m_UpperVelocityLimits;
 
+    double m_EquivalentInertia;
+
     /*! Rigid Velocity */
     CjrlRigidVelocity m_RigidVelocity;
     
@@ -444,6 +446,18 @@ namespace dynamicsJRLJapan
     {
       return m_LowerVelocityLimits[inDofRank];
     };
+
+    /** \brief Returns the equivalent inertia */
+    inline double equivalentInertia() const
+      {
+	return m_EquivalentInertia;
+      }
+
+    /** \brief Set the equivalent inertia */
+    inline void equivalentInertia(double &lequivalentInertia) 
+      {
+	m_EquivalentInertia = lequivalentInertia;
+      }
 
     /**
        \brief Get the upper velocity bound of a given degree of freedom of the joint.
