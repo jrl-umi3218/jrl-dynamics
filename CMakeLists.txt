@@ -22,6 +22,10 @@ project(${PROJECT_NAME})
 
 SET(CMAKE_INSTALL_PREFIX $ENV{ROBOTPKG_PATH})
 
+# Impose shared libraries
+#------------------------
+OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
+
 # Check for required packages
 # -------------------------
 INCLUDE(FindPkgConfig)
@@ -93,8 +97,14 @@ SET(install_pkg_include_dir "\${includedir}")
 
 # Install the file in the appropriate place.
 SET(install_libdir_pkgconfig ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+
 CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake
-	       ${install_libdir_pkgconfig}/${PROJECT_NAME}.pc )
+		 ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}.pc )
+
+INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}.pc
+	DESTINATION ${install_libdir_pkgconfig}	
+        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
+)
 
 
 
