@@ -9,5 +9,5 @@ Name: ${PROJECT_NAME}
 Description: ${PROJECT_DESCRIPTION}
 Version: ${PROJECT_VERSION}
 Requires: ${PROJECT_REQUIREMENTS}
-Libs: -L${install_pkg_libdir} -l${PROJECT_NAME}
-Cflags: -I${install_pkg_include_dir} 
+Libs:  ${${PROJECT_NAME}_LDFLAGS}
+Cflags: -I${install_pkg_include_dir} ${${PROJECT_NAME}_CXXFLAGS}
