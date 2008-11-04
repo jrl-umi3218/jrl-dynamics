@@ -17,14 +17,14 @@ SET(PROJECT_VERSION 1.9.99)
 # name of the project
 SET(PROJECT_NAME dynamicsJRLJapan)
 SET(PROJECT_CONTACT olivier.stasse@aist.go.jp)
-SET(PROJECT_DESCRIPTION Implementation of Newton Euler algorithm)
+SET(PROJECT_DESCRIPTION "Implementation of Newton Euler algorithm")
 project(${PROJECT_NAME})
 
 SET(CMAKE_INSTALL_PREFIX $ENV{ROBOTPKG_PATH})
 
 # Impose shared libraries
 #------------------------
-OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
+OPTION(BUILD_SHARED_LIBS "Build dynamicsJRLJapan with shared libraries." ON)
 
 # Check for required packages
 # -------------------------
@@ -32,7 +32,7 @@ INCLUDE(FindPkgConfig)
 pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=1.4 )
 pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=1.5.99 )
 
-SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer>=1.4 abstractRobotDynamics>=1.5.99")
+SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= 1.4 abstractRobotDynamics >= 1.5.99")
 
 MESSAGE(STATUS "${MALJRL_CFLAGS}")
 MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")
