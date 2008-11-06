@@ -53,7 +53,7 @@ FOREACH(option_ldflags ${ROBOTDYNAMICS_LDFLAGS})
   SET(${PROJECT_NAME}_LDFLAGS "${option_ldflags} ${${PROJECT_NAME}_LDFLAGS}")
 ENDFOREACH(option_ldflags)
 
-SET(${PROJECT_NAME}_LDFLAGS "-L${${PROJECT_NAME}_BINARY_DIR}/src -l${PROJECT_NAME}-${PROJECT_VERSION} ${${PROJECT_NAME}_LDFLAGS}")
+SET(${PROJECT_NAME}_LDFLAGS "-L${CMAKE_PREFIX_INSTALL}/lib -l${PROJECT_NAME}-${PROJECT_VERSION} ${${PROJECT_NAME}_LDFLAGS}")
 
 # Check if glut is present or not.
 # -------------------------------
