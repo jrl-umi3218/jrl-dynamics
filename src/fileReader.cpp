@@ -1,6 +1,7 @@
 #include "dynamics-config.h"
 
 #include <err.h>
+#include <string.h>
 
 #include "dynamicsJRLJapan/fileReader.h"
 
