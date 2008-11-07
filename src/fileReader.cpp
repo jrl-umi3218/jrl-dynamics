@@ -25,13 +25,17 @@ char look_for(FILE *fichier, const char *str)
 	Cont=true;
       
       if (!Cont)
-	if (c == str[i] && i < (int)(strlen(str)))
-	  i++;
-	else
-	  if (i == (int)strlen(str))
-	    return 1;
+	{
+	  if (c == str[i] && i < (int)(strlen(str)))
+	    i++;
 	  else
-	    i = 0;
+	    {
+	      if (i == (int)strlen(str))
+		return 1;
+	      else
+		i = 0;
+	    }
+	}
     }
   while (!feof(fichier));
     
