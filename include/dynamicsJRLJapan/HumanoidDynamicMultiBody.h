@@ -39,6 +39,8 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 #include "robotDynamics/jrlDynamicRobot.h"
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 
+#include "dynamicJRLJapan_API.h"
+
 namespace dynamicsJRLJapan
 {
 
@@ -56,7 +58,7 @@ namespace dynamicsJRLJapan
   This specific class is the specialization of the generic class CjrlHumanoidDynamicRobot.
 
   */
-  class HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot, public virtual DynamicMultiBody
+  class DYN_JRL_JAPAN_EXPORT HumanoidDynamicMultiBody: public CjrlHumanoidDynamicRobot, public virtual DynamicMultiBody
     {
     private:
       

@@ -36,6 +36,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
 
+#include "dynamicJRLJapan_API.h"
 
 using namespace std;
 
@@ -54,7 +55,7 @@ namespace dynamicsJRLJapan
         \li through abstract robot dynamics interfaces. When using this solution, 
 	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
-  class Joint: public CjrlJoint
+  class DYN_JRL_JAPAN_EXPORT Joint: public CjrlJoint
   {
   protected:
     /** 
@@ -583,28 +584,28 @@ namespace dynamicsJRLJapan
 
   };
 
-  class JointFreeflyer : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public Joint
   {
   public:
     JointFreeflyer(const matrix4d &inInitialPosition);
     virtual ~JointFreeflyer();
   };
 
-  class JointRotation : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointRotation : public Joint
   {
   public:
     JointRotation(const matrix4d &inInitialPosition);
     virtual ~JointRotation();
   };
 
-  class JointTranslation : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointTranslation : public Joint
   {
   public:
     JointTranslation(const matrix4d &inInitialPosition);
     virtual ~JointTranslation();
   };
 
-  class JointAnchor : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointAnchor : public Joint
   {
   public:
     JointAnchor(const matrix4d &inInitialPosition);

@@ -42,6 +42,7 @@
 #define MULTIBODY_H
 
 #define INTERFACE
+#include "dynamicJRLJapan_API.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/Body.h"
 #include "dynamicsJRLJapan/fileReader.h"
@@ -99,7 +100,7 @@ namespace dynamicsJRLJapan
     int liaison;
   };
 
-  bool operator==(const appariement a1, const appariement a2);
+  DYN_JRL_JAPAN_EXPORT bool operator==(const appariement a1, const appariement a2);
 
   /** @ingroup forwardynamics
        
@@ -121,7 +122,7 @@ namespace dynamicsJRLJapan
       Les methodes necessitant un parcours du graphe se base sur l'hypothese qu'il
       ne contienne pas de cycle.   
   */
-  class MultiBody
+  class DYN_JRL_JAPAN_EXPORT MultiBody
   {
   protected:
     
@@ -212,7 +213,7 @@ namespace dynamicsJRLJapan
 
   // Create a matrix from an axis and a rotation around
   // this axis.
-  void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
+  DYN_JRL_JAPAN_EXPORT void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
   
 };
 

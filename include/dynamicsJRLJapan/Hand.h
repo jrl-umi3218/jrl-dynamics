@@ -4,6 +4,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 
 #include "robotDynamics/jrlHand.h"
+#include "dynamicJRLJapan_API.h"
 
 namespace dynamicsJRLJapan
 {
@@ -11,7 +12,7 @@ namespace dynamicsJRLJapan
     \brief This class represents a HRP2 hand with a parallel mechanism.
         A hand has a central point referenced in the wrist joint frame, three axis and a scalar value ranging between 0 and 1 to describe the grasping degree (0 for open and 1 for closed hand)
     */
-    class Hand: public CjrlHand
+    class DYN_JRL_JAPAN_EXPORT Hand: public CjrlHand
     {
     public:
     

@@ -46,6 +46,8 @@
 #include <iostream>
 using namespace std;
 
+#include "dynamicJRLJapan_API.h"
+
 namespace dynamicsJRLJapan
 {
   const static int CROCHET_OUVRANT=0;
@@ -64,17 +66,17 @@ namespace dynamicsJRLJapan
   const static int JOINT_ULIMIT = 7;
 
   /// Function to look for an object.
-  char look_for(FILE* fichier, const char *str);
+  DYN_JRL_JAPAN_EXPORT char look_for(FILE* fichier, const char *str);
   
   /// Give back the word currently at the position of the file fichier in str.
-  bool immediatlyAppears(FILE* fichier, const char *str) ;
+  DYN_JRL_JAPAN_EXPORT bool immediatlyAppears(FILE* fichier, const char *str) ;
 
   /// Look for the next keyword inside fich.
-  int nextKeyWord(FILE* fich);
+  DYN_JRL_JAPAN_EXPORT int nextKeyWord(FILE* fich);
   
   /// Look for the next Joint keyword inside fich.
-  int nextJointKeyWord(FILE* fichier);
+  DYN_JRL_JAPAN_EXPORT int nextJointKeyWord(FILE* fichier);
   
   /// Returns the type of the next joint inside the file.
-  int typeOfJoint(FILE* fichier);
+  DYN_JRL_JAPAN_EXPORT int typeOfJoint(FILE* fichier);
 };

@@ -43,6 +43,7 @@
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlDynamicRobot.h"
+#include "dynamicJRLJapan_API.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/MultiBody.h"
 #include "dynamicsJRLJapan/DynamicBody.h"

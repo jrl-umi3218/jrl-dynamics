@@ -34,6 +34,7 @@
 #ifndef _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #include <vector>
+#include "dynamicJRLJapan_API.h"
 #include "dynamicsJRLJapan/DynamicMultiBody.h"
 
 namespace dynamicsJRLJapan
@@ -42,7 +43,7 @@ namespace dynamicsJRLJapan
   /*@! This Object here implements the constants 
     and the specificities of HRP-2.
     */
-  class HumanoidSpecificities
+  class DYN_JRL_JAPAN_EXPORT HumanoidSpecificities
   {
   public:
 

@@ -42,6 +42,7 @@
 
 #include <string>
 
+#include "dynamicJRLJapan_API.h"
 #include "dynamicsJRLJapan/Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
