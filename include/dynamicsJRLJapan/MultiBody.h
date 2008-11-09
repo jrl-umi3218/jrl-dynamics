@@ -100,7 +100,7 @@ namespace dynamicsJRLJapan
     int liaison;
   };
 
-  DYN_JRL_JAPAN_EXPORT bool operator==(const appariement a1, const appariement a2);
+  bool operator==(const appariement a1, const appariement a2);
 
   /** @ingroup forwardynamics
        
@@ -213,7 +213,7 @@ namespace dynamicsJRLJapan
 
   // Create a matrix from an axis and a rotation around
   // this axis.
-  DYN_JRL_JAPAN_EXPORT void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
+  void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
   
 };
 

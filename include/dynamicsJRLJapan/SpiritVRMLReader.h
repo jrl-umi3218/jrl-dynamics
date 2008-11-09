@@ -39,7 +39,7 @@ namespace dynamicsJRLJapan
 {
   namespace VRMLReader 
   {
-    DYN_JRL_JAPAN_EXPORT int ParseVRMLFile(MultiBody *aMB, std::string FileName);
+    int ParseVRMLFile(MultiBody *aMB, std::string FileName);
   };
 };
 

@@ -55,7 +55,7 @@ namespace dynamicsJRLJapan
   /*! Fundamental class to store the dynamical information for one body. 
     @ingroup forwardynamics
   */
-  class DynamicBody : public Body
+  class DYN_JRL_JAPAN_EXPORT DynamicBody : public Body
   {
     
   public:
