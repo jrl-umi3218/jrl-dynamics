@@ -58,6 +58,7 @@ OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
       		      PROPERTIES 
 	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include/ -I${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME} ${${PROJECT_NAME}_CXXFLAGS}"
+				  LINK_FLAGS ${${PROJECT_NAME}_LDFLAGS}
 	             )
 
 # Specify header files
