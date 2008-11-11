@@ -58,7 +58,7 @@ OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
       		      PROPERTIES 
 	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include/ -I${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME} ${${PROJECT_NAME}_CXXFLAGS}"
-				  LINK_FLAGS ${${PROJECT_NAME}_LDFLAGS}
+				  LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
 	             )
 
 # Specify header files
@@ -108,7 +108,7 @@ IF(WIN32)
 ##right now, there is a pb with symlink under Vista. Until I found out, I copy the dll
             COMMAND 
 			${CMAKE_COMMAND} -E copy 
-				${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
+			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
 			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}.${lib_extension}
 				
 #            COMMAND 
