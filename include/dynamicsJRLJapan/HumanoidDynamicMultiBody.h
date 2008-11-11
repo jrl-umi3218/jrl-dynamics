@@ -1,7 +1,7 @@
 /* Computation of the dynamic aspect for a humanoid robot.
   
 Copyright (c) 2005-2006, 
-@author Olivier Stasse.
+@author Francois Keith, Olivier Stasse. 
    
 JRL-Japan, CNRS/AIST
 
@@ -39,7 +39,7 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 #include "robotDynamics/jrlDynamicRobot.h"
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 
 namespace dynamicsJRLJapan
 {

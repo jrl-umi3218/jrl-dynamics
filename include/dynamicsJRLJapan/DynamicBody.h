@@ -10,7 +10,7 @@
 
 
    Copyright (c) 2005-2006, 
-   @author Jean Remy Chardonnet,  Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati
+   @author Jean Remy Chardonnet,  Francois Keith, Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati
    
    JRL-Japan, CNRS/AIST
 
@@ -42,7 +42,7 @@
 
 #include <string>
 
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"

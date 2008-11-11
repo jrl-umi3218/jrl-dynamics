@@ -1,7 +1,7 @@
 /* Class to implement a Joint object.
 
    Copyright (c) 2007, 
-   @author Olivier Stasse, Florent Lamiraux
+   @author Olivier Stasse, Florent Lamiraux, Francois Keith
    
    JRL-Japan, CNRS/AIST
 
@@ -36,7 +36,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
 
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-# Olivier Stasse, JRL, CNRS/AIST
+# Olivier Stasse, Francois Keith, JRL, CNRS/AIST
 # Creation: 31/10/2008
 # History:
 #
@@ -27,7 +27,6 @@ SpiritVRMLReader.cpp )
 #-----------------------------
 SET(libdyn_headers 
 ../include/${PROJECT_NAME}/dynamics-config.h
-../include/${PROJECT_NAME}/dynamicJRLJapan_API.h
 ../include/${PROJECT_NAME}/robotDynamicsImpl.h
 )
 

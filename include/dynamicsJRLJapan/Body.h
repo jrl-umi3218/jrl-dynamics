@@ -11,6 +11,7 @@
    Copyright (c) 2005-2006, 
    @author : 
    Adrien Escande, 
+   Francois Keith,
    Abderrahmane Kheddar,  
    Olivier Stasse, 
    Ramzi Sellouati
@@ -47,7 +48,7 @@
 //#include "linalg.h"
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Joint.h"
 
 using namespace::std;

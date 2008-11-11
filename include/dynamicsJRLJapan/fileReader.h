@@ -15,7 +15,7 @@
 
 
    Copyright (c) 2005-2006, 
-   @author Adrien Escande, Abderrahmane Kheddar, Olivier Stasse, Ramzi Sellouati
+   @author Adrien Escande, Francois Keith, Abderrahmane Kheddar, Olivier Stasse, Ramzi Sellouati
    
    JRL-Japan, CNRS/AIST
 
@@ -46,7 +46,7 @@
 #include <iostream>
 using namespace std;
 
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 
 namespace dynamicsJRLJapan
 {

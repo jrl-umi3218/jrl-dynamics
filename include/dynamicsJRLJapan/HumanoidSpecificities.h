@@ -4,6 +4,7 @@
    
 
    Copyright (c) 2005-2006, 
+   Francois Keith,
    Olivier Stasse,
    Ramzi Sellouati
    
@@ -34,7 +35,7 @@
 #ifndef _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #define _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #include <vector>
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/DynamicMultiBody.h"
 
 namespace dynamicsJRLJapan

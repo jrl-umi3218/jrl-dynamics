@@ -4,7 +4,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 
 #include "robotDynamics/jrlHand.h"
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 
 namespace dynamicsJRLJapan
 {

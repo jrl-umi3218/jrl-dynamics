@@ -11,7 +11,7 @@
    the code provided by Jean-Remy and Adrien.
   
    Copyright (c) 2005-2006, 
-   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
+   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Francois Keith, Abderrahmane Kheddar
    
    JRL-Japan, CNRS/AIST
 
@@ -43,7 +43,7 @@
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlDynamicRobot.h"
-#include "dynamicJRLJapan_API.h"
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/MultiBody.h"
 #include "dynamicsJRLJapan/DynamicBody.h"
