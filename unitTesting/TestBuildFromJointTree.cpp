@@ -3,6 +3,11 @@
 #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 
+#include <math.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 using namespace std;
 using namespace dynamicsJRLJapan;
 

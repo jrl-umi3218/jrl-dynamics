@@ -11,7 +11,7 @@
 
 
    Copyright (c) 2005-2006, 
-   @author Adrien Escande, Abderrahmane Kheddar, Olivier Stasse, Ramzi Sellouati
+   @author Adrien Escande, Francois Keith, Abderrahmane Kheddar, Olivier Stasse, Ramzi Sellouati
    
    JRL-Japan, CNRS/AIST
 
@@ -42,6 +42,7 @@
 #define MULTIBODY_H
 
 #define INTERFACE
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/Body.h"
 #include "dynamicsJRLJapan/fileReader.h"
@@ -121,7 +122,7 @@ namespace dynamicsJRLJapan
       Les methodes necessitant un parcours du graphe se base sur l'hypothese qu'il
       ne contienne pas de cycle.   
   */
-  class MultiBody
+  class DYN_JRL_JAPAN_EXPORT MultiBody
   {
   protected:
     

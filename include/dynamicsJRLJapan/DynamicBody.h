@@ -10,7 +10,7 @@
 
 
    Copyright (c) 2005-2006, 
-   @author Jean Remy Chardonnet,  Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati
+   @author Jean Remy Chardonnet,  Francois Keith, Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati
    
    JRL-Japan, CNRS/AIST
 
@@ -42,6 +42,7 @@
 
 #include <string>
 
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
@@ -54,7 +55,7 @@ namespace dynamicsJRLJapan
   /*! Fundamental class to store the dynamical information for one body. 
     @ingroup forwardynamics
   */
-  class DynamicBody : public Body
+  class DYN_JRL_JAPAN_EXPORT DynamicBody : public Body
   {
     
   public:

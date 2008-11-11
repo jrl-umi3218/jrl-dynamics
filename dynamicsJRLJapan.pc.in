@@ -9,5 +9,5 @@ Name: @PACKAGE@
 Description: Implementation of Abstract Interface abstractRobotDynamics
 Version: @VERSION@
 Requires: @MAL_REQD@, @ROBOTDYNAMICS_REQD@
-Libs: -L${libdir} -ldynamicsJRLJapan
+Libs: ${LIBDIR_KW}${libdir} ${LIBINCLUSION_KW}dynamicsJRLJapan.lib
 Cflags: -I${includedir}

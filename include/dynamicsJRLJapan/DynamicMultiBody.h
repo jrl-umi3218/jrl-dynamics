@@ -11,7 +11,7 @@
    the code provided by Jean-Remy and Adrien.
   
    Copyright (c) 2005-2006, 
-   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
+   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Francois Keith, Abderrahmane Kheddar
    
    JRL-Japan, CNRS/AIST
 
@@ -43,6 +43,7 @@
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlDynamicRobot.h"
+#include "dynamics-config.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/MultiBody.h"
 #include "dynamicsJRLJapan/DynamicBody.h"
@@ -64,7 +65,7 @@ namespace dynamicsJRLJapan
         \li through abstract robot dynamics interfaces. When using this solution, 
 	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
-  class DynamicMultiBody : public virtual CjrlDynamicRobot,
+  class DYN_JRL_JAPAN_EXPORT DynamicMultiBody : public virtual CjrlDynamicRobot,
     public MultiBody 
     
   {
