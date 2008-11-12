@@ -4,10 +4,7 @@
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "dynamicsJRLJapan/robotDynamicsImpl.h"
 
-#include <math.h>
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include "jrlMathTools/constants.h"
 
 static CjrlRobotDynamicsObjectConstructor <
   CimplDynamicRobot, 

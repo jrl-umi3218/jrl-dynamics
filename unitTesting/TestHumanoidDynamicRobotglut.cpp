@@ -2,6 +2,7 @@
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
+#include "jrlMathTools/constants.h"
 #include <GL/glut.h>
 
 using namespace std;
