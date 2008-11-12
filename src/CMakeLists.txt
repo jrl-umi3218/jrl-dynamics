@@ -102,15 +102,11 @@ IF(WIN32)
 			COMMAND 
 			${CMAKE_COMMAND} -E copy 
 				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
-				${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
+				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
 
 ###COMMM
-##right now, there is a pb with symlink under Vista. Until I found out, I copy the dll
-            COMMAND 
-			${CMAKE_COMMAND} -E copy 
-			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
-			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}.${lib_extension}
-				
+##right now, there is a pb with symlink under Vista. Until I found out, I use the copy of the dll
+
 #            COMMAND 
 #			${CMAKE_COMMAND} -E remove -f
 #			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
@@ -124,8 +120,8 @@ IF(WIN32)
 		)
 			
 		INSTALL(FILES
-			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}
-			${${PROJECT_NAME}_BINARY_DIR}/lib/${PROJECT_NAME}.${lib_extension}
+			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}
+			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
 		
 			DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 				PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
