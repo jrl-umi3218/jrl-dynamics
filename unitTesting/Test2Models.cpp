@@ -5,7 +5,7 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
-#include "jrlMathTools/constants.h"
+#include "jrlMathTools/jrlConstants.h"
 
 void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 {
