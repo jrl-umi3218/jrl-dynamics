@@ -3,7 +3,7 @@
 
 #ifndef WIN32
 #include <err.h>
-#endif WIN32
+#endif /*WIN32*/
 
 #include <string.h>
 #include "dynamicsJRLJapan/fileReader.h"
