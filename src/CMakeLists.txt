@@ -47,6 +47,16 @@ ADD_LIBRARY(${PROJECT_NAME_LIB}
   ${libdyn_src} ${libdyn_headers}
 )
 
+# Specify soname, version and rpath
+# ---------------------------------
+SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
+      		      PROPERTIES 
+		      VERSION ${PROJECT_VERSION}
+		      SOVERSION ${PROJECT_VERSION}
+		      INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib
+		      INSTALL_RPATH_USE_LINK_PATH TRUE
+		      )
+
 # Impose shared libraries
 #------------------------
 OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
