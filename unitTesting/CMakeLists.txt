@@ -8,7 +8,7 @@
 SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_CXXFLAGS}")
 
 # For the test, we link with the library corresponding to the src,  which is not installed yet
-SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME}-${PROJECT_VERSION}${LIBINCLUSION_EXT} ${${PROJECT_NAME}_src_LDFLAGS}")
+SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
 
 MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 ADD_EXECUTABLE(	TestHumanoidDynamicRobot TestHumanoidDynamicRobot.cpp)
