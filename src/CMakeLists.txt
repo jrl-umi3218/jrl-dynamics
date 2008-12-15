@@ -93,11 +93,6 @@ ENDIF(UNIX)
 
 IF(WIN32)
 	SET (LIBRARY_EXTENSION "dll" "lib")
-	SET( CONFIGURATION_EXTENSION "")
-#		IF( ${configuration} STREQUAL "Debug")
-#			SET( CONFIGURATION_EXTENSION "d")
-#		ENDIF()
-
 
 	FOREACH (lib_extension ${LIBRARY_EXTENSION} ) 
 		ADD_CUSTOM_COMMAND( TARGET ${PROJECT_NAME_LIB}
@@ -105,7 +100,8 @@ IF(WIN32)
 			COMMAND 
 			${CMAKE_COMMAND} -E copy 
 				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
-				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
+				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}
+		)
 
 ###COMMM
 ##right now, there is a pb with symlink under Vista. Until I found out, I use the copy of the dll
@@ -120,7 +116,6 @@ IF(WIN32)
 #			${PROJECT_NAME}.${lib_extension}
 ###END COMMM
 
-		)
 			
 		INSTALL(FILES
 			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}
