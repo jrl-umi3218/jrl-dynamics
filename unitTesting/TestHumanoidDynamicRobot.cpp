@@ -188,6 +188,8 @@ int main(int argc, char *argv[])
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
   
+  aCurrentConf[2]=0.56;
+
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
@@ -248,6 +250,10 @@ int main(int argc, char *argv[])
   cout << aHDMB->leftWrist()->rankInConfiguration() << endl;
   cout << ((Joint *)aHDMB->leftWrist())->getName() << endl;
   cout << ((Joint *)aHDMB->leftWrist())->getIDinVRML() << endl;
+
+  cout << "Position of the right hand "<< endl;
+  cout << ((Joint *)aHDMB->rightWrist())->currentTransformation() << endl;
+
 
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
