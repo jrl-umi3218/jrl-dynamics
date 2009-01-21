@@ -1087,7 +1087,6 @@ namespace dynamicsJRLJapan
        \li ComputeMomentum: Compute the global momentum and the momentum for each body.
        \li ComputeZMP: Compute ZMP.
        \li ComputeBackwardDynamics: Compute the force and the torque of each joint.
-       \retval 
       */
      bool isSupported(const std::string &inProperty );
        

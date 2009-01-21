@@ -57,7 +57,8 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
   m_FatherJoint(0),
-  m_IDinVRML(-1)
+  m_IDinVRML(-1),
+  m_StateVectorPosition(0)
 {
   m_FromRootToThis.push_back(this);
   CreateLimitsArray();
@@ -70,7 +71,8 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
-  m_IDinVRML(-1)
+  m_IDinVRML(-1),
+  m_StateVectorPosition(0)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) = translationStatic[0];
@@ -88,7 +90,8 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
-  m_IDinVRML(-1)
+  m_IDinVRML(-1),
+  m_StateVectorPosition(0)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   m_FromRootToThis.push_back(this);
@@ -104,6 +107,7 @@ Joint::Joint(const Joint &r)
   m_FatherJoint = 0;
   m_Name=r.getName();
   m_IDinVRML=r.getIDinVRML();
+  m_StateVectorPosition=r.stateVectorPosition(); 
   m_FromRootToThis.push_back(this);
   m_inGlobalFrame=r.m_inGlobalFrame;
   CreateLimitsArray();
@@ -122,7 +126,8 @@ Joint::Joint():
   m_inGlobalFrame(false),
   m_quantity(0.0),
   m_FatherJoint(0),
-  m_IDinVRML(-1)
+  m_IDinVRML(-1),
+  m_StateVectorPosition(0)
 {
   MAL_S3_VECTOR_ACCESS(m_axe,0) = 0.0;
   MAL_S3_VECTOR_ACCESS(m_axe,1) = 0.0;
