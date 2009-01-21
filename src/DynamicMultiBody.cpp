@@ -2313,6 +2313,424 @@ std::vector<CjrlJoint*> DynamicMultiBody::jointVector()
   return m_JointVector;
 }
 
+std::vector<CjrlJoint*> DynamicMultiBody::jointsBetween(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint) const
+{
+    std::vector<CjrlJoint*> outJoints;
+    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+    robotRoot2StartJoint = inStartJoint.jointsFromRootToThis();
+    robotRoot2EndJoint = inEndJoint.jointsFromRootToThis();
+
+    unsigned int i;
+    unsigned int lastCommonJointRank = 0;
+    unsigned int minChainLength = (robotRoot2StartJoint.size()<robotRoot2EndJoint.size())?robotRoot2StartJoint.size():robotRoot2EndJoint.size();
+
+    for(i=1; i< minChainLength; i++)
+    {
+        if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
+            lastCommonJointRank++;
+    }
+
+    for(i = robotRoot2StartJoint.size()-1; i>lastCommonJointRank; i--)
+        outJoints.push_back(robotRoot2StartJoint[i]);
+
+    for(i=lastCommonJointRank+1; i< robotRoot2EndJoint.size(); i++)
+        outJoints.push_back(robotRoot2EndJoint[i]);
+    
+    return outJoints;
+}
+
+void DynamicMultiBody::getJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian)
+{
+    if ((outjacobian.size1() != 6) || (outjacobian.size2() != numberDof()))
+         outjacobian.resize(6,numberDof(),false);
+    outjacobian.clear();
+    addJacobian(inStartJoint,inEndJoint,inFrameLocalPosition,outjacobian);
+}
+
+void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian)
+{
+    if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))
+        outjacobian.resize(3,numberDof(),false);
+    outjacobian.clear();
+        //determine participating joints
+    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+    robotRoot2StartJoint = inStartJoint.jointsFromRootToThis();
+    robotRoot2EndJoint = inEndJoint.jointsFromRootToThis();
+    
+    unsigned int i,j;
+    unsigned int offset = 1;
+    unsigned int minChain = (robotRoot2StartJoint.size()<robotRoot2EndJoint.size())?robotRoot2StartJoint.size():robotRoot2EndJoint.size();
+
+    for(i=1; i< minChain; i++)
+    {
+        if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
+            offset++;
+    }
+    unsigned int rank;
+    Joint* aJoint;
+    DynamicBody * aBody;
+    
+    DynamicBody * FinalBody = (DynamicBody *)(inEndJoint.linkedBody());
+    DynamicBody * FirstBody = (DynamicBody *)(inStartJoint.linkedBody());
+    vector3d p = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inFrameLocalPosition);
+    vector3d dp,aRa,lv;
+    
+    for(i=offset;i<robotRoot2EndJoint.size();i++)
+    {
+        aJoint = (Joint*)robotRoot2EndJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2EndJoint[i]->rankInConfiguration();
+        
+        
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+
+        dp = p - aBody->p;
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) +=  lv[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) +=  aRa[j];
+                }
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j) +=  1.0;
+                }
+                outjacobian(1,rank+3) -=  dp[2];
+                outjacobian(2,rank+3) +=  dp[1];
+                outjacobian(0,rank+4) +=  dp[2];
+                outjacobian(2,rank+4) -=  dp[0];
+                outjacobian(0,rank+5) -=  dp[1];
+                outjacobian(1,rank+5) +=  dp[0];
+                break;
+        }
+    }
+    
+    for(i=offset;i<robotRoot2StartJoint.size();i++)
+    {
+        
+        aJoint = (Joint*) robotRoot2StartJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2StartJoint[i]->rankInConfiguration();
+
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+        
+        dp = p - aBody->p;
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) -=  lv[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) -=  aRa[j];
+                }
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j) -=  1.0;
+                }
+                outjacobian(1,rank+3) +=  dp[2];
+                outjacobian(2,rank+3) -=  dp[1];
+                outjacobian(0,rank+4) -=  dp[2];
+                outjacobian(2,rank+4) +=  dp[0];
+                outjacobian(0,rank+5) +=  dp[1];
+                outjacobian(1,rank+5) -=  dp[0];
+                break;
+        }
+    }
+    dp = p - FirstBody->p;
+    for(j=0;j<3;j++)
+        outjacobian(j,j) +=  1.0;
+    outjacobian(1,3) -=  dp[2];
+    outjacobian(2,3) +=  dp[1];
+    outjacobian(0,4) +=  dp[2];
+    outjacobian(2,4) -=  dp[0];
+    outjacobian(0,5) -=  dp[1];
+    outjacobian(1,5) +=  dp[0];
+}
+
+void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian)
+{
+    if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))
+        outjacobian.resize(3,numberDof(),false);
+    outjacobian.clear();
+    
+    //determine participating joints
+    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+    robotRoot2StartJoint = inStartJoint.jointsFromRootToThis();
+    robotRoot2EndJoint = inEndJoint.jointsFromRootToThis();
+    
+    unsigned int i,j;
+    unsigned int offset = 1;
+    unsigned int minChain = (robotRoot2StartJoint.size()<robotRoot2EndJoint.size())?robotRoot2StartJoint.size():robotRoot2EndJoint.size();
+
+    for(i=1; i< minChain; i++)
+    {
+        if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
+            offset++;
+    }
+    unsigned int rank;
+    Joint* aJoint;
+    DynamicBody * aBody;
+    vector3d aRa;
+    
+    for(i=offset;i<robotRoot2EndJoint.size();i++)
+    {
+        aJoint = (Joint*)robotRoot2EndJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2StartJoint[i]->rankInConfiguration();
+
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) += aRa[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j+3) +=  1.0;
+                }
+                break;
+        }
+    }
+    
+    for(i=offset;i<robotRoot2StartJoint.size();i++)
+    {
+        aJoint = (Joint*) robotRoot2StartJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2StartJoint[i]->rankInConfiguration();
+
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) -= aRa[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j+3) -=  1.0;
+                }
+                break;
+        }
+    }
+    
+    for(j=0;j<3;j++)
+    {
+        outjacobian(j,j+3) +=  1.0;
+    }
+}
+    
+        
+void DynamicMultiBody::addJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian)
+{
+    //determine participating joints
+    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+    robotRoot2StartJoint = inStartJoint.jointsFromRootToThis();
+    robotRoot2EndJoint = inEndJoint.jointsFromRootToThis();
+    
+    unsigned int i,j;
+    unsigned int offset = 1;
+    unsigned int minChain = (robotRoot2StartJoint.size()<robotRoot2EndJoint.size())?robotRoot2StartJoint.size():robotRoot2EndJoint.size();
+
+    for(i=1; i< minChain; i++)
+    {
+        if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
+            offset++;
+    }
+    unsigned int rank;
+    Joint* aJoint;
+    DynamicBody * aBody;
+    
+    DynamicBody * FinalBody = (DynamicBody *)(inEndJoint.linkedBody());
+    DynamicBody * FirstBody = (DynamicBody *)(inStartJoint.linkedBody());
+    vector3d p = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inFrameLocalPosition);
+    vector3d dp,aRa,lv;
+    
+    for(i=offset;i<robotRoot2EndJoint.size();i++)
+    {
+        aJoint = (Joint*)robotRoot2EndJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2EndJoint[i]->rankInConfiguration();
+        
+        
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+
+        dp = p - aBody->p;
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) +=  lv[j];
+                    outjacobian(j+3,rank) += aRa[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) +=  aRa[j];
+                }
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j) +=  1.0;
+                    outjacobian(j+3,rank+j+3) +=  1.0;
+                }
+                outjacobian(1,rank+3) -=  dp[2];
+                outjacobian(2,rank+3) +=  dp[1];
+                outjacobian(0,rank+4) +=  dp[2];
+                outjacobian(2,rank+4) -=  dp[0];
+                outjacobian(0,rank+5) -=  dp[1];
+                outjacobian(1,rank+5) +=  dp[0];
+                break;
+        }
+    }
+    
+    for(i=offset;i<robotRoot2StartJoint.size();i++)
+    {
+        
+        aJoint = (Joint*) robotRoot2StartJoint[i];
+        aBody=  (DynamicBody *) aJoint->linkedBody();
+        rank = robotRoot2StartJoint[i]->rankInConfiguration();
+
+        MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+        
+        dp = p - aBody->p;
+        
+        switch (aJoint->type())
+        {
+            case Joint::REVOLUTE_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) -=  lv[j];
+                    outjacobian(j+3,rank) -= aRa[j];
+                }
+                break;
+            case Joint::PRISMATIC_JOINT:
+                MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank) -=  aRa[j];
+                }
+                break;
+            case Joint::FREE_JOINT:
+                for(j=0;j<3;j++)
+                {
+                    outjacobian(j,rank+j) -=  1.0;
+                    outjacobian(j+3,rank+j+3) -=  1.0;
+                }
+                outjacobian(1,rank+3) +=  dp[2];
+                outjacobian(2,rank+3) -=  dp[1];
+                outjacobian(0,rank+4) -=  dp[2];
+                outjacobian(2,rank+4) +=  dp[0];
+                outjacobian(0,rank+5) +=  dp[1];
+                outjacobian(1,rank+5) -=  dp[0];
+                break;
+        }
+    }
+    
+    dp = p - FirstBody->p;
+    
+    for(j=0;j<3;j++)
+    {
+        outjacobian(j,j) +=  1.0;
+        outjacobian(j+3,j+3) +=  1.0;
+    }
+    outjacobian(1,3) -=  dp[2];
+    outjacobian(2,3) +=  dp[1];
+    outjacobian(0,4) +=  dp[2];
+    outjacobian(2,4) -=  dp[0];
+    outjacobian(0,5) -=  dp[1];
+    outjacobian(1,5) +=  dp[0];
+}
+
+void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian)
+{
+    if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))
+        outjacobian.resize(3,numberDof());
+    outjacobian.clear();
+
+    std::vector<CjrlJoint*> routeJoints;
+    CjrlBody* body;
+    CjrlJoint* joint;
+
+    double weight;
+    unsigned int rank,i,k,l;
+
+    const vector3d & comPos =  positionCenterOfMass();
+    const matrix4d & rootM = inStartJoint.currentTransformation();
+  
+    for (i=0; i < m_JointVector.size(); i++)
+    {
+        joint = m_JointVector[i];
+        if (joint == rootJoint())
+            continue;
+
+        body = joint->linkedBody();
+        const vector3d& localCOM = body->localCenterOfMass();
+        weight = body->mass()/mass();
+        joint->getJacobianPointWrtConfig( localCOM, m_attCalcJointJacobian );
+        routeJoints = joint->jointsFromRootToThis();
+        for (k= 1; k< routeJoints.size(); k++)
+        {
+            rank = routeJoints[k]->rankInConfiguration(); 
+            for (l=0; l<3;l++)
+                outjacobian(l,rank) += weight * m_attCalcJointJacobian(l,rank);
+        }
+    }
+  
+    for (k= 0; k<3;k++)
+        outjacobian(k,k) = 1.0;
+      
+    outjacobian(1,3) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,2,3) - comPos[2];
+    outjacobian(2,3) = comPos[1] - MAL_S4x4_MATRIX_ACCESS_I_J(rootM,1,3);
+      
+    outjacobian(0,4) = -outjacobian(1,3);
+    outjacobian(2,4) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,0,3) - comPos[0];
+      
+    outjacobian(0,5) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,1,3) - comPos[1];
+    outjacobian(1,5) = -outjacobian(2,4);
+}
+
 void DynamicMultiBody::ComputeNumberOfJoints()
 {
   unsigned int r=0;
@@ -2825,7 +3243,7 @@ bool DynamicMultiBody::computeCenterOfMassDynamics()
 /**
    \brief Get the position of the center of mass.
 */
-const MAL_S3_VECTOR(,double)&  DynamicMultiBody::positionCenterOfMass() 
+const MAL_S3_VECTOR(,double)&  DynamicMultiBody::positionCenterOfMass() const
 {
   return positionCoMPondere;
 }

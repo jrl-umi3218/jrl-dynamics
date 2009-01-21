@@ -327,6 +327,8 @@ namespace dynamicsJRLJapan
 
     /* @} */
 
+    void addJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
+            
   public:
     
     /** \brief Default constructor. */
@@ -626,6 +628,17 @@ namespace dynamicsJRLJapan
     */
     std::vector<CjrlJoint*> jointVector();
     
+    /**inherited from abstractRobotDynamics*/
+    std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint) const;
+    /**inherited from abstractRobotDynamics*/
+    void getJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
+    /**inherited from abstractRobotDynamics*/
+    void getPositionJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
+    /**inherited from abstractRobotDynamics*/
+    void getOrientationJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian);
+    /**inherited from abstractRobotDynamics*/
+    void getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian);
+    
     /**
        \brief Get the number of degrees of freedom of the robot.
     */
@@ -898,7 +911,7 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the position of the center of mass.
     */
-    const vector3d& positionCenterOfMass() ;
+    const vector3d& positionCenterOfMass() const;
     
     /**
        \brief Get the velocity of the center of mass.
