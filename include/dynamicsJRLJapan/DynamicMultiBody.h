@@ -70,7 +70,9 @@ namespace dynamicsJRLJapan
     
   {
   private:
-
+     /* **/ 
+      vector3d tempLV,tempP,tempDP;
+      
     /**  Label of the root. */
     int labelTheRoot;
     
@@ -326,8 +328,6 @@ namespace dynamicsJRLJapan
     bool m_ComputeZMP;
 
     /* @} */
-
-    void addJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
             
   public:
     
@@ -1087,6 +1087,7 @@ namespace dynamicsJRLJapan
        \li ComputeMomentum: Compute the global momentum and the momentum for each body.
        \li ComputeZMP: Compute ZMP.
        \li ComputeBackwardDynamics: Compute the force and the torque of each joint.
+       \retval 
       */
      bool isSupported(const std::string &inProperty );
        

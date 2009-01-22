@@ -35,14 +35,13 @@
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
-
 #include "dynamics-config.h"
 
 using namespace std;
 
 namespace dynamicsJRLJapan
 {  
-
+    class DynamicBody;
   /** @ingroup forwardynamics
        Define a transformation from a body to another
       Supported type:
@@ -68,8 +67,20 @@ namespace dynamicsJRLJapan
        \brief Position of the joint in the global frame at construction (joint value is equal to 0).
     */
     matrix4d m_globalPoseAtConstruction;
+    
+
+    
 
   private:
+      
+      /** */
+      double attSTcoef;
+      /** */
+      unsigned int attId, attNumberLifted;
+      /** */
+      vector3d attSTmcom;
+      
+      
     /*!  Type of the transformation */ 
     int m_type;
     
@@ -90,13 +101,15 @@ namespace dynamicsJRLJapan
     Joint * m_FatherJoint;
 
     /*! Vector of childs */
-    std::vector< CjrlJoint*> m_Children;
+    std::vector< Joint*> m_Children;
 
     /*! Vector of joints from the root to this joint. */
     std::vector< CjrlJoint*> m_FromRootToThis;
+    std::vector<Joint*> m_FromRootToThisJoint;
 
     /*! Pointer towards the body. */
     CjrlBody * m_Body;
+    DynamicBody * m_dynBody;
 
     /*! Name */
     string m_Name;
@@ -143,6 +156,19 @@ namespace dynamicsJRLJapan
     void computeLocalAndGlobalPose();
 
   public: 
+      
+      /** */
+      double subTreeCoef();
+      /** */
+      void subTreeCoef(double inReplacement);
+      /** */
+      void computeSubTreeMCom();
+      /** */
+      void computeSubTreeMComExceptChild(const CjrlJoint* inJoint);
+      /** */
+      const vector3d& subTreeMCom() const;
+      /** */
+      void subTreeMCom(const vector3d& inReplacement);
     
     /*! \brief Static constant to define the kind of joints
       available */
@@ -312,6 +338,7 @@ namespace dynamicsJRLJapan
     
     /*! \brief Returns the child joint at the given rank */
     CjrlJoint* childJoint(unsigned int givenRank) const;
+    Joint* child_Joint(unsigned int givenRank) const;
 
     /**
     ! \brief Get a vector containing references of the joints 
@@ -319,6 +346,8 @@ namespace dynamicsJRLJapan
     The root Joint and this Joint are included in the vector.
      */
     std::vector< CjrlJoint* > jointsFromRootToThis() const ;
+    
+    std::vector< Joint* > jointsFromRootToThisJoint() const ;
     /*! @} */
     
     /*! \name Joint Kinematics 
@@ -559,6 +588,7 @@ namespace dynamicsJRLJapan
        \brief Get a pointer to the linked body (if any).
     */
     CjrlBody* linkedBody() const;
+    DynamicBody* linkedDBody() const;
  	
     /**
        \brief Link a body to the joint.

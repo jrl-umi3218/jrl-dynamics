@@ -102,7 +102,7 @@ namespace dynamicsJRLJapan
     vector3d a, b, c, w_c, p,
       v0,  dv,  w,  dw,
       sv,  sw,  cv, cw,
-      hhv,  hhw,  pph,  ppb;
+      hhv,  hhw,  pph,  ppb, w_a;
 
     /*! Transformation
       (It is redundant, but required to implement CjrlJoint::currentTransformation)

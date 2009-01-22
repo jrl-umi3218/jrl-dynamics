@@ -59,6 +59,7 @@ DynamicBody::DynamicBody():Body()
   b[0] = b[1] = b[2] = 0;
   c[0] = c[1] = c[2] = 0;
   w_c[0] = w_c[1] = w_c[2] = 0;
+  w_a[0] = w_a[1] = w_a[2] = 0;
   p[0] = p[1] = p[2] = 0;
   v0[0] = v0[1] = v0[2] = 0;
   dv[0] = dv[1] = dv[2] = 0;

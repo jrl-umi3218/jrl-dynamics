@@ -57,10 +57,10 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
   m_FatherJoint(0),
-  m_IDinVRML(-1),
-  m_StateVectorPosition(0)
+  m_IDinVRML(-1)
 {
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -71,14 +71,14 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
-  m_IDinVRML(-1),
-  m_StateVectorPosition(0)
+  m_IDinVRML(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) = translationStatic[0];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = translationStatic[1];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = translationStatic[2];
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
 
   CreateLimitsArray();
 }
@@ -90,11 +90,11 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
-  m_IDinVRML(-1),
-  m_StateVectorPosition(0)
+  m_IDinVRML(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -107,8 +107,8 @@ Joint::Joint(const Joint &r)
   m_FatherJoint = 0;
   m_Name=r.getName();
   m_IDinVRML=r.getIDinVRML();
-  m_StateVectorPosition=r.stateVectorPosition(); 
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
   m_inGlobalFrame=r.m_inGlobalFrame;
   CreateLimitsArray();
 
@@ -126,8 +126,7 @@ Joint::Joint():
   m_inGlobalFrame(false),
   m_quantity(0.0),
   m_FatherJoint(0),
-  m_IDinVRML(-1),
-  m_StateVectorPosition(0)
+  m_IDinVRML(-1)
 {
   MAL_S3_VECTOR_ACCESS(m_axe,0) = 0.0;
   MAL_S3_VECTOR_ACCESS(m_axe,1) = 0.0;
@@ -136,6 +135,7 @@ Joint::Joint():
 
   m_type = FREE_JOINT;
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -265,10 +265,18 @@ unsigned int Joint::countChildJoints() const
 
 CjrlJoint* Joint::childJoint(unsigned int givenRank) const
 {
-  if ((givenRank>=0) && (givenRank<m_Children.size()))
+  if (givenRank<m_Children.size())
     return m_Children[givenRank];
   
-  return 0; // Previously return m_Children[0] (potential problem)
+  return 0;
+}
+
+Joint* Joint::child_Joint(unsigned int givenRank) const
+{
+    if (givenRank<m_Children.size())
+        return m_Children[givenRank];
+  
+    return 0;
 }
 
 std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const 
@@ -276,6 +284,10 @@ std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const
   return m_FromRootToThis;
 }
 
+std::vector<Joint*> Joint::jointsFromRootToThisJoint() const 
+{
+    return m_FromRootToThisJoint;
+}
 
 const MAL_S4x4_MATRIX(,double) & Joint::currentTransformation() const
 {
@@ -291,6 +303,58 @@ CjrlRigidVelocity Joint::jointVelocity()
     return ajrlRV;
 }
 
+void Joint::computeSubTreeMCom()
+{
+    for (attId = 0; attId< 3;attId++)
+        attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
+
+    attSTcoef = linkedDBody()->massCoef();
+    
+    for (attId = 0; attId< countChildJoints();attId++)
+    {
+        m_Children[attId]->computeSubTreeMCom();
+        attSTmcom += m_Children[attId]->subTreeMCom();
+        attSTcoef += m_Children[attId]->subTreeCoef();
+    }
+}
+
+void Joint::computeSubTreeMComExceptChild(const CjrlJoint* inJoint)
+{
+    for (attId = 0; attId< 3;attId++)
+        attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
+
+    attSTcoef = linkedDBody()->massCoef();
+    
+    for (attId = 0; attId< countChildJoints();attId++)
+    {
+        if (inJoint == m_Children[attId])
+            continue;
+        m_Children[attId]->computeSubTreeMCom();
+        attSTmcom += m_Children[attId]->subTreeMCom();
+        attSTcoef += m_Children[attId]->subTreeCoef();
+    }
+}
+      
+void Joint::subTreeMCom(const vector3d& inReplacement)
+{
+    attSTmcom = inReplacement;
+}
+            
+const vector3d& Joint::subTreeMCom() const
+{
+    return attSTmcom;
+}
+
+double Joint::subTreeCoef()
+{
+    return attSTcoef;
+}
+
+void Joint::subTreeCoef(double inReplacement)
+{
+    attSTcoef = inReplacement;
+}
+    
 CjrlRigidAcceleration Joint::jointAcceleration()
 {
   // TODO : Update the member of this object
@@ -354,24 +418,22 @@ void Joint::computeJacobianJointWrtConfig()
 void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 					   matrixNxP& outJ) const
 {
-  vector3d aRa,dp,lv;
+  vector3d dp,lv;
 
   ODEBUG("Size of the jacobian :" << m_FromRootToThis.size()-1);
    
-  for(unsigned int i=0;i<m_FromRootToThis.size();i++)
+  for(unsigned int i=0;i<m_FromRootToThisJoint.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
-      DynamicBody * aBody=  (DynamicBody *) m_FromRootToThis[i]->linkedBody();
-      Joint * aJoint = (Joint *)m_FromRootToThis[i];
-      
-      MAL_S3x3_C_eq_A_by_B(aRa,aBody->R, aBody->a);
+      DynamicBody * aBody= m_FromRootToThisJoint[i]->linkedDBody();
+      Joint * aJoint = m_FromRootToThisJoint[i];
 
       unsigned int lcol = aJoint->stateVectorPosition();
       ODEBUG("Joint: " << aJoint->getName() << " " << lcol);
-      dp = (vector3d)inPointWorldFrame - aBody->p;
+      dp = inPointWorldFrame - aBody->p;
 
-      MAL_S3_VECTOR_CROSS_PRODUCT(lv,aRa,dp);
+      MAL_S3_VECTOR_CROSS_PRODUCT(lv,aBody->w_a,dp);
       
       switch (aJoint->type())
 	{
@@ -380,13 +442,13 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 	  for(int j=0;j<3;j++)
 	    {
 	      outJ(j,lcol) =  lv[j];
-	      outJ(j+3,lcol) = aRa[j];
+              outJ(j+3,lcol) = aBody->w_a[j];
 	    }
 	  break;
 	case Joint::PRISMATIC_JOINT:
 	  for(int j=0;j<3;j++)
 	    {
-	      outJ(j,lcol) =  aRa[j];
+              outJ(j,lcol) =  aBody->w_a[j];
 	      outJ(j+3,lcol) = 0;
 	    }
 	  break;
@@ -449,9 +511,15 @@ CjrlBody* Joint::linkedBody() const
   return m_Body;
 }
 
+DynamicBody* Joint::linkedDBody() const
+{
+    return m_dynBody;
+}
+
 void Joint::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
+  m_dynBody = (DynamicBody*)m_Body;
 }
 
 void Joint::SetFatherJoint(Joint *aFather)
@@ -459,13 +527,16 @@ void Joint::SetFatherJoint(Joint *aFather)
   m_FatherJoint = aFather;
 
   m_FromRootToThis.clear();
+  m_FromRootToThisJoint.clear();
   
   m_FromRootToThis.push_back(this);
+  m_FromRootToThisJoint.push_back(this);
 
   CjrlJoint* aJoint = m_FatherJoint;
   while(aJoint!=0)
     {
       m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
+      m_FromRootToThisJoint.insert(m_FromRootToThisJoint.begin(),(Joint*)aJoint);
       aJoint = aJoint->parentJoint();
     }
   computeLocalAndGlobalPose();

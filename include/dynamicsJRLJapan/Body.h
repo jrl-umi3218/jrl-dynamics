@@ -91,6 +91,8 @@ namespace dynamicsJRLJapan
     /*! \brief Joint to which the body is attached inside a tree
      structure. */
     Joint * m_AttachedJoint;
+    
+    double attCoefMass;
 
   public:
 
@@ -192,6 +194,13 @@ namespace dynamicsJRLJapan
 
     /** @} */
 
+    
+    /** Get the mass of body divided by mass of robot*/
+    double massCoef() const {return attCoefMass;}
+    /** Set mass of body divided by mass of robot*/
+    void massCoef(double inCoef){attCoefMass = inCoef;}
+    
+    
     /*! \name Interface from jrlBody 
       @{
     */

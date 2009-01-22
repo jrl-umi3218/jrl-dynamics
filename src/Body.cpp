@@ -52,6 +52,7 @@ Body::Body(void)
 {
   //  label = cptCorps++;
   masse	= 0;
+  attCoefMass = 0;
   posCoM[0] = 0;
   posCoM[1] = 0;
   posCoM[2] = 0;
