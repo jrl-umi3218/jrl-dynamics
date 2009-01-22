@@ -324,9 +324,9 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
   
   int IndexChild = CurrentBody.child;
   //cout << "Body : " << CurrentBody.getName() << endl;
-  DynamicBody *Child = listOfBodies[IndexChild];
   while(IndexChild!=-1)
     {
+	  DynamicBody *Child = listOfBodies[IndexChild];
       //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = Child->Riip1;
       //cout << "Riip1: " << aRt << endl;
