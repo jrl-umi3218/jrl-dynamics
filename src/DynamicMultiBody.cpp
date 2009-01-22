@@ -2348,9 +2348,13 @@ void DynamicMultiBody::getJacobian(const CjrlJoint& inStartJoint, const CjrlJoin
          outjacobian.resize(6,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[6][numberDof()];
+	int valNumberDof = numberDof();
+    double ** outTable;
+	outTable = new double* [6];
+	for (i=0; i<6; i++)
+		outTable[i] = new double [valNumberDof];
     for (i=0; i<6; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
     
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -2465,6 +2469,11 @@ void DynamicMultiBody::getJacobian(const CjrlJoint& inStartJoint, const CjrlJoin
     outTable[1][5] =  tempDP[0];
     for (i=0; i<6; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+	//clean
+	for (i=0; i<6; i++)
+		delete (outTable[i]);
+	delete (outTable);
 }
 
 void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian)
@@ -2473,9 +2482,13 @@ void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const 
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[3][numberDof()];
+	int valNumberDof = numberDof();
+    double ** outTable;
+	outTable = new double* [3];
+	for (i=0; i<3; i++)
+		outTable[i] = new double [valNumberDof];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
     
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -2575,6 +2588,11 @@ void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const 
     outTable[1][5] =  tempDP[0];
     for (i=0; i<3; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+	//clean
+	for (i=0; i<3; i++)
+		delete (outTable[i]);
+	delete (outTable);
 }
 
 void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian)
@@ -2584,9 +2602,14 @@ void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, con
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[3][numberDof()];
+
+	int valNumberDof = numberDof();
+	double ** outTable;
+	outTable = new double* [3];
+	for (i=0; i<3; i++)
+		outTable[i] = new double [valNumberDof];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
     
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -2659,6 +2682,11 @@ void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, con
         outTable[i][i+3] =  1.0;
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
     }
+
+	//clean
+	for (i=0; i<3; i++)
+		delete (outTable[i]);
+	delete (outTable);
 }
     
 void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian)
@@ -2667,10 +2695,13 @@ void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, ma
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-    
-    double outTable[3][numberDof()];
+    	int valNumberDof = numberDof();
+	double ** outTable;
+	outTable = new double* [3];
+	for (i=0; i<3; i++)
+		outTable[i] = new double [valNumberDof];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
 
     std::vector<int> jointsigns(numberDof(),1);
 
@@ -2785,6 +2816,11 @@ void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, ma
     
     for (i=0; i<3; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+	//clean
+	for (i=0; i<3; i++)
+		delete (outTable[i]);
+	delete (outTable);
 }
 
 void DynamicMultiBody::ComputeNumberOfJoints()
