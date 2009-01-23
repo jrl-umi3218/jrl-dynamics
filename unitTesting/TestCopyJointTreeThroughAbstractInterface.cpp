@@ -239,29 +239,20 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
 
 int main(int argc, char *argv[])
 {
+  if (argc!=5)
+    {
+      cerr << " This program takes 4 arguments: " << endl;
+      cerr << "./TestCopyJointTreeThroughAbstractInterface PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
+      cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
+      exit(-1);
+    }	
+
   int VerboseMode = 3;
-  string aPath="/home/stasse/src/OpenHRP/etc/HRP2JRL/";
-  string aName="HRP2JRLmain.wrl";
-  string pathToWalkGenJRL = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/";
+  string aPath=argv[1];
+  string aName=argv[2];
 
-  int argindex=1;
-  if (argc>1)
-    {
-      aPath=argv[argindex++];
-      argc--;
-      if (aPath == "--help") {
-	std::cout << "TestCopyJointTreeThroughAbstractInterface .../OpenHRP/etc/HRP2JRL/ .../share/walkgenjrl/" << std::endl;
-	exit (0);
-      }
-    }
-  if (argc>1)
-    {
-      pathToWalkGenJRL=argv[argindex++];
-      argc--;
-    }
-
-  string JointToRank = pathToWalkGenJRL+"HRP2LinkJointRank.xml";
-  string aSpecificitiesFileName = pathToWalkGenJRL+"HRP2Specificities.xml";
+  string JointToRank = argv[4];
+  string aSpecificitiesFileName = argv[3];
   // Read the first humanoid.
   HumanoidDynamicMultiBody * aHDR = 
     dynamic_cast<HumanoidDynamicMultiBody*>(robotDynamicsObjectConstructor.createhumanoidDynamicRobot());
