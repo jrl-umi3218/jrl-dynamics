@@ -12,7 +12,7 @@ enable_language(CXX)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set version
-SET(PROJECT_VERSION 1.9.100)
+SET(PROJECT_VERSION 1.10.99)
 
 IF(WIN32)
   SET(LIBDIR_KW "/LIBPATH:")
@@ -32,19 +32,21 @@ SET(PROJECT_CONTACT olivier.stasse@aist.go.jp)
 SET(PROJECT_DESCRIPTION "Implementation of Newton Euler algorithm")
 project(${PROJECT_NAME})
 
-SET(CMAKE_INSTALL_PREFIX $ENV{ROBOTPKG_PATH})
-
 # Impose shared libraries
 #------------------------
 OPTION(BUILD_SHARED_LIBS "Build dynamicsJRLJapan with shared libraries." ON)
 
 # Check for required packages
-# -------------------------
+# ---------------------------
 INCLUDE(FindPkgConfig)
-pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=1.4 )
-pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=1.11.100 )
 
-SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= 1.4 abstractRobotDynamics >= 1.11.100")
+SET(MAL_REQUIRED_VERSION 1.7.2)
+SET(ABSTROBOTDYNAMICS_REQUIRED_VERSION 1.11)
+
+pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=${MAL_REQUIRED_VERSION})
+pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=${ABSTROBOTDYNAMICS_REQUIRED_VERSION})
+
+SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= ${MAL_REQUIRED_VERSION} abstractRobotDynamics >= ${ABSTROBOTDYNAMICS_REQUIRED_VERSION}")
 
 MESSAGE(STATUS "${MALJRL_CFLAGS}")
 MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")
@@ -118,6 +120,7 @@ SET(install_pkg_prefix "\${prefix}")
 SET(install_pkg_exec_prefix "\${exec_prefix}")
 SET(install_pkg_libdir "\${libdir}")
 SET(install_pkg_include_dir "\${includedir}")
+SET(install_pkg_datarootdir "\${datarootdir}")
 
 # Install the file in the appropriate place.
 SET(install_libdir_pkgconfig ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)

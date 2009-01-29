@@ -296,10 +296,10 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
     lg(2) = -9.81;
 
     /* Compute the torque
-     * with eq. (7.147) Spong RMC p. 277
-     * 
-     *
-     */
+    * with eq. (7.147) Spong RMC p. 277
+    *
+    *
+    */
     MAL_S3_VECTOR(,double) firstterm,
     sndterm, thirdterm, fifthterm,tmp;
     // Do not fourth term because it is the angular acceleration.
@@ -316,10 +316,10 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
     CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm -sndterm;
 
     /* Compute with the force
-     * eq. (7.146) Spong RMC p. 277
-     * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
-     * g_i is the gravity express in the i reference frame.
-     */
+    * eq. (7.146) Spong RMC p. 277
+    * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
+    * g_i is the gravity express in the i reference frame.
+    */
 
     /* Constant part. */
     tmp = CurrentBody.dv_c - lg;
@@ -328,9 +328,9 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
 
     int IndexChild = CurrentBody.child;
     //cout << "Body : " << CurrentBody.getName() << endl;
-    DynamicBody *Child = listOfBodies[IndexChild];
     while(IndexChild!=-1)
     {
+        DynamicBody *Child = listOfBodies[IndexChild];
         //cout << "Child Bodies : " << Child->getName() << endl;
         aRt = Child->Riip1;
         //cout << "Riip1: " << aRt << endl;
@@ -672,7 +672,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
     }
 
     positionCoMPondere = positionCoMPondere/masse;
-            
+
     // Zero Momentum Point Computation.
     if (m_ComputeZMP)
     {
@@ -2400,9 +2400,13 @@ void DynamicMultiBody::getJacobian(const CjrlJoint& inStartJoint, const CjrlJoin
         outjacobian.resize(6,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[6][numberDof()];
+    int valNumberDof = numberDof();
+    double ** outTable;
+    outTable = new double* [6];
     for (i=0; i<6; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        outTable[i] = new double [valNumberDof];
+    for (i=0; i<6; i++)
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
 
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -2517,6 +2521,11 @@ void DynamicMultiBody::getJacobian(const CjrlJoint& inStartJoint, const CjrlJoin
     outTable[1][5] =  tempDP[0];
     for (i=0; i<6; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+    //clean
+    for (i=0; i<6; i++)
+        delete (outTable[i]);
+    delete (outTable);
 }
 
 void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian)
@@ -2525,10 +2534,15 @@ void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const 
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[3][numberDof()];
+    int valNumberDof = numberDof();
+    double ** outTable;
+    outTable = new double* [3];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        outTable[i] = new double [valNumberDof];
+    for (i=0; i<3; i++)
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
 
+    src/DynamicMultiBody.cpp
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
     Joint* StartJoint = (Joint*)(&inStartJoint);
@@ -2627,6 +2641,11 @@ void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const 
     outTable[1][5] =  tempDP[0];
     for (i=0; i<3; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+    //clean
+    for (i=0; i<3; i++)
+        delete (outTable[i]);
+    delete (outTable);
 }
 
 void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian)
@@ -2636,9 +2655,14 @@ void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, con
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-    double outTable[3][numberDof()];
+
+    int valNumberDof = numberDof();
+    double ** outTable;
+    outTable = new double* [3];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        outTable[i] = new double [valNumberDof];
+    for (i=0; i<3; i++)
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
 
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -2712,6 +2736,11 @@ void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint, con
         outTable[i][i+3] =  1.0;
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
     }
+
+    //clean
+    for (i=0; i<3; i++)
+        delete (outTable[i]);
+    delete (outTable);
 }
 
 void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian)
@@ -2720,10 +2749,14 @@ void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, ma
         outjacobian.resize(3,numberDof(),false);
 
     unsigned int i,j;
-
-    double outTable[3][numberDof()];
+    int valNumberDof = numberDof();
+    double ** outTable;
+    outTable = new double* [3];
     for (i=0; i<3; i++)
-        memset (outTable[i], 0, numberDof()*sizeof(double));
+        outTable[i] = new double [valNumberDof];
+
+    for (i=0; i<3; i++)
+        memset (outTable[i], 0, valNumberDof*sizeof(double));
 
     std::vector<int> jointsigns(numberDof(),1);
 
@@ -2838,6 +2871,11 @@ void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, ma
 
     for (i=0; i<3; i++)
         memcpy((&outjacobian.data()[i*numberDof()]),outTable[i],numberDof()*sizeof(double));
+
+    //clean
+    for (i=0; i<3; i++)
+        delete (outTable[i]);
+    delete (outTable);
 }
 
 void DynamicMultiBody::ComputeNumberOfJoints()

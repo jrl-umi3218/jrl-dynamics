@@ -1,4 +1,10 @@
+dynamic-JRLJapan 1.10 released January 29, 2009
 
+	49. Joint::m_StateVectorPosition is initialized in constructors.
+	48. Changes to handle installation through cmake instead of autotools.
+	47. bug fix: destructor of Body was called twice by destructors of 
+	    DynamicMultiBody and MultiBody.
+	
 dynamic-JRLJapan 1.9 released October 8, 2008
 
 	46. Modified internal computations to include properly the acceleration
