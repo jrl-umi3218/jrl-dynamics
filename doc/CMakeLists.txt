@@ -14,7 +14,7 @@ SET(${${PROJECT_NAME}_SOURCE_DIR}/doc/docfiles
 
 # Configure package.dox file
 CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/doc/package.dox.cmake
-  ${${PROJECT_NAME}_SOURCE_DIR}/doc/package.dox
+  ${CMAKE_CURRENT_BINARY_DIR}/package.dox
 )
 
 
@@ -30,4 +30,7 @@ INSTALL(DIRECTORY ${${PROJECT_NAME}_BINARY_DIR}/doc/html
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}/)
 INSTALL(DIRECTORY ${${PROJECT_NAME}_SOURCE_DIR}/doc/pictures
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}/html/)
+# doxytag
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.doxytag
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}/html)
 
