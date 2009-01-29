@@ -12,7 +12,7 @@ enable_language(CXX)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set version
-SET(PROJECT_VERSION 1.9.99)
+SET(PROJECT_VERSION 1.9.100)
 
 IF(WIN32)
   SET(LIBDIR_KW "/LIBPATH:")
@@ -42,9 +42,9 @@ OPTION(BUILD_SHARED_LIBS "Build dynamicsJRLJapan with shared libraries." ON)
 # -------------------------
 INCLUDE(FindPkgConfig)
 pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=1.4 )
-pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=1.5.99 )
+pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=1.11.100 )
 
-SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= 1.4 abstractRobotDynamics >= 1.5.99")
+SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= 1.4 abstractRobotDynamics >= 1.11.100")
 
 MESSAGE(STATUS "${MALJRL_CFLAGS}")
 MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")

@@ -20,7 +20,7 @@ AC_SUBST(MAL_CFLAGS)
 AC_SUBST(MAL_LIBS)
 
 dnl Dynamic Robot Abstract Interface
-define(robotdynamics_reqd, [abstractRobotDynamics >= 1.11])
+define(robotdynamics_reqd, [abstractRobotDynamics >= 1.11.100])
 AC_SUBST(ROBOTDYNAMICS_REQD, "robotdynamics_reqd")
 PKG_CHECK_MODULES(ROBOTDYNAMICS, robotdynamics_reqd)
 ROBOTDYNAMICS_PREFIX=`$PKG_CONFIG abstractRobotDynamics --variable=prefix`

@@ -313,6 +313,9 @@ namespace dynamicsJRLJapan
 
     /*! Computing CoM according to the position of each joint. */
     bool m_ComputeCoM;
+    
+    /*! Computing SkewCoM matrix */
+    bool m_ComputeSkewCoM;
 
     /*! Computing momentum using the velocity, i.e. 
       setting the m_ComputeMomentum to true will set m_ComputeVelocity to true. */
@@ -859,6 +862,11 @@ namespace dynamicsJRLJapan
     void SaveCurrentStateAsPastState();
     
     /**
+    */
+    vector3d NE_tmp3, NE_tmp2, NE_wn,NE_cl, NE_lw_c, NE_aRc, NE_aRb,  NE_lpComP, NE_RotByMotherdv, NE_lP,NE_lL, NE_tmp;
+    matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
+
+    /**
     \brief vectors and matrices used in FiniteDifferenceStateUpdate declared here to avoid dynamic allocation
     */
     vector3d FD_tmp,FD_tmp2,FD_tmp3;
@@ -998,7 +1006,7 @@ namespace dynamicsJRLJapan
      /*! \brief Getting the computation status for the velocity. */
      bool getComputeVelocity()
      { return m_ComputeVelocity; }
-
+     
      /*! \brief Setting the acceleration. */
      void setComputeAcceleration(const bool & abool)
      { if (abool) m_ComputeVelocity=true;
@@ -1011,6 +1019,10 @@ namespace dynamicsJRLJapan
      /*! \brief Compute the CoM. */
      void setComputeCoM(const bool & abool)
      { m_ComputeCoM = abool; }
+     
+     /*! \brief Compute the SkewCoM matrix. */
+     void setComputeSkewCoM(const bool & abool)
+     { m_ComputeSkewCoM = abool; }
      
      /*! \brief Getting the computation status for the CoM. */
      bool getComputeCoM()
