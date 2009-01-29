@@ -2542,7 +2542,6 @@ void DynamicMultiBody::getPositionJacobian(const CjrlJoint& inStartJoint, const 
     for (i=0; i<3; i++)
         memset (outTable[i], 0, valNumberDof*sizeof(double));
 
-    src/DynamicMultiBody.cpp
     //determine participating joints
     std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
     Joint* StartJoint = (Joint*)(&inStartJoint);
