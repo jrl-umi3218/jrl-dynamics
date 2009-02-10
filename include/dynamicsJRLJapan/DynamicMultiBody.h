@@ -77,10 +77,10 @@ namespace dynamicsJRLJapan
     int labelTheRoot;
     
     /**  List of bodies with dynamical properties */
-    vector<DynamicBody *> listOfBodies;
+    std::vector<DynamicBody *> listOfBodies;
     
     /** Array to convert Joint Id from VRL file to Body array index. */
-    vector<int> ConvertIDINVRMLToBodyID;
+    std::vector<int> ConvertIDINVRMLToBodyID;
     
     /** Update body parameters from the bodyinfo list of 
       joints and the internal list of bodies. */
@@ -439,10 +439,10 @@ namespace dynamicsJRLJapan
 		      double zmpz);
 
     /** \brief Compute the matrices MH*B, MH*Fi,MHFree  (Kajita IROS 2003 p. 1645) */
-    void BuildSplittedInertialMatrices(  vector<int> LeftLeg, 
-					 vector<int> RightLeg,
+    void BuildSplittedInertialMatrices(  std::vector<int> LeftLeg, 
+                                         std::vector<int> RightLeg,
 					 int WaistIndex, 
-					 vector<int> FreeJoints);
+      std::vector<int> FreeJoints);
     
     /** \brief Build the linear system for Resolved Momentum Control. */
     void BuildLinearSystemForRMC(matrixNxP &PLref,
@@ -472,7 +472,7 @@ namespace dynamicsJRLJapan
 			double *jacobienne[6]);
 
     /** \brief Computing the Jacobian with a path (links) */
-    void ComputeJacobianWithPath(vector<int> aPath,
+    void ComputeJacobianWithPath(std::vector<int> aPath,
 				 matrixNxP &J);
 
     /** \brief Modifying the initial body. */
@@ -481,12 +481,12 @@ namespace dynamicsJRLJapan
     /** \brief Finding a path between two bodies   
       (this is the version of "trouverCheminEntre" and has been set in english) 
     */
-    vector<int> FindPathBetween(int body1, int body2);
+    std::vector<int> FindPathBetween(int body1, int body2);
 
 
     /** \brief Finding a path between the current body and the targeted body. */
     void trouverCheminEntreAux(int corpsCourant, int corpsVise, 
-			       int liaisonDeProvenance, vector<int> &chemin);
+                               int liaisonDeProvenance, std::vector<int> &chemin);
 
     inline void empilerTransformationsLiaisonDirecte(int liaison);
     inline void empilerTransformationsLiaisonInverse(int liaison);
@@ -494,7 +494,7 @@ namespace dynamicsJRLJapan
     void calculerMatriceTransformationEntre(int corps1, int corps2, float *matrice);
     void calculerMatriceTransformationEntre(int corps1, int corps2, double *matrice);
     
-    vector<int> trouverCheminEntre(int corps1, int corps2);
+    std::vector<int> trouverCheminEntre(int corps1, int corps2);
 
 
     /** @} */
@@ -583,7 +583,7 @@ namespace dynamicsJRLJapan
     CjrlJoint* GetJointFromVRMLID(int JointID);
 
     /** Returns a vector to transfer from VRML ID to configuration ID . */
-    void GetJointIDInConfigurationFromVRMLID(vector<int> & VectorFromVRMLIDToConfigurationID);
+    void GetJointIDInConfigurationFromVRMLID(std::vector<int> & VectorFromVRMLIDToConfigurationID);
 
     /** Returns the ZMP value */
     inline const vector3d getZMP() const

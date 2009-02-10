@@ -118,12 +118,12 @@ namespace dynamicsJRLJapan
     int m_IDinVRML;
 
     /*! Limits of the joint. */
-    vector<double> m_LowerLimits;
-    vector<double> m_UpperLimits;
+    std::vector<double> m_LowerLimits;
+    std::vector<double> m_UpperLimits;
 
     /*! Limits of the joint velocity. */
-    vector<double> m_LowerVelocityLimits;
-    vector<double> m_UpperVelocityLimits;
+    std::vector<double> m_LowerVelocityLimits;
+    std::vector<double> m_UpperVelocityLimits;
 
     double m_EquivalentInertia;
 

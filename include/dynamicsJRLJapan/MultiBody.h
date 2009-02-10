@@ -131,11 +131,11 @@ namespace dynamicsJRLJapan
     /*!  CoM of the robot */
     vector3d positionCoMPondere;			//CoM*masse
     /*!  List of links. */
-    vector<internalLink> listeLiaisons;
+    std::vector<internalLink> listeLiaisons;
     /*!  List Of Bodies. */
-    vector<Body *> listeCorps;
+    std::vector<Body *> listeCorps;
     /*!  Links with other bodies. */
-    vector<vector<appariement> > liaisons;
+    std::vector<std::vector<appariement> > liaisons;
     /*!  Counter for links. */
     int cptLiaison;
 
