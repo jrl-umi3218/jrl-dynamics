@@ -158,7 +158,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = \
-       ${_abstractRobotDynamics_DATAROOTDIR}/doc/doxytag/abstractRobotDynamics.doxytag=${_abstractRobotDynamics_DATAROOTDIR}/doc/abstractRobotDynamics
+	${_abstractRobotDynamics_DOCDIR}/html/abstractRobotDynamics.doxytag=${_abstractRobotDynamics_DOCDIR}/html
 
 GENERATE_TAGFILE       = ${PROJECT_NAME}.doxytag
 ALLEXTERNALS           = NO

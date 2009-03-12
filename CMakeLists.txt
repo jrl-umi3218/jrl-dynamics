@@ -45,8 +45,8 @@ SET(ABSTROBOTDYNAMICS_REQUIRED_VERSION 1.12)
 
 pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=${MAL_REQUIRED_VERSION})
 pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=${ABSTROBOTDYNAMICS_REQUIRED_VERSION})
-EXEC_PROGRAM(${PKG_CONFIG_EXECUTABLE} ARGS  --variable=datarootdir abstractRobotDynamics
-  OUTPUT_VARIABLE _abstractRobotDynamics_DATAROOTDIR)
+EXEC_PROGRAM(${PKG_CONFIG_EXECUTABLE} ARGS  --variable=docdir abstractRobotDynamics
+  OUTPUT_VARIABLE _abstractRobotDynamics_DOCDIR)
 
 SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= ${MAL_REQUIRED_VERSION} abstractRobotDynamics >= ${ABSTROBOTDYNAMICS_REQUIRED_VERSION}")
 
