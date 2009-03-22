@@ -48,10 +48,10 @@ static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d i
 
   // we just built a y vector that is neither colinear nor nearly colinear with inAxis
   
-  z = x * y;
+  z = x ^ y;
   z.normalize();
   
-  y = z * x;
+  y = z ^ x;
   
   // (inAxis, y, z) is now a directly-oriented orthonormal frame
   
