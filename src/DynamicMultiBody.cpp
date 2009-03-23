@@ -97,6 +97,7 @@ DynamicMultiBody::DynamicMultiBody()
     m_ComputeSkewCoM = true;
     m_IterationNumber = 0;
     m_TimeStep = 0.005;
+    m_FileLinkJointRank="";
 
     labelTheRoot=1;
 
@@ -1185,7 +1186,10 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
     }
 
     if (option!=0)
+      {
+	ODEBUG3("ReadSpecificities :" << option);
         ReadSpecificities(option);
+      }
 
     ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
     SpecifyTheRootLabel(0);
@@ -1264,6 +1268,7 @@ void DynamicMultiBody::InitializeFromJointsTree()
 
         lIDinVRML++;
 
+	if (m_FileLinkJointRank.size()==0)
         // Create a relation between the name and the rank.
         {
             NameAndRank_t aNameAndRank;
@@ -1286,8 +1291,8 @@ void DynamicMultiBody::InitializeFromJointsTree()
                    (char *)CurrentLink.aJoint->getName().c_str());
 
             aNameAndRank.RankInConfiguration = lRank;
-            m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
-                                                   aNameAndRank);
+	    m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
+						   aNameAndRank);
 
             lRank+= CurrentLink.aJoint->numberDof();
         }
@@ -1382,7 +1387,10 @@ void DynamicMultiBody::InitializeFromJointsTree()
     }
 
     /* Initialize the data structures needed for the Newton-Euler algorithm. */
-    CreatesTreeStructure(0);
+    if (m_FileLinkJointRank.size()==0)
+      CreatesTreeStructure(0);
+    else
+      CreatesTreeStructure(m_FileLinkJointRank.c_str());
 }
 
 void DynamicMultiBody::parserVRML(string path,
@@ -4008,6 +4016,10 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
             return true;
         }
 
+    }
+    else if (inProperty=="FileJointRank")
+    {
+      m_FileLinkJointRank = inValue;
     }
     return false;
 }

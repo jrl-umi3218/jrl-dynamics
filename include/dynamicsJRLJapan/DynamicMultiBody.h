@@ -330,6 +330,9 @@ namespace dynamicsJRLJapan
     /*! Compute ZMP. */
     bool m_ComputeZMP;
 
+    /*! String specifying the map between the joints and their rank. */
+    std::string m_FileLinkJointRank;
+
     /* @} */
             
   public:

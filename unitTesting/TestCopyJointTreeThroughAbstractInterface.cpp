@@ -101,7 +101,8 @@ void DisplayJoint(Joint * aJoint)
     cout << "Child("<<li<<")=" 
 	 << ((Joint*)(aJoint->childJoint(li)))->getName() << endl;
   
-  cout << "Current transformation " << aJoint->currentTransformation() << endl;
+  cout << "Rank in configuration " << aJoint->rankInConfiguration() << endl;
+  //  cout << "Current transformation " << aJoint->currentTransformation() << endl;
 
 }
 
@@ -161,6 +162,8 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
       }
            
       newJoint->addChildJoint(*a2newJoint);
+      string aName = Child->getName();
+      (dynamic_cast<Joint *>(a2newJoint))->setName(aName);
 #if 0
       Joint *a2newJointdc = dynamic_cast<Joint*>(a2newJoint);
       // 
@@ -174,7 +177,8 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
 
 
 void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
-			       CjrlHumanoidDynamicRobot* a2HDR)
+			       CjrlHumanoidDynamicRobot* a2HDR,
+			       string &JointToRank)
 {
   Joint* InitJoint = dynamic_cast<Joint *>( aHDR->rootJoint()) ;
   
@@ -212,8 +216,11 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
   aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
+  string aProperty("FileJointRank");
+  cout << "JointToRank:" << JointToRank << endl;
+  a2HDR->setProperty(aProperty,JointToRank);
   a2HDR->initialize();
- 
+  cout << "Finito" << endl;
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
   std::vector<CjrlJoint *> VecOfCopyJoints = a2HDR->jointVector();
@@ -269,7 +276,7 @@ int main(int argc, char *argv[])
   //
   CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
-  PerformCopyFromJointsTree(aHDR, a2HDR);
+  PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
 
 
   // Test the new humanoid structure.
