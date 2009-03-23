@@ -1187,7 +1187,6 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
 
     if (option!=0)
       {
-	ODEBUG3("ReadSpecificities :" << option);
         ReadSpecificities(option);
       }
 
