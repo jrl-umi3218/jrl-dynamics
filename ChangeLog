@@ -1,3 +1,10 @@
+dynamic-JRLJapan 1.13 released March 24, 2009
+
+	57. Removed dependency to jrlMathTools
+	56. Removed debug output
+	55. Joint <-> Rank file specification for Kinematic Tree.
+	54. Correction of the test due to the modification of jrlMathTools
+	
 dynamic-JRLJapan 1.12 released March 14, 2009
 
 	53. Fixed doc dependency to abstractRobotDynamics
