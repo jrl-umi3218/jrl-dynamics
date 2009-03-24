@@ -4,8 +4,6 @@
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "dynamicsJRLJapan/robotDynamicsImpl.h"
 
-#include "jrlMathTools/jrlConstants.h"
-
 static CjrlRobotDynamicsObjectConstructor <
   CimplDynamicRobot, 
   CimplHumanoidDynamicRobot, 
@@ -46,15 +44,7 @@ static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d i
 
   y[smallestComponent] = 1.;
 
-  // we just built a y vector that is neither colinear nor nearly colinear with inAxis
-  
-  z = x ^ y;
-  z.normalize();
-  
-  y = z ^ x;
-  
-  // (inAxis, y, z) is now a directly-oriented orthonormal frame
-  
+
   MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,0) = x[0];
   MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,0) = x[1];
   MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,0) = x[2];
