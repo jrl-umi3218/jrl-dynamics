@@ -3,8 +3,6 @@
 #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 
-#include "jrlMathTools/jrlConstants.h"
-
 using namespace std;
 using namespace dynamicsJRLJapan;
 

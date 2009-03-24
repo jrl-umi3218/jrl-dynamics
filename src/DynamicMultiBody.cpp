@@ -44,7 +44,6 @@
 /*! Local library includes. */
 #include "dynamicsJRLJapan/DynamicMultiBody.h"
 #include "robotDynamics/jrlBody.h"
-#include "jrlMathTools/jrlConstants.h"
 
 #define RESETDEBUG5(y) { ofstream DebugFile; \
     DebugFile.open(y,ofstream::out); \
