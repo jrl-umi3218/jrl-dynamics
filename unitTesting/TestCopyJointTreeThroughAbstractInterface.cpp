@@ -4,6 +4,8 @@
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "dynamicsJRLJapan/robotDynamicsImpl.h"
 
+#include "jrlMathTools/jrlConstants.h"
+
 static CjrlRobotDynamicsObjectConstructor <
   CimplDynamicRobot, 
   CimplHumanoidDynamicRobot, 
