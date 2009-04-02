@@ -275,7 +275,7 @@ double HumanoidDynamicMultiBody::footHeight() const
 
 void HumanoidDynamicMultiBody::waist(CjrlJoint * inWaist)
 {
-  // This method is ineffective regarding the internals.
+  m_WaistJoint = inWaist;
 }
 
 CjrlJoint* HumanoidDynamicMultiBody::waist()
