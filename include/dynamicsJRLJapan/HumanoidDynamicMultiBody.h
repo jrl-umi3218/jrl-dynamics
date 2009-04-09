@@ -157,11 +157,6 @@ namespace dynamicsJRLJapan
       inline HumanoidSpecificities * getHumanoidSpecificities() const
 	{return m_HS;};
 
-#if 0
-      /*! Get pointer on the CjrlDynamicRobot used as a proxy. */
-      inline CjrlDynamicRobot *getDynamicMultiBody() const
-	{return this;}
-#endif
 
       /** \name jrlHumanoidDynamicRobot Interface */
       
@@ -227,16 +222,18 @@ namespace dynamicsJRLJapan
       virtual CjrlHand* leftHand()
       { return m_leftHand;}
       
-        /**
-      \brief Get the hand clench value. This is a scalar value ranging between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand)
-      This method is customized for HRP2 with two-jaw hands (parallel mechanism)
-         */
+      /**
+	 \brief Get the hand clench value. This is a scalar value ranging between 0 
+	 and 1 which describes the hand clench (0 for open and 1 for closed hand)
+	 This method is customized for HRP2 with two-jaw hands (parallel mechanism)
+      */
       virtual double getHandClench(CjrlHand* inHand);
-
-    /**
-      \brief Set the hand clench value. This is a scalar value ranging between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand).
-      This method is customized for HRP2 with two-jaw hands (parallel mechanism)
-   */
+      
+      /**
+	 \brief Set the hand clench value. This is a scalar value ranging 
+	 between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand).
+	 This method is customized for HRP2 with two-jaw hands (parallel mechanism)
+      */
       virtual bool  setHandClench(CjrlHand* inHand, double inClenchingValue);
       
       /**
@@ -367,10 +364,6 @@ namespace dynamicsJRLJapan
       */
       void FiniteDifferenceStateUpdate(double inTimeStep);
       
-      /**
-      \brief Set the robot in the static state described by the given configuration vector.
-      */
-      void staticState( const vectorN& inConfiguration );
       
       /**
 	 \brief Compute forward kinematics.

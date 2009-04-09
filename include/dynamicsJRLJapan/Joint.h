@@ -59,7 +59,8 @@ namespace dynamicsJRLJapan
   protected:
     /** 
 	\brief Whether pose was specified in global frame or not 
-	If true, the position of the joint has been defined in the global frame. By convention, the axis of the joint is X-axis in joint frame.
+	If true, the position of the joint has been defined in the global frame. 
+	By convention, the axis of the joint is X-axis in joint frame.
     */
     bool m_inGlobalFrame;
 
