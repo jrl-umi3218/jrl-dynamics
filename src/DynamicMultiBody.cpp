@@ -1610,6 +1610,68 @@ void DynamicMultiBody::getOrientationJacobian(const CjrlJoint& inStartJoint,
     }
 }
 
+void DynamicMultiBody::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
+{
+  matrixNxP JCoM;
+  getJacobianCenterOfMass(*rootJoint(),JCoM);
+  outjacobian = masse * JCoM;
+}
+
+void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
+{
+  if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))
+    outjacobian.resize(3,numberDof(),false);
+
+  MAL_MATRIX_FILL(outjacobian,0);
+
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody;
+    
+  for(unsigned int i=0;i<m_ConfigurationToJoints.size();i++)
+    {
+      if (m_ConfigurationToJoints[i] == rootJoint())
+	continue;
+
+      aJoint = m_ConfigurationToJoints[i];
+      aBody=  aJoint->linkedDBody();
+      rank = aJoint->rankInConfiguration();
+      
+      matrixNxP pJacobian;
+      vector3d av(0,0,0); // Dummy 
+      getJacobian(*rootJoint(),*aJoint,av,pJacobian);
+      matrixNxP pLinearJacobian; 
+      MAL_MATRIX_C_eq_EXTRACT_A(pLinearJacobian,pJacobian,double,0,0,3,pJacobian.size2());
+      matrixNxP pAngularJacobian; 
+      MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,pJacobian.size2());
+
+      // Used to compute the anti-symmetric matrix.
+      matrixNxP xkmxg_cp;
+      xkmxg_cp.resize(3,3);
+      av =aBody->w_c - positionCoMPondere;
+      xkmxg_cp(0,0) =         0.0; xkmxg_cp(0,1) = -masse*av(3); xkmxg_cp(0,2) = masse*av(2);
+      xkmxg_cp(1,0) = masse*av(3); xkmxg_cp(1,1) =          0.0; xkmxg_cp(1,2) =-masse*av(1);
+      xkmxg_cp(2,0) =-masse*av(2); xkmxg_cp(2,1) =  masse*av(1); xkmxg_cp(2,2) =         0.0;
+
+      matrixNxP leftoperand;
+      MAL_C_eq_A_by_B(leftoperand,xkmxg_cp,pLinearJacobian);
+      outjacobian = outjacobian + leftoperand;
+      
+      matrixNxP rightoperand;
+      matrix3d tmp2_3d;
+      matrixNxP tmp2;
+      MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->R,aBody->getInertie()); 
+      for(unsigned int i=0;i<3;++i)
+	for(unsigned int j=0;j<3;++j)
+	  tmp2(i,j) = tmp2_3d(i,j);
+
+      MAL_C_eq_A_by_B(rightoperand,tmp2,pAngularJacobian);
+      
+      outjacobian = outjacobian + rightoperand;
+    }
+  
+}
+
 void DynamicMultiBody::getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian)
 {
   if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))

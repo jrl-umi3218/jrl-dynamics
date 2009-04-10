@@ -779,6 +779,16 @@ namespace dynamicsJRLJapan
      inFrameLocalPosition inside outJacobian. */
     void getJacobianCenterOfMass(const CjrlJoint& inStartJoint, 
 				 matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    void getJacobianLinearMomentumWrtCoM(matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    void getJacobianAngularMomentumWrtCoM(matrixNxP& outjacobian);
+
+
     
     /** 
 	\name Forward kinematics and dynamics
