@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 
   std::vector<CjrlJoint *> aVec = aHDMB->jointVector();
   
-  Joint  * aJoint = (Joint *)aVec[22]; // Try to get the hand.
+  Joint  * aJoint = (Joint *)aVec[3]; // Try to get the hand.
   cout << aJoint->getName() << endl;  
   aJoint->computeJacobianJointWrtConfig();
 
