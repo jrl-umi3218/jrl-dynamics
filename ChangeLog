@@ -1,3 +1,15 @@
+2009-04-14  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	[src] Adding Angular Momemtum computed with respect to a point.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h: 
+	Adding two methods: angularMomentumWrtAPt/CoM.
+	* src/DynamicMultiBody.cpp: 
+	Implementation of the above methods: Compute
+	the angular momentum with respect to a point,
+	and more particulary to the CoM.
+	* unitTesting/TestHumanoidDynamicRobot.cpp: 
+	Call to the CoM method.
+
 dynamic-JRLJapan 1.13.1 released April 2, 2009
 
 	58. make HumanoidDynamicMultiBody::waist effective

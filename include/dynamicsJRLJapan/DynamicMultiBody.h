@@ -788,7 +788,13 @@ namespace dynamicsJRLJapan
 	center of Mass. */
     void getJacobianAngularMomentumWrtCoM(matrixNxP& outjacobian);
 
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    const vector3d & angularMomentumWrtCoM();
 
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    const vector3d & angularMomentumWrtToPt(vector3d & apoint);
     
     /** 
 	\name Forward kinematics and dynamics

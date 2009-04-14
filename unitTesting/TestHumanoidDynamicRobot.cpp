@@ -270,7 +270,9 @@ int main(int argc, char *argv[])
   // Height of the foot. 
   cout << "Height foot: "<< aHDMB->footHeight() << endl;
 
-
+  matrixNxP outjacobian;
+  aHDMB->getJacobianAngularMomentumWrtCoM(outjacobian);
+  cout << "Jacobian of the angular momentum:" << outjacobian <<endl;
   
   delete aHDMB;
   

@@ -573,6 +573,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 
 	  listOfBodies[currentNode]->L = NE_lL;
 	  m_L+= NE_lL;
+
         }
 
       if (m_ComputeAcceleration)
@@ -674,7 +675,6 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
     }
 
   positionCoMPondere = positionCoMPondere/masse;
-
   // Zero Momentum Point Computation.
   if (m_ComputeZMP)
     {
@@ -1640,18 +1640,26 @@ void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
       matrixNxP pJacobian;
       vector3d av(0,0,0); // Dummy 
       getJacobian(*rootJoint(),*aJoint,av,pJacobian);
-      matrixNxP pLinearJacobian; 
+
+      ODEBUG("pJacobian:" <<pJacobian);
+      matrixNxP pLinearJacobian;
+      pLinearJacobian.resize(3,pJacobian.size2());
       MAL_MATRIX_C_eq_EXTRACT_A(pLinearJacobian,pJacobian,double,0,0,3,pJacobian.size2());
+      ODEBUG("pLinearJacobian:" <<endl <<pLinearJacobian);
       matrixNxP pAngularJacobian; 
+      pAngularJacobian.resize(3,pJacobian.size2());
       MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,pJacobian.size2());
+      ODEBUG("pAngularJacobian:" <<endl <<pAngularJacobian);
 
       // Used to compute the anti-symmetric matrix.
-      matrixNxP xkmxg_cp;
+      matrixNxP xkmxg_cp;double lmasse = aBody->getMasse();
       xkmxg_cp.resize(3,3);
       av =aBody->w_c - positionCoMPondere;
-      xkmxg_cp(0,0) =         0.0; xkmxg_cp(0,1) = -masse*av(3); xkmxg_cp(0,2) = masse*av(2);
-      xkmxg_cp(1,0) = masse*av(3); xkmxg_cp(1,1) =          0.0; xkmxg_cp(1,2) =-masse*av(1);
-      xkmxg_cp(2,0) =-masse*av(2); xkmxg_cp(2,1) =  masse*av(1); xkmxg_cp(2,2) =         0.0;
+      xkmxg_cp(0,0) =          0.0; xkmxg_cp(0,1) = -lmasse*av(2); xkmxg_cp(0,2) = lmasse*av(1);
+      xkmxg_cp(1,0) = lmasse*av(2); xkmxg_cp(1,1) =           0.0; xkmxg_cp(1,2) =-lmasse*av(0);
+      xkmxg_cp(2,0) =-lmasse*av(1); xkmxg_cp(2,1) =  lmasse*av(0); xkmxg_cp(2,2) =         0.0;
+
+      ODEBUG("xkmxg_cp: " <<xkmxg_cp);
 
       matrixNxP leftoperand;
       MAL_C_eq_A_by_B(leftoperand,xkmxg_cp,pLinearJacobian);
@@ -1660,6 +1668,7 @@ void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
       matrixNxP rightoperand;
       matrix3d tmp2_3d;
       matrixNxP tmp2;
+      tmp2.resize(3,3);
       MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->R,aBody->getInertie()); 
       for(unsigned int i=0;i<3;++i)
 	for(unsigned int j=0;j<3;++j)
@@ -2666,7 +2675,7 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
 	  return true;
         }
     }
-  else if (inProperty=="ComputeMomemtum")
+  else if (inProperty=="ComputeMomentum")
     {
       if (inValue=="true")
         {
@@ -2737,4 +2746,88 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
       m_FileLinkJointRank = inValue;
     }
   return false;
+}
+
+const vector3d & DynamicMultiBody::angularMomentumWrtCoM()
+{
+  return angularMomentumWrtToPt(positionCoMPondere);
+}
+
+const vector3d & DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint)
+{
+  DynamicBody *aDB=0;
+  int currentNode = labelTheRoot;
+  currentNode = listOfBodies[labelTheRoot]->child;
+  vector3d lL(0.0,0.0,0.0);
+
+  do
+    {
+
+      aDB = listOfBodies[currentNode];
+
+      NE_lP = listOfBodies[currentNode]->P;
+      ODEBUG("P: " << NE_lP );
+      NE_lw_c = listOfBodies[currentNode]->w_c - positionCoMPondere;
+
+      // Computes angular momentum matrix L
+      // Lk = xc x Pk + R * I * Rt * w
+      MAL_S3x3_TRANSPOSE_A_in_At(listOfBodies[currentNode]->R,NE_Rt);
+
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,NE_lw_c,NE_lP);
+
+      MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , listOfBodies[currentNode]->w);
+      MAL_S3x3_C_eq_A_by_B(NE_tmp, listOfBodies[currentNode]->getInertie(),NE_tmp2);
+      MAL_S3x3_C_eq_A_by_B(NE_tmp2, listOfBodies[currentNode]->R,NE_tmp);
+      NE_lL = NE_tmp3 + NE_tmp2;
+      ODEBUG("L: " << lL);
+
+      lL += NE_lL;
+
+      int step=0;
+      int NextNode=0;
+      do
+        {
+
+	  if (step==0)
+            {
+	      NextNode = listOfBodies[currentNode]->child;
+	      step++;
+            }
+	  else if(step==1)
+            {
+	      NextNode = listOfBodies[currentNode]->sister;
+	      step++;
+            }
+	  else if (step==2)
+            {
+	      NextNode = listOfBodies[currentNode]->getLabelMother();
+	      if (NextNode>=0)
+                {
+		  /* Test if current node is leaf,
+		     because in this case the force are not set properly. */
+		  if (m_ComputeBackwardDynamics)
+                    {
+		      if ((listOfBodies[currentNode]->sister==-1) &&
+			  (listOfBodies[currentNode]->child==-1))
+			BackwardDynamics(*listOfBodies[currentNode]);
+
+		      /* Compute backward dynamics */
+		      BackwardDynamics(*listOfBodies[NextNode]);
+                    }
+		  currentNode = NextNode;
+		  NextNode = listOfBodies[currentNode]->sister;
+                }
+	      else
+		NextNode=labelTheRoot;
+            }
+
+
+        }
+      while (NextNode==-1);
+      currentNode = NextNode;
+
+    }
+  while(currentNode!=labelTheRoot);
+
+  return lL;
 }
