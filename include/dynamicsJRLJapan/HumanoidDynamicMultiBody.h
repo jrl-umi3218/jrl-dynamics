@@ -343,27 +343,6 @@ namespace dynamicsJRLJapan
 	  \name Forward kinematics and dynamics
       */
   
-    /**
-      \brief Compute kinematics and dynamics following a finite difference scheme.
-
-    Based on previously stored values, this method computes:
-    for every joint:
-      linear velocity and acceleration
-      angular velocity and acceleration
-      linear momentum
-      angular momentum
-    for the robot
-      linear momentum
-      angular momentum
-      ZMP
-
-     */
-      void FiniteDifferenceStateEstimate(double inTimeStep);
-      /**
-      \brief Compute kinematics and dynamics following a finite difference scheme and update past values
-      */
-      void FiniteDifferenceStateUpdate(double inTimeStep);
-      
       
       /**
 	 \brief Compute forward kinematics.
