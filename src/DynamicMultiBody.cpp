@@ -409,6 +409,15 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 					    MAL_S3_VECTOR(&dvForRoot,double),
 					    MAL_S3_VECTOR(&dwForRoot,double))
 {
+  /** Intermediate variables. The mantra is :
+      "To optimize those variables, in the Compiler we trust"
+      (with the appropriate compilation options).
+  */
+  vector3d NE_tmp3, NE_tmp2, NE_wn,NE_cl, NE_lw_c, NE_aRc, NE_aRb,  
+    NE_lpComP, NE_RotByMotherdv, NE_lP,NE_lL, NE_tmp;
+  matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
+  /* End of intermediate */
+
   double norm_w, th;
   int currentNode = labelTheRoot;
   int lMother=0;
@@ -2748,13 +2757,21 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
   return false;
 }
 
-const vector3d & DynamicMultiBody::angularMomentumWrtCoM()
+void DynamicMultiBody::angularMomentumWrtCoM(vector3d & angularmomentum) 
 {
-  return angularMomentumWrtToPt(positionCoMPondere);
+  angularMomentumWrtToPt(positionCoMPondere, angularmomentum);
 }
 
-const vector3d & DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint)
+void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angularmomentum)
 {
+  /** Intermediate variables. The mantra is :
+      "To optimize those variables, in the Compiler we trust"
+      (with the appropriate compilation options).
+  */
+  vector3d NE_lP,NE_lw_c, NE_tmp3, NE_tmp2, NE_tmp,NE_lL;
+  matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
+  /* End of intermediate */
+
   DynamicBody *aDB=0;
   int currentNode = labelTheRoot;
   currentNode = listOfBodies[labelTheRoot]->child;
@@ -2828,6 +2845,6 @@ const vector3d & DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint)
 
     }
   while(currentNode!=labelTheRoot);
-
-  return lL;
+  
+  angularmomentum = lL;
 }

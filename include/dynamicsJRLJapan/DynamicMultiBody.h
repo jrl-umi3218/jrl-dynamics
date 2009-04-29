@@ -12,30 +12,14 @@
   
    Copyright (c) 2005-2006, 
    @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Francois Keith, Abderrahmane Kheddar
+   Copyright (c) 2007-2009
+   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro, Florent Lamiraux.
    
    JRL-Japan, CNRS/AIST
 
    All rights reserved.
-   
-   Redistribution and use in source and binary forms, with or without modification, 
-   are permitted provided that the following conditions are met:
-   
-   * Redistributions of source code must retain the above copyright notice, 
-   this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-   this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-   * Neither the name of the <ORGANIZATION> nor the names of its contributors 
-   may be used to endorse or promote products derived from this software without specific prior written permission.
-   
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS 
-   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY 
-   AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER 
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
-   OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
-   OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
-   IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   Please see License.txt for more informations on the license related to this software.
 */
 
 #ifndef _DYNAMIC_MULTI_BODY_H_
@@ -788,34 +772,24 @@ namespace dynamicsJRLJapan
 	center of Mass. */
     void getJacobianAngularMomentumWrtCoM(matrixNxP& outjacobian);
 
-    /** ! \brief Get the jacobian of the linear momentum with respect to the
-	center of Mass. */
-    const vector3d & angularMomentumWrtCoM();
+    /** ! \brief Get the angular momentum with respect to the
+	center of Mass. 
+	\param[out] angularmomentum: the 3d vector in which 
+	the angular momentum with respect to the CoM is provided.
+    */
+    void angularMomentumWrtCoM(vector3d & angularmomentum);
 
-    /** ! \brief Get the jacobian of the linear momentum with respect to the
-	center of Mass. */
-    const vector3d & angularMomentumWrtToPt(vector3d & apoint);
+    /** ! \brief Get the angular momentum with respect to the
+	center of Mass. 
+	\param[in] point: The point with respect to which the angular momentum is computed.
+	\param[out] angularmomentum: The angularmomentum computed with respect to apoint.
+    */
+    void angularMomentumWrtToPt(vector3d & apoint, vector3d &angularmomentum);
     
     /** 
 	\name Forward kinematics and dynamics
     */
-    
-    
-    /**
-    */
-    vector3d NE_tmp3, NE_tmp2, NE_wn,NE_cl, NE_lw_c, NE_aRc, NE_aRb,  
-      NE_lpComP, NE_RotByMotherdv, NE_lP,NE_lL, NE_tmp;
-    matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
 
-    /**
-    \brief vectors and matrices used in FiniteDifferenceStateUpdate declared here to avoid dynamic allocation
-    */
-    vector3d FD_tmp,FD_tmp2,FD_tmp3;
-    vector3d FD_wlc; //from joint to joint com in world frame
-    vector3d FD_lP;
-    vector3d FD_lL;
-    matrix3d FD_Ro,FD_Roo,FD_Rt;
-    
     /**
         \brief Get the upper bound for ith dof.
     */
