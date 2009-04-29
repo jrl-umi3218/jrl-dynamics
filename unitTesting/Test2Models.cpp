@@ -5,7 +5,19 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
-void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
+void DisplayMatrix4x4(MAL_S4x4_MATRIX(todisplay,double), ostream &os)
+{
+  for(unsigned int i=0;i<4;i++)
+    {
+      for(unsigned int j=0;j<4;j++)
+	{
+	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	}
+      os << endl;
+    }
+}
+
+void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
 {
   if (aJoint==0)
     return;
@@ -23,54 +35,58 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   cout << "CurrentTransformation " <<
     aJoint->currentTransformation() << endl;
 
-#if 0
-  cout << "Number of child  :" << NbChildren << endl;
-  for(int i=0;i<NbChildren;i++)
+  if (verbosedisplay>2)
     {
-      a2Joint = (Joint *)aJoint->childJoint(i);
-
-      cout << " Child " << i << " " <<a2Joint->getName() << endl;
+      cout << "Number of child  :" << NbChildren << endl;
+      for(int i=0;i<NbChildren;i++)
+	{
+	  a2Joint = (Joint *)aJoint->childJoint(i);
+	  
+	  cout << " Child " << i << " " <<a2Joint->getName() << endl;
+	}
+      
+      
+      cout << "Nb of degree of freedom " << 
+	aJoint->numberDof() << endl;
+      
+      MAL_S4x4_MATRIX(,double) initialpos = aJoint->initialPosition();
+      cout << "Initial Position ";
+      DisplayMatrix4x4(initialpos,cout);
+      
+      MAL_S4x4_MATRIX(,double) currentTransformation = aJoint->currentTransformation();
+      cout << "CurrentTransformation ";
+      DisplayMatrix4x4(currentTransformation,cout);
+      
+      cout << " Joint from root to here:" << endl;
+      std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+      
+      cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
+      for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
+	{
+	  Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
+	  if (a3Joint==0)
+	    continue;
+	  
+	  cout << a3Joint->getName() << endl;
+	  
+	}
+      CjrlRigidVelocity aRV = aJoint->jointVelocity();
+      cout << " Linear Velocity " << aRV.linearVelocity() << endl;
+      cout << " Angular Velocity " << aRV.rotationVelocity() << endl;
+      CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
+      cout << " Linear Acceleration " << aRA.linearAcceleration() << endl;
+      cout << " Angular Acceleration " << aRA.rotationAcceleration() << endl;
+      
+      cout << "***********************************************" << endl;
+      cout << " Display Now information related to children :" << endl;
     }
 
-
-  cout << "Nb of degree of freedom " << 
-    aJoint->numberDof() << endl;
-
-  cout << "Initial Position " <<
-    aJoint->initialPosition();
-
-  cout << "CurrentTransformation " <<
-    aJoint->currentTransformation() << endl;
-
-  cout << " Joint from root to here:" << endl;
-  std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
-
-  cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
-  for(int i=0;i<JointsFromRootToHere.size();i++)
-    {
-      Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
-      if (a3Joint==0)
-	continue;
-
-      cout << a3Joint->getName() << endl;
-
-    }
-  CjrlRigidVelocity aRV = aJoint->jointVelocity();
-  cout << " Linear Velocity " << aRV.linearVelocity() << endl;
-  cout << " Angular Velocity " << aRV.rotationVelocity() << endl;
-  CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-  cout << " Linear Acceleration " << aRA.linearAcceleration() << endl;
-  cout << " Angular Acceleration " << aRA.rotationAcceleration() << endl;
-
-  cout << "***********************************************" << endl;
-  cout << " Display Now information related to children :" << endl;
-#endif
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
       RecursiveDisplayOfJoints((CjrlJoint *)aJoint->childJoint(i)); 
     }
-  //cout << " End for Joint: " << a2Joint->getName() << endl;
+
 }
 
 
