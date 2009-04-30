@@ -12,30 +12,14 @@
   
    Copyright (c) 2005-2006, 
    @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Francois Keith, Abderrahmane Kheddar
+   Copyright (c) 2007-2009
+   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro, Florent Lamiraux.
    
    JRL-Japan, CNRS/AIST
 
    All rights reserved.
-   
-   Redistribution and use in source and binary forms, with or without modification, 
-   are permitted provided that the following conditions are met:
-   
-   * Redistributions of source code must retain the above copyright notice, 
-   this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-   this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-   * Neither the name of the <ORGANIZATION> nor the names of its contributors 
-   may be used to endorse or promote products derived from this software without specific prior written permission.
-   
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS 
-   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY 
-   AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER 
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
-   OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
-   OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
-   IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   Please see License.txt for more informations on the license related to this software.
 */
 
 #ifndef _DYNAMIC_MULTI_BODY_H_
@@ -441,23 +425,6 @@ namespace dynamicsJRLJapan
 		      vector3d dL, 
 		      double zmpz);
 
-    /** \brief Compute the matrices MH*B, MH*Fi,MHFree  (Kajita IROS 2003 p. 1645) */
-    void BuildSplittedInertialMatrices(  std::vector<int> LeftLeg, 
-                                         std::vector<int> RightLeg,
-					 int WaistIndex, 
-      std::vector<int> FreeJoints);
-    
-    /** \brief Build the linear system for Resolved Momentum Control. */
-    void BuildLinearSystemForRMC(matrixNxP &PLref,
-				 matrixNxP &XiLeftFootRef,
-				 matrixNxP &XiRightFootRef,
-				 int NbOfFreeJoints,
-				 matrixNxP &S,
-				 matrixNxP &XiBdThetaFreeRef,
-				 matrixNxP &XiBdThetaFree,
-				 matrixNxP &LeftLegVelocity,
-				 matrixNxP &RightLegVelocity);
-
     
     /** \brief Compute the D operator (Kajita IROS 2003 p. 1647) */
     matrix3d D(vector3d &r);
@@ -468,43 +435,13 @@ namespace dynamicsJRLJapan
     /** \name Jacobian computation related methods 
 	@{
      */
-    
-    /** \brief Computing the Jacobian. */
-    int ComputeJacobian(int corps1, int corps2, 
-			vector3d coordLocales, 
-			double *jacobienne[6]);
-
-    /** \brief Computing the Jacobian with a path (links) */
-    void ComputeJacobianWithPath(std::vector<int> aPath,
-				 matrixNxP &J);
-
-    /** \brief Modifying the initial body. */
-    void changerCorpsInitial(int nouveauCorps);
 
     /** \brief Finding a path between two bodies   
       (this is the version of "trouverCheminEntre" and has been set in english) 
     */
     std::vector<int> FindPathBetween(int body1, int body2);
 
-
-    /** \brief Finding a path between the current body and the targeted body. */
-    void trouverCheminEntreAux(int corpsCourant, int corpsVise, 
-                               int liaisonDeProvenance, std::vector<int> &chemin);
-
-    inline void empilerTransformationsLiaisonDirecte(int liaison);
-    inline void empilerTransformationsLiaisonInverse(int liaison);
-    
-    void calculerMatriceTransformationEntre(int corps1, int corps2, float *matrice);
-    void calculerMatriceTransformationEntre(int corps1, int corps2, double *matrice);
-    
-    std::vector<int> trouverCheminEntre(int corps1, int corps2);
-
-
     /** @} */
-
-    /** Give the position of a body's point in a frame.  */
-    vector3d getPositionPointDansRepere(vector3d point, 
-				 	int corpsDuPoint, int corpsDuRepere);
 
     /** \name Getter and setter for dynamic bodies  */
 
@@ -634,16 +571,6 @@ namespace dynamicsJRLJapan
     */
     std::vector<CjrlJoint*> jointVector();
     
-    /**inherited from abstractRobotDynamics*/
-    std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint) const;
-    /**inherited from abstractRobotDynamics*/
-    void getJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
-    /**inherited from abstractRobotDynamics*/
-    void getPositionJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian);
-    /**inherited from abstractRobotDynamics*/
-    void getOrientationJacobian(const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian);
-    /**inherited from abstractRobotDynamics*/
-    void getJacobianCenterOfMass(const CjrlJoint& inStartJoint, matrixNxP& outjacobian);
     
     /**
        \brief Get the number of degrees of freedom of the robot.
@@ -806,78 +733,63 @@ namespace dynamicsJRLJapan
     /**
        @}
     */
+
+    
+    /** ! \brief Creates the path between inStartJoint and inEndJoint. */
+    std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint, 
+					  const CjrlJoint& inEndJoint) const;
+
+    /** ! \brief Get the jacobian from inStartJoint to inEndJoint in the frame
+     inFrameLocalPosition in outJacobian. */
+    void getJacobian(const CjrlJoint& inStartJoint, 
+		     const CjrlJoint& inEndJoint, 
+		     const vector3d& inFrameLocalPosition, 
+		     matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian for linear velocity in the frame
+     inFrameLocalPosition inside outJacobian. */
+    void getPositionJacobian(const CjrlJoint& inStartJoint, 
+			     const CjrlJoint& inEndJoint, 
+			     const vector3d& inFrameLocalPosition, 
+			     matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian for angular velocity in the frame
+     inFrameLocalPosition inside outJacobian. */
+    void getOrientationJacobian(const CjrlJoint& inStartJoint, 
+				const CjrlJoint& inEndJoint, 
+				matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian for Center of Mass in the frame
+     inFrameLocalPosition inside outJacobian. */
+    void getJacobianCenterOfMass(const CjrlJoint& inStartJoint, 
+				 matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    void getJacobianLinearMomentumWrtCoM(matrixNxP& outjacobian);
+
+    /** ! \brief Get the jacobian of the linear momentum with respect to the
+	center of Mass. */
+    void getJacobianAngularMomentumWrtCoM(matrixNxP& outjacobian);
+
+    /** ! \brief Get the angular momentum with respect to the
+	center of Mass. 
+	\param[out] angularmomentum: the 3d vector in which 
+	the angular momentum with respect to the CoM is provided.
+    */
+    void angularMomentumWrtCoM(vector3d & angularmomentum);
+
+    /** ! \brief Get the angular momentum with respect to the
+	center of Mass. 
+	\param[in] point: The point with respect to which the angular momentum is computed.
+	\param[out] angularmomentum: The angularmomentum computed with respect to apoint.
+    */
+    void angularMomentumWrtToPt(vector3d & apoint, vector3d &angularmomentum);
     
     /** 
 	\name Forward kinematics and dynamics
     */
-    
-    
-   /**
-    \brief Apply a configuration
 
-
-    Based on the entered configuration, this method computes:
-    for every joint:
-        the new transformation
-        the new position of the center of mass in world frame
-    for the robot
-        position of the center of mass in world frame
-
-    \return true if success, false if failure (the dimension of the
-    input vector does not fit the number of degrees of freedom of the
-    robot).
-         */
-    bool applyConfiguration(const vectorN& inConfiguration);
-    /**
-    \brief Compute kinematics and dynamics following a finite difference scheme and update past values
-     */
-    virtual void FiniteDifferenceStateUpdate(double inTimeStep);
-
-    /**
-    \brief Compute kinematics and dynamics following a finite difference scheme.
-
-    Based on previously stored values, this method computes:
-    for every joint:
-        linear velocity and acceleration
-        angular velocity and acceleration
-        linear momentum
-        angular momentum
-    for the robot
-        linear momentum
-        angular momentum
-        ZMP
-     */
-    virtual void FiniteDifferenceStateEstimate(double inTimeStep);
-
-    /**
-    \brief Store current values as past values
-
-    Following values are stored:
-    for every joint:
-    	joint value and velocity
-	linear and angular velocities
-	position and orientation
-    for the robot:
-    	configuration vector
-	velocity vector
-	linear and angular momentums
-     */
-    void SaveCurrentStateAsPastState();
-    
-    /**
-    */
-    vector3d NE_tmp3, NE_tmp2, NE_wn,NE_cl, NE_lw_c, NE_aRc, NE_aRb,  NE_lpComP, NE_RotByMotherdv, NE_lP,NE_lL, NE_tmp;
-    matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
-
-    /**
-    \brief vectors and matrices used in FiniteDifferenceStateUpdate declared here to avoid dynamic allocation
-    */
-    vector3d FD_tmp,FD_tmp2,FD_tmp3;
-    vector3d FD_wlc; //from joint to joint com in world frame
-    vector3d FD_lP;
-    vector3d FD_lL;
-    matrix3d FD_Ro,FD_Roo,FD_Rt;
-    
     /**
         \brief Get the upper bound for ith dof.
     */
@@ -898,11 +810,6 @@ namespace dynamicsJRLJapan
     double lowerBoundDof(unsigned int inRankInConfiguration,
 			 const vectorN& inConfig);
     
-    /**
-    \brief Set the robot in the static state described by the given configuration vector.
-     */
-    virtual void staticState(const vectorN& inConfiguration);
-     
     /**
        \brief Compute forward kinematics.
        

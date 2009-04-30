@@ -22,6 +22,18 @@ using namespace dynamicsJRLJapan;
     x-axis to vector inAxis
 */
 
+void DisplayMatrix4x4(matrix4d & todisplay, ostream &os)
+{
+  for(unsigned int i=0;i<4;i++)
+    {
+      for(unsigned int j=0;j<4;j++)
+	{
+	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	}
+      os << endl;
+    }
+}
+
 static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d inCenter)
 {
   matrix4d outPose;
@@ -92,7 +104,8 @@ void DisplayJoint(Joint * aJoint)
 	 << ((Joint*)(aJoint->childJoint(li)))->getName() << endl;
   
   cout << "Rank in configuration " << aJoint->rankInConfiguration() << endl;
-  //  cout << "Current transformation " << aJoint->currentTransformation() << endl;
+  matrix4d ct = aJoint->currentTransformation();
+  DisplayMatrix4x4(ct,cout);
 
 }
 
@@ -110,13 +123,13 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
     return;
 
   DisplayJoint(a2Joint);
-  //DisplayBody(aJoint->linkedBody());
+
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
       RecursiveDisplayOfJoints((CjrlJoint *)a2Joint->childJoint(i)); 
     }
-  //cout << " End for Joint: " << a2Joint->getName() << endl;
+
 }
 
 
@@ -154,12 +167,6 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
       newJoint->addChildJoint(*a2newJoint);
       string aName = Child->getName();
       (dynamic_cast<Joint *>(a2newJoint))->setName(aName);
-#if 0
-      Joint *a2newJointdc = dynamic_cast<Joint*>(a2newJoint);
-      // 
-      // This function is not in the abstract interface. MAybe a source of bug.
-      a2newJointdc->SetFatherJoint(dynamic_cast<Joint*>(newJoint));
-#endif
       recursiveMultibodyCopy(Child, a2newJoint) ;
     }
   }
@@ -217,7 +224,8 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
   
   if (VecOfInitJoints.size()!=VecOfCopyJoints.size())
     {
-      std::cout << "Problem while copying the joints. size : " <<VecOfInitJoints.size() << " size copy : " << VecOfCopyJoints.size()  <<endl;
+      std::cout << "Problem while copying the joints. size : "<< VecOfInitJoints.size() 
+		<< " size copy : " << VecOfCopyJoints.size()  << endl;
       cout << endl << endl << "There is a probleme the new joints vector is not updated" << endl << endl ;
       exit(-1);
     }
@@ -288,16 +296,6 @@ int main(int argc, char *argv[])
   aHDR->setComputeAcceleration(false);
   aHDR->setComputeBackwardDynamics(false);
   aHDR->setComputeZMP(true);
-
-#if 0
-  // 
-  // These functions are not in the abstract interface. Might be a source of bug.
-  //
-  a2HDR->SetTimeStep(0.005);
-  a2HDR->setComputeZMP(true);
-  a2HDR->setComputeAcceleration(false);
-  a2HDR->setComputeBackwardDynamics(false);
-#endif
 
   int NbOfDofs = a2HDR->numberDof();
   if (VerboseMode>2)

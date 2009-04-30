@@ -234,23 +234,6 @@ bool HumanoidDynamicMultiBody::computeForwardKinematics()
 
 }
 
-void HumanoidDynamicMultiBody::FiniteDifferenceStateUpdate(double inTimeStep)
-{
-    DynamicMultiBody::FiniteDifferenceStateUpdate(inTimeStep);
-    ComputingZeroMomentumPoint();
-}
-
-void HumanoidDynamicMultiBody::FiniteDifferenceStateEstimate(double inTimeStep)
-{
-    DynamicMultiBody::FiniteDifferenceStateEstimate(inTimeStep);
-    ComputingZeroMomentumPoint();
-}
-
-void HumanoidDynamicMultiBody::staticState( const vectorN& inConfiguration )
-{
-    DynamicMultiBody::staticState(inConfiguration);
-    ComputingZeroMomentumPoint();
-}
 
 bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
 							  MAL_MATRIX(,double) & outJacobian)
