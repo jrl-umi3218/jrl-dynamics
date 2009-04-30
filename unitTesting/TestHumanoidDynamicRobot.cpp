@@ -5,8 +5,26 @@
 
 using namespace std;
 using namespace dynamicsJRLJapan;
+void dv3d(vector3d &av3d, ostream &os) 
+{
+  for(unsigned int i=0;i<3;i++)
+    os << av3d(i) << " ";
+  os << endl;
+}
 
-void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
+void dm4d(const matrix4d &todisplay, ostream &os)
+{
+  for(unsigned int i=0;i<4;i++)
+    {
+      for(unsigned int j=0;j<4;j++)
+	{
+	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	}
+      os << endl;
+    }
+}
+
+void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
 {
   if (aJoint==0)
     return;
@@ -21,7 +39,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 
   cout << a2Joint->getName() << " rank : " << a2Joint->rankInConfiguration() << endl;
 
-#if 0
+
   cout << "Number of child  :" << NbChildren << endl;
   for(int i=0;i<NbChildren;i++)
     {
@@ -33,36 +51,51 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
 
   cout << "Nb of degree of freedom " << 
     aJoint->numberDof() << endl;
-
-  cout << "Initial Position " <<
-    aJoint->initialPosition();
-
-  cout << "CurrentTransformation " <<
-    aJoint->currentTransformation() << endl;
-
-  cout << " Joint from root to here:" << endl;
-  std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
-
-  cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
-  for(int i=0;i<JointsFromRootToHere.size();i++)
+  
+  if (verbosedisplay>3)
     {
-      Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
-      if (a3Joint==0)
-	continue;
+      cout << "Initial Position " ;
+      matrix4d iP = aJoint->initialPosition();
+      dm4d(iP,cout);
+      
+      cout << "CurrentTransformation ";
+      matrix4d cT = aJoint->currentTransformation();
+      dm4d(cT,cout);
+      
+      cout << " Joint from root to here:" << endl;
+      std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+      
+      cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
+      for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
+	{
+	  Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
+	  if (a3Joint==0)
+	    continue;
+	  
+	  cout << a3Joint->getName() << endl;
+	  
+	}
+      CjrlRigidVelocity aRV = aJoint->jointVelocity();
+      cout << " Linear Velocity ";
+      vector3d av3d = aRV.linearVelocity();
+      dv3d(av3d,cout);
+      cout << " Angular Velocity ";
+      av3d = aRV.rotationVelocity();
+      dv3d(av3d,cout);
 
-      cout << a3Joint->getName() << endl;
-
+      CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
+      
+      cout << " Linear Acceleration ";
+      av3d = aRA.linearAcceleration();
+      dv3d(av3d,cout);
+      cout << " Angular Acceleration ";
+      av3d = aRA.rotationAcceleration();
+      dv3d(av3d,cout);
+      
+      cout << "***********************************************" << endl;
+      cout << " Display Now information related to children :" << endl;
     }
-  CjrlRigidVelocity aRV = aJoint->jointVelocity();
-  cout << " Linear Velocity " << aRV.linearVelocity() << endl;
-  cout << " Angular Velocity " << aRV.rotationVelocity() << endl;
-  CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-  cout << " Linear Acceleration " << aRA.linearAcceleration() << endl;
-  cout << " Angular Acceleration " << aRA.rotationAcceleration() << endl;
 
-  cout << "***********************************************" << endl;
-  cout << " Display Now information related to children :" << endl;
-#endif
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/

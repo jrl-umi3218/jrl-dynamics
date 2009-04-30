@@ -1,3 +1,31 @@
+2009-04-30  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	[unitTesting] Reinforce T3d compatibility.
+	* ChangeLog: .
+	* unitTesting/TestCopyJointTreeThroughAbstractInterface.cpp: 
+	access compatiable with t3d.
+	* unitTesting/TestHumanoidDynamicRobot.cpp: 
+	access compatible with t3d.
+	* unitTesting/TestHumanoidDynamicRobotglut.cpp: 
+	access compatible with t3d.
+
+2009-04-30  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	[unitTesting] T3D compatibility.
+	* unitTesting/Test2Models.cpp: Removed call to << operator
+	not supported in t3d.
+
+2009-04-30  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	[src] Code cleaning and changing interface for angularMomentum.
+	* ./include/dynamicsJRLJapan/DynamicMultiBody.h:
+	- Removed intermediate variables which are/should be optimized	
+	by the compiler with appropriate options in the local method,
+	and should not be at the interface level.
+	- Modifying the interface to get angularMomentum.
+	* ./src/DynamicMultiBody.cpp
+	Implements the above modifications in the source code.
+
 2009-04-14  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	[src] Adding Angular Momemtum computed with respect to a point.
