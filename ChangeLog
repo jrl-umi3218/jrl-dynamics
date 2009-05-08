@@ -1,3 +1,8 @@
+2009-05-08  Florent Lamiraux  <florent@laas.fr>
+
+	Release 1.14.
+	* CMakeLists.txt: Upgrade package version and dependencies.
+
 2009-04-30  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	[unitTesting] Reinforce T3d compatibility.

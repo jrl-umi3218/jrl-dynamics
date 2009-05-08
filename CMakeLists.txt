@@ -12,7 +12,7 @@ enable_language(CXX)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set version
-SET(PROJECT_VERSION 1.13.1.99)
+SET(PROJECT_VERSION 1.14)
 
 IF(WIN32)
   SET(LIBDIR_KW "/LIBPATH:")
@@ -40,7 +40,7 @@ OPTION(BUILD_SHARED_LIBS "Build dynamicsJRLJapan with shared libraries." ON)
 # ---------------------------
 INCLUDE(FindPkgConfig)
 
-SET(MAL_REQUIRED_VERSION 1.7.2)
+SET(MAL_REQUIRED_VERSION 1.7.3)
 SET(ABSTROBOTDYNAMICS_REQUIRED_VERSION 1.13)
 
 pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=${MAL_REQUIRED_VERSION})
