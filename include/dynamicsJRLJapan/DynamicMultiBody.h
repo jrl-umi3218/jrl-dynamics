@@ -741,28 +741,28 @@ namespace dynamicsJRLJapan
 
     /** ! \brief Get the jacobian from inStartJoint to inEndJoint in the frame
      inFrameLocalPosition in outJacobian. */
-    void getJacobian(const CjrlJoint& inStartJoint, 
+    bool getJacobian(const CjrlJoint& inStartJoint, 
 		     const CjrlJoint& inEndJoint, 
 		     const vector3d& inFrameLocalPosition, 
-		     matrixNxP& outjacobian);
+       matrixNxP& outjacobian, unsigned int offset = 0, bool inIncludeStartFreeFlyer = true);
 
     /** ! \brief Get the jacobian for linear velocity in the frame
      inFrameLocalPosition inside outJacobian. */
-    void getPositionJacobian(const CjrlJoint& inStartJoint, 
+    bool getPositionJacobian(const CjrlJoint& inStartJoint, 
 			     const CjrlJoint& inEndJoint, 
 			     const vector3d& inFrameLocalPosition, 
-			     matrixNxP& outjacobian);
+        matrixNxP& outjacobian, unsigned int offset = 0, bool inIncludeStartFreeFlyer = true);
 
     /** ! \brief Get the jacobian for angular velocity in the frame
      inFrameLocalPosition inside outJacobian. */
-    void getOrientationJacobian(const CjrlJoint& inStartJoint, 
+    bool getOrientationJacobian(const CjrlJoint& inStartJoint, 
 				const CjrlJoint& inEndJoint, 
-				matrixNxP& outjacobian);
+    matrixNxP& outjacobian, unsigned int offset = 0, bool inIncludeStartFreeFlyer = true);
 
     /** ! \brief Get the jacobian for Center of Mass in the frame
      inFrameLocalPosition inside outJacobian. */
-    void getJacobianCenterOfMass(const CjrlJoint& inStartJoint, 
-				 matrixNxP& outjacobian);
+    bool getJacobianCenterOfMass(const CjrlJoint& inStartJoint, 
+                                 matrixNxP& outjacobian, unsigned int offset = 0, bool inIncludeStartFreeFlyer = true);
 
     /** ! \brief Get the jacobian of the linear momentum with respect to the
 	center of Mass. */
