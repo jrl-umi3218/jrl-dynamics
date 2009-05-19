@@ -383,51 +383,6 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
     return;
 
   cout << ((DynamicBody *)a2Joint->linkedBody())->p << endl;
-#if 0
-  cout << a2Joint->getName() << " rank : " << a2Joint->rankInConfiguration() << endl;
-
-
-  cout << "Number of child  :" << NbChildren << endl;
-  for(int i=0;i<NbChildren;i++)
-    {
-      a2Joint = (Joint *)&aJoint->childJoint(i);
-
-      cout << " Child " << i << " " <<a2Joint->getName() << endl;
-    }
-
-
-  cout << "Nb of degree of freedom " << 
-    aJoint->numberDof() << endl;
-
-  cout << "Initial Position " <<
-    aJoint->initialPosition();
-
-  cout << "CurrentTransformation " <<
-    aJoint->currentTransformation() << endl;
-
-  cout << " Joint from root to here:" << endl;
-  std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
-
-  cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
-  for(int i=0;i<JointsFromRootToHere.size();i++)
-    {
-      Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
-      if (a3Joint==0)
-	continue;
-
-      cout << a3Joint->getName() << endl;
-
-    }
-  CjrlRigidVelocity aRV = aJoint->jointVelocity();
-  cout << " Linear Velocity " << aRV.linearVelocity() << endl;
-  cout << " Angular Velocity " << aRV.rotationVelocity() << endl;
-  CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-  cout << " Linear Acceleration " << aRA.linearAcceleration() << endl;
-  cout << " Angular Acceleration " << aRA.rotationAcceleration() << endl;
-
-  cout << "***********************************************" << endl;
-  cout << " Display Now information related to children :" << endl;
-#endif
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
@@ -450,7 +405,6 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot)
 
   
 }
-
 
 void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 {
@@ -477,8 +431,6 @@ void GoDownTree(const CjrlJoint * startJoint)
 {
   std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
   std::cout << "Joint name :" << ((Joint *)startJoint)->getName() << std::endl;
-  std::cout << "Force on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Force << std::endl;
-  std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
   std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
   std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
 
