@@ -20,6 +20,14 @@ SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
 
 ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
 
+ADD_EXECUTABLE(	TestSimpleLegRobot TestSimpleLegRobot.cpp)
+SET_TARGET_PROPERTIES(TestSimpleLegRobot
+	              PROPERTIES
+		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
+ADD_DEPENDENCIES (TestSimpleLegRobot ${PROJECT_NAME})
+
 IF(GLUT_FOUND)
 	ADD_EXECUTABLE(	TestHumanoidDynamicRobot2 TestHumanoidDynamicRobot2.cpp)
 	SET_TARGET_PROPERTIES( TestHumanoidDynamicRobot2
