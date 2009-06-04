@@ -205,6 +205,9 @@ namespace dynamicsJRLJapan
 
     /** Vector of torques. */
     matrixNxP m_Torques;
+
+    /** Inertia Matrix. */
+    matrixNxP m_InertiaMatrix;
 	
     /** Time step used to compute momentum derivative. */
     double m_TimeStep;
@@ -861,6 +864,12 @@ namespace dynamicsJRLJapan
     */
     const vector3d& derivativeAngularMomentum() ;
     
+    /*! \brief Compute the inertia matrix. 
+     */
+    void computeInertiaMatrix();
+
+    /*! \brief returns the inertia matrix. */
+    const matrixNxP& inertiaMatrix() const;
     /**
        @}
     */

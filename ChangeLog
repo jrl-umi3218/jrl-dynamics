@@ -1,3 +1,17 @@
+2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	Adding inertia matrix computation + misc.
+	* CMakeLists.txt: 
+	Adding new variable to specify rpath.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h:
+	Adding computeInertiaMatrix and inertiaMatrix.
+	* src/DynamicMultiBody.cpp: 
+	Adding method to compute inertia Matrix.
+	* unitTesting/CMakeLists.txt: 
+	Forcing test program to use library in build.
+	* unitTesting/TestHumanoidDynamicRobot.cpp: 
+	Test to compute inertia matrix added.
+
 2009-05-08  Florent Lamiraux  <florent@laas.fr>
 
 	Release 1.14.
