@@ -1,3 +1,17 @@
+/* @doc Object used to handle hand
+
+   Copyright (c) 2005-2009, 
+
+   @author : 
+   Oussama Kanoun
+   
+   JRL-Japan, CNRS/AIST
+
+   All rights reserved.
+   
+   Please refers to file License.txt for details on the license.
+
+*/
 #include "dynamicsJRLJapan/Hand.h"
 
 using namespace dynamicsJRLJapan;

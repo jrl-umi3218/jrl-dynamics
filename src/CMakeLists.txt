@@ -3,7 +3,8 @@
 # History:
 #
 # Copyright CNRS/AIST
-
+#
+# Please refers to file License.txt for details on the license.
 
 
 # Create the library "dynamicsJRLJapan" 

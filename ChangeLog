@@ -1,16 +1,25 @@
 2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
-	Adding inertia matrix computation + misc.
-	* CMakeLists.txt: 
-	Adding new variable to specify rpath.
-	* include/dynamicsJRLJapan/DynamicMultiBody.h:
-	Adding computeInertiaMatrix and inertiaMatrix.
-	* src/DynamicMultiBody.cpp: 
-	Adding method to compute inertia Matrix.
-	* unitTesting/CMakeLists.txt: 
-	Forcing test program to use library in build.
-	* unitTesting/TestHumanoidDynamicRobot.cpp: 
-	Test to compute inertia matrix added.
+	License is send back to file License.txt.
+	* include/dynamicsJRLJapan/Body.h: .
+	* include/dynamicsJRLJapan/DynamicBody.h: .
+	* include/dynamicsJRLJapan/Hand.h: .
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h: .
+	* include/dynamicsJRLJapan/HumanoidSpecificities.h: .
+	* include/dynamicsJRLJapan/Joint.h: .
+	* include/dynamicsJRLJapan/MultiBody.h: .
+	* include/dynamicsJRLJapan/SpiritVRMLReader.h: .
+	* include/dynamicsJRLJapan/fileReader.h: .
+	* src/Body.cpp: .
+	* src/CMakeLists.txt: .
+	* src/DynamicBody.cpp: .
+	* src/Hand.cpp: .
+	* src/HumanoidDynamicMultiBody.cpp: .
+	* src/HumanoidSpecificities.cpp: .
+	* src/Joint.cpp: .
+	* src/MultiBody.cpp: .
+	* src/SpiritVRMLReader.cpp: .
+	* src/fileReader.cpp: .
 
 2009-05-08  Florent Lamiraux  <florent@laas.fr>
 

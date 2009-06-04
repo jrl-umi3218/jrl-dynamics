@@ -1,3 +1,18 @@
+/* @doc Object used to parse a VRML file describing a robot.
+
+   Copyright (c) 2005-2009, 
+
+   @author : 
+   Olivier Stasse
+   
+   JRL-Japan, CNRS/AIST
+
+   All rights reserved.
+   
+   Please refers to file License.txt for details on the license.
+
+*/
+
 #include <fstream>
 #include <sstream>
 
