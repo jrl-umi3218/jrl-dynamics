@@ -3000,3 +3000,8 @@ const matrixNxP & DynamicMultiBody::inertiaMatrix() const
 {
   return m_InertiaMatrix;
 }
+
+matrixNxP & DynamicMultiBody::getInertiaMatrix() 
+{
+  return m_InertiaMatrix;
+}

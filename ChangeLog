@@ -1,5 +1,12 @@
 2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Adding a new method for optimized code in hrp2dynamics.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h: 
+	Adding access to inertiaMatrix.
+	* src/DynamicMultiBody.cpp: .
+
+2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	License is send back to file License.txt.
 	* include/dynamicsJRLJapan/Body.h: .
 	* include/dynamicsJRLJapan/DynamicBody.h: .

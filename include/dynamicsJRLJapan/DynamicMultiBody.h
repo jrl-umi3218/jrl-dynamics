@@ -870,6 +870,10 @@ namespace dynamicsJRLJapan
 
     /*! \brief returns the inertia matrix. */
     const matrixNxP& inertiaMatrix() const;
+
+    /*! \brief returns the inertia matrix. */
+    matrixNxP& getInertiaMatrix();
+    
     /**
        @}
     */
