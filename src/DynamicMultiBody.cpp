@@ -16,26 +16,9 @@
    JRL-Japan, CNRS/AIST
  
    All rights reserved.
-   
-   Redistribution and use in source and binary forms, with or without modification, 
-   are permitted provided that the following conditions are met:
-   
-   * Redistributions of source code must retain the above copyright notice, 
-   this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-   this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-   * Neither the name of the CNRS and AIST nor the names of its contributors 
-   may be used to endorse or promote products derived from this software without specific prior written permission.
-   
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS 
-   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY 
-   AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER 
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
-   OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS 
-   OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-   STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
-   IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   Please refers to file License.txt for details on the license.
+
 */
 
 /*! System includes */
@@ -66,7 +49,10 @@
 
 #if 0
 
-#define ODEBUG4(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); DebugFile << "WalkGenJRLIntegrate: " << x << endl; DebugFile.close();}
+#define ODEBUG4(x,y) { ofstream DebugFile; \
+    DebugFile.open(y,ofstream::app); \
+    DebugFile << "WalkGenJRLIntegrate: " \
+	      << x << endl; DebugFile.close();}
 #define _DEBUG_4_ACTIVATED_ 1
 #else
 #define ODEBUG4(x,y)
@@ -153,7 +139,7 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
   m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(*listOfBodies[ID]);
   //specify the type of the root joint
-  //m_RootOfTheJointsTree->type( Joint::FREE_JOINT );
+
   // Start the vector of joints.
   m_JointVector.clear();
   m_JointVector.insert(m_JointVector.end(),m_RootOfTheJointsTree);
@@ -162,12 +148,6 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
     m_NbOfVRMLIDs = lVRMLID;
 
   // Find out the next body to be examine.
-  /*
-    int NewBody = listeLiaisons[ld].indexCorps1;
-    if (NewBody == ID)
-    NewBody = listeLiaisons[ld].indexCorps2;
-
-    ReLabelling(NewBody,ld);   */
   ReLabelling(ID,ld);
 
   // Once finished we initialize the child and the sister.
@@ -493,17 +473,22 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
       //-------------------------------
 
       // Position and orientation in reference frame
-      listOfBodies[currentNode]->p = MAL_S3x3_RET_A_by_B(listOfBodies[lMother]->R , aDB->b )+ listOfBodies[lMother]->p;
-      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,listOfBodies[lMother]->R , listOfBodies[currentNode]->R_static);
+      listOfBodies[currentNode]->p = 
+	MAL_S3x3_RET_A_by_B(listOfBodies[lMother]->R , aDB->b )
+	+ listOfBodies[lMother]->p;
+      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,listOfBodies[lMother]->R , 
+			   listOfBodies[currentNode]->R_static);
       MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode]->R ,NE_Rtmp , NE_Ro);
       listOfBodies[currentNode]->Riip1 = NE_Ro;
 
       for( i=0;i<3;i++)
 	for( j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,j) = listOfBodies[currentNode]->R(i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,j) 
+	    = listOfBodies[currentNode]->R(i,j);
 
       for( i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,3) = listOfBodies[currentNode]->p(i);
+	MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,3) 
+	  = listOfBodies[currentNode]->p(i);
 
       ODEBUG("q: "<< aDB->q );
       ODEBUG("p: "
@@ -513,7 +498,8 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
       ODEBUG("R: "<< aDB->R );
 
       //update the translation/rotation axis of joint
-      MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode]->w_a,listOfBodies[currentNode]->R, aDB->a);
+      MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode]->w_a,
+			   listOfBodies[currentNode]->R, aDB->a);
 
       if (m_ComputeVelocity)
         {
@@ -544,11 +530,15 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
       if (m_ComputeCoM)
         {
 	  ODEBUG("c: " << listOfBodies[currentNode]->c);
-	  MAL_S3x3_C_eq_A_by_B(NE_cl,listOfBodies[currentNode]->R, listOfBodies[currentNode]->c);
+	  MAL_S3x3_C_eq_A_by_B(NE_cl,listOfBodies[currentNode]->R, 
+			       listOfBodies[currentNode]->c);
 	  NE_lw_c = NE_cl + listOfBodies[currentNode]->p;
-	  ODEBUG("lw_c: "<<currentNode<<" "<< NE_lw_c[0] << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  positionCoMPondere +=  NE_lw_c * listOfBodies[currentNode]->getMasse();
-	  ODEBUG("w_c: " << NE_lw_c[0] << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
+	  ODEBUG("lw_c: "<<currentNode<<" "<< NE_lw_c[0] 
+		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
+	  positionCoMPondere +=  
+	    NE_lw_c * listOfBodies[currentNode]->getMasse();
+	  ODEBUG("w_c: " << NE_lw_c[0] << " " 
+		 << NE_lw_c[1] << " " << NE_lw_c[2]);
 	  ODEBUG("Masse " << listOfBodies[currentNode]->getMasse());
 	  ODEBUG("positionCoMPondere " << positionCoMPondere);
 	  listOfBodies[currentNode]->w_c = NE_lw_c;
@@ -740,16 +730,12 @@ void DynamicMultiBody::ForwardDynamics(int corpsCourant, int liaisonDeProvenance
   // Building the appropriate transformations.
 
   if (liaisonDeProvenance == 0)
-    { //a revoir
+    { 
       masse = 0;
       MAL_S3_VECTOR_FILL(positionCoMPondere,0);
     }
 
-  //  double matrice[16];
-  //  glGetDoublev(GL_MODELVIEW_MATRIX, matrice);
-  //  positionCoMPondere += (matrice*(listeCorps[corpsCourant].getPositionCoM()))*listeCorps[corpsCourant].getMasse();
   masse += listeCorps[corpsCourant]->getMasse();
-  //listeCorps[corpsCourant].dessiner(alpha);
 
   switch (liaisons[corpsCourant].size())
     {
@@ -1173,7 +1159,6 @@ void DynamicMultiBody::CalculateZMP(double &px, double &py,
   ODEBUG(" CalculateZMP : Masse :"<< masse << " g:" << g  << " "
 	 << dP << " " << dL << " " << positionCoMPondere );
 
-  //  cout << "px :"<< px<< " py: " << py<< endl;
 
 }
 
@@ -1189,12 +1174,6 @@ string DynamicMultiBody::GetName(int JointID)
 
 CjrlJoint* DynamicMultiBody::GetJointFromVRMLID(int JointID)
 {
-#if 0
-  if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return (CjrlJoint<MAL_MATRIX(,double), MAL_S4x4_MATRIX(,double),MAL_S3x3_MATRIX(,double),
-	    MAL_VECTOR(,double),MAL_S3_VECTOR(,double)> *)listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->joint();
-#else
 
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
@@ -1206,7 +1185,6 @@ CjrlJoint* DynamicMultiBody::GetJointFromVRMLID(int JointID)
 	  return r;
         }
     }
-#endif
   return 0;
 }
 
@@ -1297,524 +1275,547 @@ std::vector<CjrlJoint*> DynamicMultiBody::jointsBetween(const CjrlJoint& inStart
   return outJoints;
 }
 
-bool DynamicMultiBody::getJacobian ( const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian, unsigned int outOffset, bool includeFreeFlyer )
+bool DynamicMultiBody::getJacobian ( const CjrlJoint& inStartJoint, 
+				     const CjrlJoint& inEndJoint, 
+				     const vector3d& inFrameLocalPosition, 
+				     matrixNxP& outjacobian, 
+				     unsigned int outOffset, 
+				     bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = outjacobian.size2();
-    if ( ( outjacobian.size1() != 6 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
-
-    unsigned int i,j;
-    double ** outTable;
-    outTable = new double* [6];
-    for ( i=0; i<6; i++ )
-        outTable[i] = new double [valNumberDof];
-    for ( i=0; i<6; i++ )
-        memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
-
-//determine participating joints
-    std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-    Joint* EndJoint = ( Joint* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
-
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
-
-    for ( i=1; i< minChain; i++ )
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);
+  if ( ( MAL_MATRIX_NB_ROWS(outjacobian) != 6 ) || 
+       ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
+  
+  unsigned int i,j;
+  double ** outTable;
+  outTable = new double* [6];
+  for ( i=0; i<6; i++ )
+    outTable[i] = new double [valNumberDof];
+  for ( i=0; i<6; i++ )
+    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
+  
+  //determine participating joints
+  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
+  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+  
+  for ( i=1; i< minChain; i++ )
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
     }
+  
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody = EndJoint->linkedDBody();
+  tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
-    unsigned int rank;
-    Joint* aJoint;
-    DynamicBody* aBody = EndJoint->linkedDBody();
-    tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
-
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-        aJoint=  robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint=  robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank] =  tempLV[j];
-                    outTable[j+3][rank] = aBody->w_a[j];
-                }
-                break;
-            case Joint::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank] =  aBody->w_a[j];
-                }
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank+j] =  1.0;
-                    outTable[j+3][rank+j+3] =  1.0;
-                }
-                outTable[1][rank+3] =  -tempDP[2];
-                outTable[2][rank+3] =  tempDP[1];
-                outTable[0][rank+4] =  tempDP[2];
-                outTable[2][rank+4] =  -tempDP[0];
-                outTable[0][rank+5] =  -tempDP[1];
-                outTable[1][rank+5] =  tempDP[0];
-                break;
+	case Joint::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank] =  tempLV[j];
+	      outTable[j+3][rank] = aBody->w_a[j];
+	    }
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank] =  aBody->w_a[j];
+	    }
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank+j] =  1.0;
+	      outTable[j+3][rank+j+3] =  1.0;
+	    }
+	  outTable[1][rank+3] =  -tempDP[2];
+	  outTable[2][rank+3] =  tempDP[1];
+	  outTable[0][rank+4] =  tempDP[2];
+	  outTable[2][rank+4] =  -tempDP[0];
+	  outTable[0][rank+5] =  -tempDP[1];
+	  outTable[1][rank+5] =  tempDP[0];
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint = robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank] = -tempLV[j];
-                    outTable[j+3][rank] = -aBody->w_a[j];
-                }
-                break;
-            case Joint::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank] = -aBody->w_a[j];
-                }
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outTable[j][rank+j] =  -1.0;
-                    outTable[j+3][rank+j+3] =  -1.0;
-                }
-                outTable[1][rank+3] =  tempDP[2];
-                outTable[2][rank+3] =  -tempDP[1];
-                outTable[0][rank+4] =  -tempDP[2];
-                outTable[2][rank+4] =  tempDP[0];
-                outTable[0][rank+5] =  tempDP[1];
-                outTable[1][rank+5] =  -tempDP[0];
-                break;
+	case Joint::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank] = -tempLV[j];
+	      outTable[j+3][rank] = -aBody->w_a[j];
+	    }
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank] = -aBody->w_a[j];
+	    }
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outTable[j][rank+j] =  -1.0;
+	      outTable[j+3][rank+j+3] =  -1.0;
+	    }
+	  outTable[1][rank+3] =  tempDP[2];
+	  outTable[2][rank+3] =  -tempDP[1];
+	  outTable[0][rank+4] =  -tempDP[2];
+	  outTable[2][rank+4] =  tempDP[0];
+	  outTable[0][rank+5] =  tempDP[1];
+	  outTable[1][rank+5] =  -tempDP[0];
+	  break;
         }
     }
 
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
-        tempDP = tempP - StartJoint->linkedDBody()->p;
+      tempDP = tempP - StartJoint->linkedDBody()->p;
 
-        for ( j=0;j<6;j++ )
-            outTable[j][j] =  1.0;
-        outTable[1][3] =  -tempDP[2];
-        outTable[2][3] =  tempDP[1];
-        outTable[0][4] =  tempDP[2];
-        outTable[2][4] =  -tempDP[0];
-        outTable[0][5] =  -tempDP[1];
-        outTable[1][5] =  tempDP[0];
+      for ( j=0;j<6;j++ )
+	outTable[j][j] =  1.0;
+      outTable[1][3] =  -tempDP[2];
+      outTable[2][3] =  tempDP[1];
+      outTable[0][4] =  tempDP[2];
+      outTable[2][4] =  -tempDP[0];
+      outTable[0][5] =  -tempDP[1];
+      outTable[1][5] =  tempDP[0];
     }
 
-    for ( i=0; i<6; i++ )
-        memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof*sizeof ( double ) );
+  for ( i=0; i<6; i++ )
+    memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],
+	     valNumberDof*sizeof ( double ) );
 
-    //clean
-    for ( i=0; i<6; i++ )
-        delete ( outTable[i] );
-    delete ( outTable );
+  //clean
+  for ( i=0; i<6; i++ )
+    delete ( outTable[i] );
+  delete ( outTable );
 
-    return true;
+  return true;
 }
 
-bool DynamicMultiBody::getPositionJacobian ( const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, const vector3d& inFrameLocalPosition, matrixNxP& outjacobian, unsigned int outOffset, bool includeFreeFlyer )
+bool DynamicMultiBody::getPositionJacobian ( const CjrlJoint& inStartJoint, 
+					     const CjrlJoint& inEndJoint, 
+					     const vector3d& inFrameLocalPosition, 
+					     matrixNxP& outjacobian, 
+					     unsigned int outOffset, 
+					     bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = outjacobian.size2();
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);
 
-    if ( ( outjacobian.size1() != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  if ( ( MAL_MATRIX_NB_ROWS(outjacobian) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    unsigned int i,j;
-    double ** outTable;
-    outTable = new double* [3];
-    for ( i=0; i<3; i++ )
-        outTable[i] = new double [valNumberDof];
-    for ( i=0; i<3; i++ )
-        memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
+  unsigned int i,j;
+  double ** outTable;
+  outTable = new double* [3];
+  for ( i=0; i<3; i++ )
+    outTable[i] = new double [valNumberDof];
+  for ( i=0; i<3; i++ )
+    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
-    //determine participating joints
-    std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-    Joint* EndJoint = ( Joint* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  //determine participating joints
+  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
+  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
 
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
 
-    for ( i=1; i< minChain; i++ )
+  for ( i=1; i< minChain; i++ )
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
     }
 
-    unsigned int rank;
-    Joint* aJoint;
-    DynamicBody* aBody = EndJoint->linkedDBody();
-    tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody = EndJoint->linkedDBody();
+  tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-        aJoint=  robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint=  robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] =  tempLV[j];
-                break;
-            case Joint::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] =  aBody->w_a[j];
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank+j] =  1.0;
-                outTable[1][rank+3] =  -tempDP[2];
-                outTable[2][rank+3] =  tempDP[1];
-                outTable[0][rank+4] =  tempDP[2];
-                outTable[2][rank+4] =  -tempDP[0];
-                outTable[0][rank+5] =  -tempDP[1];
-                outTable[1][rank+5] =  tempDP[0];
-                break;
+	case Joint::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] =  tempLV[j];
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] =  aBody->w_a[j];
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank+j] =  1.0;
+	  outTable[1][rank+3] =  -tempDP[2];
+	  outTable[2][rank+3] =  tempDP[1];
+	  outTable[0][rank+4] =  tempDP[2];
+	  outTable[2][rank+4] =  -tempDP[0];
+	  outTable[0][rank+5] =  -tempDP[1];
+	  outTable[1][rank+5] =  tempDP[0];
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint = robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] = -tempLV[j];
-                break;
-            case Joint::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] = -aBody->w_a[j];
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank+j] =  -1.0;
-                outTable[1][rank+3] =  tempDP[2];
-                outTable[2][rank+3] =  -tempDP[1];
-                outTable[0][rank+4] =  -tempDP[2];
-                outTable[2][rank+4] =  tempDP[0];
-                outTable[0][rank+5] =  tempDP[1];
-                outTable[1][rank+5] =  -tempDP[0];
-                break;
+	case Joint::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] = -tempLV[j];
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] = -aBody->w_a[j];
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank+j] =  -1.0;
+	  outTable[1][rank+3] =  tempDP[2];
+	  outTable[2][rank+3] =  -tempDP[1];
+	  outTable[0][rank+4] =  -tempDP[2];
+	  outTable[2][rank+4] =  tempDP[0];
+	  outTable[0][rank+5] =  tempDP[1];
+	  outTable[1][rank+5] =  -tempDP[0];
+	  break;
         }
     }
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
-        tempDP = tempP - StartJoint->linkedDBody()->p;
+      tempDP = tempP - StartJoint->linkedDBody()->p;
 
-        for ( j=0;j<3;j++ )
-            outTable[j][j] =  1.0;
+      for ( j=0;j<3;j++ )
+	outTable[j][j] =  1.0;
 
-        outTable[1][3] =  -tempDP[2];
-        outTable[2][3] =  tempDP[1];
-        outTable[0][4] =  tempDP[2];
-        outTable[2][4] =  -tempDP[0];
-        outTable[0][5] =  -tempDP[1];
-        outTable[1][5] =  tempDP[0];
+      outTable[1][3] =  -tempDP[2];
+      outTable[2][3] =  tempDP[1];
+      outTable[0][4] =  tempDP[2];
+      outTable[2][4] =  -tempDP[0];
+      outTable[0][5] =  -tempDP[1];
+      outTable[1][5] =  tempDP[0];
     }
-    for ( i=0; i<3; i++ )
-        memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
+  for ( i=0; i<3; i++ )
+    memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
 
-    //clean
-    for ( i=0; i<3; i++ )
-        delete ( outTable[i] );
-    delete ( outTable );
-    return true;
+  //clean
+  for ( i=0; i<3; i++ )
+    delete ( outTable[i] );
+  delete ( outTable );
+  return true;
 }
 
-bool DynamicMultiBody::getOrientationJacobian ( const CjrlJoint& inStartJoint, const CjrlJoint& inEndJoint, matrixNxP& outjacobian, unsigned int outOffset, bool includeFreeFlyer )
+bool DynamicMultiBody::getOrientationJacobian ( const CjrlJoint& inStartJoint, 
+						const CjrlJoint& inEndJoint, 
+						matrixNxP& outjacobian, 
+						unsigned int outOffset,
+						bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = outjacobian.size2();
-    if ( ( outjacobian.size1() != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);
+  if ( ( MAL_MATRIX_NB_ROWS(outjacobian) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    unsigned int i,j;
-    double ** outTable;
-    outTable = new double* [3];
-    for ( i=0; i<3; i++ )
-        outTable[i] = new double [valNumberDof];
-    for ( i=0; i<3; i++ )
-        memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
+  unsigned int i,j;
+  double ** outTable;
+  outTable = new double* [3];
+  for ( i=0; i<3; i++ )
+    outTable[i] = new double [valNumberDof];
+  for ( i=0; i<3; i++ )
+    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
-    //determine participating joints
-    std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-    Joint* EndJoint = ( Joint* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  //determine participating joints
+  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
+  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
 
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
 
-    for ( i=1; i< minChain; i++ )
+  for ( i=1; i< minChain; i++ )
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
     }
 
-    unsigned int rank;
-    Joint* aJoint;
-    DynamicBody* aBody;
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody;
 
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-        aJoint=  robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint=  robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] = aBody->w_a[j];
+	case Joint::REVOLUTE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] = aBody->w_a[j];
 
-                break;
-            case Joint::PRISMATIC_JOINT:
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank+j] =  1.0;
-                break;
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank+j] =  1.0;
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint = robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank] = -aBody->w_a[j];
+	case Joint::REVOLUTE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank] = -aBody->w_a[j];
 
-                break;
-            case Joint::PRISMATIC_JOINT:
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outTable[j][rank+j] =  -1.0;
-                break;
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outTable[j][rank+j] =  -1.0;
+	  break;
         }
     }
 
-    for ( i=0;i<3;i++ )
+  for ( i=0;i<3;i++ )
     {
-        if ( includeFreeFlyer )
-            outTable[i][i+3] =  1.0;
-        memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
+      if ( includeFreeFlyer )
+	outTable[i][i+3] =  1.0;
+      memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),
+	       outTable[i],valNumberDof *sizeof ( double ) );
     }
 
-    //clean
-    for ( i=0; i<3; i++ )
-        delete ( outTable[i] );
-    delete ( outTable );
-    return true;
+  //clean
+  for ( i=0; i<3; i++ )
+    delete ( outTable[i] );
+  delete ( outTable );
+  return true;
 }
 
-bool DynamicMultiBody::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint, matrixNxP& outjacobian, unsigned int outOffset, bool includeFreeFlyer )
+bool DynamicMultiBody::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint, 
+						 matrixNxP& outjacobian, 
+						 unsigned int outOffset, 
+						 bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = outjacobian.size2();
-    if ( ( outjacobian.size1() != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);
+  if ( ( MAL_MATRIX_NB_ROWS(outjacobian) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    unsigned int i,j;
-    double ** outTable;
-    outTable = new double* [3];
-    for ( i=0; i<3; i++ )
-        outTable[i] = new double [valNumberDof];
+  unsigned int i,j;
+  double ** outTable;
+  outTable = new double* [3];
+  for ( i=0; i<3; i++ )
+    outTable[i] = new double [valNumberDof];
 
-    for ( i=0; i<3; i++ )
-        memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
+  for ( i=0; i<3; i++ )
+    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
-    std::vector<int> jointsigns ( numberDof(),1 );
+  std::vector<int> jointsigns ( numberDof(),1 );
 
-    Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-    //determine participating joints
-    if ( rootJoint() !=&inStartJoint )
+  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
+  //determine participating joints
+  if ( rootJoint() !=&inStartJoint )
     {
-        std::vector<Joint *> robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+      std::vector<Joint *> robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
 
-        for ( i = 1; i<robotRoot2StartJoint.size();i++ )
-            jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
+      for ( i = 1; i<robotRoot2StartJoint.size();i++ )
+	jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
 
-        std::vector<vector3d> tempoS;
-        std::vector<double> liftedS;
+      std::vector<vector3d> tempoS;
+      std::vector<double> liftedS;
 
-        for ( i = 0; i<robotRoot2StartJoint.size()-1;i++ )
+      for ( i = 0; i<robotRoot2StartJoint.size()-1;i++ )
         {
-            robotRoot2StartJoint[i]->computeSubTreeMComExceptChild ( robotRoot2StartJoint[i+1] );
-            tempoS.push_back ( robotRoot2StartJoint[i]->subTreeMCom() );
-            liftedS.push_back ( robotRoot2StartJoint[i]->subTreeCoef() );
+	  robotRoot2StartJoint[i]->computeSubTreeMComExceptChild ( robotRoot2StartJoint[i+1] );
+	  tempoS.push_back ( robotRoot2StartJoint[i]->subTreeMCom() );
+	  liftedS.push_back ( robotRoot2StartJoint[i]->subTreeCoef() );
         }
 
-        robotRoot2StartJoint[1]->subTreeMCom ( tempoS[0] );
-        robotRoot2StartJoint[1]->subTreeCoef ( liftedS[0] );
+      robotRoot2StartJoint[1]->subTreeMCom ( tempoS[0] );
+      robotRoot2StartJoint[1]->subTreeCoef ( liftedS[0] );
 
-        for ( i = 2; i<robotRoot2StartJoint.size();i++ )
+      for ( i = 2; i<robotRoot2StartJoint.size();i++ )
         {
-            robotRoot2StartJoint[i]->subTreeMCom ( robotRoot2StartJoint[i-1]->subTreeMCom() +tempoS[i-1] );
-            robotRoot2StartJoint[i]->subTreeCoef ( robotRoot2StartJoint[i-1]->subTreeCoef() +liftedS[i-1] );
+	  robotRoot2StartJoint[i]->subTreeMCom ( robotRoot2StartJoint[i-1]->subTreeMCom() +tempoS[i-1] );
+	  robotRoot2StartJoint[i]->subTreeCoef ( robotRoot2StartJoint[i-1]->subTreeCoef() +liftedS[i-1] );
         }
     }
-    else
-        StartJoint->computeSubTreeMCom();
+  else
+    StartJoint->computeSubTreeMCom();
 
-    unsigned int rank;
-    Joint* aJoint;
-    DynamicBody* aBody;
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody;
 
-    for ( i=0;i<m_ConfigurationToJoints.size();i++ )
+  for ( i=0;i<m_ConfigurationToJoints.size();i++ )
     {
-        if ( m_ConfigurationToJoints[i] == rootJoint() )
-            continue;
+      if ( m_ConfigurationToJoints[i] == rootJoint() )
+	continue;
 
-        aJoint = m_ConfigurationToJoints[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration();
-        else
-            rank = aJoint->rankInConfiguration()-6;
+      aJoint = m_ConfigurationToJoints[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration();
+      else
+	rank = aJoint->rankInConfiguration()-6;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case Joint::REVOLUTE_JOINT:
-                for ( j=0;j<3;j++ )
-                    tempDP[j] = aJoint->subTreeMCom() [j]- aJoint->subTreeCoef() *aBody->p[j];
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                    if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
-                        outTable[j][rank] =  tempLV[j];
-                else
-                    outTable[j][rank] =  -tempLV[j];
-                break;
-            case Joint::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
-                        outTable[j][rank] = aBody->w_a[j];
-                    else
-                        outTable[j][rank] = -aBody->w_a[j];
-                }
-                break;
-            case Joint::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
-                        outTable[j][rank+j] =  1.0;
-                    else
-                        outTable[j][rank+j] =  -1.0;
-                }
-                for ( j=0;j<3;j++ )
-                    tempDP[j] = aJoint->subTreeMCom() [j]- aJoint->subTreeCoef() *aBody->p[j];
-                if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
-                {
-                    outTable[1][rank+3] =  -tempDP[2];
-                    outTable[2][rank+3] =  tempDP[1];
-                    outTable[0][rank+4] =  tempDP[2];
-                    outTable[2][rank+4] =  -tempDP[0];
-                    outTable[0][rank+5] =  -tempDP[1];
-                    outTable[1][rank+5] =  tempDP[0];
-                }
-                else
-                {
-                    outTable[1][rank+3] =  tempDP[2];
-                    outTable[2][rank+3] =  -tempDP[1];
-                    outTable[0][rank+4] =  -tempDP[2];
-                    outTable[2][rank+4] =  tempDP[0];
-                    outTable[0][rank+5] =  tempDP[1];
-                    outTable[1][rank+5] =  -tempDP[0];
-                }
+	case Joint::REVOLUTE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    tempDP[j] = aJoint->subTreeMCom() [j]- aJoint->subTreeCoef() *aBody->p[j];
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
+	      outTable[j][rank] =  tempLV[j];
+	    else
+	      outTable[j][rank] =  -tempLV[j];
+	  break;
+	case Joint::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
+		outTable[j][rank] = aBody->w_a[j];
+	      else
+		outTable[j][rank] = -aBody->w_a[j];
+	    }
+	  break;
+	case Joint::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
+		outTable[j][rank+j] =  1.0;
+	      else
+		outTable[j][rank+j] =  -1.0;
+	    }
+	  for ( j=0;j<3;j++ )
+	    tempDP[j] = aJoint->subTreeMCom() [j]- aJoint->subTreeCoef() *aBody->p[j];
+	  if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
+	    {
+	      outTable[1][rank+3] =  -tempDP[2];
+	      outTable[2][rank+3] =  tempDP[1];
+	      outTable[0][rank+4] =  tempDP[2];
+	      outTable[2][rank+4] =  -tempDP[0];
+	      outTable[0][rank+5] =  -tempDP[1];
+	      outTable[1][rank+5] =  tempDP[0];
+	    }
+	  else
+	    {
+	      outTable[1][rank+3] =  tempDP[2];
+	      outTable[2][rank+3] =  -tempDP[1];
+	      outTable[0][rank+4] =  -tempDP[2];
+	      outTable[2][rank+4] =  tempDP[0];
+	      outTable[0][rank+5] =  tempDP[1];
+	      outTable[1][rank+5] =  -tempDP[0];
+	    }
 
-                break;
+	  break;
         }
 
     }
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
 
-        for ( j=0;j<3;j++ )
-            outTable[j][j] =  1.0;
-        tempDP = positionCoMPondere - StartJoint->linkedDBody()->p;
-        outTable[1][3] =  -tempDP[2];
-        outTable[2][3] =  tempDP[1];
-        outTable[0][4] =  tempDP[2];
-        outTable[2][4] =  -tempDP[0];
-        outTable[0][5] =  -tempDP[1];
-        outTable[1][5] =  tempDP[0];
+      for ( j=0;j<3;j++ )
+	outTable[j][j] =  1.0;
+      tempDP = positionCoMPondere - StartJoint->linkedDBody()->p;
+      outTable[1][3] =  -tempDP[2];
+      outTable[2][3] =  tempDP[1];
+      outTable[0][4] =  tempDP[2];
+      outTable[2][4] =  -tempDP[0];
+      outTable[0][5] =  -tempDP[1];
+      outTable[1][5] =  tempDP[0];
     }
-    for ( i=0; i<3; i++ )
-        memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
+  for ( i=0; i<3; i++ )
+    memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
 
-    //clean
-    for ( i=0; i<3; i++ )
-        delete ( outTable[i] );
-    delete ( outTable );
-    return true;
+  //clean
+  for ( i=0; i<3; i++ )
+    delete ( outTable[i] );
+  delete ( outTable );
+  return true;
 }
 
 void DynamicMultiBody::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
@@ -1826,8 +1827,9 @@ void DynamicMultiBody::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
 
 void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
 {
-  if ((outjacobian.size1() != 3) || (outjacobian.size2() != numberDof()))
-    outjacobian.resize(3,numberDof(),false);
+  if ((MAL_MATRIX_NB_ROWS(outjacobian) != 3) || 
+      (MAL_MATRIX_NB_COLS(outjacobian) != numberDof()))
+    MAL_MATRIX_RESIZE(outjacobian,3,numberDof());
 
   MAL_MATRIX_FILL(outjacobian,0);
 
@@ -1846,21 +1848,26 @@ void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
       
       matrixNxP pJacobian;
       vector3d av(0,0,0); // Dummy 
+      MAL_MATRIX_RESIZE(pJacobian,6, numberDof());
       getJacobian(*rootJoint(),*aJoint,av,pJacobian);
 
       ODEBUG("pJacobian:" <<pJacobian);
       matrixNxP pLinearJacobian;
-      pLinearJacobian.resize(3,pJacobian.size2());
-      MAL_MATRIX_C_eq_EXTRACT_A(pLinearJacobian,pJacobian,double,0,0,3,pJacobian.size2());
+      MAL_MATRIX_RESIZE(pLinearJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
+      MAL_MATRIX_C_eq_EXTRACT_A(pLinearJacobian,pJacobian,double,0,0,3,
+				MAL_MATRIX_NB_COLS(pJacobian));
       ODEBUG("pLinearJacobian:" <<endl <<pLinearJacobian);
+
       matrixNxP pAngularJacobian; 
-      pAngularJacobian.resize(3,pJacobian.size2());
-      MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,pJacobian.size2());
+      MAL_MATRIX_RESIZE(pAngularJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
+      MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,
+				MAL_MATRIX_NB_COLS(pJacobian));
+
       ODEBUG("pAngularJacobian:" <<endl <<pAngularJacobian);
 
       // Used to compute the anti-symmetric matrix.
       matrixNxP xkmxg_cp;double lmasse = aBody->getMasse();
-      xkmxg_cp.resize(3,3);
+      MAL_MATRIX_RESIZE(xkmxg_cp,3,3);
       av =aBody->w_c - positionCoMPondere;
       xkmxg_cp(0,0) =          0.0; xkmxg_cp(0,1) = -lmasse*av(2); xkmxg_cp(0,2) = lmasse*av(1);
       xkmxg_cp(1,0) = lmasse*av(2); xkmxg_cp(1,1) =           0.0; xkmxg_cp(1,2) =-lmasse*av(0);
@@ -1875,7 +1882,7 @@ void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
       matrixNxP rightoperand;
       matrix3d tmp2_3d;
       matrixNxP tmp2;
-      tmp2.resize(3,3);
+      MAL_MATRIX_RESIZE(tmp2,3,3);
       MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->R,aBody->getInertie()); 
       for(unsigned int i=0;i<3;++i)
 	for(unsigned int j=0;j<3;++j)
@@ -2922,4 +2929,79 @@ void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angul
   while(currentNode!=labelTheRoot);
   
   angularmomentum = lL;
+}
+
+void DynamicMultiBody::computeInertiaMatrix()
+{
+  if ((MAL_MATRIX_NB_ROWS(m_InertiaMatrix) != numberDof()) || 
+      (MAL_MATRIX_NB_COLS(m_InertiaMatrix) != numberDof()))
+    MAL_MATRIX_RESIZE(m_InertiaMatrix,numberDof(),numberDof());
+
+  MAL_MATRIX_FILL(m_InertiaMatrix,0);
+
+  unsigned int rank;
+  Joint* aJoint;
+  DynamicBody* aBody;
+    
+  for(unsigned int i=0;i<m_ConfigurationToJoints.size();i++)
+    {
+      if (m_ConfigurationToJoints[i] == rootJoint())
+	continue;
+
+      aJoint = m_ConfigurationToJoints[i];
+      aBody=  aJoint->linkedDBody();
+      rank = aJoint->rankInConfiguration();
+      
+      matrixNxP pJacobian;
+      MAL_MATRIX_RESIZE(pJacobian, 6, numberDof());
+      vector3d av(0,0,0); // Dummy 
+      getJacobian(*rootJoint(),*aJoint,av,pJacobian);
+
+      ODEBUG("pJacobian:" <<pJacobian);
+      matrixNxP pLinearJacobian;
+      MAL_MATRIX_RESIZE(pLinearJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
+      MAL_MATRIX_C_eq_EXTRACT_A(pLinearJacobian,pJacobian,double,0,0,3,
+				MAL_MATRIX_NB_COLS(pJacobian));
+      ODEBUG("pLinearJacobian:" <<endl <<pLinearJacobian);
+
+      matrixNxP pAngularJacobian; 
+      MAL_MATRIX_RESIZE(pAngularJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
+      MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,
+				MAL_MATRIX_NB_COLS(pJacobian));
+
+      ODEBUG("pAngularJacobian:" <<endl <<pAngularJacobian);
+
+      // Used to compute the anti-symmetric matrix.
+      double lmasse = aBody->getMasse();
+      matrixNxP leftoperand;
+      MAL_C_eq_A_by_B(leftoperand,MAL_RET_TRANSPOSE(pLinearJacobian),pLinearJacobian);
+      m_InertiaMatrix = m_InertiaMatrix + lmasse * leftoperand;
+      
+      matrixNxP rightoperand;
+      matrix3d tmp2_3d,tmp2_3d2;
+      matrixNxP tmp2,tmp3;
+      MAL_MATRIX_RESIZE(tmp2,3,3);
+      MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->getInertie(),MAL_S3x3_RET_TRANSPOSE(aBody->R)); 
+      MAL_S3x3_C_eq_A_by_B(tmp2_3d2,aBody->R,tmp2_3d); 
+
+      for(unsigned int i=0;i<3;++i)
+	for(unsigned int j=0;j<3;++j)
+	  tmp2(i,j) = tmp2_3d2(i,j);
+
+      MAL_C_eq_A_by_B(tmp3,tmp2,pAngularJacobian);
+      MAL_C_eq_A_by_B(rightoperand,MAL_RET_TRANSPOSE(pAngularJacobian),tmp3);
+
+      m_InertiaMatrix = m_InertiaMatrix + rightoperand;
+    }
+  
+}
+
+const matrixNxP & DynamicMultiBody::inertiaMatrix() const
+{
+  return m_InertiaMatrix;
+}
+
+matrixNxP & DynamicMultiBody::getInertiaMatrix() 
+{
+  return m_InertiaMatrix;
 }

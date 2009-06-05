@@ -1,3 +1,18 @@
+/* @doc Object used to handle specificities of humanoid robots
+
+   Copyright (c) 2005-2009, 
+
+   @author : 
+   Olivier Stasse, Florent Lamiraux
+   
+   JRL-Japan, CNRS/AIST
+
+   All rights reserved.
+   
+   Please refers to file License.txt for details on the license.
+
+*/
+
 #include "dynamicsJRLJapan/HumanoidSpecificities.h"
 
 #define ODEBUG2(x)

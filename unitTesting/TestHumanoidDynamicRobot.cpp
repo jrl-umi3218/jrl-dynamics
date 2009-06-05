@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     {
       cerr << " This program takes 4 arguments: " << endl;
       cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
-      cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
+      cerr << " PATH_TO_SPECIFICITIES_XML PATH_TO_MAP_JOINT_2_RANK" << endl;
       exit(-1);
     }	
 
@@ -304,8 +304,15 @@ int main(int argc, char *argv[])
   cout << "Height foot: "<< aHDMB->footHeight() << endl;
 
   matrixNxP outjacobian;
+  MAL_MATRIX_RESIZE(outjacobian, 3, NbOfDofs);
   aHDMB->getJacobianAngularMomentumWrtCoM(outjacobian);
   cout << "Jacobian of the angular momentum:" << outjacobian <<endl;
+
+  matrixNxP InertiaMatrix;
+  aHDMB->computeInertiaMatrix();
+  InertiaMatrix = aHDMB->inertiaMatrix();
+  cout << "InertiaMatrix:" << InertiaMatrix <<endl;
+
   
   delete aHDMB;
   

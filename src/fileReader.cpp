@@ -1,3 +1,17 @@
+/* @doc Object used to parse small config files
+
+   Copyright (c) 2005-2009, 
+
+   @author : 
+   Abderrahmane Kheddar
+   
+   JRL-Japan, CNRS/AIST
+
+   All rights reserved.
+   
+   Please refers to file License.txt for details on the license.
+
+*/
 #include "dynamics-config.h"
 
 
