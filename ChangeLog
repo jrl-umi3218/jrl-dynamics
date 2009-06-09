@@ -1,5 +1,12 @@
 2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Adding infamous functional extension through StepSequence.
+	* src/DynamicMultiBody.cpp: 
+	No I will not extend the abstract interface to specify
+	a time step specific to the implementation.
+
+2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Adding InverseKinematics.
 	* include/dynamicsJRLJapan/InverseKinematics.h: New.
 	* src/InverseKinematics.cpp: New.

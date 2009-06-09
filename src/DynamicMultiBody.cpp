@@ -2832,6 +2832,12 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
         }
 
     }
+  else if (inProperty=="TimeStep")
+    {
+      istringstream strm(inValue);
+      strm >> m_TimeStep;
+      ODEBUG3("m_TimeStep" << m_TimeStep);
+    }
   else if (inProperty=="FileJointRank")
     {
       m_FileLinkJointRank = inValue;
