@@ -3005,3 +3005,4 @@ matrixNxP & DynamicMultiBody::getInertiaMatrix()
 {
   return m_InertiaMatrix;
 }
+

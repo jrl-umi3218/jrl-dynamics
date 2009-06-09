@@ -15,6 +15,7 @@
 #define _HUMANOID_DYNAMIC_MULTIBODY_H_
 #include <vector>
 
+#include "InverseKinematics.h"
 #include "HumanoidSpecificities.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
@@ -81,6 +82,9 @@ namespace dynamicsJRLJapan
       
       /*! Object to store the specificities to an instance of a humanoid robot. */
       HumanoidSpecificities *m_HS;
+
+      /*! Object to deal with the Inverse Kinematics. */
+      InverseKinematics *m_IK;
 
       /*! Distance between the ankle and the soil. */
       double m_AnkleSoilDistance;
@@ -450,6 +454,36 @@ namespace dynamicsJRLJapan
     /*! \brief Returns the vector of joints index for the
       waist. */
     const std::vector<int> & GetWaistJoints();
+
+      
+    /*! \brief Compute InverseKinematics for legs. 
+      \param[in] Body_R: Matrix 3x3 for the rotation of the upper part of the leg.
+      \param[in] Body_R: Vector 3d for the position of the upper part of the leg.
+      \param[in] Dt: Distance between the waist and the leg.
+      \param[in] Foot_R: Matrix 3x3 for the rotation of the lower part of the leg.
+      \param[in] Foot_P: Vector 3d for the position of the lower part of the leg.
+      \param[out] q: Result i.e. the articular values.
+     */
+    virtual int ComputeInverseKinematicsForLegs(matrix3d & Body_R,
+						vector3d &Body_P,
+						vector3d &Dt,
+						matrix3d &Foot_R,
+						vector3d &Foot_P,
+						vectorN &q);
+      
+    /*! \brief Compute InverseKinematics for arms moving alog the saggital plane. 
+      \param[in] X: position of the end effector in the front.
+      \param[in] Z: vertical position of the end effector.
+      \param[out] Alpha: value of the first articular value.
+      \param[out] Beta: value of the second articular value.
+     */
+    virtual int ComputeInverseKinematicsForArms(double X,
+						double Z,
+						double &Alpha,
+						double &Beta);
+      
+    /*! \brief Compute Arm swing maximum amplitude. */
+    virtual double ComputeXmax(double & lZ);
 
     /*! @} */
     };

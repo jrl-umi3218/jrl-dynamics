@@ -63,13 +63,16 @@ HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynamicMultiBody()
   m_rightHand = m_leftHand = 0;
   m_RightFootJoint = m_LeftFootJoint = 0;
   m_HS = NULL;
+  m_IK=0;
 }
 
 HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(const DynamicMultiBody& inDynamicMultiBody,
 						   string aFileNameForHumanoidSpecificities) :
   DynamicMultiBody(inDynamicMultiBody)
 {
+  m_IK =0;
   SetHumanoidSpecificitiesFile(aFileNameForHumanoidSpecificities);
+  
 }
 
 void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameForHumanoidSpecificities)
@@ -155,12 +158,17 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
 
     }
 
+  m_IK = new InverseKinematics(this);
+  
 }
 
 HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
 {
   if (m_HS!=0)
     delete m_HS;
+
+  if (m_IK!=0)
+    delete m_IK;
   
   delete m_rightHand;
   delete m_leftHand;
@@ -415,6 +423,37 @@ const std::vector<int> & HumanoidDynamicMultiBody::GetWaistJoints()
 {
   return m_HS->GetWaistJoints();
 }
+
+int HumanoidDynamicMultiBody::ComputeInverseKinematicsForLegs(matrix3d & Body_R,
+							      vector3d &Body_P,
+							      vector3d &Dt,
+							      matrix3d &Foot_R,
+							      vector3d &Foot_P,
+							      vectorN &q)
+{
+  if (m_IK!=0)
+    m_IK->ComputeInverseKinematicsForLegs(Body_R, Body_P,
+					  Dt, Foot_R, Foot_P,q);
+  return -1;
+}
+
+int HumanoidDynamicMultiBody::ComputeInverseKinematicsForArms(double X,
+							      double Z,
+							      double &Alpha,
+							      double &Beta)
+{
+  if (m_IK!=0)
+    return m_IK->ComputeInverseKinematicsForArms(X,Z,Alpha,Beta);
+  return -1;
+}
+
+double HumanoidDynamicMultiBody::ComputeXmax(double &lZ)
+{
+  if (m_IK!=0)
+    return m_IK->ComputeXmax(lZ);
+  return 0.0;
+}      
+
 /***************************************************/
 /* End of the implementation                       */
 /***************************************************/

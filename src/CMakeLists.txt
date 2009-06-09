@@ -21,7 +21,9 @@ MultiBody.cpp
 DynamicMultiBody.cpp 
 HumanoidDynamicMultiBody.cpp 
 HumanoidSpecificities.cpp  
-SpiritVRMLReader.cpp )
+SpiritVRMLReader.cpp 
+InverseKinematics.cpp
+)
 
 
 # Create list of headers files
