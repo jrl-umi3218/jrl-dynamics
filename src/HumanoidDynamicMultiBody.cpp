@@ -424,6 +424,18 @@ const std::vector<int> & HumanoidDynamicMultiBody::GetWaistJoints()
   return m_HS->GetWaistJoints();
 }
 
+const std::vector<int> & HumanoidDynamicMultiBody::GetUpperBodyJoints()
+{
+  return m_HS->GetUpperBodyJoints();
+}
+
+int HumanoidDynamicMultiBody::GetUpperBodyJointNb()
+{
+  return m_HS->GetUpperBodyJointNb();
+}
+
+
+
 int HumanoidDynamicMultiBody::ComputeInverseKinematicsForLegs(matrix3d & Body_R,
 							      vector3d &Body_P,
 							      vector3d &Dt,
