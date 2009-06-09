@@ -1,5 +1,11 @@
 2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Adding InverseKinematics.
+	* include/dynamicsJRLJapan/InverseKinematics.h: New.
+	* src/InverseKinematics.cpp: New.
+
+2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Adding missing methods.
 	* src/HumanoidDynamicMultiBody.cpp: 
 	Added GetUpperBodyJoints and GetUpperBodyJointNB.
