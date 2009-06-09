@@ -1,3 +1,7 @@
+2009-06-09  Nicolas Mansard
+
+	Release 1.15.0 for sot 1.1.0.
+
 2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Adding a new method for optimized code in hrp2dynamics.
