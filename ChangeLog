@@ -1,3 +1,11 @@
+2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	HumanoidDynamicMultiBody augmented with HRPSpecificities interface.
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h:
+	Adding HRPSpecificities interface.
+	* src/HumanoidDynamicMultiBody.cpp: 
+	Calling m_HS.
+
 2009-06-04  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Adding a new method for optimized code in hrp2dynamics.

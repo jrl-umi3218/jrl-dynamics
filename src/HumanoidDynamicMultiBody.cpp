@@ -293,7 +293,129 @@ bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchin
     return false;
 }
 
+int HumanoidDynamicMultiBody::GetFootSize(int WhichFoot, double &Depth, double &Width,double &Height)
+{
+  if (m_HS!=0)
+    return m_HS->GetFootSize(WhichFoot, Depth, Width, Height);
+  return -1;
+}
 
+double HumanoidDynamicMultiBody::GetTibiaLength(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetTibiaLength(WhichSide);
+  return 0.0;
+}
+
+double HumanoidDynamicMultiBody::GetFemurLength(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetFemurLength(WhichSide);
+  return 0.0;
+}
+
+double HumanoidDynamicMultiBody::GetUpperArmLength(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetUpperArmLength(WhichSide);
+  return 0.0;
+}
+
+double HumanoidDynamicMultiBody::GetForeArmLength(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetForeArmLength(WhichSide);
+  return 0.0;
+}
+
+void HumanoidDynamicMultiBody::GetAnklePosition(int WhichSide, double AnklePosition[3])
+{
+  if (m_HS!=0)
+    m_HS->GetAnklePosition(WhichSide,AnklePosition);
+}
+
+void HumanoidDynamicMultiBody::GetWaistToHip(int WhichSide, double WaistToHip[3])
+{
+  if (m_HS!=0)
+    m_HS->GetWaistToHip(WhichSide,WaistToHip);
+}
+
+void HumanoidDynamicMultiBody::GetHipLength(int WhichSide, double HipLength[3])
+{
+  if (m_HS!=0)
+    m_HS->GetHipLength(WhichSide,HipLength);
+}
+
+int HumanoidDynamicMultiBody::GetArmJointNb(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetArmJointNb(WhichSide);
+  return -1;
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetArmJoints(int WhichSide)
+{
+  return m_HS->GetArmJoints(WhichSide);
+}
+
+int HumanoidDynamicMultiBody::GetLegJointNb(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetLegJointNb(WhichSide);
+  return -1;
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetLegJoints(int WhichSide)
+{
+  return m_HS->GetLegJoints(WhichSide);
+}
+
+int HumanoidDynamicMultiBody::GetFootJointNb(int WhichSide)
+{
+  if (m_HS!=0)
+    return m_HS->GetFootJointNb(WhichSide);
+  return -1;
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetFootJoints(int WhichSide)
+{
+  return m_HS->GetFootJoints(WhichSide);
+}
+
+int HumanoidDynamicMultiBody::GetHeadJointNb()
+{
+  if (m_HS!=0)
+    return m_HS->GetHeadJointNb();
+  return -1;
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetHeadJoints()
+{
+  return m_HS->GetHeadJoints();
+}
+
+int HumanoidDynamicMultiBody::GetChestJointNb()
+{
+  if (m_HS!=0)
+    return m_HS->GetChestJointNb();
+  return -1;
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetChestJoints()
+{
+  return m_HS->GetChestJoints();
+}
+
+int HumanoidDynamicMultiBody::GetWaistJointNb()
+{
+  return m_HS->GetWaistJointNb();
+}
+
+const std::vector<int> & HumanoidDynamicMultiBody::GetWaistJoints()
+{
+  return m_HS->GetWaistJoints();
+}
 /***************************************************/
 /* End of the implementation                       */
 /***************************************************/
+
