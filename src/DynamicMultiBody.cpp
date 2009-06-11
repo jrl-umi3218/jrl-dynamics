@@ -3012,3 +3012,12 @@ matrixNxP & DynamicMultiBody::getInertiaMatrix()
   return m_InertiaMatrix;
 }
 
+const std::vector<int> & DynamicMultiBody::getActuatedJoints() const
+{
+  return m_VRMLIDToConfiguration;
+}
+
+void DynamicMultiBody::setActuatedJoints(std::vector<int> &lActuatedJoints)
+{
+  m_VRMLIDToConfiguration = lActuatedJoints;
+}

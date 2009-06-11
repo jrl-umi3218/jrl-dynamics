@@ -1045,6 +1045,17 @@ namespace dynamicsJRLJapan
      bool setProperty(std::string &inProperty, const std::string& inValue); 
 
      /*! @} */
+
+     /*! \name Actuated joints related methods.  
+       @{
+     */
+     /*! Returns an index of actuated joints. */
+     virtual const std::vector<int>& getActuatedJoints() const;
+     
+     /*! Set the index of actuated joints. */
+     virtual void setActuatedJoints(std::vector<int> & lActuatedJoints);
+     /*! @} */
+
   };
 };
 #endif

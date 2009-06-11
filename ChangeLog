@@ -1,3 +1,9 @@
+2009-06-11  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	[DynamicHumanoidRobot] Adding actuated joints.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h: .
+	* src/DynamicMultiBody.cpp: .
+
 2009-06-09  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Adding infamous functional extension through StepSequence.
