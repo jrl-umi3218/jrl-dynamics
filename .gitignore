@@ -9,3 +9,8 @@ install-sh
 ltmain.sh
 missing
 dynamics-config.h.in
+dynamics-config.h
+*~
++committed
++mail
+,svn-log*

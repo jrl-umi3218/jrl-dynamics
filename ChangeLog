@@ -1,5 +1,11 @@
 2009-06-19  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Added files to be ignored by git.
+	* .gitignore: Ignore svn-wrapper related files + generated
+	config file.
+
+2009-06-19  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Removed uncessary fields for resolved momentum and spatial notations.
 	* include/dynamicsJRLJapan/DynamicBody.h: 
 	Removed the fields (RMC + spatial notations).
