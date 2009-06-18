@@ -77,45 +77,20 @@ namespace dynamicsJRLJapan
       - \a dv = linear acceleration,
       - \a w  = angular velocity,
       - \a dw = angular acceleration,
-      - \a sv, sw = spatial velocity,
-      - \a cv, cw = cross velocity term,
       - \a pph, ppb = v x Iv 
     */
     vector3d a, b, c, w_c, p,
       v0,  dv,  w,  dw,
-      sv,  sw,  cv, cw,
-      hhv,  hhw,  pph,  ppb, w_a;
+      w_a;
 
     /*! Transformation
       (It is redundant, but required to implement CjrlJoint::currentTransformation)
      */
     matrix4d m_transformation;
 
-    /**
-    Used for Finite difference computations
-    */
-    double   pastq, pastdq;
-    vector3d pastv0, pastp, pastw;
-    matrix3d pastR;
-
     /*! Linear and angular momentums. */
     vector3d P,L;
 
-    /*!  Mass in the tree structure, cf Kajita IROS2003 p 1647 */
-    double m_tildem;
-    double m_tildem_sister;
-
-    /*! Tilde Center of Mass, 2, cf Kajita IROS2003 p 1647 */
-    vector3d m_tildec;
-    vector3d m_tildec_sister;
-
-    /*! Tilde Inertia matrix , cf Kajita IROS2003 p 1647 */
-    matrix3d m_tildeI, 
-      m_tildeI_sister, m_Dsister;
-
-    /*! Inertia vector for RMC. */
-    vector3d m_RMC_m;
-    vector3d m_RMC_h;
     int sister;
     int child;
     

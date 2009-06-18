@@ -1,3 +1,11 @@
+2009-06-19  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	Removed uncessary fields for resolved momentum and spatial notations.
+	* include/dynamicsJRLJapan/DynamicBody.h: 
+	Removed the fields (RMC + spatial notations).
+	* src/DynamicBody.cpp: 
+	Removed the fields from initialization and operator=.
+
 2009-06-09  Nicolas Mansard
 
 	Release 1.15.0 for sot 1.1.0.
