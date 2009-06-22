@@ -104,9 +104,9 @@ DynamicMultiBody::DynamicMultiBody()
 
 DynamicMultiBody::~DynamicMultiBody()
 {
-  for(unsigned int li=0; li<listOfBodies.size();li++)
+  for(unsigned int li=0; li<m_listOfBodies.size();li++)
     {
-      Body *body = listOfBodies[li];
+      Body *body = m_listOfBodies[li];
       std::vector<Body *>::iterator it;
       for (it = listeCorps.begin(); it != listeCorps.end(); it++)
         {
@@ -116,14 +116,14 @@ DynamicMultiBody::~DynamicMultiBody()
 	      break;
             }
         }
-      delete listOfBodies[li];
+      delete m_listOfBodies[li];
     }
 }
 
 void DynamicMultiBody::SpecifyTheRootLabel(int ID)
 {
   labelTheRoot = ID;
-  listOfBodies[ID]->setLabelMother(-1);
+  m_listOfBodies[ID]->setLabelMother(-1);
 
   // Right now it is assume that the first body is the world,
   // and that this body is related to another body.
@@ -137,7 +137,7 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
     }
   int ld = liaisons[ID][0].liaison;
   m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
-  m_RootOfTheJointsTree->setLinkedBody(*listOfBodies[ID]);
+  m_RootOfTheJointsTree->setLinkedBody(*m_listOfBodies[ID]);
   //specify the type of the root joint
 
   // Start the vector of joints.
@@ -151,31 +151,31 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
   ReLabelling(ID,ld);
 
   // Once finished we initialize the child and the sister.
-  for(unsigned int i=0;i<listOfBodies.size();i++)
+  for(unsigned int i=0;i<m_listOfBodies.size();i++)
     {
       int lMother,lElderSister;
-      if ((lMother=listOfBodies[i]->getLabelMother()) != -1)
+      if ((lMother=m_listOfBodies[i]->getLabelMother()) != -1)
         {
 
-	  if ((lElderSister=listOfBodies[lMother]->child) == -1)
+	  if ((lElderSister=m_listOfBodies[lMother]->child) == -1)
             {
-	      listOfBodies[lMother]->child = i;					  // Mother, I am your daughter !
+	      m_listOfBodies[lMother]->child = i;					  // Mother, I am your daughter !
 
             }
 	  else
             {
 	      // I have an elder sister !
 
-	      while (listOfBodies[lElderSister]->sister != -1)
-		lElderSister = listOfBodies[lElderSister]->sister;  // I have another elder sister !
+	      while (m_listOfBodies[lElderSister]->sister != -1)
+		lElderSister = m_listOfBodies[lElderSister]->sister;  // I have another elder sister !
 
-	      listOfBodies[lElderSister]->sister = i;				  // I am your younger sister !
+	      m_listOfBodies[lElderSister]->sister = i;				  // I am your younger sister !
             }
         }
     }
 
-  for (unsigned int i = 0; i< listOfBodies.size();i++)
-    listOfBodies[i]->massCoef(listOfBodies[i]->mass()/mass());
+  for (unsigned int i = 0; i< m_listOfBodies.size();i++)
+    m_listOfBodies[i]->massCoef(m_listOfBodies[i]->mass()/mass());
 }
 
 void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, int LiaisonForFatherJoint)
@@ -185,16 +185,16 @@ void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, in
 
   ODEBUG( "Update body :" << BodyID << " from Joint " << JointID);
   // Update the rotation axis.
-  listOfBodies[BodyID]->a =  listeLiaisons[JointID].aJoint->axe();
-  ODEBUG(" axe: " << listOfBodies[BodyID]->a);
+  m_listOfBodies[BodyID]->a =  listeLiaisons[JointID].aJoint->axe();
+  ODEBUG(" axe: " << m_listOfBodies[BodyID]->a);
   // Update the translation vector
-  listeLiaisons[JointID].aJoint->getStaticTranslation(listOfBodies[BodyID]->b);
-  ODEBUG(" JointID: " << JointID << "BodyID: " << BodyID << ", static translation: " << listOfBodies[BodyID]->b);
+  listeLiaisons[JointID].aJoint->getStaticTranslation(m_listOfBodies[BodyID]->b);
+  ODEBUG(" JointID: " << JointID << "BodyID: " << BodyID << ", static translation: " << m_listOfBodies[BodyID]->b);
   // Update the rotation matrix
-  listeLiaisons[JointID].aJoint->getStaticRotation(listOfBodies[BodyID]->R_static);
-  ODEBUG(" Rotation matrix: " << endl << listOfBodies[BodyID]->R_static);
-  listeLiaisons[JointID].aJoint->setLinkedBody(*listOfBodies[BodyID]);
-  listOfBodies[BodyID]->joint( listeLiaisons[JointID].aJoint);
+  listeLiaisons[JointID].aJoint->getStaticRotation(m_listOfBodies[BodyID]->R_static);
+  ODEBUG(" Rotation matrix: " << endl << m_listOfBodies[BodyID]->R_static);
+  listeLiaisons[JointID].aJoint->setLinkedBody(*m_listOfBodies[BodyID]);
+  m_listOfBodies[BodyID]->joint( listeLiaisons[JointID].aJoint);
 
 }
 
@@ -222,7 +222,7 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 	  corpsSon = corps1;
 	  corpsMother = corps2;
         }
-      listOfBodies[corpsSon]->setLabelMother(corpsMother);
+      m_listOfBodies[corpsSon]->setLabelMother(corpsMother);
 
       if(listeLiaisons[liaisonDestination].aJoint->getIDinVRML()!=-1)
         {
@@ -311,7 +311,7 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
   //cout << "Body : " << CurrentBody.getName() << endl;
   while(IndexChild!=-1)
     {
-      DynamicBody *Child = listOfBodies[IndexChild];
+      DynamicBody *Child = m_listOfBodies[IndexChild];
       //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = Child->Riip1;
       //cout << "Riip1: " << aRt << endl;
@@ -331,9 +331,9 @@ void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
       CurrentBody.m_Torque += firstterm + thirdterm;
 
       /* Body selection. */
-      IndexChild = listOfBodies[IndexChild]->sister;
+      IndexChild = m_listOfBodies[IndexChild]->sister;
       if (IndexChild!=-1)
-	Child=listOfBodies[IndexChild];
+	Child=m_listOfBodies[IndexChild];
     }
 
   // Update the vector related to the computed quantities.
@@ -405,14 +405,14 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
   double NORME_EPSILON=1e-6;
   DynamicBody *aDB;
 
-  listOfBodies[labelTheRoot]->p = PosForRoot;
-  listOfBodies[labelTheRoot]->v0 = v0ForRoot;
-  listOfBodies[labelTheRoot]->R = OrientationForRoot;
-  listOfBodies[labelTheRoot]->w = wForRoot;
-  listOfBodies[labelTheRoot]->dv = dvForRoot;
-  listOfBodies[labelTheRoot]->dw = dwForRoot;
+  m_listOfBodies[labelTheRoot]->p = PosForRoot;
+  m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
+  m_listOfBodies[labelTheRoot]->R = OrientationForRoot;
+  m_listOfBodies[labelTheRoot]->w = wForRoot;
+  m_listOfBodies[labelTheRoot]->dv = dvForRoot;
+  m_listOfBodies[labelTheRoot]->dw = dwForRoot;
 
-  currentNode = listOfBodies[labelTheRoot]->child;
+  currentNode = m_listOfBodies[labelTheRoot]->child;
   //  cout << "STARTING FORWARD VELOCITY " << v0ForRoot << endl;
 
   if (m_ComputeMomentum)
@@ -431,12 +431,12 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
   do
     {
 
-      aDB = listOfBodies[currentNode];
+      aDB = m_listOfBodies[currentNode];
 
       norm_w = MAL_S3_VECTOR_NORM(aDB->a);
       lMother = aDB->getLabelMother();
 
-      ODEBUG("CurrentBody " << listOfBodies[currentNode]->getName());
+      ODEBUG("CurrentBody " << m_listOfBodies[currentNode]->getName());
 
       // ----------------------------------
       // Rodrigues formula. (p33)
@@ -466,111 +466,111 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
         }
 
       ODEBUG("Ro:" << endl << NE_Ro );
-      ODEBUG("MR:" << listOfBodies[lMother]->R );
+      ODEBUG("MR:" << m_listOfBodies[lMother]->R );
       ODEBUG("b: " << aDB->b);
-      ODEBUG("Mp: " << listOfBodies[lMother]->p);
+      ODEBUG("Mp: " << m_listOfBodies[lMother]->p);
       // End Rodrigues formula
       //-------------------------------
 
       // Position and orientation in reference frame
-      listOfBodies[currentNode]->p = 
-	MAL_S3x3_RET_A_by_B(listOfBodies[lMother]->R , aDB->b )
-	+ listOfBodies[lMother]->p;
-      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,listOfBodies[lMother]->R , 
-			   listOfBodies[currentNode]->R_static);
-      MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode]->R ,NE_Rtmp , NE_Ro);
-      listOfBodies[currentNode]->Riip1 = NE_Ro;
+      m_listOfBodies[currentNode]->p = 
+	MAL_S3x3_RET_A_by_B(m_listOfBodies[lMother]->R , aDB->b )
+	+ m_listOfBodies[lMother]->p;
+      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,m_listOfBodies[lMother]->R , 
+			   m_listOfBodies[currentNode]->R_static);
+      MAL_S3x3_C_eq_A_by_B(m_listOfBodies[currentNode]->R ,NE_Rtmp , NE_Ro);
+      m_listOfBodies[currentNode]->Riip1 = NE_Ro;
 
       for( i=0;i<3;i++)
 	for( j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,j) 
-	    = listOfBodies[currentNode]->R(i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(m_listOfBodies[currentNode]->m_transformation,i,j) 
+	    = m_listOfBodies[currentNode]->R(i,j);
 
       for( i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J(listOfBodies[currentNode]->m_transformation,i,3) 
-	  = listOfBodies[currentNode]->p(i);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_listOfBodies[currentNode]->m_transformation,i,3) 
+	  = m_listOfBodies[currentNode]->p(i);
 
       ODEBUG("q: "<< aDB->q );
       ODEBUG("p: "
-	     << listOfBodies[currentNode]->p[0] << " "
-	     << listOfBodies[currentNode]->p[1] << " "
-	     << listOfBodies[currentNode]->p[2] << " " );
+	     << m_listOfBodies[currentNode]->p[0] << " "
+	     << m_listOfBodies[currentNode]->p[1] << " "
+	     << m_listOfBodies[currentNode]->p[2] << " " );
       ODEBUG("R: "<< aDB->R );
 
       //update the translation/rotation axis of joint
-      MAL_S3x3_C_eq_A_by_B(listOfBodies[currentNode]->w_a,
-			   listOfBodies[currentNode]->R, aDB->a);
+      MAL_S3x3_C_eq_A_by_B(m_listOfBodies[currentNode]->w_a,
+			   m_listOfBodies[currentNode]->R, aDB->a);
 
       if (m_ComputeVelocity)
         {
 
 	  ODEBUG("dq: "<< aDB->dq );
-	  NE_tmp = listOfBodies[currentNode]->a * listOfBodies[currentNode]->dq;
-	  NE_tmp = MAL_S3x3_RET_A_by_B(listOfBodies[currentNode]->R,NE_tmp);
+	  NE_tmp = m_listOfBodies[currentNode]->a * m_listOfBodies[currentNode]->dq;
+	  NE_tmp = MAL_S3x3_RET_A_by_B(m_listOfBodies[currentNode]->R,NE_tmp);
 
-	  listOfBodies[currentNode]->w  = listOfBodies[lMother]->w  + NE_tmp;
+	  m_listOfBodies[currentNode]->w  = m_listOfBodies[lMother]->w  + NE_tmp;
 
-	  ODEBUG("w: " << listOfBodies[currentNode]->w );
+	  ODEBUG("w: " << m_listOfBodies[currentNode]->w );
 
 	  // Computes the linear velocity.
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp,listOfBodies[lMother]->R,
-			       listOfBodies[currentNode]->b);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_listOfBodies[lMother]->R,
+			       m_listOfBodies[currentNode]->b);
 
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,listOfBodies[lMother]->w , NE_tmp);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[lMother]->w , NE_tmp);
 
-	  listOfBodies[currentNode]->v0 = listOfBodies[lMother]->v0 + NE_tmp2;
+	  m_listOfBodies[currentNode]->v0 = m_listOfBodies[lMother]->v0 + NE_tmp2;
 
 	  ODEBUG("v0: "
-		 << listOfBodies[currentNode]->v0[0] << " "
-		 << listOfBodies[currentNode]->v0[1] << " "
-		 << listOfBodies[currentNode]->v0[2] << " " );
+		 << m_listOfBodies[currentNode]->v0[0] << " "
+		 << m_listOfBodies[currentNode]->v0[1] << " "
+		 << m_listOfBodies[currentNode]->v0[2] << " " );
         }
 
       // Computes also the center of mass in the reference frame.
       if (m_ComputeCoM)
         {
-	  ODEBUG("c: " << listOfBodies[currentNode]->c);
-	  MAL_S3x3_C_eq_A_by_B(NE_cl,listOfBodies[currentNode]->R, 
-			       listOfBodies[currentNode]->c);
-	  NE_lw_c = NE_cl + listOfBodies[currentNode]->p;
+	  ODEBUG("c: " << m_listOfBodies[currentNode]->c);
+	  MAL_S3x3_C_eq_A_by_B(NE_cl,m_listOfBodies[currentNode]->R, 
+			       m_listOfBodies[currentNode]->c);
+	  NE_lw_c = NE_cl + m_listOfBodies[currentNode]->p;
 	  ODEBUG("lw_c: "<<currentNode<<" "<< NE_lw_c[0] 
 		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
 	  positionCoMPondere +=  
-	    NE_lw_c * listOfBodies[currentNode]->getMasse();
+	    NE_lw_c * m_listOfBodies[currentNode]->getMasse();
 	  ODEBUG("w_c: " << NE_lw_c[0] << " " 
 		 << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  ODEBUG("Masse " << listOfBodies[currentNode]->getMasse());
+	  ODEBUG("Masse " << m_listOfBodies[currentNode]->getMasse());
 	  ODEBUG("positionCoMPondere " << positionCoMPondere);
-	  listOfBodies[currentNode]->w_c = NE_lw_c;
+	  m_listOfBodies[currentNode]->w_c = NE_lw_c;
         }
       if (m_ComputeMomentum)
         {
 
 	  // Computes momentum matrix P.
-	  ODEBUG("w: " << listOfBodies[currentNode]->w );
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,listOfBodies[currentNode]->w, NE_cl);
+	  ODEBUG("w: " << m_listOfBodies[currentNode]->w );
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_listOfBodies[currentNode]->w, NE_cl);
 	  ODEBUG("cl^w: " << NE_tmp);
-	  ODEBUG("masse: " << listOfBodies[currentNode]->getMasse());
-	  ODEBUG("v0: " << listOfBodies[currentNode]->v0 );
-	  NE_lP=  (listOfBodies[currentNode]->v0 +
-		   NE_tmp )* listOfBodies[currentNode]->getMasse();
-	  listOfBodies[currentNode]->P = NE_lP;
+	  ODEBUG("masse: " << m_listOfBodies[currentNode]->getMasse());
+	  ODEBUG("v0: " << m_listOfBodies[currentNode]->v0 );
+	  NE_lP=  (m_listOfBodies[currentNode]->v0 +
+		   NE_tmp )* m_listOfBodies[currentNode]->getMasse();
+	  m_listOfBodies[currentNode]->P = NE_lP;
 	  ODEBUG("P: " << NE_lP );
 	  m_P += NE_lP;
 
 	  // Computes angular momentum matrix L
 	  // Lk = xc x Pk + R * I * Rt * w
-	  MAL_S3x3_TRANSPOSE_A_in_At(listOfBodies[currentNode]->R,NE_Rt);
+	  MAL_S3x3_TRANSPOSE_A_in_At(m_listOfBodies[currentNode]->R,NE_Rt);
 
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,NE_lw_c,NE_lP);
 
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , listOfBodies[currentNode]->w);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp, listOfBodies[currentNode]->getInertie(),NE_tmp2);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2, listOfBodies[currentNode]->R,NE_tmp);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , m_listOfBodies[currentNode]->w);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp, m_listOfBodies[currentNode]->getInertie(),NE_tmp2);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2, m_listOfBodies[currentNode]->R,NE_tmp);
 	  NE_lL = NE_tmp3 + NE_tmp2;
 	  ODEBUG("L: " << lL);
 
-	  listOfBodies[currentNode]->L = NE_lL;
+	  m_listOfBodies[currentNode]->L = NE_lL;
 	  m_L+= NE_lL;
 
         }
@@ -579,38 +579,38 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
         {
 	  // ******************* Computes the angular acceleration for joint i. ********************
 	  // NE_tmp2 = z_{i-1} * dqi
-	  NE_tmp2 = listOfBodies[currentNode]->w_a * listOfBodies[currentNode]->dq;
+	  NE_tmp2 = m_listOfBodies[currentNode]->w_a * m_listOfBodies[currentNode]->dq;
 	  // NE_tmp3 = w^{(0)}_i x z_{i-1} * dqi
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
 	  // NE_tmp2 = z_{i-1} * ddqi
-	  NE_tmp2 = listOfBodies[currentNode]->w_a * listOfBodies[currentNode]->ddq;
-	  listOfBodies[currentNode]->dw = NE_tmp2 + NE_tmp3 + listOfBodies[lMother]->dw;
+	  NE_tmp2 = m_listOfBodies[currentNode]->w_a * m_listOfBodies[currentNode]->ddq;
+	  m_listOfBodies[currentNode]->dw = NE_tmp2 + NE_tmp3 + m_listOfBodies[lMother]->dw;
 
 	  // ******************* Computes the linear acceleration for joint i. ********************
-	  MAL_S3x3_C_eq_A_by_B(NE_aRb, listOfBodies[currentNode]->R, aDB->b);
+	  MAL_S3x3_C_eq_A_by_B(NE_aRb, m_listOfBodies[currentNode]->R, aDB->b);
 	  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,listOfBodies[currentNode]->w,NE_aRb);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->w,NE_aRb);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,listOfBodies[currentNode]->dw,NE_aRb);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->dw,NE_aRb);
 	  NE_Rot = MAL_S3x3_RET_TRANSPOSE(NE_Ro);
-	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,NE_Rot,listOfBodies[lMother]->dv);
-	  listOfBodies[currentNode]->dv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,NE_Rot,m_listOfBodies[lMother]->dv);
+	  m_listOfBodies[currentNode]->dv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
         }
 
       if (m_ComputeAccCoM)
         {
 
 	  // *******************  Acceleration for the center of mass of body  i ************************
-	  MAL_S3x3_C_eq_A_by_B(NE_aRc, listOfBodies[currentNode]->R, aDB->c);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,listOfBodies[currentNode]->w,NE_aRc);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3x3_C_eq_A_by_B(NE_aRc, m_listOfBodies[currentNode]->R, aDB->c);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->w,NE_aRc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,listOfBodies[currentNode]->dw,NE_aRc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->dw,NE_aRc);
 	  //
-	  listOfBodies[currentNode]->dv_c = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  m_listOfBodies[currentNode]->dv_c = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
         }
 
       // TO DO if necessary : cross velocity.
@@ -621,32 +621,32 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 
 	  if (step==0)
             {
-	      NextNode = listOfBodies[currentNode]->child;
+	      NextNode = m_listOfBodies[currentNode]->child;
 	      step++;
             }
 	  else if(step==1)
             {
-	      NextNode = listOfBodies[currentNode]->sister;
+	      NextNode = m_listOfBodies[currentNode]->sister;
 	      step++;
             }
 	  else if (step==2)
             {
-	      NextNode = listOfBodies[currentNode]->getLabelMother();
+	      NextNode = m_listOfBodies[currentNode]->getLabelMother();
 	      if (NextNode>=0)
                 {
 		  /* Test if current node is leaf,
 		     because in this case the force are not set properly. */
 		  if (m_ComputeBackwardDynamics)
                     {
-		      if ((listOfBodies[currentNode]->sister==-1) &&
-			  (listOfBodies[currentNode]->child==-1))
-			BackwardDynamics(*listOfBodies[currentNode]);
+		      if ((m_listOfBodies[currentNode]->sister==-1) &&
+			  (m_listOfBodies[currentNode]->child==-1))
+			BackwardDynamics(*m_listOfBodies[currentNode]);
 
 		      /* Compute backward dynamics */
-		      BackwardDynamics(*listOfBodies[NextNode]);
+		      BackwardDynamics(*m_listOfBodies[NextNode]);
                     }
 		  currentNode = NextNode;
-		  NextNode = listOfBodies[currentNode]->sister;
+		  NextNode = m_listOfBodies[currentNode]->sister;
                 }
 	      else
 		NextNode=labelTheRoot;
@@ -795,7 +795,7 @@ void DynamicMultiBody::ForwardDynamics(int corpsCourant, int liaisonDeProvenance
 
 void DynamicMultiBody::CreatesTreeStructure(const char * option)
 {
-  listOfBodies.resize(listeCorps.size());
+  m_listOfBodies.resize(listeCorps.size());
   DynamicBody *dbody;
   for(unsigned int i=0;i<listeCorps.size();i++)
     {
@@ -805,7 +805,7 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
 	  dbody = new DynamicBody();
 	  *dbody = *listeCorps[i];
         }
-      listOfBodies[i] = dbody;
+      m_listOfBodies[i] = dbody;
     }
 
   if (option!=0)
@@ -813,7 +813,7 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
       ReadSpecificities(option);
     }
 
-  ConvertIDINVRMLToBodyID.resize(listOfBodies.size());
+  ConvertIDINVRMLToBodyID.resize(m_listOfBodies.size());
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
   BuildStateVectorToJointAndDOFs();
@@ -1019,7 +1019,7 @@ void DynamicMultiBody::parserVRML(string path,
                                   string nom,
                                   const char *option)
 {
-  listOfBodies.clear();
+  m_listOfBodies.clear();
   MultiBody::parserVRML(path, nom, option);
   CreatesTreeStructure(option);
 }
@@ -1029,42 +1029,42 @@ void DynamicMultiBody::parserVRML(string path,
 double DynamicMultiBody::Getq(int JointID) const
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->q;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->q;
   return 0.0;
 }
 
 void DynamicMultiBody::Setq(int JointID,double q)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
+      ((unsigned int)JointID<m_listOfBodies.size()))
     {
-      listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->q= q;
-      ((Joint *)listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->joint())->quantity(q);
+      m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->q= q;
+      ((Joint *)m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->joint())->quantity(q);
     }
 }
 
 void DynamicMultiBody::Setdq(int JointID, double dq)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
+      ((unsigned int)JointID<m_listOfBodies.size()))
     {
-      listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->dq= dq;
+      m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->dq= dq;
     }
 }
 
 void DynamicMultiBody::Setv(int JointID, MAL_S3_VECTOR(,double) v0)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->v0 = v0;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->v0 = v0;
 }
 
 MAL_S3_VECTOR(,double) DynamicMultiBody::Getv(int JointID)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->v0;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->v0;
 
   MAL_S3_VECTOR(dr,double);
   dr[0] = 0.0;
@@ -1076,8 +1076,8 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::Getv(int JointID)
 MAL_S3_VECTOR(,double) DynamicMultiBody::GetvBody(int BodyID)
 {
   if ((BodyID>=0) &&
-      ((unsigned int)BodyID<listOfBodies.size()))
-    return listOfBodies[BodyID]->v0;
+      ((unsigned int)BodyID<m_listOfBodies.size()))
+    return m_listOfBodies[BodyID]->v0;
   MAL_S3_VECTOR(dr,double);
   dr[0] = 0.0;
   dr[1] = 0.0;
@@ -1088,8 +1088,8 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetvBody(int BodyID)
 MAL_S3_VECTOR(,double) DynamicMultiBody::GetwBody(int BodyID)
 {
   if ((BodyID>=0) &&
-      ((unsigned int)BodyID<listOfBodies.size()))
-    return listOfBodies[BodyID]->w;
+      ((unsigned int)BodyID<m_listOfBodies.size()))
+    return m_listOfBodies[BodyID]->w;
   MAL_S3_VECTOR(dr,double);
   dr[0] = 0.0;
   dr[1] = 0.0;
@@ -1100,8 +1100,8 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetwBody(int BodyID)
 MAL_S3_VECTOR(,double) DynamicMultiBody::Getw(int JointID)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->w;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->w;
 
   MAL_S3_VECTOR(dr,double);
   dr[0] = 0.0;
@@ -1113,24 +1113,24 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::Getw(int JointID)
 void DynamicMultiBody::Setw(int JointID, MAL_S3_VECTOR(,double) w)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->w = w;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->w = w;
 }
 
 MAL_S3_VECTOR(,double) DynamicMultiBody::Getp(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->p;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->p;
   return empty;
 }
 
 void DynamicMultiBody::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
 {
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->p = apos;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->p = apos;
 }
 
 MAL_S3_VECTOR(,double) DynamicMultiBody::getPositionCoM(void)
@@ -1166,8 +1166,8 @@ string DynamicMultiBody::GetName(int JointID)
 {
   string empty;
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->getName();
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->getName();
   return empty;
 
 }
@@ -1192,8 +1192,8 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetL(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->L;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->L;
   return empty;
 }
 
@@ -1201,8 +1201,8 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetP(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->P;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->P;
   return empty;
 }
 
@@ -1210,8 +1210,8 @@ double DynamicMultiBody::Getdq(int JointID) const
 {
   double empty=0.0;
   if ((JointID>=0) &&
-      ((unsigned int)JointID<listOfBodies.size()))
-    return listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->dq;
+      ((unsigned int)JointID<m_listOfBodies.size()))
+    return m_listOfBodies[ConvertIDINVRMLToBodyID[JointID]]->dq;
   return empty;
 }
 
@@ -1220,8 +1220,8 @@ double DynamicMultiBody::Getdq(int JointID) const
 void DynamicMultiBody::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
 {
   if ((BodyID>=0) &&
-      ((unsigned int)BodyID<listOfBodies.size()))
-    listOfBodies[BodyID]->R = R;
+      ((unsigned int)BodyID<m_listOfBodies.size()))
+    m_listOfBodies[BodyID]->R = R;
 }
 
 /***********************************************/
@@ -1424,8 +1424,8 @@ bool DynamicMultiBody::getJacobian ( const CjrlJoint& inStartJoint,
 
   //clean
   for ( i=0; i<6; i++ )
-    delete ( outTable[i] );
-  delete ( outTable );
+    delete [] outTable[i];
+  delete [] outTable ;
 
   return true;
 }
@@ -1849,7 +1849,7 @@ void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
       matrixNxP pJacobian;
       vector3d av(0,0,0); // Dummy 
       MAL_MATRIX_RESIZE(pJacobian,6, numberDof());
-      getJacobian(*rootJoint(),*aJoint,av,pJacobian);
+      getJacobian(*rootJoint(),*aJoint,av,pJacobian,true);
 
       ODEBUG("pJacobian:" <<pJacobian);
       matrixNxP pLinearJacobian;
@@ -2133,12 +2133,12 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 	  if (lIDinVRML!=-1)
             {
 	      m_ConfigurationToJoints[i]->quantity(inConfig[lindex]);
-	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = inConfig[lindex];
+	      m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = inConfig[lindex];
             }
 	  else
             {
 	      m_ConfigurationToJoints[i]->quantity(0.0);
-	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = 0.0;
+	      m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->q = 0.0;
             }
 
 	  lindex++;
@@ -2148,9 +2148,9 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 
   if (0)
     {
-      for(unsigned int i=0;i<listOfBodies.size();i++)
+      for(unsigned int i=0;i<m_listOfBodies.size();i++)
         {
-	  cout << listOfBodies[i]->q * 180/M_PI << endl;
+	  cout << m_listOfBodies[i]->q * 180/M_PI << endl;
         }
     }
   return true;
@@ -2216,16 +2216,16 @@ bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 	  int lIDinVRML = ((Joint *)m_JointVector[i])->getIDinVRML();
 	  if (lIDinVRML>=0)
             {
-	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq = inVelocity[lindex];
+	      m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq = inVelocity[lindex];
 	      // Update dq.
 	      /* ODEBUG(" Id (Vs) :" << lindex
 		 << " Id (JV) : " << i 
 		 << " Id (VRML): " << lIDinVRML 
 		 << " Id (Body): " << ConvertIDINVRMLToBodyID[lIDinVRML]
-		 << " dq: " << listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
+		 << " dq: " << m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
             }
 	  else
-	    listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq = 0.0;
+	    m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq = 0.0;
 
 	  lindex++;
         }
@@ -2296,16 +2296,16 @@ bool DynamicMultiBody::currentAcceleration(const MAL_VECTOR(,double)& inAccelera
 	  int lIDinVRML = ((Joint *)m_JointVector[i])->getIDinVRML();
 	  if (lIDinVRML>=0)
             {
-	      listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = inAcceleration[lindex];
+	      m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = inAcceleration[lindex];
 	      // Update dq.
 	      /* ODEBUG(" Id (Vs) :" << lindex
 		 << " Id (JV) : " << i 
 		 << " Id (VRML): " << lIDinVRML 
 		 << " Id (Body): " << ConvertIDINVRMLToBodyID[lIDinVRML]
-		 << " dq: " << listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
+		 << " dq: " << m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->dq ); */
             }
 	  else
-	    listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = 0.0;
+	    m_listOfBodies[ConvertIDINVRMLToBodyID[lIDinVRML]]->ddq = 0.0;
 
 	  lindex++;
         }
@@ -2857,27 +2857,27 @@ void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angul
 
   DynamicBody *aDB=0;
   int currentNode = labelTheRoot;
-  currentNode = listOfBodies[labelTheRoot]->child;
+  currentNode = m_listOfBodies[labelTheRoot]->child;
   vector3d lL(0.0,0.0,0.0);
 
   do
     {
 
-      aDB = listOfBodies[currentNode];
+      aDB = m_listOfBodies[currentNode];
 
-      NE_lP = listOfBodies[currentNode]->P;
+      NE_lP = m_listOfBodies[currentNode]->P;
       ODEBUG("P: " << NE_lP );
-      NE_lw_c = listOfBodies[currentNode]->w_c - positionCoMPondere;
+      NE_lw_c = m_listOfBodies[currentNode]->w_c - positionCoMPondere;
 
       // Computes angular momentum matrix L
       // Lk = xc x Pk + R * I * Rt * w
-      MAL_S3x3_TRANSPOSE_A_in_At(listOfBodies[currentNode]->R,NE_Rt);
+      MAL_S3x3_TRANSPOSE_A_in_At(m_listOfBodies[currentNode]->R,NE_Rt);
 
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,NE_lw_c,NE_lP);
 
-      MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , listOfBodies[currentNode]->w);
-      MAL_S3x3_C_eq_A_by_B(NE_tmp, listOfBodies[currentNode]->getInertie(),NE_tmp2);
-      MAL_S3x3_C_eq_A_by_B(NE_tmp2, listOfBodies[currentNode]->R,NE_tmp);
+      MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , m_listOfBodies[currentNode]->w);
+      MAL_S3x3_C_eq_A_by_B(NE_tmp, m_listOfBodies[currentNode]->getInertie(),NE_tmp2);
+      MAL_S3x3_C_eq_A_by_B(NE_tmp2, m_listOfBodies[currentNode]->R,NE_tmp);
       NE_lL = NE_tmp3 + NE_tmp2;
       ODEBUG("L: " << lL);
 
@@ -2890,32 +2890,32 @@ void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angul
 
 	  if (step==0)
             {
-	      NextNode = listOfBodies[currentNode]->child;
+	      NextNode = m_listOfBodies[currentNode]->child;
 	      step++;
             }
 	  else if(step==1)
             {
-	      NextNode = listOfBodies[currentNode]->sister;
+	      NextNode = m_listOfBodies[currentNode]->sister;
 	      step++;
             }
 	  else if (step==2)
             {
-	      NextNode = listOfBodies[currentNode]->getLabelMother();
+	      NextNode = m_listOfBodies[currentNode]->getLabelMother();
 	      if (NextNode>=0)
                 {
 		  /* Test if current node is leaf,
 		     because in this case the force are not set properly. */
 		  if (m_ComputeBackwardDynamics)
                     {
-		      if ((listOfBodies[currentNode]->sister==-1) &&
-			  (listOfBodies[currentNode]->child==-1))
-			BackwardDynamics(*listOfBodies[currentNode]);
+		      if ((m_listOfBodies[currentNode]->sister==-1) &&
+			  (m_listOfBodies[currentNode]->child==-1))
+			BackwardDynamics(*m_listOfBodies[currentNode]);
 
 		      /* Compute backward dynamics */
-		      BackwardDynamics(*listOfBodies[NextNode]);
+		      BackwardDynamics(*m_listOfBodies[NextNode]);
                     }
 		  currentNode = NextNode;
-		  NextNode = listOfBodies[currentNode]->sister;
+		  NextNode = m_listOfBodies[currentNode]->sister;
                 }
 	      else
 		NextNode=labelTheRoot;
@@ -2944,13 +2944,13 @@ void DynamicMultiBody::computeInertiaMatrix()
   Joint* aJoint;
   DynamicBody* aBody;
     
-  for(unsigned int i=0;i<m_ConfigurationToJoints.size();i++)
+  for(unsigned int i=1;i<m_listOfBodies.size();i++)
     {
-      if (m_ConfigurationToJoints[i] == rootJoint())
-	continue;
-
-      aJoint = m_ConfigurationToJoints[i];
-      aBody=  aJoint->linkedDBody();
+      //      if (m_ConfigurationToJoints[i] == rootJoint())
+      //	continue;
+      aBody=  m_listOfBodies[i];
+      aJoint=(Joint *)aBody->joint();
+      
       rank = aJoint->rankInConfiguration();
       
       matrixNxP pJacobian;

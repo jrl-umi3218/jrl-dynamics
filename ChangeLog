@@ -1,5 +1,14 @@
 2009-06-22  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Fixed the computation of the inertia Matrix.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h: 
+	Changed m_ to listOfBodies.
+	* src/DynamicMultiBody.cpp:
+	Implement the modification + fixed the Inertia Matrix computation.
+	
+
+2009-06-22  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Added correct resizing of the inertia matrix.
 	* src/DynamicMultiBody.cpp: cf patch.
 
