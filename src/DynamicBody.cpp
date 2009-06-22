@@ -82,9 +82,6 @@ DynamicBody & DynamicBody::operator=(const DynamicBody & r)
   P = r.P;
   L = r.L;
 
-  m_RMC_m = r.m_RMC_m;
-  m_RMC_h = r.m_RMC_h;
-  
   return *this;
 }
 

@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "dynamicsJRLJapan/Joint.h"
 #include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
@@ -311,9 +313,24 @@ int main(int argc, char *argv[])
   matrixNxP InertiaMatrix;
   aHDMB->computeInertiaMatrix();
   InertiaMatrix = aHDMB->inertiaMatrix();
-  cout << "InertiaMatrix:" << InertiaMatrix <<endl;
+ 
+  cout << "InertiaMatrix("
+       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
+       << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
+    
+  ofstream aof;
+  aof.open("InertiaMatrix.dat");
+  for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(InertiaMatrix);i++)
+    {
+      for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(InertiaMatrix);j++)
+	{
+	  aof << InertiaMatrix(i,j) << " ";
+	}
+      aof << endl;
+    }
+  aof.close();
 
-  
+
   delete aHDMB;
   
 }
