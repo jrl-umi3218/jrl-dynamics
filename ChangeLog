@@ -1,5 +1,10 @@
 2009-06-22  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Added correct resizing of the inertia matrix.
+	* src/DynamicMultiBody.cpp: cf patch.
+
+2009-06-22  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Removed wrong access to RMC fields + InertiaMatrix test..
 	* src/DynamicBody.cpp: Removed access to RMC.
 	* unitTesting/TestHumanoidDynamicRobot.cpp: 
