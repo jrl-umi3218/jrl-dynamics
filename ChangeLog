@@ -1,3 +1,14 @@
+2009-06-26  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	Reconstructing ZMP from log files and more.
+	* unitTesting/AnalysisHum09.gnu: New.
+	* unitTesting/AnalysisHum092.gnu: New.
+	* unitTesting/AnalysisHum09Actual.gnu: New.
+	* unitTesting/AnalysisHum09Feet.gnu: New.
+	* unitTesting/AnalysisHum09Waist.gnu: New.
+	* unitTesting/CMakeLists.txt: .
+	* unitTesting/ComputeRealZMP.cpp: New.
+
 2009-06-22  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Fixed the computation of the inertia Matrix.
