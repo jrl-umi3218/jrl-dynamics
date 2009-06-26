@@ -78,7 +78,7 @@ void ExtractActualWaist(Joint *LeftFoot2,
   matrix4d CurrentWaistInWorld2 = Waist2->currentTransformation();
   if (
       (TrLF2(2,3)<TrRF2(2,3)) &&
-      (fabs(TrLF2(2,3)-TrRF2(2,3))>1e-5))
+      (fabs(TrRF2(2,3)-0.105)>1e-3))
     {
       CurrentSupportFootPosInWorld = TrLF2;
       CurrentSupportFoot = 1;
@@ -87,7 +87,7 @@ void ExtractActualWaist(Joint *LeftFoot2,
   else
     {
       if ((TrLF2(2,3)>TrRF2(2,3)) &&
-	  (fabs(TrLF2(2,3)-TrRF2(2,3))>1e-5))
+	  (fabs(TrLF2(2,3)-0.105)>1e-3))
 	{
 	  CurrentSupportFootPosInWorld = TrRF2;
 	  CurrentSupportFoot = -1;
@@ -439,6 +439,9 @@ int main(int argc, char *argv[])
      
       matrix4d TrLF = LeftFoot->currentTransformation();
       matrix4d TrRF = RightFoot->currentTransformation();
+      matrix4d TrLF2 = LeftFoot2->currentTransformation();
+      matrix4d TrRF2 = RightFoot2->currentTransformation();
+
       double lnorm  = NormalForces[0] + NormalForces[1];
       
       RebuildZMP.open("RebuildZMP.dat",ofstream::app);
@@ -450,7 +453,9 @@ int main(int argc, char *argv[])
 		 << AbsSupportFootPos(0,3) << " " 
 		 << AbsSupportFootPos(1,3) << " " 
 		 << AbsSupportFootPos(2,3) << " "
-		 << PreviousSupportFoot << endl;
+		 << PreviousSupportFoot << " " 
+		 << TrLF2(0,3) << " " << TrLF2(1,3) << " " << TrLF2(2,3) << " " 
+		 << TrRF2(0,3) << " " << TrRF2(1,3) << " " << TrRF2(2,3) << endl;
       //92
       RebuildZMP.close();
 

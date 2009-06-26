@@ -1,5 +1,10 @@
 2009-06-26  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Adding Ref computation for feet in RebuildZMP.dat.
+	* unitTesting/ComputeRealZMP.cpp: .
+
+2009-06-26  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Reconstructing ZMP from log files and more.
 	* unitTesting/AnalysisHum09.gnu: New.
 	* unitTesting/AnalysisHum092.gnu: New.
