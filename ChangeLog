@@ -1,5 +1,41 @@
 2009-06-27  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Add comments to changelog.
+	* ChangeLog: .
+	Reinforce pure abstact interface support.
+	The data structure are now totally hidden inside
+	the library itself and are removed from external inclusion.
+	This strategy is not implicit anymore.
+	
+	Therefore the template used by abstractRobotDynamics to	
+	build robots cannot be used anymore as it is contaminant.
+	Indeed the impl are just typedef of the internal structure,
+	and therefore allow a dynamic cast.
+
+	Please use dynamicsJRLJapan::ObjectFactory as demonstrate
+	in the samples to build in the samples.
+	OpenHRPVRML file is supported by
+	dynamicsJRLJapan::parseOpenHRPVRMLFile.
+	Please look at the samples for examples.
+
+2009-06-27  Olivier Stasse  <olivier.stasse@aist.go.jp>
+	Reinforce pure abstact interface support.
+	The data structure are now totally hidden inside
+	the library itself and are removed from external inclusion.
+	This strategy is not implicit anymore.
+	
+	Therefore the template used by abstractRobotDynamics to	
+	build robots cannot be used anymore as it is contaminant.
+	Indeed the impl are just typedef of the internal structure,
+	and therefore allow a dynamic cast.
+
+	Please use dynamicsJRLJapan::ObjectFactory as demonstrate
+	in the samples to build in the samples.
+	OpenHRPVRML file is supported by
+	dynamicsJRLJapan::parseOpenHRPVRMLFile.
+	Please look at the samples for examples.
+
+
 	Reinforce abstract interface policy.
 	* CMakeLists.txt: .
 	* include/dynamicsJRLJapan/dynamicsJRLJapan.h: Remove.
