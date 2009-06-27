@@ -10,8 +10,8 @@
    
 */
 
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "Joint.h"
+#include "DynamicBody.h"
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << "Joint :" << x << endl

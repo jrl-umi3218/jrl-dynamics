@@ -20,7 +20,7 @@
 #endif /*WIN32*/
 
 #include <string.h>
-#include "dynamicsJRLJapan/fileReader.h"
+#include "fileReader.h"
 
 namespace dynamicsJRLJapan
 {

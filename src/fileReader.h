@@ -10,6 +10,9 @@
    Please refers to file License.txt for details on the license.
 
 */
+#ifndef _DYN_JRLJAPAN_FILE_READER_H_
+#define _DYN_JRLJAPAN_FILE_READER_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -49,3 +52,4 @@ namespace dynamicsJRLJapan
   /// Returns the type of the next joint inside the file.
   DYN_JRL_JAPAN_EXPORT int typeOfJoint(FILE* fichier);
 };
+#endif /* _DYN_JRLJAPAN_FILE_READER_H_ */

@@ -13,7 +13,7 @@
 #define _SPIRIT_VRML_READER_H_
 
 #include <string>
-#include <dynamicsJRLJapan/MultiBody.h>
+#include "MultiBody.h"
 
 
 namespace dynamicsJRLJapan

@@ -29,7 +29,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"
 #include "dynamics-config.h"
-#include "dynamicsJRLJapan/Joint.h"
+#include "Joint.h"
 
 using namespace::std;
 

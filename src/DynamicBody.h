@@ -25,7 +25,7 @@
 #include <string>
 
 #include "dynamics-config.h"
-#include "dynamicsJRLJapan/Body.h"
+#include "Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"

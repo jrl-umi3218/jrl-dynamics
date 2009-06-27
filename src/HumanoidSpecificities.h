@@ -16,7 +16,7 @@
 #define _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
 #include <vector>
 #include "dynamics-config.h"
-#include "dynamicsJRLJapan/DynamicMultiBody.h"
+#include "DynamicMultiBody.h"
 
 namespace dynamicsJRLJapan
 {

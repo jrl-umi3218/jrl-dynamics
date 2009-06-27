@@ -1,3 +1,41 @@
+2009-06-27  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	Reinforce abstract interface policy.
+	* CMakeLists.txt: .
+	* include/dynamicsJRLJapan/dynamicsJRLJapan.h: Remove.
+	* src/Body.cpp: .
+	* src/Body.h: Rename from include/dynamicsJRLJapan/Body.h.
+	* src/CMakeLists.txt: .
+	* src/DynamicBody.cpp: .
+	* src/DynamicBody.h: Rename from include/dynamicsJRLJapan/DynamicBody.h.
+	* src/DynamicMultiBody.cpp: .
+	* src/DynamicMultiBody.h: Rename from include/dynamicsJRLJapan/DynamicMultiBody.h.
+	* src/Hand.cpp: .
+	* src/Hand.h: Rename from include/dynamicsJRLJapan/Hand.h.
+	* src/HumanoidDynamicMultiBody.cpp: .
+	* src/HumanoidDynamicMultiBody.h: Rename from include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h.
+	* src/HumanoidSpecificities.cpp: .
+	* src/HumanoidSpecificities.h: Rename from include/dynamicsJRLJapan/HumanoidSpecificities.h.
+	* src/Joint.cpp: .
+	* src/Joint.h: Rename from include/dynamicsJRLJapan/Joint.h.
+	* src/MultiBody.cpp: .
+	* src/MultiBody.h: Rename from include/dynamicsJRLJapan/MultiBody.h.
+	* src/SpiritVRMLReader.cpp: .
+	* src/SpiritVRMLReader.h: Rename from include/dynamicsJRLJapan/SpiritVRMLReader.h.
+	* src/dynamicsJRLJapan.h: New.
+	* src/dynamicsJRLJapanFactory.cpp: New.
+	* src/fileReader.cpp: .
+	* src/fileReader.h: Rename from include/dynamicsJRLJapan/fileReader.h.
+	* src/robotDynamicsImpl.h: Rename from include/dynamicsJRLJapan/robotDynamicsImpl.h.
+	* unitTesting/CMakeLists.txt: .
+	* unitTesting/ComputeRealZMP.cpp: .
+	* unitTesting/Test2Models.cpp: .
+	* unitTesting/TestBuildFromJointTree.cpp: Remove.
+	* unitTesting/TestCopyJointTreeThroughAbstractInterface.cpp: .
+	* unitTesting/TestHumanoidDynamicRobot.cpp: .
+	* unitTesting/TestHumanoidDynamicRobot2.cpp: Remove.
+	* unitTesting/TestSimpleLegRobot.cpp: Remove.
+
 2009-06-26  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Adding Ref computation for feet in RebuildZMP.dat.

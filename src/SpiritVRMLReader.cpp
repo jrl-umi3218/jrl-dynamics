@@ -55,8 +55,8 @@
 #endif
 
 
-#include <dynamicsJRLJapan/MultiBody.h>
-#include <dynamicsJRLJapan/SpiritVRMLReader.h>
+#include "MultiBody.h"
+#include "SpiritVRMLReader.h"
 
 using namespace std;
 using namespace boost::spirit;

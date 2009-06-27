@@ -21,7 +21,7 @@
    Please refers to file License.txt for details on the license.
 */
 
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "DynamicBody.h"
 
 using namespace dynamicsJRLJapan;
 

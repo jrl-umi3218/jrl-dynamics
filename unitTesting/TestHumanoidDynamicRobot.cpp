@@ -1,9 +1,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
-#include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
+#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
 using namespace std;
 using namespace dynamicsJRLJapan;
@@ -31,24 +29,14 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
   if (aJoint==0)
     return;
 
-  Joint *a2Joint=0;
 
   int NbChildren = aJoint->countChildJoints();
 
-  a2Joint = dynamic_cast<Joint *>( aJoint);
-  if (a2Joint==0)
-    return;
 
-  cout << a2Joint->getName() << " rank : " << a2Joint->rankInConfiguration() << endl;
+  cout << aJoint << " rank : " << aJoint->rankInConfiguration() << endl;
 
 
   cout << "Number of child  :" << NbChildren << endl;
-  for(int i=0;i<NbChildren;i++)
-    {
-      a2Joint = (Joint *)aJoint->childJoint(i);
-
-      cout << " Child " << i << " " <<a2Joint->getName() << endl;
-    }
 
 
   cout << "Nb of degree of freedom " << 
@@ -68,15 +56,6 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
       std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
       
       cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
-      for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
-	{
-	  Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
-	  if (a3Joint==0)
-	    continue;
-	  
-	  cout << a3Joint->getName() << endl;
-	  
-	}
       CjrlRigidVelocity aRV = aJoint->jointVelocity();
       cout << " Linear Velocity ";
       vector3d av3d = aRV.linearVelocity();
@@ -101,7 +80,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints((CjrlJoint *)aJoint->childJoint(i)); 
+      RecursiveDisplayOfJoints(aJoint->childJoint(i)); 
     }
   //cout << " End for Joint: " << a2Joint->getName() << endl;
 }
@@ -112,12 +91,6 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot)
   std::vector<CjrlJoint *> aVec = aDynamicRobot->jointVector();
   int r = aVec.size();
   cout << "Number of joints :" << r << endl;
-  for(int i=0;i<r;i++)
-    {
-      Joint * aJoint = dynamic_cast<Joint *>(aVec[i]);
-      cout << aJoint->getName();
-    }	
-
   
 }
 
@@ -140,13 +113,8 @@ void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 void GoDownTree(const CjrlJoint * startJoint)
 {
   std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
-  std::cout << "Joint name :" << ((Joint *)startJoint)->getName() << std::endl;
-  std::cout << "Force on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Force << std::endl;
-  std::cout << "Torque on the related Body : " << ((DynamicBody *)(startJoint->linkedBody()))->m_Torque << std::endl;
-  std::cout << "Mass of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getMasse() << std::endl;
-  std::cout << "Name of the body: " << ((DynamicBody *)(startJoint->linkedBody()))->getName() << std::endl;
-  std::cout << "llimit: " << ((Joint *)startJoint)->lowerBound(0)*180/M_PI << " " 
-	    << "ulimit: " << ((Joint *)startJoint)->upperBound(0)*180/M_PI << " " << endl;
+  std::cout << "llimit: " << startJoint->lowerBound(0)*180/M_PI << " " 
+	    << "ulimit: " << startJoint->upperBound(0)*180/M_PI << " " << endl;
   std::cout << startJoint->currentTransformation() << std::endl;
   
   if (startJoint->countChildJoints()!=0)
@@ -171,31 +139,21 @@ int main(int argc, char *argv[])
   string aName=argv[2];
   string aMapFromJointToRank=argv[4];
 
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
+  dynamicsJRLJapan::ObjectFactory aRobotDynamicsObjectConstructor;
   
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
-  HumanoidDynamicMultiBody *aHDMB;
-  aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
 
-  if (aHDMB==0)
+  if (aHDR==0)
     { 
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
     }
-  aHDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
-  cout << "Here in between" << endl;
-  aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-  cout << " Finished the initialization"<< endl;
+  string RobotFileName = aPath+aName;
+  dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,aMapFromJointToRank,aSpecificitiesFileName);
   
   // Display tree of the joints.
-  CjrlJoint* rootJoint = aHDMB->rootJoint();  
+  CjrlJoint* rootJoint = aHDR->rootJoint();  
 
   // Test the tree.
   RecursiveDisplayOfJoints(rootJoint);
@@ -214,7 +172,7 @@ int main(int argc, char *argv[])
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
   };
 
-  int NbOfDofs = aHDMB->numberDof();
+  int NbOfDofs = aHDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -225,7 +183,7 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
   
-  aHDMB->currentConfiguration(aCurrentConf);
+  aHDR->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   lindex=0;
@@ -234,53 +192,43 @@ int main(int argc, char *argv[])
   
   MAL_S3_VECTOR(ZMPval,double);
 
-  aHDMB->currentVelocity(aCurrentVel);
-  //  aHDMB->setComputeZMP(true);
+  aHDR->currentVelocity(aCurrentVel);
+  //  aHDR->setComputeZMP(true);
   string inProperty="ComputeZMP"; string aValue="true";
   aHDR->setProperty(inProperty,aValue);
   aHDR->computeForwardKinematics();
-  ZMPval = aHDMB->zeroMomentumPoint();
+  ZMPval = aHDR->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
-  cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
+  cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
 
-  aHDMB->LinkBetweenJointsAndEndEffectorSemantic();
-
-  std::vector<CjrlJoint *> aVec = aHDMB->jointVector();
+  std::vector<CjrlJoint *> aVec = aHDR->jointVector();
   
-  Joint  * aJoint = (Joint *)aVec[3]; // Try to get the hand.
-  cout << aJoint->getName() << endl;  
+  CjrlJoint  * aJoint = aVec[3]; // Try to get the hand.
   aJoint->computeJacobianJointWrtConfig();
 
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
   
   //  DisplayMatrix(aJ);
   cout << "****************************" << endl;
-  cout << "Root: " << ((Joint *)rootJoint)->getName() << endl;
   rootJoint->computeJacobianJointWrtConfig();
   aJ = rootJoint->jacobianJointWrtConfig();  
   cout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
 
   //  DisplayMatrix(aJ);
 
-  aJoint = (Joint *)aHDMB->waist();
-  cout << "Name of the WAIST joint :" << endl;
-  cout << aJoint->getName() << endl;
+  aJoint = aHDR->waist();
   cout << "****************************" << endl;
-  aHDMB->computeJacobianCenterOfMass();
+  aHDR->computeJacobianCenterOfMass();
   cout << "Value of the CoM's Jacobian:" << endl
-       << aHDMB->jacobianCenterOfMass() << endl;
+       << aHDR->jacobianCenterOfMass() << endl;
   cout << "****************************" << endl;
-  GoDownTree(aHDMB->rootJoint());
+  GoDownTree(aHDR->rootJoint());
 
-  cout << "Mass of the robot " << aHDMB->getMasse() << endl;
-  cout << "Force " << aHDMB->getMasse()*9.81 << endl;
 
   cout << "****************************" << endl;
   // Test rank of the left hand.
   cout << "Rank of the left hand "<< endl;
-  cout << aHDMB->leftWrist()->rankInConfiguration() << endl;
-  cout << ((Joint *)aHDMB->leftWrist())->getName() << endl;
-  cout << ((Joint *)aHDMB->leftWrist())->getIDinVRML() << endl;
+  cout << aHDR->leftWrist()->rankInConfiguration() << endl;
 
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
@@ -288,31 +236,31 @@ int main(int argc, char *argv[])
 
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
-  aHDMB->SetTimeStep(0.005);
-  aHDMB->setComputeAcceleration(false);
-  aHDMB->setComputeBackwardDynamics(false);
-  aHDMB->setComputeZMP(true);
+  {
+    string inProperty[4]={"TimeStep","ComputeAcceleration",
+			  "ComputeBackwardDynamics", "ComputeZMP"};
+    string inValue[4]={"0.005","false","false","true"};
+    for(unsigned int i=0;i<4;i++)
+      aHDR->setProperty(inProperty[i],inValue[i]);
+
+  }
   for(int i=0;i<4;i++)
     {
-      aHDMB->currentVelocity(aCurrentVel);
-      aHDMB->currentAcceleration(aCurrentAcc);
-      aHDMB->computeForwardKinematics();
-      ZMPval = aHDMB->zeroMomentumPoint();
+      aHDR->currentVelocity(aCurrentVel);
+      aHDR->currentAcceleration(aCurrentAcc);
+      aHDR->computeForwardKinematics();
+      ZMPval = aHDR->zeroMomentumPoint();
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
+      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
     }
 
   // Height of the foot. 
-  cout << "Height foot: "<< aHDMB->footHeight() << endl;
+  cout << "Height foot: "<< aHDR->footHeight() << endl;
 
-  matrixNxP outjacobian;
-  MAL_MATRIX_RESIZE(outjacobian, 3, NbOfDofs);
-  aHDMB->getJacobianAngularMomentumWrtCoM(outjacobian);
-  cout << "Jacobian of the angular momentum:" << outjacobian <<endl;
 
   matrixNxP InertiaMatrix;
-  aHDMB->computeInertiaMatrix();
-  InertiaMatrix = aHDMB->inertiaMatrix();
+  aHDR->computeInertiaMatrix();
+  InertiaMatrix = aHDR->inertiaMatrix();
  
   cout << "InertiaMatrix("
        << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
@@ -331,6 +279,6 @@ int main(int argc, char *argv[])
   aof.close();
 
 
-  delete aHDMB;
+  delete aHDR;
   
 }

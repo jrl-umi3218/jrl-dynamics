@@ -22,11 +22,13 @@
 */
 
 /*! System includes */
+#include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string.h>
 
 /*! Local library includes. */
-#include "dynamicsJRLJapan/DynamicMultiBody.h"
+#include "DynamicMultiBody.h"
 #include "robotDynamics/jrlBody.h"
 
 #define RESETDEBUG5(y) { ofstream DebugFile;	\
@@ -1024,6 +1026,13 @@ void DynamicMultiBody::parserVRML(string path,
   CreatesTreeStructure(option);
 }
 
+void DynamicMultiBody::parserVRML(string nom,
+                                  const char *option)
+{
+  m_listOfBodies.clear();
+  MultiBody::parserVRML(nom, option);
+  CreatesTreeStructure(option);
+}
 
 
 double DynamicMultiBody::Getq(int JointID) const
@@ -2659,6 +2668,8 @@ bool DynamicMultiBody::isSupported(const std::string &aName)
     return true;
   else if (aName=="ComputeZMP")
     return true;
+  else if (aName=="TimeStep")
+    return true;
   return false;
 }
 
@@ -2734,6 +2745,12 @@ bool DynamicMultiBody::getProperty(const std::string &inProperty,std::string &ou
 	outValue="false";
       return true;
 
+    }
+  else if (inProperty=="TimeStep")
+    {
+      ostringstream aos;
+      aos << m_TimeStep;
+      outValue=aos.str();
     }
   outValue="false";
   return false;
@@ -2836,6 +2853,11 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
   else if (inProperty=="FileJointRank")
     {
       m_FileLinkJointRank = inValue;
+    }
+  else if (inProperty=="TimeStep")
+    {
+      istringstream iss(inValue);
+      iss >> m_TimeStep;
     }
   return false;
 }

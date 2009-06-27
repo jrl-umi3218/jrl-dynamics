@@ -13,9 +13,9 @@
 
 */
 
-#include "dynamicsJRLJapan/DynamicMultiBody.h"
-#include "dynamicsJRLJapan/Hand.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
+#include "DynamicMultiBody.h"
+#include "Hand.h"
+#include "HumanoidDynamicMultiBody.h"
 
 #if 0
 

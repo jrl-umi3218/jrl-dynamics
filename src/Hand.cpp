@@ -12,7 +12,7 @@
    Please refers to file License.txt for details on the license.
 
 */
-#include "dynamicsJRLJapan/Hand.h"
+#include "Hand.h"
 
 using namespace dynamicsJRLJapan;
 

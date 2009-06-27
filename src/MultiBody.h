@@ -25,9 +25,9 @@
 
 #define INTERFACE
 #include "dynamics-config.h"
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/Body.h"
-#include "dynamicsJRLJapan/fileReader.h"
+#include "Joint.h"
+#include "Body.h"
+#include "fileReader.h"
 #include <vector>
 #include <algorithm>	//pour utiliser la fonction find
 #include <iostream>
@@ -177,7 +177,8 @@ namespace dynamicsJRLJapan
 
     //Construction a partir d'un fichier VRML
     virtual void parserVRML(string path, string nom, const char* option);
-  
+    virtual void parserVRML(string FileName, const char* option);
+
     /*!  Display bodies */
     void afficherCorps(void);
     /*!  Display links */

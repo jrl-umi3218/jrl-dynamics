@@ -1,13 +1,13 @@
 #ifndef ROBOT_DYNAMICS_IMPL_H
 #define ROBOT_DYNAMICS_IMPL_H
 
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/Body.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
-#include "dynamicsJRLJapan/MultiBody.h"
-#include "dynamicsJRLJapan/DynamicMultiBody.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
-#include "dynamicsJRLJapan/Hand.h"
+#include "Joint.h"
+#include "Body.h"
+#include "DynamicBody.h"
+#include "MultiBody.h"
+#include "DynamicMultiBody.h"
+#include "HumanoidDynamicMultiBody.h"
+#include "Hand.h"
 
 typedef dynamicsJRLJapan::DynamicMultiBody CimplDynamicRobot;
 typedef dynamicsJRLJapan::HumanoidDynamicMultiBody CimplHumanoidDynamicRobot;

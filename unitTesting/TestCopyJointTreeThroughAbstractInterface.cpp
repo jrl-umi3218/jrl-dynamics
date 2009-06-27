@@ -1,16 +1,7 @@
 #include <string>
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
-#include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
-#include "dynamicsJRLJapan/robotDynamicsImpl.h"
+#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
-static CjrlRobotDynamicsObjectConstructor <
-  CimplDynamicRobot, 
-  CimplHumanoidDynamicRobot, 
-  CimplJointFreeFlyer, 
-  CimplJointRotation,
-  CimplJointTranslation,
-  CimplBody >  robotDynamicsObjectConstructor;
+dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
 
 
 using namespace std;
@@ -92,16 +83,14 @@ void DisplayBody(CjrlBody *aBody)
   cout << InertiaMatrix << endl;
   
 }
-void DisplayJoint(Joint * aJoint)
+void DisplayJoint(CjrlJoint * aJoint)
 {
-  cout << "Joint : " << aJoint->getName() << endl;
+  cout << "Joint : " << aJoint << endl;
   unsigned int NbCJ = aJoint->countChildJoints();
-  if (aJoint->parentJoint()!=0)
-    cout << "Father: " << ((Joint *)(aJoint->parentJoint()))->getName() << endl;
   cout << "Number of children : " << NbCJ << endl;
   for(unsigned int li=0;li<NbCJ;li++)
     cout << "Child("<<li<<")=" 
-	 << ((Joint*)(aJoint->childJoint(li)))->getName() << endl;
+	 << aJoint->childJoint(li) << endl;
   
   cout << "Rank in configuration " << aJoint->rankInConfiguration() << endl;
   matrix4d ct = aJoint->currentTransformation();
@@ -114,26 +103,22 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   if (aJoint==0)
     return;
 
-  Joint *a2Joint=0;
 
   int NbChildren = aJoint->countChildJoints();
  
-  a2Joint = dynamic_cast<Joint *>( aJoint);
-  if (a2Joint==0)
-    return;
 
-  DisplayJoint(a2Joint);
+  DisplayJoint(aJoint);
 
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints((CjrlJoint *)a2Joint->childJoint(i)); 
+      RecursiveDisplayOfJoints(aJoint->childJoint(i)); 
     }
 
 }
 
 
-void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
+void recursiveMultibodyCopy(CjrlJoint *initJoint, CjrlJoint *newJoint)
 {
   int lNbOfChildren= initJoint->countChildJoints();
 
@@ -141,63 +126,30 @@ void recursiveMultibodyCopy(Joint *initJoint, CjrlJoint *newJoint)
   if (lNbOfChildren == 0) return ;
 
   for(int li=0;li<lNbOfChildren;li++) {
-    Joint *Child = dynamic_cast<Joint*> (initJoint->childJoint(li)) ;
+    CjrlJoint *Child = initJoint->childJoint(li) ;
 
     if (Child != 0) {
-      int type =  Child->type();
-      vector3d axisInLocalFrame = Child->axe();
-      vector3d staticTrans; 
-      Child->getStaticTranslation(staticTrans);
-      matrix3d staticRotation;
-      Child->getStaticRotation(staticRotation);
-      vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
-      matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
       
       CjrlJoint* a2newJoint=0;
-
-      switch (type) {
-      case Joint::REVOLUTE_JOINT:
-	a2newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
-	break;
-      case Joint::FREE_JOINT:
-	a2newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
-	break;
-      }
-           
+      matrix4d pose = Child->currentTransformation();
+      a2newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
+      
       newJoint->addChildJoint(*a2newJoint);
-      string aName = Child->getName();
-      (dynamic_cast<Joint *>(a2newJoint))->setName(aName);
       recursiveMultibodyCopy(Child, a2newJoint) ;
     }
   }
 }
 
 
-void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
+void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* aHDR,
 			       CjrlHumanoidDynamicRobot* a2HDR,
 			       string &JointToRank)
 {
-  Joint* InitJoint = dynamic_cast<Joint *>( aHDR->rootJoint()) ;
+  CjrlJoint* InitJoint = aHDR->rootJoint() ;
   
-  int type =  InitJoint->type();
-  vector3d axisInLocalFrame = InitJoint->axe();
-  string name = InitJoint->getName() ;
-  vector3d staticTrans; 
-  InitJoint->getStaticTranslation(staticTrans);
-  matrix3d staticRotation;
-  InitJoint->getStaticRotation(staticRotation);
-  vector3d axisInGlobalFrame = staticRotation*axisInLocalFrame;
-  matrix4d pose=getPoseFromAxisAndCenter(axisInGlobalFrame, staticTrans);
   CjrlJoint* newJoint=0;
-
-  switch (type) {
-  case Joint::REVOLUTE_JOINT:
-    newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
-    break;
-  case Joint::FREE_JOINT:
-    newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
-    break;
-  }
+  matrix4d pose = InitJoint->currentTransformation();
+  newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
   
   a2HDR->rootJoint(*newJoint);
   
@@ -209,8 +161,6 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
   RecursiveDisplayOfJoints(a2HDR->rootJoint());
 
   // Initialize the second humanoid from the joint tree.
-  std::vector<NameAndRank_t> LinkJointNameAndRank;
-  aHDR->getLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
   //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
   string aProperty("FileJointRank");
@@ -236,8 +186,8 @@ void PerformCopyFromJointsTree(HumanoidDynamicMultiBody* aHDR,
     {
       if ((VecOfCopyJoints[i]!=0) &&
 	  (VecOfInitJoints[i]!=0))
-      *((DynamicBody *)VecOfCopyJoints[i]->linkedBody()) = 
-	*((DynamicBody *)VecOfInitJoints[i]->linkedBody());
+	*VecOfCopyJoints[i]->linkedBody() = 
+	  *VecOfInitJoints[i]->linkedBody();
     }
 
 }
@@ -259,17 +209,11 @@ int main(int argc, char *argv[])
   string JointToRank = argv[4];
   string aSpecificitiesFileName = argv[3];
   // Read the first humanoid.
-  HumanoidDynamicMultiBody * aHDR = 
-    dynamic_cast<HumanoidDynamicMultiBody*>(robotDynamicsObjectConstructor.createhumanoidDynamicRobot());
-
-  aHDR->parserVRML(aPath,
-		   aName,
-		   (char *)JointToRank.c_str());
+  CjrlHumanoidDynamicRobot * aHDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  string RobotFileName = aPath+aName;
+  dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,JointToRank, aSpecificitiesFileName);
   
-  aHDR->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
 
-
-  // 
   // The second humanoid is constructed through the abstract interface
   //
   CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
@@ -292,10 +236,14 @@ int main(int argc, char *argv[])
 
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
-  aHDR->SetTimeStep(0.005);
-  aHDR->setComputeAcceleration(false);
-  aHDR->setComputeBackwardDynamics(false);
-  aHDR->setComputeZMP(true);
+  {
+    string inProperty[4]={"TimeStep","ComputeAcceleration",
+			  "ComputeBackwardDynamics", "ComputeZMP"};
+    string inValue[4]={"0.005","false","false","true"};
+    for(unsigned int i=0;i<4;i++)
+      aHDR->setProperty(inProperty[i],inValue[i]);
+  }
+  
 
   int NbOfDofs = a2HDR->numberDof();
   if (VerboseMode>2)

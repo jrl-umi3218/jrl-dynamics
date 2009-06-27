@@ -21,20 +21,19 @@ MultiBody.cpp
 DynamicMultiBody.cpp 
 HumanoidDynamicMultiBody.cpp 
 HumanoidSpecificities.cpp  
-SpiritVRMLReader.cpp )
+SpiritVRMLReader.cpp 
+dynamicsJRLJapanFactory.cpp)
 
 
 # Create list of headers files
 #-----------------------------
 SET(libdyn_headers 
-../include/${PROJECT_NAME}/dynamics-config.h
-../include/${PROJECT_NAME}/robotDynamicsImpl.h
+../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
 )
 
 FOREACH(srcfile ${libdyn_src})
   SET(newsrcfile "")
   STRING(REGEX REPLACE "cpp$" "h" newsrcfile ${srcfile})
-  SET(libdyn_headers ../include/${PROJECT_NAME}/${newsrcfile} ${libdyn_headers})
 #   MESSAGE(STATUS "newsrcfile: " ${newsrcfile})
 ENDFOREACH(srcfile)
 
@@ -103,20 +102,6 @@ IF(WIN32)
 				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
 				${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}
 		)
-
-###COMMM
-##right now, there is a pb with symlink under Vista. Until I found out, I use the copy of the dll
-
-#            COMMAND 
-#			${CMAKE_COMMAND} -E remove -f
-#			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}.${lib_extension}
-			
-#            COMMAND 
-#			${CMAKE_COMMAND} -E create_symlink
-#			${PROJECT_NAME}-${PROJECT_VERSION}${CONFIGURATION_EXTENSION}.${lib_extension}
-#			${PROJECT_NAME}.${lib_extension}
-###END COMMM
-
 			
 		INSTALL(FILES
 			${${PROJECT_NAME}_BINARY_DIR}/src/${PROJECT_NAME}-${PROJECT_VERSION}.${lib_extension}

@@ -1,9 +1,7 @@
 #include <string>
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
-#include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
+#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
+
 using namespace std;
-using namespace dynamicsJRLJapan;
 
 void DisplayMatrix4x4(MAL_S4x4_MATRIX(todisplay,double), ostream &os)
 {
@@ -22,15 +20,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
   if (aJoint==0)
     return;
 
-  Joint *a2Joint=0;
-
   int NbChildren = aJoint->countChildJoints();
-
-  a2Joint = dynamic_cast<Joint *>( aJoint);
-  if (a2Joint==0)
-    return;
-
-  cout << a2Joint->getName() << " rank : " << a2Joint->rankInConfiguration() << endl;
 
   cout << "CurrentTransformation " <<
     aJoint->currentTransformation() << endl;
@@ -40,9 +30,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
       cout << "Number of child  :" << NbChildren << endl;
       for(int i=0;i<NbChildren;i++)
 	{
-	  a2Joint = (Joint *)aJoint->childJoint(i);
-	  
-	  cout << " Child " << i << " " <<a2Joint->getName() << endl;
+	  aJoint = aJoint->childJoint(i);
 	}
       
       
@@ -61,15 +49,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
       std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
       
       cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
-      for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
-	{
-	  Joint * a3Joint = dynamic_cast<Joint *>(JointsFromRootToHere[i]);
-	  if (a3Joint==0)
-	    continue;
-	  
-	  cout << a3Joint->getName() << endl;
-	  
-	}
+
       CjrlRigidVelocity aRV = aJoint->jointVelocity();
       cout << " Linear Velocity " << aRV.linearVelocity() << endl;
       cout << " Angular Velocity " << aRV.rotationVelocity() << endl;
@@ -95,13 +75,6 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot)
   std::vector<CjrlJoint *> aVec = aDynamicRobot->jointVector();
   int r = aVec.size();
   cout << "Number of joints :" << r << endl;
-  for(int i=0;i<r;i++)
-    {
-      Joint * aJoint = dynamic_cast<Joint *>(aVec[i]);
-      cout << aJoint->getName();
-    }	
-
-  
 }
 
 void DisplayMatrix(MAL_MATRIX(,double) &aJ)
@@ -140,41 +113,20 @@ int main(int argc, char *argv[])
 
   CjrlJoint* rootJoint=0;
 
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
+  dynamicsJRLJapan::ObjectFactory dynFactory;
+  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createhumanoidDynamicRobot();
+  string RobotFileName = aPath + aName;
+  dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,
+					 aMapFromJointToRank,aSpecificitiesFileName);
   
-  CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
   
-  HumanoidDynamicMultiBody *aHDMB;
-  aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
-
-  CjrlHumanoidDynamicRobot * aHDRSmall = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
-  HumanoidDynamicMultiBody *aHDMBSmall;
-  aHDMBSmall = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDRSmall);
-
-  if (aHDMB==0)
-    { 
-      cerr<< "Dynamic cast on HDR failed " << endl;
-      exit(-1);
-    }
-  aHDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
-  cout << "Here in between" << endl;
-  aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-  cout << " Finished the initialization"<< endl;
-  
-  aHDMBSmall->parserVRML(aPath,aName,(char *)aMapFromJointToRankSmall.c_str());
-  cout << "Here in between" << endl;
-  aHDMBSmall->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-  cout << " Finished the initialization"<< endl;
+  CjrlHumanoidDynamicRobot * aHDRSmall =  dynFactory.createhumanoidDynamicRobot();
+  dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDRSmall,RobotFileName,
+					 aMapFromJointToRank,aSpecificitiesFileName);
 
   // Display tree of the joints.
   cout << "Small model" << endl;
-  rootJoint = aHDMBSmall->rootJoint();  
+  rootJoint = aHDRSmall->rootJoint();  
 
   // Test the tree.
   RecursiveDisplayOfJoints(rootJoint);
@@ -193,7 +145,7 @@ int main(int argc, char *argv[])
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
   };
 
-  int NbOfDofs = aHDMB->numberDof();
+  int NbOfDofs = aHDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -204,9 +156,9 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
   
-  aHDMB->currentConfiguration(aCurrentConf);
+  aHDR->currentConfiguration(aCurrentConf);
 
-  int NbOfDofsSmall = aHDMBSmall->numberDof();
+  int NbOfDofsSmall = aHDRSmall->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofsSmall << std::endl;
   MAL_VECTOR_DIM(aCurrentConfSmall,double,NbOfDofsSmall);
   lindex=0;
@@ -217,7 +169,7 @@ int main(int argc, char *argv[])
     aCurrentConfSmall[lindex++] = dInitPos[i]*M_PI/180.0;
   //aCurrentConf[lindex++] = 0.0;
   
-  aHDMBSmall->currentConfiguration(aCurrentConfSmall);
+  aHDRSmall->currentConfiguration(aCurrentConfSmall);
   
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   MAL_VECTOR_DIM(aCurrentVelSmall,double,NbOfDofsSmall); 
@@ -227,10 +179,10 @@ int main(int argc, char *argv[])
   
   MAL_S3_VECTOR(ZMPval,double);
 
-  aHDMB->currentVelocity(aCurrentVel);
-  aHDMBSmall->currentVelocity(aCurrentVelSmall);
+  aHDR->currentVelocity(aCurrentVel);
+  aHDRSmall->currentVelocity(aCurrentVelSmall);
   
-  //  aHDMB->setComputeZMP(true);
+  //  aHDR->setComputeZMP(true);
   string inProperty="ComputeZMP"; string aValue="true";
   aHDR->setProperty(inProperty,aValue);
   aHDR->computeForwardKinematics();
@@ -239,7 +191,7 @@ int main(int argc, char *argv[])
   aHDRSmall->computeForwardKinematics();
 
   // Display tree of the joints.
-  rootJoint = aHDMB->rootJoint();  
+  rootJoint = aHDR->rootJoint();  
 
   // Test the tree.
   cout << "Normal model" << endl;
@@ -247,30 +199,29 @@ int main(int argc, char *argv[])
 
   // Display tree of the joints.
   cout << "Small model" << endl;
-  rootJoint = aHDMBSmall->rootJoint();  
+  rootJoint = aHDRSmall->rootJoint();  
 
   // Test the tree.
   RecursiveDisplayOfJoints(rootJoint);
   
-  ZMPval = aHDMB->zeroMomentumPoint();
+  ZMPval = aHDR->zeroMomentumPoint();
   cout << "Normal model" << endl;
   cout << "Value of ZMP : " << ZMPval <<endl;
-  cout << "Should be equal to the CoM: " << aHDMB->positionCenterOfMass() << endl;
+  cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
 
-  ZMPval = aHDMBSmall->zeroMomentumPoint();
+  ZMPval = aHDRSmall->zeroMomentumPoint();
   cout << "Small model" << endl;
   cout << "Value of ZMP : " << ZMPval <<endl;
-  cout << "Should be equal to the CoM: " << aHDMBSmall->positionCenterOfMass() << endl;
+  cout << "Should be equal to the CoM: " << aHDRSmall->positionCenterOfMass() << endl;
 
-  std::vector<CjrlJoint *> aVec = aHDMBSmall->jointVector();
-  Joint  * aJoint = (Joint *)aVec[22]; // Try to get the hand.
-  cout << aJoint->getName() << endl;  
-  aJoint->computeJacobianJointWrtConfig();
+  std::vector<CjrlJoint *> aVec = aHDRSmall->jointVector();
+  aVec[22]->computeJacobianJointWrtConfig();
 
-  MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
+  MAL_MATRIX(,double) aJ = aVec[22]->jacobianJointWrtConfig();
 
   DisplayMatrix(aJ);
 
-  delete aHDMB;
+  delete aHDR;
+  delete aHDRSmall;
   
 }

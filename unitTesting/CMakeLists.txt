@@ -27,32 +27,6 @@ SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
 
 ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
 
-ADD_EXECUTABLE(	TestSimpleLegRobot TestSimpleLegRobot.cpp)
-SET_TARGET_PROPERTIES(TestSimpleLegRobot
-	              PROPERTIES
-		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-)
-ADD_DEPENDENCIES (TestSimpleLegRobot ${PROJECT_NAME})
-
-IF(GLUT_FOUND)
-	ADD_EXECUTABLE(	TestHumanoidDynamicRobot2 TestHumanoidDynamicRobot2.cpp)
-	SET_TARGET_PROPERTIES( TestHumanoidDynamicRobot2
-	              PROPERTIES
-	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-	)
-	ADD_DEPENDENCIES (TestHumanoidDynamicRobot2 ${PROJECT_NAME})
-ENDIF(GLUT_FOUND)
-
-ADD_EXECUTABLE(	TestBuildFromJointTree TestBuildFromJointTree.cpp)
-SET_TARGET_PROPERTIES( TestBuildFromJointTree
-	              PROPERTIES
-	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-          	      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-
-)
-ADD_DEPENDENCIES (TestBuildFromJointTree ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface.cpp)
 SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface

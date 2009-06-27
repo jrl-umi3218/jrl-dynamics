@@ -2,11 +2,7 @@
 #include <fstream>
 
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
-#include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
-
-#include "jrlMathTools/jrlConstants.h"
+#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
 
 using namespace std;
 using namespace dynamicsJRLJapan;
@@ -57,9 +53,9 @@ void ExtractRefWaist(ifstream &RefStateFile,
     }
 }
 
-void ExtractActualWaist(Joint *LeftFoot2,
-			Joint *RightFoot2,
-			Joint *Waist2,
+void ExtractActualWaist(CjrlJoint *LeftFoot2,
+			CjrlJoint *RightFoot2,
+			CjrlJoint *Waist2,
 			matrix4d &AbsSupportFootPos,
 			double * WaistFromRef,
 			double * RotationFreeFlyer,
@@ -198,7 +194,7 @@ int main(int argc, char *argv[])
   string aSpecificitiesFileName;
   string aPath;
   string aName;
-  string aMapFromJointToRank;
+  string aMapFromCjrlJointToRank;
 
   string RefLogFile;
   string ActualLogFile;
@@ -223,9 +219,9 @@ int main(int argc, char *argv[])
 	  aSpecificitiesFileName = value;
 	  aSpecificitiesFileName +="Controller/IOserver/robot/HRP2JRL/etc/";
 	  aSpecificitiesFileName += "HRP2Specificities.xml";
-	  aMapFromJointToRank = value;
-	  aMapFromJointToRank += "Controller/IOserver/robot/HRP2JRL/etc/";
-	  aMapFromJointToRank += "HRP2LinkJointRank.xml";
+	  aMapFromCjrlJointToRank = value;
+	  aMapFromCjrlJointToRank += "Controller/IOserver/robot/HRP2JRL/etc/";
+	  aMapFromCjrlJointToRank += "HRP2LinkJointRank.xml";
 	  
 	}
 
@@ -240,45 +236,30 @@ int main(int argc, char *argv[])
       aPath=argv[1];
       aName=argv[2];
       aSpecificitiesFileName = argv[3];
-      aMapFromJointToRank = argv[4];
+      aMapFromCjrlJointToRank = argv[4];
     }
-
-
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
   
-  CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
-  
-  HumanoidDynamicMultiBody *aHDMB;
-  aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
+  dynamicsJRLJapan::ObjectFactory dynFactory;
+  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR2 = dynFactory.createhumanoidDynamicRobot();
 
-  CjrlHumanoidDynamicRobot * aHDR2 = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
-  HumanoidDynamicMultiBody *aHDMB2;
-  aHDMB2 = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR2);
-
-  if (aHDMB==0)
+  if (aHDR==0)
     { 
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
   }
   cout << "Robot's model file:" << aPath << aName << endl;
   cout << "Specificities file:" << aSpecificitiesFileName << endl;
-  cout << "Map from joint to rank:" << aMapFromJointToRank << endl;
+  cout << "Map from joint to rank:" << aMapFromCjrlJointToRank << endl;
+  string RobotFileName = aPath + aName;
+  parseOpenHRPVRMLFile(*aHDR,RobotFileName,
+		       aMapFromCjrlJointToRank,aSpecificitiesFileName);
+  parseOpenHRPVRMLFile(*aHDR2,RobotFileName,
+		       aMapFromCjrlJointToRank,aSpecificitiesFileName);
 
-  aHDMB->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
-  aHDMB->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-
-  aHDMB2->parserVRML(aPath,aName,(char *)aMapFromJointToRank.c_str());
-  aHDMB2->SetHumanoidSpecificitiesFile(aSpecificitiesFileName);
-  
   // Display tree of the joints.
 
-  int NbOfDofs = aHDMB->numberDof();
+  int NbOfDofs = aHDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
@@ -288,20 +269,17 @@ int main(int argc, char *argv[])
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = 0.0;
   
-  aHDMB->currentConfiguration(aCurrentConf);
+  aHDR->currentConfiguration(aCurrentConf);
 
-  aHDMB2->currentConfiguration(aCurrentConf);
+  aHDR2->currentConfiguration(aCurrentConf);
 
-  Joint * LeftFoot = (Joint *)aHDMB->leftFoot();
-  Joint * RightFoot = (Joint *)aHDMB->rightFoot();
+  CjrlJoint * LeftFoot = aHDR->leftFoot();
+  CjrlJoint * RightFoot = aHDR->rightFoot();
 
-  Joint * LeftFoot2 = (Joint *)aHDMB2->leftFoot();
-  Joint * RightFoot2 = (Joint *)aHDMB2->rightFoot();
+  CjrlJoint * LeftFoot2 = aHDR2->leftFoot();
+  CjrlJoint * RightFoot2 = aHDR2->rightFoot();
 
-  Joint * LeftWrist = (Joint *)aHDMB->leftWrist();
-  Joint * RightWrist = (Joint *)aHDMB->rightWrist();
-
-  Joint * Waist2 = (Joint *)aHDMB2->waist();
+  CjrlJoint * Waist2 = aHDR2->waist();
 
   // Read the data file.
   ifstream ActualStateFile;
@@ -334,15 +312,23 @@ int main(int argc, char *argv[])
   RebuildWaist.open("RebuildWaist.dat",ofstream::out);
   RebuildWaist.close();
 
-  aHDMB->SetTimeStep(0.005);
-  aHDMB->setComputeAcceleration(true);
-  aHDMB->setComputeBackwardDynamics(true);
-  aHDMB->setComputeZMP(true);
+  // Set properties for the first model.
+  {
+    string inProperty[4]={"TimeStep","ComputeAcceleration",
+			  "ComputeBackwardDynamics", "ComputeZMP"};
+    string inValue[4]={"0.005","true","true","true"};
+    for(unsigned int i=0;i<4;i++)
+      aHDR->setProperty(inProperty[i],inValue[i]);
+  }
+  // Set properties for the second model.
+  {
+    string inProperty[4]={"TimeStep","ComputeAcceleration",
+			  "ComputeBackwardDynamics", "ComputeZMP"};
+    string inValue[4]={"0.005","false","false","false"};
+    for(unsigned int i=0;i<4;i++)
+      aHDR2->setProperty(inProperty[i],inValue[i]);
 
-  aHDMB2->SetTimeStep(0.005);
-  aHDMB2->setComputeAcceleration(false);
-  aHDMB2->setComputeBackwardDynamics(false);
-  aHDMB2->setComputeZMP(false);
+  }
 
   // Read the first line of actual state:
   ofstream ASD("ActualStateDescription.dat");
@@ -405,8 +391,8 @@ int main(int argc, char *argv[])
       for(unsigned int i=0;i<40;i++)
 	aCurrentConf[i+6]=RefData[i];
 
-      aHDMB2->currentConfiguration(aCurrentConf);
-      aHDMB2->computeForwardKinematics();
+      aHDR2->currentConfiguration(aCurrentConf);
+      aHDR2->computeForwardKinematics();
 
       ExtractActualWaist(LeftFoot2,
 			 RightFoot2,
@@ -431,11 +417,11 @@ int main(int argc, char *argv[])
 	     aCurrentConf[i] = WaistFromRef[i];
 	}
       
-      aHDMB->currentConfiguration(aCurrentConf);
-      aHDMB->computeForwardKinematics();
+      aHDR->currentConfiguration(aCurrentConf);
+      aHDR->computeForwardKinematics();
 
       vector3d ZMPval;
-      ZMPval = aHDMB->zeroMomentumPoint();
+      ZMPval = aHDR->zeroMomentumPoint();
      
       matrix4d TrLF = LeftFoot->currentTransformation();
       matrix4d TrRF = RightFoot->currentTransformation();
@@ -459,19 +445,12 @@ int main(int argc, char *argv[])
       //92
       RebuildZMP.close();
 
-      RebuildForces.open("RebuildForces.dat",ofstream::app);
-      for(unsigned int i=0;i<3;i++)
-	RebuildForces << ((DynamicBody *)(LeftWrist->linkedBody()))->m_Force(i) << " " ;
-      for(unsigned int i=0;i<3;i++)
-	RebuildForces << ((DynamicBody *)(RightWrist->linkedBody()))->m_Force(i) << " ";
-      RebuildForces << endl;
-      RebuildForces.close();
       
       NbIt++;
     }
   
   ActualStateFile.close();
   
-  delete aHDMB;
+  delete aHDR;
   
 }

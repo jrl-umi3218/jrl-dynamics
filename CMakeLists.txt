@@ -100,7 +100,7 @@ ELSE(HAVE_GETLINE_PTR)
 ENDIF(HAVE_GETLINE_PTR)
 
 CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/dynamics-config.h.cmake
-	       ${${PROJECT_NAME}_SOURCE_DIR}/include/${PROJECT_NAME}/dynamics-config.h )
+	       ${${PROJECT_NAME}_SOURCE_DIR}/dynamics-config.h )
 
 # To deal with the headers.
 #--------------------------

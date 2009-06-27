@@ -23,7 +23,7 @@
 
 */
 
-#include "dynamicsJRLJapan/Body.h"
+#include "Body.h"
 
 using namespace dynamicsJRLJapan;
 

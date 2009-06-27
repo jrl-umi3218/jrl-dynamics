@@ -28,9 +28,9 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlDynamicRobot.h"
 #include "dynamics-config.h"
-#include "dynamicsJRLJapan/Joint.h"
-#include "dynamicsJRLJapan/MultiBody.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "Joint.h"
+#include "MultiBody.h"
+#include "DynamicBody.h"
 
 
 using namespace::std;
@@ -342,6 +342,8 @@ namespace dynamicsJRLJapan
 	\param option filename of XML file which contains information on associations between joint names and ranks
     */
     virtual void parserVRML(string path, string nom, 
+			    const char *option);
+    virtual void parserVRML(string nom, 
 			    const char *option);
 
     /**

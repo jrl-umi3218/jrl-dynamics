@@ -19,8 +19,8 @@
    Please refers to file License.txt for details on the license.
 
 */
-#include "dynamicsJRLJapan/MultiBody.h"
-#include "dynamicsJRLJapan/SpiritVRMLReader.h"
+#include "MultiBody.h"
+#include "SpiritVRMLReader.h"
 
 using namespace dynamicsJRLJapan;
 
@@ -407,6 +407,10 @@ void MultiBody::parserVRML(string path, string nom, const char* option)
   dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,nomWRML);
 }
 
+void MultiBody::parserVRML(string nomWRML, const char* option)
+{
+  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,nomWRML);
+}
 
 
 
