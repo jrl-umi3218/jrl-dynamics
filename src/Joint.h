@@ -98,7 +98,7 @@ namespace dynamicsJRLJapan
     string m_Name;
 
     /*! Identifier in the VRML file. */
-    int m_IDinVRML;
+    int m_IDinActuated;
 
     /*! Limits of the joint. */
     std::vector<double> m_LowerLimits;
@@ -255,13 +255,13 @@ namespace dynamicsJRLJapan
 
     /*! Set the Identifier of the joint inside
       the VRML file. */
-    inline void setIDinVRML(int IDinVRML)
-      { m_IDinVRML = IDinVRML;}
+    inline void setIDinActuated(int IDinActuated)
+      { m_IDinActuated = IDinActuated;}
 
     /*! Get the Identifier of the joint insidie
       the VRML file. */
-    inline const int & getIDinVRML() const
-      { return m_IDinVRML;}
+    inline const int & getIDinActuated() const
+      { return m_IDinActuated;}
 
     /*! Get the static translation. */
     inline void getStaticTranslation(vector3d & staticTranslation) 

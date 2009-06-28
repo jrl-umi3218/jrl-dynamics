@@ -273,11 +273,11 @@ int main(int argc, char *argv[])
 
   aHDR2->currentConfiguration(aCurrentConf);
 
-  CjrlJoint * LeftFoot = aHDR->leftFoot();
-  CjrlJoint * RightFoot = aHDR->rightFoot();
+  CjrlJoint * LeftFoot = aHDR->leftFoot()->associatedAnkle();
+  CjrlJoint * RightFoot = aHDR->rightFoot()->associatedAnkle();
 
-  CjrlJoint * LeftFoot2 = aHDR2->leftFoot();
-  CjrlJoint * RightFoot2 = aHDR2->rightFoot();
+  CjrlJoint * LeftFoot2 = aHDR2->leftFoot()->associatedAnkle();
+  CjrlJoint * RightFoot2 = aHDR2->rightFoot()->associatedAnkle();
 
   CjrlJoint * Waist2 = aHDR2->waist();
 

@@ -16,13 +16,15 @@ fileReader.cpp
 Joint.cpp 
 Body.cpp 
 Hand.cpp 
+Foot.cpp
 DynamicBody.cpp 
 MultiBody.cpp 
 DynamicMultiBody.cpp 
 HumanoidDynamicMultiBody.cpp 
 HumanoidSpecificities.cpp  
 SpiritVRMLReader.cpp 
-dynamicsJRLJapanFactory.cpp)
+dynamicsJRLJapanFactory.cpp
+)
 
 
 # Create list of headers files

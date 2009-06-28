@@ -1,3 +1,41 @@
+2009-06-28  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	First working commit with the new abstract interface.
+	* This version is compatible with 
+	commit 3b65ab81576a0e7398afb095644d801ef997d6bc
+	of abstractRobotDynamics.
+	* DynamicMultiBody.cpp has ballooned into a
+	huge file. Thus it has been splitted in a more
+	meaningful organization.
+	* A class to handle the new object Foot has been
+	added.
+	* VRMLID has been replaced by ActuatedID.
+	
+	* src/CMakeLists.txt: Adding Foot.
+	* src/DynamicMultiBody.cpp: Split into several files and
+	added actuated joints support.
+	* src/DynamicMultiBody.h: Adding actuated joint support.
+	* src/DynamicMultiBodyActuated.cpp: New.
+	* src/DynamicMultiBodyAngularMomentum.cpp: New.
+	* src/DynamicMultiBodyArticularJacobian.cpp: New.
+	* src/DynamicMultiBodyCenterOfMass.cpp: New.
+	* src/DynamicMultiBodyInertiaMatrix.cpp: New.
+	* src/DynamicMultiBodyJointRank.cpp: New.
+	* src/DynamicMultiBodyNewtonEuler.cpp: New.
+	* src/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp: New.
+	* src/DynamicMultiBodyProperties.cpp: New.
+	* src/DynamicMultiBodyTree.cpp: New.
+	* src/Foot.cpp: New.
+	* src/Foot.h: New.
+	* src/Hand.h: .
+	* src/HumanoidDynamicMultiBody.cpp: Adding Foot and chest.
+	* src/HumanoidDynamicMultiBody.h: Adding Foot and chest.
+	* src/Joint.cpp: Replace VRMLID into ActuatedID.
+	* src/Joint.h: Replace VRMLID into ActuatedID.
+	* src/MultiBody.cpp: .
+	* src/SpiritVRMLReader.cpp: Access ActuatedID.
+	* unitTesting/ComputeRealZMP.cpp: .
+
 2009-06-27  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Add comments to changelog.

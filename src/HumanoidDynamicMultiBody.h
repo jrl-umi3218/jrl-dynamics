@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "HumanoidSpecificities.h"
+#include "Foot.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
@@ -23,6 +24,7 @@
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 
 #include "dynamics-config.h"
+
 
 namespace dynamicsJRLJapan
 {
@@ -46,28 +48,31 @@ namespace dynamicsJRLJapan
     private:
       
       /** \brief Store the Left Wrist Joint */
-      CjrlJoint *m_LeftWristJoint;
+      CjrlJoint * m_LeftWristJoint;
       
       /** \brief Store the Right Wrist Joint */
-      CjrlJoint *m_RightWristJoint;
+      CjrlJoint * m_RightWristJoint;
       
       /** \brief Store the Left Foot Joint */
-      CjrlJoint *m_LeftFootJoint;
+      CjrlFoot * m_LeftFoot;
       
       /** \brief Store the Right Foot Joint */
-      CjrlJoint *m_RightFootJoint;
+      CjrlFoot *m_RightFoot;
       
       /** \brief Store the Left hand */
-      CjrlHand*  m_leftHand;
+      CjrlHand * m_leftHand;
       
       /** \brief Store the Right hand */
-      CjrlHand*  m_rightHand;
+      CjrlHand * m_rightHand;
       
       /** \brief Store the Gaze Joint */
-      CjrlJoint *m_GazeJoint;
+      CjrlJoint * m_GazeJoint;
 
       /** \brief Store the Waist Joint */
-      CjrlJoint *m_WaistJoint;
+      CjrlJoint * m_WaistJoint;
+
+      /*! \brief Store the chest. */
+      CjrlJoint * m_Chest;
 
       /** \name Gaze related store */
 
@@ -160,50 +165,44 @@ namespace dynamicsJRLJapan
       /**
       \brief Set the pointer to the left Wrist joint.
       */
-      inline void leftWrist(CjrlJoint *inLeftWrist)
-      { m_LeftWristJoint = inLeftWrist;};
+      void leftWrist(CjrlJoint *inLeftWrist);
+
       
       /** 
       \brief Get a pointer to the left Wrist.
       */
-      inline CjrlJoint *leftWrist() 
-      { return m_LeftWristJoint;}
+      CjrlJoint *leftWrist();
       
       /**
       \brief Set the pointer to the right Wrist joint.
       */
-      inline void rightWrist(CjrlJoint *inRightWrist)
-      { m_RightWristJoint = inRightWrist;}
+      void rightWrist(CjrlJoint *inRightWrist);
       
       /** 
       \brief Get a pointer to the right Wrist.
       */
-      inline CjrlJoint *rightWrist()
-      { return m_RightWristJoint;}
+      CjrlJoint *rightWrist();
+      
       
       /**
         \brief Set the pointer to the right hand
       */
-      virtual void rightHand(CjrlHand* inRightHand)
-      { m_rightHand = inRightHand;}
+      virtual void rightHand(CjrlHand* inRightHand);
   
       /**
         \brief Get a pointer to the right hand
       */
-      virtual CjrlHand* rightHand()
-      { return m_rightHand;}
+      virtual CjrlHand* rightHand();
   
       /**
         \brief Set the pointer to the left hand
       */
-      virtual void leftHand(CjrlHand* inLeftHand)
-      { m_leftHand = inLeftHand;}
+      virtual void leftHand(CjrlHand* inLeftHand);
   
       /**
         \brief Get a pointer to the left hand
       */
-      virtual CjrlHand* leftHand()
-      { return m_leftHand;}
+      virtual CjrlHand* leftHand();
       
       /**
 	 \brief Get the hand clench value. This is a scalar value ranging between 0 
@@ -222,26 +221,22 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Set the pointer to the left foot joint.
       */
-      inline void leftFoot(CjrlJoint *inLeftFoot)
-	{ m_LeftFootJoint = (Joint *)inLeftFoot;}
+      void leftFoot(CjrlFoot *inLeftFoot);
       
       /** 
 	  \brief Get a pointer to the left foot.
       */
-      inline CjrlJoint *leftFoot() 
-	{ return m_LeftFootJoint;};
+      CjrlFoot *leftFoot();
       
       /**
 	 \brief Set the pointer to the right foot joint.
       */
-      inline void rightFoot(CjrlJoint *inRightFoot)
-	{m_RightFootJoint = (Joint *) inRightFoot;}
+      void rightFoot(CjrlFoot *inRightFoot);
       
       /** 
 	  \brief Get a pointer to the right foot.
       */
-      inline CjrlJoint *rightFoot()
-	{return m_RightFootJoint;}
+      CjrlFoot *rightFoot();
       
       /** 
 	  \brief Set gaze joint
@@ -287,6 +282,12 @@ namespace dynamicsJRLJapan
       */
       double footHeight() const;
 
+
+      /*! \brief Specify which joint is the chest. */
+      void chest(CjrlJoint *);
+
+      /*! \brief Returns joint which is the first joint of the chest. */
+      CjrlJoint * chest();
 
       /**
 	 \@}

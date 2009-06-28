@@ -356,7 +356,7 @@ void MultiBody::afficherLiaisons(void) {
   for (unsigned int i=0; i<listeLiaisons.size(); i++) {
     cout << "Name: "<< listeLiaisons[i].aJoint->getName()
 	 << " JointID in VRML " 
-	 << listeLiaisons[i].aJoint->getIDinVRML() << " " ;
+	 << listeLiaisons[i].aJoint->getIDinActuated() << " " ;
     cout << "liaison de type " << listeLiaisons[i].aJoint->type()
 	 << "  label "<< listeLiaisons[i].label 
 	 << "  liant le corps " 

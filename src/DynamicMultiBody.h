@@ -64,7 +64,7 @@ namespace dynamicsJRLJapan
     std::vector<DynamicBody *> m_listOfBodies;
     
     /** Array to convert Joint Id from VRL file to Body array index. */
-    std::vector<int> ConvertIDINVRMLToBodyID;
+    std::vector<int> ConvertIDInActuatedToBodyID;
     
     /** Update body parameters from the bodyinfo list of 
       joints and the internal list of bodies. */
@@ -218,9 +218,6 @@ namespace dynamicsJRLJapan
     /** Vector of pointers towards the joints. */
     std::vector<CjrlJoint*> m_JointVector;
 
-    /** \brief Vector of fixed joints. */
-    std::vector<CjrlJoint*> m_VectorOfFixedJoints;
-
     /*! \name Internal computation of Joints */
     /*! Method to compute the number of joints
       and btw the size of the configuration.
@@ -243,7 +240,7 @@ namespace dynamicsJRLJapan
 
     /*! Interface between the VRML ID and the row of the
       configuration state vector */
-    std::vector<int> m_VRMLIDToConfiguration;
+    std::vector<int> m_ActuatedIDToConfiguration;
 
     /*! Number of VRML IDs, they are supposed to be 
      positive or null, and continuous. */
@@ -321,7 +318,30 @@ namespace dynamicsJRLJapan
     std::string m_FileLinkJointRank;
 
     /* @} */
-            
+
+    /*! Actuated joints related fields 
+      @{
+     */
+
+    /* ! Boolean to know if the synchronization between the actuated vector 
+     and the joints have been realized. 
+     Set to false each time a new vector of actuated joints 
+     is set.
+     Set to true each time the method BuildLinkBetweenActuatedVectorAndJoints()
+     is called.
+    */
+    bool m_SynchronizationBetweenActuatedVectorAndJoints;
+
+    /*! Vector of actuated Joints. */
+    std::vector<CjrlJoint *> m_ActuatedJoints;
+
+    /*! @} */
+  protected:
+
+    /*! Internal synchronization */
+    int BuildLinkBetweenActuatedVectorAndJoints();
+
+    
   public:
     
     /** \brief Default constructor. */
@@ -411,18 +431,6 @@ namespace dynamicsJRLJapan
      */
     void BackwardDynamics(DynamicBody & CurrentBody);
 
-    /** \brief Compute Inertia Matrices for Resolved Mometum Control
-	Fist pass for tilde m and tilde c */
-    void InertiaMatricesforRMCFirstStep();
-    
-    /** \brief Second pass for tilde I, and the inertia matrix M and H
-	splitted across all the bodies in RMC_m and RMC_h. */
-    void InertiaMatricesforRMCSecondStep();
-    
-    /** \brief Initialisation of the direct model computation */
-    void ForwardDynamics(int corpsCourant, int liaisonDeProvenance);
-    
-    
     /** \brief Calculate ZMP. */
     void CalculateZMP(double &px, 
 		      double &py,
@@ -525,10 +533,10 @@ namespace dynamicsJRLJapan
     string GetName(int JointID);
 
     /** Returns a CjrlJoint corresponding to body JointID in the VRML numbering system . */
-    CjrlJoint* GetJointFromVRMLID(int JointID);
+    CjrlJoint* GetJointFromActuatedID(int JointID);
 
     /** Returns a vector to transfer from VRML ID to configuration ID . */
-    void GetJointIDInConfigurationFromVRMLID(std::vector<int> & VectorFromVRMLIDToConfigurationID);
+    void GetJointIDInConfigurationFromActuatedID(std::vector<int> & VectorFromVRMLIDToConfigurationID);
 
     /** Returns the ZMP value */
     inline const vector3d getZMP() const
@@ -581,41 +589,6 @@ namespace dynamicsJRLJapan
        \brief Get the number of degrees of freedom of the robot.
     */
     unsigned int numberDof() const;
-    
-    /** \name Methods related to fixed joints
-	@{
-    */
-    /** 
-	\brief Add a joint to the vector of fixed joints.
-	This Declares a joint as fixed in the world.
-    */
-    void addFixedJoint(CjrlJoint *inFixedJoint) ;
-    
-    /** 
-	\brief Count joints that are fixed in the world.
-    */
-    unsigned int countFixedJoints() const;
-    
-    /** 
-	\brief Remove a joint from the vector of fixed joints.
-	The input joint will no longer be considered fixed in the world.
-    */
-    void removeFixedJoint(CjrlJoint *inFixedJoint);
-      
-    /** 
-	\brief Clear the list of fixed joints
-    */
-    void clearFixedJoints();
-       
-    /** 
-	\brief Return the fixed joint at rank inRank 
-    */
-    CjrlJoint& fixedJoint(unsigned int inJointRank);
-
-      
-    /**
-       @}
-    */
     
     /** 
 	\name Configuration, velocity and acceleration
@@ -1047,6 +1020,25 @@ namespace dynamicsJRLJapan
      bool setProperty(std::string &inProperty, const std::string& inValue); 
 
      /*! @} */
+
+     /*! \name Actuated joints related methods.  
+       @{
+     */
+     
+     /** 
+	 \brief Returns the list of actuated joints. 
+     */
+     virtual const std::vector<CjrlJoint*>& getActuatedJoints() const;
+     
+     /**
+	\brief Specifies the list of actuated joints. 
+     */
+     virtual void setActuatedJoints(std::vector<CjrlJoint*>& lActuatedJoints);
+     
+     /*! 
+       @} 
+     */
+
   };
 };
 #endif

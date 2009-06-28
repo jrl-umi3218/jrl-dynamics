@@ -16,9 +16,9 @@
 #ifndef HAND_H
 #define HAND_H
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 
-#include "robotDynamics/jrlHand.h"
+#include <robotDynamics/jrlHand.h>
 #include "dynamics-config.h"
 
 namespace dynamicsJRLJapan

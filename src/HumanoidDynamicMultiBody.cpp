@@ -61,7 +61,7 @@ using namespace dynamicsJRLJapan;
 HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynamicMultiBody()
 {
   m_rightHand = m_leftHand = 0;
-  m_RightFootJoint = m_LeftFootJoint = 0;
+  m_RightFoot = m_LeftFoot = 0;
   m_HS = NULL;
 }
 
@@ -164,6 +164,8 @@ HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
   
   delete m_rightHand;
   delete m_leftHand;
+  delete m_RightFoot;
+  delete m_LeftFoot;
 }
 
 void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
@@ -179,7 +181,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   //int EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   int EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
 
-  m_LeftWristJoint = GetJointFromVRMLID(EndIndex);
+  m_LeftWristJoint = GetJointFromActuatedID(EndIndex);
   
   // Get the right hand.
   JointForOneLimb.clear();
@@ -188,7 +190,7 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   //EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
 
-  m_RightWristJoint = GetJointFromVRMLID(EndIndex);
+  m_RightWristJoint = GetJointFromActuatedID(EndIndex);
   
   
   // Get the left foot.
@@ -198,8 +200,10 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the left foot:" << EndIndex);
 
-  m_LeftFootJoint = GetJointFromVRMLID(EndIndex);
-  
+  Foot *lLeftFoot = new Foot();
+  lLeftFoot->setAssociatedAnkle(GetJointFromActuatedID(EndIndex));
+  leftFoot(lLeftFoot);
+
   // Get the right foot.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetFootJoints(-1);
@@ -207,21 +211,22 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the right foot:" << EndIndex);
 
-  m_RightFootJoint = GetJointFromVRMLID(EndIndex);
+  Foot *lRightFoot = new Foot();
+  lRightFoot->setAssociatedAnkle(GetJointFromActuatedID(EndIndex));
+  rightFoot(lRightFoot);
 
-  
   // Get the gaze joint (head) of the humanoid.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetHeadJoints();
   ListeJointsSize = JointForOneLimb.size();
   EndIndex = JointForOneLimb[ListeJointsSize-1];
 
-  m_GazeJoint = GetJointFromVRMLID(EndIndex);
+  m_GazeJoint = GetJointFromActuatedID(EndIndex);
 
   // Get the waist joint of the humanoid.
   std::vector<int> JointsForWaist = m_HS->GetWaistJoints();
   if (JointsForWaist.size()==1)
-    m_WaistJoint = GetJointFromVRMLID(JointsForWaist[0]);
+    m_WaistJoint = GetJointFromActuatedID(JointsForWaist[0]);
 }
 
 const MAL_S3_VECTOR(,double) & HumanoidDynamicMultiBody::zeroMomentumPoint() const
@@ -293,6 +298,76 @@ bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchin
     return false;
 }
 
+void HumanoidDynamicMultiBody::leftWrist(CjrlJoint *inLeftWrist)
+{ 
+  m_LeftWristJoint = inLeftWrist;
+}
+
+CjrlJoint *HumanoidDynamicMultiBody::leftWrist()
+{ 
+  return m_LeftWristJoint;
+}
+
+void HumanoidDynamicMultiBody::rightWrist(CjrlJoint *inRightWrist)
+{ 
+  m_RightWristJoint = inRightWrist;
+}
+
+CjrlJoint *HumanoidDynamicMultiBody::rightWrist()
+{ 
+  return m_RightWristJoint;
+}
+
+void HumanoidDynamicMultiBody::rightHand(CjrlHand* inRightHand)
+{
+  m_rightHand = inRightHand;
+}
+
+CjrlHand * HumanoidDynamicMultiBody::rightHand()
+{
+  return m_rightHand;
+}
+
+
+void HumanoidDynamicMultiBody::leftHand(CjrlHand* inLeftHand)
+{
+  m_leftHand = inLeftHand;
+}
+
+CjrlHand * HumanoidDynamicMultiBody::leftHand()
+{ 
+  return m_leftHand;
+}
+
+void HumanoidDynamicMultiBody::leftFoot(CjrlFoot *inLeftFoot)
+{ 
+  m_LeftFoot = inLeftFoot;
+}
+
+CjrlFoot * HumanoidDynamicMultiBody::leftFoot() 
+{ 
+  return m_LeftFoot;
+}
+
+void HumanoidDynamicMultiBody::rightFoot(CjrlFoot *inRightFoot)
+{ 
+  m_RightFoot = inRightFoot;
+}
+
+CjrlFoot * HumanoidDynamicMultiBody::rightFoot() 
+{ 
+  return m_RightFoot;
+}
+
+void HumanoidDynamicMultiBody::chest(CjrlJoint *inChest)
+{
+  m_Chest = inChest;
+}
+
+CjrlJoint * HumanoidDynamicMultiBody::chest()
+{
+  return m_Chest;
+}
 
 /***************************************************/
 /* End of the implementation                       */

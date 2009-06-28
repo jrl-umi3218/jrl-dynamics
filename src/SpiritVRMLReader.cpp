@@ -341,7 +341,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->CurrentLink.aJoint = new Joint();
 	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
 	m_DataForParsing->CurrentLink.aJoint->setName(s);
-	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
+	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 		
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the Joint: |" << s<<"|" << endl;
@@ -354,7 +354,7 @@ namespace dynamicsJRLJapan
 
 	m_DataForParsing->CurrentLink.aJoint = new Joint();
 	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
-	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(-1);
+	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 	if (m_Verbose>1)
 	  std::cout<< "Reading the `name of the Joint SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
@@ -508,7 +508,7 @@ namespace dynamicsJRLJapan
 
       void fJointID(int aJointID)  const
       {
-	m_DataForParsing->CurrentLink.aJoint->setIDinVRML(aJointID);
+	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(aJointID);
 	if (m_Verbose>1)
 	  std::cout << "JointID :" << aJointID << endl;
       }
