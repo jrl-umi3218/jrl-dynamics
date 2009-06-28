@@ -1,3 +1,10 @@
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
+	Adding header dynamicsJRLJapan.h.
+	* Adding file removed from previous commit
+	preventing correct compilation.
+	* include/dynamicsJRLJapan/dynamicsJRLJapanFactory.h: New.
+
 2009-06-28  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	First working commit with the new abstract interface.
