@@ -1,5 +1,10 @@
 2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	T3D compatibility with samples.
+	* unitTesting/ComputeRealZMP.cpp: Put back local MAL compatibility.
+
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	dynamics-config.h generated now in ./src.
 	* CMakeLists.txt: Corrected the target directory
 	for dynamics-config.h.

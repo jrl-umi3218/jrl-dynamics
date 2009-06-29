@@ -7,6 +7,7 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
+/*
 void LocalInversionMatrix4dHomogeneous(matrix4d &a, matrix4d &inva)
 {
   inva(0,0) = a(0,0); inva(0,1) = a(1,0); inva(0,2) = a(2,0); 
@@ -20,6 +21,7 @@ void LocalInversionMatrix4dHomogeneous(matrix4d &a, matrix4d &inva)
   inva(3,0) = inva(3,1) = inva(3,2) = 0.0;
   inva(3,3) = 1.0;
 }
+*/
 
 void ExtractRefWaist(ifstream &RefStateFile,
 		     double *WaistFromRef,
@@ -108,7 +110,8 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
 
   matrix4d CurrentWorldPosInSupportFoot;
 
-  LocalInversionMatrix4dHomogeneous(CurrentSupportFootPosInWorld,CurrentWorldPosInSupportFoot);
+  MAL_S4x4_INVERSE(CurrentSupportFootPosInWorld,CurrentWorldPosInSupportFoot,double);
+
   cout << "CurrentWorldPosInSupportFoot" << CurrentWorldPosInSupportFoot << endl;
   MAL_S4x4_C_eq_A_by_B(CurrentWaistPosInSupportFoot,CurrentWorldPosInSupportFoot,CurrentWaistInWorld2);
   cout << "CurrentWaistPosInSupportFoot : " << CurrentWaistPosInSupportFoot << endl;
@@ -123,7 +126,8 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
       
       if ((CurrentSupportFoot==1) && (PreviousSupportFoot==-1))
 	{
-	  LocalInversionMatrix4dHomogeneous(TrRF2,tmp);
+	  MAL_S4x4_INVERSE(TrRF2,tmp,double);
+	  //LocalInversionMatrix4dHomogeneous(TrRF2,tmp);
 	  // Put Waist in support foot pos during Change support.
 	  // we moved from right support foot to left support foot.
 
@@ -140,7 +144,8 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
       
       if ((CurrentSupportFoot==-1) && (PreviousSupportFoot==1))
 	{
-	  LocalInversionMatrix4dHomogeneous(TrLF2,tmp);
+	  MAL_S4x4_INVERSE(TrLF2,tmp,double);
+	  //LocalInversionMatrix4dHomogeneous(TrLF2,tmp);
 	  AbsSupportFootPos = MAL_S4x4_RET_A_by_B(AbsSupportFootPos,
 						  tmp);
 	  AbsSupportFootPos = MAL_S4x4_RET_A_by_B(AbsSupportFootPos,
