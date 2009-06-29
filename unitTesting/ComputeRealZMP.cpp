@@ -7,22 +7,6 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
-/*
-void LocalInversionMatrix4dHomogeneous(matrix4d &a, matrix4d &inva)
-{
-  inva(0,0) = a(0,0); inva(0,1) = a(1,0); inva(0,2) = a(2,0); 
-  inva(1,0) = a(0,1); inva(1,1) = a(1,1); inva(1,2) = a(2,1); 
-  inva(2,0) = a(0,2); inva(2,1) = a(1,2); inva(2,2) = a(2,2); 
-
-  inva(0,3) = -(inva(0,0)*a(0,3)+inva(0,1)*a(1,3)+inva(0,2)*a(2,3));
-  inva(1,3) = -(inva(1,0)*a(0,3)+inva(1,1)*a(1,3)+inva(1,2)*a(2,3));
-  inva(2,3) = -(inva(2,0)*a(0,3)+inva(2,1)*a(1,3)+inva(2,2)*a(2,3));
-  
-  inva(3,0) = inva(3,1) = inva(3,2) = 0.0;
-  inva(3,3) = 1.0;
-}
-*/
-
 void ExtractRefWaist(ifstream &RefStateFile,
 		     double *WaistFromRef,
 		     double *RotationFreeFlyer,

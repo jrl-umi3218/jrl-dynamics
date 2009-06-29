@@ -1,5 +1,11 @@
 2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	Removed local inverse matrix.
+	* unitTesting/ComputeRealZMP.cpp: No the problem was not coming
+	from the inverse matrix in jrlMathTools for small matrix.
+
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	T3D compatibility with samples.
 	* unitTesting/ComputeRealZMP.cpp: Put back local MAL compatibility.
 
