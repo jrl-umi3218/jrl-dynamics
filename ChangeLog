@@ -1,5 +1,10 @@
 2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	T3D compatibility for ComputeZMP.cpp.
+	* unitTesting/ComputeRealZMP.cpp: .
+
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Removed local inverse matrix.
 	* unitTesting/ComputeRealZMP.cpp: No the problem was not coming
 	from the inverse matrix in jrlMathTools for small matrix.

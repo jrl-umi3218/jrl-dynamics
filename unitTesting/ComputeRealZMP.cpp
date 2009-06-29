@@ -59,8 +59,9 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
   matrix4d TrRF2 = RightFoot2->currentTransformation();
   matrix4d CurrentWaistInWorld2 = Waist2->currentTransformation();
   if (
-      (TrLF2(2,3)<TrRF2(2,3)) &&
-      (fabs(TrRF2(2,3)-0.105)>1e-3))
+      (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)<
+       MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)) &&
+      (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)-0.105)>1e-3))
     {
       CurrentSupportFootPosInWorld = TrLF2;
       CurrentSupportFoot = 1;
@@ -68,7 +69,8 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
     }
   else
     {
-      if ((TrLF2(2,3)>TrRF2(2,3)) &&
+      if ((MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)>
+	   MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)) &&
 	  (fabs(TrLF2(2,3)-0.105)>1e-3))
 	{
 	  CurrentSupportFootPosInWorld = TrRF2;
@@ -143,17 +145,17 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
   cout << "CurrentAbsWaistPos: " << CurrentAbsWaistPos << endl;
 
   {
-    const double & nx = CurrentAbsWaistPos(2,2);
-    const double & ny = CurrentAbsWaistPos(2,1);
+    const double & nx = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,2);
+    const double & ny = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,1);
     
     WaistFromActual[3] = atan2(ny,nx);
-    WaistFromActual[4] = atan2(-CurrentAbsWaistPos(2,0),
+    WaistFromActual[4] = atan2(-MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,0),
 			       sqrt(ny*ny+nx*nx));
-    WaistFromActual[5] = atan2(CurrentAbsWaistPos(1,0),
-			       CurrentAbsWaistPos(0,0));
-    WaistFromActual[0] = CurrentAbsWaistPos(0,3);
-    WaistFromActual[1] = CurrentAbsWaistPos(1,3);
-    WaistFromActual[2] = CurrentAbsWaistPos(2,3);
+    WaistFromActual[5] = atan2(MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,1,0),
+			       MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,0,0));
+    WaistFromActual[0] = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,0,3);
+    WaistFromActual[1] = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,1,3);
+    WaistFromActual[2] = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,3);
   }
 
   
@@ -420,17 +422,27 @@ int main(int argc, char *argv[])
       double lnorm  = NormalForces[0] + NormalForces[1];
       
       RebuildZMP.open("RebuildZMP.dat",ofstream::app);
-      RebuildZMP << (TrLF(0,3) * NormalForces[0] + TrRF(0,3) * NormalForces[1])/ lnorm  << " "
-		 << (TrLF(1,3) * NormalForces[0] + TrRF(1,3) * NormalForces[1])/ lnorm  << " " 
+      RebuildZMP << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) * NormalForces[0] + 
+		     MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) * NormalForces[1])/ lnorm  << " "
+		 << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) * NormalForces[0] + 
+		     MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) * NormalForces[1])/ lnorm  << " " 
 		 << ZMPval(0) << " " << ZMPval(1) << " " 
-		 << TrLF(0,3) << " " << TrLF(1,3) << " " << TrLF(2,3) << " " 
-		 << TrRF(0,3) << " " << TrRF(1,3) << " " << TrRF(2,3) << " "
-		 << AbsSupportFootPos(0,3) << " " 
-		 << AbsSupportFootPos(1,3) << " " 
-		 << AbsSupportFootPos(2,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,2,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,2,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,0,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,2,3) << " "
 		 << PreviousSupportFoot << " " 
-		 << TrLF2(0,3) << " " << TrLF2(1,3) << " " << TrLF2(2,3) << " " 
-		 << TrRF2(0,3) << " " << TrRF2(1,3) << " " << TrRF2(2,3) << endl;
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,0,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,0,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3) << endl;
       //92
       RebuildZMP.close();
 
