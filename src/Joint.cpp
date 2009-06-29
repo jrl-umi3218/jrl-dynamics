@@ -9,29 +9,11 @@
   Please refers to file License.txt for details on the license.
    
 */
+#include "Debug.h"
 
 #include "Joint.h"
 #include "DynamicBody.h"
 
-#define ODEBUG2(x)
-#define ODEBUG3(x) cerr << "Joint :" << x << endl
-
-#if 0
-#define ODEBUG(x) cerr << "Joint :" <<  x << endl
-#else
-#define ODEBUG(x)
-#endif
-
-#if 0
-
-#define ODEBUG4(x,y) { ofstream DebugFile;\
-    DebugFile.open(y,ofstream::app); \
-    DebugFile << "WalkGenJRLIntegrate: " << x << endl; \
-    DebugFile.close();}
-#define _DEBUG_4_ACTIVATED_ 1
-#else
-#define ODEBUG4(x,y)
-#endif
 
 using namespace dynamicsJRLJapan;
 

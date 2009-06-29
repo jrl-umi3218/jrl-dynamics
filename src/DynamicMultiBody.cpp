@@ -27,48 +27,12 @@
 #include <fstream>
 #include <string.h>
 
+#include "Debug.h"
+
 /*! Local library includes. */
 #include "DynamicMultiBody.h"
 #include "robotDynamics/jrlBody.h"
 
-#define RESETDEBUG5(y) { ofstream DebugFile;	\
-    DebugFile.open(y,ofstream::out);		\
-    DebugFile.close();}
-
-#define ODEBUG5(x,y) { ofstream DebugFile;	\
-    DebugFile.open(y,ofstream::app);		\
-    DebugFile << "DMB: " << x << endl;		\
-    DebugFile.close();}
-
-#define ODEBUG2(x)
-#define ODEBUG3(x) cerr << "DynamicMultiBody :" << x << endl
-
-#if 0
-#define ODEBUG(x) cerr << "DynamicMultiBody :" <<  x << endl
-#else
-#define ODEBUG(x)
-#endif
-
-#if 0
-
-#define ODEBUG4(x,y) { ofstream DebugFile; \
-    DebugFile.open(y,ofstream::app); \
-    DebugFile << "WalkGenJRLIntegrate: " \
-	      << x << endl; DebugFile.close();}
-#define _DEBUG_4_ACTIVATED_ 1
-#else
-#define ODEBUG4(x,y)
-#endif
-
-#if 0
-#define RESETDEBUG4(y) { ofstream DebugFile; DebugFile.open(y,ofstream::out); DebugFile.close();}
-#define ODEBUG4(x,y) { ofstream DebugFile; DebugFile.open(y,ofstream::app); \
-    DebugFile << "PGI: " << x << endl; DebugFile.close();}
-#define _DEBUG_4_ACTIVATED_ 1
-#else
-#define RESETDEBUG4(y)
-#define ODEBUG4(x,y)
-#endif
 
 using namespace dynamicsJRLJapan;
 

@@ -1,5 +1,14 @@
 2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	ODEBUG definition removed from files.
+	* src/DynamicMultiBody.cpp: .
+	* src/HumanoidDynamicMultiBody.cpp: .
+	* src/HumanoidSpecificities.cpp: .
+	* src/Joint.cpp: .
+	* src/SpiritVRMLReader.cpp: .
+
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	All ODEBUG macros are now in Debug.h....
 	* src/Debug.h: Long overdue - All Macros are here now. New.
 
