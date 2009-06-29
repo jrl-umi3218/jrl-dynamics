@@ -1,5 +1,10 @@
 2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
+	All ODEBUG macros are now in Debug.h....
+	* src/Debug.h: Long overdue - All Macros are here now. New.
+
+2009-06-29  Olivier Stasse  <olivier.stasse@aist.go.jp>
+
 	Adding access through MAL_S4x4_ACCESS_I_J.
 	* unitTesting/ComputeRealZMP.cpp: .
 
