@@ -71,7 +71,7 @@ void ExtractActualWaist(CjrlJoint *LeftFoot2,
     {
       if ((MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)>
 	   MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)) &&
-	  (fabs(TrLF2(2,3)-0.105)>1e-3))
+	  (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)-0.105)>1e-3))
 	{
 	  CurrentSupportFootPosInWorld = TrRF2;
 	  CurrentSupportFoot = -1;
