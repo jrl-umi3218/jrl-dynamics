@@ -18,6 +18,7 @@
 #include "DynamicMultiBody.h"
 #include "Hand.h"
 #include "HumanoidDynamicMultiBody.h"
+#include "HumanoidSpecificities.h"
 
 
 using namespace dynamicsJRLJapan;

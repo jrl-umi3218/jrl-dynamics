@@ -27,7 +27,6 @@
 #include "dynamics-config.h"
 #include "Joint.h"
 #include "Body.h"
-#include "fileReader.h"
 #include <vector>
 #include <algorithm>	//pour utiliser la fonction find
 #include <iostream>

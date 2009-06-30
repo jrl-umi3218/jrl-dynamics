@@ -16,7 +16,7 @@
 #include "Debug.h"
 
 #include "HumanoidSpecificities.h"
-
+#include "fileReader.h"
 
 using namespace dynamicsJRLJapan;
 

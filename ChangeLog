@@ -1,3 +1,23 @@
+2009-06-30  Florent Lamiraux  <florent@laas.fr>
+
+	Install again headers implementing abstract interface.
+	* include/dynamicsJRLJapan/Body.h: Rename from src/Body.h.
+	* include/dynamicsJRLJapan/DynamicBody.h: Rename from src/DynamicBody.h.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h: Rename from src/DynamicMultiBody.h.
+	* include/dynamicsJRLJapan/Foot.h: Rename from src/Foot.h.
+	* include/dynamicsJRLJapan/Hand.h: Rename from src/Hand.h.
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h: Rename from src/HumanoidDynamicMultiBody.h.
+	* include/dynamicsJRLJapan/Joint.h: Rename from src/Joint.h.
+	* include/dynamicsJRLJapan/MultiBody.h: Rename from src/MultiBody.h.
+	* include/dynamicsJRLJapan/jrlDynamicRobotNA.hpp: Remove.
+	* include/dynamicsJRLJapan/jrlHumanoidDynamicRobotNA.hpp: Remove.
+	* include/dynamicsJRLJapan/robotDynamicsImpl.h: Rename from src/robotDynamicsImpl.h.
+	* src/CMakeLists.txt: .
+	* src/DynamicMultiBody.cpp: .
+	* src/HumanoidDynamicMultiBody.cpp: .
+	* src/HumanoidSpecificities.cpp: .
+	These headers are needed for packages deriving from the classes defined in these headers.
+
 2009-06-30  Olivier Stasse  <olivier.stasse@aist.go.jp>
 
 	Moving in the template for Non Abstract implementation.

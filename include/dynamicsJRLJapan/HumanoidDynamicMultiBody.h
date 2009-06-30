@@ -15,7 +15,6 @@
 #define _HUMANOID_DYNAMIC_MULTIBODY_H_
 #include <vector>
 
-#include "HumanoidSpecificities.h"
 #include "Foot.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
@@ -28,6 +27,7 @@
 
 namespace dynamicsJRLJapan
 {
+  class HumanoidSpecificities;
 
   struct HumanoidDMBComparison
   {

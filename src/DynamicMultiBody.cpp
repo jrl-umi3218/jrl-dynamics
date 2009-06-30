@@ -33,6 +33,7 @@
 #include "DynamicMultiBody.h"
 #include "robotDynamics/jrlBody.h"
 
+#include "fileReader.h"
 
 using namespace dynamicsJRLJapan;
 
