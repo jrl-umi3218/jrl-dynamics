@@ -31,6 +31,8 @@ dynamicsJRLJapanFactory.cpp
 #-----------------------------
 SET(libdyn_headers 
 ../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
+../include/${PROJECT_NAME}/jrlDynamicRobotNA.hpp
+../include/${PROJECT_NAME}/jrlHumanoidDynamicRobotNA.hpp
 )
 
 FOREACH(srcfile ${libdyn_src})
