@@ -1,5 +1,11 @@
 2009-06-30  Florent Lamiraux  <florent@laas.fr>
 
+	Fix order of include flags in compilation.
+	* CMakeLists.txt: abstractRobotDynamics flags should be
+	before MatrixAbstractLayer flags.
+
+2009-06-30  Florent Lamiraux  <florent@laas.fr>
+
 	Install again headers implementing abstract interface.
 	* include/dynamicsJRLJapan/Body.h: Rename from src/Body.h.
 	* include/dynamicsJRLJapan/DynamicBody.h: Rename from src/DynamicBody.h.

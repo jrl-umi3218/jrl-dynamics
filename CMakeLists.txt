@@ -56,19 +56,19 @@ MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")
 
 SET(${PROJECT_NAME}_CXXFLAGS "-Wall ${${PROJECT_NAME}_CXXFLAGS}")
 
-FOREACH(option_cxxflags ${MALJRL_CFLAGS})
-  SET(${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
-ENDFOREACH(option_cxxflags)
-
 FOREACH(option_cxxflags ${ROBOTDYNAMICS_CFLAGS})
   SET(${PROJECT_NAME}_CXXFLAGS " ${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
 ENDFOREACH(option_cxxflags)
 
-FOREACH(option_ldflags ${MALJRL_LDFLAGS})
+FOREACH(option_cxxflags ${MALJRL_CFLAGS})
+  SET(${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
+ENDFOREACH(option_cxxflags)
+
+FOREACH(option_ldflags ${ROBOTDYNAMICS_LDFLAGS})
   SET(${PROJECT_NAME}_LDFLAGS "${option_ldflags} ${${PROJECT_NAME}_LDFLAGS}")
 ENDFOREACH(option_ldflags)
 
-FOREACH(option_ldflags ${ROBOTDYNAMICS_LDFLAGS})
+FOREACH(option_ldflags ${MALJRL_LDFLAGS})
   SET(${PROJECT_NAME}_LDFLAGS "${option_ldflags} ${${PROJECT_NAME}_LDFLAGS}")
 ENDFOREACH(option_ldflags)
 
