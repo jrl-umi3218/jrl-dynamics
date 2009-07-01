@@ -13,6 +13,24 @@
 
 	These classes are now wrapper around old implementation.
 
+2009-07-01  Florent Lamiraux  <florent@laas.fr>
+
+	Add information in INSTALL file.
+	* INSTALL: indicate how to choose the mode of building:
+	debug, release, ...
+
+2009-07-01  Florent Lamiraux  <florent@laas.fr>
+
+	Test programs correctly compile and all symbols are defined.
+	* CMakeLists.txt,
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h,
+	* src/DynamicMultiBody.cpp,
+	* src/DynamicMultiBodyPrivate.h,
+	* src/HumanoidDynamicMultiBody.cpp,
+	* src/MultiBody.h,
+	* unitTesting/TestCopyJointTreeThroughAbstractInterface.cpp: 
+	Define undefined functions.
+
 2009-07-02  Florent Lamiraux  <florent@laas.fr>
 
 	Change name of class in private implementation.
