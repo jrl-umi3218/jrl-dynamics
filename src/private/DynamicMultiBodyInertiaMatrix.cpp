@@ -1,6 +1,6 @@
-/*! Implements Inertia Matrix methods of DynamicMultiBody. */
+/*! Implements Inertia Matrix methods of DynMultiBodyPrivate. */
 
-void DynamicMultiBody::computeInertiaMatrix()
+void DynMultiBodyPrivate::computeInertiaMatrix()
 {
   if ((MAL_MATRIX_NB_ROWS(m_InertiaMatrix) != numberDof()) || 
       (MAL_MATRIX_NB_COLS(m_InertiaMatrix) != numberDof()))
@@ -65,12 +65,12 @@ void DynamicMultiBody::computeInertiaMatrix()
   
 }
 
-const matrixNxP & DynamicMultiBody::inertiaMatrix() const
+const matrixNxP & DynMultiBodyPrivate::inertiaMatrix() const
 {
   return m_InertiaMatrix;
 }
 
-matrixNxP & DynamicMultiBody::getInertiaMatrix() 
+matrixNxP & DynMultiBodyPrivate::getInertiaMatrix() 
 {
   return m_InertiaMatrix;
 }

@@ -15,7 +15,7 @@
 
 #include "Debug.h"
 
-#include "DynamicMultiBody.h"
+#include "DynMultiBodyPrivate.h"
 #include "Hand.h"
 #include "HumanoidDynamicMultiBody.h"
 #include "HumanoidSpecificities.h"
@@ -24,16 +24,16 @@
 using namespace dynamicsJRLJapan;
 
 
-HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynamicMultiBody()
+HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynMultiBodyPrivate()
 {
   m_rightHand = m_leftHand = 0;
   m_RightFoot = m_LeftFoot = 0;
   m_HS = NULL;
 }
 
-HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(const DynamicMultiBody& inDynamicMultiBody,
+HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(const DynMultiBodyPrivate& inDynamicMultiBody,
 						   string aFileNameForHumanoidSpecificities) :
-  DynamicMultiBody(inDynamicMultiBody)
+  DynMultiBodyPrivate(inDynamicMultiBody)
 {
   SetHumanoidSpecificitiesFile(aFileNameForHumanoidSpecificities);
 }
@@ -214,7 +214,7 @@ void HumanoidDynamicMultiBody::ComputingZeroMomentumPoint()
 bool HumanoidDynamicMultiBody::computeForwardKinematics()
 {
   bool r;
-  r= DynamicMultiBody::computeForwardKinematics();
+  r= DynMultiBodyPrivate::computeForwardKinematics();
   ComputingZeroMomentumPoint();
   return r;
 

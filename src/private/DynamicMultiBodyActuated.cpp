@@ -1,5 +1,5 @@
 /* Implements Actuated methods of DynamicsMultiBody */
-void DynamicMultiBody::setActuatedJoints(std::vector<CjrlJoint *>& lActuatedJoints)
+void DynMultiBodyPrivate::setActuatedJoints(std::vector<CjrlJoint *>& lActuatedJoints)
 {
   bool Same=true;
 
@@ -20,19 +20,19 @@ void DynamicMultiBody::setActuatedJoints(std::vector<CjrlJoint *>& lActuatedJoin
   m_SynchronizationBetweenActuatedVectorAndJoints = false;
 }
 
-const std::vector<CjrlJoint *>& DynamicMultiBody::getActuatedJoints() const
+const std::vector<CjrlJoint *>& DynMultiBodyPrivate::getActuatedJoints() const
 {
   return m_ActuatedJoints;
 }
 
 
-void DynamicMultiBody::GetJointIDInConfigurationFromActuatedID(std::vector<int> &VectorFromActuatedIDToConfigurationID)
+void DynMultiBodyPrivate::GetJointIDInConfigurationFromActuatedID(std::vector<int> &VectorFromActuatedIDToConfigurationID)
 {
   VectorFromActuatedIDToConfigurationID.clear();
   VectorFromActuatedIDToConfigurationID = m_ActuatedIDToConfiguration;
 }
 
-int DynamicMultiBody::BuildLinkBetweenActuatedVectorAndJoints()
+int DynMultiBodyPrivate::BuildLinkBetweenActuatedVectorAndJoints()
 {
   m_ActuatedIDToConfiguration.resize(m_ActuatedJoints.size());
 
@@ -64,7 +64,7 @@ int DynamicMultiBody::BuildLinkBetweenActuatedVectorAndJoints()
   return 0;
 }
 
-CjrlJoint* DynamicMultiBody::GetJointFromActuatedID(int JointID)
+CjrlJoint* DynMultiBodyPrivate::GetJointFromActuatedID(int JointID)
 {
 
   for(unsigned int i=0;i<m_JointVector.size();i++)

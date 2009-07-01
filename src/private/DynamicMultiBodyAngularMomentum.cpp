@@ -1,11 +1,11 @@
-/*! Implements the angular Momentum methods of DynamicMultiBody */
+/*! Implements the angular Momentum methods of DynMultiBodyPrivate */
 
-void DynamicMultiBody::angularMomentumWrtCoM(vector3d & angularmomentum) 
+void DynMultiBodyPrivate::angularMomentumWrtCoM(vector3d & angularmomentum) 
 {
   angularMomentumWrtToPt(positionCoMPondere, angularmomentum);
 }
 
-void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angularmomentum)
+void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &apoint, vector3d & angularmomentum)
 {
   /** Intermediate variables. The mantra is :
       "To optimize those variables, in the Compiler we trust"
@@ -95,7 +95,7 @@ void DynamicMultiBody::angularMomentumWrtToPt(vector3d &apoint, vector3d & angul
 /**
    \brief Get the angular momentum of the robot at the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::angularMomentumRobot()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::angularMomentumRobot()
 {
   return m_L;
 
@@ -104,14 +104,14 @@ const MAL_S3_VECTOR(,double)& DynamicMultiBody::angularMomentumRobot()
 /**
    \brief Get the time-derivative of the angular momentum at the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::derivativeAngularMomentum()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeAngularMomentum()
 {
 
   return m_dL;
 
 };
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::GetL(int JointID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetL(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
@@ -120,7 +120,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetL(int JointID)
   return empty;
 }
 
-void DynamicMultiBody::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
+void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
 {
   if ((MAL_MATRIX_NB_ROWS(outjacobian) != 3) || 
       (MAL_MATRIX_NB_COLS(outjacobian) != numberDof()))

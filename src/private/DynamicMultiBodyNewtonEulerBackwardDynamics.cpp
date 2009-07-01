@@ -1,4 +1,4 @@
-void DynamicMultiBody::BackwardDynamics(DynamicBody & CurrentBody )
+void DynMultiBodyPrivate::BackwardDynamics(DynamicBody & CurrentBody )
 {
   MAL_S3x3_MATRIX(,double) aRt;
 

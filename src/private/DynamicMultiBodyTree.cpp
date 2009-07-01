@@ -1,4 +1,4 @@
-void DynamicMultiBody::SpecifyTheRootLabel(int ID)
+void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 {
   labelTheRoot = ID;
   m_listOfBodies[ID]->setLabelMother(-1);
@@ -56,7 +56,7 @@ void DynamicMultiBody::SpecifyTheRootLabel(int ID)
     m_listOfBodies[i]->massCoef(m_listOfBodies[i]->mass()/mass());
 }
 
-void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, int LiaisonForFatherJoint)
+void DynMultiBodyPrivate::UpdateBodyParametersFromJoint(int BodyID, int JointID, int LiaisonForFatherJoint)
 // cID : corps identifier
 // lD : liaison destination
 {
@@ -76,7 +76,7 @@ void DynamicMultiBody::UpdateBodyParametersFromJoint(int BodyID, int JointID, in
 
 }
 
-void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
+void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 {
   // This one has been nicely clean-up
   for (unsigned int i=0; i<liaisons[corpsCourant].size(); i++)
@@ -142,7 +142,7 @@ void DynamicMultiBody::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 
 }
 
-void DynamicMultiBody::CreatesTreeStructure(const char * option)
+void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
 {
   m_listOfBodies.resize(listeCorps.size());
   DynamicBody *dbody;
@@ -179,7 +179,7 @@ void DynamicMultiBody::CreatesTreeStructure(const char * option)
   MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);
 }
 
-void DynamicMultiBody::InitializeFromJointsTree()
+void DynMultiBodyPrivate::InitializeFromJointsTree()
 {
   /* The goal of this method is to recreate the undirected
      graph, to restart the sequence of initialization. */

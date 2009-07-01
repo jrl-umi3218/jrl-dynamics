@@ -18,7 +18,7 @@
 #include <iostream>
 using namespace std;
 
-#include "dynamics-config.h"
+#include "dynamicsJRLJapan/dynamics-config.h"
 
 namespace dynamicsJRLJapan
 {

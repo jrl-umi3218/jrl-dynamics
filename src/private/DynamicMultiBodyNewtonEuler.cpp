@@ -1,5 +1,5 @@
 /*! Kept for backward compatibility. */
-void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
+void DynMultiBodyPrivate::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
                                        MAL_S3x3_MATRIX(&OrientationForRoot,double),
                                        MAL_S3_VECTOR(&v0ForRoot,double),
                                        MAL_S3_VECTOR(&wForRoot,double),
@@ -11,7 +11,7 @@ void DynamicMultiBody::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 
 
 /*! Implementation of the Newton-Euler algorithm */
-void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
+void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
 					    MAL_S3x3_MATRIX(&OrientationForRoot,double),
 					    MAL_S3_VECTOR(&v0ForRoot,double),
 					    MAL_S3_VECTOR(&wForRoot,double),
@@ -363,7 +363,7 @@ void DynamicMultiBody::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
    wrt \f${\bf {q}}\f$, \f${\bf \dot{q}}\f$, \f${\bf \ddot{q}}\f$.
    
 */
-bool DynamicMultiBody::computeForwardKinematics()
+bool DynMultiBodyPrivate::computeForwardKinematics()
 {
   MAL_S3_VECTOR(,double) lPositionForRoot;
   MAL_S3x3_MATRIX(,double) lOrientationForRoot;

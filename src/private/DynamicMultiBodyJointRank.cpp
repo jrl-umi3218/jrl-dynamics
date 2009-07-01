@@ -1,6 +1,6 @@
 /*! Implements the map between the joints' names and their rank */
 
-int DynamicMultiBody::setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
+int DynMultiBodyPrivate::setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
 {
   if (m_LinksBetweenJointNamesAndRank.size()!=
       aLinks.size())
@@ -13,7 +13,7 @@ int DynamicMultiBody::setLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t
   return 0;
 }
 
-int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
+int DynMultiBodyPrivate::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t> &aLinks)
 {
   if (m_LinksBetweenJointNamesAndRank.size()!=
       aLinks.size())
@@ -26,7 +26,7 @@ int DynamicMultiBody::getLinksBetweenJointNamesAndRank(std::vector<NameAndRank_t
   return 0;
 }
 
-void DynamicMultiBody::setJointOrderInConfig(std::vector<CjrlJoint *>inJointVector)
+void DynMultiBodyPrivate::setJointOrderInConfig(std::vector<CjrlJoint *>inJointVector)
 {
   if (m_LinksBetweenJointNamesAndRank.size()!=inJointVector.size())
     m_LinksBetweenJointNamesAndRank.resize(inJointVector.size());
@@ -46,7 +46,7 @@ void DynamicMultiBody::setJointOrderInConfig(std::vector<CjrlJoint *>inJointVect
 }
 
 
-int DynamicMultiBody::JointRankFromName(Joint *aJoint)
+int DynMultiBodyPrivate::JointRankFromName(Joint *aJoint)
 {
 
   ODEBUG("m_LinksBetweenJointNamesAndRank.size():" << m_LinksBetweenJointNamesAndRank.size());
@@ -58,7 +58,7 @@ int DynamicMultiBody::JointRankFromName(Joint *aJoint)
   return -1;
 }
 
-Joint * DynamicMultiBody::JointFromRank(int aRank)
+Joint * DynMultiBodyPrivate::JointFromRank(int aRank)
 {
   if (m_LinksBetweenJointNamesAndRank.size()!=0)
     {

@@ -1,3 +1,43 @@
+2009-07-02  Florent Lamiraux  <florent@laas.fr>
+
+	Class Dynamic MultiBody class now exclusively implements CjrlDynamicRobot.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h,
+	* src/CMakeLists.txt,
+	* src/private/Body.cpp: New,
+	* src/private/Debug.h: New,
+	* src/private/DynMultiBodyPrivate.cpp: New,
+	* src/private/DynMultiBodyPrivate.h: Copy from include/dynamicsJRLJapan/DynamicMultiBody.h,
+	* src/private/DynamicBody.cpp: New,
+	* src/private/DynamicMultiBodyActuated.cpp: New,
+	* src/private/DynamicMultiBodyAngularMomentum.cpp: New,
+	* src/private/DynamicMultiBodyArticularJacobian.cpp: New,
+	* src/private/DynamicMultiBodyCenterOfMass.cpp: New,
+	* src/private/DynamicMultiBodyInertiaMatrix.cpp: New,
+	* src/private/DynamicMultiBodyJointRank.cpp: New,
+	* src/private/DynamicMultiBodyNewtonEuler.cpp: New,
+	* src/private/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp: New,
+	* src/private/DynamicMultiBodyProperties.cpp: New,
+	* src/private/DynamicMultiBodyTree.cpp: New,
+	* src/private/Foot.cpp: New,
+	* src/private/Hand.cpp: New,
+	* src/private/HumanoidDynamicMultiBody.cpp: New,
+	* src/private/HumanoidSpecificities.cpp: New,
+	* src/private/HumanoidSpecificities.h: New,
+	* src/private/Joint.cpp: New,
+	* src/private/MultiBody.cpp: New,
+	* src/private/SpiritVRMLReader.cpp: New,
+	* src/private/SpiritVRMLReader.h: New,
+	* src/private/fileReader.cpp: New,
+	* src/private/fileReader.h: New
+	
+	For refactoring purposes, source files have been dispatched into
+	 - src/private for files implementing the core of the library,
+         - src/public for files implementing wrappers around existing classes.
+	Previous DynamicMultiBody class has been renamed DynMultiBodyPrivate and
+	new DynamicMultiBody class now stores a pointer to a DynMultiBodyPrivate
+	object and forward calls to this object for all methods defined in 
+	CjrlDynamicRobot.
+
 2009-06-30  Florent Lamiraux  <florent@laas.fr>
 
 	Fix order of include flags in compilation.

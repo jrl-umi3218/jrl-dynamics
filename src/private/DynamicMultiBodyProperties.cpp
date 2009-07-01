@@ -1,6 +1,6 @@
 
 /*! Implements methods related to propertis for DynamicsMultiBody */
-bool DynamicMultiBody::getProperty(const std::string &inProperty,std::string &outValue)
+bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string &outValue)
 {
   if (inProperty=="ComputeVelocity")
     {
@@ -73,7 +73,7 @@ bool DynamicMultiBody::getProperty(const std::string &inProperty,std::string &ou
   return false;
 }
 
-bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &inValue)
+bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string &inValue)
 {
   if (inProperty=="ComputeVelocity")
     {
@@ -179,7 +179,7 @@ bool DynamicMultiBody::setProperty(std::string &inProperty,const std::string &in
   return false;
 }
 
-bool DynamicMultiBody::isSupported(const std::string &aName)
+bool DynMultiBodyPrivate::isSupported(const std::string &aName)
 {
   if (aName=="ComputeVelocity")
     return true;

@@ -30,14 +30,14 @@
 #include "Debug.h"
 
 /*! Local library includes. */
-#include "DynamicMultiBody.h"
+#include "DynMultiBodyPrivate.h"
 #include "robotDynamics/jrlBody.h"
 
 #include "fileReader.h"
 
 using namespace dynamicsJRLJapan;
 
-DynamicMultiBody::DynamicMultiBody()
+DynMultiBodyPrivate::DynMultiBodyPrivate()
 {
   m_NbDofs=0;
   m_ComputeVelocity = true;
@@ -72,7 +72,7 @@ DynamicMultiBody::DynamicMultiBody()
   RESETDEBUG4("DebugDataDMB_ZMP.dat");
 }
 
-DynamicMultiBody::~DynamicMultiBody()
+DynMultiBodyPrivate::~DynMultiBodyPrivate()
 {
   for(unsigned int li=0; li<m_listOfBodies.size();li++)
     {
@@ -91,7 +91,7 @@ DynamicMultiBody::~DynamicMultiBody()
 }
 
 
-bool DynamicMultiBody::initialize()
+bool DynMultiBodyPrivate::initialize()
 {
   setComputeZMP(true);
   InitializeFromJointsTree();
@@ -105,7 +105,7 @@ bool DynamicMultiBody::initialize()
 }
 
 
-void DynamicMultiBody::parserVRML(string path,
+void DynMultiBodyPrivate::parserVRML(string path,
                                   string nom,
                                   const char *option)
 {
@@ -114,7 +114,7 @@ void DynamicMultiBody::parserVRML(string path,
   CreatesTreeStructure(option);
 }
 
-void DynamicMultiBody::parserVRML(string nom,
+void DynMultiBodyPrivate::parserVRML(string nom,
                                   const char *option)
 {
   m_listOfBodies.clear();
@@ -123,7 +123,7 @@ void DynamicMultiBody::parserVRML(string nom,
 }
 
 
-double DynamicMultiBody::Getq(int JointID) const
+double DynMultiBodyPrivate::Getq(int JointID) const
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -131,7 +131,7 @@ double DynamicMultiBody::Getq(int JointID) const
   return 0.0;
 }
 
-void DynamicMultiBody::Setq(int JointID,double q)
+void DynMultiBodyPrivate::Setq(int JointID,double q)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -141,7 +141,7 @@ void DynamicMultiBody::Setq(int JointID,double q)
     }
 }
 
-void DynamicMultiBody::Setdq(int JointID, double dq)
+void DynMultiBodyPrivate::Setdq(int JointID, double dq)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -150,14 +150,14 @@ void DynamicMultiBody::Setdq(int JointID, double dq)
     }
 }
 
-void DynamicMultiBody::Setv(int JointID, MAL_S3_VECTOR(,double) v0)
+void DynMultiBodyPrivate::Setv(int JointID, MAL_S3_VECTOR(,double) v0)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
     m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->v0 = v0;
 }
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::Getv(int JointID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getv(int JointID)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -170,7 +170,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::Getv(int JointID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::GetvBody(int BodyID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetvBody(int BodyID)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -182,7 +182,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetvBody(int BodyID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::GetwBody(int BodyID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetwBody(int BodyID)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -194,7 +194,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetwBody(int BodyID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::Getw(int JointID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getw(int JointID)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -207,14 +207,14 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::Getw(int JointID)
   return dr;
 }
 
-void DynamicMultiBody::Setw(int JointID, MAL_S3_VECTOR(,double) w)
+void DynMultiBodyPrivate::Setw(int JointID, MAL_S3_VECTOR(,double) w)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
     m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->w = w;
 }
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::Getp(int JointID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getp(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
@@ -223,7 +223,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::Getp(int JointID)
   return empty;
 }
 
-void DynamicMultiBody::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
+void DynMultiBodyPrivate::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -232,7 +232,7 @@ void DynamicMultiBody::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
 
 
 
-void DynamicMultiBody::CalculateZMP(double &px, double &py,
+void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
                                     MAL_S3_VECTOR(,double) dP,
                                     MAL_S3_VECTOR(,double) dL,
                                     double zmpz)
@@ -250,7 +250,7 @@ void DynamicMultiBody::CalculateZMP(double &px, double &py,
 
 }
 
-string DynamicMultiBody::GetName(int JointID)
+string DynMultiBodyPrivate::GetName(int JointID)
 {
   string empty;
   if ((JointID>=0) &&
@@ -262,7 +262,7 @@ string DynamicMultiBody::GetName(int JointID)
 
 
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::GetP(int JointID)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetP(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
@@ -271,7 +271,7 @@ MAL_S3_VECTOR(,double) DynamicMultiBody::GetP(int JointID)
   return empty;
 }
 
-double DynamicMultiBody::Getdq(int JointID) const
+double DynMultiBodyPrivate::Getdq(int JointID) const
 {
   double empty=0.0;
   if ((JointID>=0) &&
@@ -282,7 +282,7 @@ double DynamicMultiBody::Getdq(int JointID) const
 
 
 
-void DynamicMultiBody::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
+void DynMultiBodyPrivate::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -294,25 +294,25 @@ void DynamicMultiBody::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
 /***********************************************/
 
 // Set the root joint of the robot.
-void DynamicMultiBody::rootJoint(CjrlJoint& inJoint)
+void DynMultiBodyPrivate::rootJoint(CjrlJoint& inJoint)
 {
   m_RootOfTheJointsTree = & (Joint &)inJoint;
 
 }
 
 // Get the robot joint of the robot.
-CjrlJoint* DynamicMultiBody::rootJoint() const
+CjrlJoint* DynMultiBodyPrivate::rootJoint() const
 {
   return m_RootOfTheJointsTree;
 }
 
 // Get a vector containning all the joints
-std::vector<CjrlJoint*> DynamicMultiBody::jointVector()
+std::vector<CjrlJoint*> DynMultiBodyPrivate::jointVector()
 {
   return m_JointVector;
 }
 
-std::vector<CjrlJoint*> DynamicMultiBody::jointsBetween(const CjrlJoint& inStartJoint, 
+std::vector<CjrlJoint*> DynMultiBodyPrivate::jointsBetween(const CjrlJoint& inStartJoint, 
 							const CjrlJoint& inEndJoint) const
 {
   std::vector<CjrlJoint*> outJoints;
@@ -344,7 +344,7 @@ std::vector<CjrlJoint*> DynamicMultiBody::jointsBetween(const CjrlJoint& inStart
 
 
 
-void DynamicMultiBody::ComputeNumberOfJoints()
+void DynMultiBodyPrivate::ComputeNumberOfJoints()
 {
   unsigned int r=0;
   ODEBUG("JointVector :" << m_JointVector.size());
@@ -366,7 +366,7 @@ void DynamicMultiBody::ComputeNumberOfJoints()
   MAL_MATRIX_RESIZE(m_attCalcJointJacobian,6,m_NbDofs);
 }
 
-void DynamicMultiBody::ReadSpecificities(string aFileName)
+void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 {
   FILE *fp;
   fp = fopen((char *)aFileName.c_str(),"r");
@@ -412,7 +412,7 @@ void DynamicMultiBody::ReadSpecificities(string aFileName)
 
 
 
-void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
+void DynMultiBodyPrivate::BuildStateVectorToJointAndDOFs()
 {
   m_StateVectorToJoint.resize(m_NbDofs);
   int lindex=0,StateVectorIndexDefault=0;
@@ -470,7 +470,7 @@ void DynamicMultiBody::BuildStateVectorToJointAndDOFs()
     m_ConfigurationToJoints.push_back(JointFromRank(i));
 }
 
-void DynamicMultiBody::UpdateTheSizeOfJointsJacobian()
+void DynMultiBodyPrivate::UpdateTheSizeOfJointsJacobian()
 {
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
@@ -480,7 +480,7 @@ void DynamicMultiBody::UpdateTheSizeOfJointsJacobian()
 
 
 // Get the number of degrees of freedom of the robot
-unsigned int DynamicMultiBody::numberDof() const
+unsigned int DynMultiBodyPrivate::numberDof() const
 {
   return m_NbDofs;
 }
@@ -499,7 +499,7 @@ unsigned int DynamicMultiBody::numberDof() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
+bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
 {
   if (MAL_VECTOR_SIZE(inConfig)!=
       MAL_VECTOR_SIZE(m_Configuration))
@@ -562,7 +562,7 @@ bool DynamicMultiBody::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
    
    \return the configuration vector \f${\bf q}\f$.
 */
-const MAL_VECTOR(,double)& DynamicMultiBody::currentConfiguration() const
+const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentConfiguration() const
 {
   return m_Configuration;
 }
@@ -576,7 +576,7 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentConfiguration() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
+bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 {
   if (MAL_VECTOR_SIZE(inVelocity)!=
       MAL_VECTOR_SIZE(m_Velocity))
@@ -642,7 +642,7 @@ bool DynamicMultiBody::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
    
    \return the velocity vector \f${\bf \dot{q}}\f$.
 */
-const MAL_VECTOR(,double)& DynamicMultiBody::currentVelocity() const
+const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentVelocity() const
 {
   return m_Velocity;
 
@@ -656,7 +656,7 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentVelocity() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynamicMultiBody::currentAcceleration(const MAL_VECTOR(,double)& inAcceleration)
+bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAcceleration)
 {
   if (MAL_VECTOR_SIZE(inAcceleration)!=
       MAL_VECTOR_SIZE(m_Acceleration))
@@ -721,7 +721,7 @@ bool DynamicMultiBody::currentAcceleration(const MAL_VECTOR(,double)& inAccelera
    
    \return the acceleration vector \f${\bf \ddot{q}}\f$.
 */
-const MAL_VECTOR(,double)& DynamicMultiBody::currentAcceleration() const
+const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentAcceleration() const
 {
   return m_Acceleration;
 }
@@ -730,7 +730,7 @@ const MAL_VECTOR(,double)& DynamicMultiBody::currentAcceleration() const
 /* Jacobian functions */
 
 
-double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
+double DynMultiBodyPrivate::upperBoundDof(unsigned int inRankInConfiguration)
 {
   //     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
   //         return 0;
@@ -739,7 +739,7 @@ double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration)
   //WARNING: this code does not work if the joints have more than a single degree of freedom
 }
 
-double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
+double DynMultiBodyPrivate::lowerBoundDof(unsigned int inRankInConfiguration)
 {
   //     if (inRankInConfiguration == m_RootOfTheJointsTree->rankInConfiguration())
   //         return 0;
@@ -748,23 +748,23 @@ double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration)
   //WARNING: this code does not work if the joints have more than a single degree of freedom
 }
 
-double DynamicMultiBody::upperBoundDof(unsigned int inRankInConfiguration,
+double DynMultiBodyPrivate::upperBoundDof(unsigned int inRankInConfiguration,
                                        const vectorN& inConfig)
 {
   return upperBoundDof(inRankInConfiguration);
 }
 
-double DynamicMultiBody::lowerBoundDof(unsigned int inRankInConfiguration,
+double DynMultiBodyPrivate::lowerBoundDof(unsigned int inRankInConfiguration,
                                        const vectorN& inConfig)
 {
   return lowerBoundDof(inRankInConfiguration);
 }
-const matrixNxP & DynamicMultiBody::currentTorques() const
+const matrixNxP & DynMultiBodyPrivate::currentTorques() const
 {
   return m_Torques;
 }
 
-const matrixNxP & DynamicMultiBody::currentForces() const
+const matrixNxP & DynMultiBodyPrivate::currentForces() const
 {
   return m_Forces;
 }

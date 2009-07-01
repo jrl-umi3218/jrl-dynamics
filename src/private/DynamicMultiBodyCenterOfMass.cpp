@@ -1,7 +1,7 @@
 
 // Compute the Jacobian matrix of the center of Mass. 
 // Interaction with the environement not taken into account.
-void DynamicMultiBody::computeJacobianCenterOfMass()
+void DynMultiBodyPrivate::computeJacobianCenterOfMass()
 {
   m_JacobianOfTheCoM.clear();
 
@@ -47,13 +47,13 @@ void DynamicMultiBody::computeJacobianCenterOfMass()
   m_JacobianOfTheCoM(1,5) = -m_JacobianOfTheCoM(2,4);
 }
 
-const MAL_MATRIX(,double) &DynamicMultiBody::jacobianCenterOfMass() const
+const MAL_MATRIX(,double) &DynMultiBodyPrivate::jacobianCenterOfMass() const
 {
   return m_JacobianOfTheCoM;
 
 }
 
-MAL_MATRIX(,double) &DynamicMultiBody::getJacobianOfTheCoM()
+MAL_MATRIX(,double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 {
   return m_JacobianOfTheCoM;
 }
@@ -61,7 +61,7 @@ MAL_MATRIX(,double) &DynamicMultiBody::getJacobianOfTheCoM()
 /**
    \brief Get the acceleration of the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::accelerationCenterOfMass()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::accelerationCenterOfMass()
 {
   return m_AccelerationCenterOfMass;
 };
@@ -69,7 +69,7 @@ const MAL_S3_VECTOR(,double)& DynamicMultiBody::accelerationCenterOfMass()
 /**
    \brief Get the position of the center of mass.
 */
-const MAL_S3_VECTOR(,double)&  DynamicMultiBody::positionCenterOfMass() const
+const MAL_S3_VECTOR(,double)&  DynMultiBodyPrivate::positionCenterOfMass() const
 {
   return positionCoMPondere;
 }
@@ -78,13 +78,13 @@ const MAL_S3_VECTOR(,double)&  DynamicMultiBody::positionCenterOfMass() const
 /**
    \brief Get the velocity of the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::velocityCenterOfMass()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::velocityCenterOfMass()
 {
   return m_VelocityCenterOfMass;
 };
 
 
-bool DynamicMultiBody::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint, 
+bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint, 
 						 matrixNxP& outjacobian, 
 						 unsigned int outOffset, 
 						 bool includeFreeFlyer )
@@ -229,7 +229,7 @@ bool DynamicMultiBody::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint,
   return true;
 }
 
-void DynamicMultiBody::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
+void DynMultiBodyPrivate::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
 {
   matrixNxP JCoM;
   getJacobianCenterOfMass(*rootJoint(),JCoM);
@@ -244,7 +244,7 @@ void DynamicMultiBody::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian)
   
   Compute the linear and  angular momentum and their time derivatives, at the center of mass.
 */
-bool DynamicMultiBody::computeCenterOfMassDynamics()
+bool DynMultiBodyPrivate::computeCenterOfMassDynamics()
 {
   computeForwardKinematics();
   return true;
@@ -254,7 +254,7 @@ bool DynamicMultiBody::computeCenterOfMassDynamics()
 /**
    \brief Get the linear momentum of the robot.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::linearMomentumRobot()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::linearMomentumRobot()
 {
   return m_P;
 };
@@ -262,17 +262,17 @@ const MAL_S3_VECTOR(,double)& DynamicMultiBody::linearMomentumRobot()
 /**
    \brief Get the time-derivative of the linear momentum.
 */
-const MAL_S3_VECTOR(,double)& DynamicMultiBody::derivativeLinearMomentum()
+const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeLinearMomentum()
 {
   return m_dP;
 };
 
-MAL_S3_VECTOR(,double) DynamicMultiBody::getPositionCoM(void)
+MAL_S3_VECTOR(,double) DynMultiBodyPrivate::getPositionCoM(void)
 {
   return (positionCoMPondere);
 }
 
-void DynamicMultiBody::GetPandL(MAL_S3_VECTOR(,double) &aP, MAL_S3_VECTOR(,double) &aL)
+void DynMultiBodyPrivate::GetPandL(MAL_S3_VECTOR(,double) &aP, MAL_S3_VECTOR(,double) &aL)
 {
   aP = m_P;
   aL = m_L;

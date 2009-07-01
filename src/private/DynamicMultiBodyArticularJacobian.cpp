@@ -1,4 +1,4 @@
-bool DynamicMultiBody::getJacobian ( const CjrlJoint& inStartJoint, 
+bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint, 
 				     const CjrlJoint& inEndJoint, 
 				     const vector3d& inFrameLocalPosition, 
 				     matrixNxP& outjacobian, 
@@ -153,7 +153,7 @@ bool DynamicMultiBody::getJacobian ( const CjrlJoint& inStartJoint,
   return true;
 }
 
-bool DynamicMultiBody::getPositionJacobian ( const CjrlJoint& inStartJoint, 
+bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint, 
 					     const CjrlJoint& inEndJoint, 
 					     const vector3d& inFrameLocalPosition, 
 					     matrixNxP& outjacobian, 
@@ -289,7 +289,7 @@ bool DynamicMultiBody::getPositionJacobian ( const CjrlJoint& inStartJoint,
   return true;
 }
 
-bool DynamicMultiBody::getOrientationJacobian ( const CjrlJoint& inStartJoint, 
+bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint, 
 						const CjrlJoint& inEndJoint, 
 						matrixNxP& outjacobian, 
 						unsigned int outOffset,
