@@ -31,7 +31,7 @@ namespace dynamicsJRLJapan
   class HumDynMultiBodyPrivate;
 
 class HumanoidDynamicMultiBody : public  virtual CjrlHumanoidDynamicRobot, 
-				   public DynamicMultiBody
+				   public virtual DynamicMultiBody
 {
 public:
 
