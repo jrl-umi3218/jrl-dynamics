@@ -15,7 +15,7 @@ void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &apoint, vector3d & an
   matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
   /* End of intermediate */
 
-  DynamicBody *aDB=0;
+  DynamicBodyPrivate *aDB=0;
   int currentNode = labelTheRoot;
   currentNode = m_listOfBodies[labelTheRoot]->child;
   vector3d lL(0.0,0.0,0.0);
@@ -129,8 +129,8 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
   MAL_MATRIX_FILL(outjacobian,0);
 
   unsigned int rank;
-  Joint* aJoint;
-  DynamicBody* aBody;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody;
     
   for(unsigned int i=0;i<m_ConfigurationToJoints.size();i++)
     {

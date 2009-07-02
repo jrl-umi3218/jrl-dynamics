@@ -25,7 +25,7 @@
 
 #define INTERFACE
 #include "dynamics-config.h"
-#include "Joint.h"
+#include "JointPrivate.h"
 #include "Body.h"
 #include <vector>
 #include <algorithm>	//pour utiliser la fonction find
@@ -61,7 +61,7 @@ namespace dynamicsJRLJapan
   */
   struct internalLink {
     int label;
-    Joint * aJoint;
+    JointPrivate * aJoint;
     int indexCorps1;
     int indexCorps2;
   };

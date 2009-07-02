@@ -200,7 +200,7 @@ void MultiBody::ajouterLiaisonFixe(Body &corps1, Body &corps2,
   }
 
   //creation de la liaison
-  Joint * aJoint= new Joint(Joint::FIX_JOINT,axeRotationStat,angleRotationStat,translationStat);
+  JointPrivate * aJoint= new JointPrivate(JointPrivate::FIX_JOINT,axeRotationStat,angleRotationStat,translationStat);
 
   internalLink l = {cptLiaison++,aJoint,index1, index2};
   listeLiaisons.push_back(l);		//ajout de la liaison a la liste

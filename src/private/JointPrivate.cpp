@@ -11,13 +11,13 @@
 */
 #include "Debug.h"
 
-#include "Joint.h"
-#include "DynamicBody.h"
+#include "JointPrivate.h"
+#include "DynamicBodyPrivate.h"
 
 
 using namespace dynamicsJRLJapan;
 
-Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
              float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
   m_inGlobalFrame(false),
   m_type(ltype),
@@ -32,7 +32,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   CreateLimitsArray();
 }
 
-Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
              float lquantite, MAL_S3_VECTOR(,double) & translationStatic):
   m_inGlobalFrame(false),
   m_type(ltype),
@@ -51,7 +51,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   CreateLimitsArray();
 }
 
-Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
              float lquantite):
   m_inGlobalFrame(false),
   m_type(ltype),
@@ -66,7 +66,7 @@ Joint::Joint(int ltype, MAL_S3_VECTOR(,double) & laxe,
   CreateLimitsArray();
 }
 
-Joint::Joint(const Joint &r)
+JointPrivate::JointPrivate(const JointPrivate &r)
 {
   m_type = r.type();
   m_axe = r.axe();
@@ -90,7 +90,7 @@ Joint::Joint(const Joint &r)
 
 }
 
-Joint::Joint():
+JointPrivate::JointPrivate():
   m_inGlobalFrame(false),
   m_quantity(0.0),
   m_FatherJoint(0),
@@ -107,10 +107,10 @@ Joint::Joint():
   CreateLimitsArray();
 }
 
-Joint::~Joint()
+JointPrivate::~JointPrivate()
 {}
 
-void Joint::CreateLimitsArray()
+void JointPrivate::CreateLimitsArray()
 {
   if (numberDof()!=0)
     {
@@ -136,7 +136,7 @@ void Joint::CreateLimitsArray()
 }
 
 
-void Joint::computeLocalAndGlobalPose()
+void JointPrivate::computeLocalAndGlobalPose()
 {
   if (m_FatherJoint==0)
     return;
@@ -181,7 +181,7 @@ void Joint::computeLocalAndGlobalPose()
     }
 }
 
-Joint & Joint::operator=(const Joint & r)
+JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 {
   m_type = r.type();
   m_axe = r.axe();
@@ -207,14 +207,14 @@ Joint & Joint::operator=(const Joint & r)
 /* Implementation of the generic JRL interface */
 /***********************************************/
 
-CjrlJoint* Joint::parentJoint() const
+CjrlJoint* JointPrivate::parentJoint() const
 {
   return m_FatherJoint;
 }
 
-bool Joint::addChildJoint(CjrlJoint& aJoint)
+bool JointPrivate::addChildJoint(CjrlJoint& aJoint)
 {
-  Joint * pjoint = (Joint *)&aJoint;
+  JointPrivate * pjoint = (JointPrivate *)&aJoint;
   for(unsigned int li =0; li < m_Children.size();li++)
     {
       if (m_Children[li]==pjoint)
@@ -228,12 +228,12 @@ bool Joint::addChildJoint(CjrlJoint& aJoint)
   return true;
 }
 
-unsigned int Joint::countChildJoints() const
+unsigned int JointPrivate::countChildJoints() const
 {
   return m_Children.size();
 }
 
-CjrlJoint* Joint::childJoint(unsigned int givenRank) const
+CjrlJoint* JointPrivate::childJoint(unsigned int givenRank) const
 {
   if (givenRank<m_Children.size())
     return m_Children[givenRank];
@@ -241,7 +241,7 @@ CjrlJoint* Joint::childJoint(unsigned int givenRank) const
   return 0;
 }
 
-Joint* Joint::child_Joint(unsigned int givenRank) const
+JointPrivate* JointPrivate::child_JointPrivate(unsigned int givenRank) const
 {
   if (givenRank<m_Children.size())
     return m_Children[givenRank];
@@ -249,31 +249,31 @@ Joint* Joint::child_Joint(unsigned int givenRank) const
   return 0;
 }
 
-std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const
+std::vector<CjrlJoint*> JointPrivate::jointsFromRootToThis() const
 {
   return m_FromRootToThis;
 }
 
-std::vector<Joint*> Joint::jointsFromRootToThisJoint() const
+std::vector<JointPrivate*> JointPrivate::jointsFromRootToThisJoint() const
 {
   return m_FromRootToThisJoint;
 }
 
-const MAL_S4x4_MATRIX(,double) & Joint::currentTransformation() const
+const MAL_S4x4_MATRIX(,double) & JointPrivate::currentTransformation() const
 {
-  DynamicBody *m_DBody = (DynamicBody *) m_Body;
+  DynamicBodyPrivate *m_DBody = (DynamicBodyPrivate *) m_Body;
   return m_DBody->m_transformation;
 }
 
-CjrlRigidVelocity Joint::jointVelocity()
+CjrlRigidVelocity JointPrivate::jointVelocity()
 {
 
-  DynamicBody *m_DBody = dynamic_cast<DynamicBody *>(m_Body);
+  DynamicBodyPrivate *m_DBody = dynamic_cast<DynamicBodyPrivate *>(m_Body);
   CjrlRigidVelocity ajrlRV(m_DBody->v0,m_DBody->w);
   return ajrlRV;
 }
 
-void Joint::computeSubTreeMCom()
+void JointPrivate::computeSubTreeMCom()
 {
   for (attId = 0; attId< 3;attId++)
     attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
@@ -288,7 +288,7 @@ void Joint::computeSubTreeMCom()
     }
 }
 
-void Joint::computeSubTreeMComExceptChild(const CjrlJoint* inJoint)
+void JointPrivate::computeSubTreeMComExceptChild(const CjrlJoint* inJoint)
 {
   for (attId = 0; attId< 3;attId++)
     attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
@@ -305,27 +305,27 @@ void Joint::computeSubTreeMComExceptChild(const CjrlJoint* inJoint)
     }
 }
 
-void Joint::subTreeMCom(const vector3d& inReplacement)
+void JointPrivate::subTreeMCom(const vector3d& inReplacement)
 {
   attSTmcom = inReplacement;
 }
 
-const vector3d& Joint::subTreeMCom() const
+const vector3d& JointPrivate::subTreeMCom() const
 {
   return attSTmcom;
 }
 
-double Joint::subTreeCoef()
+double JointPrivate::subTreeCoef()
 {
   return attSTcoef;
 }
 
-void Joint::subTreeCoef(double inReplacement)
+void JointPrivate::subTreeCoef(double inReplacement)
 {
   attSTcoef = inReplacement;
 }
 
-CjrlRigidAcceleration Joint::jointAcceleration()
+CjrlRigidAcceleration JointPrivate::jointAcceleration()
 {
   // TODO : Update the member of this object
   // TODO : when calling ForwardDynamics.
@@ -334,7 +334,7 @@ CjrlRigidAcceleration Joint::jointAcceleration()
 
   if (m_Body!=0)
     {
-      DynamicBody *m_DBody = dynamic_cast<DynamicBody *>(m_Body);
+      DynamicBodyPrivate *m_DBody = dynamic_cast<DynamicBodyPrivate *>(m_Body);
 
       a = m_DBody->dv;
       b = m_DBody->dw;
@@ -345,7 +345,7 @@ CjrlRigidAcceleration Joint::jointAcceleration()
 
 }
 
-unsigned int Joint::numberDof() const
+unsigned int JointPrivate::numberDof() const
 {
   unsigned int r=0;
 
@@ -367,25 +367,25 @@ unsigned int Joint::numberDof() const
   return r;
 }
 
-const MAL_MATRIX(,double) & Joint::jacobianJointWrtConfig() const
+const MAL_MATRIX(,double) & JointPrivate::jacobianJointWrtConfig() const
 {
   return m_J;
 }
 
-void Joint::resizeJacobianJointWrtConfig(int lNbDofs)
+void JointPrivate::resizeJacobianJointWrtConfig(int lNbDofs)
 {
   MAL_MATRIX_RESIZE(m_J,6,lNbDofs);
   MAL_MATRIX_FILL(m_J,0.0);
 
 }
 
-void Joint::computeJacobianJointWrtConfig()
+void JointPrivate::computeJacobianJointWrtConfig()
 {
-  DynamicBody * FinalBody = (DynamicBody *)m_Body;
+  DynamicBodyPrivate * FinalBody = (DynamicBodyPrivate *)m_Body;
   getJacobianWorldPointWrtConfig(FinalBody->p, m_J);
 }
 
-void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
+void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 					   matrixNxP& outJ) const
 {
   vector3d dp,lv;
@@ -396,11 +396,11 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
-      DynamicBody * aBody= m_FromRootToThisJoint[i]->linkedDBody();
-      Joint * aJoint = m_FromRootToThisJoint[i];
+      DynamicBodyPrivate * aBody= m_FromRootToThisJoint[i]->linkedDBody();
+      JointPrivate * aJoint = m_FromRootToThisJoint[i];
       
       unsigned int lcol = aJoint->stateVectorPosition();
-      ODEBUG("Joint: " << aJoint->getName() << " " << lcol);
+      ODEBUG("JointPrivate: " << aJoint->getName() << " " << lcol);
       dp = inPointWorldFrame - aBody->p;
       
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aBody->w_a,dp);
@@ -408,21 +408,21 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
       switch (aJoint->type())
         {
 	  
-        case Joint::REVOLUTE_JOINT:
+        case JointPrivate::REVOLUTE_JOINT:
 	  for(int j=0;j<3;j++)
             {
 	      outJ(j,lcol) =  lv[j];
 	      outJ(j+3,lcol) = aBody->w_a[j];
             }
 	  break;
-        case Joint::PRISMATIC_JOINT:
+        case JointPrivate::PRISMATIC_JOINT:
 	  for(int j=0;j<3;j++)
             {
 	      outJ(j,lcol) =  aBody->w_a[j];
 	      outJ(j+3,lcol) = 0;
             }
 	  break;
-        case Joint::FREE_JOINT:
+        case JointPrivate::FREE_JOINT:
 	  //J =  I M = J11 J12
 	  //     0 I   J21 J22
 	  //
@@ -466,7 +466,7 @@ void Joint::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
    The output matrix outjacobian is automatically resized if necessary
  
 */
-void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
+void JointPrivate::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
 {
   if (outJ.size1() !=6 || outJ.size2() != m_J.size2())
     {
@@ -475,30 +475,30 @@ void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixN
   outJ.clear();
 
 
-  DynamicBody * FinalBody = (DynamicBody *)m_Body;
+  DynamicBodyPrivate * FinalBody = (DynamicBodyPrivate *)m_Body;
 
   vector3d pn = FinalBody->p + MAL_S3x3_RET_A_by_B(FinalBody->R, inPointJointFrame);
   getJacobianWorldPointWrtConfig(pn, outJ);
 }
 
 
-CjrlBody* Joint::linkedBody() const
+CjrlBody* JointPrivate::linkedBody() const
 {
   return m_Body;
 }
 
-DynamicBody* Joint::linkedDBody() const
+DynamicBodyPrivate* JointPrivate::linkedDBody() const
 {
   return m_dynBody;
 }
 
-void Joint::setLinkedBody(CjrlBody& inBody)
+void JointPrivate::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
-  m_dynBody = (DynamicBody*)m_Body;
+  m_dynBody = (DynamicBodyPrivate*)m_Body;
 }
 
-void Joint::SetFatherJoint(Joint *aFather)
+void JointPrivate::SetFatherJoint(JointPrivate *aFather)
 {
   m_FatherJoint = aFather;
 
@@ -512,18 +512,18 @@ void Joint::SetFatherJoint(Joint *aFather)
   while(aJoint!=0)
     {
       m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
-      m_FromRootToThisJoint.insert(m_FromRootToThisJoint.begin(),(Joint*)aJoint);
+      m_FromRootToThisJoint.insert(m_FromRootToThisJoint.begin(),(JointPrivate*)aJoint);
       aJoint = aJoint->parentJoint();
     }
   computeLocalAndGlobalPose();
 }
 
-const MAL_S4x4_MATRIX(,double) & Joint::initialPosition()
+const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
 {
   if (m_Body!=0)
     {
-      DynamicBody *aDB = (DynamicBody *) m_Body;
-      ODEBUG("Joint Name " << m_Name << " " << m_Body);
+      DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) m_Body;
+      ODEBUG("JointPrivate Name " << m_Name << " " << m_Body);
       for(int i=0;i<3;i++)
 	for(int j=0;j<3;j++)
 	  MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j) = aDB->R(i,j);
@@ -535,7 +535,7 @@ const MAL_S4x4_MATRIX(,double) & Joint::initialPosition()
   return m_poseInParentFrame;
 }
 
-void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
+void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 {
   // Update the orientation of the joint.
   // Takes the three euler joints
@@ -544,10 +544,10 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = a6DVector(1);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = a6DVector(2);
 
-  DynamicBody* body = dynamic_cast<DynamicBody*>(m_Body);
+  DynamicBodyPrivate* body = dynamic_cast<DynamicBodyPrivate*>(m_Body);
   if (!body)
     {
-      std::cerr << "m_Body is not an instance of DynamicBody" << std::endl;
+      std::cerr << "m_Body is not an instance of DynamicBodyPrivate" << std::endl;
     }
   body->p[0] = a6DVector(0);
   body->p[1] = a6DVector(1);
@@ -614,7 +614,7 @@ void Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   body->m_transformation = m_poseInParentFrame;
 }
 
-void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelocity,
+void JointPrivate::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelocity,
 					    MAL_S3_VECTOR(,double) & anAngularVelocity)
 {
   m_RigidVelocity.linearVelocity(aLinearVelocity);
@@ -622,7 +622,7 @@ void Joint::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelo
 }
 
 
-void Joint::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
+void JointPrivate::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
 {
   double norm_w = MAL_S3_VECTOR_NORM(inAxis);
   if (norm_w < 10e-7)
@@ -650,7 +650,7 @@ void Joint::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRot
 
 JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
-  type(Joint::FREE_JOINT);
+  type(JointPrivate::FREE_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;
 
@@ -670,7 +670,7 @@ JointFreeflyer::~JointFreeflyer()
 
 JointAnchor::JointAnchor(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
-  type(Joint::FIX_JOINT);
+  type(JointPrivate::FIX_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;
 
@@ -690,7 +690,7 @@ JointAnchor::~JointAnchor()
 
 JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
-  type(Joint::REVOLUTE_JOINT);
+  type(JointPrivate::REVOLUTE_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;
 
@@ -711,7 +711,7 @@ JointRotation::~JointRotation()
 
 JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
-  type(Joint::PRISMATIC_JOINT);
+  type(JointPrivate::PRISMATIC_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;
 
@@ -729,7 +729,7 @@ JointTranslation::~JointTranslation()
 {}
 
 
-bool Joint::updateTransformation(const vectorN& inDofVector)
+bool JointPrivate::updateTransformation(const vectorN& inDofVector)
 {
   if (rankInConfiguration() > inDofVector.size() -1 )
     {
@@ -739,10 +739,10 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
 
   switch (type())
     {
-    case Joint::REVOLUTE_JOINT :
+    case JointPrivate::REVOLUTE_JOINT :
       {
-	DynamicBody* body = (DynamicBody*)(linkedBody());
-	DynamicBody* parentbody = (DynamicBody*)(parentJoint()->linkedBody());
+	DynamicBodyPrivate* body = (DynamicBodyPrivate*)(linkedBody());
+	DynamicBodyPrivate* parentbody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
 	body->q = inDofVector(rankInConfiguration());
 	quantity( body->q);
@@ -763,7 +763,7 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
       }
       break;
 
-    case Joint::FREE_JOINT :
+    case JointPrivate::FREE_JOINT :
       {
 	if (dof6D.size() != 6)
 	  dof6D.resize(6,false);
@@ -775,10 +775,10 @@ bool Joint::updateTransformation(const vectorN& inDofVector)
       }
       break;
 
-    case Joint::PRISMATIC_JOINT :
+    case JointPrivate::PRISMATIC_JOINT :
       {
-	DynamicBody* body = (DynamicBody*)(linkedBody());
-	DynamicBody* parentbody = (DynamicBody*)(parentJoint()->linkedBody());
+	DynamicBodyPrivate* body = (DynamicBodyPrivate*)(linkedBody());
+	DynamicBodyPrivate* parentbody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
 	body->q = inDofVector(rankInConfiguration());
 	quantity( body->q);

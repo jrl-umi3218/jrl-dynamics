@@ -1,4 +1,4 @@
-void DynMultiBodyPrivate::BackwardDynamics(DynamicBody & CurrentBody )
+void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
   MAL_S3x3_MATRIX(,double) aRt;
 
@@ -45,7 +45,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBody & CurrentBody )
   //cout << "Body : " << CurrentBody.getName() << endl;
   while(IndexChild!=-1)
     {
-      DynamicBody *Child = m_listOfBodies[IndexChild];
+      DynamicBodyPrivate *Child = m_listOfBodies[IndexChild];
       //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = Child->Riip1;
       //cout << "Riip1: " << aRt << endl;
@@ -75,10 +75,10 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBody & CurrentBody )
     {
       unsigned int StateRankComputed=false;
 
-      Joint * aJoint = (Joint *)m_JointVector[m_StateVectorToJoint[i]];
+      JointPrivate * aJoint = (JointPrivate *)m_JointVector[m_StateVectorToJoint[i]];
       if (aJoint!=0)
         {
-	  DynamicBody *aDB = (DynamicBody *) aJoint->linkedBody();
+	  DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) aJoint->linkedBody();
 	  if (aDB!=0)
             {
 	      StateRankComputed = true;

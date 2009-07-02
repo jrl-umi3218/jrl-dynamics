@@ -105,11 +105,11 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 
   std::vector<int> jointsigns ( numberDof(),1 );
 
-  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
   //determine participating joints
   if ( rootJoint() !=&inStartJoint )
     {
-      std::vector<Joint *> robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+      std::vector<JointPrivate *> robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
 
       for ( i = 1; i<robotRoot2StartJoint.size();i++ )
 	jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
@@ -137,8 +137,8 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
     StartJoint->computeSubTreeMCom();
 
   unsigned int rank;
-  Joint* aJoint;
-  DynamicBody* aBody;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody;
 
   for ( i=0;i<m_ConfigurationToJoints.size();i++ )
     {
@@ -154,7 +154,7 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    tempDP[j] = aJoint->subTreeMCom() [j]- aJoint->subTreeCoef() *aBody->p[j];
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
@@ -164,7 +164,7 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 	    else
 	      outTable[j][rank] =  -tempLV[j];
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )
@@ -173,7 +173,7 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 		outTable[j][rank] = -aBody->w_a[j];
 	    }
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      if ( jointsigns[m_ConfigurationToJoints[i]->rankInConfiguration() ]>0 )

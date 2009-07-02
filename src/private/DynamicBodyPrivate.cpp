@@ -21,11 +21,11 @@
    Please refers to file License.txt for details on the license.
 */
 
-#include "DynamicBody.h"
+#include "DynamicBodyPrivate.h"
 
 using namespace dynamicsJRLJapan;
 
-DynamicBody::DynamicBody():Body()
+DynamicBodyPrivate::DynamicBodyPrivate():Body()
 {
   sister =-1;
   child=-1;
@@ -49,17 +49,17 @@ DynamicBody::DynamicBody():Body()
   dw[0] = dw[1] = dw[2] = 0;  
 }
 
-DynamicBody::~DynamicBody()
+DynamicBodyPrivate::~DynamicBodyPrivate()
 {
 
 }
 
-DynamicBody & DynamicBody::operator=(const DynamicBody & r)
+DynamicBodyPrivate & DynamicBodyPrivate::operator=(const DynamicBodyPrivate & r)
 {
   *((Body *)this)= *((Body *)&r);
   //  (Body)*this= (Body)r;
 
-  // Joint value.
+  // JointPrivate value.
   q = r.q;
   dq = r.dq;
   ddq = r.ddq;
@@ -86,7 +86,7 @@ DynamicBody & DynamicBody::operator=(const DynamicBody & r)
 }
 
 
-DynamicBody & DynamicBody::operator=(const Body & r)
+DynamicBodyPrivate & DynamicBodyPrivate::operator=(const Body & r)
 {
   *((Body *)this) =r ;
   this->c = r.getPositionCoM();

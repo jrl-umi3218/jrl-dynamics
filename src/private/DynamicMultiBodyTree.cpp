@@ -145,13 +145,13 @@ void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
 {
   m_listOfBodies.resize(listeCorps.size());
-  DynamicBody *dbody;
+  DynamicBodyPrivate *dbody;
   for(unsigned int i=0;i<listeCorps.size();i++)
     {
-      dbody = dynamic_cast<DynamicBody *>(listeCorps[i]);
+      dbody = dynamic_cast<DynamicBodyPrivate *>(listeCorps[i]);
       if (!dbody)
         {
-	  dbody = new DynamicBody();
+	  dbody = new DynamicBodyPrivate();
 	  *dbody = *listeCorps[i];
         }
       m_listOfBodies[i] = dbody;
@@ -192,7 +192,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 
   // Default initialization to 30 bodies for one branch.
   vectorOfBodies.resize(30);
-  vectorOfBodies[0] = new DynamicBody();
+  vectorOfBodies[0] = new DynamicBodyPrivate();
   vectorOfBodies[0]->setLabel(NbOfBodies++);
   ajouterCorps(*vectorOfBodies[0]);
   Depth++;
@@ -201,8 +201,8 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 
 
   // Go through the Joints tree.
-  Joint *CurrentJoint = m_RootOfTheJointsTree;
-  Joint *NextCurrentJoint=0,*FatherJoint;
+  JointPrivate *CurrentJoint = m_RootOfTheJointsTree;
+  JointPrivate *NextCurrentJoint=0,*FatherJoint;
   double mi[9]={ 1.0,1.0,1.0, 1.0,1.0,1.0, 1.0,1.0,1.0};
   double cm[3] = { 0.0,0.0,0.0};
 
@@ -235,7 +235,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	  if (CurrentLink.aJoint->getName() == "")
             {
 	      char buf[64];
-	      if (CurrentLink.aJoint->type() == Joint::FIX_JOINT)
+	      if (CurrentLink.aJoint->type() == JointPrivate::FIX_JOINT)
                 {
 		  sprintf(buf, "FIXED_%02d", lRank);
                 }
@@ -274,12 +274,12 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
       if (jrlBody != NULL)
         {
 	  lCurrentBody = (Body *)jrlBody;
-	  DynamicBody *dbody = dynamic_cast<DynamicBody *>(lCurrentBody);
+	  DynamicBodyPrivate *dbody = dynamic_cast<DynamicBodyPrivate *>(lCurrentBody);
 	  dbody->c = jrlBody->localCenterOfMass();
         }
       else
         {
-	  lCurrentBody = new DynamicBody();
+	  lCurrentBody = new DynamicBodyPrivate();
 	  lCurrentBody->setInertie(mi);
 	  lCurrentBody->setMasse(1.0);// 1 kg per default.
 	  lCurrentBody->setPositionCoM(cm);
@@ -299,14 +299,14 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 
       // Find the next one.
       // 1. A children.
-      NextCurrentJoint = (dynamicsJRLJapan::Joint *)CurrentJoint->childJoint(0);
+      NextCurrentJoint = (dynamicsJRLJapan::JointPrivate *)CurrentJoint->childJoint(0);
       Depth++;
 
       // No child.
       if (NextCurrentJoint==0)
         {
 	  // If a father exist.
-	  FatherJoint = (dynamicsJRLJapan::Joint *)CurrentJoint->parentJoint();
+	  FatherJoint = (dynamicsJRLJapan::JointPrivate *)CurrentJoint->parentJoint();
 	  Depth--;
 
 	  while( (FatherJoint!=0) &&
@@ -327,13 +327,13 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	      if(CurrentJointPosition<NbOfChildren-1)
                 {
 		  // take it !
-		  NextCurrentJoint = (dynamicsJRLJapan::Joint *)FatherJoint->childJoint(CurrentJointPosition+1);
+		  NextCurrentJoint = (dynamicsJRLJapan::JointPrivate *)FatherJoint->childJoint(CurrentJointPosition+1);
                 }
 	      else
                 {
 		  // otherwise move upward.
 		  CurrentJoint =FatherJoint;
-		  FatherJoint=(dynamicsJRLJapan::Joint *)FatherJoint->parentJoint();
+		  FatherJoint=(dynamicsJRLJapan::JointPrivate *)FatherJoint->parentJoint();
 		  Depth--;
                 }
             }

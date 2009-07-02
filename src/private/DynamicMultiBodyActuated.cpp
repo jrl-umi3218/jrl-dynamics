@@ -50,7 +50,7 @@ int DynMultiBodyPrivate::BuildLinkBetweenActuatedVectorAndJoints()
 	  }
       if (FoundActuatedJoint)
 	{
-	  ((Joint *)(m_JointVector[IndexInJointVector]))->setIDinActuated(IndexInActuatedVector);
+	  ((JointPrivate *)(m_JointVector[IndexInJointVector]))->setIDinActuated(IndexInActuatedVector);
 	  m_ActuatedIDToConfiguration[IndexInActuatedVector] = IndexInJointVector;
 	}
       else
@@ -69,10 +69,10 @@ CjrlJoint* DynMultiBodyPrivate::GetJointFromActuatedID(int JointID)
 
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      Joint * r;
-      if (((r=(Joint *)m_JointVector[i])->getIDinActuated())==JointID)
+      JointPrivate * r;
+      if (((r=(JointPrivate *)m_JointVector[i])->getIDinActuated())==JointID)
         {
-	  ODEBUG("Joint : "<< r->getName() << " " << JointID );
+	  ODEBUG("JointPrivate : "<< r->getName() << " " << JointID );
 
 	  return r;
         }

@@ -27,9 +27,9 @@
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "dynamics-config.h"
-#include "Joint.h"
+#include "JointPrivate.h"
 #include "MultiBody.h"
-#include "DynamicBody.h"
+#include "DynamicBodyPrivate.h"
 
 
 using namespace::std;
@@ -59,9 +59,9 @@ namespace dynamicsJRLJapan
     int labelTheRoot;
     
     /**  List of bodies with dynamical properties */
-    std::vector<DynamicBody *> m_listOfBodies;
+    std::vector<DynamicBodyPrivate *> m_listOfBodies;
     
-    /** Array to convert Joint Id from VRL file to Body array index. */
+    /** Array to convert JointPrivate Id from VRL file to Body array index. */
     std::vector<int> ConvertIDInActuatedToBodyID;
     
     /** Update body parameters from the bodyinfo list of 
@@ -113,7 +113,7 @@ namespace dynamicsJRLJapan
     bool m_FirstTime;
 
     /** \brief Store the root of the Joints tree. */
-    Joint * m_RootOfTheJointsTree;
+    JointPrivate * m_RootOfTheJointsTree;
 
     /** \brief Velocity of the center of Mass */
     vector3d m_VelocityCenterOfMass;
@@ -267,7 +267,7 @@ namespace dynamicsJRLJapan
     
     /*! \brief The ith element of this vector is the joint corrsponding 
       to the ith element of the configuration of the robot (dofs)*/
-    std::vector<Joint*> m_ConfigurationToJoints;
+    std::vector<JointPrivate*> m_ConfigurationToJoints;
 
     /*! \brief Number of links */
     int m_LinksBetweenJointNamesAndRankNb;
@@ -276,7 +276,7 @@ namespace dynamicsJRLJapan
     \brief Recursive emthod to update the kinematic tree transformations 
     starting from the given joint. This method update p, R and w_c for every Body
      */
-    void forwardTransformation(Joint* inJoint, const vectorN& inConfiguration);
+    void forwardTransformation(JointPrivate* inJoint, const vectorN& inConfiguration);
 
     /**
     \brief a temporary vector used in forwardTransformation, to avoid dynamic allocation in a recursive method
@@ -381,7 +381,7 @@ namespace dynamicsJRLJapan
 	links between joint names and rank in the state vector,
 	or to provide a file name which specify those links.
 
-	\param option: Read from a file the relationship between Joint Name and rank
+	\param option: Read from a file the relationship between JointPrivate Name and rank
 	in the state vector.
     */
     virtual void CreatesTreeStructure(const char * option);
@@ -427,7 +427,7 @@ namespace dynamicsJRLJapan
     /** \brief Compute the backward part of the dynamics
 	to get the force and the torques of the bodies.
      */
-    void BackwardDynamics(DynamicBody & CurrentBody);
+    void BackwardDynamics(DynamicBodyPrivate & CurrentBody);
 
     /** \brief Calculate ZMP. */
     void CalculateZMP(double &px, 
@@ -522,10 +522,10 @@ namespace dynamicsJRLJapan
     vector3d getPositionCoM(void);
         
     /** Returns the rank of the joint from the name. */
-    int JointRankFromName(Joint *aJoint);    
+    int JointRankFromName(JointPrivate *aJoint);    
 
     /** Returns the joint according to the rank. */
-    Joint * JointFromRank(int aRank);
+    JointPrivate * JointFromRank(int aRank);
 
     /** Returns the name of the body JointID in the VRML numbering system. */
     string GetName(int JointID);

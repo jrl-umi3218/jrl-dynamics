@@ -23,7 +23,7 @@ using namespace std;
 
 namespace dynamicsJRLJapan
 {  
-    class DynamicBody;
+    class DynamicBodyPrivate;
   /** @ingroup forwardynamics
        Define a transformation from a body to another
       Supported type:
@@ -36,7 +36,7 @@ namespace dynamicsJRLJapan
         \li through abstract robot dynamics interfaces. When using this solution, 
 	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
-  class DYN_JRL_JAPAN_EXPORT Joint: public CjrlJoint
+  class DYN_JRL_JAPAN_EXPORT JointPrivate: public CjrlJoint
   {
   protected:
     /** 
@@ -81,18 +81,18 @@ namespace dynamicsJRLJapan
     matrix4d m_poseInParentFrame;
 
     /*! Father joint */
-    Joint * m_FatherJoint;
+    JointPrivate * m_FatherJoint;
 
     /*! Vector of childs */
-    std::vector< Joint*> m_Children;
+    std::vector< JointPrivate*> m_Children;
 
     /*! Vector of joints from the root to this joint. */
     std::vector< CjrlJoint*> m_FromRootToThis;
-    std::vector<Joint*> m_FromRootToThisJoint;
+    std::vector<JointPrivate*> m_FromRootToThisJoint;
 
     /*! Pointer towards the body. */
     CjrlBody * m_Body;
-    DynamicBody * m_dynBody;
+    DynamicBodyPrivate * m_dynBody;
 
     /*! Name */
     string m_Name;
@@ -161,27 +161,27 @@ namespace dynamicsJRLJapan
     static const int PRISMATIC_JOINT=2;
     
     /*! \brief Constructor with full initialization. */
-    Joint(int ltype, vector3d&  laxe, 
+    JointPrivate(int ltype, vector3d&  laxe, 
 	  float lquantite, matrix4d & apose);
 
-    Joint(int ltype, vector3d& laxe, 
+    JointPrivate(int ltype, vector3d& laxe, 
 	  float lquantite, vector3d &translationStatic);
     
-    Joint(int ltype, vector3d& laxe, 
+    JointPrivate(int ltype, vector3d& laxe, 
 	  float lquantite);
 
 	
     /*! \brief Constructor by copy. */
-    Joint(const Joint &r); 
+    JointPrivate(const JointPrivate &r); 
     
     /*! \brief Default constructor. */ 
-    Joint();
+    JointPrivate();
 
     /*! \brief default destructor */
-    virtual ~Joint();
+    virtual ~JointPrivate();
     
     /*! \brief Affectation operator */
-    Joint & operator=(const Joint &r);
+    JointPrivate & operator=(const JointPrivate &r);
 
     /*! \brief Operator to get one element of the rotation 
       
@@ -307,13 +307,13 @@ namespace dynamicsJRLJapan
     /*! \name Implements the virtual function inherited from CjrlJoint
       @{
      */
-    /*! \name Joint hierarchy 
+    /*! \name JointPrivate hierarchy 
       @{
      */
-    /*! \brief parent Joint */
+    /*! \brief parent JointPrivate */
     CjrlJoint*  parentJoint() const ;
 
-    /*! \brief Add a child Joint */
+    /*! \brief Add a child JointPrivate */
     bool addChildJoint(CjrlJoint&);
     
     /*! \brief Count the number of child joints */
@@ -321,19 +321,19 @@ namespace dynamicsJRLJapan
     
     /*! \brief Returns the child joint at the given rank */
     CjrlJoint* childJoint(unsigned int givenRank) const;
-    Joint* child_Joint(unsigned int givenRank) const;
+    JointPrivate* child_JointPrivate(unsigned int givenRank) const;
 
     /**
     ! \brief Get a vector containing references of the joints 
     between the rootJoint and this joint. 
-    The root Joint and this Joint are included in the vector.
+    The root JointPrivate and this JointPrivate are included in the vector.
      */
     std::vector< CjrlJoint* > jointsFromRootToThis() const ;
     
-    std::vector< Joint* > jointsFromRootToThisJoint() const ;
+    std::vector< JointPrivate* > jointsFromRootToThisJoint() const ;
     /*! @} */
     
-    /*! \name Joint Kinematics 
+    /*! \name JointPrivate Kinematics 
       @{
      */
     
@@ -383,8 +383,8 @@ namespace dynamicsJRLJapan
     unsigned int numberDof() const;
 
     /**
-       \brief Returns the rank of the Joint in the state vector.
-       If the Joint has several dimensions, it is the rank of the first dimension.
+       \brief Returns the rank of the JointPrivate in the state vector.
+       If the JointPrivate has several dimensions, it is the rank of the first dimension.
     */
     inline unsigned int rankInConfiguration() const
       { return m_StateVectorPosition; }
@@ -571,7 +571,7 @@ namespace dynamicsJRLJapan
        \brief Get a pointer to the linked body (if any).
     */
     CjrlBody* linkedBody() const;
-    DynamicBody* linkedDBody() const;
+    DynamicBodyPrivate* linkedDBody() const;
  	
     /**
        \brief Link a body to the joint.
@@ -585,7 +585,7 @@ namespace dynamicsJRLJapan
     /*! @} */
 
     /*! Specify the joint father. */
-    void SetFatherJoint(Joint *aFather);
+    void SetFatherJoint(JointPrivate *aFather);
 
     /*! Set the state vector position. */
     inline const unsigned int & stateVectorPosition() const
@@ -597,28 +597,28 @@ namespace dynamicsJRLJapan
 
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public JointPrivate
   {
   public:
     JointFreeflyer(const matrix4d &inInitialPosition);
     virtual ~JointFreeflyer();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointRotation : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointRotation : public JointPrivate
   {
   public:
     JointRotation(const matrix4d &inInitialPosition);
     virtual ~JointRotation();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointTranslation : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointTranslation : public JointPrivate
   {
   public:
     JointTranslation(const matrix4d &inInitialPosition);
     virtual ~JointTranslation();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointAnchor : public Joint
+  class DYN_JRL_JAPAN_EXPORT JointAnchor : public JointPrivate
   {
   public:
     JointAnchor(const matrix4d &inInitialPosition);

@@ -238,7 +238,7 @@ const CjrlJoint* Body::joint() const
   return m_AttachedJoint;
 }
 
-void Body::joint(Joint * ajoint)
+void Body::joint(JointPrivate * ajoint)
 {
   m_AttachedJoint = ajoint;
 }

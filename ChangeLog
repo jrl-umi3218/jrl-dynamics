@@ -1,5 +1,34 @@
 2009-07-02  Florent Lamiraux  <florent@laas.fr>
 
+	Change name of class in private implementation.
+	* src/CMakeLists.txt: .
+	* src/private/Body.cpp: .
+	* src/private/Body.h: .
+	* src/private/DynMultiBodyPrivate.cpp: .
+	* src/private/DynMultiBodyPrivate.h: .
+	* src/private/DynamicBodyPrivate.cpp: .
+	* src/private/DynamicBodyPrivate.h: .
+	* src/private/DynamicMultiBodyActuated.cpp: .
+	* src/private/DynamicMultiBodyAngularMomentum.cpp: .
+	* src/private/DynamicMultiBodyArticularJacobian.cpp: .
+	* src/private/DynamicMultiBodyCenterOfMass.cpp: .
+	* src/private/DynamicMultiBodyInertiaMatrix.cpp: .
+	* src/private/DynamicMultiBodyJointRank.cpp: .
+	* src/private/DynamicMultiBodyNewtonEuler.cpp: .
+	* src/private/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp: .
+	* src/private/DynamicMultiBodyTree.cpp: .
+	* src/private/HumDynMultiBodyPrivate.h: .
+	* src/private/JointPrivate.cpp: .
+	* src/private/JointPrivate.h: .
+	* src/private/MultiBody.cpp: .
+	* src/private/MultiBody.h: .
+	* src/private/SpiritVRMLReader.cpp: .
+	Query-replace
+	  DynamicBody -> DynamicBodyPrivate
+	  Joint -> JointPrivate
+
+2009-07-02  Florent Lamiraux  <florent@laas.fr>
+
 	Move some header files in private part.
 	* src/private/Body.h: Rename from include/dynamicsJRLJapan/Body.h,
 	* src/private/DynamicBodyPrivate.cpp: Rename from src/private/DynamicBody.cpp,

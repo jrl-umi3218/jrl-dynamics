@@ -323,13 +323,13 @@ namespace dynamicsJRLJapan
 	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
 	  delete m_DataForParsing->CurrentLink.aJoint;
 	
-	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
 	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
 	m_DataForParsing->CurrentLink.aJoint->setName(s);
 	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 		
 	if (m_Verbose>1)
-	  std::cout<< "Reading the name of the Joint: |" << s<<"|" << endl;
+	  std::cout<< "Reading the name of the JointPrivate: |" << s<<"|" << endl;
       }
 
       void fJointSubBlockName() const
@@ -337,12 +337,12 @@ namespace dynamicsJRLJapan
 	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
 	  delete m_DataForParsing->CurrentLink.aJoint;
 
-	m_DataForParsing->CurrentLink.aJoint = new Joint();
+	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
 	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
 	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 	if (m_Verbose>1)
-	  std::cout<< "Reading the `name of the Joint SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
+	  std::cout<< "Reading the `name of the JointPrivate SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
       }
 
       void fBodySubBlockName() const
@@ -356,7 +356,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
 	if (m_Verbose>1)
-	  std::cout<< "Reading the name of the Joint: |" << m_DataForParsing->aName<<"|" << endl;
+	  std::cout<< "Reading the name of the JointPrivate: |" << m_DataForParsing->aName<<"|" << endl;
       }
     
       void fSFVec3f_0(char const *str, char const *end) const
@@ -397,7 +397,7 @@ namespace dynamicsJRLJapan
 
 	// IMPORTANT POLICY: all the free joint have their static 
 	// translation set to zero.
-	if (m_DataForParsing->CurrentLink.aJoint->type()!=Joint::FREE_JOINT)
+	if (m_DataForParsing->CurrentLink.aJoint->type()!=JointPrivate::FREE_JOINT)
 	  m_DataForParsing->CurrentLink.aJoint->setStaticTranslation(m_DataForParsing->JointTranslation);
 	else
 	  {
@@ -407,7 +407,7 @@ namespace dynamicsJRLJapan
 	  }
 	  
 	if (m_Verbose>1)
-	  cout << "Joint" << m_DataForParsing->CurrentLink.aJoint->getName()
+	  cout << "JointPrivate" << m_DataForParsing->CurrentLink.aJoint->getName()
 	       << ":" << m_DataForParsing->JointTranslation << endl;
       }
     
@@ -482,11 +482,11 @@ namespace dynamicsJRLJapan
 
 	if (s=="free")
 	  {
-	    m_DataForParsing->CurrentLink.aJoint->type(Joint::FREE_JOINT);
+	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::FREE_JOINT);
 	  }
 	else if (s=="rotate")
 	  {
-	    m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	  }
 	  
       }
@@ -502,7 +502,7 @@ namespace dynamicsJRLJapan
       {
 	MAL_S3_VECTOR(lxaxis,double);
 	lxaxis[0]=1.0;lxaxis[1]=0.0;lxaxis[2]=0.0;
-	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	m_DataForParsing->CurrentLink.aJoint->axe(lxaxis);
       }
 
@@ -511,7 +511,7 @@ namespace dynamicsJRLJapan
 	
 	MAL_S3_VECTOR(lyaxis,double);
 	lyaxis[0]=0.0;lyaxis[1]=1.0;lyaxis[2]=0.0;
-	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	m_DataForParsing->CurrentLink.aJoint->axe(lyaxis);
 
       }
@@ -520,7 +520,7 @@ namespace dynamicsJRLJapan
       {
 	MAL_S3_VECTOR(lzaxis,double);
 	lzaxis[0]=0.0;lzaxis[1]=0.0;lzaxis[2]=1.0;
-	m_DataForParsing->CurrentLink.aJoint->type(Joint::REVOLUTE_JOINT);
+	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	m_DataForParsing->CurrentLink.aJoint->axe(lzaxis);
 
       }
@@ -1114,7 +1114,7 @@ namespace dynamicsJRLJapan
 					      >> *( JointChildrenDEFBlocks_r ) 
 					      >> ch_p(']')[SVRBIND2(fDecreaseDepth,(self))];
 
-	  JointSubBlock_r = (str_p("Joint"))[SVRBIND2(fJointSubBlockName,(self))] >> ch_p('{') 
+	  JointSubBlock_r = (str_p("JointPrivate"))[SVRBIND2(fJointSubBlockName,(self))] >> ch_p('{') 
 					   >> *(JointField_r | JointChildren_r ) >> ch_p('}');
 
 	  JointBlock_r = str_p("DEF") 
@@ -1225,7 +1225,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->Depth = 0;
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;
-	m_DataForParsing->CurrentLink.aJoint = new Joint(Joint::FIX_JOINT,dummy,0.0);
+	m_DataForParsing->CurrentLink.aJoint = new JointPrivate(JointPrivate::FIX_JOINT,dummy,0.0);
 	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
 	m_DataForParsing->CurrentLink.indexCorps2 = 0;

@@ -32,7 +32,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int lMother=0;
   unsigned int i,j;
   double NORME_EPSILON=1e-6;
-  DynamicBody *aDB;
+  DynamicBodyPrivate *aDB;
 
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
   m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;

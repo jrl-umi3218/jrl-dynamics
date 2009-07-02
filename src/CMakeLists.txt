@@ -13,11 +13,11 @@
 # ---------------------------
 SET(libdyn_src
   private/fileReader.cpp 
-  private/Joint.cpp 
+  private/JointPrivate.cpp 
   private/Body.cpp 
   private/Hand.cpp 
   private/Foot.cpp
-  private/DynamicBody.cpp 
+  private/DynamicBodyPrivate.cpp 
   private/MultiBody.cpp 
   private/DynMultiBodyPrivate.cpp 
   private/HumDynMultiBodyPrivate.cpp 

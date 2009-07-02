@@ -29,7 +29,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"
 #include "dynamics-config.h"
-#include "Joint.h"
+#include "JointPrivate.h"
 
 using namespace::std;
 
@@ -68,9 +68,9 @@ namespace dynamicsJRLJapan
     /*! \brief Says if the body has been explored. */
     int m_Explored;
     
-    /*! \brief Joint to which the body is attached inside a tree
+    /*! \brief JointPrivate to which the body is attached inside a tree
      structure. */
-    Joint * m_AttachedJoint;
+    JointPrivate * m_AttachedJoint;
     
     double attCoefMass;
 
@@ -148,7 +148,7 @@ namespace dynamicsJRLJapan
 	
 	This joint is defined once a tree for a MultiBody object has been specified.
     */
-    void joint(Joint * ajoint );
+    void joint(JointPrivate * ajoint );
     
     /*! \brief  Returns if the object has been explored or not. */
     int getExplored() const;

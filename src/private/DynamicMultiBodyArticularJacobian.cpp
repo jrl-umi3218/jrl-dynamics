@@ -20,9 +20,9 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
   
   //determine participating joints
-  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
   robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
   robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
   
@@ -37,8 +37,8 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     }
   
   unsigned int rank;
-  Joint* aJoint;
-  DynamicBody* aBody = EndJoint->linkedDBody();
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
   tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
@@ -54,7 +54,7 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    {
@@ -62,13 +62,13 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	      outTable[j+3][rank] = aBody->w_a[j];
 	    }
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      outTable[j][rank] =  aBody->w_a[j];
 	    }
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      outTable[j][rank+j] =  1.0;
@@ -97,7 +97,7 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    {
@@ -105,13 +105,13 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	      outTable[j+3][rank] = -aBody->w_a[j];
 	    }
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      outTable[j][rank] = -aBody->w_a[j];
 	    }
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
 	      outTable[j][rank+j] =  -1.0;
@@ -175,9 +175,9 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
   //determine participating joints
-  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
   robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
   robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
 
@@ -192,8 +192,8 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     }
 
   unsigned int rank;
-  Joint* aJoint;
-  DynamicBody* aBody = EndJoint->linkedDBody();
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
   tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
@@ -209,16 +209,16 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] =  tempLV[j];
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] =  aBody->w_a[j];
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank+j] =  1.0;
 	  outTable[1][rank+3] =  -tempDP[2];
@@ -244,16 +244,16 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] = -tempLV[j];
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] = -aBody->w_a[j];
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank+j] =  -1.0;
 	  outTable[1][rank+3] =  tempDP[2];
@@ -309,9 +309,9 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
   //determine participating joints
-  std::vector<Joint *> robotRoot2StartJoint, robotRoot2EndJoint;
-  Joint* StartJoint = ( Joint* ) ( &inStartJoint );
-  Joint* EndJoint = ( Joint* ) ( &inEndJoint );
+  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
   robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
   robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
 
@@ -326,8 +326,8 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     }
 
   unsigned int rank;
-  Joint* aJoint;
-  DynamicBody* aBody;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody;
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
@@ -340,14 +340,14 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] = aBody->w_a[j];
 
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank+j] =  1.0;
 	  break;
@@ -367,14 +367,14 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
 
       switch ( aJoint->type() )
         {
-	case Joint::REVOLUTE_JOINT:
+	case JointPrivate::REVOLUTE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank] = -aBody->w_a[j];
 
 	  break;
-	case Joint::PRISMATIC_JOINT:
+	case JointPrivate::PRISMATIC_JOINT:
 	  break;
-	case Joint::FREE_JOINT:
+	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    outTable[j][rank+j] =  -1.0;
 	  break;

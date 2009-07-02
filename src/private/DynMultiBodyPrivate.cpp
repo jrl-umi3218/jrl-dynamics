@@ -137,7 +137,7 @@ void DynMultiBodyPrivate::Setq(int JointID,double q)
       ((unsigned int)JointID<m_listOfBodies.size()))
     {
       m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->q= q;
-      ((Joint *)m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->joint())->quantity(q);
+      ((JointPrivate *)m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->joint())->quantity(q);
     }
 }
 
@@ -296,7 +296,7 @@ void DynMultiBodyPrivate::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
 // Set the root joint of the robot.
 void DynMultiBodyPrivate::rootJoint(CjrlJoint& inJoint)
 {
-  m_RootOfTheJointsTree = & (Joint &)inJoint;
+  m_RootOfTheJointsTree = & (JointPrivate &)inJoint;
 
 }
 
@@ -350,10 +350,10 @@ void DynMultiBodyPrivate::ComputeNumberOfJoints()
   ODEBUG("JointVector :" << m_JointVector.size());
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      ODEBUG("Joint " << i << " : "
+      ODEBUG("JointPrivate " << i << " : "
 	     << m_JointVector[i]->numberDof() <<  " "
-	     << ((Joint *)m_JointVector[i])->getIDinActuated() << " "
-	     << ((Joint *)m_JointVector[i])->getName());
+	     << ((JointPrivate *)m_JointVector[i])->getIDinActuated() << " "
+	     << ((JointPrivate *)m_JointVector[i])->getName());
       r += m_JointVector[i]->numberDof();
     }
 
@@ -404,7 +404,7 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 
 	  ODEBUG( aNameAndRank.LinkName << " " << aNameAndRank.RankInConfiguration);
         }
-      //     ODEBUG((char *)((Joint *)m_JointVector[0])->getName().c_str()
+      //     ODEBUG((char *)((JointPrivate *)m_JointVector[0])->getName().c_str()
       // << " "  << m_JointVector[0]->rankInConfiguration());
     }
   fclose(fp);
@@ -418,7 +418,7 @@ void DynMultiBodyPrivate::BuildStateVectorToJointAndDOFs()
   int lindex=0,StateVectorIndexDefault=0;
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      lindex = JointRankFromName((JointPrivate *)m_JointVector[i]);
       if (lindex==-1)
 	lindex = StateVectorIndexDefault;
 
@@ -436,11 +436,11 @@ void DynMultiBodyPrivate::BuildStateVectorToJointAndDOFs()
   StateVectorIndexDefault=0;
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      lindex = JointRankFromName((Joint *)m_JointVector[i]);
+      lindex = JointRankFromName((JointPrivate *)m_JointVector[i]);
       if (lindex==-1)
 	lindex = StateVectorIndexDefault;
 
-      ODEBUG(((Joint *)m_JointVector[i])->getName() << " " << lindex);
+      ODEBUG(((JointPrivate *)m_JointVector[i])->getName() << " " << lindex);
       for(unsigned int j=0;j<m_JointVector[i]->numberDof();j++)
         {
 	  m_StateVectorToDOFs[lindex++]=j;
@@ -452,7 +452,7 @@ void DynMultiBodyPrivate::BuildStateVectorToJointAndDOFs()
   for(unsigned int i=0;i<m_StateVectorToJoint.size();)
     {
       int r;
-      Joint * aJoint = (Joint *)m_JointVector[m_StateVectorToJoint[i]];
+      JointPrivate * aJoint = (JointPrivate *)m_JointVector[m_StateVectorToJoint[i]];
 
       // ASSUMPTION: The joint in the VRML have only one degree of freedom.
       if ((r=aJoint->getIDinActuated())!=-1)
@@ -474,7 +474,7 @@ void DynMultiBodyPrivate::UpdateTheSizeOfJointsJacobian()
 {
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
-      ((Joint *)m_JointVector[i])->resizeJacobianJointWrtConfig(m_NbDofs);
+      ((JointPrivate *)m_JointVector[i])->resizeJacobianJointWrtConfig(m_NbDofs);
     }
 }
 
@@ -607,14 +607,14 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 	      lindex++;
             }
 
-	  ((Joint *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
+	  ((JointPrivate *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
 								       anAngularVelocity);
 	  lindex+=3;
         }
       // Update only the quantity when it is a revolute or a prismatic joint.
       else
         {
-	  int lIDinActuated = ((Joint *)m_JointVector[i])->getIDinActuated();
+	  int lIDinActuated = ((JointPrivate *)m_JointVector[i])->getIDinActuated();
 	  if (lIDinActuated>=0)
             {
 	      m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq = inVelocity[lindex];
@@ -687,14 +687,14 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
 	      lindex++;
             }
 
-	  //((Joint *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
+	  //((JointPrivate *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
 	  //								       anAngularVelocity);
 	  lindex+=3;
         }
       // Update only the quantity when it is a revolute or a prismatic joint.
       else
         {
-	  int lIDinActuated = ((Joint *)m_JointVector[i])->getIDinActuated();
+	  int lIDinActuated = ((JointPrivate *)m_JointVector[i])->getIDinActuated();
 	  if (lIDinActuated>=0)
             {
 	      m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->ddq = inAcceleration[lindex];

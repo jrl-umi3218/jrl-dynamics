@@ -46,7 +46,7 @@ void DynMultiBodyPrivate::setJointOrderInConfig(std::vector<CjrlJoint *>inJointV
 }
 
 
-int DynMultiBodyPrivate::JointRankFromName(Joint *aJoint)
+int DynMultiBodyPrivate::JointRankFromName(JointPrivate *aJoint)
 {
 
   ODEBUG("m_LinksBetweenJointNamesAndRank.size():" << m_LinksBetweenJointNamesAndRank.size());
@@ -58,7 +58,7 @@ int DynMultiBodyPrivate::JointRankFromName(Joint *aJoint)
   return -1;
 }
 
-Joint * DynMultiBodyPrivate::JointFromRank(int aRank)
+JointPrivate * DynMultiBodyPrivate::JointFromRank(int aRank)
 {
   if (m_LinksBetweenJointNamesAndRank.size()!=0)
     {
@@ -70,8 +70,8 @@ Joint * DynMultiBodyPrivate::JointFromRank(int aRank)
         }
       for(unsigned int i=0;i<m_JointVector.size();i++)
         {
-	  if (((Joint *)m_JointVector[i])->getName()==JointName)
-	    return (Joint *)m_JointVector[i];
+	  if (((JointPrivate *)m_JointVector[i])->getName()==JointName)
+	    return (JointPrivate *)m_JointVector[i];
         }
     }
 
@@ -80,12 +80,12 @@ Joint * DynMultiBodyPrivate::JointFromRank(int aRank)
   for(unsigned int i=0;i<m_JointVector.size();i++)
     {
       int RankRangeBegin=CurrentTestRank;
-      int RankRangeEnd=RankRangeBegin+((Joint *)m_JointVector[i])->numberDof();
+      int RankRangeEnd=RankRangeBegin+((JointPrivate *)m_JointVector[i])->numberDof();
       if((aRank>=RankRangeBegin) &&
 	 (aRank<RankRangeEnd))
-	return (Joint *)m_JointVector[i];
+	return (JointPrivate *)m_JointVector[i];
       CurrentTestRank=RankRangeEnd;
     }
   ODEBUG("Looking for rank " << aRank << " failed " << m_LinksBetweenJointNamesAndRank.size());
-  return (Joint *)0;
+  return (JointPrivate *)0;
 }

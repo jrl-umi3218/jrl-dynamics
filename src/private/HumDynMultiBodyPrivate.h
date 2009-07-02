@@ -244,7 +244,7 @@ namespace dynamicsJRLJapan
 	  \note  For most humanoid robots, the gaze joint is the head.
       */
       inline void gazeJoint(CjrlJoint *inGazeJoint)
-	{ m_GazeJoint = (Joint *)inGazeJoint; }
+	{ m_GazeJoint = (JointPrivate *)inGazeJoint; }
       
       /**
 	 \brief Get gaze joint

@@ -37,7 +37,7 @@ namespace dynamicsJRLJapan
   /*! Fundamental class to store the dynamical information for one body. 
     @ingroup forwardynamics
   */
-  class DYN_JRL_JAPAN_EXPORT DynamicBody : public Body
+  class DYN_JRL_JAPAN_EXPORT DynamicBodyPrivate : public Body
   {
     
   public:
@@ -95,18 +95,18 @@ namespace dynamicsJRLJapan
     int child;
     
     /*! Default Constructor. */
-    DynamicBody();
+    DynamicBodyPrivate();
 
     /*! Default Destructor. */
-    virtual ~DynamicBody();
+    virtual ~DynamicBodyPrivate();
 
     /*! \name Assignment operator 
       @{
      */
     /*! From a dynamical body. */
-    DynamicBody & operator=(const DynamicBody & r);
+    DynamicBodyPrivate & operator=(const DynamicBodyPrivate & r);
     /*! From a body */
-    DynamicBody & operator=(const Body & r);
+    DynamicBodyPrivate & operator=(const Body & r);
     /*! @} */
     
     
