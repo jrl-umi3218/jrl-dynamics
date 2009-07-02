@@ -2,9 +2,7 @@
 #define ROBOT_DYNAMICS_IMPL_H
 
 #include "Joint.h"
-#include "Body.h"
 #include "DynamicBody.h"
-#include "MultiBody.h"
 #include "DynamicMultiBody.h"
 #include "HumanoidDynamicMultiBody.h"
 #include "Hand.h"
