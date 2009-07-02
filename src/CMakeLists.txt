@@ -20,13 +20,14 @@ SET(libdyn_src
   private/DynamicBody.cpp 
   private/MultiBody.cpp 
   private/DynMultiBodyPrivate.cpp 
-  private/HumanoidDynamicMultiBody.cpp 
+  private/HumDynMultiBodyPrivate.cpp 
   private/HumanoidSpecificities.cpp  
   private/SpiritVRMLReader.cpp 
 )
 
 SET(libdyn_src ${libdyn_src}
   public/DynamicMultiBody.cpp
+  public/HumanoidDynamicMultiBody.cpp 
   public/dynamicsJRLJapanFactory.cpp
 )
 

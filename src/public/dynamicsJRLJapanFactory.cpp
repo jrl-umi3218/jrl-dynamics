@@ -1,6 +1,8 @@
 #include "dynamicsJRLJapan.h"
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
+#include "../private/HumDynMultiBodyPrivate.h"
+
 namespace dynamicsJRLJapan
 {
 
@@ -101,9 +103,9 @@ int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
   // but right now it is easier.
   if (aHDR!=0)
     {
-      aHDR->parserVRML(OpenHRPVRMLFile,
+      aHDR->m_privateObj->parserVRML(OpenHRPVRMLFile,
 		       (char *)MapJointToRankFileName.c_str());
-      aHDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
+      aHDR->m_privateObj->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
       return 0;
     }
   return -1;

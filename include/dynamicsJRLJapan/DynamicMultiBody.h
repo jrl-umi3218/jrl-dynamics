@@ -12,6 +12,7 @@
 #ifndef DYNAMICSJRLJAPAN_DYNAMICMULTIBODY_H
 #define DYNAMICSJRLJAPAN_DYNAMICMULTIBODY_H
 
+#include "boost/shared_ptr.hpp"
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
 #include "robotDynamics/jrlDynamicRobot.h"
@@ -32,16 +33,17 @@ namespace dynamicsJRLJapan {
   */
   class DynamicMultiBody : public virtual CjrlDynamicRobot
   {
-  private:
-    DynMultiBodyPrivate *m_privateObj;
   public:
+
+    boost::shared_ptr<DynMultiBodyPrivate> m_privateObj;
+
     /**
        \name Initialization
        @{
     */
     DynamicMultiBody();
 
-    DynamicMultiBody(DynamicMultiBody *inDynamicRobot);
+    DynamicMultiBody(const DynamicMultiBody& inDynamicRobot);
 
     /**
        \brief Initialize data-structure necessary to dynamic computations
@@ -395,40 +397,12 @@ namespace dynamicsJRLJapan {
       @} 
     */
 
-
-    /*! \brief Compute Speciliazed InverseKinematics between two joints. 
-    
-    Specialized means that this method can be re implemented to be
-    extremly efficient and used the particularity of your robot.
-    For instance in some case, it is possible to use an exact inverse
-    kinematics to compute a set of articular value.
-    
-    This method does not intend to replace an architecture computing
-    inverse kinematics through the Jacobian.
-
-    jointRootPosition and jointEndPosition have to be expressed in the same
-    frame. 
-
-    \param[in] jointRoot: The root of the joint chain for which the specialized
-    inverse kinematics should be computed.
-
-    \param[in] jointEnd: The end of the joint chain for which the specialized 
-    inverse kinematics should be computed.
-
-    \param[in] jointRootPosition: The desired position of the root. 
-    
-    \param[in] jointEndPosition: The end position of the root.
-    
-    \param[out] q: Result i.e. the articular values.
+  protected:
+    /**
+       \brief Constructor optionally allocating the private part
     */
-    virtual bool 
-      ComputeSpecializedInverseKinematics(const CjrlJoint & jointRoot,
-					  const CjrlJoint & jointEnd,
-					  const matrix4d & jointRootPosition,
-					  const matrix4d & jointEndPosition,
-					  vectorN &q);
-    
-  };
+    DynamicMultiBody(bool inAllocatePrivate);
+ };
 };
 
 #endif /* DYNAMICSJRLJAPAN_DYNAMICMULTIBODY_H_ */

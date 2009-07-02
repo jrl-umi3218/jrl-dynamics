@@ -17,28 +17,28 @@
 
 #include "DynMultiBodyPrivate.h"
 #include "Hand.h"
-#include "HumanoidDynamicMultiBody.h"
+#include "HumDynMultiBodyPrivate.h"
 #include "HumanoidSpecificities.h"
 
 
 using namespace dynamicsJRLJapan;
 
 
-HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() : DynMultiBodyPrivate()
+HumDynMultiBodyPrivate::HumDynMultiBodyPrivate() : DynMultiBodyPrivate()
 {
   m_rightHand = m_leftHand = 0;
   m_RightFoot = m_LeftFoot = 0;
   m_HS = NULL;
 }
 
-HumanoidDynamicMultiBody::HumanoidDynamicMultiBody(const DynMultiBodyPrivate& inDynamicMultiBody,
+HumDynMultiBodyPrivate::HumDynMultiBodyPrivate(const DynMultiBodyPrivate& inDynamicMultiBody,
 						   string aFileNameForHumanoidSpecificities) :
   DynMultiBodyPrivate(inDynamicMultiBody)
 {
   SetHumanoidSpecificitiesFile(aFileNameForHumanoidSpecificities);
 }
 
-void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameForHumanoidSpecificities)
+void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHumanoidSpecificities)
 {
   string aHumanoidName="HRP2JRL";
   m_HS = new HumanoidSpecificities();
@@ -123,7 +123,7 @@ void HumanoidDynamicMultiBody::SetHumanoidSpecificitiesFile(string &aFileNameFor
 
 }
 
-HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
+HumDynMultiBodyPrivate::~HumDynMultiBodyPrivate()
 {
   if (m_HS!=0)
     delete m_HS;
@@ -134,7 +134,7 @@ HumanoidDynamicMultiBody::~HumanoidDynamicMultiBody()
   delete m_LeftFoot;
 }
 
-void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
+void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 {
   if (m_HS==0)
     return;
@@ -195,13 +195,13 @@ void HumanoidDynamicMultiBody::LinkBetweenJointsAndEndEffectorSemantic()
     m_WaistJoint = GetJointFromActuatedID(JointsForWaist[0]);
 }
 
-const MAL_S3_VECTOR(,double) & HumanoidDynamicMultiBody::zeroMomentumPoint() const
+const MAL_S3_VECTOR(,double) & HumDynMultiBodyPrivate::zeroMomentumPoint() const
 {
 
   return m_ZeroMomentumPoint;
 }
 
-void HumanoidDynamicMultiBody::ComputingZeroMomentumPoint()
+void HumDynMultiBodyPrivate::ComputingZeroMomentumPoint()
 {
   m_ZeroMomentumPoint = getZMP();
 }
@@ -211,7 +211,7 @@ void HumanoidDynamicMultiBody::ComputingZeroMomentumPoint()
 /* the part inherited from jrlDynamicRobot.        */
 /***************************************************/
 
-bool HumanoidDynamicMultiBody::computeForwardKinematics()
+bool HumDynMultiBodyPrivate::computeForwardKinematics()
 {
   bool r;
   r= DynMultiBodyPrivate::computeForwardKinematics();
@@ -221,15 +221,15 @@ bool HumanoidDynamicMultiBody::computeForwardKinematics()
 }
 
 
-bool HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
+bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
 							  MAL_MATRIX(,double) & outJacobian)
 {
-  cerr<< " The method HumanoidDynamicMultiBody::jacobianJointWrtFixedJoint " <<endl
+  cerr<< " The method HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint " <<endl
       << " is not implemented yet. " << endl;
   return true;
 }
 
-double HumanoidDynamicMultiBody::footHeight() const
+double HumDynMultiBodyPrivate::footHeight() const
 {
   if (m_HS){
     double lWidth, lHeight, lDepth;
@@ -242,95 +242,95 @@ double HumanoidDynamicMultiBody::footHeight() const
 }
 
 
-void HumanoidDynamicMultiBody::waist(CjrlJoint * inWaist)
+void HumDynMultiBodyPrivate::waist(CjrlJoint * inWaist)
 {
   m_WaistJoint = inWaist;
 }
 
-CjrlJoint* HumanoidDynamicMultiBody::waist()
+CjrlJoint* HumDynMultiBodyPrivate::waist()
 {
   return m_WaistJoint;
 }
 
-double HumanoidDynamicMultiBody::getHandClench(CjrlHand* inHand)
+double HumDynMultiBodyPrivate::getHandClench(CjrlHand* inHand)
 {
     // default implementation. always returns 0
     return 0;
 }
 
-bool HumanoidDynamicMultiBody::setHandClench(CjrlHand* inHand, double inClenchingValue)
+bool HumDynMultiBodyPrivate::setHandClench(CjrlHand* inHand, double inClenchingValue)
 {
     // default implementation. always returns false
     return false;
 }
 
-void HumanoidDynamicMultiBody::leftWrist(CjrlJoint *inLeftWrist)
+void HumDynMultiBodyPrivate::leftWrist(CjrlJoint *inLeftWrist)
 { 
   m_LeftWristJoint = inLeftWrist;
 }
 
-CjrlJoint *HumanoidDynamicMultiBody::leftWrist()
+CjrlJoint *HumDynMultiBodyPrivate::leftWrist()
 { 
   return m_LeftWristJoint;
 }
 
-void HumanoidDynamicMultiBody::rightWrist(CjrlJoint *inRightWrist)
+void HumDynMultiBodyPrivate::rightWrist(CjrlJoint *inRightWrist)
 { 
   m_RightWristJoint = inRightWrist;
 }
 
-CjrlJoint *HumanoidDynamicMultiBody::rightWrist()
+CjrlJoint *HumDynMultiBodyPrivate::rightWrist()
 { 
   return m_RightWristJoint;
 }
 
-void HumanoidDynamicMultiBody::rightHand(CjrlHand* inRightHand)
+void HumDynMultiBodyPrivate::rightHand(CjrlHand* inRightHand)
 {
   m_rightHand = inRightHand;
 }
 
-CjrlHand * HumanoidDynamicMultiBody::rightHand()
+CjrlHand * HumDynMultiBodyPrivate::rightHand()
 {
   return m_rightHand;
 }
 
 
-void HumanoidDynamicMultiBody::leftHand(CjrlHand* inLeftHand)
+void HumDynMultiBodyPrivate::leftHand(CjrlHand* inLeftHand)
 {
   m_leftHand = inLeftHand;
 }
 
-CjrlHand * HumanoidDynamicMultiBody::leftHand()
+CjrlHand * HumDynMultiBodyPrivate::leftHand()
 { 
   return m_leftHand;
 }
 
-void HumanoidDynamicMultiBody::leftFoot(CjrlFoot *inLeftFoot)
+void HumDynMultiBodyPrivate::leftFoot(CjrlFoot *inLeftFoot)
 { 
   m_LeftFoot = inLeftFoot;
 }
 
-CjrlFoot * HumanoidDynamicMultiBody::leftFoot() 
+CjrlFoot * HumDynMultiBodyPrivate::leftFoot() 
 { 
   return m_LeftFoot;
 }
 
-void HumanoidDynamicMultiBody::rightFoot(CjrlFoot *inRightFoot)
+void HumDynMultiBodyPrivate::rightFoot(CjrlFoot *inRightFoot)
 { 
   m_RightFoot = inRightFoot;
 }
 
-CjrlFoot * HumanoidDynamicMultiBody::rightFoot() 
+CjrlFoot * HumDynMultiBodyPrivate::rightFoot() 
 { 
   return m_RightFoot;
 }
 
-void HumanoidDynamicMultiBody::chest(CjrlJoint *inChest)
+void HumDynMultiBodyPrivate::chest(CjrlJoint *inChest)
 {
   m_Chest = inChest;
 }
 
-CjrlJoint * HumanoidDynamicMultiBody::chest()
+CjrlJoint * HumDynMultiBodyPrivate::chest()
 {
   return m_Chest;
 }

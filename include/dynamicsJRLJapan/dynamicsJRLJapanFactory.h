@@ -1,4 +1,4 @@
-/*! \file Object factory for dynamicsJRLJapan.
+/*! \file dynamicsJRLJapanFactory.h Object factory for dynamicsJRLJapan.
    
   
   Solely provides an implementation of AbstractRobotDynamics.

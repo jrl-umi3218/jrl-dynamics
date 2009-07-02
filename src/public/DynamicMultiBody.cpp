@@ -16,12 +16,24 @@ using namespace dynamicsJRLJapan;
 
 DynamicMultiBody::DynamicMultiBody()
 {
-  m_privateObj = new DynMultiBodyPrivate();
+  DynMultiBodyPrivate* obj = new DynMultiBodyPrivate();
+  m_privateObj = boost::shared_ptr<DynMultiBodyPrivate>(obj);
 }
 
-DynamicMultiBody::DynamicMultiBody(DynamicMultiBody *inDynamicRobot)
+DynamicMultiBody::DynamicMultiBody(const DynamicMultiBody& inDynamicRobot)
 {
-  m_privateObj = new DynMultiBodyPrivate(*inDynamicRobot->m_privateObj);
+  DynMultiBodyPrivate* obj = 
+    new DynMultiBodyPrivate(*inDynamicRobot.m_privateObj);
+  m_privateObj = boost::shared_ptr<DynMultiBodyPrivate>(obj);
+}
+
+DynamicMultiBody::DynamicMultiBody(bool inAllocatePrivate) :
+  m_privateObj()
+{
+  if (inAllocatePrivate) {
+    DynMultiBodyPrivate* obj = new DynMultiBodyPrivate();
+    m_privateObj = boost::shared_ptr<DynMultiBodyPrivate>(obj);
+  }
 }
 
 /**
@@ -38,7 +50,6 @@ bool DynamicMultiBody::initialize()
 */
 DynamicMultiBody::~DynamicMultiBody() 
 {
-  delete m_privateObj;
 };
 
 /**
@@ -529,43 +540,3 @@ DynamicMultiBody::setActuatedJoints(std::vector<CjrlJoint*>& lActuatedJoints)
 */
 
 
-/*! \brief Compute Speciliazed InverseKinematics between two joints. 
-    
-Specialized means that this method can be re implemented to be
-extremly efficient and used the particularity of your robot.
-For instance in some case, it is possible to use an exact inverse
-kinematics to compute a set of articular value.
-    
-This method does not intend to replace an architecture computing
-inverse kinematics through the Jacobian.
-
-jointRootPosition and jointEndPosition have to be expressed in the same
-frame. 
-
-\param[in] jointRoot: The root of the joint chain for which the specialized
-inverse kinematics should be computed.
-
-\param[in] jointEnd: The end of the joint chain for which the specialized 
-inverse kinematics should be computed.
-
-\param[in] jointRootPosition: The desired position of the root. 
-    
-\param[in] jointEndPosition: The end position of the root.
-    
-\param[out] q: Result i.e. the articular values.
-*/
-bool 
-DynamicMultiBody::
-ComputeSpecializedInverseKinematics(const CjrlJoint & jointRoot,
-				    const CjrlJoint & jointEnd,
-				    const matrix4d & jointRootPosition,
-				    const matrix4d & jointEndPosition,
-				    vectorN &q)
-{ 
-  return m_privateObj->ComputeSpecializedInverseKinematics(jointRoot,
-							   jointEnd,
-							   jointRootPosition,
-							   jointEndPosition,
-							   q);
-}
-  

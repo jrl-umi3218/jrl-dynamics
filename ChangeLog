@@ -1,5 +1,28 @@
 2009-07-02  Florent Lamiraux  <florent@laas.fr>
 
+	HumanoidDynamicMultiBody now exclusively implements CjrlHumanoidDynamicRobot.
+	* include/dynamicsJRLJapan/DynamicMultiBody.h,
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h,
+	* include/dynamicsJRLJapan/dynamicsJRLJapanFactory.h,
+	* src/CMakeLists.txt,
+	* src/private/DynMultiBodyPrivate.h,
+	* src/private/HumDynMultiBodyPrivate.cpp: 
+	Rename from src/private/HumanoidDynamicMultiBody.cpp,
+	* src/private/HumDynMultiBodyPrivate.h: 
+	Copy from include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h,
+	* src/public/DynamicMultiBody.cpp,
+	* src/public/HumanoidDynamicMultiBody.cpp: New, 
+	* src/public/dynamicsJRLJapanFactory.cpp:
+	For refactoring purposes, source files have been dispatched into
+          - src/private for files implementing the core of the library,
+          - src/public for files implementing wrappers around existing classes.
+        Previous HumanoidDynamicMultiBody class has been renamed HumDynMultiBodyPrivate 
+	and new HumanoidDynamicMultiBody class now stores a pointer to a 
+	DynMultiBodyPrivate object and forward calls to this object for all methods 
+	defined in CjrlHumanoidDynamicRobot.
+
+2009-07-02  Florent Lamiraux  <florent@laas.fr>
+
 	Class Dynamic MultiBody class now exclusively implements CjrlDynamicRobot.
 	* include/dynamicsJRLJapan/DynamicMultiBody.h,
 	* src/CMakeLists.txt,
