@@ -1,5 +1,13 @@
 2009-07-02  Florent Lamiraux  <florent@laas.fr>
 
+	Prefix include file dynamicsJRLJapan.
+	* include/dynamicsJRLJapan/Foot.h,
+	* include/dynamicsJRLJapan/Hand.h,
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h:
+	In these files.
+
+2009-07-02  Florent Lamiraux  <florent@laas.fr>
+
 	Do not try to include files that are not installed anymore.
 	* include/dynamicsJRLJapan/robotDynamicsImpl.h: 
 	MultiBody.h and Body.h are not installed anymore.

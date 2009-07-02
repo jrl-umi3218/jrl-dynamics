@@ -19,7 +19,7 @@
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 
 #include <robotDynamics/jrlHand.h>
-#include "dynamics-config.h"
+#include "dynamicsJRLJapan/dynamics-config.h"
 
 namespace dynamicsJRLJapan
 {
