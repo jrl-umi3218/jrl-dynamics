@@ -1,5 +1,19 @@
 2009-07-02  Florent Lamiraux  <florent@laas.fr>
 
+	Move some header files in private part.
+	* src/private/Body.h: Rename from include/dynamicsJRLJapan/Body.h,
+	* src/private/DynamicBodyPrivate.cpp: Rename from src/private/DynamicBody.cpp,
+	* src/private/DynamicBodyPrivate.h: 
+	Rename from include/dynamicsJRLJapan/DynamicBody.h,
+	* src/private/JointPrivate.cpp: Rename from src/private/Joint.cpp,
+	* src/private/JointPrivate.h: Rename from include/dynamicsJRLJapan/Joint.h,
+	* src/private/MultiBody.h: Rename from include/dynamicsJRLJapan/MultiBody.h,
+
+	Old headers become headers of the private implementation. They
+	will be replaced soon by headers exclusively implementing the abstract interface.
+
+2009-07-02  Florent Lamiraux  <florent@laas.fr>
+
 	HumanoidDynamicMultiBody now exclusively implements CjrlHumanoidDynamicRobot.
 	* include/dynamicsJRLJapan/DynamicMultiBody.h,
 	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h,
