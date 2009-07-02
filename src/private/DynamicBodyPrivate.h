@@ -10,7 +10,7 @@
 
 
    Copyright (c) 2005-2006, 
-   @author Jean Remy Chardonnet,  Francois Keith, Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati
+   @author Jean Remy Chardonnet,  Francois Keith, Abderrahmane Kheddar,  Olivier Stasse,  Ramzi Sellouati, Florent Lamiraux
    
    JRL-Japan, CNRS/AIST
 
@@ -19,8 +19,8 @@
    Please refers to file License.txt for details on the license.
 */
 
-#ifndef _HRP2_DYNAMIQUE_H_
-#define _HRP2_DYNAMIQUE_H_
+#ifndef DYNAMICBODYPRIVATE_H
+#define DYNAMICBODYPRIVATE_H
 
 #include <string>
 
@@ -114,5 +114,4 @@ namespace dynamicsJRLJapan
   };
 
 };
-#endif
-
+#endif /* DYNAMICBODYPRIVATE_H */

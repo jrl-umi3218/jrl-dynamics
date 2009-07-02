@@ -648,7 +648,7 @@ void JointPrivate::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d&
     }
 }
 
-JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::FREE_JOINT);
   m_inGlobalFrame = true;
@@ -664,11 +664,11 @@ JointFreeflyer::JointFreeflyer(const MAL_S4x4_MATRIX(,double) &inInitialPosition
   axe(axis);
 }
 
-JointFreeflyer::~JointFreeflyer()
+JointFreeflyerPrivate::~JointFreeflyerPrivate()
 {
 }
 
-JointAnchor::JointAnchor(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointAnchorPrivate::JointAnchorPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::FIX_JOINT);
   m_inGlobalFrame = true;
@@ -684,11 +684,11 @@ JointAnchor::JointAnchor(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
   axe(axis);
 }
 
-JointAnchor::~JointAnchor()
+JointAnchorPrivate::~JointAnchorPrivate()
 {
 }
 
-JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::REVOLUTE_JOINT);
   m_inGlobalFrame = true;
@@ -705,11 +705,11 @@ JointRotation::JointRotation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
   axe(axis);
 }
 
-JointRotation::~JointRotation()
+JointRotationPrivate::~JointRotationPrivate()
 {
 }
 
-JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::PRISMATIC_JOINT);
   m_inGlobalFrame = true;
@@ -725,7 +725,7 @@ JointTranslation::JointTranslation(const MAL_S4x4_MATRIX(,double) &inInitialPosi
   axe(axis);
 }
 
-JointTranslation::~JointTranslation()
+JointTranslationPrivate::~JointTranslationPrivate()
 {}
 
 
@@ -733,7 +733,7 @@ bool JointPrivate::updateTransformation(const vectorN& inDofVector)
 {
   if (rankInConfiguration() > inDofVector.size() -1 )
     {
-      std::cout << "JointTranslation::updateTransformation(). Inappropriate configuration vector.\n";
+      std::cout << "JointTranslationPrivate::updateTransformation(). Inappropriate configuration vector.\n";
       return false;
     }
 

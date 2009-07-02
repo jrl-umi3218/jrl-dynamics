@@ -10,8 +10,8 @@
    Please refers to file License.txt for details on the license.   
 */
 
-#ifndef _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
-#define _JRLCIRDYNAMICS_JOINT_JRL_JAPAN_H_
+#ifndef JOINTPRIVATE_H
+#define JOINTPRIVATE_H
 
 #include <vector>
 
@@ -597,32 +597,32 @@ namespace dynamicsJRLJapan
 
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public JointPrivate
+  class JointFreeflyerPrivate : public JointPrivate
   {
   public:
-    JointFreeflyer(const matrix4d &inInitialPosition);
-    virtual ~JointFreeflyer();
+    JointFreeflyerPrivate(const matrix4d &inInitialPosition);
+    virtual ~JointFreeflyerPrivate();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointRotation : public JointPrivate
+  class JointRotationPrivate : public JointPrivate
   {
   public:
-    JointRotation(const matrix4d &inInitialPosition);
-    virtual ~JointRotation();
+    JointRotationPrivate(const matrix4d &inInitialPosition);
+    virtual ~JointRotationPrivate();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointTranslation : public JointPrivate
+  class JointTranslationPrivate : public JointPrivate
   {
   public:
-    JointTranslation(const matrix4d &inInitialPosition);
-    virtual ~JointTranslation();
+    JointTranslationPrivate(const matrix4d &inInitialPosition);
+    virtual ~JointTranslationPrivate();
   };
 
-  class DYN_JRL_JAPAN_EXPORT JointAnchor : public JointPrivate
+  class  JointAnchorPrivate : public JointPrivate
   {
   public:
-    JointAnchor(const matrix4d &inInitialPosition);
-    virtual ~JointAnchor();
+    JointAnchorPrivate(const matrix4d &inInitialPosition);
+    virtual ~JointAnchorPrivate();
   };
 };
-#endif
+#endif /* JOINTPRIVATE_H */

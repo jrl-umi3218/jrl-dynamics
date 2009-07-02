@@ -28,6 +28,8 @@ SET(libdyn_src
 SET(libdyn_src ${libdyn_src}
   public/DynamicMultiBody.cpp
   public/HumanoidDynamicMultiBody.cpp 
+  public/Joint.cpp
+  public/DynamicBody.cpp
   public/dynamicsJRLJapanFactory.cpp
 )
 
@@ -35,13 +37,12 @@ SET(libdyn_src ${libdyn_src}
 #-----------------------------
 SET(libdyn_headers 
 ../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
-../include/${PROJECT_NAME}/Body.h
 ../include/${PROJECT_NAME}/DynamicBody.h
 ../include/${PROJECT_NAME}/DynamicMultiBody.h
+../include/${PROJECT_NAME}/HumanoidDynamicMultiBody.h
 ../include/${PROJECT_NAME}/Foot.h
 ../include/${PROJECT_NAME}/Hand.h
 ../include/${PROJECT_NAME}/Joint.h 
-../include/${PROJECT_NAME}/MultiBody.h
 ../include/${PROJECT_NAME}/robotDynamicsImpl.h
 )
 
