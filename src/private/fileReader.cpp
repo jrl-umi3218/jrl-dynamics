@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include "fileReader.h"
+#include "dynamicsGetLine.h"
 
 namespace dynamicsJRLJapan
 {

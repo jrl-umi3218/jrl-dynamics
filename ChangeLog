@@ -1,5 +1,29 @@
 2009-07-03  Florent Lamiraux  <florent@laas.fr>
 
+	Replace dynamics-config.h by two files.
+	* CMakeLists.txt: .
+	* dynamics-config.h.cmake: Remove.
+	* include/dynamicsJRLJapan/DynamicBody.h: .
+	* include/dynamicsJRLJapan/Foot.h: .
+	* include/dynamicsJRLJapan/Hand.h: .
+	* include/dynamicsJRLJapan/HumanoidDynamicMultiBody.h: .
+	* include/dynamicsJRLJapan/Joint.h: .
+	* include/dynamicsJRLJapan/dll.h: New.
+	* src/CMakeLists.txt: .
+	* src/private/Body.h: .
+	* src/private/DynMultiBodyPrivate.h: .
+	* src/private/DynamicBodyPrivate.h: .
+	* src/private/HumDynMultiBodyPrivate.h: .
+	* src/private/HumanoidSpecificities.h: .
+	* src/private/JointPrivate.h: .
+	* src/private/MultiBody.h: .
+	* src/private/fileReader.cpp: .
+	* src/private/fileReader.h: .
+	dll.h is exported for Windows users,
+	dynamicsGetLine.h is configured but not exported.
+
+2009-07-03  Florent Lamiraux  <florent@laas.fr>
+
 	Do not put in .gitignore files that should be removed.
 	* .gitignore: Just remove those files.
 

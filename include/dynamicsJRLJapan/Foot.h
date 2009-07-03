@@ -18,7 +18,7 @@
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 
 #include "robotDynamics/jrlFoot.h"
-#include "dynamicsJRLJapan/dynamics-config.h"
+#include "dynamicsJRLJapan/dll.h"
 
 namespace dynamicsJRLJapan
 {

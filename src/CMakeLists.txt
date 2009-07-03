@@ -75,7 +75,7 @@ OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
 # -------------------------
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
       		      PROPERTIES 
-	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include -I${PROJECT_SOURCE_DIR}/include/dynamicsJRLJapan -I${PROJECT_SOURCE_DIR}/src/private ${${PROJECT_NAME}_CXXFLAGS}"
+	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include -I${PROJECT_SOURCE_DIR}/include/dynamicsJRLJapan -I${PROJECT_BINARY_DIR}/src/private -I${PROJECT_SOURCE_DIR}/src/private ${${PROJECT_NAME}_CXXFLAGS}"
 		      LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
 	             )
 

@@ -24,7 +24,6 @@
 
 #include <string>
 
-#include "dynamics-config.h"
 #include "Body.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
@@ -37,7 +36,7 @@ namespace dynamicsJRLJapan
   /*! Fundamental class to store the dynamical information for one body. 
     @ingroup forwardynamics
   */
-  class DYN_JRL_JAPAN_EXPORT DynamicBodyPrivate : public Body
+  class DynamicBodyPrivate : public Body
   {
     
   public:

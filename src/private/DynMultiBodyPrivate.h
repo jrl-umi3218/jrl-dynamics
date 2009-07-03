@@ -26,7 +26,6 @@
 #define _DYNAMIC_MULTI_BODY_H_
 #include <vector>
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include "dynamics-config.h"
 #include "JointPrivate.h"
 #include "MultiBody.h"
 #include "DynamicBodyPrivate.h"
@@ -48,7 +47,7 @@ namespace dynamicsJRLJapan
         \li through abstract robot dynamics interfaces. When using this solution, 
 	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
-  class DYN_JRL_JAPAN_EXPORT DynMultiBodyPrivate : public MultiBody 
+  class DynMultiBodyPrivate : public MultiBody 
     
   {
   private:

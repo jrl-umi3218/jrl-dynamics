@@ -16,7 +16,7 @@
 
 #include "boost/shared_ptr.hpp"
 #include "robotDynamics/jrlJoint.h"
-#include "dynamicsJRLJapan/dynamics-config.h"
+#include "dynamicsJRLJapan/dll.h"
 
 /*
   Forward declaration

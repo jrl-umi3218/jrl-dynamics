@@ -24,7 +24,6 @@
 #define MULTIBODY_H
 
 #define INTERFACE
-#include "dynamics-config.h"
 #include "JointPrivate.h"
 #include "Body.h"
 #include <vector>
@@ -103,7 +102,7 @@ namespace dynamicsJRLJapan
       Les methodes necessitant un parcours du graphe se base sur l'hypothese qu'il
       ne contienne pas de cycle.   
   */
-  class DYN_JRL_JAPAN_EXPORT MultiBody
+  class MultiBody
   {
   protected:
     

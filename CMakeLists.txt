@@ -99,8 +99,10 @@ ELSE(HAVE_GETLINE_PTR)
   SET(HAVE_GETLINE_INT 0)
 ENDIF(HAVE_GETLINE_PTR)
 
-CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/dynamics-config.h.cmake
-	       ${${PROJECT_NAME}_SOURCE_DIR}/src/dynamics-config.h )
+CONFIGURE_FILE(
+	${${PROJECT_NAME}_SOURCE_DIR}/src/private/dynamicsGetLine.h.cmake
+	${${PROJECT_NAME}_BINARY_DIR}/src/private/dynamicsGetLine.h
+)
 
 # To deal with the headers.
 #--------------------------

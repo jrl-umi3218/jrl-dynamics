@@ -28,7 +28,6 @@
 //#include "linalg.h"
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"
-#include "dynamics-config.h"
 #include "JointPrivate.h"
 
 using namespace::std;
@@ -40,7 +39,7 @@ namespace dynamicsJRLJapan
       This object is used to compute the Center Of Masse,
       and store some basic information of each body of the robot. 
   */    
-  class DYN_JRL_JAPAN_EXPORT Body : public CjrlBody
+  class Body : public CjrlBody
   {
   protected:
     

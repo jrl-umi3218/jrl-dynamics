@@ -20,7 +20,7 @@
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 #include "dynamicsJRLJapan/DynamicMultiBody.h"
 
-#include "dynamicsJRLJapan/dynamics-config.h"
+#include "dynamicsJRLJapan/dll.h"
 
 
 namespace dynamicsJRLJapan

@@ -18,8 +18,6 @@
 #include <iostream>
 using namespace std;
 
-#include "dynamicsJRLJapan/dynamics-config.h"
-
 namespace dynamicsJRLJapan
 {
   const static int CROCHET_OUVRANT=0;
@@ -38,18 +36,18 @@ namespace dynamicsJRLJapan
   const static int JOINT_ULIMIT = 7;
 
   /// Function to look for an object.
-  DYN_JRL_JAPAN_EXPORT char look_for(FILE* fichier, const char *str);
+  char look_for(FILE* fichier, const char *str);
   
   /// Give back the word currently at the position of the file fichier in str.
-  DYN_JRL_JAPAN_EXPORT bool immediatlyAppears(FILE* fichier, const char *str) ;
+  bool immediatlyAppears(FILE* fichier, const char *str) ;
 
   /// Look for the next keyword inside fich.
-  DYN_JRL_JAPAN_EXPORT int nextKeyWord(FILE* fich);
+  int nextKeyWord(FILE* fich);
   
   /// Look for the next Joint keyword inside fich.
-  DYN_JRL_JAPAN_EXPORT int nextJointKeyWord(FILE* fichier);
+  int nextJointKeyWord(FILE* fichier);
   
   /// Returns the type of the next joint inside the file.
-  DYN_JRL_JAPAN_EXPORT int typeOfJoint(FILE* fichier);
+  int typeOfJoint(FILE* fichier);
 };
 #endif /* _DYN_JRLJAPAN_FILE_READER_H_ */
