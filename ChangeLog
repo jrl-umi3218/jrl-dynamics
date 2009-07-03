@@ -1,5 +1,11 @@
 2009-07-03  Florent Lamiraux  <florent@laas.fr>
 
+	Remove unused function.
+	* unitTesting/TestCopyJointTreeThroughAbstractInterface.cpp: 
+	Function getPoseFromAxisAndCenter was unused.
+
+2009-07-03  Florent Lamiraux  <florent@laas.fr>
+
 	Replace dynamics-config.h by two files.
 	* CMakeLists.txt: .
 	* dynamics-config.h.cmake: Remove.

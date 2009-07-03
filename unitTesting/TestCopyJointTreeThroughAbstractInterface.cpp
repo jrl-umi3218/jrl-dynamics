@@ -25,53 +25,6 @@ void DisplayMatrix4x4(matrix4d & todisplay, ostream &os)
     }
 }
 
-static matrix4d getPoseFromAxisAndCenter(const vector3d inAxis, const vector3d inCenter)
-{
-  matrix4d outPose;
-  vector3d x(inAxis);
-  vector3d y;
-  vector3d z;
-  int smallestComponent(0);
-
-  x.normalize();
-
-  if((fabs(x[0]) <= fabs(x[1])) && (fabs(x[0]) <= fabs(x[2]))) {
-    smallestComponent = 0;
-  }
-  else if((fabs(x[1]) <= fabs(x[0])) && (fabs(x[1]) <= fabs(x[2]))) {
-    smallestComponent = 1;
-  }
-  else if((fabs(x[2]) <= fabs(x[0])) && (fabs(x[2]) <= fabs(x[1]))) {
-    smallestComponent = 2;
-  }
-
-  y[smallestComponent] = 1.;
-
-
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,0) = x[0];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,0) = x[1];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,0) = x[2];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,0) = inCenter[0];
-
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,1) = y[0];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,1) = y[1];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,1) = y[2];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,1) = inCenter[1];
-
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,2) = z[0];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,2) = z[1];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,2) = z[2];
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,2) = inCenter[2];
-
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,0,3) = 0;
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,1,3) = 0;
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,2,3) = 0;
-  MAL_S4x4_MATRIX_ACCESS_I_J(outPose,3,3) = 1;
-
-  return outPose;
-}
-
-
 void DisplayBody(CjrlBody *aBody)
 {
   matrix3d InertiaMatrix = aBody->inertiaMatrix();
