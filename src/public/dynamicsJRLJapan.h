@@ -6,12 +6,12 @@
 #define jrlCIRdynamicsJRLJapan_H
 
 #include "fileReader.h"
-#include "Joint.h"
+#include "dynamicsJRLJapan/Joint.h"
 #include "Body.h"
-#include "DynamicBody.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
 #include "MultiBody.h"
-#include "DynamicMultiBody.h"
-#include "HumanoidDynamicMultiBody.h"
+#include "dynamicsJRLJapan/DynamicMultiBody.h"
+#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
 
 
 #endif

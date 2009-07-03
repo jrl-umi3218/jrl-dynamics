@@ -16,7 +16,7 @@
 #include "Debug.h"
 
 #include "DynMultiBodyPrivate.h"
-#include "Hand.h"
+#include "dynamicsJRLJapan/Hand.h"
 #include "HumDynMultiBodyPrivate.h"
 #include "HumanoidSpecificities.h"
 

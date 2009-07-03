@@ -16,7 +16,7 @@
 
 #include <vector>
 
-#include "Foot.h"
+#include "dynamicsJRLJapan/Foot.h"
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "DynMultiBodyPrivate.h"
