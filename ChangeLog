@@ -1,5 +1,11 @@
 2009-07-03  Florent Lamiraux  <florent@laas.fr>
 
+	Tell cmake to install dll.h.
+	* src/CMakeLists.txt: Should have been done in commit
+	256f338861b23e76e12a8a1eeb959af5fb8ade80.
+
+2009-07-03  Florent Lamiraux  <florent@laas.fr>
+
 	Remove unused function.
 	* unitTesting/TestCopyJointTreeThroughAbstractInterface.cpp: 
 	Function getPoseFromAxisAndCenter was unused.

@@ -36,6 +36,7 @@ SET(libdyn_src ${libdyn_src}
 # Create list of headers files
 #-----------------------------
 SET(libdyn_headers 
+../include/${PROJECT_NAME}/dll.h
 ../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
 ../include/${PROJECT_NAME}/DynamicBody.h
 ../include/${PROJECT_NAME}/DynamicMultiBody.h
