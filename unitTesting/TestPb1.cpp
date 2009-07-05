@@ -17,7 +17,7 @@ int main(void)
     jrlRobotFactory;
   
   CjrlHumanoidDynamicRobot *attRobot=0;
-  attRobot = jrlRobotFactory.createhumanoidDynamicRobot();
+  attRobot = jrlRobotFactory.createHumanoidDynamicRobot();
   dynamicsJRLJapan::HumanoidDynamicMultiBody *aHDMB;
   aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody*) attRobot;
   

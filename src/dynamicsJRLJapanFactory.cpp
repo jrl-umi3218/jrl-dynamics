@@ -4,7 +4,7 @@
 namespace dynamicsJRLJapan
 {
 
- CjrlHumanoidDynamicRobot * ObjectFactory::createhumanoidDynamicRobot()
+ CjrlHumanoidDynamicRobot * ObjectFactory::createHumanoidDynamicRobot()
 {
   CjrlHumanoidDynamicRobot * aHDR = new HumanoidDynamicMultiBody();
   return aHDR;

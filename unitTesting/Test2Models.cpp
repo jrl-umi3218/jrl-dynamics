@@ -114,13 +114,13 @@ int main(int argc, char *argv[])
   CjrlJoint* rootJoint=0;
 
   dynamicsJRLJapan::ObjectFactory dynFactory;
-  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createHumanoidDynamicRobot();
   string RobotFileName = aPath + aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,
 					 aMapFromJointToRank,aSpecificitiesFileName);
   
   
-  CjrlHumanoidDynamicRobot * aHDRSmall =  dynFactory.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDRSmall =  dynFactory.createHumanoidDynamicRobot();
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDRSmall,RobotFileName,
 					 aMapFromJointToRank,aSpecificitiesFileName);
 

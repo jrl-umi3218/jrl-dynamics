@@ -466,7 +466,7 @@ int main(int argc, char *argv[])
     dynamicsJRLJapan::JointTranslation,
     dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
   
-  CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   
   aHDMB = dynamic_cast<dynamicsJRLJapan::HumanoidDynamicMultiBody*>(aHDR);
 

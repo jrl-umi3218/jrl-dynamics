@@ -39,17 +39,17 @@ namespace dynamicsJRLJapan
   class DYN_JRL_JAPAN_EXPORT ObjectFactory: public CjrlRobotDynamicsObjectFactory
   {
   public:
-     CjrlHumanoidDynamicRobot * createhumanoidDynamicRobot();
+    CjrlHumanoidDynamicRobot * createHumanoidDynamicRobot();
     
-     CjrlDynamicRobot * createDynamicRobot();
-
-     CjrlJoint * createJointFreeflyer(const matrix4d& inInitialPosition);
-
-     CjrlJoint * createJointRotation(const matrix4d& inInitialPosition);
-  
-     CjrlJoint * createJointTranslation(const matrix4d& inInitialPosition);
-
-     CjrlBody * createBody();
+    CjrlDynamicRobot * createDynamicRobot();
+    
+    CjrlJoint * createJointFreeflyer(const matrix4d& inInitialPosition);
+    
+    CjrlJoint * createJointRotation(const matrix4d& inInitialPosition);
+    
+    CjrlJoint * createJointTranslation(const matrix4d& inInitialPosition);
+    
+    CjrlBody * createBody();
   };
 
   

@@ -231,8 +231,8 @@ int main(int argc, char *argv[])
     }
   
   dynamicsJRLJapan::ObjectFactory dynFactory;
-  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createhumanoidDynamicRobot();
-  CjrlHumanoidDynamicRobot * aHDR2 = dynFactory.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createHumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR2 = dynFactory.createHumanoidDynamicRobot();
 
   if (aHDR==0)
     { 

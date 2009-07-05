@@ -209,14 +209,14 @@ int main(int argc, char *argv[])
   string JointToRank = argv[4];
   string aSpecificitiesFileName = argv[3];
   // Read the first humanoid.
-  CjrlHumanoidDynamicRobot * aHDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   string RobotFileName = aPath+aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,JointToRank, aSpecificitiesFileName);
   
 
   // The second humanoid is constructed through the abstract interface
   //
-  CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   
   PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
 
