@@ -20,9 +20,8 @@
    This template takes a class implementing the methods of the template
    CjrlRobotDynamicsObjectConstructor.
 */
-template <class T>
 class CjrlHumanoidDynamicRobotNA : public  virtual CjrlHumanoidDynamicRobot, 
-				   public CjrlDynamicRobotNA<T>
+				   public CjrlDynamicRobot
 {
 private:
   CjrlHumanoidDynamicRobot *m_HDR;

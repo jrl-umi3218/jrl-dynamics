@@ -30,6 +30,7 @@
 
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
+#include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 
 namespace dynamicsJRLJapan
 {

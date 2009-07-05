@@ -6,85 +6,37 @@ namespace dynamicsJRLJapan
 
  CjrlHumanoidDynamicRobot * ObjectFactory::createhumanoidDynamicRobot()
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createhumanoidDynamicRobot();
+  CjrlHumanoidDynamicRobot * aHDR = new HumanoidDynamicMultiBody();
   return aHDR;
 }
 
  CjrlDynamicRobot * ObjectFactory::createDynamicRobot()
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlDynamicRobot * aDR = aRobotDynamicsObjectConstructor.createDynamicRobot();
+  CjrlDynamicRobot * aDR = new DynamicMultiBody();
   return aDR;
 }
 
  CjrlJoint * ObjectFactory::createJointFreeflyer(const matrix4d& inInitialPosition)
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlJoint * aHDR = aRobotDynamicsObjectConstructor.createJointFreeflyer(inInitialPosition);
+  CjrlJoint * aHDR = new JointFreeflyer(inInitialPosition);
   return aHDR;
 }
 
  CjrlJoint * ObjectFactory::createJointRotation(const matrix4d& inInitialPosition)
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlJoint * aHDR = aRobotDynamicsObjectConstructor.createJointRotation(inInitialPosition);
+  CjrlJoint * aHDR = new JointRotation(inInitialPosition);
   return aHDR;
 }
 
  CjrlJoint * ObjectFactory::createJointTranslation(const matrix4d& inInitialPosition)
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlJoint * aHDR = aRobotDynamicsObjectConstructor.createJointTranslation(inInitialPosition);
+  CjrlJoint * aHDR = new JointTranslation(inInitialPosition);
   return aHDR;
 }
 
  CjrlBody * ObjectFactory::createBody()
 {
-  CjrlRobotDynamicsObjectConstructor<
-  dynamicsJRLJapan::DynamicMultiBody, 
-    dynamicsJRLJapan::HumanoidDynamicMultiBody, 
-    dynamicsJRLJapan::JointFreeflyer, 
-    dynamicsJRLJapan::JointRotation,
-    dynamicsJRLJapan::JointTranslation,
-    dynamicsJRLJapan::Body> aRobotDynamicsObjectConstructor;
-  
-  CjrlBody * aHDR = aRobotDynamicsObjectConstructor.createBody();
+  CjrlBody * aHDR = new Body();
   return aHDR;
 }
 

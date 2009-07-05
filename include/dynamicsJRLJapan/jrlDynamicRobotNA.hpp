@@ -14,14 +14,13 @@
 
 #include <robotDynamics/jrlJoint.h>
 #include <robotDynamics/jrlDynamicRobot.h>
-
+#include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
 /**
    \brief Template to implement a non abstract class for a robot with dynamic properties
    from an object factory.
  
    
 */
-template <class T>
 class CjrlDynamicRobotNA : public virtual CjrlDynamicRobot
 {
 private:
@@ -31,12 +30,12 @@ public:
      \name Initialization
      @{
   */
-  CjrlDynamicRobotNA(T *inObjectFactory)
+  CjrlDynamicRobotNA(CjrlRobotDynamicsObjectFactory *inObjectFactory)
   {
     m_DR = inObjectFactory->createDynamicRobot();
   }
 
-  CjrlDynamicRobotNA(CjrlDynamicRobotNA<T> *inDRNA)
+  CjrlDynamicRobotNA(CjrlDynamicRobotNA *inDRNA)
   {
     m_DR = inDRNA;
   }
