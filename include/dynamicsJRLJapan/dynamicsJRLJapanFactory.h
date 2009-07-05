@@ -35,7 +35,7 @@ namespace dynamicsJRLJapan
 {
   /*! Hooks for to create objects. */
 
-  class DYN_JRL_JAPAN_EXPORT ObjectFactory 
+  class DYN_JRL_JAPAN_EXPORT ObjectFactory: public CjrlRobotDynamicsObjectFactory
   {
   public:
      CjrlHumanoidDynamicRobot * createhumanoidDynamicRobot();
