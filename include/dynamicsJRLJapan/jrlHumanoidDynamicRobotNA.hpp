@@ -21,29 +21,29 @@
    CjrlRobotDynamicsObjectConstructor.
 */
 class CjrlHumanoidDynamicRobotNA : public  virtual CjrlHumanoidDynamicRobot, 
-				   public CjrlDynamicRobot
+				   public CjrlDynamicRobotNA
 {
 private:
   CjrlHumanoidDynamicRobot *m_HDR;
 
 public:
 
-  CjrlHumanoidDynamicRobotNA(T * inObjectFactory)
+  CjrlHumanoidDynamicRobotNA(CjrlRobotDynamicsObjectFactory * inObjectFactory)
   {
     m_HDR = inObjectFactory->createhumanoidDynamicRobot();
-    CjrlDynamicRobotNA<T>(m_HDR);
+    CjrlDynamicRobotNA(m_HDR);
   }
 
-  CjrlHumanoidDynamicRobotNA(CjrlHumanoidDynamicRobotNA<T> *inHDRNA )
+  CjrlHumanoidDynamicRobotNA(CjrlHumanoidDynamicRobotNA *inHDRNA )
   {
     m_HDR = inHDRNA;
-    CjrlDynamicRobotNA<T>(m_HDR);
+    CjrlDynamicRobotNA(m_HDR);
   }
 
   CjrlHumanoidDynamicRobotNA()
   {
     m_HDR=0;
-    CjrlDynamicRobotNA<T>(m_HDR);
+    CjrlDynamicRobotNA(m_HDR);
   }
   /**
      \brief Destructor
