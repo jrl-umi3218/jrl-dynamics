@@ -760,7 +760,7 @@ public:
     
     \param[out] q: Result i.e. the articular values.
   */
-  virtual bool ComputeSpecializedInverseKinematics(const CjrlJoint & jointRoot,
+  virtual bool getSpecializedInverseKinematics(const CjrlJoint & jointRoot,
 						   const CjrlJoint & jointEnd,
 						   const matrix4d & jointRootPosition,
 						   const matrix4d & jointEndPosition,
@@ -769,7 +769,7 @@ public:
 #ifndef NDEBUG
     if (m_DR!=0)
 #endif
-      return m_DR->ComputeSpecializedInverseKinematics(jointRoot,
+      return m_DR->getSpecializedInverseKinematics(jointRoot,
 						       jointEnd,
 						       jointRootPosition,
 						       jointEndPosition,

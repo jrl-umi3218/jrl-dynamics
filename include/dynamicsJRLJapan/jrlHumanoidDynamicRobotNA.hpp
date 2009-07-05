@@ -30,7 +30,7 @@ public:
 
   CjrlHumanoidDynamicRobotNA(CjrlRobotDynamicsObjectFactory * inObjectFactory)
   {
-    m_HDR = inObjectFactory->createhumanoidDynamicRobot();
+    m_HDR = inObjectFactory->createHumanoidDynamicRobot();
     CjrlDynamicRobotNA(m_HDR);
   }
 
