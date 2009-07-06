@@ -12,34 +12,40 @@
 # Create list of source files
 # ---------------------------
 SET(libdyn_src
-fileReader.cpp 
-Joint.cpp 
-Body.cpp 
-Hand.cpp 
-Foot.cpp
-DynamicBody.cpp 
-MultiBody.cpp 
-DynamicMultiBody.cpp 
-HumanoidDynamicMultiBody.cpp 
-HumanoidSpecificities.cpp  
-SpiritVRMLReader.cpp 
-dynamicsJRLJapanFactory.cpp
+  private/fileReader.cpp 
+  private/JointPrivate.cpp 
+  private/Body.cpp 
+  private/Hand.cpp 
+  private/Foot.cpp
+  private/DynamicBodyPrivate.cpp 
+  private/MultiBody.cpp 
+  private/DynMultiBodyPrivate.cpp 
+  private/HumDynMultiBodyPrivate.cpp 
+  private/HumanoidSpecificities.cpp  
+  private/SpiritVRMLReader.cpp 
 )
 
+SET(libdyn_src ${libdyn_src}
+  public/DynamicMultiBody.cpp
+  public/HumanoidDynamicMultiBody.cpp 
+  public/Joint.cpp
+  public/DynamicBody.cpp
+  public/dynamicsJRLJapanFactory.cpp
+)
 
 # Create list of headers files
 #-----------------------------
 SET(libdyn_headers 
+../include/${PROJECT_NAME}/dll.h
 ../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
-../include/${PROJECT_NAME}/jrlDynamicRobotNA.hpp
-../include/${PROJECT_NAME}/jrlHumanoidDynamicRobotNA.hpp
+../include/${PROJECT_NAME}/DynamicBody.h
+../include/${PROJECT_NAME}/DynamicMultiBody.h
+../include/${PROJECT_NAME}/HumanoidDynamicMultiBody.h
+../include/${PROJECT_NAME}/Foot.h
+../include/${PROJECT_NAME}/Hand.h
+../include/${PROJECT_NAME}/Joint.h 
+../include/${PROJECT_NAME}/robotDynamicsImpl.h
 )
-
-FOREACH(srcfile ${libdyn_src})
-  SET(newsrcfile "")
-  STRING(REGEX REPLACE "cpp$" "h" newsrcfile ${srcfile})
-#   MESSAGE(STATUS "newsrcfile: " ${newsrcfile})
-ENDFOREACH(srcfile)
 
 # Create name of the library.
 #---------------------------
@@ -70,8 +76,8 @@ OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
 # -------------------------
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
       		      PROPERTIES 
-	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include/ -I${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME} ${${PROJECT_NAME}_CXXFLAGS}"
-				  LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
+	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include -I${PROJECT_BINARY_DIR}/src/private -I${PROJECT_SOURCE_DIR}/src/private ${${PROJECT_NAME}_CXXFLAGS}"
+		      LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
 	             )
 
 # Specify header files

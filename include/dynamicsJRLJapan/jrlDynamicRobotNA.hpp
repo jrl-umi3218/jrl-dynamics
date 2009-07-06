@@ -16,15 +16,15 @@
 #include <robotDynamics/jrlDynamicRobot.h>
 #include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
 /**
-   \brief Template to implement a non abstract class for a robot with dynamic properties
+   \brief Class to implement a non abstract class for a robot with dynamic properties
    from an object factory.
- 
-   
+
 */
 class CjrlDynamicRobotNA : public virtual CjrlDynamicRobot
 {
 private:
-  CjrlDynamicRobot *m_DR;
+  CjrlDynamicRobot * m_DR;
+
 public:
   /**
      \name Initialization

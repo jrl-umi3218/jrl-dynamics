@@ -357,6 +357,11 @@ public:
     return 0;
   }
 
+
+  friend int dynamicsJRLJapan::parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+						    std::string &OpenHRPVRMLFile,
+						    std::string &MapJointToRankFileName,
+						    std::string &SpecificitiesFileName);
     
     /*! @} */
 

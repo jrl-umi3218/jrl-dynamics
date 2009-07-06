@@ -18,3 +18,5 @@ Options:
 -DCMAKE_INSTALL_PREFIX=...
   specifies the directory where to install the package.
 
+-DCMAKE_BUILD_TYPE=[none|debug|release|relwithdebinfo|MinSizeRel]
+  specifies to type of compilation (release, debug, ...)
