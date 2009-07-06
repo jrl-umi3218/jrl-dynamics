@@ -16,65 +16,101 @@
 #include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "../private/HumDynMultiBodyPrivate.h"
+#include "dynamicsJRLJapan/jrlHumanoidDynamicRobotNA.hpp"
 
 namespace dynamicsJRLJapan
 {
 
- CjrlHumanoidDynamicRobot * ObjectFactory::createHumanoidDynamicRobot()
-{
-  CjrlHumanoidDynamicRobot * aHDR = new HumanoidDynamicMultiBody();
-  return aHDR;
-}
+  CjrlHumanoidDynamicRobot * ObjectFactory::createHumanoidDynamicRobot()
+  {
+    CjrlHumanoidDynamicRobot * aHDR = new HumDynMultiBodyPrivate();
+    return aHDR;
+  }
+  
+  CjrlDynamicRobot * ObjectFactory::createDynamicRobot()
+  {
+    CjrlDynamicRobot * aDR = new DynMultiBodyPrivate();
+    return aDR;
+  }
 
- CjrlDynamicRobot * ObjectFactory::createDynamicRobot()
-{
-  CjrlDynamicRobot * aDR = new DynamicMultiBody();
-  return aDR;
-}
+  CjrlJoint * ObjectFactory::createJointFreeflyer(const matrix4d& inInitialPosition)
+  {
+    CjrlJoint * aHDR = new JointFreeflyer(inInitialPosition);
+    return aHDR;
+  }
 
- CjrlJoint * ObjectFactory::createJointFreeflyer(const matrix4d& inInitialPosition)
-{
-  CjrlJoint * aHDR = new JointFreeflyer(inInitialPosition);
-  return aHDR;
-}
+  CjrlJoint * ObjectFactory::createJointRotation(const matrix4d& inInitialPosition)
+  {
+    CjrlJoint * aHDR = new JointRotation(inInitialPosition);
+    return aHDR;
+  }
 
- CjrlJoint * ObjectFactory::createJointRotation(const matrix4d& inInitialPosition)
-{
-  CjrlJoint * aHDR = new JointRotation(inInitialPosition);
-  return aHDR;
-}
+  CjrlJoint * ObjectFactory::createJointTranslation(const matrix4d& inInitialPosition)
+  {
+    CjrlJoint * aHDR = new JointTranslation(inInitialPosition);
+    return aHDR;
+  }
 
- CjrlJoint * ObjectFactory::createJointTranslation(const matrix4d& inInitialPosition)
-{
-  CjrlJoint * aHDR = new JointTranslation(inInitialPosition);
-  return aHDR;
-}
-
- CjrlBody * ObjectFactory::createBody()
-{
-  CjrlBody * aHDR = new Body();
-  return aHDR;
-}
+  CjrlBody * ObjectFactory::createBody()
+  {
+    CjrlBody * aHDR = new Body();
+    return aHDR;
+  }
 
 
-int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
-			 std::string &OpenHRPVRMLFile,
-			 std::string &MapJointToRankFileName,
-			 std::string &SpecificitiesFileName)
-{
-  dynamicsJRLJapan::HumanoidDynamicMultiBody *aHDR = 
-    dynamic_cast<HumanoidDynamicMultiBody *>(&ajrlHumanoidDynamicRobot);
+  int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+			   std::string &OpenHRPVRMLFile,
+			   std::string &MapJointToRankFileName,
+			   std::string &SpecificitiesFileName)
+  {
+    dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR = 
+      dynamic_cast<HumDynMultiBodyPrivate *>(&ajrlHumanoidDynamicRobot);
 
-  // TO DO : Not be limited to dynamicsJRLJapan implementation.
-  // but right now it is easier.
-  if (aHDR!=0)
-    {
-      aHDR->m_privateObj->parserVRML(OpenHRPVRMLFile,
-		       (char *)MapJointToRankFileName.c_str());
-      aHDR->m_privateObj->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
-      return 0;
-    }
-  return -1;
-}
+    // TO DO : Not be limited to dynamicsJRLJapan implementation.
+    // but right now it is easier.
+    // The following is purely heretic and will disappear sooner or later.
+    if (aHDR!=0)
+      {
+	aHDR->parserVRML(OpenHRPVRMLFile,
+				       (char *)MapJointToRankFileName.c_str());
+	aHDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
+	return 0;
+      }
+    else 
+      {
+	dynamicsJRLJapan::HumanoidDynamicMultiBody *a2HDR = 
+	  dynamic_cast<HumanoidDynamicMultiBody *>(&ajrlHumanoidDynamicRobot);
+
+	if (a2HDR!=0)
+	  {
+	    a2HDR->m_privateObj->parserVRML(OpenHRPVRMLFile,
+			     (char *)MapJointToRankFileName.c_str());
+	    a2HDR->m_privateObj->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
+	    return 0;
+	  }
+
+	else
+	  {
+	    CjrlHumanoidDynamicRobotNA *a3HDR = 
+	      dynamic_cast<CjrlHumanoidDynamicRobotNA *>(&ajrlHumanoidDynamicRobot);
+	    if (a3HDR!=0)
+	      {
+		dynamicsJRLJapan::HumDynMultiBodyPrivate *a4HDR = 
+		  dynamic_cast<HumDynMultiBodyPrivate *>(a3HDR->m_HDR);
+		
+		if (a4HDR!=0)
+		  {
+		    a4HDR->parserVRML(OpenHRPVRMLFile,
+						   (char *)MapJointToRankFileName.c_str());
+		    a4HDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
+		    return 0;
+		  }
+		
+	      }
+	  }
+	
+      }
+    return -1;
+  }
 };
 
