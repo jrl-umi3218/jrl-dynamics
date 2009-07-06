@@ -33,9 +33,14 @@ namespace dynamicsJRLJapan {
   */
   class DynamicMultiBody : public virtual CjrlDynamicRobot
   {
+  private:
+    boost::shared_ptr<DynMultiBodyPrivate> m_privateObj;
+
+  protected:
+    DynamicMultiBody(boost::shared_ptr<DynMultiBodyPrivate> & inDynamicRobot);
+
   public:
 
-    boost::shared_ptr<DynMultiBodyPrivate> m_privateObj;
 
     /**
        \name Initialization
@@ -43,8 +48,7 @@ namespace dynamicsJRLJapan {
     */
     DynamicMultiBody();
 
-    DynamicMultiBody(const DynamicMultiBody& inDynamicRobot);
-
+    DynamicMultiBody(const DynamicMultiBody & inDynamicRobot);
     /**
        \brief Initialize data-structure necessary to dynamic computations
        This function should be called after building the tree of joints.

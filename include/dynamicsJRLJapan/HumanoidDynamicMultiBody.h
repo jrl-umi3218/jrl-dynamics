@@ -33,10 +33,11 @@ namespace dynamicsJRLJapan
 class HumanoidDynamicMultiBody : public  virtual CjrlHumanoidDynamicRobot, 
 				   public virtual DynamicMultiBody
 {
-public:
 
+ private:
   boost::shared_ptr<HumDynMultiBodyPrivate> m_privateObj;
 
+public:
   HumanoidDynamicMultiBody();
 
   HumanoidDynamicMultiBody(const HumanoidDynamicMultiBody& inHumanoid);
@@ -202,6 +203,11 @@ public:
   /**
      @}
   */
+
+  friend int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+				  std::string &OpenHRPVRMLFile,
+				  std::string &MapJointToRankFileName,
+				  std::string &SpecificitiesFileName);
     
 };
 

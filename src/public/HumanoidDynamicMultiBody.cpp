@@ -25,7 +25,7 @@ HumanoidDynamicMultiBody::HumanoidDynamicMultiBody() :
   /*
     Store the same pointer to private part in base class
   */
-  DynamicMultiBody::m_privateObj = m_privateObj;
+  DynamicMultiBody::DynamicMultiBody(m_privateObj);
 }
 
 HumanoidDynamicMultiBody::
@@ -38,7 +38,7 @@ HumanoidDynamicMultiBody(const HumanoidDynamicMultiBody& inHumanoid) :
   /*
     Store the same pointer to private part in base class
   */
-  DynamicMultiBody::m_privateObj = m_privateObj;
+  DynamicMultiBody::DynamicMultiBody(m_privateObj);
 }
 
 /**
