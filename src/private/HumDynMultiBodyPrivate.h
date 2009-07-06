@@ -21,6 +21,7 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "DynMultiBodyPrivate.h"
 
+#include <robotDynamics/jrlHumanoidDynamicRobot.h>
 namespace dynamicsJRLJapan
 {
   class HumanoidSpecificities;
@@ -39,8 +40,8 @@ namespace dynamicsJRLJapan
   This specific class is the specialization of the generic class CjrlHumanoidDynamicRobot.
 
   */
-  class HumDynMultiBodyPrivate: 
-  public virtual DynMultiBodyPrivate
+  class HumDynMultiBodyPrivate:     public virtual CjrlHumanoidDynamicRobot,
+  public DynMultiBodyPrivate
     {
     private:
       
