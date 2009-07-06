@@ -126,19 +126,44 @@ void GoDownTree(const CjrlJoint * startJoint)
 
 int main(int argc, char *argv[])
 {
+  string aSpecificitiesFileName;
+  string aPath;
+  string aName;
+  string aMapFromJointToRank;
+
+  const char *openhrphome="OPENHRPHOME";
+  char *value = 0;
+  value = getenv(openhrphome);
   if (argc!=5)
     {
-      cerr << " This program takes 4 arguments: " << endl;
-      cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
-      cerr << " PATH_TO_SPECIFICITIES_XML PATH_TO_MAP_JOINT_2_RANK" << endl;
-      exit(-1);
-    }	
-
-  string aSpecificitiesFileName = argv[3];
-  string aPath=argv[1];
-  string aName=argv[2];
-  string aMapFromJointToRank=argv[4];
-
+      if (value==0)
+	{
+	  cerr << " This program takes 4 arguments: " << endl;
+	  cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
+	  cerr << " PATH_TO_SPECIFICITIES_XML PATH_TO_MAP_JOINT_2_RANK" << endl;
+	  exit(-1);
+	}
+      else
+	{
+	  aPath=value;
+	  aPath+="Controller/IOserver/robot/HRP2JRL/model/";
+	  aName="HRP2JRLmain.wrl";
+	  aSpecificitiesFileName = value;
+	  aSpecificitiesFileName +="Controller/IOserver/robot/HRP2JRL/etc/";
+	  aSpecificitiesFileName += "HRP2Specificities.xml";
+	  aMapFromJointToRank = value;
+	  aMapFromJointToRank += "Controller/IOserver/robot/HRP2JRL/etc/";
+	  aMapFromJointToRank += "HRP2LinkJointRank.xml";
+	  
+	}	
+    }
+  else 
+    {
+      aSpecificitiesFileName = argv[3];
+      aPath=argv[1];
+      aName=argv[2];
+      aMapFromJointToRank=argv[4];
+    }
   dynamicsJRLJapan::ObjectFactory aRobotDynamicsObjectConstructor;
   
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createHumanoidDynamicRobot();
@@ -174,6 +199,11 @@ int main(int argc, char *argv[])
 
   int NbOfDofs = aHDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+  if (NbOfDofs==0)
+    {
+      cerr << "Empty Robot..."<< endl;
+      return -1;
+    }
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   int lindex=0;
   for(int i=0;i<6;i++)
@@ -253,10 +283,6 @@ int main(int argc, char *argv[])
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
       cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
     }
-
-  // Height of the foot. 
-  cout << "Height foot: "<< aHDR->footHeight() << endl;
-
 
   matrixNxP InertiaMatrix;
   aHDR->computeInertiaMatrix();
