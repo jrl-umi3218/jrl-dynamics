@@ -823,7 +823,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing(aDFP)
 	
       {
-	m_Verbose = 0;
+	m_Verbose = 5;
       }
           
       template <typename ScannerT>
@@ -1114,7 +1114,7 @@ namespace dynamicsJRLJapan
 					      >> *( JointChildrenDEFBlocks_r ) 
 					      >> ch_p(']')[SVRBIND2(fDecreaseDepth,(self))];
 
-	  JointSubBlock_r = (str_p("JointPrivate"))[SVRBIND2(fJointSubBlockName,(self))] >> ch_p('{') 
+	  JointSubBlock_r = (str_p("Joint"))[SVRBIND2(fJointSubBlockName,(self))] >> ch_p('{') 
 					   >> *(JointField_r | JointChildren_r ) >> ch_p('}');
 
 	  JointBlock_r = str_p("DEF") 
@@ -1261,6 +1261,12 @@ namespace dynamicsJRLJapan
 	  cout << "Unable to open file "<< aFileName<< endl;
 	  return 0;
 	}
+      else {
+	if (aSpiritOpenHRP.getVerbose()>10)
+	  {
+	    cout << "Succeeded in opening " << aFileName <<endl;
+	  }
+      }
       unsigned int length;
   
       // get length of file:
@@ -1278,7 +1284,7 @@ namespace dynamicsJRLJapan
       //  BOOST_SPIRIT_DEBUG_RULE(BodyBlock_r);
       //  BOOST_SPIRIT_DEBUG_RULE(Humanoid_r);
       aSpiritOpenHRP.Init();
-      aSpiritOpenHRP.setVerbose(0);
+      aSpiritOpenHRP.setVerbose(10);
       
       parse(buffer,aSpiritOpenHRP,aSkipGrammar).full;
       delete [] buffer;
