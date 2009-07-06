@@ -45,6 +45,8 @@ SET(libdyn_headers
 ../include/${PROJECT_NAME}/Hand.h
 ../include/${PROJECT_NAME}/Joint.h 
 ../include/${PROJECT_NAME}/robotDynamicsImpl.h
+../include/${PROJECT_NAME}/jrlDynamicRobotNA.hpp
+../include/${PROJECT_NAME}/jrlHumanoidDynamicRobotNA.hpp
 )
 
 # Create name of the library.
