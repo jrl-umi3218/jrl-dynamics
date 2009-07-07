@@ -1,0 +1,39 @@
+  <LinkJointNameAndRank>
+       <Nb> 41 </Nb>
+       <Link> WAIST 0 </Link>
+       <Link> WAIST_P 26 </Link>
+       <Link> WAIST_R 27 </Link>
+
+       <Link> CHEST 28 </Link>
+
+       <Link> LARM_SHOULDER_P 19 </Link>
+       <Link> LARM_SHOULDER_R 20 </Link>
+       <Link> LARM_SHOULDER_Y 21 </Link>
+       <Link> LARM_ELBOW 22 </Link>
+       <Link> LARM_WRIST_Y 23 </Link>
+       <Link> LARM_WRIST_P 24 </Link>
+       <Link> LARM_WRIST_R 25 </Link>
+
+       <Link> RARM_SHOULDER_P 6 </Link>
+       <Link> RARM_SHOULDER_R 7 </Link>
+       <Link> RARM_SHOULDER_Y 8 </Link>
+       <Link> RARM_ELBOW 9 </Link>
+       <Link> RARM_WRIST_Y 10 </Link>
+       <Link> RARM_WRIST_P 11 </Link>
+       <Link> RARM_WRIST_R 12 </Link>
+
+       <Link> LLEG_HIP_R 13 </Link>
+       <Link> LLEG_HIP_P 14 </Link>
+       <Link> LLEG_HIP_Y 15 </Link>
+       <Link> LLEG_KNEE 16 </Link>
+       <Link> LLEG_ANKLE_P 17 </Link>
+       <Link> LLEG_ANKLE_R 18 </Link>
+
+       <Link> RLEG_HIP_R 0 </Link>
+       <Link> RLEG_HIP_P 1 </Link>
+       <Link> RLEG_HIP_Y 2 </Link>
+       <Link> RLEG_KNEE 3 </Link>
+       <Link> RLEG_ANKLE_P 4 </Link>
+       <Link> RLEG_ANKLE_R 5 </Link>
+
+  </LinkJointNameAndRank> 
