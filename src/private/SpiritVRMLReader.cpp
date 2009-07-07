@@ -37,6 +37,7 @@
 #include <boost/spirit/phoenix/binders.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
+#include <boost/spirit/utility/chset.hpp>
 #endif
 
 
@@ -190,6 +191,54 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<< "fSFInt32: " << s<< endl;
       }
+
+      void fCylinderSensor(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout << "fCylinderSensor: "<< s << endl;
+      }
+
+      void fCSAngle(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout << "fCSAngle: "<< s << endl;
+      }
+
+      void fTCBChildren(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "fTCBChildren: " << s<< endl;
+      }
+      void fRoute(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "fRoute: " << s<< endl;
+      }
+
+      void fTransformBlock(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<<"fTransformBlock: "<< s<< endl;
+      }
+      void fTransformBlockDef(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<<"fTransformBlockDef: "<< s<< endl;
+      }
+
+      void fTransformChildren(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<<"fTransformChildren: "<< s<< endl;
+      }
+
       void fTransformToField(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -273,13 +322,39 @@ namespace dynamicsJRLJapan
 	  std::cout << "Humanoid Name :" << s << endl;
       }
 
+      void fHumanoidname(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Specified name of the Humanoid: |" << s<<"|" << endl;
+      }
+
+
+      void fHumanoidversion(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Specified version of the Humanoid: |" << s<<"|" << endl;
+      }
+
       void fHumanoidName(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the Humanoid: |" << s<<"|" << endl;
       }
-    
+      void fHumanoidinfo(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Reading the info of the Humanoid: |" << s<<"|" << endl;
+      }
+      void fHumanoidinfoline(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Reading the infoline of the Humanoid: |" << s<<"|" << endl;
+      }
       void fProtoName(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -410,7 +485,31 @@ namespace dynamicsJRLJapan
 	  cout << "JointPrivate" << m_DataForParsing->CurrentLink.aJoint->getName()
 	       << ":" << m_DataForParsing->JointTranslation << endl;
       }
-    
+      
+      void fTransformToFieldInstanceRotationX(double x) const
+      {
+	if (m_Verbose>1)
+	  cout << "Transform rotation (AxisX):" << x << endl;
+      }
+
+      void fTransformToFieldInstanceRotationY(double x) const
+      {
+	if (m_Verbose>1)
+	  cout << "Transform rotation (AxisY):" << x << endl;
+      }
+
+      void fTransformToFieldInstanceRotationZ(double x) const
+      {
+	if (m_Verbose>1)
+	  cout << "Transform rotation (AxisZ):" << x << endl;
+      }
+
+      void fTransformToFieldInstanceRotationAngle(double x) const
+      {
+	if (m_Verbose>1)
+	  cout << "Transform rotation (Angle):" << x << endl;
+      }
+
       void fJointRotationX(double x)  const
       {
 	m_DataForParsing->RotationAxis(0) = x;
@@ -746,11 +845,17 @@ namespace dynamicsJRLJapan
 	  }
       }
  
+      void fSensorBlockName(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "fSensorBlockName: "<< s << endl;
+      }
       void fVisionSensorName(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
-	  std::cout<< "fVisionSensorName"<< endl;
+	  std::cout<< "fVisionSensorName: "<< endl;
       }
 
       void fVSTranslationX(double x) const
@@ -847,34 +952,49 @@ namespace dynamicsJRLJapan
 	    >> *(blank_p) 
 	    >> (str_p("IS"))[SVRBIND2(fISFromNameToField,(self,arg1,arg2))] 
 	    >> (NameToField_r)[SVRBIND2(fNameToField2,(self,arg1,arg2))];
+
+	  TransformToFieldInstanceRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationX,(self,arg1))] >> 
+	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationY,(self,arg1))] >> 
+	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationZ,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationAngle,(self,arg1))];
+
 	  // Fields for group
 	  GroupBlock_r = str_p("Group") 
 	    >> ch_p('{') 
 	    >> *(TransformToField_r) 
 	    >> ch_p('}');
+
+	  Route_r = (str_p("ROUTE"))[SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> (lexeme_d[+(alnum_p|'.'|'_')])[SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> (str_p("TO"))[SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> (lexeme_d[+(alnum_p|'.'|'_')])[SVRBIND2(fRoute,(self,arg1,arg2))];
       
 	  // Fields of Transform block.
-	  TCBChildren_r = str_p("children") 
+	  TCBChildren_r = (str_p("children"))
+	    [SVRBIND2(fTCBChildren,(self,arg1,arg2))]
 	    >> ch_p('[') 
-	    >> *(GroupBlock_r|TransformBlock_r )
+	    >> *(GroupBlock_r|TransformBlock_r |Sensors_r )
 	    >> ch_p(']');
       
 	  TransformChildrenBlock_r = ch_p('[') 
 	    >> *(GroupBlock_r | TCBChildren_r) 
 	    >> ch_p(']');
       
-	  TransformChildren_r= str_p("children") 
+	  TransformChildren_r= (str_p("children"))[SVRBIND2(fTransformChildren,(self,arg1,arg2))]
 	    >> ((str_p("IS")  >> str_p("children")) |
 		TransformChildrenBlock_r);
 	  
 	  TransformLine_r = (TransformToField_r)[SVRBIND2(fTransformToField,(self,arg1,arg2))]|
 	    TransformChildren_r | TCBChildren_r  ;
       
-	  TransformBlock_r = str_p("Transform") 
+	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >> 
+			       (str_p("Transform"))[SVRBIND2(fTransformBlockDef,(self,arg1,arg2))] )
+			      |(str_p("Transform"))[SVRBIND2(fTransformBlock,(self,arg1,arg2))])
 	    >> ch_p('{') 
-	    >> *(TransformLine_r) 
+	    >> *(TransformLine_r | TransformToFieldInstanceRotation_r) 
 	    >> ch_p('}');
-      
+	  
 	  // Fields of Proto []block.
       
 	  SFVec3f_r= str_p("SFVec3f") 
@@ -914,7 +1034,7 @@ namespace dynamicsJRLJapan
 
 	  ProtoBlock_r = ch_p('[') >> *(ProtoLine_r) >> ch_p(']');
 
-	  ProtoSndBlock_r = ch_p('{') >> *(TransformBlock_r| GroupBlock_r )>> ch_p('}');
+	  ProtoSndBlock_r = ch_p('{') >> *(TransformBlock_r| GroupBlock_r|Route_r )>> ch_p('}');
  
 	  Proto_r= str_p("PROTO") >> (+alpha_p)[SVRBIND2(fProtoName,(self,arg1,arg2))] 
 				  >> (ProtoBlock_r)[SVRBIND2(fProtoBlock,(self,arg1, arg2))] 
@@ -1066,12 +1186,23 @@ namespace dynamicsJRLJapan
 				  VSFieldOfView_r  );
 	  VisionSensor_r = str_p("VisionSensor") >> ch_p('{') >> VisionSensorBlock_r >> ch_p('}');
   
+	  CSAngle_r = (lexeme_d[+alnum_p])[SVRBIND2(fCSAngle,(self,arg1,arg2))]
+	    >> str_p("IS") >> (lexeme_d[+alnum_p])[SVRBIND2(fCSAngle,(self,arg1,arg2))];
+	  CylinderSensorBlock_r = *(CSAngle_r);
+
+	  CylinderSensor_r = (str_p("CylinderSensor"))
+	    [SVRBIND2(fCylinderSensor,(self,arg1,arg2))]
+	    >> ch_p('{') >> CylinderSensorBlock_r >> ch_p('}');
+
 	  ListSensors_r =  VisionSensor_r |
 	    AccelerationSensor_r |
 	    ForceSensor_r |
-	    GyrometerSensor_r ;
+	    GyrometerSensor_r |
+	    CylinderSensor_r;
 
-	  Sensors_r =  str_p("DEF") >> lexeme_d[+(alpha_p|ch_p('_'))] >> ListSensors_r;
+	  Sensors_r =  str_p("DEF") >> (lexeme_d[+(alpha_p|ch_p('_'))] )
+	    [SVRBIND2(fSensorBlockName,(self,arg1,arg2))]
+				    >> ListSensors_r ;
 
 	  // Parts of the body
 	  CenterOfMass_r = str_p("centerOfMass") >> 
@@ -1121,9 +1252,27 @@ namespace dynamicsJRLJapan
 	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[SVRBIND2(fJointName,(self,arg1,arg2))] 
 	    >> JointSubBlock_r;
 
+	  HumanoidVersion_r = str_p("version") >> ch_p('"') 
+					       >> (lexeme_d[+(alnum_p|'.')])
+	    [SVRBIND2(fHumanoidversion,(self,arg1,arg2))]
+	     >> ch_p('"');
+          HumanoidName_r = str_p("name") >> ch_p('"') >> (lexeme_d[+(alnum_p)])
+	    [SVRBIND2(fHumanoidname,(self,arg1,arg2))]
+					 >> ch_p('"');
+	  HumanoidInfoLine_r = ch_p('"')
+	    >> *((lexeme_d[+(alnum_p|':'|'.'|',')])[SVRBIND2(fHumanoidinfoline,(self,arg1,arg2))])
+	    >> ch_p('"');
+	    
+				
+
+	  HumanoidInfo_r = (str_p("info"))[SVRBIND2(fHumanoidinfo,(self,arg1,arg2))] 
+	    >> ch_p('[') >> *(HumanoidInfoLine_r) >> ch_p(']');
+	  
 	  // Define the entry rules for huanoid.
-	  HumanoidBlock_r =  str_p("humanoidBody") 
-	    >> ch_p('[') >> *JointBlock_r >> ch_p(']') ;
+	  HumanoidBlock_r =  *(str_p("humanoidBody") 
+	    >> ch_p('[') >> *JointBlock_r >> ch_p(']') |
+			       HumanoidName_r | HumanoidVersion_r |
+			       HumanoidInfo_r );
   
 	  HumanoidTrail_r = str_p("Humanoid")
 	    >> ch_p('{') >> HumanoidBlock_r >> ch_p('}');
@@ -1167,7 +1316,9 @@ namespace dynamicsJRLJapan
 	}
     
 	rule<ScannerT> scaleMultiple_r, NameToField_r, TransformToField_r,
-	  GroupBlock_r, TransformBlock_r, TCBChildren_r, TransformChildrenBlock_r,
+	  TransformToFieldInstanceRotation_r,
+	  GroupBlock_r, Route_r,
+	  TransformBlock_r, TCBChildren_r, TransformChildrenBlock_r,
 	  TransformChildren_r, 
 	  TransformLine_r, SFVec3f_r, MF_brackets_r, MFNode_r, SFNode_r, MFFloat_r,
 	  SFRotation_r, SFString_r, MFString_r, SFFloat_r, SFInt32_r,
@@ -1192,7 +1343,8 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> VSTranslation_r, VSRotation_r, VSID_r, 
 	  VSFrontClipDistance_r, VSBackClipDistance_r,
 	  VSwidth_r,  VSheight_r, VStype_r, VSFieldOfView_r, VSName_r,
-	  VisionSensorBlock_r, VisionSensor_r;
+	  VisionSensorBlock_r, VisionSensor_r,
+	  CylinderSensorBlock_r, CylinderSensor_r, CSAngle_r;
 
 	rule<ScannerT> ListSensors_r, Sensors_r, CenterOfMass_r,Mass_r, MomentsOfInertia_r;
 
@@ -1200,7 +1352,8 @@ namespace dynamicsJRLJapan
 	  BodyChildrenField_r, BodyChildren_r, BodyBlock_r;
 
 	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r, 
-	  HumanoidBlock_r, HumanoidTrail_r, Humanoid_r;
+	  HumanoidBlock_r, HumanoidTrail_r, Humanoid_r,
+	  HumanoidVersion_r, HumanoidName_r, HumanoidInfo_r,HumanoidInfoLine_r;
       
 	rule<ScannerT> NIavatarSize_r, NIHeadlight_r, NIType_r, NavigationInfo_r;
 
@@ -1208,7 +1361,7 @@ namespace dynamicsJRLJapan
 	  ViewpointPos_r, Viewpoint_r, EntryPoint;
 
 	rule<ScannerT> const& start() const {return EntryPoint;}
-	      
+	
       };
 
 

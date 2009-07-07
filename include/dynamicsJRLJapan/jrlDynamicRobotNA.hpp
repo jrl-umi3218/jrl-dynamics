@@ -25,6 +25,10 @@ class CjrlDynamicRobotNA : public virtual CjrlDynamicRobot
 private:
   CjrlDynamicRobot * m_DR;
 
+protected:
+  void setDynamicRobot (CjrlDynamicRobot *inDynamicRobot)
+  { m_DR = inDynamicRobot;}
+  
 public:
   /**
      \name Initialization

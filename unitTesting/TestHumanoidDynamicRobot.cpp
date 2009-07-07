@@ -131,31 +131,12 @@ int main(int argc, char *argv[])
   string aName;
   string aMapFromJointToRank;
 
-  const char *openhrphome="OPENHRPHOME";
-  char *value = 0;
-  value = getenv(openhrphome);
   if (argc!=5)
     {
-      if (value==0)
-	{
-	  cerr << " This program takes 4 arguments: " << endl;
-	  cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
-	  cerr << " PATH_TO_SPECIFICITIES_XML PATH_TO_MAP_JOINT_2_RANK" << endl;
-	  exit(-1);
-	}
-      else
-	{
-	  aPath=value;
-	  aPath+="Controller/IOserver/robot/HRP2JRL/model/";
-	  aName="HRP2JRLmain.wrl";
-	  aSpecificitiesFileName = value;
-	  aSpecificitiesFileName +="Controller/IOserver/robot/HRP2JRL/etc/";
-	  aSpecificitiesFileName += "HRP2Specificities.xml";
-	  aMapFromJointToRank = value;
-	  aMapFromJointToRank += "Controller/IOserver/robot/HRP2JRL/etc/";
-	  aMapFromJointToRank += "HRP2LinkJointRank.xml";
-	  
-	}	
+      aPath="./";
+      aName="sample.wrl";
+      aSpecificitiesFileName = "sampleSpecificities.xml";
+      aMapFromJointToRank = "sampleLinkJointRank.xml";
     }
   else 
     {

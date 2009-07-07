@@ -13,6 +13,7 @@
 #define JRL_HUMANOID_DYNAMIC_ROBOT_NA_H_
 
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
+#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
 #include "jrlDynamicRobotNA.hpp"
 /**
@@ -31,19 +32,19 @@ public:
   CjrlHumanoidDynamicRobotNA(CjrlRobotDynamicsObjectFactory * inObjectFactory)
   {
     m_HDR = inObjectFactory->createHumanoidDynamicRobot();
-    CjrlDynamicRobotNA(m_HDR);
+    setDynamicRobot(m_HDR);
   }
 
   CjrlHumanoidDynamicRobotNA(CjrlHumanoidDynamicRobotNA *inHDRNA )
   {
     m_HDR = inHDRNA;
-    CjrlDynamicRobotNA(m_HDR);
+    setDynamicRobot(m_HDR);
   }
 
   CjrlHumanoidDynamicRobotNA()
   {
     m_HDR=0;
-    CjrlDynamicRobotNA(m_HDR);
+    setDynamicRobot(m_HDR);
   }
   /**
      \brief Destructor
@@ -357,6 +358,11 @@ public:
     return 0;
   }
 
+
+  friend int dynamicsJRLJapan::parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+						    std::string &OpenHRPVRMLFile,
+						    std::string &MapJointToRankFileName,
+						    std::string &SpecificitiesFileName);
 
     /*! @} */
 
