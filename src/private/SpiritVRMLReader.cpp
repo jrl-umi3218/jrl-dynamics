@@ -212,6 +212,20 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<< "fTCBChildren: " << s<< endl;
       }
+      
+      void fDisplay(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< s<< endl;
+      }
+      void fShapeBlock(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "fShapeBlock: " << s<< endl;
+      }
+
       void fRoute(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -486,25 +500,25 @@ namespace dynamicsJRLJapan
 	       << ":" << m_DataForParsing->JointTranslation << endl;
       }
       
-      void fTransformToFieldInstanceRotationX(double x) const
+      void fTransformInstanceRotationX(double x) const
       {
 	if (m_Verbose>1)
 	  cout << "Transform rotation (AxisX):" << x << endl;
       }
 
-      void fTransformToFieldInstanceRotationY(double x) const
+      void fTransformInstanceRotationY(double x) const
       {
 	if (m_Verbose>1)
 	  cout << "Transform rotation (AxisY):" << x << endl;
       }
 
-      void fTransformToFieldInstanceRotationZ(double x) const
+      void fTransformInstanceRotationZ(double x) const
       {
 	if (m_Verbose>1)
 	  cout << "Transform rotation (AxisZ):" << x << endl;
       }
 
-      void fTransformToFieldInstanceRotationAngle(double x) const
+      void fTransformInstanceRotationAngle(double x) const
       {
 	if (m_Verbose>1)
 	  cout << "Transform rotation (Angle):" << x << endl;
@@ -953,11 +967,14 @@ namespace dynamicsJRLJapan
 	    >> (str_p("IS"))[SVRBIND2(fISFromNameToField,(self,arg1,arg2))] 
 	    >> (NameToField_r)[SVRBIND2(fNameToField2,(self,arg1,arg2))];
 
-	  TransformToFieldInstanceRotation_r = str_p("rotation") >>
-	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationY,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationZ,(self,arg1))] >>
-	    (real_p)[SVRBIND2(fTransformToFieldInstanceRotationAngle,(self,arg1))];
+	  TransformInstanceRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fTransformInstanceRotationX,(self,arg1))] >> 
+	    (real_p)[SVRBIND2(fTransformInstanceRotationY,(self,arg1))] >> 
+	    (real_p)[SVRBIND2(fTransformInstanceRotationZ,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fTransformInstanceRotationAngle,(self,arg1))];
+
+	  TransformInstanceTranslation_r = (str_p("translation"))[SVRBIND2(fDisplay,(self,arg1,arg2))] >>
+	    real_p>> real_p>> real_p;
 
 	  // Fields for group
 	  GroupBlock_r = str_p("Group") 
@@ -965,23 +982,24 @@ namespace dynamicsJRLJapan
 	    >> *(TransformToField_r) 
 	    >> ch_p('}');
 
-	  Route_r = (str_p("ROUTE"))[SVRBIND2(fRoute,(self,arg1,arg2))]
-	    >> (lexeme_d[+(alnum_p|'.'|'_')])[SVRBIND2(fRoute,(self,arg1,arg2))]
-	    >> (str_p("TO"))[SVRBIND2(fRoute,(self,arg1,arg2))]
-	    >> (lexeme_d[+(alnum_p|'.'|'_')])[SVRBIND2(fRoute,(self,arg1,arg2))];
+	  Route_r = str_p("ROUTE")[SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> lexeme_d[+(alnum_p|'.'|'_')][SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> str_p("TO")[SVRBIND2(fRoute,(self,arg1,arg2))]
+	    >> lexeme_d[+(alnum_p|'.'|'_')][SVRBIND2(fRoute,(self,arg1,arg2))];
       
 	  // Fields of Transform block.
+	  TCBChildrenBlock_r = ch_p('[') 
+	    >> *(GroupBlock_r|TransformBlock_r |Sensors_r | Shape_r )
+	    >> ch_p(']');
 	  TCBChildren_r = (str_p("children"))
 	    [SVRBIND2(fTCBChildren,(self,arg1,arg2))]
-	    >> ch_p('[') 
-	    >> *(GroupBlock_r|TransformBlock_r |Sensors_r )
-	    >> ch_p(']');
+	    >> Shape_r | GroupBlock_r|TransformBlock_r |Sensors_r | TCBChildrenBlock_r ;
       
 	  TransformChildrenBlock_r = ch_p('[') 
 	    >> *(GroupBlock_r | TCBChildren_r) 
 	    >> ch_p(']');
       
-	  TransformChildren_r= (str_p("children"))[SVRBIND2(fTransformChildren,(self,arg1,arg2))]
+	  TransformChildren_r= str_p("children")[SVRBIND2(fTransformChildren,(self,arg1,arg2))]
 	    >> ((str_p("IS")  >> str_p("children")) |
 		TransformChildrenBlock_r);
 	  
@@ -992,7 +1010,7 @@ namespace dynamicsJRLJapan
 			       (str_p("Transform"))[SVRBIND2(fTransformBlockDef,(self,arg1,arg2))] )
 			      |(str_p("Transform"))[SVRBIND2(fTransformBlock,(self,arg1,arg2))])
 	    >> ch_p('{') 
-	    >> *(TransformLine_r | TransformToFieldInstanceRotation_r) 
+	    >> *(TransformLine_r | TransformInstanceRotation_r | TransformInstanceTranslation_r) 
 	    >> ch_p('}');
 	  
 	  // Fields of Proto []block.
@@ -1215,6 +1233,36 @@ namespace dynamicsJRLJapan
 							 >> *((real_p)[SVRBIND2(fFillmomentsOfInertia,(self,arg1))])
 							 >> ch_p(']') ;
 
+	  MaterialBlock_r = str_p("diffuseColor") >> 
+	    real_p >> real_p >> real_p ;
+
+	  AppearanceBlock_r = (str_p("material"))[SVRBIND2(fDisplay,(self,arg1,arg2))] 
+	    >> str_p("Material")
+	    >> ch_p('{') >> *(MaterialBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]) >> ch_p('}');
+	  
+	  AppearanceUse_r = str_p("USE")  >>  lexeme_d[+(alnum_p|'_')][SVRBIND2(fShapeBlock,(self,arg1,arg2))];
+	  AppearanceDef_r = str_p("DEF")  >>
+	    ( (lexeme_d[+(alnum_p|'_')][SVRBIND2(fDisplay,(self,arg1,arg2))] >>
+	       str_p("Appearance")) | str_p("Appearance") )
+					>>  ch_p('{') 
+					>> AppearanceBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]
+					>> ch_p('}') ;
+	  AppearanceHeader_r = str_p("appearance")[SVRBIND2(fDisplay,(self,arg1,arg2))] >>
+	    (AppearanceDef_r[SVRBIND2(fDisplay,(self,arg1,arg2))] | AppearanceUse_r[SVRBIND2(fDisplay,(self,arg1,arg2))]);
+	  
+	  GeometryBox_r = str_p("Box")[SVRBIND2(fDisplay,(self,arg1,arg2))] >> ch_p('{') >> str_p("size") >>
+	    real_p >> real_p >>real_p >> ch_p('}');
+	  GeometryCylinder_r = str_p("Cylinder")[SVRBIND2(fDisplay,(self,arg1,arg2))] >> ch_p('{') >> str_p("radius") >>
+	    real_p >> str_p("height") >>real_p >> ch_p('}');
+	  
+	  GeometryHeader_r = str_p("geometry")[SVRBIND2(fDisplay,(self,arg1,arg2))] >>  GeometryBox_r| GeometryCylinder_r;
+	  
+	  ShapeBlock_r = AppearanceHeader_r | GeometryHeader_r[SVRBIND2(fDisplay,(self,arg1,arg2))];
+	  
+	  Shape_r = (str_p("Shape"))[SVRBIND2(fDisplay,(self,arg1,arg2))]
+	    >> ch_p('{') 
+	    >> *ShapeBlock_r >> ch_p('}');
+
 	  BodySubBlock_r =CenterOfMass_r | Mass_r | MomentsOfInertia_r ;
 	  BodyChildrenInlineUrl_r = str_p("url") 
 	    >> ch_p('"') 
@@ -1225,10 +1273,12 @@ namespace dynamicsJRLJapan
 	    *(BodyChildrenInlineUrl_r)>> ch_p('}');
   
 	  BodyChildrenField_r= (str_p("Inline") >> BodyChildrenInline_r ) |
-	    Sensors_r;
+	    Sensors_r | Shape_r | TransformBlock_r;
 	
-	  BodyChildren_r = str_p("children") >> ch_p('[') >> (*BodyChildrenField_r)[SVRBIND2(fProtoName,(self,arg1,arg2))]
-					     >> ch_p(']');
+	  BodyChildren_r = str_p("children") >> (ch_p('[') 
+						 >> *BodyChildrenField_r
+						 >> ch_p(']')) |
+	    Shape_r;
 	  // Define the entry rules for body and hint
 	  BodyBlock_r =  (str_p("Segment"))[SVRBIND2(fBodySubBlockName,(self))]
 	    >> ch_p('{') >> *(BodySubBlock_r |
@@ -1316,9 +1366,9 @@ namespace dynamicsJRLJapan
 	}
     
 	rule<ScannerT> scaleMultiple_r, NameToField_r, TransformToField_r,
-	  TransformToFieldInstanceRotation_r,
+	  TransformInstanceRotation_r, TransformInstanceTranslation_r,
 	  GroupBlock_r, Route_r,
-	  TransformBlock_r, TCBChildren_r, TransformChildrenBlock_r,
+	  TransformBlock_r, TCBChildren_r, TCBChildrenBlock_r, TransformChildrenBlock_r,
 	  TransformChildren_r, 
 	  TransformLine_r, SFVec3f_r, MF_brackets_r, MFNode_r, SFNode_r, MFFloat_r,
 	  SFRotation_r, SFString_r, MFString_r, SFFloat_r, SFInt32_r,
@@ -1350,6 +1400,11 @@ namespace dynamicsJRLJapan
 
 	rule<ScannerT> BodySubBlock_r, BodyChildrenInlineUrl_r, BodyChildrenInline_r,
 	  BodyChildrenField_r, BodyChildren_r, BodyBlock_r;
+
+	rule<ScannerT> GeometryHeader_r, GeometryBox_r, GeometryCylinder_r;
+
+	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r, 
+	  AppearanceUse_r, AppearanceDef_r, MaterialBlock_r;
 
 	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r, 
 	  HumanoidBlock_r, HumanoidTrail_r, Humanoid_r,

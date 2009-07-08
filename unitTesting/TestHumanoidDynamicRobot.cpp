@@ -29,19 +29,17 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
   if (aJoint==0)
     return;
 
-
   int NbChildren = aJoint->countChildJoints();
 
-
-  cout << aJoint << " rank : " << aJoint->rankInConfiguration() << endl;
-
-
-  cout << "Number of child  :" << NbChildren << endl;
-
-
-  cout << "Nb of degree of freedom " << 
-    aJoint->numberDof() << endl;
+  cout << " rank : " << aJoint->rankInConfiguration() << endl;
+  cout << "Number of child  :" << aJoint->countChildJoints() << endl;
+  cout << "Initial position:" << aJoint->initialPosition() << endl;
+  cout << "currentTransformation: " <<
+    aJoint->currentTransformation() << endl;
+  cout << "Nb of degree of freedom " 
+       <<  aJoint->numberDof() << endl;
   
+
   if (verbosedisplay>3)
     {
       cout << "Initial Position " ;
@@ -51,7 +49,6 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
       cout << "CurrentTransformation ";
       matrix4d cT = aJoint->currentTransformation();
       dm4d(cT,cout);
-      
       cout << " Joint from root to here:" << endl;
       std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
       

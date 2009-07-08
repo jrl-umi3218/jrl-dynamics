@@ -326,7 +326,7 @@ DEF SampleRobot Humanoid {
             }
             Transform {
               translation   0 0 0.0955
-              children      Shape {
+              children Shape {
                 appearance  USE WAIST_APP
                 geometry Box { size 0.05 0.05 0.111 }
               }
@@ -346,7 +346,7 @@ DEF SampleRobot Humanoid {
               momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
               children [
                 Shape {
-                  appearance  DEF WAIST_LINK1_APP Appearance {
+                  appearance  DEF WAIST_LINK1_APP Appearance{
 
                     material  Material {
                       diffuseColor   0.6 1.0 0.6
