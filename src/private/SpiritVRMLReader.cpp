@@ -1492,7 +1492,7 @@ namespace dynamicsJRLJapan
       //  BOOST_SPIRIT_DEBUG_RULE(BodyBlock_r);
       //  BOOST_SPIRIT_DEBUG_RULE(Humanoid_r);
       aSpiritOpenHRP.Init();
-      aSpiritOpenHRP.setVerbose(10);
+      aSpiritOpenHRP.setVerbose(0);
       
       parse(buffer,aSpiritOpenHRP,aSkipGrammar).full;
       delete [] buffer;

@@ -158,10 +158,6 @@ int main(int argc, char *argv[])
   // Display tree of the joints.
   CjrlJoint* rootJoint = aHDR->rootJoint();  
 
-  // Test the tree.
-  RecursiveDisplayOfJoints(rootJoint);
-
-
   // Tes the computation of the jacobian.
   double dInitPos[40] = { 
     0.0, 0.0, -26.0, 50.0, -24.0, 0.0, 0.0, 0.0, -26.0, 50.0, -24.0, 0.0,  // legs
