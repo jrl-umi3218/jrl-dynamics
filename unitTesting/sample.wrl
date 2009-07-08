@@ -8,6 +8,8 @@
 # version   1.1 (2000.11.24)
 # modified  Natsuki Miyata (MEL)
 # version   1.1 (2000.12.7)
+# modified  Olivier Stasse (JRL, CNRS/AIST)
+# version   1.2 (2009.07.8)
 #--------------------------------------------------------------
 
 PROTO Joint [
@@ -317,20 +319,6 @@ DEF SampleRobot Humanoid {
           mass    27.0
           momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
           children [
-            Shape {
-              appearance DEF WAIST_APP Appearance {
-                material Material {
-                }
-              }
-              geometry Box { size 0.08 0.08 0.08 }
-            }
-            Transform {
-              translation   0 0 0.0955
-              children Shape {
-                appearance  USE WAIST_APP
-                geometry Box { size 0.05 0.05 0.111 }
-              }
-            }
           ]
         }
 
@@ -345,15 +333,6 @@ DEF SampleRobot Humanoid {
               mass    6.0
               momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
               children [
-                Shape {
-                  appearance  DEF WAIST_LINK1_APP Appearance{
-
-                    material  Material {
-                      diffuseColor   0.6 1.0 0.6
-                    }
-                  }
-                  geometry Cylinder { radius 0.025 height 0.05 }
-                }
               ]
             }
 
@@ -367,24 +346,6 @@ DEF SampleRobot Humanoid {
                   mass    30.0
                   momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
                   children [
-                    Transform {
-                      rotation 0 0 1 1.5708
-                      children Shape {
-                        appearance DEF WAIST_LINK2_APP Appearance {
-                          material      Material {
-                            diffuseColor       0.6 0.8 0.6
-                          }
-                        }
-                        geometry Cylinder { radius 0.025 height 0.05 }
-                      }
-                    }
-                    Transform {
-                      translation 0 0 0.1625
-                      children  Shape {
-                        appearance USE WAIST_LINK2_APP
-                        geometry Box { size 0.05 0.05 0.275 }
-                      }
-                    } # Transform
                   ]
                 } # segment WAIST_LINK2
 
@@ -398,82 +359,9 @@ DEF SampleRobot Humanoid {
                       mass    13.0
                       momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
                       children [
-                        Transform {
-                          rotation 1 0 0 1.5708
-                          children Shape {
-                            appearance DEF WAIST_LINK3_APP Appearance {
-                              material  Material {
-                                diffuseColor 0.8 0.8 0.8
-                              }
-                            }
-                            geometry Cylinder { radius 0.025 height 0.1 }
-                          }
-                        }
-                        Shape {
-                          appearance USE WAIST_LINK3_APP
-                          geometry Box { size 0.15 0.27 0.05 }
-                        }
-                        Transform {
-                          translation 0 0 0.065
-                          children  Shape {
-                            appearance      Appearance {
-                              material      Material {
-                                diffuseColor  0.5 0.8 0.5
-                              }
-                            }
-                            geometry Box { size 0.05 0.05 0.03 }
-                          }
-                        }
-                        Transform {
-                          translation -0.015 0 0.16 
-                          children  Shape {
-                            appearance      Appearance {
-                              material      Material {
-                                diffuseColor 0.5 0.8 0.5
-                              }
-                            }
-                            geometry Box { size 0.31 0.16 0.16 }
-                          } # shape
-                        } # transform
                       ]
                     } # segment WAIST_LINK3
                     
-                    DEF VISION_SENSOR1 VisionSensor {
-                      translation   0.15 0.05 0.15
-                      rotation      0.4472 -0.4472 -0.7746 1.8235
-                      name          "LeftCamera"
-                      type          "DEPTH"
-                      sensorId      0
-                      children [
-                        DEF CAMERA_SHAPE Transform {
-                          rotation  1 0 0 -1.5708
-                          children [
-                            Shape {
-                              geometry Cylinder {
-                                radius      0.02
-                                height      0.025
-                              }
-                              appearance Appearance {
-                                material Material {
-                                  diffuseColor      1 0 0
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                    DEF VISION_SENSOR2 VisionSensor {
-                      translation   0.15 -0.05 0.15
-                      rotation      0.4472 -0.4472 -0.7746 1.8235
-                      name          "RightCamera"
-                      type          "DEPTH"
-                      sensorId      1
-                      children [
-                        USE CAMERA_SHAPE
-                      ]
-                    }
-
                     #==================== Left Arm ====================
 
                     DEF LARM_SHOULDER_P Joint {
@@ -486,18 +374,7 @@ DEF SampleRobot Humanoid {
                           centerOfMass  0.1 0 0
                           mass    3.0
                           momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                          children Transform {
-                            translation 0 -0.05 0
-                            children DEF ARM_SHAPE1 Shape {
-                              appearance Appearance {
-                                material Material {
-                                }
-                              }
-                              geometry Cylinder { radius 0.025 height 0.05 }
-                            }
-                          }
-                        }
-
+			}			  
                         DEF LARM_SHOULDER_R Joint {
                           jointType "rotate"
 			  jointAxis "X"
@@ -507,29 +384,7 @@ DEF SampleRobot Humanoid {
                               centerOfMass  0 0 -0.1
                               mass    0.6
                               momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                              children DEF ARM_SHAPE2 Transform {
-                                children [
-                                  Transform {
-                                    rotation 0 0 1 1.5708
-                                    children Shape {
-                                      appearance DEF ARM_LINK2_APP Appearance {
-                                        material  Material {
-                                          diffuseColor 0.8 0.9 0.8
-                                        }
-                                      }
-                                      geometry Cylinder { radius 0.025 height 0.05 }
-                                    }
-                                  }
-                                  Transform {
-                                    translation   0 0 -0.1065
-                                    children      Shape {
-                                      appearance USE ARM_LINK2_APP
-                                      geometry Box { size 0.05 0.05 0.163 }
-                                    }
-                                  }
-                                ]
-                              }
-                            } # Segment LARM_LINK2
+                            } 
 
                             DEF LARM_SHOULDER_Y Joint {
                               jointType "rotate"
@@ -540,17 +395,6 @@ DEF SampleRobot Humanoid {
                                   centerOfMass  0 0 0
                                   mass    1.0
                                   momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                                  children DEF ARM_SHAPE3 Transform {
-                                    translation 0 0 0.05
-                                    rotation 1 0 0 1.5708
-                                    children Shape {
-                                      appearance Appearance {
-                                        material Material {
-                                        }
-                                      }
-                                      geometry Cylinder { radius 0.025 height 0.05}
-                                    }
-                                  }
                                 } # Segment LARM_LINK3
 
                                 DEF LARM_ELBOW Joint {
@@ -562,25 +406,6 @@ DEF SampleRobot Humanoid {
                                       centerOfMass  0 0 -0.3
                                       mass    0.6
                                       momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                                      children DEF ARM_SHAPE4 Transform {
-                                        children [
-                                          Shape {
-                                            appearance DEF ARM_APP4 Appearance {
-                                              material    Material {
-                                                diffuseColor     0.8 1.0 0.8
-                                              }
-                                            }
-                                            geometry Cylinder { radius 0.025 height 0.05 }
-                                          }
-                                          Transform {
-                                            translation  0 0 -0.0985
-                                            children        Shape {
-                                              appearance USE ARM_APP4
-                                              geometry Box { size 0.05 0.05 0.147 }
-                                            }
-                                          }
-                                        ]
-                                      }
                                     } # Segment LARM_LINK4
 
                                     DEF LARM_WRIST_Y Joint {
@@ -593,17 +418,6 @@ DEF SampleRobot Humanoid {
                                           centerOfMass  0 0 0.1
                                           mass    0.4
                                           momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                                          children DEF ARM_SHAPE5 Transform {
-                                            translation 0 0 0.05
-                                            rotation 1 0 0 1.5708
-                                            children Shape {
-                                              appearance Appearance {
-                                                material Material {
-                                                }
-                                              }
-                                              geometry Cylinder { radius 0.025 height 0.05 }
-                                            }
-                                          }
                                         }
 
                                         DEF LARM_WRIST_P Joint {
@@ -615,13 +429,6 @@ DEF SampleRobot Humanoid {
                                               centerOfMass  -0.1 0 0
                                               mass    0.4
                                               momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                                              children DEF ARM_SHAPE6 Shape {
-                                                appearance Appearance {
-                                                  material Material {
-                                                  }
-                                                }
-                                                geometry Cylinder { radius 0.025 height 0.05 }
-                                              }
                                             }
 
                                             DEF LARM_WRIST_R Joint {
@@ -633,28 +440,6 @@ DEF SampleRobot Humanoid {
                                                   centerOfMass  0 0 -0.1
                                                   mass    0.4
                                                   momentsOfInertia [ 1 0 0 0 1 0 0 0 1 ]
-                                                  children DEF ARM_SHAPE7 Transform {
-                                                    children [
-                                                      Transform {
-                                                        rotation 0 0 1 1.5708
-                                                        children Shape {
-                                                          appearance DEF ARM_APP7 Appearance {
-                                                            material      Material {
-                                                              diffuseColor 0.7 0.9 0.7
-                                                            }
-                                                          }
-                                                          geometry Cylinder { radius 0.025 height 0.05 }
-                                                        }
-                                                      }
-                                                      Transform {
-                                                        translation 0 0 -0.1125
-                                                        children  Shape {
-                                                          appearance USE ARM_APP7
-                                                          geometry Box { size 0.05 0.05 0.175 }
-                                                        }
-                                                      }# Transform
-                                                    ]
-                                                  }
                                                 } # Segment LARM_LINK7
                                               ]
                                             } # Joint LARM_WRIST_R
@@ -683,10 +468,6 @@ DEF SampleRobot Humanoid {
                           centerOfMass          0.1 0 0
                           mass                  3.0
                           momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                          children Transform {
-                            translation 0 0.05 0
-                            children USE ARM_SHAPE1
-                          }
                         }
 
                         DEF RARM_SHOULDER_R Joint {
@@ -698,9 +479,6 @@ DEF SampleRobot Humanoid {
                               centerOfMass          0 0 -0.1
                               mass                  0.6
                               momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                              children [
-                                USE ARM_SHAPE2
-                              ]
                             } # Segment RARM_LINK2
 
                             DEF RARM_SHOULDER_Y Joint {
@@ -712,7 +490,6 @@ DEF SampleRobot Humanoid {
                                   centerOfMass          0 0 0
                                   mass                  1.0
                                   momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                  children USE ARM_SHAPE3
                                 }
 
                                 DEF RARM_ELBOW Joint {
@@ -724,7 +501,6 @@ DEF SampleRobot Humanoid {
                                       centerOfMass          0 0 -0.3
                                       mass                  0.6
                                       momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                      children USE ARM_SHAPE4 
                                     } # Segment RARM_LINK4
 
                                     DEF RARM_WRIST_Y Joint {
@@ -737,7 +513,6 @@ DEF SampleRobot Humanoid {
                                           centerOfMass          0 0 0.1
                                           mass                  0.4
                                           momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                          children USE ARM_SHAPE5
                                         }
                                         
                                         DEF RARM_WRIST_P Joint {
@@ -749,7 +524,6 @@ DEF SampleRobot Humanoid {
                                               centerOfMass          -0.1 0 0
                                               mass                  0.4
                                               momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                              children USE ARM_SHAPE6
                                             }
 
                                             DEF RARM_WRIST_R Joint {
@@ -761,10 +535,7 @@ DEF SampleRobot Humanoid {
                                                   centerOfMass          0 0 -0.1
                                                   mass                  0.4
                                                   momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                                  children [
-                                                    USE ARM_SHAPE7
-                                                  ]
-                                                } # Segment RARM_LINK7
+                                           	} # Segment RARM_LINK7
                                               ]
                                             } # Joint RARM_WRIST_R
                                           ]
@@ -798,16 +569,6 @@ DEF SampleRobot Humanoid {
               centerOfMass          0 0.1 0
               mass                  2.5
               momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-              children DEF LEG_SHAPE1 Transform {
-                rotation 0 0 1 1.5708
-                children Shape {
-                  appearance Appearance {
-                    material Material {
-                    }
-                  }
-                  geometry Cylinder { radius 0.05 height 0.1 }
-                }  
-              }
             }
 
             DEF LLEG_HIP_P Joint {
@@ -819,13 +580,6 @@ DEF SampleRobot Humanoid {
                      centerOfMass          0 0 -0.15
                      mass                  2.0
                      momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                     children DEF LEG_SHAPE2 Shape {
-                       appearance Appearance {
-                         material Material {
-                         }
-                       }
-                       geometry Cylinder { radius 0.05 height 0.1 }
-                     }
                    }
 
                    DEF LLEG_HIP_Y Joint {
@@ -837,29 +591,6 @@ DEF SampleRobot Humanoid {
                          centerOfMass          0 0.04 0
                          mass                  5.1
                          momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                         children DEF LEG_SHAPE3 Transform {
-                           children [
-                             Transform {
-                               translation 0 0 0.1
-                               rotation 1 0 0 1.5708
-                               children Shape {
-                                 appearance DEF LEG_APP3 Appearance {
-                                   material  Material {
-                                     diffuseColor   0.8 0.9 0.8
-                                   }
-                                 }
-                                 geometry Cylinder { radius 0.05 height 0.1 }
-                               }
-                             }
-                             Transform {
-                               translation 0 0 0.22675
-                               children      Shape {
-                                 appearance USE LEG_APP3
-                                 geometry Box { size 0.1 0.1 0.1535 }
-                               }
-                             }
-                           ]
-                         }
                        } # Segment LLEG_LINK3
 
                        DEF LLEG_KNEE Joint {
@@ -872,25 +603,6 @@ DEF SampleRobot Humanoid {
                              centerOfMass          0 0 -0.3
                              mass                  7.0
                              momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                             children DEF LEG_SHAPE4 Transform {
-                               children [
-                                 Shape {
-                                   appearance DEF LEG_APP4 Appearance {
-                                     material    Material {
-                                       diffuseColor     0.8 1.0 0.8
-                                     }
-                                   }
-                                   geometry Cylinder { radius 0.05 height 0.1 }
-                                 }
-                                 Transform {
-                                   translation      0 0 -0.15
-                                   children        Shape {
-                                     appearance USE LEG_APP4
-                                     geometry Box { size 0.1 0.1 0.2 }
-                                   }
-                                 }
-                               ]
-                             }
                            } # Segment LLEG_LINK4
 
                            DEF LLEG_ANKLE_P Joint {
@@ -903,13 +615,6 @@ DEF SampleRobot Humanoid {
                                  centerOfMass          -0.15 0 0
                                  mass                  2.5
                                  momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                 children DEF LEG_SHAPE5 Shape {
-                                   appearance Appearance {
-                                     material Material {
-                                     }
-                                   }
-                                   geometry Cylinder { radius 0.05 height 0.1 }
-                                 }
                                }
                                DEF LLEG_ANKLE_R Joint {
                                  jointType "rotate"
@@ -920,29 +625,7 @@ DEF SampleRobot Humanoid {
                                      centerOfMass          0.28 0 -0.2
                                      mass                  1.9
                                      momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                     children DEF LEG_SHAPE6 Transform {
-                                       children [
-                                         Transform {
-					   translation 0.1 0 0
-                                           rotation 0 0 1 1.5708
-                                           children Shape {
-                                             appearance DEF LEG_APP6 Appearance {
-                                               material      Material {
-                                                 diffuseColor 0.0 0.5 0.0
-                                               }
-                                             }
-                                             geometry Cylinder { radius 0.05 height 0.1 }
-                                           }
-                                         }
-                                         Transform {
-                                           translation       0.055 0 -0.05
-                                           children  Shape {
-                                             appearance USE LEG_APP6
-                                             geometry Box { size 0.25 0.14 0.01 }
-                                           } # Shape
-                                         }#Transform
-                                       ]
-                                     }
+
                                    } # Segment LLEG_LINK6
                                  ]
                                } # Joint LLEG_ANKLE_R
@@ -969,7 +652,6 @@ DEF SampleRobot Humanoid {
               centerOfMass          0 -0.1 0
               mass                  2.5
               momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-              children USE LEG_SHAPE1
             }
 
             DEF RLEG_HIP_P Joint {
@@ -981,7 +663,6 @@ DEF SampleRobot Humanoid {
                   centerOfMass          0 0 -0.15
                   mass                  2.0
                   momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                  children USE LEG_SHAPE2
                 }
                 DEF RLEG_HIP_Y Joint {
                   jointType "rotate"
@@ -992,9 +673,6 @@ DEF SampleRobot Humanoid {
                       centerOfMass          0 -0.04 0
                       mass                  5.1
                       momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                      children [
-                        USE LEG_SHAPE3
-                      ]
                     }
 
                     DEF RLEG_KNEE Joint {
@@ -1006,9 +684,6 @@ DEF SampleRobot Humanoid {
                           centerOfMass          0 0 -0.3
                           mass                  7.0
                           momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                          children [
-                            USE LEG_SHAPE4
-                          ]
                         } # Segment RLEG_LINK4
 
                         DEF RLEG_ANKLE_P Joint {
@@ -1021,7 +696,6 @@ DEF SampleRobot Humanoid {
                               centerOfMass          -0.15 0 0
                               mass                  2.5
                               momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                              children USE LEG_SHAPE5
                             }
 
                             DEF RLEG_ANKLE_R Joint {
@@ -1033,9 +707,6 @@ DEF SampleRobot Humanoid {
                                   centerOfMass          0.28 0 -0.2
                                   mass                  1.9
                                   momentsOfInertia      [ 1 0 0 0 1 0 0 0 1 ]
-                                  children [
-                                    USE LEG_SHAPE6
-                                  ]
                                 } # Segment RLEG_LINK6
                               ]
                             } # Joint RLEG_ANKLE_R
