@@ -14,8 +14,6 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
     
   for(unsigned int i=1;i<m_listOfBodies.size();i++)
     {
-      //      if (m_ConfigurationToJoints[i] == rootJoint())
-      //	continue;
       aBody=  m_listOfBodies[i];
       aJoint=(JointPrivate *)aBody->joint();
       
@@ -23,8 +21,8 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
       
       matrixNxP pJacobian;
       MAL_MATRIX_RESIZE(pJacobian, 6, numberDof());
-      vector3d av(0,0,0); // Dummy 
-      getJacobian(*rootJoint(),*aJoint,av,pJacobian);
+      vector3d aCoM = aBody->getPositionCoM(); // Dummy 
+      getJacobian(*rootJoint(),*aJoint,aCoM,pJacobian);
 
       ODEBUG("pJacobian:" <<pJacobian);
       matrixNxP pLinearJacobian;
@@ -40,7 +38,7 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
 
       ODEBUG("pAngularJacobian:" <<endl <<pAngularJacobian);
 
-      // Used to compute the anti-symmetric matrix.
+      // Used to compute the symmetric matrix.
       double lmasse = aBody->getMasse();
       matrixNxP leftoperand;
       MAL_C_eq_A_by_B(leftoperand,MAL_RET_TRANSPOSE(pLinearJacobian),pLinearJacobian);

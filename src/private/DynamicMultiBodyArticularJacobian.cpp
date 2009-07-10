@@ -1,9 +1,9 @@
 bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint, 
-				     const CjrlJoint& inEndJoint, 
-				     const vector3d& inFrameLocalPosition, 
-				     matrixNxP& outjacobian, 
-				     unsigned int outOffset, 
-				     bool includeFreeFlyer )
+					const CjrlJoint& inEndJoint, 
+					const vector3d& inFrameLocalPosition, 
+					matrixNxP& outjacobian, 
+					unsigned int outOffset, 
+					bool includeFreeFlyer )
 {
   unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
   unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);
@@ -154,11 +154,11 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 }
 
 bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint, 
-					     const CjrlJoint& inEndJoint, 
-					     const vector3d& inFrameLocalPosition, 
-					     matrixNxP& outjacobian, 
-					     unsigned int outOffset, 
-					     bool includeFreeFlyer )
+						const CjrlJoint& inEndJoint, 
+						const vector3d& inFrameLocalPosition, 
+						matrixNxP& outjacobian, 
+						unsigned int outOffset, 
+						bool includeFreeFlyer )
 {
   unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
   unsigned int lengthJacobian = MAL_MATRIX_NB_COLS(outjacobian);

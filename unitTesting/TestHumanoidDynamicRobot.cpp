@@ -12,7 +12,21 @@ void dv3d(vector3d &av3d, ostream &os)
   os << endl;
 }
 
-void dm4d(const matrix4d &todisplay, ostream &os)
+void dm3d(const matrix3d &todisplay, ostream &os, string shifttab)
+{
+  for(unsigned int i=0;i<3;i++)
+    {
+      for(unsigned int j=0;j<3;j++)
+	{
+	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	}
+      os << endl;
+      if (i!=2)
+	os << shifttab;
+    }
+}
+
+void dm4d(const matrix4d &todisplay, ostream &os, string shifttab)
 {
   for(unsigned int i=0;i<4;i++)
     {
@@ -21,65 +35,108 @@ void dm4d(const matrix4d &todisplay, ostream &os)
 	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
 	}
       os << endl;
+      if (i!=3)
+	os << shifttab;
     }
 }
 
-void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
+void DisplayBody(CjrlBody *aBody, string &shifttab)
+{
+  
+  cout << shifttab << "Related body informations" << endl;
+  vector3d alcm = aBody->localCenterOfMass();
+  cout << shifttab << "Local center of Mass : ";
+  dv3d(alcm,cout);
+  matrix3d aim = aBody->inertiaMatrix();
+  cout << shifttab << "Inertia Matrix: " ;
+  dm3d(aim,cout,shifttab);
+  cout << shifttab << "mass: " << aBody->mass() << endl;
+      
+}
+void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
+			      unsigned int verbosedisplay=0,
+			      unsigned int ldepth=0)
 {
   if (aJoint==0)
     return;
 
   int NbChildren = aJoint->countChildJoints();
-
-  cout << " rank : " << aJoint->rankInConfiguration() << endl;
-  cout << "Number of child  :" << aJoint->countChildJoints() << endl;
-  cout << "Initial position:" << aJoint->initialPosition() << endl;
-  cout << "currentTransformation: " <<
-    aJoint->currentTransformation() << endl;
-  cout << "Nb of degree of freedom " 
+  string shifttab="";
+  for(unsigned int i=0;i<ldepth;i++)
+	shifttab+=" ";
+  
+  cout << shifttab << "Rank : " 
+       << aJoint->rankInConfiguration() << endl;
+  cout << shifttab << "Number of child  :" 
+       << aJoint->countChildJoints() << endl;
+  cout << shifttab << "Nb of degree of freedom " 
        <<  aJoint->numberDof() << endl;
   
 
   if (verbosedisplay>3)
     {
-      cout << "Initial Position " ;
+      cout << shifttab << "Initial Position " ;
       matrix4d iP = aJoint->initialPosition();
-      dm4d(iP,cout);
+      dm4d(iP,cout,shifttab);
       
-      cout << "CurrentTransformation ";
+      cout << shifttab << "CurrentTransformation ";
       matrix4d cT = aJoint->currentTransformation();
-      dm4d(cT,cout);
-      cout << " Joint from root to here:" << endl;
-      std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+      dm4d(cT,cout,shifttab);
+
+      // Limits
+      std::cout << shifttab << "llimit: " 
+		<< aJoint->lowerBound(0)*180/M_PI << " " 
+		<< shifttab << "ulimit: " 
+		<< aJoint->upperBound(0)*180/M_PI << " " << endl;
+
+      std::cout << shifttab << "lvlimit: " 
+		<< aJoint->lowerVelocityBound(0)*180/M_PI << " " 
+		<< shifttab << "uvlimit: " 
+		<< aJoint->upperVelocityBound(0)*180/M_PI << " " << endl;
       
-      cout << " Nb of nodes: " << JointsFromRootToHere.size() << endl;
+      // Path from the root to this joint.
+      std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+      cout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
+	   << shifttab << "Joint from root to here:" << endl << shifttab;
+      for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
+	cout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
+      cout << endl;
+
+      // Current state of the joint.
+
+      // Rigid velocity:
       CjrlRigidVelocity aRV = aJoint->jointVelocity();
-      cout << " Linear Velocity ";
+      cout << shifttab << "Linear Velocity ";
       vector3d av3d = aRV.linearVelocity();
       dv3d(av3d,cout);
-      cout << " Angular Velocity ";
+      cout << shifttab << "Angular Velocity ";
       av3d = aRV.rotationVelocity();
       dv3d(av3d,cout);
 
+      // Rigit Acceleration.
       CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-      
-      cout << " Linear Acceleration ";
+      cout << shifttab << "Linear Acceleration ";
       av3d = aRA.linearAcceleration();
       dv3d(av3d,cout);
-      cout << " Angular Acceleration ";
+      cout << shifttab << "Angular Acceleration ";
       av3d = aRA.rotationAcceleration();
       dv3d(av3d,cout);
       
-      cout << "***********************************************" << endl;
-      cout << " Display Now information related to children :" << endl;
+      CjrlBody * aBody = aJoint->linkedBody();
+      DisplayBody(aBody,shifttab);
     }
 
-  for(int i=0;i<NbChildren;i++)
+  if (NbChildren!=0)
     {
-      // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints(aJoint->childJoint(i)); 
+      cout << shifttab << "***********************************************" << endl;
+      cout << shifttab << " Display Now information related to children :" << endl;
+      
+      for(int i=0;i<NbChildren;i++)
+	{
+	  // Returns a const so we have to force the casting/
+	  RecursiveDisplayOfJoints(aJoint->childJoint(i),verbosedisplay,ldepth+1); 
+	}
     }
-  //cout << " End for Joint: " << a2Joint->getName() << endl;
 }
 
 
@@ -158,19 +215,6 @@ int main(int argc, char *argv[])
   // Display tree of the joints.
   CjrlJoint* rootJoint = aHDR->rootJoint();  
 
-  // Tes the computation of the jacobian.
-  double dInitPos[40] = { 
-    0.0, 0.0, -26.0, 50.0, -24.0, 0.0, 0.0, 0.0, -26.0, 50.0, -24.0, 0.0,  // legs
-
-    0.0, 0.0, 0.0, 0.0, // chest and head
-
-    15.0, -10.0, 0.0, -30.0, 0.0, 0.0, 10.0, // right arm
-    15.0,  10.0, 0.0, -30.0, 0.0, 0.0, 10.0, // left arm 
-
-    -20.0, 20.0, -20.0, 20.0, -20.0, // right hand
-    -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
-  };
-
   int NbOfDofs = aHDR->numberDof();
   std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
   if (NbOfDofs==0)
@@ -184,8 +228,7 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = 0.0;
   
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-    aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
-  //aCurrentConf[lindex++] = 0.0;
+    aCurrentConf[lindex++] = 0.0;
   
   aHDR->currentConfiguration(aCurrentConf);
 
@@ -204,6 +247,34 @@ int main(int argc, char *argv[])
   ZMPval = aHDR->zeroMomentumPoint();
   cout << "First value of ZMP : " << ZMPval <<endl;
   cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+
+
+  matrixNxP InertiaMatrix;
+  aHDR->computeInertiaMatrix();
+  InertiaMatrix = aHDR->inertiaMatrix();
+ 
+  cout << "InertiaMatrix("
+       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
+       << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
+    
+  cout << InertiaMatrix << endl;
+  matrixNxP IMt;
+  MAL_TRANSPOSE_A_in_At(InertiaMatrix,IMt);
+  matrixNxP IMxIMt;
+  MAL_C_eq_A_by_B(IMxIMt,InertiaMatrix,IMt);
+  cout << IMxIMt << endl;
+  
+  ofstream aof;
+  aof.open("InertiaMatrix.dat");
+  for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(InertiaMatrix);i++)
+    {
+      for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(InertiaMatrix);j++)
+       {
+         aof << InertiaMatrix(i,j) << " ";
+       }
+      aof << endl;
+    }
+  aof.close();
 
   std::vector<CjrlJoint *> aVec = aHDR->jointVector();
   
@@ -226,8 +297,7 @@ int main(int argc, char *argv[])
   cout << "Value of the CoM's Jacobian:" << endl
        << aHDR->jacobianCenterOfMass() << endl;
   cout << "****************************" << endl;
-  GoDownTree(aHDR->rootJoint());
-
+  RecursiveDisplayOfJoints(rootJoint,10);
 
   cout << "****************************" << endl;
   // Test rank of the left hand.
@@ -257,27 +327,6 @@ int main(int argc, char *argv[])
       cout << i << "-th value of ZMP : " << ZMPval <<endl;
       cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
     }
-
-  matrixNxP InertiaMatrix;
-  aHDR->computeInertiaMatrix();
-  InertiaMatrix = aHDR->inertiaMatrix();
- 
-  cout << "InertiaMatrix("
-       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
-       << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
-    
-  ofstream aof;
-  aof.open("InertiaMatrix.dat");
-  for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(InertiaMatrix);i++)
-    {
-      for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(InertiaMatrix);j++)
-	{
-	  aof << InertiaMatrix(i,j) << " ";
-	}
-      aof << endl;
-    }
-  aof.close();
-
 
   delete aHDR;
   
