@@ -18,7 +18,7 @@ void dm3d(const matrix3d &todisplay, ostream &os, string shifttab)
     {
       for(unsigned int j=0;j<3;j++)
 	{
-	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	  os << MAL_S3x3_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
 	}
       os << endl;
       if (i!=2)
