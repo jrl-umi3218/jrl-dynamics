@@ -58,13 +58,14 @@ namespace dynamicsJRLJapan
     to add semantic information. 
     Right now this will fail it is not a dynamicsJRLJapan instanciated
     object.
-    \param OpenHRPVRMFile: Filename which containes the humanoid description
+    \param OpenHRPVRMLFile Filename which containes the humanoid description
     using OpenHRP format.
     \param MapJointToRankFileName: File describing the joint mapping from
     the VRML ID to the state vector.
-    \param FileOfSpecificities: Describe which joints are hands, arm...
+    \param FileOfSpecificities Describe which joints are hands, arm...
     and so on.
-    \retval Negative value if failed, 0 otherwise.
+    \retval ajrlHumanoidDynamicRobot The robot built by parsing the file.
+    \return Negative value if failed, 0 otherwise.
   */
   DYN_JRL_JAPAN_EXPORT 
     int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
