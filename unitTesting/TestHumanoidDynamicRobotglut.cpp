@@ -21,7 +21,7 @@ using namespace dynamicsJRLJapan;
 //GLdouble view_h = 270, view_v = 0, head_angle = 0;
 GLdouble view_h = 230, view_v = 270, head_angle = 0;
 
-CjrlHumanoidDynamicRobotNA *aHDMB=0;
+jrlDelegate::humanoidDynamicRobot *aHDMB=0;
 
 GLshort shaded = TRUE, anim = FALSE;
 GLshort texture = FALSE, transparent = FALSE;
@@ -459,8 +459,8 @@ int main(int argc, char *argv[])
   string aMapFromJointToRank=argv[4];
 
   CjrlRobotDynamicsObjectConstructor<
-  CjrlDynamicRobotNA, 
-    CjrlHumanoidDynamicRobotNA, 
+  jrlDelegate::dynamicRobot, 
+    jrlDelegate::humanoidDynamicRobot, 
     dynamicsJRLJapan::JointFreeflyer, 
     dynamicsJRLJapan::JointRotation,
     dynamicsJRLJapan::JointTranslation,
@@ -468,7 +468,7 @@ int main(int argc, char *argv[])
   
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   
-  aHDMB = dynamic_cast<CjrlHumanoidDynamicRobotNA*>(aHDR);
+  aHDMB = dynamic_cast<jrlDelegate::humanoidDynamicRobot*>(aHDR);
 
   if (aHDMB==0)
     { 

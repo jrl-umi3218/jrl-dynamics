@@ -15,33 +15,36 @@
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
-#include "dynamicRobot.h"
+#include "dynamicsJRLJapan/dynamicRobot.h"
+
+namespace jrlDelegate {
+
 /**
    \brief Template to implement a non abstract class describing a humanoid robot with dynamics.
    This template takes a class implementing the methods of the template
    CjrlRobotDynamicsObjectConstructor.
 */
-class CjrlHumanoidDynamicRobotNA : public  virtual CjrlHumanoidDynamicRobot, 
-				   public CjrlDynamicRobotNA
+class humanoidDynamicRobot : public  virtual CjrlHumanoidDynamicRobot, 
+				   public dynamicRobot
 {
 private:
   CjrlHumanoidDynamicRobot *m_HDR;
 
 public:
 
-  CjrlHumanoidDynamicRobotNA(CjrlRobotDynamicsObjectFactory * inObjectFactory)
+  humanoidDynamicRobot(CjrlRobotDynamicsObjectFactory * inObjectFactory)
   {
     m_HDR = inObjectFactory->createHumanoidDynamicRobot();
     setDynamicRobot(m_HDR);
   }
 
-  CjrlHumanoidDynamicRobotNA(CjrlHumanoidDynamicRobotNA *inHDRNA )
+  humanoidDynamicRobot(humanoidDynamicRobot *inHDRNA )
   {
     m_HDR = inHDRNA;
     setDynamicRobot(m_HDR);
   }
 
-  CjrlHumanoidDynamicRobotNA()
+  humanoidDynamicRobot()
   {
     m_HDR=0;
     setDynamicRobot(m_HDR);
@@ -49,7 +52,7 @@ public:
   /**
      \brief Destructor
   */
-  virtual ~CjrlHumanoidDynamicRobotNA()
+  virtual ~humanoidDynamicRobot()
   {
     // m_HDR should be deleted through DynamicRobot.
   }
@@ -370,6 +373,8 @@ public:
      @}
   */
     
+};
+
 };
 
 #endif

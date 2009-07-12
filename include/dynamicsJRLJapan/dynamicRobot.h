@@ -20,7 +20,10 @@
    from an object factory.
 
 */
-class CjrlDynamicRobotNA : public virtual CjrlDynamicRobot
+
+namespace jrlDelegate {
+
+class dynamicRobot : public virtual CjrlDynamicRobot
 {
 private:
   CjrlDynamicRobot * m_DR;
@@ -34,17 +37,17 @@ public:
      \name Initialization
      @{
   */
-  CjrlDynamicRobotNA(CjrlRobotDynamicsObjectFactory *inObjectFactory)
+  dynamicRobot(CjrlRobotDynamicsObjectFactory *inObjectFactory)
   {
     m_DR = inObjectFactory->createDynamicRobot();
   }
 
-  CjrlDynamicRobotNA(CjrlDynamicRobotNA *inDRNA)
+  dynamicRobot(dynamicRobot *inDRNA)
   {
     m_DR = inDRNA;
   }
 
-  CjrlDynamicRobotNA()
+  dynamicRobot()
   {
     m_DR = 0;
   }
@@ -64,7 +67,7 @@ public:
   /**
   \brief Destructor
    */
-  virtual ~CjrlDynamicRobotNA() 
+  virtual ~dynamicRobot() 
   {
 #ifndef NDEBUG
     if (m_DR!=0)
@@ -783,5 +786,6 @@ public:
   
 };
 
+};
 
 #endif /* JRL_DYNAMIC_ROBOT_NA_H_ */

@@ -78,8 +78,8 @@ namespace dynamicsJRLJapan
       }
     else
       {
-	CjrlHumanoidDynamicRobotNA *a3HDR = 
-	  dynamic_cast<CjrlHumanoidDynamicRobotNA *>(&ajrlHumanoidDynamicRobot);
+	jrlDelegate::humanoidDynamicRobot *a3HDR = 
+	  dynamic_cast<jrlDelegate::humanoidDynamicRobot *>(&ajrlHumanoidDynamicRobot);
 	if (a3HDR!=0)
 	  {
 	    dynamicsJRLJapan::HumDynMultiBodyPrivate *a4HDR = 

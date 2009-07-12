@@ -7,8 +7,8 @@
 #include "dynamicsJRLJapan/humanoidDynamicRobot.h"
 #include "Hand.h"
 
-typedef CjrlDynamicRobotNA CimplDynamicRobot;
-typedef CjrlHumanoidDynamicRobotNA CimplHumanoidDynamicRobot;
+typedef jrlDelegate::dynamicRobot CimplDynamicRobot;
+typedef jrlDelegate::humanoidDynamicRobot CimplHumanoidDynamicRobot;
 typedef dynamicsJRLJapan::JointFreeflyer CimplJointFreeFlyer;
 typedef dynamicsJRLJapan::JointAnchor CimplJointAnchor;
 typedef dynamicsJRLJapan::JointRotation CimplJointRotation;
