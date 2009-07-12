@@ -24,8 +24,8 @@ namespace jrlDelegate {
      This template takes a class implementing the methods of the template
      CjrlRobotDynamicsObjectConstructor.
   */
-  class humanoidDynamicRobot : public  virtual CjrlHumanoidDynamicRobot, 
-    public dynamicRobot
+  class humanoidDynamicRobot : public CjrlHumanoidDynamicRobot, 
+    public virtual dynamicRobot
     {
     private:
       CjrlHumanoidDynamicRobot *m_HDR;
