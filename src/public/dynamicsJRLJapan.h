@@ -10,8 +10,8 @@
 #include "Body.h"
 #include "dynamicsJRLJapan/DynamicBody.h"
 #include "MultiBody.h"
-#include "dynamicsJRLJapan/DynamicMultiBody.h"
-#include "dynamicsJRLJapan/HumanoidDynamicMultiBody.h"
+#include "dynamicsJRLJapan/dynamicRobot.h"
+#include "dynamicsJRLJapan/humanoidDynamicRobot.h"
 
 
 #endif

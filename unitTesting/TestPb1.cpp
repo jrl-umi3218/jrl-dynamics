@@ -1,6 +1,6 @@
 #include <string>
 #include <robotDynamicsJRLJapan/Joint.h>
-#include <robotDynamicsJRLJapan/HumanoidDynamicMultiBody.h>
+#include <robotDynamicsJRLJapan/humanoidDynamicRobot.h>
 #include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
 using namespace std;
 using namespace dynamicsJRLJapan;
@@ -8,8 +8,8 @@ using namespace dynamicsJRLJapan;
 int main(void)
 {
   CjrlRobotDynamicsObjectConstructor<
-    dynamicsJRLJapan::DynamicMultiBody,
-    dynamicsJRLJapan::HumanoidDynamicMultiBody,
+    CjrlDynamicRobotNA,
+    CjrlHumanoidDynamicRobotNA,
     dynamicsJRLJapan::JointFreeflyer,
     dynamicsJRLJapan::JointRotation,
     dynamicsJRLJapan::JointTranslation,
@@ -18,8 +18,8 @@ int main(void)
   
   CjrlHumanoidDynamicRobot *attRobot=0;
   attRobot = jrlRobotFactory.createHumanoidDynamicRobot();
-  dynamicsJRLJapan::HumanoidDynamicMultiBody *aHDMB;
-  aHDMB = (dynamicsJRLJapan::HumanoidDynamicMultiBody*) attRobot;
+  CjrlHumanoidDynamicRobotNA *aHDMB;
+  aHDMB = (CjrlHumanoidDynamicRobotNA*) attRobot;
   
   aHDMB->parserVRML("/home/stasse/src/OpenHRP/etc/HRP2JRL/","HRP2JRLmain.wrl","");
   std::string aName = "/home/stasse/src/OpenHRP/JRL/src/PatternGeneratorJRL/src/data/HRP2Specificities.xml";

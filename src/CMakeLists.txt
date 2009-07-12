@@ -26,8 +26,6 @@ SET(libdyn_src
 )
 
 SET(libdyn_src ${libdyn_src}
-  public/DynamicMultiBody.cpp
-  public/HumanoidDynamicMultiBody.cpp 
   public/Joint.cpp
   public/DynamicBody.cpp
   public/dynamicsJRLJapanFactory.cpp
@@ -39,14 +37,12 @@ SET(libdyn_headers
 ../include/${PROJECT_NAME}/dll.h
 ../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
 ../include/${PROJECT_NAME}/DynamicBody.h
-../include/${PROJECT_NAME}/DynamicMultiBody.h
-../include/${PROJECT_NAME}/HumanoidDynamicMultiBody.h
 ../include/${PROJECT_NAME}/Foot.h
 ../include/${PROJECT_NAME}/Hand.h
 ../include/${PROJECT_NAME}/Joint.h 
 ../include/${PROJECT_NAME}/robotDynamicsImpl.h
-../include/${PROJECT_NAME}/jrlDynamicRobotNA.hpp
-../include/${PROJECT_NAME}/jrlHumanoidDynamicRobotNA.hpp
+../include/${PROJECT_NAME}/dynamicRobot.h
+../include/${PROJECT_NAME}/humanoidDynamicRobot.h
 )
 
 # Create name of the library.

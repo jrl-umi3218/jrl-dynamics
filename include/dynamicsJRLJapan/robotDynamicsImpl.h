@@ -3,12 +3,12 @@
 
 #include "Joint.h"
 #include "DynamicBody.h"
-#include "DynamicMultiBody.h"
-#include "HumanoidDynamicMultiBody.h"
+#include "dynamicsJRLJapan/dynamicRobot.h"
+#include "dynamicsJRLJapan/humanoidDynamicRobot.h"
 #include "Hand.h"
 
-typedef dynamicsJRLJapan::DynamicMultiBody CimplDynamicRobot;
-typedef dynamicsJRLJapan::HumanoidDynamicMultiBody CimplHumanoidDynamicRobot;
+typedef CjrlDynamicRobotNA CimplDynamicRobot;
+typedef CjrlHumanoidDynamicRobotNA CimplHumanoidDynamicRobot;
 typedef dynamicsJRLJapan::JointFreeflyer CimplJointFreeFlyer;
 typedef dynamicsJRLJapan::JointAnchor CimplJointAnchor;
 typedef dynamicsJRLJapan::JointRotation CimplJointRotation;
