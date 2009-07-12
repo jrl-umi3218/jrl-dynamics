@@ -29,7 +29,7 @@ Foot::~Foot()
 {
 }
 
-CjrlJoint * Foot::associatedAnkle()
+CjrlJoint * Foot::associatedAnkle() const
 {
   return m_Ankle;
 }
@@ -39,44 +39,44 @@ void Foot::setAssociatedAnkle(CjrlJoint * inAssociatedAnkle)
   m_Ankle = inAssociatedAnkle;
 }
 
-void Foot::soleSize(double &outLength, double &outWidth)
+void Foot::getSoleSize(double &outLength, double &outWidth) const
 {
   outLength = m_SoleLength;
   outWidth  = m_SoleWidth;
 }
 
-void Foot::setSoleSize(double &inLength, double &inWidth)
+void Foot::setSoleSize(const double &inLength, const double &inWidth)
 {
   m_SoleLength = inLength;
   m_SoleWidth = inWidth;
 }
 
-void Foot::anklePositionInLocalFrame(vector3d& outCoordinates)
+void Foot::getAnklePositionInLocalFrame(vector3d& outCoordinates) const
 {
   outCoordinates = m_AnklePositionInFootFrame;
 }
 
-void Foot::setAnklePositionInLocalFrame(vector3d& inCoordinates)
+void Foot::setAnklePositionInLocalFrame(const vector3d& inCoordinates)
 {
   m_AnklePositionInFootFrame = inCoordinates;
 }
 
-void Foot::soleCenterInLocalFrame(vector3d & outCoordinates)
+void Foot::getSoleCenterInLocalFrame(vector3d & outCoordinates) const
 {
   outCoordinates = m_CenterInFootFrame;
 }
 
-void Foot::setSoleCenterInLocalFrame(vector3d &inCoordinates)
+void Foot::setSoleCenterInLocalFrame(const vector3d &inCoordinates)
 {
   m_CenterInFootFrame = inCoordinates;
 }
 
-void Foot::projectionCenterLocalFrameInSole(vector3d& outCoordinates)
+void Foot::getProjectionCenterLocalFrameInSole(vector3d& outCoordinates) const
 {
   outCoordinates = m_ProjectionCenterInSoleFrame;
 }
 
-void Foot::setProjectionCenterLocalFrameInSole(vector3d& inCoordinates)
+void Foot::setProjectionCenterLocalFrameInSole(const vector3d& inCoordinates)
 {
   m_ProjectionCenterInSoleFrame = inCoordinates;
 }
