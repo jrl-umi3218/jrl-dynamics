@@ -17,6 +17,8 @@
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "../private/HumDynMultiBodyPrivate.h"
 #include "dynamicsJRLJapan/humanoidDynamicRobot.h"
+#include "dynamicsJRLJapan/Hand.h"
+#include "dynamicsJRLJapan/Foot.h"
 
 namespace dynamicsJRLJapan
 {
@@ -57,6 +59,18 @@ namespace dynamicsJRLJapan
     return aHDR;
   }
 
+  CjrlHand* ObjectFactory::createHand(const CjrlJoint* inWrist)
+  {
+    CjrlHand* hand = new Hand(inWrist);
+    return hand;
+  }
+
+  CjrlFoot* ObjectFactory::createFoot(const CjrlJoint* inAnkle)
+  {
+    Foot* foot = new Foot();
+    foot->setAssociatedAnkle(inAnkle);
+    return foot;
+  }
 
   int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 			   std::string &OpenHRPVRMLFile,
