@@ -103,10 +103,21 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
       palmAxis[0] = 0;
       palmAxis[1] = 1;
       palmAxis[2] = 0;
-  
-      rightHand(new Hand(rightWrist(), center, okayAxis, showingAxis, palmAxis));
+      
+      Hand* hand=new Hand(rightWrist());
+      hand->setCenter(center); 
+      hand->setThumbAxis(okayAxis); 
+      hand->setForeFingerAxis(showingAxis);
+      hand->setPalmNormal(palmAxis);
+      rightHand(hand);
+
       palmAxis[1] = -1;
-      leftHand(new Hand(leftWrist(), center, okayAxis, showingAxis, palmAxis));
+      hand=new Hand(leftWrist());
+      hand->setCenter(center); 
+      hand->setThumbAxis(okayAxis); 
+      hand->setForeFingerAxis(showingAxis);
+      hand->setPalmNormal(palmAxis);
+      leftHand(hand);
     }
   else
     {

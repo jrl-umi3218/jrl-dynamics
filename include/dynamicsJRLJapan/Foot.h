@@ -40,10 +40,10 @@ namespace dynamicsJRLJapan
     virtual ~Foot();
 
     /*! Returns associated ankle. */
-    virtual CjrlJoint * associatedAnkle() const;
+    virtual const CjrlJoint * associatedAnkle() const;
 
     /*! Returns associated ankle. */
-    void setAssociatedAnkle(CjrlJoint * inAssociatedAnkle);
+    void setAssociatedAnkle(const CjrlJoint * inAssociatedAnkle);
     
     /** 
 	\brief Get size of the rectagular sole
@@ -112,7 +112,7 @@ namespace dynamicsJRLJapan
 
   private:
     /*! Store the ankle joint. */
-    CjrlJoint * m_Ankle;
+    const CjrlJoint * m_Ankle;
     
     /*! Store sole size. */
     double m_SoleLength, m_SoleWidth;

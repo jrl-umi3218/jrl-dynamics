@@ -39,8 +39,8 @@ void ExtractRefWaist(ifstream &RefStateFile,
     }
 }
 
-void ExtractActualWaist(CjrlJoint *LeftFoot2,
-			CjrlJoint *RightFoot2,
+void ExtractActualWaist(const CjrlJoint *LeftFoot2,
+			const CjrlJoint *RightFoot2,
 			CjrlJoint *Waist2,
 			matrix4d &AbsSupportFootPos,
 			double * WaistFromRef,
@@ -264,11 +264,11 @@ int main(int argc, char *argv[])
 
   aHDR2->currentConfiguration(aCurrentConf);
 
-  CjrlJoint * LeftFoot = aHDR->leftFoot()->associatedAnkle();
-  CjrlJoint * RightFoot = aHDR->rightFoot()->associatedAnkle();
+  const CjrlJoint * LeftFoot = aHDR->leftFoot()->associatedAnkle();
+  const CjrlJoint * RightFoot = aHDR->rightFoot()->associatedAnkle();
 
-  CjrlJoint * LeftFoot2 = aHDR2->leftFoot()->associatedAnkle();
-  CjrlJoint * RightFoot2 = aHDR2->rightFoot()->associatedAnkle();
+  const CjrlJoint * LeftFoot2 = aHDR2->leftFoot()->associatedAnkle();
+  const CjrlJoint * RightFoot2 = aHDR2->rightFoot()->associatedAnkle();
 
   CjrlJoint * Waist2 = aHDR2->waist();
 
