@@ -51,12 +51,18 @@ namespace dynamicsJRLJapan
       /** \brief Store the Right Wrist Joint */
       CjrlJoint * m_RightWristJoint;
       
-      /** \brief Store the Left Foot Joint */
+      /** \brief Store the Left Foot */
       CjrlFoot * m_LeftFoot;
       
-      /** \brief Store the Right Foot Joint */
+      /** \brief Store the Right Foot */
       CjrlFoot *m_RightFoot;
       
+      /** \brief Store the Left Ankle Joint */
+      CjrlJoint* m_LeftAnkleJoint;
+
+      /** \brief Store the Right Ankle Joint */
+      CjrlJoint* m_RightAnkleJoint;
+
       /** \brief Store the Left hand */
       CjrlHand * m_leftHand;
       
@@ -216,6 +222,26 @@ namespace dynamicsJRLJapan
       */
       virtual bool  setHandClench(CjrlHand* inHand, double inClenchingValue);
       
+      /**
+	 \brief Set the pointer to the left ankle joint.
+      */
+      void leftAnkle(CjrlJoint* inLefAnkle);
+
+      /**
+	 \brief Get a pointer to the left ankle.
+      */
+      CjrlJoint* leftAnkle();
+
+      /**
+	 \brief Set the pointer to the right ankle joint.
+      */
+      void rightAnkle(CjrlJoint* inRightAnkle);
+
+      /**
+	 \brief Get a pointer to the right ankle.
+      */
+      CjrlJoint* rightAnkle();
+
       /**
 	 \brief Set the pointer to the left foot joint.
       */

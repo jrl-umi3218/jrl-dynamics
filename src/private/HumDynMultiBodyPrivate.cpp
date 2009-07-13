@@ -177,9 +177,11 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the left foot:" << EndIndex);
 
-  Foot *lLeftFoot = new Foot();
-  lLeftFoot->setAssociatedAnkle(GetJointFromActuatedID(EndIndex));
-  leftFoot(lLeftFoot);
+  Foot *theLeftFoot = new Foot();
+  CjrlJoint* theLeftAnkle = GetJointFromActuatedID(EndIndex);
+  theLeftFoot->setAssociatedAnkle(theLeftAnkle);
+  leftFoot(theLeftFoot);
+  leftAnkle(theLeftAnkle);
 
   // Get the right foot.
   JointForOneLimb.clear();
@@ -188,9 +190,11 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   EndIndex = JointForOneLimb[ListeJointsSize-1];
   ODEBUG("Joints for the right foot:" << EndIndex);
 
-  Foot *lRightFoot = new Foot();
-  lRightFoot->setAssociatedAnkle(GetJointFromActuatedID(EndIndex));
-  rightFoot(lRightFoot);
+  Foot *theRightFoot = new Foot();
+  CjrlJoint* theRightAnkle = GetJointFromActuatedID(EndIndex);
+  theRightFoot->setAssociatedAnkle(theRightAnkle);
+  rightFoot(theRightFoot);
+  rightAnkle(theRightAnkle);
 
   // Get the gaze joint (head) of the humanoid.
   JointForOneLimb.clear();
@@ -314,6 +318,26 @@ void HumDynMultiBodyPrivate::leftHand(CjrlHand* inLeftHand)
 CjrlHand * HumDynMultiBodyPrivate::leftHand()
 { 
   return m_leftHand;
+}
+
+void HumDynMultiBodyPrivate::leftAnkle(CjrlJoint *inLeftAnkle)
+{ 
+  m_LeftAnkleJoint = inLeftAnkle;
+}
+
+CjrlJoint *HumDynMultiBodyPrivate::leftAnkle()
+{ 
+  return m_LeftAnkleJoint;
+}
+
+void HumDynMultiBodyPrivate::rightAnkle(CjrlJoint *inRightAnkle)
+{ 
+  m_RightAnkleJoint = inRightAnkle;
+}
+
+CjrlJoint *HumDynMultiBodyPrivate::rightAnkle()
+{ 
+  return m_RightAnkleJoint;
 }
 
 void HumDynMultiBodyPrivate::leftFoot(CjrlFoot *inLeftFoot)

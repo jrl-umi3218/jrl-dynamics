@@ -228,6 +228,50 @@ namespace jrlDelegate {
       }
   
       /**
+	 \brief Set the pointer to the left ankle joint.
+      */
+      virtual void leftAnkle(CjrlJoint* inLeftAnkle)
+      {
+#ifndef NDEBUG
+	if (m_HDR!=0)
+#endif
+	  m_HDR->leftAnkle(inLeftAnkle);
+      }
+
+      /**
+	 \brief Get a pointer to the left ankle.
+      */
+      virtual CjrlJoint* leftAnkle() 
+      {
+#ifndef NDEBUG
+	if (m_HDR!=0)
+#endif
+	  return m_HDR->leftAnkle();
+      }
+
+      /**
+	 \brief Set the pointer to the right ankle joint.
+      */
+      virtual void rightAnkle(CjrlJoint* inRightAnkle)
+      {
+#ifndef NDEBUG
+	if (m_HDR!=0)
+#endif
+	  m_HDR->rightAnkle(inRightAnkle);
+      }
+  
+      /**
+	 \brief Get a pointer to the right ankle.
+      */
+      virtual CjrlJoint* rightAnkle()
+      {
+#ifndef NDEBUG
+	if (m_HDR!=0)
+#endif
+	  return m_HDR->rightAnkle();
+      }
+
+      /**
 	 \brief Set the pointer to the left foot joint.
       */
       virtual void leftFoot(CjrlFoot* inLeftFoot)
