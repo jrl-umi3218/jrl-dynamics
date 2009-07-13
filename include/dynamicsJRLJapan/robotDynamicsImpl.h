@@ -16,5 +16,6 @@ typedef dynamicsJRLJapan::JointTranslation CimplJointTranslation;
 typedef dynamicsJRLJapan::Joint CimplJoint;
 typedef dynamicsJRLJapan::DynamicBody CimplBody;
 typedef dynamicsJRLJapan::Hand CimplHand;
+typedef dynamicsJRLJapan::ObjectFactory CimplObjectFactory;
 
 #endif
