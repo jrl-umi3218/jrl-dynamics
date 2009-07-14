@@ -40,20 +40,21 @@ void dm4d(const matrix4d &todisplay, ostream &os, string shifttab)
     }
 }
 
-void DisplayBody(CjrlBody *aBody, string &shifttab)
+void DisplayBody(CjrlBody *aBody, string &shifttab,ostream &tcout)
 {
   
-  cout << shifttab << "Related body informations" << endl;
+  tcout << shifttab << "Related body informations" << endl;
   vector3d alcm = aBody->localCenterOfMass();
-  cout << shifttab << "Local center of Mass : ";
-  dv3d(alcm,cout);
+  tcout << shifttab << "Local center of Mass : ";
+  dv3d(alcm,tcout);
   matrix3d aim = aBody->inertiaMatrix();
-  cout << shifttab << "Inertia Matrix: " ;
-  dm3d(aim,cout,shifttab);
-  cout << shifttab << "mass: " << aBody->mass() << endl;
+  tcout << shifttab << "Inertia Matrix: " ;
+  dm3d(aim,tcout,shifttab);
+  tcout << shifttab << "mass: " << aBody->mass() << endl;
       
 }
 void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
+			      ostream &tcout,
 			      unsigned int verbosedisplay=0,
 			      unsigned int ldepth=0)
 {
@@ -65,86 +66,86 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
   for(unsigned int i=0;i<ldepth;i++)
 	shifttab+=" ";
   
-  cout << shifttab << "Rank : " 
+  tcout << shifttab << "Rank : " 
        << aJoint->rankInConfiguration() << endl;
-  cout << shifttab << "Number of child  :" 
+  tcout << shifttab << "Number of child  :" 
        << aJoint->countChildJoints() << endl;
-  cout << shifttab << "Nb of degree of freedom " 
+  tcout << shifttab << "Nb of degree of freedom " 
        <<  aJoint->numberDof() << endl;
   
 
   if (verbosedisplay>3)
     {
-      cout << shifttab << "Initial Position " ;
+      tcout << shifttab << "Initial Position " ;
       matrix4d iP = aJoint->initialPosition();
-      dm4d(iP,cout,shifttab);
+      dm4d(iP,tcout,shifttab);
       
-      cout << shifttab << "CurrentTransformation ";
+      tcout << shifttab << "CurrentTransformation ";
       matrix4d cT = aJoint->currentTransformation();
-      dm4d(cT,cout,shifttab);
+      dm4d(cT,tcout,shifttab);
 
       // Limits
-      std::cout << shifttab << "llimit: " 
+      tcout << shifttab << "llimit: " 
 		<< aJoint->lowerBound(0)*180/M_PI << " " 
 		<< shifttab << "ulimit: " 
 		<< aJoint->upperBound(0)*180/M_PI << " " << endl;
 
-      std::cout << shifttab << "lvlimit: " 
+      tcout << shifttab << "lvlimit: " 
 		<< aJoint->lowerVelocityBound(0)*180/M_PI << " " 
 		<< shifttab << "uvlimit: " 
 		<< aJoint->upperVelocityBound(0)*180/M_PI << " " << endl;
       
       // Path from the root to this joint.
       std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
-      cout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
+      tcout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
 	   << shifttab << "Joint from root to here:" << endl << shifttab;
       for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
-	cout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
-      cout << endl;
+	tcout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
+      tcout << endl;
 
       // Current state of the joint.
 
       // Rigid velocity:
       CjrlRigidVelocity aRV = aJoint->jointVelocity();
-      cout << shifttab << "Linear Velocity ";
+      tcout << shifttab << "Linear Velocity ";
       vector3d av3d = aRV.linearVelocity();
-      dv3d(av3d,cout);
-      cout << shifttab << "Angular Velocity ";
+      dv3d(av3d,tcout);
+      tcout << shifttab << "Angular Velocity ";
       av3d = aRV.rotationVelocity();
-      dv3d(av3d,cout);
+      dv3d(av3d,tcout);
 
       // Rigit Acceleration.
       CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-      cout << shifttab << "Linear Acceleration ";
+      tcout << shifttab << "Linear Acceleration ";
       av3d = aRA.linearAcceleration();
-      dv3d(av3d,cout);
-      cout << shifttab << "Angular Acceleration ";
+      dv3d(av3d,tcout);
+      tcout << shifttab << "Angular Acceleration ";
       av3d = aRA.rotationAcceleration();
-      dv3d(av3d,cout);
+      dv3d(av3d,tcout);
       
       CjrlBody * aBody = aJoint->linkedBody();
-      DisplayBody(aBody,shifttab);
+      DisplayBody(aBody,shifttab,tcout);
     }
 
   if (NbChildren!=0)
     {
-      cout << shifttab << "***********************************************" << endl;
-      cout << shifttab << " Display Now information related to children :" << endl;
+      tcout << shifttab << "***********************************************" << endl;
+      tcout << shifttab << " Display Now information related to children :" << endl;
       
       for(int i=0;i<NbChildren;i++)
 	{
 	  // Returns a const so we have to force the casting/
-	  RecursiveDisplayOfJoints(aJoint->childJoint(i),verbosedisplay,ldepth+1); 
+	  RecursiveDisplayOfJoints(aJoint->childJoint(i),tcout,verbosedisplay,ldepth+1); 
 	}
     }
 }
 
 
-void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot)
+void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot,ostream &tcout)
 {
   std::vector<CjrlJoint *> aVec = aDynamicRobot->jointVector();
   int r = aVec.size();
-  cout << "Number of joints :" << r << endl;
+  tcout << "Number of joints :" << r << endl;
   
 }
 
@@ -164,26 +165,50 @@ void DisplayMatrix(MAL_MATRIX(,double) &aJ)
 
 }
 
-void GoDownTree(const CjrlJoint * startJoint)
+bool CompareTwoFiles(char *RefFileName, char *OurFileName)
 {
-  std::cout << "joint ranked :" << startJoint->rankInConfiguration() << std::endl;
-  std::cout << "llimit: " << startJoint->lowerBound(0)*180/M_PI << " " 
-	    << "ulimit: " << startJoint->upperBound(0)*180/M_PI << " " << endl;
-  std::cout << startJoint->currentTransformation() << std::endl;
-  
-  if (startJoint->countChildJoints()!=0)
-    {
-      const CjrlJoint * childJoint = startJoint->childJoint(0);
-      GoDownTree(childJoint);
-    }
-}
+  ifstream reffile(RefFileName,ifstream::in), 
+    ourfile(OurFileName,ifstream::in);
+  unsigned int NbLine=0;
+  bool readingok=true;
 
+  while(!reffile.eof())
+    {
+
+      char refline[25536],ourline[25536];
+      reffile.getline(refline,25536);
+      ourfile.getline(ourline,25536);
+      if (reffile.gcount()!=ourfile.gcount())
+	readingok=false;
+      else
+	{
+	  for(int i=0;i<reffile.gcount();i++)
+	    if (refline[i]!=ourline[i])
+	      {
+		readingok=false;
+		cerr << "Error at column " << i << endl;
+		break;
+	      }
+	}
+      if (readingok==false)
+	{
+	  cerr << "Error at line "<< NbLine 
+	       << endl << "ref: " << refline 
+	       << endl << "our: " << ourline <<endl;
+	  break;
+	}
+      NbLine++;
+    }
+  return readingok;
+}
 int main(int argc, char *argv[])
 {
   string aSpecificitiesFileName;
   string aPath;
   string aName;
   string aMapFromJointToRank;
+
+  ofstream tcout("output.txt",ofstream::out);
 
   if (argc!=5)
     {
@@ -216,7 +241,7 @@ int main(int argc, char *argv[])
   CjrlJoint* rootJoint = aHDR->rootJoint();  
 
   int NbOfDofs = aHDR->numberDof();
-  std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+  tcout << "NbOfDofs :" << NbOfDofs << std::endl;
   if (NbOfDofs==0)
     {
       cerr << "Empty Robot..."<< endl;
@@ -245,24 +270,19 @@ int main(int argc, char *argv[])
   aHDR->setProperty(inProperty,aValue);
   aHDR->computeForwardKinematics();
   ZMPval = aHDR->zeroMomentumPoint();
-  cout << "First value of ZMP : " << ZMPval <<endl;
-  cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+  tcout << "First value of ZMP : " << ZMPval <<endl;
+  tcout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
 
 
   matrixNxP InertiaMatrix;
   aHDR->computeInertiaMatrix();
   InertiaMatrix = aHDR->inertiaMatrix();
  
-  cout << "InertiaMatrix("
+  tcout << "InertiaMatrix("
        << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
        << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
     
-  cout << InertiaMatrix << endl;
-  matrixNxP IMt;
-  MAL_TRANSPOSE_A_in_At(InertiaMatrix,IMt);
-  matrixNxP IMxIMt;
-  MAL_C_eq_A_by_B(IMxIMt,InertiaMatrix,IMt);
-  cout << IMxIMt << endl;
+  tcout << InertiaMatrix << endl;
   
   ofstream aof;
   aof.open("InertiaMatrix.dat");
@@ -284,25 +304,25 @@ int main(int argc, char *argv[])
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
   
   //  DisplayMatrix(aJ);
-  cout << "****************************" << endl;
+  tcout << "****************************" << endl;
   rootJoint->computeJacobianJointWrtConfig();
   aJ = rootJoint->jacobianJointWrtConfig();  
-  cout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
+  tcout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
 
   //  DisplayMatrix(aJ);
 
   aJoint = aHDR->waist();
-  cout << "****************************" << endl;
+  tcout << "****************************" << endl;
   aHDR->computeJacobianCenterOfMass();
-  cout << "Value of the CoM's Jacobian:" << endl
+  tcout << "Value of the CoM's Jacobian:" << endl
        << aHDR->jacobianCenterOfMass() << endl;
-  cout << "****************************" << endl;
-  RecursiveDisplayOfJoints(rootJoint,10);
+  tcout << "****************************" << endl;
+  RecursiveDisplayOfJoints(rootJoint,tcout,10);
 
-  cout << "****************************" << endl;
+  tcout << "****************************" << endl;
   // Test rank of the left hand.
-  cout << "Rank of the left hand "<< endl;
-  cout << aHDR->leftWrist()->rankInConfiguration() << endl;
+  tcout << "Rank of the left hand "<< endl;
+  tcout << aHDR->leftWrist()->rankInConfiguration() << endl;
 
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
@@ -324,10 +344,23 @@ int main(int argc, char *argv[])
       aHDR->currentAcceleration(aCurrentAcc);
       aHDR->computeForwardKinematics();
       ZMPval = aHDR->zeroMomentumPoint();
-      cout << i << "-th value of ZMP : " << ZMPval <<endl;
-      cout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+      tcout << i << "-th value of ZMP : " << ZMPval <<endl;
+      tcout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
     }
 
+  tcout.close();
+
+  // ASCII Comparison between the generated output and the reference one
+  // given in argument.
+  if (argc==2)
+    {
+      char OurFileName[120]="output.txt";
+      if (CompareTwoFiles(argv[1],OurFileName))
+	{
+	  delete aHDR;
+	  return 0;
+	}
+    }
   delete aHDR;
-  
+  return -1;
 }

@@ -4,6 +4,8 @@
 #
 # Copyright CNRS/AIST
 
+INCLUDE(CTest)
+
 # For the test, we include the same files as the src
 SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_CXXFLAGS}")
 
@@ -66,3 +68,7 @@ SET_TARGET_PROPERTIES(ComputeRealZMP
 )
 ADD_DEPENDENCIES (ComputeRealZMP ${PROJECT_NAME})
 
+CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
+		 ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/output.ascii )
+
+ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")

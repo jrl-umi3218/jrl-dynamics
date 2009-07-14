@@ -8,6 +8,8 @@ cmake_minimum_required(VERSION 2.6)
 
 enable_language(CXX)
 
+ENABLE_TESTING()
+
 # Debug mode for cmake.
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
