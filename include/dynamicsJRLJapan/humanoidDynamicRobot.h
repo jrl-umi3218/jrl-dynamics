@@ -15,6 +15,7 @@
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
+#include "dynamicsJRLJapan/deprecated.h"
 #include "dynamicsJRLJapan/dynamicRobot.h"
 
 namespace jrlDelegate {
@@ -400,7 +401,7 @@ namespace jrlDelegate {
      
 	 \deprecated This piece of information has been moved in class CjrlFoot
       */
-      virtual double footHeight() const  __attribute__ ((deprecated))
+      virtual JRLDEPRECATED (double footHeight() const )
       {
 	return 0;
       }

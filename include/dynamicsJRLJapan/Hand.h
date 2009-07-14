@@ -19,6 +19,7 @@
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 
 #include <robotDynamics/jrlHand.h>
+#include "dynamicsJRLJapan/deprecated.h"
 #include "dynamicsJRLJapan/dll.h"
 
 namespace dynamicsJRLJapan
@@ -109,22 +110,22 @@ namespace dynamicsJRLJapan
         /**
             \brief Get the center of the hand in the wrist frame
         */
-        virtual vector3d& centerInWristFrame() __attribute__ ((deprecated));
+        virtual JRLDEPRECATED (vector3d& centerInWristFrame() );
     
         /**
             \brief Get the axis defined by the thumb being held up in the way an "okay" sign is made. The returned axis is a 3d vector in the wrist frame.
         */
-        virtual vector3d& okayAxisInWristFrame() __attribute__ ((deprecated));
+        virtual JRLDEPRECATED (vector3d& okayAxisInWristFrame() );
     
         /**
             \brief Get the axis defined by the forefinger being. The returned axis is a 3d vector in the wrist frame,
         */
-        virtual vector3d& showingAxisInWristFrame() __attribute__ ((deprecated));
+        virtual JRLDEPRECATED (vector3d& showingAxisInWristFrame() );
     
         /**
             \brief Get the axis orthogonal to the palm. The returned axis is a 3d vector in the wrist frame pointing to the direction where all fingers can join,.
         */
-        virtual vector3d& palmAxisInWristFrame() __attribute__ ((deprecated));
+        virtual JRLDEPRECATED (vector3d& palmAxisInWristFrame() );
     
     
     private:
