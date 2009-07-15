@@ -109,7 +109,7 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
   //determine participating joints
   if ( rootJoint() !=&inStartJoint )
     {
-      std::vector<JointPrivate *> robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
+      std::vector<CjrlJoint *> robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
 
       for ( i = 1; i<robotRoot2StartJoint.size();i++ )
 	jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
@@ -119,18 +119,22 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 
       for ( i = 0; i<robotRoot2StartJoint.size()-1;i++ )
         {
-	  robotRoot2StartJoint[i]->computeSubTreeMComExceptChild ( robotRoot2StartJoint[i+1] );
-	  tempoS.push_back ( robotRoot2StartJoint[i]->subTreeMCom() );
-	  liftedS.push_back ( robotRoot2StartJoint[i]->subTreeCoef() );
+	  JointPrivate *aJoint = (JointPrivate *)robotRoot2StartJoint[i],
+	    *aJointp1 = (JointPrivate *)robotRoot2StartJoint[i+1];
+	  aJoint->computeSubTreeMComExceptChild ( aJointp1);
+	  tempoS.push_back ( aJoint->subTreeMCom() );
+	  liftedS.push_back ( aJoint->subTreeCoef() );
         }
 
-      robotRoot2StartJoint[1]->subTreeMCom ( tempoS[0] );
-      robotRoot2StartJoint[1]->subTreeCoef ( liftedS[0] );
+      ((JointPrivate *)robotRoot2StartJoint[1])->subTreeMCom ( tempoS[0] );
+      ((JointPrivate *)robotRoot2StartJoint[1])->subTreeCoef ( liftedS[0] );
 
       for ( i = 2; i<robotRoot2StartJoint.size();i++ )
         {
-	  robotRoot2StartJoint[i]->subTreeMCom ( robotRoot2StartJoint[i-1]->subTreeMCom() +tempoS[i-1] );
-	  robotRoot2StartJoint[i]->subTreeCoef ( robotRoot2StartJoint[i-1]->subTreeCoef() +liftedS[i-1] );
+	  JointPrivate *aJoint = (JointPrivate *)robotRoot2StartJoint[i],
+	    *aJointm1 = (JointPrivate *)robotRoot2StartJoint[i-1];
+	  aJoint->subTreeMCom ( aJointm1->subTreeMCom() +tempoS[i-1] );
+	  aJoint->subTreeCoef ( aJointm1->subTreeCoef() +liftedS[i-1] );
         }
     }
   else

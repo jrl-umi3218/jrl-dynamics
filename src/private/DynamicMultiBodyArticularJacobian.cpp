@@ -20,11 +20,11 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
   
   //determine participating joints
-  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
   JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
   JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
   
   unsigned int offset = 1;
   unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
@@ -43,7 +43,7 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-      aJoint=  robotRoot2EndJoint[i];
+      aJoint=  (JointPrivate *)robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
@@ -86,7 +86,7 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
   for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-      aJoint = robotRoot2StartJoint[i];
+      aJoint = (JointPrivate *)robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
@@ -175,11 +175,11 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
   //determine participating joints
-  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
   JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
   JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
   unsigned int offset = 1;
   unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
@@ -198,7 +198,7 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-      aJoint=  robotRoot2EndJoint[i];
+      aJoint=  (JointPrivate *) robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
@@ -233,7 +233,7 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 
   for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-      aJoint = robotRoot2StartJoint[i];
+      aJoint = (JointPrivate *)robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
@@ -309,11 +309,11 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
   //determine participating joints
-  std::vector<JointPrivate *> robotRoot2StartJoint, robotRoot2EndJoint;
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
   JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
   JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-  robotRoot2StartJoint = StartJoint->jointsFromRootToThisJoint();
-  robotRoot2EndJoint = EndJoint->jointsFromRootToThisJoint();
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
   unsigned int offset = 1;
   unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() ) 
@@ -331,7 +331,7 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
 
   for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-      aJoint=  robotRoot2EndJoint[i];
+      aJoint=  (JointPrivate *)robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
@@ -356,7 +356,7 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
 
   for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-      aJoint = robotRoot2StartJoint[i];
+      aJoint = (JointPrivate *)robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration();
