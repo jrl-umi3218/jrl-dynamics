@@ -37,19 +37,19 @@ namespace dynamicsJRLJapan
 
   CjrlJoint * ObjectFactory::createJointFreeflyer(const matrix4d& inInitialPosition)
   {
-    CjrlJoint * aHDR = new JointFreeflyer(inInitialPosition);
+    CjrlJoint * aHDR = new JointFreeflyerPrivate(inInitialPosition);
     return aHDR;
   }
 
   CjrlJoint * ObjectFactory::createJointRotation(const matrix4d& inInitialPosition)
   {
-    CjrlJoint * aHDR = new JointRotation(inInitialPosition);
+    CjrlJoint * aHDR = new JointRotationPrivate(inInitialPosition);
     return aHDR;
   }
 
   CjrlJoint * ObjectFactory::createJointTranslation(const matrix4d& inInitialPosition)
   {
-    CjrlJoint * aHDR = new JointTranslation(inInitialPosition);
+    CjrlJoint * aHDR = new JointTranslationPrivate(inInitialPosition);
     return aHDR;
   }
 
