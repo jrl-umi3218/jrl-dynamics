@@ -21,9 +21,9 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
       
       matrixNxP pJacobian;
       MAL_MATRIX_RESIZE(pJacobian, 6, numberDof());
-      vector3d aCoM = aBody->getPositionCoM(); // Dummy 
+      vector3d aCoM = aBody->getPositionCoM(); 
       getJacobian(*rootJoint(),*aJoint,aCoM,pJacobian);
-
+      
       ODEBUG("pJacobian:" <<pJacobian);
       matrixNxP pLinearJacobian;
       MAL_MATRIX_RESIZE(pLinearJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
@@ -51,9 +51,9 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
       MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->getInertie(),MAL_S3x3_RET_TRANSPOSE(aBody->R)); 
       MAL_S3x3_C_eq_A_by_B(tmp2_3d2,aBody->R,tmp2_3d); 
 
-      for(unsigned int i=0;i<3;++i)
-	for(unsigned int j=0;j<3;++j)
-	  tmp2(i,j) = tmp2_3d2(i,j);
+      for(unsigned int k=0;k<3;++k)
+	for(unsigned int l=0;l<3;++l)
+	  tmp2(k,l) = tmp2_3d2(k,l);
 
       MAL_C_eq_A_by_B(tmp3,tmp2,pAngularJacobian);
       MAL_C_eq_A_by_B(rightoperand,MAL_RET_TRANSPOSE(pAngularJacobian),tmp3);
