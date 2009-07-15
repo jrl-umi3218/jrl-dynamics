@@ -66,7 +66,7 @@ void Matrix2AxeAngle(float R[16],double Axis[3], double & Angle)
       q[2] = (R[4] - R[1])/S;
       q[3] = 0.25*S;
     }
-  else if (sum_max == sum_x)
+   else if (sum_max == sum_x)
     {
       S  = sqrt(sum_x) * 2;
       q[0] = 0.25 * S;
@@ -424,7 +424,3 @@ int MultiBody::NbOfJoints() const
   return listeLiaisons.size();
 }
 
-double MultiBody::getMasse()
-{
-  return masse;
-}
