@@ -16,6 +16,8 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
   int ld = liaisons[ID][0].liaison;
   m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(*m_listOfBodies[ID]);
+  ODEBUG(" m_RootOfTheJointsTree->m_globalConfiguration"<<
+	  m_RootOfTheJointsTree->initialPosition());
   //specify the type of the root joint
 
   // Start the vector of joints.
@@ -37,17 +39,17 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 
 	  if ((lElderSister=m_listOfBodies[lMother]->child) == -1)
             {
-	      m_listOfBodies[lMother]->child = i;					  // Mother, I am your daughter !
-
+	      // Mother, I am your daughter !
+	      m_listOfBodies[lMother]->child = i;					  
             }
 	  else
             {
 	      // I have an elder sister !
-
 	      while (m_listOfBodies[lElderSister]->sister != -1)
-		lElderSister = m_listOfBodies[lElderSister]->sister;  // I have another elder sister !
-
-	      m_listOfBodies[lElderSister]->sister = i;				  // I am your younger sister !
+		// I have another elder sister !
+		lElderSister = m_listOfBodies[lElderSister]->sister;  
+	      // I am your younger sister !
+	      m_listOfBodies[lElderSister]->sister = i;				  
             }
         }
     }
@@ -327,7 +329,8 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	      if(CurrentJointPosition<NbOfChildren-1)
                 {
 		  // take it !
-		  NextCurrentJoint = (dynamicsJRLJapan::JointPrivate *)FatherJoint->childJoint(CurrentJointPosition+1);
+		  NextCurrentJoint = (dynamicsJRLJapan::JointPrivate *)FatherJoint->
+		    childJoint(CurrentJointPosition+1);
                 }
 	      else
                 {
