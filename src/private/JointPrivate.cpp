@@ -27,8 +27,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_FatherJoint(0),
   m_IDinActuated(-1)
 {
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -41,12 +41,12 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_FatherJoint(0),
   m_IDinActuated(-1)
 {
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) = translationStatic[0];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = translationStatic[1];
   MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = translationStatic[2];
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
 
   CreateLimitsArray();
 }
@@ -60,9 +60,9 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_FatherJoint(0),
   m_IDinActuated(-1)
 {
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -76,7 +76,6 @@ JointPrivate::JointPrivate(const JointPrivate &r)
   m_Name=r.getName();
   m_IDinActuated=r.getIDinActuated();
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
   m_inGlobalFrame=r.m_inGlobalFrame;
   CreateLimitsArray();
 
@@ -100,10 +99,10 @@ JointPrivate::JointPrivate():
   MAL_S3_VECTOR_ACCESS(m_axe,1) = 0.0;
   MAL_S3_VECTOR_ACCESS(m_axe,2) = 0.0;
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
+  MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
 
   m_type = FREE_JOINT;
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
   CreateLimitsArray();
 }
 
@@ -139,7 +138,10 @@ void JointPrivate::CreateLimitsArray()
 void JointPrivate::computeLocalAndGlobalPose()
 {
   if (m_FatherJoint==0)
-    return;
+    {
+      MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
+      return;
+    }
 
   if (m_inGlobalFrame)
     {
@@ -159,9 +161,10 @@ void JointPrivate::computeLocalAndGlobalPose()
       */
 
       m_poseInParentFrame = MAL_S4x4_RET_A_by_B(invParentGlobalPose, jointGlobalPose);
-      ODEBUG2("m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
-      ODEBUG2("invParentGlobalPose=" << invParentGlobalPose);
-      ODEBUG2("jointGlobalPose=" << jointGlobalPose);
+      ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
+      ODEBUG(" invParentGlobalPose=" << invParentGlobalPose);
+      ODEBUG(" jointGlobalPose=" << jointGlobalPose);
+      ODEBUG(" m_poseInParentFrame=" << m_poseInParentFrame);
     }
   else
     {
@@ -175,9 +178,58 @@ void JointPrivate::computeLocalAndGlobalPose()
 	R         =  R           R
 	joint        parent      joint
       */
-      m_globalPoseAtConstruction = MAL_S4x4_RET_A_by_B(m_FatherJoint->m_globalPoseAtConstruction,
-						       m_poseInParentFrame);
+      ODEBUG(" m_poseInParentFrame=" << m_poseInParentFrame);
+      ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
+      vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
+      LocalAxis[0] = m_axe[0];
+      LocalAxis[1] = m_axe[1];
+      LocalAxis[2] = m_axe[2];
+      LocalAxis[3] = 0;
+      MAL_S4x4_C_eq_A_by_B(GlobalAxis,m_FatherJoint->m_globalPoseAtConstruction,LocalAxis);
 
+      LocalCenter[0] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3);
+      LocalCenter[1] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3);
+      LocalCenter[2] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3);
+      LocalCenter[3] = 1.0;
+      MAL_S4x4_C_eq_A_by_B(GlobalCenter,m_FatherJoint->m_globalPoseAtConstruction,LocalCenter);
+	
+      
+      vector3d v1,v2,v3;
+      v1 = m_axe;
+      
+      unsigned int smallestComponent=0;
+      double valueSmallestComponent = fabs(v1[0]);
+      
+      if (fabs(v1[1]) < fabs(v1[smallestComponent])) {
+	smallestComponent = 1;
+	valueSmallestComponent = fabs(v1[1]);
+      }
+      
+      if (fabs(v1[2]) < fabs(v1[smallestComponent])) {
+	smallestComponent = 2;
+	valueSmallestComponent = fabs(v1[2]);
+      }
+      
+      v2[smallestComponent] = 1;
+      
+      //      v3 = v1*v2;
+      //      v2 = v3*v1;
+      
+      // (v1, v2, v3) form an orthonormal basis
+      
+      for (unsigned int iRow=0; iRow < 3; iRow++) {
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 0) = v1[iRow];
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 1) = v2[iRow];
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 2) = v3[iRow];
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 3) = LocalCenter[iRow];
+      }
+
+
+      /*      Normalization regarding the rotation axis. 
+      m_globalPoseAtConstruction = MAL_S4x4_RET_A_by_B(m_FatherJoint->m_globalPoseAtConstruction,
+						       m_poseInParentFrame); */
+      ODEBUG(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
+      
     }
 }
 
@@ -254,14 +306,12 @@ std::vector<CjrlJoint*> JointPrivate::jointsFromRootToThis() const
   return m_FromRootToThis;
 }
 
-std::vector<JointPrivate*> JointPrivate::jointsFromRootToThisJoint() const
-{
-  return m_FromRootToThisJoint;
-}
 
 const MAL_S4x4_MATRIX(,double) & JointPrivate::currentTransformation() const
 {
   DynamicBodyPrivate *m_DBody = (DynamicBodyPrivate *) m_Body;
+  if (m_DBody==0)
+    return m_globalPoseAtConstruction;
   return m_DBody->m_transformation;
 }
 
@@ -392,12 +442,13 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
   
   ODEBUG("Size of the jacobian :" << m_FromRootToThis.size()-1);
   
-  for(unsigned int i=0;i<m_FromRootToThisJoint.size();i++)
+  for(unsigned int i=0;i<m_FromRootToThis.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
 
-      DynamicBodyPrivate * aBody= m_FromRootToThisJoint[i]->linkedDBody();
-      JointPrivate * aJoint = m_FromRootToThisJoint[i];
+      DynamicBodyPrivate * aBody= static_cast<DynamicBodyPrivate *>
+	(m_FromRootToThis[i]->linkedBody());
+      JointPrivate * aJoint = static_cast<JointPrivate *>(m_FromRootToThis[i]);
       
       unsigned int lcol = aJoint->stateVectorPosition();
       ODEBUG("JointPrivate: " << aJoint->getName() << " " << lcol);
@@ -503,16 +554,13 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
   m_FatherJoint = aFather;
 
   m_FromRootToThis.clear();
-  m_FromRootToThisJoint.clear();
 
   m_FromRootToThis.push_back(this);
-  m_FromRootToThisJoint.push_back(this);
 
   CjrlJoint* aJoint = m_FatherJoint;
   while(aJoint!=0)
     {
       m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
-      m_FromRootToThisJoint.insert(m_FromRootToThisJoint.begin(),(JointPrivate*)aJoint);
       aJoint = aJoint->parentJoint();
     }
   computeLocalAndGlobalPose();
@@ -520,6 +568,7 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
 
 const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
 {
+#if 0
   if (m_Body!=0)
     {
       DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) m_Body;
@@ -533,6 +582,9 @@ const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
 
     }
   return m_poseInParentFrame;
+#else
+  return m_globalPoseAtConstruction;
+#endif
 }
 
 void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)

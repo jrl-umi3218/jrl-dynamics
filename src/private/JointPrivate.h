@@ -49,9 +49,6 @@ namespace dynamicsJRLJapan
        \brief Position of the joint in the global frame at construction (joint value is equal to 0).
     */
     matrix4d m_globalPoseAtConstruction;
-    
-
-    
 
   private:
       
@@ -82,12 +79,12 @@ namespace dynamicsJRLJapan
     /*! Father joint */
     JointPrivate * m_FatherJoint;
 
+
     /*! Vector of childs */
     std::vector< JointPrivate*> m_Children;
 
     /*! Vector of joints from the root to this joint. */
     std::vector< CjrlJoint*> m_FromRootToThis;
-    std::vector<JointPrivate*> m_FromRootToThisJoint;
 
     /*! Pointer towards the body. */
     CjrlBody * m_Body;
