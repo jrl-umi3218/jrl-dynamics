@@ -28,7 +28,7 @@ namespace dynamicsJRLJapan
 char look_for(FILE *fichier, const char *str)
 {
   int i = 0;
-  char c;
+  char c=0;
   bool Cont=false;
 
   do
