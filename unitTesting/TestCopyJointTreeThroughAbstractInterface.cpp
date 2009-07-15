@@ -56,9 +56,7 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
   if (aJoint==0)
     return;
 
-
   int NbChildren = aJoint->countChildJoints();
- 
 
   DisplayJoint(aJoint);
 
@@ -101,26 +99,21 @@ void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* aHDR,
   CjrlJoint* InitJoint = aHDR->rootJoint() ;
   
   CjrlJoint* newJoint=0;
-  matrix4d pose = InitJoint->currentTransformation();
-  newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
+  matrix4d pose;
+  MAL_S4x4_MATRIX_SET_IDENTITY(pose);
+  newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
   
   a2HDR->rootJoint(*newJoint);
   
-  cout << " ================== BEGIN COPY BY CONSTRUCTOR  =================== " << endl ;
-
   recursiveMultibodyCopy(InitJoint, newJoint) ;
  
-  cout << " ================== END COPY BY CONSTRUCTOR  =================== " << endl ;
-  RecursiveDisplayOfJoints(a2HDR->rootJoint());
-
   // Initialize the second humanoid from the joint tree.
   //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
   string aProperty("FileJointRank");
-  cout << "JointToRank:" << JointToRank << endl;
-  a2HDR->setProperty(aProperty,JointToRank);
+  //  cout << "JointToRank:" << JointToRank << endl;
+  //  a2HDR->setProperty(aProperty,JointToRank);
   a2HDR->initialize();
-  cout << "Finito" << endl;
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
   std::vector<CjrlJoint *> VecOfCopyJoints = a2HDR->jointVector();
@@ -139,9 +132,13 @@ void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* aHDR,
     {
       if ((VecOfCopyJoints[i]!=0) &&
 	  (VecOfInitJoints[i]!=0))
-	*VecOfCopyJoints[i]->linkedBody() = 
-	  *VecOfInitJoints[i]->linkedBody();
+	{
+	  //*VecOfCopyJoints[i]->linkedBody() = 
+	  //*VecOfInitJoints[i]->linkedBody();
+	}
+
     }
+
 
 }
 
@@ -170,8 +167,9 @@ int main(int argc, char *argv[])
   // The second humanoid is constructed through the abstract interface
   //
   CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
-  
+  cout << "----------------- Before copy ---------------------------" << endl;
   PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
+  cout << "----------------- After copy ---------------------------" << endl;
 
 
   // Test the new humanoid structure.
@@ -203,6 +201,11 @@ int main(int argc, char *argv[])
     std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
 
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
+  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
+  MAL_VECTOR_FILL(aCurrentVel,0.0);
+  MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
+  MAL_VECTOR_FILL(aCurrentAcc,0.0);
+
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
@@ -213,14 +216,17 @@ int main(int argc, char *argv[])
   aHDR->currentConfiguration(aCurrentConf);
   a2HDR->currentConfiguration(aCurrentConf);
 
-  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
-  lindex=0;
-  for(int i=0;i<NbOfDofs;i++)
-    aCurrentVel[lindex++] = 0.0;
-
-  MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
-  MAL_VECTOR_FILL(aCurrentAcc,0.0);
   
+  aHDR->currentVelocity(aCurrentVel);
+  aHDR->currentAcceleration(aCurrentAcc);
+  aHDR->computeForwardKinematics();
+
+  a2HDR->currentVelocity(aCurrentVel);
+  a2HDR->currentAcceleration(aCurrentAcc);
+  a2HDR->computeForwardKinematics();
+
+  RecursiveDisplayOfJoints(a2HDR->rootJoint());
+
   MAL_S3_VECTOR(ZMPval,double);
 
   for(int i=0;i<4;i++)
@@ -247,9 +253,6 @@ int main(int argc, char *argv[])
 
     }
 
-  if (VerboseMode>2)
-    cout << " ================== AFTER PATGEN  =================== " << endl ;
-     RecursiveDisplayOfJoints(a2HDR->rootJoint());
   delete aHDR;
   delete a2HDR;
 
