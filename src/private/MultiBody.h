@@ -126,9 +126,6 @@ namespace dynamicsJRLJapan
     /*!  Destructor */
     virtual ~MultiBody(void);
     
-    /*! Returns the masse. */
-    double getMasse();
-
     /*!  Adds a body. */
     void ajouterCorps(Body &b);
 
