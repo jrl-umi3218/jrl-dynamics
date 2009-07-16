@@ -844,11 +844,11 @@ mass: 27
 ****************************
 Rank of the left hand 
 34
-0-th value of ZMP : 0.0316055 -1.27319e-18 0 
-Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089 
-1-th value of ZMP : 0.0316055 -1.27319e-18 0 
-Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089 
-2-th value of ZMP : 0.0316055 -1.27319e-18 0 
-Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089 
-3-th value of ZMP : 0.0316055 -1.27319e-18 0 
-Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089 
+0-th value of ZMP : 0.0316055 -1.27319e-18 0
+Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089
+1-th value of ZMP : 0.0316055 -1.27319e-18 0
+Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089
+2-th value of ZMP : 0.0316055 -1.27319e-18 0
+Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089
+3-th value of ZMP : 0.0316055 -1.27319e-18 0
+Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089
