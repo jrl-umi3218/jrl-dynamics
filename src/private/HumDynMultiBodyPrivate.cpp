@@ -28,8 +28,10 @@ HumDynMultiBodyPrivate::HumDynMultiBodyPrivate() : DynMultiBodyPrivate()
 {
   m_rightHand = m_leftHand = 0;
   m_RightFoot = m_LeftFoot = 0;
+  m_WaistJoint = m_ChestJoint = m_GazeJoint=NULL;
   m_HS = NULL;
 }
+
 
 HumDynMultiBodyPrivate::HumDynMultiBodyPrivate(const DynMultiBodyPrivate& inDynamicMultiBody,
 						   string aFileNameForHumanoidSpecificities) :
@@ -86,38 +88,10 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
 
       // If the Dynamic Multibody object is already loaded
       // create the link between the joints and the effector semantic.
+
       if (numberDof()!=0)
 	LinkBetweenJointsAndEndEffectorSemantic();
       
-      //hard-coding HRP2 hand specificities
-      vector3d center,okayAxis,showingAxis,palmAxis;
-      center[0] = 0;
-      center[1] = 0;
-      center[2] = -0.17;
-      okayAxis[0] = 1;
-      okayAxis[1] = 0;
-      okayAxis[2] = 0;
-      showingAxis[0] = 0;
-      showingAxis[1] = 0;
-      showingAxis[2] = -1;
-      palmAxis[0] = 0;
-      palmAxis[1] = 1;
-      palmAxis[2] = 0;
-      
-      Hand* hand=new Hand(rightWrist());
-      hand->setCenter(center); 
-      hand->setThumbAxis(okayAxis); 
-      hand->setForeFingerAxis(showingAxis);
-      hand->setPalmNormal(palmAxis);
-      rightHand(hand);
-
-      palmAxis[1] = -1;
-      hand=new Hand(leftWrist());
-      hand->setCenter(center); 
-      hand->setThumbAxis(okayAxis); 
-      hand->setForeFingerAxis(showingAxis);
-      hand->setPalmNormal(palmAxis);
-      leftHand(hand);
     }
   else
     {
@@ -208,6 +182,32 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   std::vector<int> JointsForWaist = m_HS->GetWaistJoints();
   if (JointsForWaist.size()==1)
     m_WaistJoint = GetJointFromActuatedID(JointsForWaist[0]);
+
+  
+  // Get the chest joint of the humanoid.
+  std::vector<int> JointsForChest = m_HS->GetChestJoints();
+  unsigned NbChestJoints = JointsForChest.size();
+  if (NbChestJoints>0)
+    m_ChestJoint = GetJointFromActuatedID(JointsForChest[NbChestJoints-1]);
+
+
+  // Take care of the hands information.
+  HandsData HumHands = m_HS->GetHandsData();
+  
+  Hand* hand=new Hand(rightWrist());
+  hand->setCenter(HumHands.Center[0]); 
+  hand->setThumbAxis(HumHands.okayAxis[0]); 
+  hand->setForeFingerAxis(HumHands.showingAxis[0]);
+  hand->setPalmNormal(HumHands.palmAxis[0]);
+  rightHand(hand);
+  
+  hand=new Hand(leftWrist());
+  hand->setCenter(HumHands.Center[1]); 
+  hand->setThumbAxis(HumHands.okayAxis[1]); 
+  hand->setForeFingerAxis(HumHands.showingAxis[1]);
+  hand->setPalmNormal(HumHands.palmAxis[1]);
+  leftHand(hand);
+
 }
 
 const MAL_S3_VECTOR(,double) & HumDynMultiBodyPrivate::zeroMomentumPoint() const
@@ -362,12 +362,12 @@ CjrlFoot * HumDynMultiBodyPrivate::rightFoot()
 
 void HumDynMultiBodyPrivate::chest(CjrlJoint *inChest)
 {
-  m_Chest = inChest;
+  m_ChestJoint = inChest;
 }
 
 CjrlJoint * HumDynMultiBodyPrivate::chest()
 {
-  return m_Chest;
+  return m_ChestJoint;
 }
 
 /***************************************************/

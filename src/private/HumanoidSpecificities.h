@@ -20,6 +20,14 @@
 namespace dynamicsJRLJapan
 {
     
+  typedef struct 
+  {
+    vector3d Center[2];
+    vector3d okayAxis[2];
+    vector3d showingAxis[2];
+    vector3d palmAxis[2];
+  } HandsData;
+
   /*@! This Object here implements the constants 
     and the specificities of HRP-2.
     */
@@ -133,6 +141,9 @@ namespace dynamicsJRLJapan
       waist. */
     const std::vector<int> & GetWaistJoints();
 
+    /*! \brief Returns the information on the hands */
+    const HandsData & GetHandsData();
+
     /*! @} */
   private:
 
@@ -191,6 +202,9 @@ namespace dynamicsJRLJapan
 
     /*! \brief Number of Chest joints */
     int m_ChestJointNb;
+
+    /*! \brief Hand Data */
+    HandsData m_Hands;
 
     /*! \brief Chest joints */
     std::vector<int> m_ChestJoints;

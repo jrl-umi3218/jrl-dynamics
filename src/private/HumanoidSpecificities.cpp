@@ -204,6 +204,51 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 
 	    }
 	}
+      if (look_for(fp,"Hands"))
+	{
+	  ODEBUG("Hands");
+	  for(int i=0;i<2;i++)
+	    {
+	      if (look_for(fp,Side[i]))
+		{
+		  if (look_for(fp,"Center"))
+		    {
+		      fscanf(fp,"%lf",&m_Hands.Center[i][0]);
+		      fscanf(fp,"%lf",&m_Hands.Center[i][1]);
+		      fscanf(fp,"%lf",&m_Hands.Center[i][3]);
+		      ODEBUG("Found Hands Center: " << m_Hands.Center[i]);
+		    }
+		  
+		  if (look_for(fp,"okayAxis"))
+		    {
+		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][0]);
+		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][1]);
+		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][3]);
+
+		      ODEBUG("Found m_Hands.okayAxis: " << m_Hands.okayAxis[i]);
+		    }
+		
+		  if (look_for(fp,"showingAxis"))
+		    {
+		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][0]);
+		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][1]);
+		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][3]);
+
+		      ODEBUG("Found m_Hands.showingAxis: " << m_Hands.showingAxis[i]);
+		    }
+		  if (look_for(fp,"palmAxis"))
+		    {
+
+		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][0]);
+		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][1]);
+		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][3]);
+
+		      ODEBUG("JointNb: " << m_Hands.palmAxis[i]);
+		    }
+		}
+	    }
+	  
+	}
       if (look_for(fp,"Arms"))
 	{
 	  ODEBUG("Arms");
@@ -574,3 +619,7 @@ const std::vector<int> & HumanoidSpecificities::GetWaistJoints()
   return m_WaistJoints;
 }
 
+const HandsData & HumanoidSpecificities::GetHandsData()
+{
+  return m_Hands;
+}

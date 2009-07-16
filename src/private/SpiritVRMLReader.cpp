@@ -1434,6 +1434,9 @@ namespace dynamicsJRLJapan
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;
 	m_DataForParsing->CurrentLink.aJoint = new JointPrivate(JointPrivate::FIX_JOINT,dummy,0.0);
+	ODEBUG(" m_DataForParsing->CurrentLink.aJoint->m_globalConfiguration"<<
+	  m_DataForParsing->CurrentLink.aJoint->initialPosition());
+
 	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
 	m_DataForParsing->CurrentLink.indexCorps2 = 0;

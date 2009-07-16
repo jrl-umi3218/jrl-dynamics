@@ -42,7 +42,21 @@
         <JointNb> 4 </JointNb>
         <JointsID> 6 7 8 9 </JointsID>
     </Left>
-  </Legs>
+  </Legs>  
+  <Hands>
+    <Right>
+      <Center>0.0 0.0 -0.17</Center>
+      <okayAxis>1.0 0.0 0.0 </okayAxis>
+      <showingAxis>0.0 0.0 -1.0</showingAxis>
+      <palmAxis>0.0 1.0 0.0</showingAxis>
+    </Right>
+    <Left>
+      <Center>0.0 0.0 -0.17</Center>
+      <okayAxis>1.0 0.0 0.0 </okayAxis>
+      <showingAxis>0.0 0.0 -1.0</showingAxis>
+      <palmAxis>0.0 -1.0 0.0</palmAxis>
+    </Left>
+  </Hands>
   <Arms>
     <Right>
         <UpperArmLength> 0.21 </UpperArmLength>

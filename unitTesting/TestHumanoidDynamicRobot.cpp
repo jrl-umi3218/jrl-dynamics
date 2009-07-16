@@ -270,8 +270,16 @@ int main(int argc, char *argv[])
   aHDR->setProperty(inProperty,aValue);
   aHDR->computeForwardKinematics();
   ZMPval = aHDR->zeroMomentumPoint();
-  tcout << "First value of ZMP : " << ZMPval <<endl;
-  tcout << "Should be equal to the CoM: " << aHDR->positionCenterOfMass() << endl;
+  tcout << "First value of ZMP : " 
+	<< ZMPval(0) << " " 
+	<< ZMPval(1) << " " 
+	<< ZMPval(2) << endl;
+  MAL_S3_VECTOR(poscom,double);
+  poscom = aHDR->positionCenterOfMass();
+  tcout << "Should be equal to the CoM: " 
+	<< poscom(0) << " "
+	<< poscom(1) << " "  
+	<< poscom(2) << endl;
 
 
   matrixNxP InertiaMatrix;

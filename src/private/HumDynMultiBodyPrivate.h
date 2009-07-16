@@ -76,7 +76,7 @@ namespace dynamicsJRLJapan
       CjrlJoint * m_WaistJoint;
 
       /*! \brief Store the chest. */
-      CjrlJoint * m_Chest;
+      CjrlJoint * m_ChestJoint;
 
       /** \name Gaze related store */
 
