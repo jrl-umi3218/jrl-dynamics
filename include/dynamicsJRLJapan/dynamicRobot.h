@@ -26,7 +26,11 @@ namespace jrlDelegate {
   class dynamicRobot : public virtual CjrlDynamicRobot
   {
   private:
+    vector3d m_vec3d_dummy;
+    vectorN m_vec_dummy;
+    matrixNxP m_mat_dummy;
     CjrlDynamicRobot * m_DR;
+    std::vector<CjrlJoint *> m_list_dummy;
 
   protected:
     void setDynamicRobot (CjrlDynamicRobot *inDynamicRobot)
@@ -59,9 +63,10 @@ namespace jrlDelegate {
     virtual bool initialize()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->initialize();
+      return m_DR->initialize();
     }
 
     /**
@@ -70,9 +75,10 @@ namespace jrlDelegate {
     virtual ~dynamicRobot() 
       {
 #ifndef NDEBUG
-	if (m_DR!=0)
+	if (m_DR==0)
+	  return;
 #endif
-	  delete m_DR;
+	delete m_DR;
       };
   
     /**
@@ -89,9 +95,10 @@ namespace jrlDelegate {
     virtual void rootJoint(CjrlJoint& inJoint)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return;
 #endif
-	m_DR->rootJoint(inJoint);
+      m_DR->rootJoint(inJoint);
     }
 
     /**
@@ -100,13 +107,10 @@ namespace jrlDelegate {
     virtual CjrlJoint* rootJoint() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return (CjrlJoint*) 0;
 #endif
-	return m_DR->rootJoint();
-
-#ifndef NDEBUG
-      return (CjrlJoint*) 0;
-#endif
+      return m_DR->rootJoint();
 
     }
 
@@ -117,14 +121,14 @@ namespace jrlDelegate {
     {
 #ifndef NDEBUG
       if (m_DR!=0)
-#endif
-	return m_DR->jointVector();
-
-#ifndef NDEBUG
-      std::vector<CjrlJoint *> res;
-      res.clear();
-      return res;
-#endif
+	{
+	  std::vector<CjrlJoint *> res;
+	  res.clear();
+	  return res;
+	}
+#endif 
+      
+      return m_DR->jointVector();
 
     }
   
@@ -138,14 +142,14 @@ namespace jrlDelegate {
     {
 #ifndef NDEBUG
       if (m_DR!=0)
+	{
+	  std::vector<CjrlJoint *> res;
+	  res.clear();
+	  return res;
+	}
+      
 #endif
-	return m_DR->jointsBetween(inStartJoint,inEndJoint);
-
-#ifndef NDEBUG
-      std::vector<CjrlJoint *> res;
-      res.clear();
-      return res;
-#endif
+      return m_DR->jointsBetween(inStartJoint,inEndJoint);
     
     }
   
@@ -155,14 +159,15 @@ namespace jrlDelegate {
     virtual double upperBoundDof(unsigned int inRankInConfiguration)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  std::cerr << "m_DR not initialized" << std::endl;
+	  return 0.0;
+	}
 #endif
 
-	return m_DR->upperBoundDof(inRankInConfiguration);
+      return m_DR->upperBoundDof(inRankInConfiguration);
 
-#ifndef NDEBUG
-      std::cerr << "m_DR not initialized" << std::endl;
-#endif
     }
     /**
        \brief Get the lower bound for ith dof.
@@ -170,14 +175,14 @@ namespace jrlDelegate {
     virtual double lowerBoundDof(unsigned int inRankInConfiguration)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  std::cerr << "m_DR not initialized" << std::endl;
+	  return 0.0;
+	}
 #endif
 
 	return m_DR->lowerBoundDof(inRankInConfiguration);
-
-#ifndef NDEBUG
-      std::cerr << "m_DR not initialized" << std::endl;
-#endif
 
     }
 
@@ -188,12 +193,13 @@ namespace jrlDelegate {
 				 const vectorN& inConfig) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  std::cerr << "m_DR not initialized" << std::endl;
+	  return 0.0;
+	}
 #endif
-	return m_DR->upperBoundDof(inRankInConfiguration,inConfig);
-#ifndef NDEBUG
-      std::cerr << "m_DR not initialized" << std::endl;
-#endif
+      return m_DR->upperBoundDof(inRankInConfiguration,inConfig);
 
     }
     /**
@@ -203,12 +209,13 @@ namespace jrlDelegate {
 				 const vectorN& inConfig)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  std::cerr << "m_DR not initialized" << std::endl;
+	  return 0.0;
+	}
 #endif
-	return m_DR->lowerBoundDof(inRankInConfiguration,inConfig);
-#ifndef NDEBUG
-      std::cerr << "m_DR not initialized" << std::endl;
-#endif
+      return m_DR->lowerBoundDof(inRankInConfiguration,inConfig);
     }
 
     /**
@@ -217,12 +224,12 @@ namespace jrlDelegate {
     virtual unsigned int numberDof() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  return 0;
+	}
 #endif
-	return m_DR->numberDof();
-#ifndef NDEBUG
-      return 0;
-#endif
+      return m_DR->numberDof();
     }
 
     /**
@@ -236,13 +243,11 @@ namespace jrlDelegate {
     virtual void setJointOrderInConfig(std::vector<CjrlJoint*> inJointVector)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return ;
 #endif
-	return m_DR->setJointOrderInConfig(inJointVector);
-#ifndef NDEBUG
-      return;
-#endif
-
+      return m_DR->setJointOrderInConfig(inJointVector);
+	  
     }
 
     /**
@@ -265,12 +270,12 @@ namespace jrlDelegate {
     virtual bool currentConfiguration(const vectorN& inConfig)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	{
+	  return false;
+	}
 #endif
-	return m_DR->currentConfiguration(inConfig);
-#ifndef NDEBUG
-      return false;
-#endif
+      return m_DR->currentConfiguration(inConfig);
     }
 
     /**
@@ -281,11 +286,10 @@ namespace jrlDelegate {
     virtual const vectorN& currentConfiguration() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec_dummy;
 #endif
-	return m_DR->currentConfiguration();
-#ifndef NDEBUG
-#endif
+      return m_DR->currentConfiguration();
     }
 
     /**
@@ -300,12 +304,10 @@ namespace jrlDelegate {
     virtual bool currentVelocity(const vectorN& inVelocity)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->currentVelocity(inVelocity);
-#ifndef NDEBUG
-      return false;
-#endif
+      return m_DR->currentVelocity(inVelocity);
     
     }
 
@@ -317,12 +319,11 @@ namespace jrlDelegate {
     virtual const vectorN& currentVelocity() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec_dummy;
 #endif
-	return m_DR->currentVelocity();
-#ifndef NDEBUG
-#endif
-
+      return m_DR->currentVelocity();
+	
     }
     /**
        \brief Set the current acceleration of the robot.  
@@ -336,13 +337,10 @@ namespace jrlDelegate {
     virtual bool currentAcceleration(const vectorN& inAcceleration)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->currentAcceleration(inAcceleration);
-#ifndef NDEBUG
-      return false;
-#endif
-
+      return m_DR->currentAcceleration(inAcceleration);
     }
 
     /**
@@ -353,11 +351,10 @@ namespace jrlDelegate {
     virtual const vectorN& currentAcceleration() const 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec_dummy;
 #endif
-	return m_DR->currentAcceleration();
-#ifndef NDEBUG
-#endif
+      return m_DR->currentAcceleration();
 
     }
 
@@ -369,9 +366,10 @@ namespace jrlDelegate {
     virtual const matrixNxP& currentForces() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_mat_dummy;
 #endif
-	return m_DR->currentForces();
+      return m_DR->currentForces();
     }
 
     /**
@@ -382,7 +380,8 @@ namespace jrlDelegate {
     virtual const matrixNxP& currentTorques() const 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_mat_dummy;
 #endif
 	return m_DR->currentTorques();
     }
@@ -407,9 +406,10 @@ namespace jrlDelegate {
     virtual bool computeForwardKinematics()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->computeForwardKinematics();
+      return m_DR->computeForwardKinematics();
     }
   
 
@@ -421,9 +421,10 @@ namespace jrlDelegate {
     virtual bool computeCenterOfMassDynamics() 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->computeCenterOfMassDynamics();
+      return m_DR->computeCenterOfMassDynamics();
     }
 
     /**
@@ -432,9 +433,10 @@ namespace jrlDelegate {
     virtual const vector3d& positionCenterOfMass() const 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->positionCenterOfMass();
+      return m_DR->positionCenterOfMass();
     }
 
     /**
@@ -443,9 +445,10 @@ namespace jrlDelegate {
     virtual const vector3d& velocityCenterOfMass()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->velocityCenterOfMass();
+      return m_DR->velocityCenterOfMass();
     }
 
     /**
@@ -454,9 +457,10 @@ namespace jrlDelegate {
     virtual const vector3d& accelerationCenterOfMass()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->accelerationCenterOfMass();
+      return m_DR->accelerationCenterOfMass();
     }
 
     /**
@@ -465,7 +469,8 @@ namespace jrlDelegate {
     virtual const vector3d& linearMomentumRobot()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
 	return m_DR->linearMomentumRobot();
     }
@@ -476,9 +481,10 @@ namespace jrlDelegate {
     virtual const vector3d& derivativeLinearMomentum()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->derivativeLinearMomentum();
+      return m_DR->derivativeLinearMomentum();
     }
 
     /**
@@ -487,9 +493,10 @@ namespace jrlDelegate {
     virtual const vector3d& angularMomentumRobot()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->angularMomentumRobot();
+      return m_DR->angularMomentumRobot();
     }
 
     /**
@@ -498,9 +505,10 @@ namespace jrlDelegate {
     virtual const vector3d& derivativeAngularMomentum()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_vec3d_dummy;
 #endif
-	return m_DR->derivativeAngularMomentum();
+      return m_DR->derivativeAngularMomentum();
     }
 
     /**
@@ -509,7 +517,8 @@ namespace jrlDelegate {
     virtual double mass() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return 0.0;
 #endif
 	return m_DR->mass();
 
@@ -528,9 +537,10 @@ namespace jrlDelegate {
     virtual void computeJacobianCenterOfMass()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return;
 #endif
-	m_DR->computeJacobianCenterOfMass();
+      m_DR->computeJacobianCenterOfMass();
     }
 
     /**
@@ -539,9 +549,10 @@ namespace jrlDelegate {
     virtual const matrixNxP& jacobianCenterOfMass() const 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_mat_dummy;
 #endif
-	return m_DR->jacobianCenterOfMass();
+      return m_DR->jacobianCenterOfMass();
     }
 
     /**
@@ -559,9 +570,10 @@ namespace jrlDelegate {
     virtual bool isSupported(const std::string &inProperty) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->isSupported(inProperty);
+      return m_DR->isSupported(inProperty);
     }
 
     /**
@@ -576,10 +588,11 @@ namespace jrlDelegate {
 			     std::string& outValue) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getProperty(inProperty,
-				 outValue);
+      return m_DR->getProperty(inProperty,
+			       outValue);
     }
 
     /**
@@ -595,10 +608,11 @@ namespace jrlDelegate {
 			     const std::string& inValue) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->setProperty(inProperty,
-				 inValue);
+      return m_DR->setProperty(inProperty,
+			       inValue);
 
     } 
 
@@ -633,14 +647,15 @@ namespace jrlDelegate {
 			     bool inIncludeStartFreeFlyer = true) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getJacobian(inStartJoint,
-				 inEndJoint,
-				 inFrameLocalPosition,
-				 outjacobian,
-				 offset,
-				 inIncludeStartFreeFlyer);
+      return m_DR->getJacobian(inStartJoint,
+			       inEndJoint,
+			       inFrameLocalPosition,
+			       outjacobian,
+			       offset,
+			       inIncludeStartFreeFlyer);
     }
   
     virtual bool getPositionJacobian(const CjrlJoint& inStartJoint, 
@@ -651,14 +666,15 @@ namespace jrlDelegate {
 				     bool inIncludeStartFreeFlyer = true)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getPositionJacobian(inStartJoint,
-					 inEndJoint,
-					 inFrameLocalPosition,
-					 outjacobian,
-					 offset,
-					 inIncludeStartFreeFlyer);
+      return m_DR->getPositionJacobian(inStartJoint,
+				       inEndJoint,
+				       inFrameLocalPosition,
+				       outjacobian,
+				       offset,
+				       inIncludeStartFreeFlyer);
     }
   
     virtual bool getOrientationJacobian(const CjrlJoint& inStartJoint, 
@@ -668,13 +684,14 @@ namespace jrlDelegate {
 					bool inIncludeStartFreeFlyer = true) 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getOrientationJacobian(inStartJoint, 
-					    inEndJoint, 
-					    outjacobian, 
-					    offset, 
-					    inIncludeStartFreeFlyer);
+      return m_DR->getOrientationJacobian(inStartJoint, 
+					  inEndJoint, 
+					  outjacobian, 
+					  offset, 
+					  inIncludeStartFreeFlyer);
     }
 
 
@@ -684,12 +701,13 @@ namespace jrlDelegate {
 					 bool inIncludeStartFreeFlyer = true)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getJacobianCenterOfMass(inStartJoint,
-					     outjacobian,
-					     offset,
-					     inIncludeStartFreeFlyer);
+      return m_DR->getJacobianCenterOfMass(inStartJoint,
+					   outjacobian,
+					   offset,
+					   inIncludeStartFreeFlyer);
     }
 
     /*! \name Inertia matrix related methods 
@@ -699,19 +717,21 @@ namespace jrlDelegate {
     virtual void computeInertiaMatrix() 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return;
 #endif
-	return m_DR->computeInertiaMatrix();
+      return m_DR->computeInertiaMatrix();
     }
-
+    
     /*! \brief Get the inertia matrix of the robot according wrt \f${\bf q}\f$.
      */
     virtual const matrixNxP& inertiaMatrix() const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_mat_dummy;
 #endif
-	return m_DR->inertiaMatrix();
+      return m_DR->inertiaMatrix();
     }
     /*! @} */
 
@@ -725,9 +745,10 @@ namespace jrlDelegate {
     virtual const std::vector<CjrlJoint*>& getActuatedJoints() const 
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return m_list_dummy;
 #endif
-	return m_DR->getActuatedJoints();
+      return m_DR->getActuatedJoints();
     }
 
     /**
@@ -736,9 +757,10 @@ namespace jrlDelegate {
     virtual void setActuatedJoints(std::vector<CjrlJoint*>& lActuatedJoints)
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return;
 #endif
-	return m_DR->setActuatedJoints(lActuatedJoints);
+      return m_DR->setActuatedJoints(lActuatedJoints);
     }
 
     /*! 
@@ -778,13 +800,14 @@ namespace jrlDelegate {
 						 vectorN &q)
     { 
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
+	return false;
 #endif
-	return m_DR->getSpecializedInverseKinematics(jointRoot,
-						     jointEnd,
-						     jointRootPosition,
-						     jointEndPosition,
-						     q);
+      return m_DR->getSpecializedInverseKinematics(jointRoot,
+						   jointEnd,
+						   jointRootPosition,
+						   jointEndPosition,
+						   q);
     }
   
   

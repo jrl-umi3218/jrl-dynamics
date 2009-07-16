@@ -30,7 +30,8 @@ namespace jrlDelegate {
     {
     private:
       CjrlHumanoidDynamicRobot *m_HDR;
-
+      vector3d m_vec3d_dummy;
+      
     public:
 
       humanoidDynamicRobot(CjrlRobotDynamicsObjectFactory * inObjectFactory)
@@ -68,9 +69,10 @@ namespace jrlDelegate {
       virtual void waist(CjrlJoint* inWaist)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->waist(inWaist);
+	m_HDR->waist(inWaist);
 
       }
 
@@ -80,9 +82,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* waist()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->waist();
+	return m_HDR->waist();
 
       }
 
@@ -94,9 +97,10 @@ namespace jrlDelegate {
       virtual void chest(CjrlJoint* inChest)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->chest(inChest);
+	m_HDR->chest(inChest);
       }
 
       /**
@@ -107,9 +111,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* chest()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->chest();
+	return m_HDR->chest();
       }
 
       /**
@@ -118,9 +123,10 @@ namespace jrlDelegate {
       virtual void leftWrist(CjrlJoint* inLeftWrist)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->leftWrist(inLeftWrist);
+	m_HDR->leftWrist(inLeftWrist);
       }
 
       /**
@@ -129,9 +135,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* leftWrist() 
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->leftWrist();
+	return m_HDR->leftWrist();
       }
 
       /**
@@ -140,9 +147,10 @@ namespace jrlDelegate {
       virtual void rightWrist(CjrlJoint* inRightWrist)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->rightWrist(inRightWrist);
+	m_HDR->rightWrist(inRightWrist);
       }
   
       /**
@@ -151,9 +159,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* rightWrist()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->rightWrist();
+	return m_HDR->rightWrist();
       }
 
       /**
@@ -162,9 +171,10 @@ namespace jrlDelegate {
       virtual void rightHand(CjrlHand* inRightHand)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->rightHand(inRightHand);
+	m_HDR->rightHand(inRightHand);
       }
 
       /**
@@ -173,9 +183,10 @@ namespace jrlDelegate {
       virtual CjrlHand* rightHand()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->rightHand();
+	return m_HDR->rightHand();
       }
   
       /**
@@ -184,9 +195,10 @@ namespace jrlDelegate {
       virtual void leftHand(CjrlHand* inLeftHand)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->leftHand(inLeftHand);
+	m_HDR->leftHand(inLeftHand);
       }
   
       /**
@@ -195,9 +207,10 @@ namespace jrlDelegate {
       virtual CjrlHand* leftHand()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->leftHand();
+	return m_HDR->leftHand();
 
       }
   
@@ -209,9 +222,10 @@ namespace jrlDelegate {
       virtual double getHandClench(CjrlHand* inHand)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return 0.0;
 #endif
-	  return m_HDR->getHandClench(inHand);
+	return m_HDR->getHandClench(inHand);
       }
   
       /**
@@ -223,9 +237,10 @@ namespace jrlDelegate {
       virtual bool setHandClench(CjrlHand* inHand, double inClenchingValue)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return false;
 #endif
-	  return m_HDR->setHandClench(inHand,inClenchingValue);
+	return m_HDR->setHandClench(inHand,inClenchingValue);
       }
   
       /**
@@ -234,9 +249,10 @@ namespace jrlDelegate {
       virtual void leftAnkle(CjrlJoint* inLeftAnkle)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->leftAnkle(inLeftAnkle);
+	m_HDR->leftAnkle(inLeftAnkle);
       }
 
       /**
@@ -245,9 +261,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* leftAnkle() 
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->leftAnkle();
+	return m_HDR->leftAnkle();
       }
 
       /**
@@ -256,9 +273,10 @@ namespace jrlDelegate {
       virtual void rightAnkle(CjrlJoint* inRightAnkle)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return ;
 #endif
-	  m_HDR->rightAnkle(inRightAnkle);
+	m_HDR->rightAnkle(inRightAnkle);
       }
   
       /**
@@ -267,9 +285,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* rightAnkle()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->rightAnkle();
+	return m_HDR->rightAnkle();
       }
 
       /**
@@ -278,9 +297,10 @@ namespace jrlDelegate {
       virtual void leftFoot(CjrlFoot* inLeftFoot)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return ;
 #endif
-	  return m_HDR->leftFoot(inLeftFoot);
+	return m_HDR->leftFoot(inLeftFoot);
       }
   
       /**
@@ -289,9 +309,10 @@ namespace jrlDelegate {
       virtual CjrlFoot* leftFoot()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->leftFoot();    
+	return m_HDR->leftFoot();    
       }
 
       /**
@@ -300,9 +321,10 @@ namespace jrlDelegate {
       virtual void rightFoot(CjrlFoot* inRightFoot)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  return m_HDR->rightFoot(inRightFoot);    
+	return m_HDR->rightFoot(inRightFoot);    
       }
 
       /**
@@ -311,9 +333,10 @@ namespace jrlDelegate {
       virtual CjrlFoot* rightFoot()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->rightFoot();
+	return m_HDR->rightFoot();
       }
 
       /**
@@ -324,9 +347,10 @@ namespace jrlDelegate {
       virtual void gazeJoint(CjrlJoint* inGazeJoint)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return;
 #endif
-	  m_HDR->gazeJoint(inGazeJoint);
+	m_HDR->gazeJoint(inGazeJoint);
       }
 
       /**
@@ -335,9 +359,10 @@ namespace jrlDelegate {
       virtual CjrlJoint* gazeJoint()
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return NULL;
 #endif
-	  return m_HDR->gazeJoint();
+	return m_HDR->gazeJoint();
       }
 
       /**
@@ -348,7 +373,8 @@ namespace jrlDelegate {
       virtual void gaze(const vector3d& inDirection, const vector3d& inOrigin)
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return ;
 #endif
 	  m_HDR->gaze(inDirection,inOrigin);
 
@@ -360,9 +386,10 @@ namespace jrlDelegate {
       virtual const vector3d& gazeOrigin() const
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return m_vec3d_dummy;
 #endif
-	  return m_HDR->gazeOrigin();
+	return m_HDR->gazeOrigin();
       }
 
       /**
@@ -371,7 +398,8 @@ namespace jrlDelegate {
       virtual const vector3d& gazeDirection() const
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return m_vec3d_dummy;
 #endif
 	  return m_HDR->gazeOrigin();
       }
@@ -390,7 +418,8 @@ namespace jrlDelegate {
       virtual const vector3d& zeroMomentumPoint() const
       {
 #ifndef NDEBUG
-	if (m_HDR!=0)
+	if (m_HDR==0)
+	  return m_vec3d_dummy;
 #endif
 	  return m_HDR->zeroMomentumPoint();
       }

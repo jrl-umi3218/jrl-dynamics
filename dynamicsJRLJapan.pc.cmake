@@ -10,5 +10,5 @@ Description: ${PROJECT_DESCRIPTION}
 Version: ${PROJECT_VERSION}
 Requires: ${PROJECT_REQUIREMENTS}
 Libs: ${LIBDIR_KW}${install_pkg_libdir} ${${PROJECT_NAME}_LDFLAGS}
-Cflags: -I${install_pkg_include_dir} ${${PROJECT_NAME}_CXXFLAGS}
+Cflags: -I${install_pkg_include_dir} ${${PROJECT_NAME}_export_CXXFLAGS}
 

@@ -60,12 +60,17 @@ IF(UNIX)
 SET(${PROJECT_NAME}_CXXFLAGS "-Wall ${${PROJECT_NAME}_CXXFLAGS}")
 ENDIF(UNIX)
 
+SET(${PROJECT_NAME}_export_CXXFLAGS "")
+SET(${PROJECT_NAME}_export_LDFLAGS "")
+
 FOREACH(option_cxxflags ${ROBOTDYNAMICS_CFLAGS})
   SET(${PROJECT_NAME}_CXXFLAGS " ${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
+  SET(${PROJECT_NAME}_export_CXXFLAGS " ${${PROJECT_NAME}_export_CXXFLAGS} ${option_cxxflags}")
 ENDFOREACH(option_cxxflags)
 
 FOREACH(option_cxxflags ${MALJRL_CFLAGS})
   SET(${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
+  SET(${PROJECT_NAME}_export_CXXFLAGS " ${${PROJECT_NAME}_export_CXXFLAGS} ${option_cxxflags}")
 ENDFOREACH(option_cxxflags)
 
 FOREACH(option_ldflags ${ROBOTDYNAMICS_LDFLAGS})
