@@ -53,6 +53,37 @@ void DisplayBody(CjrlBody *aBody, string &shifttab,ostream &tcout)
   tcout << shifttab << "mass: " << aBody->mass() << endl;
       
 }
+
+void DisplayHand(CjrlHand *ajrlHand,string &shifttab,ostream &tcout)
+{
+  vector3d outCenter,outThumbAxis, outForeFinger,
+    outPalmNormal;
+  ajrlHand->getCenter(outCenter);
+  tcout << shifttab << "Center:" 
+	<< outCenter(0) << " " 
+	<< outCenter(1) << " "
+	<< outCenter(2) << endl;
+  
+  ajrlHand->getThumbAxis(outThumbAxis);
+  tcout << shifttab << "Center:" 
+	<< outThumbAxis(0) << " " 
+	<< outThumbAxis(1) << " "
+	<< outThumbAxis(2) << endl;
+  
+  ajrlHand->getForeFingerAxis(outForeFinger);
+  tcout << shifttab << "Center:" 
+	<< outForeFinger(0) << " " 
+	<< outForeFinger(1) << " "
+	<< outForeFinger(2) << endl;
+  
+  ajrlHand->getPalmNormal(outPalmNormal);
+  tcout << shifttab << "Center:" 
+	<< outForeFinger(0) << " " 
+	<< outForeFinger(1) << " "
+	<< outForeFinger(2) << endl;
+  
+}
+
 void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
 			      ostream &tcout,
 			      unsigned int verbosedisplay=0,
@@ -329,9 +360,18 @@ int main(int argc, char *argv[])
 
   tcout << "****************************" << endl;
   // Test rank of the left hand.
+  tcout << "Rank of the right hand "<< endl;
+  tcout << aHDR->rightWrist()->rankInConfiguration() << endl;
+  CjrlHand *rightHand = aHDR->rightHand();
+  string empty("");
+  DisplayHand(rightHand,empty,tcout);
+
   tcout << "Rank of the left hand "<< endl;
   tcout << aHDR->leftWrist()->rankInConfiguration() << endl;
-
+  CjrlHand *leftHand = aHDR->leftHand();
+  DisplayHand(leftHand,empty,tcout);
+  
+  
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);

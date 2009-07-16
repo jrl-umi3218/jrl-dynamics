@@ -842,8 +842,18 @@ mass: 27
       0 0 1 
       mass: 1.9
 ****************************
+Rank of the right hand 
+27
+Center:0 0 -0.17
+Center:1 0 0
+Center:0 0 -1
+Center:0 0 -1
 Rank of the left hand 
 34
+Center:0 0 -0.17
+Center:1 0 0
+Center:0 0 -1
+Center:0 0 -1
 0-th value of ZMP : 0.0316055 -1.27319e-18 0
 Should be equal to the CoM: 0.0316055 -1.27319e-18 -0.0418089
 1-th value of ZMP : 0.0316055 -1.27319e-18 0
