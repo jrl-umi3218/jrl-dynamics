@@ -164,7 +164,7 @@ void Joint::lowerVelocityBound(unsigned int inDofRank, double inLowerBound)
 
 void Joint::upperVelocityBound(unsigned int inDofRank, double inUpperBound)
 {
-  m_privateObj->upperVelocityBound(inUpperBound);
+  m_privateObj->upperVelocityBound(inDofRank);
 }
 
 const matrixNxP& Joint::jacobianJointWrtConfig() const

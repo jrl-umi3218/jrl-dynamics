@@ -69,6 +69,10 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
       aos << m_TimeStep;
       outValue=aos.str();
     }
+  else if (inProperty=="ResetIteration")
+    {
+      ResetIterationNumber();
+    }
   outValue="false";
   return false;
 }
