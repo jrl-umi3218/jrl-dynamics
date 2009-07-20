@@ -215,7 +215,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		    {
 		      fscanf(fp,"%lf",&m_Hands.Center[i][0]);
 		      fscanf(fp,"%lf",&m_Hands.Center[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.Center[i][3]);
+		      fscanf(fp,"%lf",&m_Hands.Center[i][2]);
 		      ODEBUG("Found Hands Center: " << m_Hands.Center[i]);
 		    }
 		  
@@ -223,7 +223,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		    {
 		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][0]);
 		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][3]);
+		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][2]);
 
 		      ODEBUG("Found m_Hands.okayAxis: " << m_Hands.okayAxis[i]);
 		    }
@@ -232,7 +232,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 		    {
 		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][0]);
 		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][3]);
+		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][2]);
 
 		      ODEBUG("Found m_Hands.showingAxis: " << m_Hands.showingAxis[i]);
 		    }
@@ -241,7 +241,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName,
 
 		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][0]);
 		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][3]);
+		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][2]);
 
 		      ODEBUG("JointNb: " << m_Hands.palmAxis[i]);
 		    }
