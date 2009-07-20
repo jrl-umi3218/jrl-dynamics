@@ -194,14 +194,16 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   // Take care of the hands information.
   HandsData HumHands = m_HS->GetHandsData();
   
-  Hand* hand=new Hand(rightWrist());
+  Hand* hand=new Hand();
+  hand->setAssociatedWrist(rightWrist());
   hand->setCenter(HumHands.Center[0]); 
   hand->setThumbAxis(HumHands.okayAxis[0]); 
   hand->setForeFingerAxis(HumHands.showingAxis[0]);
   hand->setPalmNormal(HumHands.palmAxis[0]);
   rightHand(hand);
   
-  hand=new Hand(leftWrist());
+  hand=new Hand();
+  hand->setAssociatedWrist(leftWrist());
   hand->setCenter(HumHands.Center[1]); 
   hand->setThumbAxis(HumHands.okayAxis[1]); 
   hand->setForeFingerAxis(HumHands.showingAxis[1]);

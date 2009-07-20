@@ -61,7 +61,8 @@ namespace dynamicsJRLJapan
 
   CjrlHand* ObjectFactory::createHand(const CjrlJoint* inWrist)
   {
-    CjrlHand* hand = new Hand(inWrist);
+    CjrlHand* hand = new Hand();
+    hand->setAssociatedWrist(inWrist);
     return hand;
   }
 

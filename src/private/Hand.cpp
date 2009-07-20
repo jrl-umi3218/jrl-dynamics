@@ -16,9 +16,14 @@
 
 using namespace dynamicsJRLJapan;
 
-Hand::Hand(const CjrlJoint* inWristJoint) :
-  attAssociatedWrist(inWristJoint)
+Hand::Hand()
 {
+  attAssociatedWrist = 0;
+}
+
+void Hand::setAssociatedWrist(const CjrlJoint * inWristJoint) 
+{
+  attAssociatedWrist=inWristJoint;
 }
 
 Hand::~Hand()

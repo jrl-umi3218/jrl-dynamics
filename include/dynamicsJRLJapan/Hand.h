@@ -35,7 +35,7 @@ namespace dynamicsJRLJapan
         /**
         \brief Constructor
         */
-        Hand(const CjrlJoint* inWristJoint);
+        Hand();
 
 	/*!\brief Destructor */
 	virtual ~Hand();
@@ -44,6 +44,11 @@ namespace dynamicsJRLJapan
             \brief Get the wrist joint to which the hand is attached
         */
         virtual const CjrlJoint* associatedWrist();
+
+        /**
+            \brief Get the wrist joint to which the hand is attached
+        */
+        virtual void setAssociatedWrist(const CjrlJoint * inWrist );
     
 	/**
 	   \brief Get the center of the hand
