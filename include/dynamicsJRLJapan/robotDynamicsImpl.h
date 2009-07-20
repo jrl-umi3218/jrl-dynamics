@@ -1,6 +1,8 @@
 #ifndef ROBOT_DYNAMICS_IMPL_H
 #define ROBOT_DYNAMICS_IMPL_H
 
+#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+
 #include "Joint.h"
 #include "DynamicBody.h"
 #include "dynamicsJRLJapan/dynamicRobot.h"
