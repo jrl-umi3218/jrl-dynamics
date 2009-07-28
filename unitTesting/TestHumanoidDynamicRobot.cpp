@@ -84,6 +84,37 @@ void DisplayHand(CjrlHand *ajrlHand,string &shifttab,ostream &tcout)
   
 }
 
+void DisplayFoot(CjrlFoot *aFoot,string &shifttab,ostream &tcout)
+{
+  vector3d AnklePositionInLocalFrame,
+    SoleCenterInLocalFrame,
+    ProjectionCenterLocalFrameInSole;
+
+  double SoleLength, SoleWidth;
+  aFoot->getSoleSize(SoleLength,SoleWidth);
+  
+  tcout << shifttab << "SoleLength: " << SoleLength << " " 
+	<< "SoleWidth: " << SoleWidth << std::endl;
+  
+  aFoot->getAnklePositionInLocalFrame(AnklePositionInLocalFrame);
+  tcout << shifttab << "AnklePositionInLocalFrame=("
+	<< AnklePositionInLocalFrame(0) << " , "
+	<< AnklePositionInLocalFrame(1) << " , "
+	<< AnklePositionInLocalFrame(2) << ")" << std::endl;
+
+  aFoot->getSoleCenterInLocalFrame(SoleCenterInLocalFrame);
+  tcout << shifttab << "SoleCenterInLocalFrame=("
+	<< SoleCenterInLocalFrame(0) << " , "
+	<< SoleCenterInLocalFrame(1) << " , "
+	<< SoleCenterInLocalFrame(2) << " ) " << std::endl;
+
+  aFoot->getSoleCenterInLocalFrame(ProjectionCenterLocalFrameInSole);
+  tcout << shifttab << "ProjectCenterLocalFrameInSole=("
+	<< ProjectionCenterLocalFrameInSole(0) << " , " 
+	<< ProjectionCenterLocalFrameInSole(1) << " , " 
+	<< ProjectionCenterLocalFrameInSole(2) << " ) " << std::endl;
+}
+
 void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
 			      ostream &tcout,
 			      unsigned int verbosedisplay=0,
@@ -359,7 +390,8 @@ int main(int argc, char *argv[])
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
 
   tcout << "****************************" << endl;
-  // Test rank of the left hand.
+
+  // Test rank of the hands.
   tcout << "Rank of the right hand "<< endl;
   tcout << aHDR->rightWrist()->rankInConfiguration() << endl;
   CjrlHand *rightHand = aHDR->rightHand();
@@ -370,7 +402,19 @@ int main(int argc, char *argv[])
   tcout << aHDR->leftWrist()->rankInConfiguration() << endl;
   CjrlHand *leftHand = aHDR->leftHand();
   DisplayHand(leftHand,empty,tcout);
+
+  // Test rank of the feet.
+  tcout << "Rank of the right foot "<< endl;
+  tcout << aHDR->rightFoot()->associatedAnkle()->rankInConfiguration() << endl;
+  CjrlFoot *rightFoot = aHDR->rightFoot();
+  DisplayFoot(rightFoot,empty,tcout);
+
+  tcout << "Rank of the left foot "<< endl;
+  tcout << aHDR->leftFoot()->associatedAnkle()->rankInConfiguration() << endl;
+  CjrlFoot *leftFoot = aHDR->leftFoot();
+  DisplayFoot(leftFoot,empty,tcout);
   
+
   
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
@@ -403,8 +447,17 @@ int main(int argc, char *argv[])
 	    << poscom(2) << endl;
     }
 
-  tcout.close();
 
+
+  // Check the information on actuated joints.
+  std::vector<CjrlJoint *> ActuatedJoints = aHDR->getActuatedJoints();
+  
+  tcout << "Size of actuated Joints:" << ActuatedJoints.size() << endl;
+  for(unsigned int i=0;i<ActuatedJoints.size();i++)
+    tcout << "Rank of actuated joints ("<<i<< ") in configuration :" 
+	  << ActuatedJoints[i]->rankInConfiguration() << endl;
+
+  tcout.close();
   // ASCII Comparison between the generated output and the reference one
   // given in argument.
   if (argc==2)
