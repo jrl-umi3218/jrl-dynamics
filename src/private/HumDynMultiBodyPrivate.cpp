@@ -154,6 +154,22 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   Foot *theLeftFoot = new Foot();
   CjrlJoint* theLeftAnkle = GetJointFromActuatedID(EndIndex);
   theLeftFoot->setAssociatedAnkle(theLeftAnkle);
+  double AnklePosition[3];
+  m_HS->GetAnklePosition(1,AnklePosition);
+  vector3d AnklePositionInLocalFrame;
+  AnklePositionInLocalFrame(0) = AnklePosition[0];
+  AnklePositionInLocalFrame(1) = AnklePosition[1];
+  AnklePositionInLocalFrame(2) = AnklePosition[2];
+  theLeftFoot->setAnklePositionInLocalFrame(AnklePositionInLocalFrame);
+  
+  vector3d vzero;
+  vzero(0) =  vzero(1) =  vzero(2) = 0.0;
+  theLeftFoot->setSoleCenterInLocalFrame(vzero);
+  theLeftFoot->setProjectionCenterLocalFrameInSole(vzero);
+  
+  double lFootWidth,lFootHeight,lFootDepth;
+  m_HS->GetFootSize(1,lFootDepth, lFootWidth, lFootHeight);
+  theLeftFoot->setSoleSize(lFootDepth,lFootWidth);
   leftFoot(theLeftFoot);
   leftAnkle(theLeftAnkle);
 
@@ -167,6 +183,20 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   Foot *theRightFoot = new Foot();
   CjrlJoint* theRightAnkle = GetJointFromActuatedID(EndIndex);
   theRightFoot->setAssociatedAnkle(theRightAnkle);
+
+  m_HS->GetAnklePosition(-1,AnklePosition);
+  AnklePositionInLocalFrame(0) = AnklePosition[0];
+  AnklePositionInLocalFrame(1) = AnklePosition[1];
+  AnklePositionInLocalFrame(2) = AnklePosition[2];
+  theRightFoot->setAnklePositionInLocalFrame(AnklePositionInLocalFrame);
+
+  vzero(0) =  vzero(1) =  vzero(2) = 0.0;
+  theRightFoot->setSoleCenterInLocalFrame(vzero);
+  theRightFoot->setProjectionCenterLocalFrameInSole(vzero);
+  
+  m_HS->GetFootSize(-1,lFootDepth, lFootWidth, lFootHeight);
+  theRightFoot->setSoleSize(lFootDepth,lFootWidth);
+  
   rightFoot(theRightFoot);
   rightAnkle(theRightAnkle);
 
