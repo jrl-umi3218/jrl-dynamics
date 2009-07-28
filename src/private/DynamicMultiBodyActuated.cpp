@@ -34,8 +34,18 @@ void DynMultiBodyPrivate::GetJointIDInConfigurationFromActuatedID(std::vector<in
 
 int DynMultiBodyPrivate::BuildLinkBetweenActuatedVectorAndJoints()
 {
-  m_ActuatedIDToConfiguration.resize(m_ActuatedJoints.size());
+  ODEBUG(" Wenth through here.");
+  if (m_ActuatedIDToConfiguration.size()==0)
+    return BuildLinkFromActuatedJoints();
+ 
+  return BuildLinkFromActuatedIDs();
+}
 
+int DynMultiBodyPrivate::BuildLinkFromActuatedJoints()
+{
+  ODEBUG(" Went through here.");
+  m_ActuatedIDToConfiguration.resize(m_ActuatedJoints.size());
+  
   for(unsigned int IndexInActuatedVector=0;
       IndexInActuatedVector<m_ActuatedJoints.size();
       IndexInActuatedVector++)
@@ -63,6 +73,42 @@ int DynMultiBodyPrivate::BuildLinkBetweenActuatedVectorAndJoints()
   m_SynchronizationBetweenActuatedVectorAndJoints = true;
   return 0;
 }
+
+int DynMultiBodyPrivate::BuildLinkFromActuatedIDs()
+{
+  ODEBUG("Went through here.");
+  m_ActuatedJoints.resize(m_ActuatedIDToConfiguration.size());
+  
+  for(unsigned int IndexInActuatedIDs=0;
+      IndexInActuatedIDs<m_ActuatedIDToConfiguration.size();
+      IndexInActuatedIDs++)
+    {
+      bool FoundActuatedJoint = false;
+      unsigned int IndexInJointVector=0;
+      for(IndexInJointVector=0;IndexInJointVector<m_JointVector.size();IndexInJointVector++)
+	if (m_JointVector[IndexInJointVector]->rankInConfiguration()== (unsigned int)
+	    m_ActuatedIDToConfiguration[IndexInActuatedIDs])
+	  {
+	    FoundActuatedJoint = true;
+	    break;
+	  }
+      if (FoundActuatedJoint)
+	{
+	  m_ActuatedJoints[IndexInActuatedIDs] = m_JointVector[IndexInJointVector];
+	  ODEBUG(" " << ((JointPrivate *)m_JointVector[IndexInJointVector])->getName() << " actuated:" 
+		  << IndexInActuatedIDs);
+	}
+      else
+	{
+	  cerr << "Unable to find actuated joint: "<< m_ActuatedJoints[IndexInJointVector] << 
+	    " in the vector of joints." << endl;
+	  return -1;
+	}
+    }
+  m_SynchronizationBetweenActuatedVectorAndJoints = true;
+  return 0;
+}
+
 
 CjrlJoint* DynMultiBodyPrivate::GetJointFromActuatedID(int JointID)
 {

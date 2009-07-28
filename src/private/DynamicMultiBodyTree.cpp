@@ -168,6 +168,7 @@ void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
   SpecifyTheRootLabel(0);
   ComputeNumberOfJoints();
   BuildStateVectorToJointAndDOFs();
+  BuildLinkFromActuatedIDs();
   UpdateTheSizeOfJointsJacobian();
 
   MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);

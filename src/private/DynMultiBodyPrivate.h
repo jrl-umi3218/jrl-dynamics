@@ -337,8 +337,21 @@ namespace dynamicsJRLJapan
     /*! @} */
   protected:
 
-    /*! Internal synchronization */
+    /*! Internal synchronization between actuated vectors and joints. 
+      @{
+     */
+    /*! Call appropriately one of the two methods BuildLinkFromActuatedJoints()
+      or BuildLinkFromActuatedIDs depending on the initialized vectors */
     int BuildLinkBetweenActuatedVectorAndJoints();
+
+    /*! Internal synchronization from actuated vectors. */
+    int BuildLinkFromActuatedJoints();
+
+    /*! Internal synchronization from actuated IDs. */
+    int BuildLinkFromActuatedIDs();
+    
+    /*! @} */
+
 
     
   public:
