@@ -19,6 +19,8 @@ using namespace dynamicsJRLJapan;
 
 Joint::Joint()
 {
+  JointPrivate* obj = NULL;
+  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
 }
 
 Joint::Joint(const Joint& inJoint)
@@ -164,7 +166,7 @@ void Joint::lowerVelocityBound(unsigned int inDofRank, double inLowerBound)
 
 void Joint::upperVelocityBound(unsigned int inDofRank, double inUpperBound)
 {
-  m_privateObj->upperVelocityBound(inDofRank);
+  m_privateObj->upperVelocityBound(inDofRank, inUpperBound);
 }
 
 const matrixNxP& Joint::jacobianJointWrtConfig() const
