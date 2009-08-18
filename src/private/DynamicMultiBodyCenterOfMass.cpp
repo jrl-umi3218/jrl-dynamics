@@ -228,8 +228,8 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 
   //clean
   for ( i=0; i<3; i++ )
-    delete ( outTable[i] );
-  delete ( outTable );
+    delete[] ( outTable[i] );
+  delete[] ( outTable );
   return true;
 }
 
