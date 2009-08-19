@@ -120,7 +120,7 @@ namespace jrlDelegate {
     virtual std::vector< CjrlJoint* > jointVector()
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
 	{
 	  std::vector<CjrlJoint *> res;
 	  res.clear();
@@ -141,7 +141,7 @@ namespace jrlDelegate {
 						  const CjrlJoint& inEndJoint) const
     {
 #ifndef NDEBUG
-      if (m_DR!=0)
+      if (m_DR==0)
 	{
 	  std::vector<CjrlJoint *> res;
 	  res.clear();
