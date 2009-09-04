@@ -18,9 +18,15 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   MAL_S3_VECTOR(,double) firstterm,
     sndterm, thirdterm, fifthterm,tmp;
   // Do not fourth term because it is the angular acceleration.
+
   /* Constant part */
+  tmp = CurrentBody.dv_c - lg;
+  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,tmp);
+  CurrentBody.m_Force =  tmp * CurrentBody.mass();
+
   /* 2nd term : -f_i x r_{i,ci} */
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, CurrentBody.c);
+
 
   /* 5th term : w_i x (I_i w_i)*/
   MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
@@ -36,10 +42,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
    * g_i is the gravity express in the i reference frame.
    */
 
-  /* Constant part. */
-  tmp = CurrentBody.dv_c - lg;
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,tmp);
-  CurrentBody.m_Force =  tmp * CurrentBody.mass();
 
   int IndexChild = CurrentBody.child;
   //cout << "Body : " << CurrentBody.getName() << endl;
