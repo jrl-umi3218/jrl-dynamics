@@ -212,8 +212,8 @@ void JointPrivate::computeLocalAndGlobalPose()
       
       v2[smallestComponent] = 1;
       
-      //      v3 = v1*v2;
-      //      v2 = v3*v1;
+      MAL_S3_VECTOR_CROSS_PRODUCT(v3,v1,v2);
+      MAL_S3_VECTOR_CROSS_PRODUCT(v2,v3,v1);
       
       // (v1, v2, v3) form an orthonormal basis
       
@@ -228,7 +228,7 @@ void JointPrivate::computeLocalAndGlobalPose()
       /*      Normalization regarding the rotation axis. 
       m_globalPoseAtConstruction = MAL_S4x4_RET_A_by_B(m_FatherJoint->m_globalPoseAtConstruction,
 						       m_poseInParentFrame); */
-      ODEBUG(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
+      ODEBUG3(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
       
     }
 }
