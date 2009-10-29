@@ -228,7 +228,7 @@ void JointPrivate::computeLocalAndGlobalPose()
       /*      Normalization regarding the rotation axis. 
       m_globalPoseAtConstruction = MAL_S4x4_RET_A_by_B(m_FatherJoint->m_globalPoseAtConstruction,
 						       m_poseInParentFrame); */
-      ODEBUG3(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
+      ODEBUG(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
       
     }
 }
