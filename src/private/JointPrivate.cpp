@@ -221,7 +221,7 @@ void JointPrivate::computeLocalAndGlobalPose()
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 0) = v1[iRow];
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 1) = v2[iRow];
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 2) = v3[iRow];
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 3) = LocalCenter[iRow];
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow, 3) = GlobalCenter[iRow];
       }
 
 
