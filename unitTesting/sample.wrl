@@ -351,6 +351,7 @@ DEF SampleRobot Humanoid {
 
                 DEF CHEST Joint {
                   jointType "rotate"
+		  jointAxis "Z"
                   jointId  28
                   translation 0 0 0.35
                   children [
@@ -388,6 +389,7 @@ DEF SampleRobot Humanoid {
 
                             DEF LARM_SHOULDER_Y Joint {
                               jointType "rotate"
+			      jointAxis "Z"
                               jointId  21
                               translation     0 0 -0.263
                               children [
@@ -483,6 +485,7 @@ DEF SampleRobot Humanoid {
 
                             DEF RARM_SHOULDER_Y Joint {
                               jointType "rotate"
+			      jointAxis "Z"
                               jointId 8
                               translation     0 0 -0.263
                               children [
@@ -584,6 +587,7 @@ DEF SampleRobot Humanoid {
 
                    DEF LLEG_HIP_Y Joint {
                      jointType "rotate"
+		     jointAxis "Z"
                      jointId 15
                      translation     0 0 -0.3535
                      children [
@@ -666,6 +670,7 @@ DEF SampleRobot Humanoid {
                 }
                 DEF RLEG_HIP_Y Joint {
                   jointType "rotate"
+		  jointAxis "Z"
                   jointId 2
                   translation     0 0 -0.3535
                   children [
