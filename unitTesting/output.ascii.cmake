@@ -41,8 +41,8 @@ mass: 27
  Number of child  :1
  Nb of degree of freedom 1
  Initial Position 0 1 0 0 
- 1 0 0 0 
- 0 0 0 0 
+ 1 -0 0 0 
+ 0 0 -1 0 
  0 0 0 1 
  CurrentTransformation 1 0 0 0 
  0 1 0 0 
@@ -70,7 +70,7 @@ mass: 27
   Nb of degree of freedom 1
   Initial Position 1 0 0 0 
   0 1 0 0 
-  0 0 0 0 
+  0 0 1 0 
   0 0 0 1 
   CurrentTransformation 1 0 0 0 
   0 1 0 0 
@@ -96,7 +96,7 @@ mass: 27
    Rank : 34
    Number of child  :2
    Nb of degree of freedom 1
-   Initial Position 0 1 0 0 
+   Initial Position 0 0 0 0 
    0 0 0 0 
    0 0 0 0.35 
    0 0 0 1 
@@ -125,8 +125,8 @@ mass: 27
     Number of child  :1
     Nb of degree of freedom 1
     Initial Position 0 1 0 0 
-    1 0 0 0.21 
-    0 0 0 0 
+    1 -0 0 0 
+    0 0 -1 0.35 
     0 0 0 1 
     CurrentTransformation 1 0 0 0 
     0 1 0 0.21 
@@ -154,7 +154,7 @@ mass: 27
      Nb of degree of freedom 1
      Initial Position 1 0 0 0 
      0 1 0 0 
-     0 0 0 0 
+     0 0 1 0.35 
      0 0 0 1 
      CurrentTransformation 1 0 0 0 
      0 1 0 0.21 
@@ -180,9 +180,9 @@ mass: 27
       Rank : 27
       Number of child  :1
       Nb of degree of freedom 1
-      Initial Position 0 1 0 0 
+      Initial Position 0 0 0 0 
       0 0 0 0 
-      0 0 0 -0.263 
+      0 0 0 0.087 
       0 0 0 1 
       CurrentTransformation 1 0 0 0 
       0 1 0 0.21 
@@ -209,8 +209,8 @@ mass: 27
        Number of child  :1
        Nb of degree of freedom 1
        Initial Position 0 1 0 0 
-       1 0 0 0 
-       0 0 0 0 
+       1 -0 0 0 
+       0 0 -1 0.087 
        0 0 0 1 
        CurrentTransformation 1 0 0 0 
        0 1 0 0.21 
@@ -237,8 +237,8 @@ mass: 27
         Number of child  :1
         Nb of degree of freedom 1
         Initial Position 0 1 0 0 
-        0 0 0 0 
-        1 0 0 -0.247 
+        0 0 1 0 
+        1 0 0 0.334 
         0 0 0 1 
         CurrentTransformation 1 0 0 0 
         0 1 0 0.21 
@@ -265,8 +265,8 @@ mass: 27
          Number of child  :1
          Nb of degree of freedom 1
          Initial Position 0 1 0 0 
-         1 0 0 0 
-         0 0 0 0 
+         1 -0 0 0 
+         0 0 -1 0.334 
          0 0 0 1 
          CurrentTransformation 1 0 0 0 
          0 1 0 0.21 
@@ -294,7 +294,7 @@ mass: 27
           Nb of degree of freedom 1
           Initial Position 1 0 0 0 
           0 1 0 0 
-          0 0 0 0 
+          0 0 1 0.334 
           0 0 0 1 
           CurrentTransformation 1 0 0 0 
           0 1 0 0.21 
@@ -319,8 +319,8 @@ mass: 27
     Number of child  :1
     Nb of degree of freedom 1
     Initial Position 0 1 0 0 
-    1 0 0 -0.21 
-    0 0 0 0 
+    1 -0 0 0 
+    0 0 -1 0.35 
     0 0 0 1 
     CurrentTransformation 1 0 0 0 
     0 1 0 -0.21 
@@ -348,7 +348,7 @@ mass: 27
      Nb of degree of freedom 1
      Initial Position 1 0 0 0 
      0 1 0 0 
-     0 0 0 0 
+     0 0 1 0.35 
      0 0 0 1 
      CurrentTransformation 1 0 0 0 
      0 1 0 -0.21 
@@ -374,9 +374,9 @@ mass: 27
       Rank : 14
       Number of child  :1
       Nb of degree of freedom 1
-      Initial Position 0 1 0 0 
+      Initial Position 0 0 0 0 
       0 0 0 0 
-      0 0 0 -0.263 
+      0 0 0 0.087 
       0 0 0 1 
       CurrentTransformation 1 0 0 0 
       0 1 0 -0.21 
@@ -403,8 +403,8 @@ mass: 27
        Number of child  :1
        Nb of degree of freedom 1
        Initial Position 0 1 0 0 
-       1 0 0 0 
-       0 0 0 0 
+       1 -0 0 0 
+       0 0 -1 0.087 
        0 0 0 1 
        CurrentTransformation 1 0 0 0 
        0 1 0 -0.21 
@@ -431,8 +431,8 @@ mass: 27
         Number of child  :1
         Nb of degree of freedom 1
         Initial Position 0 1 0 0 
-        0 0 0 0 
-        1 0 0 -0.247 
+        0 0 1 0 
+        1 0 0 0.334 
         0 0 0 1 
         CurrentTransformation 1 0 0 0 
         0 1 0 -0.21 
@@ -459,8 +459,8 @@ mass: 27
          Number of child  :1
          Nb of degree of freedom 1
          Initial Position 0 1 0 0 
-         1 0 0 0 
-         0 0 0 0 
+         1 -0 0 0 
+         0 0 -1 0.334 
          0 0 0 1 
          CurrentTransformation 1 0 0 0 
          0 1 0 -0.21 
@@ -488,7 +488,7 @@ mass: 27
           Nb of degree of freedom 1
           Initial Position 1 0 0 0 
           0 1 0 0 
-          0 0 0 0 
+          0 0 1 0.334 
           0 0 0 1 
           CurrentTransformation 1 0 0 0 
           0 1 0 -0.21 
@@ -514,7 +514,7 @@ mass: 27
  Nb of degree of freedom 1
  Initial Position 1 0 0 0 
  0 1 0 0.09 
- 0 0 0 0 
+ 0 0 1 0 
  0 0 0 1 
  CurrentTransformation 1 0 0 0 
  0 1 0 0.09 
@@ -541,8 +541,8 @@ mass: 27
   Number of child  :1
   Nb of degree of freedom 1
   Initial Position 0 1 0 0 
-  1 0 0 0 
-  0 0 0 0 
+  1 -0 0 0.09 
+  0 0 -1 0 
   0 0 0 1 
   CurrentTransformation 1 0 0 0 
   0 1 0 0.09 
@@ -568,9 +568,9 @@ mass: 27
    Rank : 21
    Number of child  :1
    Nb of degree of freedom 1
-   Initial Position 0 1 0 0 
-   0 0 0 0 
-   0 0 0 -0.3535 
+   Initial Position 0 0 0 0 
+   0 0 0 0.09 
+   0 0 0 0.3535 
    0 0 0 1 
    CurrentTransformation 1 0 0 0 
    0 1 0 0.09 
@@ -597,8 +597,8 @@ mass: 27
     Number of child  :1
     Nb of degree of freedom 1
     Initial Position 0 1 0 0 
-    1 0 0 0 
-    0 0 0 0 
+    1 -0 0 0.09 
+    0 0 -1 0.3535 
     0 0 0 1 
     CurrentTransformation 1 0 0 0 
     0 1 0 0.09 
@@ -625,8 +625,8 @@ mass: 27
      Number of child  :1
      Nb of degree of freedom 1
      Initial Position 0 1 0 0 
-     1 0 0 0 
-     0 0 0 -0.3 
+     1 -0 0 0.09 
+     0 0 -1 0.6535 
      0 0 0 1 
      CurrentTransformation 1 0 0 0 
      0 1 0 0.09 
@@ -653,8 +653,8 @@ mass: 27
       Number of child  :0
       Nb of degree of freedom 1
       Initial Position 1 0 0 0 
-      0 1 0 0 
-      0 0 0 0 
+      0 1 0 0.09 
+      0 0 1 0.6535 
       0 0 0 1 
       CurrentTransformation 1 0 0 0 
       0 1 0 0.09 
@@ -680,7 +680,7 @@ mass: 27
  Nb of degree of freedom 1
  Initial Position 1 0 0 0 
  0 1 0 -0.09 
- 0 0 0 0 
+ 0 0 1 0 
  0 0 0 1 
  CurrentTransformation 1 0 0 0 
  0 1 0 -0.09 
@@ -707,8 +707,8 @@ mass: 27
   Number of child  :1
   Nb of degree of freedom 1
   Initial Position 0 1 0 0 
-  1 0 0 0 
-  0 0 0 0 
+  1 -0 0 -0.09 
+  0 0 -1 0 
   0 0 0 1 
   CurrentTransformation 1 0 0 0 
   0 1 0 -0.09 
@@ -734,9 +734,9 @@ mass: 27
    Rank : 8
    Number of child  :1
    Nb of degree of freedom 1
-   Initial Position 0 1 0 0 
-   0 0 0 0 
-   0 0 0 -0.3535 
+   Initial Position 0 0 0 0 
+   0 0 0 -0.09 
+   0 0 0 0.3535 
    0 0 0 1 
    CurrentTransformation 1 0 0 0 
    0 1 0 -0.09 
@@ -763,8 +763,8 @@ mass: 27
     Number of child  :1
     Nb of degree of freedom 1
     Initial Position 0 1 0 0 
-    1 0 0 0 
-    0 0 0 0 
+    1 -0 0 -0.09 
+    0 0 -1 0.3535 
     0 0 0 1 
     CurrentTransformation 1 0 0 0 
     0 1 0 -0.09 
@@ -791,8 +791,8 @@ mass: 27
      Number of child  :1
      Nb of degree of freedom 1
      Initial Position 0 1 0 0 
-     1 0 0 0 
-     0 0 0 -0.3 
+     1 -0 0 -0.09 
+     0 0 -1 0.6535 
      0 0 0 1 
      CurrentTransformation 1 0 0 0 
      0 1 0 -0.09 
@@ -819,8 +819,8 @@ mass: 27
       Number of child  :0
       Nb of degree of freedom 1
       Initial Position 1 0 0 0 
-      0 1 0 0 
-      0 0 0 0 
+      0 1 0 -0.09 
+      0 0 1 0.6535 
       0 0 0 1 
       CurrentTransformation 1 0 0 0 
       0 1 0 -0.09 
