@@ -546,7 +546,7 @@ namespace jrlDelegate {
     /**
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
-    virtual const matrixNxP& jacobianCenterOfMass() const 
+    JRLDEPRECATED(virtual const matrixNxP& jacobianCenterOfMass() const) 
     {
 #ifndef NDEBUG
       if (m_DR==0)
