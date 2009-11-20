@@ -47,6 +47,12 @@ namespace dynamicsJRLJapan
     return aHDR;
   }
 
+  CjrlJoint * ObjectFactory::createJointAnchor(const matrix4d& inInitialPosition)
+  {
+    CjrlJoint * aHDR = new JointAnchorPrivate(inInitialPosition);
+    return aHDR;
+  }
+
   CjrlJoint * ObjectFactory::createJointTranslation(const matrix4d& inInitialPosition)
   {
     CjrlJoint * aHDR = new JointTranslationPrivate(inInitialPosition);

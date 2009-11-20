@@ -49,6 +49,8 @@ namespace dynamicsJRLJapan
     
     CjrlJoint * createJointTranslation(const matrix4d& inInitialPosition);
     
+    CjrlJoint * createJointAnchor(const matrix4d& inInitialPosition);
+    
     CjrlBody * createBody();
 
     CjrlHand* createHand(const CjrlJoint* inWrist);
