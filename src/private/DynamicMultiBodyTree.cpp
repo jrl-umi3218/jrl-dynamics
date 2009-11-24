@@ -40,16 +40,16 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 	  if ((lElderSister=m_listOfBodies[lMother]->child) == -1)
             {
 	      // Mother, I am your daughter !
-	      m_listOfBodies[lMother]->child = i;					  
+	      m_listOfBodies[lMother]->child = i;
             }
 	  else
             {
 	      // I have an elder sister !
 	      while (m_listOfBodies[lElderSister]->sister != -1)
 		// I have another elder sister !
-		lElderSister = m_listOfBodies[lElderSister]->sister;  
+		lElderSister = m_listOfBodies[lElderSister]->sister;
 	      // I am your younger sister !
-	      m_listOfBodies[lElderSister]->sister = i;				  
+	      m_listOfBodies[lElderSister]->sister = i;
             }
         }
     }
