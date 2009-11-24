@@ -269,17 +269,25 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
         }
 
       /*
-        If a body has already been attached to the joint, 
+        If a body has already been attached to the joint,
         keep inertial information
       */
+      DynamicBodyPrivate* lCurrentBody = NULL;
       CjrlBody* jrlBody = CurrentJoint->linkedBody();
-      Body * lCurrentBody;
-      if (jrlBody != NULL)
-        {
-	  lCurrentBody = (Body *)jrlBody;
-	  DynamicBodyPrivate *dbody = dynamic_cast<DynamicBodyPrivate *>(lCurrentBody);
-	  dbody->c = jrlBody->localCenterOfMass();
-        }
+      if (jrlBody != NULL) {
+	lCurrentBody = dynamic_cast<DynamicBodyPrivate*>(jrlBody);
+
+	if (lCurrentBody) {
+	  lCurrentBody->c = jrlBody->localCenterOfMass();
+	} else if (DynamicBody* dBody = dynamic_cast<DynamicBody*>(jrlBody)) {
+	  lCurrentBody = dBody->m_privateObj.get();
+	} else {
+	  std::cerr <<
+	    "dynamicsJRLJapan: body is not of ab expected type."
+		    << std::endl;
+	  throw(0);
+	}
+      }
       else
         {
 	  lCurrentBody = new DynamicBodyPrivate();
