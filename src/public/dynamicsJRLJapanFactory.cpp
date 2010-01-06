@@ -61,7 +61,7 @@ namespace dynamicsJRLJapan
 
   CjrlBody * ObjectFactory::createBody()
   {
-    CjrlBody * aHDR = new Body();
+    CjrlBody * aHDR = new DynamicBody();
     return aHDR;
   }
 
