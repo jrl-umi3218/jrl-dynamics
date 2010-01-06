@@ -18,6 +18,16 @@ SET(libdyn_src
   private/Hand.cpp 
   private/Foot.cpp
   private/DynamicBodyPrivate.cpp 
+  private/DynamicMultiBodyArticularJacobian.cpp
+  private/DynamicMultiBodyTree.cpp
+  private/DynamicMultiBodyNewtonEuler.cpp
+  private/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp
+  private/DynamicMultiBodyJointRank.cpp
+  private/DynamicMultiBodyCenterOfMass.cpp
+  private/DynamicMultiBodyProperties.cpp
+  private/DynamicMultiBodyAngularMomentum.cpp
+  private/DynamicMultiBodyInertiaMatrix.cpp
+  private/DynamicMultiBodyActuated.cpp
   private/MultiBody.cpp 
   private/DynMultiBodyPrivate.cpp 
   private/HumDynMultiBodyPrivate.cpp 

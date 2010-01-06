@@ -771,13 +771,3 @@ const matrixNxP & DynMultiBodyPrivate::currentForces() const
   return m_Forces;
 }
 
-#include "DynamicMultiBodyArticularJacobian.cpp"
-#include "DynamicMultiBodyTree.cpp"
-#include "DynamicMultiBodyNewtonEuler.cpp"
-#include "DynamicMultiBodyNewtonEulerBackwardDynamics.cpp"
-#include "DynamicMultiBodyJointRank.cpp"
-#include "DynamicMultiBodyCenterOfMass.cpp"
-#include "DynamicMultiBodyProperties.cpp"
-#include "DynamicMultiBodyAngularMomentum.cpp"
-#include "DynamicMultiBodyInertiaMatrix.cpp"
-#include "DynamicMultiBodyActuated.cpp"
