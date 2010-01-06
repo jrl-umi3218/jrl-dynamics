@@ -118,21 +118,6 @@ namespace dynamicsJRLJapan
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
-    /**
-       \brief Compute the pose of the joint in the global frame or in local frame of parent
-       The relation between poses in the global frame and in local frame of parent joint is the following:
-       \f[
-       R^{global}_{joint} = R^{global}_{parent} R^{parent}_{joint}
-       \f]
-       where
-       \li \f$R^{global}_{joint}\f$ is the pose of the joint in global frame,
-       \li \f$R^{global}_{parent}\f$ is the pose of the parent joint in global frame,
-       \li \f$R^{parent}_{joint}\f$ is the pose of the joint in parent joint local frame.
-
-       If the pose of the joint has been defined in global frame at construction, the local pose in parent frame is computed. 
-       If the pose of the joint has been defined in local frame of parent joint at construction, the global pose is computed.
-    */
-    void computeLocalAndGlobalPose();
 
   public: 
       
@@ -590,6 +575,22 @@ namespace dynamicsJRLJapan
     
     inline void stateVectorPosition(unsigned aStateVectorPosition)
       { m_StateVectorPosition = aStateVectorPosition;}
+
+    /**
+       \brief Compute the pose of the joint in the global frame or in local frame of parent
+       The relation between poses in the global frame and in local frame of parent joint is the following:
+       \f[
+       R^{global}_{joint} = R^{global}_{parent} R^{parent}_{joint}
+       \f]
+       where
+       \li \f$R^{global}_{joint}\f$ is the pose of the joint in global frame,
+       \li \f$R^{global}_{parent}\f$ is the pose of the parent joint in global frame,
+       \li \f$R^{parent}_{joint}\f$ is the pose of the joint in parent joint local frame.
+
+       If the pose of the joint has been defined in global frame at construction, the local pose in parent frame is computed. 
+       If the pose of the joint has been defined in local frame of parent joint at construction, the global pose is computed.
+    */
+    void computeLocalAndGlobalPose();
 
   };
 

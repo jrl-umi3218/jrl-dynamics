@@ -25,6 +25,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
   m_FatherJoint(0),
+  m_Body(0),
+  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -39,6 +41,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
+  m_Body(0),
+  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -58,6 +62,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   m_axe(laxe),
   m_quantity(lquantite),
   m_FatherJoint(0),
+  m_Body(0),
+  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -77,6 +83,8 @@ JointPrivate::JointPrivate(const JointPrivate &r)
   m_IDinActuated=r.getIDinActuated();
   m_FromRootToThis.push_back(this);
   m_inGlobalFrame=r.m_inGlobalFrame;
+  m_Body = 0;
+  m_dynBody = 0;
   CreateLimitsArray();
 
   for(unsigned int i=0;i<numberDof();i++)
@@ -93,6 +101,8 @@ JointPrivate::JointPrivate():
   m_inGlobalFrame(false),
   m_quantity(0.0),
   m_FatherJoint(0),
+  m_Body(0),
+  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S3_VECTOR_ACCESS(m_axe,0) = 0.0;
@@ -165,6 +175,22 @@ void JointPrivate::computeLocalAndGlobalPose()
       ODEBUG(" invParentGlobalPose=" << invParentGlobalPose);
       ODEBUG(" jointGlobalPose=" << jointGlobalPose);
       ODEBUG(" m_poseInParentFrame=" << m_poseInParentFrame);
+
+      if (m_Body!=0)
+	{
+	  DynamicBodyPrivate* aDBP=0;
+	  aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
+	  if (aDBP!=0)
+	    {
+	      for (unsigned int i=0;i<3;i++)
+		{
+		  MAL_S3_VECTOR_ACCESS(aDBP->b,i) = 
+		    MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
+
+		}
+	      MAL_S3x3_MATRIX_SET_IDENTITY(aDBP->R_static);
+	    }
+	}
     }
   else
     {
@@ -180,6 +206,19 @@ void JointPrivate::computeLocalAndGlobalPose()
       */
       ODEBUG(" m_poseInParentFrame=" << m_poseInParentFrame);
       ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
+      
+      DynamicBodyPrivate* aDBP=0;
+      if (m_Body!=0)
+	{
+	  aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
+	  if (aDBP!=0)
+	    {
+	      vector3d laxes;
+	      laxes = m_axe;
+	      m_axe = MAL_S3x3_RET_A_by_B(aDBP->R_static,m_axe);
+	      MAL_S3x3_MATRIX_SET_IDENTITY(aDBP->R_static);
+	    }
+	}
       vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
       LocalAxis[0] = m_axe[0];
       LocalAxis[1] = m_axe[1];
@@ -196,12 +235,12 @@ void JointPrivate::computeLocalAndGlobalPose()
       
       vector3d v1,v2,v3;
       v1 = m_axe;
-      
+      v2[0] = v2[1]=v2[2]=0.0;
       unsigned int smallestComponent=0;
       double valueSmallestComponent = fabs(v1[0]);
       
       if (fabs(v1[1]) < fabs(v1[smallestComponent])) {
-	smallestComponent = 1;
+	smallestComponent = 1.0;
 	valueSmallestComponent = fabs(v1[1]);
       }
       
@@ -210,11 +249,10 @@ void JointPrivate::computeLocalAndGlobalPose()
 	valueSmallestComponent = fabs(v1[2]);
       }
       
-      v2[smallestComponent] = 1;
-      
+      v2[smallestComponent] = 1.0;
       MAL_S3_VECTOR_CROSS_PRODUCT(v3,v1,v2);
       MAL_S3_VECTOR_CROSS_PRODUCT(v2,v3,v1);
-      
+
       // (v1, v2, v3) form an orthonormal basis
       
       for (unsigned int iRow=0; iRow < 3; iRow++) {
@@ -225,10 +263,59 @@ void JointPrivate::computeLocalAndGlobalPose()
       }
 
 
-      /*      Normalization regarding the rotation axis. 
-      m_globalPoseAtConstruction = MAL_S4x4_RET_A_by_B(m_FatherJoint->m_globalPoseAtConstruction,
-						       m_poseInParentFrame); */
       ODEBUG(" m_globalPoseAtConstruction=" << m_globalPoseAtConstruction);
+      // Rotate local center of mass and inertia matrix if present.
+      ODEBUG("m_Body:" <<m_Body);
+      if (m_Body!=0)
+	{
+	  // Compute transformation for rotation.
+	  MAL_S3x3_MATRIX(, double) rotPoseInParentFrame;
+	  MAL_S3x3_MATRIX(, double) trRotPoseInNormalizedFrame;
+	  MAL_S3x3_MATRIX_SET_IDENTITY(rotPoseInParentFrame);
+	  MAL_S3x3_MATRIX_SET_IDENTITY(trRotPoseInNormalizedFrame);
+
+	  for (unsigned int iRow=0; iRow < 3; iRow++) 
+	    {
+	      MAL_S3x3_MATRIX_ACCESS_I_J(trRotPoseInNormalizedFrame, 0 ,iRow) = v1[iRow];
+	      MAL_S3x3_MATRIX_ACCESS_I_J(trRotPoseInNormalizedFrame, 1 ,iRow) = v2[iRow];
+	      MAL_S3x3_MATRIX_ACCESS_I_J(trRotPoseInNormalizedFrame, 2 ,iRow) = v3[iRow];
+	      
+	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 0) = 
+		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 0);
+	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 1) = 
+		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 1);
+	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 2) = 
+		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 2);
+	    }
+	
+	  MAL_S3x3_MATRIX(, double) rotParams;
+	  MAL_S3x3_C_eq_A_by_B(rotParams, 
+			       trRotPoseInNormalizedFrame,
+			       rotPoseInParentFrame);
+
+	  // Transform local parameters.
+	  // Com
+	  vector3d lcom = m_Body->localCenterOfMass();
+	  lcom = MAL_S3x3_RET_A_by_B(rotParams,lcom);
+	  m_Body->localCenterOfMass(lcom);
+
+	  matrix3d linertiam = m_Body->inertiaMatrix();
+	  linertiam = MAL_S3x3_RET_A_by_B(rotParams,linertiam);
+	  m_Body->inertiaMatrix(linertiam);
+
+	  
+	  /* Get global pose of parent joint */
+	  MAL_S4x4_MATRIX(, double) invParentGlobalPose;
+	  MAL_S4x4_INVERSE(m_FatherJoint->m_globalPoseAtConstruction, invParentGlobalPose, double);
+	  MAL_S4x4_MATRIX(, double) jointGlobalPose = m_globalPoseAtConstruction;
+	  /*
+	    parent     /  global \  -1   global
+	    R         = | R        |     R
+	    joint      \  parent /       joint
+	  */
+	  
+	  m_poseInParentFrame = MAL_S4x4_RET_A_by_B(invParentGlobalPose, jointGlobalPose);
+	}
       
     }
 }
@@ -563,7 +650,6 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
       m_FromRootToThis.insert(m_FromRootToThis.begin(),aJoint);
       aJoint = aJoint->parentJoint();
     }
-  computeLocalAndGlobalPose();
 }
 
 const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
@@ -617,26 +703,6 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   SinTheta = sin(a6DVector(4));
   CosPhi = cos(a6DVector(5));
   SinPhi = sin(a6DVector(5));
-
-  /*
-    D(0,0) =       1; D(0,1) =        0; D(0,2) = 0;
-    D(1,0) =       0; D(1,1) =   CosPsi; D(1,2) = -SinPsi;
-    D(2,0) =       0; D(2,1) =   SinPsi; D(2,2) = CosPsi;
-
-    C(0,0) =  CosTheta; C(0,1) =        0; C(0,2) = SinTheta;
-    C(1,0) =         0; C(1,1) =        1; C(1,2) = 0;
-    C(2,0) = -SinTheta; C(2,1) =        0; C(2,2) = CosTheta;
-
-    B(0,0) =  CosPhi; B(0,1) = -SinPhi; B(0,2) = 0;
-    B(1,0) =  SinPhi; B(1,1) = CosPhi;  B(1,2) = 0;
-    B(2,0) =       0; B(2,1) =      0;  B(2,2) = 1;
-
-    MAL_S3x3_MATRIX(,double) tmp;
-    MAL_S3x3_C_eq_A_by_B(tmp,C,D);
-    MAL_S3x3_C_eq_A_by_B(A,B,tmp);
-
-    body->R = A;
-  */
 
   //Formulae for the above commented rotation composition
   A(0,0) = CosTheta * CosPhi ;
