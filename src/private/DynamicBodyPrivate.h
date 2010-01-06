@@ -78,7 +78,7 @@ namespace dynamicsJRLJapan
       - \a dw = angular acceleration,
       - \a pph, ppb = v x Iv 
     */
-    vector3d a, b, c, w_c, p,
+    vector3d a, b, w_c, p,
       v0,  dv,  w,  dw,
       w_a;
 

@@ -39,7 +39,6 @@ DynamicBodyPrivate::DynamicBodyPrivate():Body()
 
   a[0] = a[1] = a[2] = 0;
   b[0] = b[1] = b[2] = 0;
-  c[0] = c[1] = c[2] = 0;
   w_c[0] = w_c[1] = w_c[2] = 0;
   w_a[0] = w_a[1] = w_a[2] = 0;
   p[0] = p[1] = p[2] = 0;
@@ -68,7 +67,6 @@ DynamicBodyPrivate & DynamicBodyPrivate::operator=(const DynamicBodyPrivate & r)
   R = r.R;
   a = r.a;
   b = r.b;
-  c = r.c;
   w_c = r.w_c;
   p = r.p;
   v0 = r.v0;
@@ -89,7 +87,7 @@ DynamicBodyPrivate & DynamicBodyPrivate::operator=(const DynamicBodyPrivate & r)
 DynamicBodyPrivate & DynamicBodyPrivate::operator=(const Body & r)
 {
   *((Body *)this) =r ;
-  this->c = r.getPositionCoM();
+  this->localCenterOfMass(r.localCenterOfMass());
   return *this;
 }
 
