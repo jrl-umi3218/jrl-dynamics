@@ -1,3 +1,44 @@
+/* @doc Computation of the dynamic aspect for a robot.
+   This class will load the description of a robot from a VRML file
+   following the OpenHRP syntax. Using ForwardVelocity it is then
+   possible specifying the angular velocity and the angular value 
+   to get the absolute position, and absolute velocity of each 
+   body separetly. Heavy rewriting from the original source
+   of Adrien and Jean-Remy. 
+ 
+   This implantation is an updated based on a mixture between 
+   the code provided by Jean-Remy and Adrien.
+ 
+   Copyright (c) 2005-2006, 
+   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
+   Copyright (c) 2007-2009
+   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro.
+   JRL-Japan, CNRS/AIST
+ 
+   All rights reserved.
+
+   Please refers to file License.txt for details on the license.
+
+*/
+
+/*! System includes */
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string.h>
+
+#include "Debug.h"
+
+/*! Local library includes. */
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
+#include "DynMultiBodyPrivate.h"
+#include "robotDynamics/jrlBody.h"
+
+#include "fileReader.h"
+
+using namespace dynamicsJRLJapan;
+
 void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
   MAL_S3x3_MATRIX(,double) aRt;
@@ -25,7 +66,8 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
 
   /* 2nd term : -f_i x r_{i,ci} */
-  MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, CurrentBody.c);
+  vector3d lc = CurrentBody.localCenterOfMass();
+  MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
 
 
   /* 5th term : w_i x (I_i w_i)*/

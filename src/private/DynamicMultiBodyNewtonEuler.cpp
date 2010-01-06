@@ -1,3 +1,44 @@
+/* @doc Computation of the dynamic aspect for a robot.
+   This class will load the description of a robot from a VRML file
+   following the OpenHRP syntax. Using ForwardVelocity it is then
+   possible specifying the angular velocity and the angular value 
+   to get the absolute position, and absolute velocity of each 
+   body separetly. Heavy rewriting from the original source
+   of Adrien and Jean-Remy. 
+ 
+   This implantation is an updated based on a mixture between 
+   the code provided by Jean-Remy and Adrien.
+ 
+   Copyright (c) 2005-2006, 
+   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
+   Copyright (c) 2007-2009
+   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro.
+   JRL-Japan, CNRS/AIST
+ 
+   All rights reserved.
+
+   Please refers to file License.txt for details on the license.
+
+*/
+
+/*! System includes */
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string.h>
+
+#include "Debug.h"
+
+/*! Local library includes. */
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
+#include "DynMultiBodyPrivate.h"
+#include "robotDynamics/jrlBody.h"
+
+#include "fileReader.h"
+
+using namespace dynamicsJRLJapan;
+
 /*! Kept for backward compatibility. */
 void DynMultiBodyPrivate::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
                                        MAL_S3x3_MATRIX(&OrientationForRoot,double),
@@ -42,7 +83,6 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   m_listOfBodies[labelTheRoot]->dw = dwForRoot;
 
   currentNode = m_listOfBodies[labelTheRoot]->child;
-  //  cout << "STARTING FORWARD VELOCITY " << v0ForRoot << endl;
 
   if (m_ComputeMomentum)
     {
@@ -155,21 +195,22 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 		 << m_listOfBodies[currentNode]->v0[2] << " " );
         }
 
+      vector3d lc = aDB->localCenterOfMass();
+	    
       // Computes also the center of mass in the reference frame.
       if (m_ComputeCoM)
         {
-	  ODEBUG("c: " << m_listOfBodies[currentNode]->c);
-	  MAL_S3x3_C_eq_A_by_B(NE_cl,m_listOfBodies[currentNode]->R, 
-			       m_listOfBodies[currentNode]->c);
+	  ODEBUG(" c: " << lc);
+	  MAL_S3x3_C_eq_A_by_B(NE_cl,m_listOfBodies[currentNode]->R,lc);
 	  NE_lw_c = NE_cl + m_listOfBodies[currentNode]->p;
-	  ODEBUG("lw_c: "<<currentNode<<" "<< NE_lw_c[0] 
+	  ODEBUG(" lw_c: "<< currentNode <<" "<< NE_lw_c[0] 
 		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
 	  positionCoMPondere +=  
 	    NE_lw_c * m_listOfBodies[currentNode]->getMasse();
-	  ODEBUG("w_c: " << NE_lw_c[0] << " " 
+	  ODEBUG(" w_c: " << NE_lw_c[0] << " " 
 		 << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  ODEBUG("Masse " << m_listOfBodies[currentNode]->getMasse());
-	  ODEBUG("positionCoMPondere " << positionCoMPondere);
+	  ODEBUG(" Masse " << m_listOfBodies[currentNode]->getMasse());
+	  ODEBUG(" positionCoMPondere " << positionCoMPondere);
 	  m_listOfBodies[currentNode]->w_c = NE_lw_c;
         }
       if (m_ComputeMomentum)
@@ -232,7 +273,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
         {
 
 	  // *******************  Acceleration for the center of mass of body  i ************************
-	  MAL_S3x3_C_eq_A_by_B(NE_aRc, m_listOfBodies[currentNode]->R, aDB->c);
+	  MAL_S3x3_C_eq_A_by_B(NE_aRc, m_listOfBodies[currentNode]->R, lc);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->w,NE_aRc);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
 

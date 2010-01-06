@@ -1,3 +1,44 @@
+/* @doc Computation of the dynamic aspect for a robot.
+   This class will load the description of a robot from a VRML file
+   following the OpenHRP syntax. Using ForwardVelocity it is then
+   possible specifying the angular velocity and the angular value 
+   to get the absolute position, and absolute velocity of each 
+   body separetly. Heavy rewriting from the original source
+   of Adrien and Jean-Remy. 
+ 
+   This implantation is an updated based on a mixture between 
+   the code provided by Jean-Remy and Adrien.
+ 
+   Copyright (c) 2005-2006, 
+   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
+   Copyright (c) 2007-2009
+   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro.
+   JRL-Japan, CNRS/AIST
+ 
+   All rights reserved.
+
+   Please refers to file License.txt for details on the license.
+
+*/
+
+/*! System includes */
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string.h>
+
+#include "Debug.h"
+
+/*! Local library includes. */
+#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "dynamicsJRLJapan/DynamicBody.h"
+#include "DynMultiBodyPrivate.h"
+#include "robotDynamics/jrlBody.h"
+
+#include "fileReader.h"
+
+using namespace dynamicsJRLJapan;
+
 void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 {
   labelTheRoot = ID;
@@ -171,6 +212,13 @@ void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
   BuildLinkFromActuatedIDs();
   UpdateTheSizeOfJointsJacobian();
 
+  for(unsigned int i=0;i<m_JointVector.size();i++)
+    {
+      JointPrivate *aJP = dynamic_cast<JointPrivate *>(m_JointVector[i]);
+      if (aJP!=0)
+	aJP->computeLocalAndGlobalPose();
+    }
+
   MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);
   MAL_VECTOR_RESIZE(m_Acceleration,m_NbDofs);
@@ -207,7 +255,6 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
   JointPrivate *CurrentJoint = m_RootOfTheJointsTree;
   JointPrivate *NextCurrentJoint=0,*FatherJoint;
   double mi[9]={ 1.0,1.0,1.0, 1.0,1.0,1.0, 1.0,1.0,1.0};
-  double cm[3] = { 0.0,0.0,0.0};
 
   CurrentLink.label = 0;
   CurrentLink.aJoint = m_RootOfTheJointsTree;
@@ -278,8 +325,9 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	lCurrentBody = dynamic_cast<DynamicBodyPrivate*>(jrlBody);
 
 	if (lCurrentBody) {
-	  lCurrentBody->c = jrlBody->localCenterOfMass();
-	} else if (DynamicBody* dBody = dynamic_cast<DynamicBody*>(jrlBody)) {
+	  lCurrentBody->localCenterOfMass(jrlBody->localCenterOfMass());
+	} 
+	else if (DynamicBody* dBody = dynamic_cast<DynamicBody*>(jrlBody)) {
 	  lCurrentBody = dBody->m_privateObj.get();
 	} else {
 	  std::cerr <<
@@ -293,7 +341,8 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	  lCurrentBody = new DynamicBodyPrivate();
 	  lCurrentBody->setInertie(mi);
 	  lCurrentBody->setMasse(1.0);// 1 kg per default.
-	  lCurrentBody->setPositionCoM(cm);
+	  vector3d cm;cm[0] = cm[1] =cm[2]=0.0;
+	  lCurrentBody->localCenterOfMass(cm);
         }
       vectorOfBodies[Depth] = lCurrentBody;
       lCurrentBody->setLabel(NbOfBodies++);
@@ -362,4 +411,5 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
     CreatesTreeStructure(0);
   else
     CreatesTreeStructure(m_FileLinkJointRank.c_str());
+
 }
