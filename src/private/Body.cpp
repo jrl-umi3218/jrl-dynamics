@@ -101,19 +101,6 @@ double Body::getMasse(void) const
   return masse;
 }
 
-MAL_S3_VECTOR(,double) Body::getPositionCoM(void) const
-{
-  return posCoM;
-}
-
-void Body::setPositionCoM(double cm[3])
-{
-  posCoM[0] = cm[0];
-  posCoM[1] = cm[1];
-  posCoM[2] = cm[2];
-
-}
-
 void Body::setNbObjets(int n)
 {
   nombreObjets = n;
@@ -143,7 +130,7 @@ Body & Body::operator=( Body const & r)
 {
   label = r.getLabel();
   masse = r.getMasse();
-  posCoM = r.getPositionCoM();
+  posCoM =r.localCenterOfMass();
   inertie = r.getInertie();
   nombreObjets = r.getNbObjets();
   Name= r.getName();

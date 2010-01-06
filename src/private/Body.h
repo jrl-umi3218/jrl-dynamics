@@ -124,12 +124,6 @@ namespace dynamicsJRLJapan
     /*! \brief Set the inertia matrix of the body. */
     void setInertie(double mi[9]);
     
-    /*! \brief Get the position of the center of Mass. */
-    vector3d getPositionCoM(void) const;
-    
-    /*! \brief Set the position of the center of Mass. */
-    void setPositionCoM(double cm[3]);
-    
     /*! \brief Returns the label of the mother. */
     int getLabelMother() const;
     
