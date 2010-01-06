@@ -111,7 +111,7 @@ namespace dynamicsJRLJapan
       double mass;
 
       // Center of Mass.
-      double cm[3];
+      vector3d cm;
 
       // Constructor
       s_DataForParsing()
@@ -384,7 +384,7 @@ namespace dynamicsJRLJapan
 	lCurrentBody->setName((char *)(m_DataForParsing->aName).c_str());
 	lCurrentBody->setInertie(m_DataForParsing->mi);
 	lCurrentBody->setMasse(m_DataForParsing->mass);
-	lCurrentBody->setPositionCoM(m_DataForParsing->cm);
+	lCurrentBody->localCenterOfMass(m_DataForParsing->cm);
 	if (m_DataForParsing->Depth!=0)
 	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
 	m_MultiBody->ajouterCorps(*lCurrentBody);
