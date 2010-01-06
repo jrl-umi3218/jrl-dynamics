@@ -1,4 +1,5 @@
 #include <string>
+#include <fstream>
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
 dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
@@ -6,6 +7,43 @@ dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
 
 using namespace std;
 using namespace dynamicsJRLJapan;
+
+bool CompareTwoFiles(char *RefFileName, char *OurFileName)
+{
+  ifstream reffile(RefFileName,ifstream::in), 
+    ourfile(OurFileName,ifstream::in);
+  unsigned int NbLine=0;
+  bool readingok=true;
+
+  while(!reffile.eof())
+    {
+
+      char refline[25536],ourline[25536];
+      reffile.getline(refline,25536);
+      ourfile.getline(ourline,25536);
+      if (reffile.gcount()!=ourfile.gcount())
+	readingok=false;
+      else
+	{
+	  for(int i=0;i<reffile.gcount();i++)
+	    if (refline[i]!=ourline[i])
+	      {
+		readingok=false;
+		cerr << "Error at column " << i << endl;
+		break;
+	      }
+	}
+      if (readingok==false)
+	{
+	  cerr << "Error at line "<< NbLine 
+	       << endl << "ref: " << refline 
+	       << endl << "our: " << ourline <<endl;
+	  break;
+	}
+      NbLine++;
+    }
+  return readingok;
+}
 
 /*
   This function computes an homogeneous matrix moving 
@@ -25,50 +63,95 @@ void DisplayMatrix4x4(matrix4d & todisplay, ostream &os)
     }
 }
 
-void DisplayBody(CjrlBody *aBody)
+void DisplayBody(CjrlBody *aBody,
+		 matrix4d &ct,
+		 ostream &os)
 {
   matrix3d InertiaMatrix = aBody->inertiaMatrix();
   
-  cout << "Attached body:" << endl;
-  cout << "Mass of the attached body: " << aBody->mass() << endl;
-  cout << "Local center of mass: " << aBody->localCenterOfMass() << endl;
-  cout << "Inertia matrix:" << endl;
-  cout << InertiaMatrix << endl;
-  
+  os << "Attached body:" << endl;
+  os << "Mass of the attached body: " << aBody->mass() << endl;
+  os << "Local center of mass: " << aBody->localCenterOfMass() << endl;
+  os << "Inertia matrix:" << endl;
+  os << InertiaMatrix << endl;
+  const vector3d lcm3d = aBody->localCenterOfMass();
+  vector4d lcm4d;
+  lcm4d[0] = lcm3d[0]; lcm4d[1] = lcm3d[1];
+  lcm4d[2] = lcm3d[2]; lcm4d[3] = 1.0;
+  vector4d lcmingref;
+  os << "Current Position: "<< ct <<endl;
+  MAL_S4x4_C_eq_A_by_B(lcmingref, ct,lcm4d);
+  os << "Local center of mass:" << lcmingref <<endl;
+			     
 }
-void DisplayJoint(CjrlJoint * aJoint)
+void DisplayJoint(CjrlJoint * aJoint,
+		  ostream &os)
 {
-  cout << "Joint : " << aJoint << endl;
   unsigned int NbCJ = aJoint->countChildJoints();
-  cout << "Number of children : " << NbCJ << endl;
-  for(unsigned int li=0;li<NbCJ;li++)
-    cout << "Child("<<li<<")=" 
-	 << aJoint->childJoint(li) << endl;
-  
-  cout << "Rank in configuration " << aJoint->rankInConfiguration() << endl;
+  os << "Number of children : " << NbCJ << endl;
   matrix4d ct = aJoint->currentTransformation();
-  DisplayMatrix4x4(ct,cout);
+  DisplayMatrix4x4(ct,os);		    
+  CjrlBody * linkedBody = aJoint->linkedBody();
+  DisplayBody(linkedBody,ct,os);
+  
 
 }
 
-void RecursiveDisplayOfJoints(CjrlJoint *aJoint)
+void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
+			      ostream &os)
 {
   if (aJoint==0)
     return;
 
   int NbChildren = aJoint->countChildJoints();
 
-  DisplayJoint(aJoint);
+  DisplayJoint(aJoint,os);
 
   for(int i=0;i<NbChildren;i++)
     {
       // Returns a const so we have to force the casting/
-      RecursiveDisplayOfJoints(aJoint->childJoint(i)); 
+      RecursiveDisplayOfJoints(aJoint->childJoint(i),os); 
     }
 
 }
 
+void DisplayHumanoid(CjrlHumanoidDynamicRobot *aHDR,
+		     ostream &os)
+{
+  RecursiveDisplayOfJoints(aHDR->rootJoint(),
+			   os);
+  
 
+  os << "total mass " << aHDR->mass() 
+     << " COM: " << aHDR->positionCenterOfMass() << endl;
+}
+
+void CopyAndInstanciateBody(CjrlJoint *initJoint, 
+			    CjrlJoint *newJoint)
+{
+  CjrlBody * CopiedBody =newJoint->linkedBody();
+  CjrlBody * OriginalBody = initJoint->linkedBody();
+  
+  // Instanciate Copied Body if needed.
+  if (CopiedBody==0)
+    {
+      CopiedBody= robotDynamicsObjectConstructor.createBody();
+      newJoint->setLinkedBody(*CopiedBody);
+    }
+
+  // Copying the mass.
+  double origmass= OriginalBody->mass();
+  CopiedBody->mass(origmass);
+  
+  // Copying the inertia matrix.
+  const matrix3d anInertiaMatrix = OriginalBody->inertiaMatrix();
+  CopiedBody->inertiaMatrix(anInertiaMatrix);
+  
+  // Copying the local center of mass.
+  const vector3d aLocalCenterOfMass = OriginalBody->localCenterOfMass();
+  CopiedBody->localCenterOfMass(aLocalCenterOfMass);
+	  
+}
 void recursiveMultibodyCopy(CjrlJoint *initJoint, CjrlJoint *newJoint)
 {
   int lNbOfChildren= initJoint->countChildJoints();
@@ -82,10 +165,11 @@ void recursiveMultibodyCopy(CjrlJoint *initJoint, CjrlJoint *newJoint)
     if (Child != 0) {
       
       CjrlJoint* a2newJoint=0;
-      matrix4d pose = Child->currentTransformation();
+      const matrix4d pose = Child->initialPosition();
       a2newJoint = robotDynamicsObjectConstructor.createJointRotation(pose);
-      
       newJoint->addChildJoint(*a2newJoint);
+      CopyAndInstanciateBody(Child, a2newJoint);
+
       recursiveMultibodyCopy(Child, a2newJoint) ;
     }
   }
@@ -99,20 +183,14 @@ void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* aHDR,
   CjrlJoint* InitJoint = aHDR->rootJoint() ;
   
   CjrlJoint* newJoint=0;
-  matrix4d pose;
-  MAL_S4x4_MATRIX_SET_IDENTITY(pose);
+  matrix4d pose=InitJoint->initialPosition();
   newJoint = robotDynamicsObjectConstructor.createJointFreeflyer(pose);
-  
+  CopyAndInstanciateBody(InitJoint,newJoint);
   a2HDR->rootJoint(*newJoint);
   
   recursiveMultibodyCopy(InitJoint, newJoint) ;
- 
-  // Initialize the second humanoid from the joint tree.
-  //  a2HDR->setLinksBetweenJointNamesAndRank(LinkJointNameAndRank);
 
   string aProperty("FileJointRank");
-  //  cout << "JointToRank:" << JointToRank << endl;
-  //  a2HDR->setProperty(aProperty,JointToRank);
   a2HDR->initialize();
   // Copy the bodies.
   std::vector<CjrlJoint *> VecOfInitJoints = aHDR->jointVector();
@@ -126,51 +204,43 @@ void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* aHDR,
       exit(-1);
     }
 
-  
-
-  for(unsigned int i=0;i<VecOfInitJoints.size();i++)
-    {
-      if ((VecOfCopyJoints[i]!=0) &&
-	  (VecOfInitJoints[i]!=0))
-	{
-	  //*VecOfCopyJoints[i]->linkedBody() = 
-	  //*VecOfInitJoints[i]->linkedBody();
-	}
-
-    }
-
-
 }
 
 int main(int argc, char *argv[])
 {
+  string aPath;
+  string aName;
+  string JointToRank;
+  string aSpecificitiesFileName;
+
   if (argc!=5)
     {
-      cerr << " This program takes 4 arguments: " << endl;
-      cerr << "./TestCopyJointTreeThroughAbstractInterface PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
-      cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
-      exit(-1);
+      aPath="./";
+      aName="sample.wrl";
+      aSpecificitiesFileName = "sampleSpecificities.xml";
+      JointToRank = "sampleLinkJointRank.xml";
+    }
+  else
+    {
+      aPath=argv[1];
+      aName=argv[2];
+      JointToRank = argv[4];
+      aSpecificitiesFileName = argv[3];
     }	
 
-  int VerboseMode = 3;
-  string aPath=argv[1];
-  string aName=argv[2];
-
-  string JointToRank = argv[4];
-  string aSpecificitiesFileName = argv[3];
+  int VerboseMode = 0;
   // Read the first humanoid.
   CjrlHumanoidDynamicRobot * aHDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   string RobotFileName = aPath+aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,JointToRank, aSpecificitiesFileName);
   
-
   // The second humanoid is constructed through the abstract interface
   //
   CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
-  cout << "----------------- Before copy ---------------------------" << endl;
-  PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
-  cout << "----------------- After copy ---------------------------" << endl;
 
+  // The third humanoid is also constructed through the abstract interface
+  //
+  CjrlHumanoidDynamicRobot* a3HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
 
   // Test the new humanoid structure.
   double dInitPos[40] = { 
@@ -185,6 +255,7 @@ int main(int argc, char *argv[])
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
   };
 
+
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
   {
@@ -192,13 +263,14 @@ int main(int argc, char *argv[])
 			  "ComputeBackwardDynamics", "ComputeZMP"};
     string inValue[4]={"0.005","false","false","true"};
     for(unsigned int i=0;i<4;i++)
-      aHDR->setProperty(inProperty[i],inValue[i]);
+      {
+	aHDR->setProperty(inProperty[i],inValue[i]);
+	a2HDR->setProperty(inProperty[i],inValue[i]);
+	a3HDR->setProperty(inProperty[i],inValue[i]);
+      }
   }
-  
 
-  int NbOfDofs = a2HDR->numberDof();
-  if (VerboseMode>2)
-    std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+  int NbOfDofs = aHDR->numberDof();
 
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
@@ -211,21 +283,59 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = 0.0;
   
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-    aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
+    {
+      // aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
+      aCurrentConf[lindex++] = 0.0;
+    }
   
   aHDR->currentConfiguration(aCurrentConf);
-  a2HDR->currentConfiguration(aCurrentConf);
-
-  
   aHDR->currentVelocity(aCurrentVel);
   aHDR->currentAcceleration(aCurrentAcc);
   aHDR->computeForwardKinematics();
 
+  PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
+  PerformCopyFromJointsTree(a2HDR, a3HDR,JointToRank);
+
+
+  NbOfDofs = a2HDR->numberDof();
+  if (VerboseMode>2)
+    std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+
+  a2HDR->currentConfiguration(aCurrentConf);
   a2HDR->currentVelocity(aCurrentVel);
   a2HDR->currentAcceleration(aCurrentAcc);
   a2HDR->computeForwardKinematics();
 
-  RecursiveDisplayOfJoints(a2HDR->rootJoint());
+  a3HDR->currentConfiguration(aCurrentConf);
+  a3HDR->currentVelocity(aCurrentVel);
+  a3HDR->currentAcceleration(aCurrentAcc);
+  a3HDR->computeForwardKinematics();
+  
+  // Initial Humanoid
+  ofstream initialhumanoid;
+  initialhumanoid.open("initialhumanoid.output");
+  if (initialhumanoid.is_open())
+    {
+      DisplayHumanoid(aHDR,initialhumanoid);
+      initialhumanoid.close();
+    }
+
+  // Copied Humanoid 
+  ofstream copiedhumanoid;
+  copiedhumanoid.open("copiedhumanoid.output");
+  if (copiedhumanoid.is_open())
+    {
+      DisplayHumanoid(a2HDR,copiedhumanoid);
+      copiedhumanoid.close();
+    }
+  // 2nd copied humanoid
+  ofstream copied2ndhumanoid;
+  copied2ndhumanoid.open("copied2ndhumanoid.output");
+  if (copied2ndhumanoid.is_open())
+    {
+      DisplayHumanoid(a3HDR,copied2ndhumanoid);
+      copied2ndhumanoid.close();
+    }
 
   MAL_S3_VECTOR(ZMPval,double);
 
@@ -253,7 +363,19 @@ int main(int argc, char *argv[])
 
     }
 
+
   delete aHDR;
   delete a2HDR;
+  delete a3HDR;
+  
+  string iho("copiedhumanoid.output");
+  string cho("copied2ndhumanoid.output");
+  if (CompareTwoFiles((char *)iho.c_str(),
+		      (char *)cho.c_str()))
+    {
+      return 0;
+    }
+  
+  return -1;
 
 }

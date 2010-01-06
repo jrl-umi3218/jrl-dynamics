@@ -72,3 +72,5 @@ CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
 		 ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/output.ascii )
 
 ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")
+
+ADD_TEST(TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface)

@@ -414,8 +414,6 @@ int main(int argc, char *argv[])
   CjrlFoot *leftFoot = aHDR->leftFoot();
   DisplayFoot(leftFoot,empty,tcout);
   
-
-  
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
@@ -448,7 +446,6 @@ int main(int argc, char *argv[])
     }
 
 
-
   // Check the information on actuated joints.
   std::vector<CjrlJoint *> ActuatedJoints = aHDR->getActuatedJoints();
   
@@ -456,6 +453,8 @@ int main(int argc, char *argv[])
   for(unsigned int i=0;i<ActuatedJoints.size();i++)
     tcout << "Rank of actuated joints ("<<i<< ") in configuration :" 
 	  << ActuatedJoints[i]->rankInConfiguration() << endl;
+
+  tcout << "Humanoid mass:" << aHDR->mass() << endl;
 
   tcout.close();
   // ASCII Comparison between the generated output and the reference one
