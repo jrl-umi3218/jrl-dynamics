@@ -281,11 +281,11 @@ void JointPrivate::computeLocalAndGlobalPose()
 	      MAL_S3x3_MATRIX_ACCESS_I_J(trRotPoseInNormalizedFrame, 2 ,iRow) = v3[iRow];
 	      
 	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 0) = 
-		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 0);
+		MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 0);
 	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 1) = 
-		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 1);
+		MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 1);
 	      MAL_S3x3_MATRIX_ACCESS_I_J(rotPoseInParentFrame,iRow, 2) = 
-		MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 2);
+		MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,iRow, 2);
 	    }
 	
 	  MAL_S3x3_MATRIX(, double) rotParams;
