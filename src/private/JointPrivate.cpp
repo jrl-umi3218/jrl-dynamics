@@ -654,23 +654,7 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
 
 const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
 {
-#if 0
-  if (m_Body!=0)
-    {
-      DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) m_Body;
-      ODEBUG("JointPrivate Name " << m_Name << " " << m_Body);
-      for(int i=0;i<3;i++)
-	for(int j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j) = aDB->R(i,j);
-      for(int i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3) = aDB->p(i);
-      ODEBUG( m_poseInParentFrame);
-
-    }
-  return m_poseInParentFrame;
-#else
   return m_globalPoseAtConstruction;
-#endif
 }
 
 void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
