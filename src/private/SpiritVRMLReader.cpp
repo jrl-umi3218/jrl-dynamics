@@ -1458,6 +1458,10 @@ namespace dynamicsJRLJapan
 
     int ParseVRMLFile(MultiBody *aMB, std::string aFileName)
     {
+      if (aFileName == std::string("")) {
+	std::cout << "SpiritVRMLReader: do not read VRML file." << std::endl;
+	return 1;
+      }
       ifstream aif;
       struct s_DataForParsing DataForParsing;
 
