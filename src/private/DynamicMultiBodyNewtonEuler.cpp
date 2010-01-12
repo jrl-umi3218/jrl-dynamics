@@ -78,6 +78,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
   m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
   m_listOfBodies[labelTheRoot]->R = OrientationForRoot;
+  MAL_S3x3_MATRIX_SET_IDENTITY(m_listOfBodies[labelTheRoot]->R_static);
   m_listOfBodies[labelTheRoot]->w = wForRoot;
   m_listOfBodies[labelTheRoot]->dv = dvForRoot;
   m_listOfBodies[labelTheRoot]->dw = dwForRoot;
