@@ -50,6 +50,11 @@ namespace dynamicsJRLJapan
     */
     matrix4d m_globalPoseAtConstruction;
 
+    /**
+       \brief Normalized position of the joint in the global frame at construction (joint value is equal to 0).
+    */
+    matrix4d m_globalPoseAtConstructionNormalized;
+
   private:
       
       /** */
@@ -118,6 +123,12 @@ namespace dynamicsJRLJapan
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
+    
+    /*! Compute global data from initialization using Local information*/
+    void computeLocalAndGlobalPoseFromGlobalFrame();
+
+    /*! Compute local data from initialization using global information*/
+    void computeLocalAndGlobalPoseFromLocalFrame();
 
   public: 
       

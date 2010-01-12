@@ -46,9 +46,8 @@ bool CompareTwoFiles(char *RefFileName, char *OurFileName)
 }
 
 /*
-  This function computes an homogeneous matrix moving 
-    (0,0,0) to inCenter and
-    x-axis to vector inAxis
+  This function displays an homogeneous matrix as 
+  a 4x4 matrix.
 */
 
 void DisplayMatrix4x4(matrix4d & todisplay, ostream &os)
@@ -61,6 +60,21 @@ void DisplayMatrix4x4(matrix4d & todisplay, ostream &os)
 	}
       os << endl;
     }
+}
+
+void DisplayMatrix4x4AsAVector(matrix4d & todisplay, ostream &os)
+{
+  os << "(";
+  for(unsigned int i=0;i<4;i++)
+    {
+      for(unsigned int j=0;j<4;j++)
+	{
+	  os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) ;
+	  if ((i!=3) || (j!=3))
+	    os << ",";
+	}
+    }
+  os << ")";
 }
 
 void DisplayBody(CjrlBody *aBody,
@@ -79,22 +93,25 @@ void DisplayBody(CjrlBody *aBody,
   lcm4d[0] = lcm3d[0]; lcm4d[1] = lcm3d[1];
   lcm4d[2] = lcm3d[2]; lcm4d[3] = 1.0;
   vector4d lcmingref;
-  os << "Current Position: "<< ct <<endl;
+  /*  os << "Current Position: ";
+  DisplayMatrix4x4AsAVector(ct,os); 
+  os <<endl;*/
   MAL_S4x4_C_eq_A_by_B(lcmingref, ct,lcm4d);
-  os << "Local center of mass:" << lcmingref <<endl;
+  //  os << "Local center of mass:" << lcmingref <<endl;
 			     
 }
 void DisplayJoint(CjrlJoint * aJoint,
 		  ostream &os)
 {
+  os << " ======================= "<<endl;
   unsigned int NbCJ = aJoint->countChildJoints();
   os << "Number of children : " << NbCJ << endl;
   matrix4d ct = aJoint->currentTransformation();
-  DisplayMatrix4x4(ct,os);		    
+  os << "Current Position: ";
+  DisplayMatrix4x4AsAVector(ct,os);		    
+  os << endl;
   CjrlBody * linkedBody = aJoint->linkedBody();
   DisplayBody(linkedBody,ct,os);
-  
-
 }
 
 void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
@@ -292,8 +309,11 @@ int main(int argc, char *argv[])
   aHDR->currentVelocity(aCurrentVel);
   aHDR->currentAcceleration(aCurrentAcc);
   aHDR->computeForwardKinematics();
-
+  
+  cout << "Copy First Humanoid Robot" <<endl;
   PerformCopyFromJointsTree(aHDR, a2HDR,JointToRank);
+
+  cout << "Copy Second Humanoid Robot" <<endl;
   PerformCopyFromJointsTree(a2HDR, a3HDR,JointToRank);
 
 
