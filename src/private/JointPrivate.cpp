@@ -165,7 +165,7 @@ void JointPrivate::computeLocalAndGlobalPoseFromGlobalFrame()
     R         = | R        |     R
     joint      \  parent /       joint
   */
-  
+  m_globalPoseAtConstructionNormalized = m_globalPoseAtConstruction;
   m_poseInParentFrame = MAL_S4x4_RET_A_by_B(invParentGlobalPose, jointGlobalPose);
   ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
   ODEBUG(" invParentGlobalPose=" << invParentGlobalPose);
