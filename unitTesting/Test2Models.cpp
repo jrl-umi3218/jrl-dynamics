@@ -1,4 +1,5 @@
 #include <string>
+#include <cstdio>
 #include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
 
 using namespace std;
