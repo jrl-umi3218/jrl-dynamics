@@ -121,6 +121,13 @@ IF(CMAKE_BUILD_TYPE MATCHES "RELEASE")
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_BUILD_TYPE MATCHES "RELEASE")
 
+# Profiling flags when building with DEBUG
+#-----------------------------------------
+IF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+  IF(CMAKE_COMPILER_IS_GNUCXX)
+    SET (${PROJECT_NAME}_CXXFLAGS "-fprofile-arcs -ftest-coverage ${${PROJECT_NAME}_CXXFLAGS}")
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 # To deal with the headers.
 #--------------------------
 #add_subdirectory(include)
