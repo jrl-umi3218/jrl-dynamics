@@ -13,6 +13,13 @@ SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_
 IF(UNIX)
   SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
   SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
+
+  IF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET (${PROJECT_NAME}_test_LDFLAGS " ${${PROJECT_NAME}_test_LDFLAGS} -lgcov")
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+  ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -24,7 +31,7 @@ MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl")
 
-ADD_EXECUTABLE(	TestHumanoidDynamicRobot TestHumanoidDynamicRobot.cpp)
+ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp)
 SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
 	              PROPERTIES
 		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
@@ -44,7 +51,10 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
 ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
 
 
-ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface.cpp)
+ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
+  CommonTools.cpp 
+  HumanoidCopy.cpp
+  TestCopyJointTreeThroughAbstractInterface.cpp)
 SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface
 	              PROPERTIES
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
