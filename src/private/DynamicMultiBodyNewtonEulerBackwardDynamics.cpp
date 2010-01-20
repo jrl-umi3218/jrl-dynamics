@@ -41,6 +41,8 @@ using namespace dynamicsJRLJapan;
 
 void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
+  ODEBUG("=====================");
+  ODEBUG("Body : " << CurrentBody.getName());
   MAL_S3x3_MATRIX(,double) aRt;
 
   MAL_S3x3_MATRIX(,double) currentBodyR;
@@ -57,14 +59,13 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
    *
    */
   MAL_S3_VECTOR(,double) firstterm,
-    sndterm, thirdterm, fifthterm,tmp;
-  // Do not fourth term because it is the angular acceleration.
+    sndterm, thirdterm, fifthterm,tmp,tmp2;
+  // There is no fourth term because it is the angular acceleration.
 
   /* Constant part */
   tmp = CurrentBody.dv_c - lg;
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,tmp);
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
-
+  ODEBUG("tmp: " << tmp << " tmp2: " << tmp2 );
   /* 2nd term : -f_i x r_{i,ci} */
   vector3d lc = CurrentBody.localCenterOfMass();
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
@@ -72,11 +73,10 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
   /* 5th term : w_i x (I_i w_i)*/
   MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.w);
-  tmp = MAL_S3x3_RET_A_by_B(lI,tmp);
+  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody.w);
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.w,tmp);
 
-  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm -sndterm;
+  CurrentBody.m_Torque =  CurrentBody.dw + fifthterm -sndterm;
 
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
@@ -86,17 +86,19 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
 
   int IndexChild = CurrentBody.child;
-  //cout << "Body : " << CurrentBody.getName() << endl;
+  ODEBUG( " Force from Acceleration + gravity: " << CurrentBody.m_Force <<
+	   " Acceleration: " << CurrentBody.dv_c );
   while(IndexChild!=-1)
     {
       DynamicBodyPrivate *Child = m_listOfBodies[IndexChild];
-      //cout << "Child Bodies : " << Child->getName() << endl;
+      ODEBUG( "Child Bodies : " << Child->getName() );
       aRt = Child->Riip1;
-      //cout << "Riip1: " << aRt << endl;
+      ODEBUG( "Riip1: " << aRt );
       // /* Force computation. */
       //// Other immediate child are sisters of the other immediate childs.
-      //cout << "Force: " << Child->m_Force << endl;
+      ODEBUG("Child Force: " << Child->m_Force );
       tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);
+      ODEBUG("Riip1 * fi+1: " << tmp );
       CurrentBody.m_Force += tmp;
 
       /* Torque computation. */
@@ -104,7 +106,9 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       firstterm = MAL_S3x3_RET_A_by_B(aRt, Child->m_Torque);
 
       /* 3rd term : R_i_{i+1} f_{i+1} */
-      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, CurrentBody.w_c);
+      vector3d rip1ci = Child->p - CurrentBody.w_c;
+      ODEBUG( "rip1ci:" << rip1ci);
+      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, rip1ci);
 
       CurrentBody.m_Torque += firstterm + thirdterm;
 
@@ -113,7 +117,8 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       if (IndexChild!=-1)
 	Child=m_listOfBodies[IndexChild];
     }
-
+  ODEBUG("Force for Body " << CurrentBody.getName() << " " << CurrentBody.m_Force );
+  ODEBUG("=====================");
   // Update the vector related to the computed quantities.
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
     {
