@@ -69,7 +69,6 @@ namespace dynamicsJRLJapan
       (as defined in Kajita's book page 46 figure 2.20):
       - \a a  = rotation vector,
       - \a b  = translation vector,
-      - \a c  = center of mass,
       - \a w_c = center of mass in reference frame,
       - \a p  = position,
       - \a v0 = linear velocity in reference frame,
