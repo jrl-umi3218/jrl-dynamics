@@ -23,7 +23,6 @@
 #ifndef MULTIBODY_H
 #define MULTIBODY_H
 
-#define INTERFACE
 #include "JointPrivate.h"
 #include "Body.h"
 #include <vector>
