@@ -67,6 +67,65 @@ namespace dynamicsJRLJapan {
     os << ")";
   }
 
+  void DisplayMatrix(MAL_MATRIX(,double) &aJ,ostream &os)
+  {
+    for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)
+      {
+	for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
+	  {
+	    if (aJ(i,j)==0.0)
+	      os << "0 "; 
+	    else
+	      os << aJ(i,j) << " ";
+	  }
+	os << std::endl;
+      }
+
+  }
+
+  void DisplayMatrix(const MAL_MATRIX(,double) &aJ, ostream &os)
+  {
+    
+    for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)
+      {
+	for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
+	  {
+	    if (aJ(i,j)==0.0)
+	      os << "0 "; 
+	    else
+	      os << aJ(i,j) << " ";
+	  }
+	os << std::endl;
+      }
+
+  }
+
+  void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
+		      string &shifttab, 
+		      ostream &tcout)
+  {
+    if (aHDR!=0)
+      {
+	const matrixNxP& Torques = aHDR->currentTorques();
+	tcout << shifttab << "Torques :" ;
+	DisplayMatrix(Torques,tcout);
+	tcout << std::endl;
+      }
+  }
+
+  void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
+		     string &shifttab, 
+		     ostream &tcout)
+  {
+    if (aHDR!=0)
+      {
+	const matrixNxP& Forces = aHDR->currentForces();
+	tcout << shifttab << "Forces :";
+	DisplayMatrix(Forces,tcout);
+	tcout << std::endl;
+      }
+  }
+
   void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR, 
 		       string &shifttab, 
 		       ostream &tcout)
@@ -244,24 +303,6 @@ namespace dynamicsJRLJapan {
 				     tcout,verbosedisplay,ldepth+1); 
 	  }
       }
-  }
-
-
-  
-  void DisplayMatrix(MAL_MATRIX(,double) &aJ)
-  {
-    for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)
-      {
-	for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
-	  {
-	    if (aJ(i,j)==0.0)
-	      printf("0 ");
-	    else
-	      printf("%10.5f ",aJ(i,j));
-	  }
-	printf("\n");
-      }
-
   }
 
   void DisplayEndEffectors(CjrlHumanoidDynamicRobot *aHDR,

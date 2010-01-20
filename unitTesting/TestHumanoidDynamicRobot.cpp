@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
   {
     string inProperty[4]={"TimeStep","ComputeAcceleration",
 			  "ComputeBackwardDynamics", "ComputeZMP"};
-    string inValue[4]={"0.005","false","false","true"};
+    string inValue[4]={"0.005","true","true","true"};
     for(unsigned int i=0;i<4;i++)
       aHDR->setProperty(inProperty[i],inValue[i]);
 
@@ -209,6 +209,9 @@ int main(int argc, char *argv[])
 	  << ActuatedJoints[i]->rankInConfiguration() << endl;
 
   tcout << "Humanoid mass:" << aHDR->mass() << endl;
+
+  DisplayForces(aHDR,empty,tcout);
+  DisplayTorques(aHDR,empty, tcout);
 
   tcout.close();
   // ASCII Comparison between the generated output and the reference one

@@ -67,6 +67,16 @@ namespace dynamicsJRLJapan
 		       std::string &shifttab,
 		       std::ostream &tcout);
 
+  /*! Display forces */
+  void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
+		     std::string &shifttab, 
+		     std::ostream &tcout);
+
+  /*! Display torques */
+  void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
+		      std::string &shifttab, 
+		      std::ostream &tcout);
+
   /*! Display full humanoid information */
   void DisplayHumanoid(CjrlHumanoidDynamicRobot *aHDR,
 		       std::ostream &tcout);
