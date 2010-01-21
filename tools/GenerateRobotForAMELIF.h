@@ -49,8 +49,9 @@ namespace dynamicsJRLJapan
 		      unsigned int &gindex);
 
     void GenerateJoint(CjrlJoint *aJoint, 
-		     std::ostream &os,
-		     std::string shifttab);
+		       std::ostream &os,
+		       std::string shifttab,
+		       unsigned int &gindex);
 
     void GenerateBodies(std::ostream &os,
 			std::string shifttab);

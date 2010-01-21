@@ -1,3 +1,4 @@
+
 /* @doc \file Object to generate a file following AMELIF format.
 
    Copyright (c) 2010
@@ -29,12 +30,17 @@ namespace dynamicsJRLJapan {
 
   void GenerateRobotForAMELIF::GenerateJoint(CjrlJoint *aJoint, 
 					     ostream &os,
-					     string shifttab)
+					     string shifttab, unsigned int &gindex)
   {
     // Joint name and type.
     os << shifttab << "<Joint id=\""      
-       << aJoint->rankInConfiguration() 
-       << "\" type=\"revolute\" axis=\"x\" " 
+       << aJoint->rankInConfiguration() ;
+    if (gindex==0)
+      os << "\" type=\"revolute\"";
+    else
+      os << "\" type=\"revolute\"";
+    
+    os << " axis=\"x\" " 
        << "innerID=\""<<aJoint->rankInConfiguration() 
        << "\" outerID=\""<<aJoint->rankInConfiguration()+1
        << "\"> " << endl;
@@ -42,17 +48,17 @@ namespace dynamicsJRLJapan {
     // Label
     os << shifttab << "  <Label>JOINT_" 
        << aJoint->rankInConfiguration() 
-       << "  </Label>";
+       << "  </Label>" << endl;
   
 
     // Position min and max.
     os << shifttab << "  <PositionMin>"
        << aJoint->lowerBound(0) 
-       <<"  </PositionMin>" << endl;
+       <<"</PositionMin>" << endl;
   
-    os << shifttab << "<PositionMax>"
+    os << shifttab << "  <PositionMax>"
        << aJoint->upperBound(0)
-       << "  </PositionMax>" << endl;
+       << "</PositionMax>" << endl;
 
     // Close the joint description
     os << shifttab << "</Joint>"<< endl;
@@ -98,12 +104,10 @@ namespace dynamicsJRLJapan {
       for(unsigned int j=0;j<3;j++)
 	os << MAL_S3x3_MATRIX_ACCESS_I_J(Inertia,i,j) << " ";
     os << "</Inertia>" << endl;
-       
-    gindex++;
-
     // Geometric file.
     os << shifttab << "  <File>" << m_AccessToData[gindex] << "</File>" << endl;
 
+    gindex++;
     // Close body description.
     os << shifttab << "</Body>" << endl;
 

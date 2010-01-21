@@ -61,8 +61,6 @@ int main(int argc, char *argv[])
   dynamicsJRLJapan::GenerateRobotForAMELIF aGenerateRobotForAMELIF;
 
   string aHRP2Normalized("HRP2Normalized");
-  vector<string> AccessToData;
-  
   aGenerateRobotForAMELIF.SetAccessToData(aVectorOfURLs);
   aGenerateRobotForAMELIF.GenerateRobot(aHRP2Normalized,aHDR);
   
