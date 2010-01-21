@@ -51,7 +51,7 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 
   if (liaisons[ID].size()!=1)
     {
-      cout << "Wrong assumption concerning the initial body." << endl;
+      cout << "Wrong assumption concerning the initial body: " << liaisons[ID].size()<< endl;
       return;
     }
   int ld = liaisons[ID][0].liaison;
@@ -247,9 +247,6 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
   vectorOfBodies[0]->setLabel(NbOfBodies++);
   ajouterCorps(*vectorOfBodies[0]);
   Depth++;
-
-  MAL_S3_VECTOR(,double) dummy;
-
 
   // Go through the Joints tree.
   JointPrivate *CurrentJoint = m_RootOfTheJointsTree;
