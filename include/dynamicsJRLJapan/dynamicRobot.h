@@ -27,11 +27,7 @@ namespace jrlDelegate {
   class dynamicRobot : public virtual CjrlDynamicRobot
   {
   private:
-    vector3d m_vec3d_dummy;
-    vectorN m_vec_dummy;
-    matrixNxP m_mat_dummy;
     CjrlDynamicRobot * m_DR;
-    std::vector<CjrlJoint *> m_list_dummy;
 
   protected:
     void setDynamicRobot (CjrlDynamicRobot *inDynamicRobot)

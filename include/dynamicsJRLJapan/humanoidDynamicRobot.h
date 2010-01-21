@@ -31,7 +31,6 @@ namespace jrlDelegate {
     {
     private:
       CjrlHumanoidDynamicRobot *m_HDR;
-      vector3d m_vec3d_dummy;
       
     public:
 
@@ -356,7 +355,8 @@ namespace jrlDelegate {
       friend int dynamicsJRLJapan::parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 							std::string &OpenHRPVRMLFile,
 							std::string &MapJointToRankFileName,
-							std::string &SpecificitiesFileName);
+							std::string &SpecificitiesFileName,
+							std::vector<std::string> &VectorOfURLs);
 
       /*! @} */
 

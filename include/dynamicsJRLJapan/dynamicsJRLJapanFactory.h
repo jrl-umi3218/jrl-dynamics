@@ -28,6 +28,7 @@
 #  define DYN_JRL_JAPAN_EXPORT
 #endif
 
+#include <vector>
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
@@ -78,6 +79,13 @@ namespace dynamicsJRLJapan
 			     std::string &OpenHRPVRMLFile,
 			     std::string &MapJointToRankFileName,
 			     std::string &FileOfSpecificities);
+
+  DYN_JRL_JAPAN_EXPORT 
+    int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+			     std::string &OpenHRPVRMLFile,
+			     std::string &MapJointToRankFileName,
+			     std::string &FileOfSpecificities,
+			     std::vector<std::string> &VectorOfURLs);
   
 };
 #endif
