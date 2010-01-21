@@ -45,6 +45,7 @@
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << __FILE__ << ":" << __LINE__ << x << endl
+#define ODEBUG3Q(x) cerr << x << endl
 
 #ifdef DEBUG_MODE
 
