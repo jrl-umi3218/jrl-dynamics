@@ -1,3 +1,14 @@
+/* @doc \file Object to generate a file following AMELIF format.
+
+   Copyright (c) 2007-2010
+   @author Olivier Stasse
+   JRL-Japan, CNRS/AIST
+ 
+   All rights reserved.
+
+   Please refers to file License.txt for details on the license.
+
+*/
 
 #include <string>
 #include <iostream>
