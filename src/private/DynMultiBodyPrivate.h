@@ -369,14 +369,12 @@ namespace dynamicsJRLJapan
     
     /** \brief Parse a vrml file which describes the robot. The format
 	should be compatible with the one specified by OpenHRP. 
-	\param path directory where following files are located
-	\param nom filename of VRML file
-	\param option filename of XML file which contains information on associations between joint names and ranks
+	\param path directory and filename of VRML file
+	\param option link to rank filename
     */
-    virtual void parserVRML(string path, string nom, 
-			    const char *option);
-    virtual void parserVRML(string nom, 
-			    const char *option);
+    virtual void parserVRML(string path, 
+			    char *option, 
+			    std::vector<string> &aListOfURLs);
 
     /**
        \brief Initialization of the kinematic chain

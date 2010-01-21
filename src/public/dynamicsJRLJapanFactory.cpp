@@ -84,6 +84,20 @@ namespace dynamicsJRLJapan
 			   std::string &MapJointToRankFileName,
 			   std::string &SpecificitiesFileName)
   {
+    std::vector<std::string> lVectorOfURLs;
+    return parseOpenHRPVRMLFile(ajrlHumanoidDynamicRobot,
+				OpenHRPVRMLFile,
+				MapJointToRankFileName,
+				SpecificitiesFileName,
+				lVectorOfURLs);
+    
+  }
+  int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
+			   std::string &OpenHRPVRMLFile,
+			   std::string &MapJointToRankFileName,
+			   std::string &SpecificitiesFileName,
+			   std::vector<std::string> &VectorOfURLs)
+  {
     dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR = 
       dynamic_cast<HumDynMultiBodyPrivate *>(&ajrlHumanoidDynamicRobot);
 
@@ -92,8 +106,8 @@ namespace dynamicsJRLJapan
     // The following is purely heretic and will disappear sooner or later.
     if (aHDR!=0)
       {
-	aHDR->parserVRML(OpenHRPVRMLFile,
-				       (char *)MapJointToRankFileName.c_str());
+	aHDR->parserVRML(OpenHRPVRMLFile, (char *)MapJointToRankFileName.c_str(),
+			 VectorOfURLs);
 	aHDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
 	return 0;
       }
@@ -109,7 +123,8 @@ namespace dynamicsJRLJapan
 	    if (a4HDR!=0)
 	      {
 		a4HDR->parserVRML(OpenHRPVRMLFile,
-				  (char *)MapJointToRankFileName.c_str());
+				  (char *)MapJointToRankFileName.c_str(),
+				  VectorOfURLs);
 		a4HDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
 		return 0;
 	      }

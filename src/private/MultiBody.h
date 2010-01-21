@@ -169,9 +169,6 @@ namespace dynamicsJRLJapan
     /*!  Returns the CoM position. */ 
     vector3d getPositionCoM(void);
 
-    //Construction a partir d'un fichier VRML
-    virtual void parserVRML(string path, string nom, const char* option);
-    virtual void parserVRML(string FileName, const char* option);
 
     /*!  Display bodies */
     void afficherCorps(void);

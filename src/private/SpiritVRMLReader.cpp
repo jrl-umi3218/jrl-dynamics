@@ -118,7 +118,9 @@ namespace dynamicsJRLJapan
       {
 	CurrentLink.aJoint = 0;
       }
-
+      
+      // String for the url.
+      string URLforGeometry;
     };
 
     struct SkipGrammar : public grammar<SkipGrammar>
@@ -392,7 +394,7 @@ namespace dynamicsJRLJapan
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
 	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
-	
+	m_ListOfURLs.push_back(m_DataForParsing->URLforGeometry);
       }
       void fJCDEFBlocks(char const *str, char const *end) const
       {
@@ -580,6 +582,9 @@ namespace dynamicsJRLJapan
       void fBodyInlineUrl(const char *str, const char *end)  const
       {
 	string s(str,end);
+
+	m_DataForParsing->URLforGeometry = s;
+
 	if (m_Verbose>1)
 	  std::cout << "fBodyInlineUrl:" << s << endl;
       }
@@ -937,9 +942,11 @@ namespace dynamicsJRLJapan
       // The parser object is copied a lot, so instead of keeping its own table
       // of variables, it keeps track of a reference to a common table.
       SpiritOpenHRP(MultiBody *aMB,
-		    struct s_DataForParsing *aDFP) : 
+		    struct s_DataForParsing *aDFP,
+		    vector<string> &aListOfURLs) : 
 	m_MultiBody(aMB),
-	m_DataForParsing(aDFP)
+	m_DataForParsing(aDFP),
+	m_ListOfURLs(aListOfURLs)
 	
       {
 	m_Verbose = 5;
@@ -1453,10 +1460,13 @@ namespace dynamicsJRLJapan
 
       MultiBody * m_MultiBody;
       struct s_DataForParsing *m_DataForParsing;
+      vector<string> &m_ListOfURLs;
       int m_Verbose;
     };
 
-    int ParseVRMLFile(MultiBody *aMB, std::string aFileName)
+    int ParseVRMLFile(MultiBody *aMB, 
+		      std::string aFileName,
+		      vector<string> &aListOfURLs)
     {
       if (aFileName == std::string("")) {
 	std::cout << "SpiritVRMLReader: do not read VRML file." << std::endl;
@@ -1467,7 +1477,8 @@ namespace dynamicsJRLJapan
 
       SkipGrammar aSkipGrammar;
       SpiritOpenHRP aSpiritOpenHRP(aMB,
-				   &DataForParsing);
+				   &DataForParsing,
+				   aListOfURLs);
 
       
       aif.open(aFileName.c_str(),ifstream::in|ifstream::binary);

@@ -401,20 +401,6 @@ void dynamicsJRLJapan::AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity,
   MAL_S3x3_MATRIX_ACCESS_I_J(R,2,2) = zv + c;
 }
 
-void MultiBody::parserVRML(string path, string nom, const char* option)
-{
-  string nomWRML = path;
-  nomWRML += nom;
-  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,nomWRML);
-}
-
-void MultiBody::parserVRML(string nomWRML, const char* option)
-{
-  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,nomWRML);
-}
-
-
-
 int MultiBody::NbOfLinks() const
 {
   return listeLiaisons.size();

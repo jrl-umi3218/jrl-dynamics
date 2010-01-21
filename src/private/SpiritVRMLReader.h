@@ -13,6 +13,7 @@
 #define _SPIRIT_VRML_READER_H_
 
 #include <string>
+#include <vector>
 #include "MultiBody.h"
 
 
@@ -20,7 +21,7 @@ namespace dynamicsJRLJapan
 {
   namespace VRMLReader 
   {
-    int ParseVRMLFile(MultiBody *aMB, std::string FileName);
+    int ParseVRMLFile(MultiBody *aMB, std::string FileName, std::vector<std::string> & VectorOfURLs);
   };
 };
 

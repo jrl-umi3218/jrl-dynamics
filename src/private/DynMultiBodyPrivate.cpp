@@ -37,6 +37,8 @@
 
 #include "fileReader.h"
 
+#include "SpiritVRMLReader.h"
+
 using namespace dynamicsJRLJapan;
 
 DynMultiBodyPrivate::DynMultiBodyPrivate()
@@ -108,19 +110,11 @@ bool DynMultiBodyPrivate::initialize()
 
 
 void DynMultiBodyPrivate::parserVRML(string path,
-                                  string nom,
-                                  const char *option)
+				     char *option,
+				     vector<string> &aListOfURLs)
 {
   m_listOfBodies.clear();
-  MultiBody::parserVRML(path, nom, option);
-  CreatesTreeStructure(option);
-}
-
-void DynMultiBodyPrivate::parserVRML(string nom,
-                                  const char *option)
-{
-  m_listOfBodies.clear();
-  MultiBody::parserVRML(nom, option);
+  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,path, aListOfURLs);
   CreatesTreeStructure(option);
 }
 
