@@ -137,6 +137,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(unitTesting)
+add_subdirectory(tools)
 
 # Prepare the documentation
 # -------------------------
