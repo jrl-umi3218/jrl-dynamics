@@ -63,10 +63,12 @@ namespace dynamicsJRLJapan {
     // Close the joint description
     os << shifttab << "</Joint>"<< endl;
 
+    gindex++;
+
     // Call the sons.
     for(unsigned int i=0;i<aJoint->countChildJoints();i++)
       {
-	GenerateJoint(aJoint->childJoint(i),os,shifttab);
+	GenerateJoint(aJoint->childJoint(i),os,shifttab,gindex);
       }
 
   }
@@ -141,7 +143,8 @@ namespace dynamicsJRLJapan {
     CjrlJoint *RootJoint = m_HDR->rootJoint();
     string lshifttab = shifttab+"  ";
     os << shifttab << "<Joints>" << endl;
-    GenerateJoint(RootJoint,os, lshifttab);
+    unsigned int gindex=0;
+    GenerateJoint(RootJoint,os, lshifttab,gindex);
     os << shifttab << "</Joints>" << endl;
   }
 
