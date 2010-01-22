@@ -344,6 +344,7 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 	      MAL_S3_VECTOR_ACCESS(m_axe,0)=1.0;
 	      MAL_S3_VECTOR_ACCESS(m_axe,1)=0.0;
 	      MAL_S3_VECTOR_ACCESS(m_axe,2)=0.0;
+	      aDBP->a = m_axe;
 	    }
 	}
       
