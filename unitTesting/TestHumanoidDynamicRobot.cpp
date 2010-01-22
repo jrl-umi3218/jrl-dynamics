@@ -133,10 +133,14 @@ int main(int argc, char *argv[])
 
   std::vector<CjrlJoint *> aVec = aHDR->jointVector();
   
-  CjrlJoint  * aJoint = aVec[3]; // Try to get the hand.
+  // Get the Jacobian of the right ankle.
+  CjrlJoint  * aJoint = aHDR->rightAnkle();
   aJoint->computeJacobianJointWrtConfig();
+  cout << "Rank of Joint : " << aJoint->rankInConfiguration() << endl;
 
   MAL_MATRIX(,double) aJ = aJoint->jacobianJointWrtConfig();
+  cout << "Articular Jacobian" << endl;
+  dynamicsJRLJapan::DisplayMatrix(aJ,cout);
   
   //  DisplayMatrix(aJ);
   tcout << "****************************" << endl;

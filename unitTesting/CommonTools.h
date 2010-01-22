@@ -86,7 +86,12 @@ namespace dynamicsJRLJapan
 				std::ostream &tcout,
 				unsigned int verbosedisplay=0,
 				unsigned int ldepth=0);
-  
+
+  /*! Display a matrix following an imposed format. */
+  void DisplayMatrix(MAL_MATRIX(,double) &aJ,std::ostream &os);
+
+  /*! Display a matrix following an imposed format. */
+  void DisplayMatrix(const MAL_MATRIX(,double) &aJ, std::ostream &os);
   /*! @} */
 
   /*! Compare two files for testing */
