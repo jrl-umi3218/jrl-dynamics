@@ -75,7 +75,7 @@ namespace dynamicsJRLJapan
       - \a dv = linear acceleration,
       - \a w  = angular velocity,
       - \a dw = angular acceleration,
-      - \a pph, ppb = v x Iv 
+      - \a w_a = axis for revolute joint in the world reference frame.
     */
     vector3d a, b, w_c, p,
       v0,  dv,  w,  dw,
