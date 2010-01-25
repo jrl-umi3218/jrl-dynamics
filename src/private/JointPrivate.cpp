@@ -212,7 +212,22 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
   MAL_S4x4_C_eq_A_by_B(m_globalPoseAtConstruction,
 		       m_FatherJoint->m_globalPoseAtConstruction,
 		       m_poseInParentFrame);
-  
+
+  if (m_type!=JointPrivate::REVOLUTE_JOINT)
+    {
+      m_globalPoseAtConstructionNormalized = m_globalPoseAtConstruction;
+      if( m_Body!=0)
+	{
+	  DynamicBodyPrivate * aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
+	  if (aDBP!=0)
+	    {
+	      ODEBUG3("R: " << aDBP->R);
+	      ODEBUG3("p: " << aDBP->p);
+	    }
+	}
+      return;
+    }
+
   vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
   LocalAxis[0] = m_axe[0];
   LocalAxis[1] = m_axe[1];
@@ -313,7 +328,9 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
       ODEBUG("rotParams:" << rotParams);
       
       // Inertia matrix
+      // Rotation using similarity transformation.
       matrix3d linertiam = m_Body->inertiaMatrix();
+      linertiam = MAL_S3x3_RET_A_by_B(linertiam, trRotParams);
       linertiam = MAL_S3x3_RET_A_by_B(rotParams,linertiam);
       m_Body->inertiaMatrix(linertiam);
       
