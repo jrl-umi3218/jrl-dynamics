@@ -90,7 +90,7 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	rank = aJoint->rankInConfiguration();
       else
 	rank = aJoint->rankInConfiguration()-6;
-
+      
       tempDP = tempP - aBody->p;
 
       switch ( aJoint->type() )
@@ -115,12 +115,17 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	      outTable[j][rank+j] =  1.0;
 	      outTable[j+3][rank+j+3] =  1.0;
 	    }
-	  outTable[1][rank+3] =  -tempDP[2];
-	  outTable[2][rank+3] =  tempDP[1];
+
+	  outTable[0][rank+3] = 0.0;
 	  outTable[0][rank+4] =  tempDP[2];
-	  outTable[2][rank+4] =  -tempDP[0];
 	  outTable[0][rank+5] =  -tempDP[1];
+
+	  outTable[1][rank+3] =  -tempDP[2];
+	  outTable[1][rank+4] =  0.0;
 	  outTable[1][rank+5] =  tempDP[0];
+
+	  outTable[2][rank+3] =  tempDP[1];
+	  outTable[2][rank+4] =  -tempDP[0];
 	  break;
         }
     }
@@ -174,12 +179,15 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
       for ( j=0;j<6;j++ )
 	outTable[j][j] =  1.0;
-      outTable[1][3] =  -tempDP[2];
-      outTable[2][3] =  tempDP[1];
+
       outTable[0][4] =  tempDP[2];
-      outTable[2][4] =  -tempDP[0];
       outTable[0][5] =  -tempDP[1];
+
+      outTable[1][3] =  -tempDP[2];
       outTable[1][5] =  tempDP[0];
+
+      outTable[2][3] =  tempDP[1];
+      outTable[2][4] =  -tempDP[0];
     }
 
   for ( i=0; i<6; i++ )
