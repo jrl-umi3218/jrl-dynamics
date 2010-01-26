@@ -137,9 +137,38 @@ int main(int argc, char *argv[])
   CjrlJoint  * aJoint = aHDR->rightAnkle();
   aJoint->computeJacobianJointWrtConfig();
 
-
+  tcout << "Jacobian of the right ankle." << endl;
   MAL_MATRIX(,double) aJ;
-//  DisplayMatrix(aJ);
+  aJ = aJoint->jacobianJointWrtConfig();  
+  DisplayMatrix(aJ,tcout);
+
+  // Get the articular Jacobian from the right ankle to the right wrist.
+  vector3d origin; origin(0) = 0.0; origin(1) = 0.0; origin(2) = 0.0;
+  aHDR->getJacobian(*aHDR->rightAnkle(),
+		    *aHDR->rightWrist(),
+		    origin,
+		    aJ);
+  tcout << "Jacobian from the right ankle to the right wrist. " << endl;
+  DisplayMatrix(aJ,tcout);
+  
+  MAL_MATRIX_RESIZE(aJ,3, MAL_MATRIX_NB_COLS(aJ));
+  // Get the linear part of the articular Jacobian from the right ankle to the right wrist.
+  aHDR->getPositionJacobian(*aHDR->rightAnkle(),
+			    *aHDR->rightWrist(),
+			    origin,
+			    aJ);
+  tcout << "Jacobian from the right ankle to the right wrist. " << endl;
+  DisplayMatrix(aJ,tcout);
+  
+  // Get the angular part of the articular Jacobian from the right ankle to the right wrist.
+  aHDR->getOrientationJacobian(*aHDR->rightAnkle(),
+			       *aHDR->rightWrist(),
+			       aJ);
+  
+  tcout << "Jacobian from the right ankle to the right wrist. " << endl;
+  DisplayMatrix(aJ,tcout);
+  
+  
   tcout << "****************************" << endl;
   rootJoint->computeJacobianJointWrtConfig();
   aJ = rootJoint->jacobianJointWrtConfig();  
@@ -232,7 +261,10 @@ int main(int argc, char *argv[])
   if (argc==2)
     {
       char OurFileName[120]="output.txt";
-      if (CompareTwoFiles(argv[1],OurFileName))
+      char ReportFileName[120]="reportthdr.txt";
+      if (CompareTwoFiles(argv[1],
+			  OurFileName,
+			  ReportFileName))
 	{
 	  delete aHDR;
 	  return 0;
