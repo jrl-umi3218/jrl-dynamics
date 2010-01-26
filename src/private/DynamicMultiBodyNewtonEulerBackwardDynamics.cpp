@@ -120,7 +120,15 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 	 Note: rip1,c1 is expressed in the frame of link i.
        */
       vector3d res3d; 
-      res3d(0) = lc(0)-ip1Mi(0,3); res3d(1) = lc(1) - ip1Mi(1,3) ;res3d(2) = lc(2)-ip1Mi(2,3);
+      MAL_S3_VECTOR_ACCESS(res3d,0) = 
+	MAL_S3_VECTOR_ACCESS(lc,0)-
+	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3); 
+      MAL_S3_VECTOR_ACCESS(res3d,1) = 
+	MAL_S3_VECTOR_ACCESS(lc,1) - 
+	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,1,3) ;
+      MAL_S3_VECTOR_ACCESS(res3d,2) = 
+	MAL_S3_VECTOR_ACCESS(lc,2)-
+	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,2,3);
       MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
 
       CurrentBody.m_Torque += firstterm + thirdterm;
@@ -133,7 +141,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
   //vector3d lc = CurrentBody.w_c;
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
-  CurrentBody.m_Torque -= sndterm;
+  CurrentBody.m_Torque = CurrentBody.m_Torque - sndterm;
 
   // Update the vector related to the computed quantities.
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
