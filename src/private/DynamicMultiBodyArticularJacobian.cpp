@@ -51,15 +51,11 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
   if ( ( MAL_MATRIX_NB_ROWS(outjacobian) != 6 ) || 
        ( lengthJacobian < valNumberDof + outOffset ) )
     return false;
-  
+
+  MAL_MATRIX_FILL(outjacobian,0.0);
+
   unsigned int i,j;
-  double ** outTable;
-  outTable = new double* [6];
-  for ( i=0; i<6; i++ )
-    outTable[i] = new double [valNumberDof];
-  for ( i=0; i<6; i++ )
-    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
-  
+
   //determine participating joints
   std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
   JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
@@ -99,33 +95,33 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank] =  tempLV[j];
-	      outTable[j+3][rank] = aBody->w_a[j];
+	      outjacobian(j,rank) = tempLV[j];
+	      outjacobian(j+3,rank) = aBody->w_a[j];
 	    }
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank] =  aBody->w_a[j];
+	      outjacobian(j,rank) = aBody->w_a[j];
 	    }
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank+j] =  1.0;
-	      outTable[j+3][rank+j+3] =  1.0;
+	      outjacobian(j,rank+j) = 1.0;
+	      outjacobian(j+3,rank+j+3) = 1.0;
 	    }
 
-	  outTable[0][rank+3] = 0.0;
-	  outTable[0][rank+4] =  tempDP[2];
-	  outTable[0][rank+5] =  -tempDP[1];
+	  outjacobian(0,rank+3) = 0.0;
+	  outjacobian(0,rank+4) = tempDP[2];
+	  outjacobian(0,rank+5) = -tempDP[1];
+	  outjacobian(1,rank+3) = -tempDP[2];
+	  outjacobian(1,rank+4) = 0.0;
+	  outjacobian(1,rank+5) = tempDP[0];
 
-	  outTable[1][rank+3] =  -tempDP[2];
-	  outTable[1][rank+4] =  0.0;
-	  outTable[1][rank+5] =  tempDP[0];
-
-	  outTable[2][rank+3] =  tempDP[1];
-	  outTable[2][rank+4] =  -tempDP[0];
+	  outjacobian(2,rank+3) = tempDP[1];
+	  outjacobian(2,rank+4) = -tempDP[0];
+	  outjacobian(2,rank+5) = 0.0;
 	  break;
         }
     }
@@ -147,28 +143,32 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank] = -tempLV[j];
-	      outTable[j+3][rank] = -aBody->w_a[j];
+	      outjacobian(j,rank) = -tempLV[j];
+	      outjacobian(j+3,rank) = -aBody->w_a[j];
+
 	    }
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank] = -aBody->w_a[j];
+	      outjacobian(j,rank) = -aBody->w_a[j];
 	    }
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
 	    {
-	      outTable[j][rank+j] =  -1.0;
-	      outTable[j+3][rank+j+3] =  -1.0;
+	      outjacobian(j,rank+j) = -1.0;
+	      outjacobian(j+3,rank+j+3) = -1.0;
 	    }
-	  outTable[1][rank+3] =  tempDP[2];
-	  outTable[2][rank+3] =  -tempDP[1];
-	  outTable[0][rank+4] =  -tempDP[2];
-	  outTable[2][rank+4] =  tempDP[0];
-	  outTable[0][rank+5] =  tempDP[1];
-	  outTable[1][rank+5] =  -tempDP[0];
+	  outjacobian(0,rank+3) = 0.0;
+	  outjacobian(0,rank+4) = -tempDP[2];
+	  outjacobian(0,rank+5) = tempDP[1];
+	  outjacobian(1,rank+3) = tempDP[2];
+	  outjacobian(1,rank+4) = 0.0;
+	  outjacobian(1,rank+5) = -tempDP[0];
+	  outjacobian(2,rank+3) = -tempDP[1];
+	  outjacobian(2,rank+4) = tempDP[0];
+	  outjacobian(2,rank+5) = 0.0;
 	  break;
         }
     }
@@ -178,26 +178,19 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
       tempDP = tempP - StartJoint->linkedDBody()->p;
 
       for ( j=0;j<6;j++ )
-	outTable[j][j] =  1.0;
+	outjacobian(j,j)= 1.0;
+      
+      outjacobian(0,3) = 0.0;
+      outjacobian(0,4) = tempDP[2];
+      outjacobian(0,5) = -tempDP[1];
+      outjacobian(1,3) = -tempDP[2];
+      outjacobian(1,4) = 0.0;
+      outjacobian(1,5) = tempDP[0];
+      outjacobian(2,3) = tempDP[1];
+      outjacobian(2,4) = -tempDP[0];
+      outjacobian(2,5) = 0.0;
 
-      outTable[0][4] =  tempDP[2];
-      outTable[0][5] =  -tempDP[1];
-
-      outTable[1][3] =  -tempDP[2];
-      outTable[1][5] =  tempDP[0];
-
-      outTable[2][3] =  tempDP[1];
-      outTable[2][4] =  -tempDP[0];
     }
-
-  for ( i=0; i<6; i++ )
-    memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],
-	     valNumberDof*sizeof ( double ) );
-
-  //clean
-  for ( i=0; i<6; i++ )
-    delete [] outTable[i];
-  delete [] outTable ;
 
   return true;
 }
@@ -216,12 +209,7 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     return false;
 
   unsigned int i,j;
-  double ** outTable;
-  outTable = new double* [3];
-  for ( i=0; i<3; i++ )
-    outTable[i] = new double [valNumberDof];
-  for ( i=0; i<3; i++ )
-    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
+  MAL_MATRIX_FILL(outjacobian,0.0);
 
   //determine participating joints
   std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -261,21 +249,21 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] =  tempLV[j];
+	    outjacobian(j,rank) =  tempLV[j];
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] =  aBody->w_a[j];
+	    outjacobian(j,rank) = aBody->w_a[j];
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank+j] =  1.0;
-	  outTable[1][rank+3] =  -tempDP[2];
-	  outTable[2][rank+3] =  tempDP[1];
-	  outTable[0][rank+4] =  tempDP[2];
-	  outTable[2][rank+4] =  -tempDP[0];
-	  outTable[0][rank+5] =  -tempDP[1];
-	  outTable[1][rank+5] =  tempDP[0];
+	    outjacobian(j,rank+j) = 1.0;
+	  outjacobian(1,rank+3) =  -tempDP[2];
+	  outjacobian(2,rank+3) =  tempDP[1];
+	  outjacobian(0,rank+4) =  tempDP[2];
+	  outjacobian(2,rank+4) =  -tempDP[0];
+	  outjacobian(0,rank+5) =  -tempDP[1];
+	  outjacobian(1,rank+5) =  tempDP[0];
 	  break;
         }
     }
@@ -296,21 +284,22 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 	case JointPrivate::REVOLUTE_JOINT:
 	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] = -tempLV[j];
+	    outjacobian(j,rank) = -tempLV[j];
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] = -aBody->w_a[j];
+	    outjacobian(j,rank) = -aBody->w_a[j];
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank+j] =  -1.0;
-	  outTable[1][rank+3] =  tempDP[2];
-	  outTable[2][rank+3] =  -tempDP[1];
-	  outTable[0][rank+4] =  -tempDP[2];
-	  outTable[2][rank+4] =  tempDP[0];
-	  outTable[0][rank+5] =  tempDP[1];
-	  outTable[1][rank+5] =  -tempDP[0];
+	    outjacobian(j,rank+j) = -1.0;
+
+	  outjacobian(1,rank+3) =  tempDP[2];
+	  outjacobian(2,rank+3) =  -tempDP[1];
+	  outjacobian(0,rank+4) =  -tempDP[2];
+	  outjacobian(2,rank+4) =  tempDP[0];
+	  outjacobian(0,rank+5) =  tempDP[1];
+	  outjacobian(1,rank+5) =  -tempDP[0];
 	  break;
         }
     }
@@ -319,22 +308,15 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
       tempDP = tempP - StartJoint->linkedDBody()->p;
 
       for ( j=0;j<3;j++ )
-	outTable[j][j] =  1.0;
-
-      outTable[1][3] =  -tempDP[2];
-      outTable[2][3] =  tempDP[1];
-      outTable[0][4] =  tempDP[2];
-      outTable[2][4] =  -tempDP[0];
-      outTable[0][5] =  -tempDP[1];
-      outTable[1][5] =  tempDP[0];
+	outjacobian(j,j) = 1.0;
+      outjacobian(1,3) =  -tempDP[2];
+      outjacobian(2,3) =  tempDP[1];
+      outjacobian(0,4) =  tempDP[2];
+      outjacobian(2,4) =  -tempDP[0];
+      outjacobian(0,5) =  -tempDP[1];
+      outjacobian(1,5) =  tempDP[0];
+      
     }
-  for ( i=0; i<3; i++ )
-    memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),outTable[i],valNumberDof *sizeof ( double ) );
-
-  //clean
-  for ( i=0; i<3; i++ )
-    delete ( outTable[i] );
-  delete ( outTable );
   return true;
 }
 
@@ -350,13 +332,8 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     return false;
 
   unsigned int i,j;
-  double ** outTable;
-  outTable = new double* [3];
-  for ( i=0; i<3; i++ )
-    outTable[i] = new double [valNumberDof];
-  for ( i=0; i<3; i++ )
-    memset ( outTable[i], 0, valNumberDof*sizeof ( double ) );
 
+  MAL_MATRIX_FILL(outjacobian,0.0);
   //determine participating joints
   std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
   JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
@@ -391,14 +368,14 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
         {
 	case JointPrivate::REVOLUTE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] = aBody->w_a[j];
+	    outjacobian(j,rank) = aBody->w_a[j];
 
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank+j] =  1.0;
+	    outjacobian(j,rank+j) =  1.0;
 	  break;
         }
     }
@@ -418,14 +395,13 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
         {
 	case JointPrivate::REVOLUTE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank] = -aBody->w_a[j];
-
+	    outjacobian(j,rank) = -aBody->w_a[j];
 	  break;
 	case JointPrivate::PRISMATIC_JOINT:
 	  break;
 	case JointPrivate::FREE_JOINT:
 	  for ( j=0;j<3;j++ )
-	    outTable[j][rank+j] =  -1.0;
+	    outjacobian(j,rank+j) =  -1.0;
 	  break;
         }
     }
@@ -433,14 +409,7 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
   for ( i=0;i<3;i++ )
     {
       if ( includeFreeFlyer )
-	outTable[i][i+3] =  1.0;
-      memcpy ( ( &outjacobian.data() [i*lengthJacobian+outOffset] ),
-	       outTable[i],valNumberDof *sizeof ( double ) );
+	outjacobian(i,i+3) =  1.0;
     }
-
-  //clean
-  for ( i=0; i<3; i++ )
-    delete ( outTable[i] );
-  delete ( outTable );
   return true;
 }
