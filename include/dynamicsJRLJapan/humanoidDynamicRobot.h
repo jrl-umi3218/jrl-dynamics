@@ -320,7 +320,7 @@ namespace jrlDelegate {
       virtual const vector3d& gazeDirection() const
       {
 	assert(m_HDR != 0);
-	return m_HDR->gazeOrigin();
+	return m_HDR->gazeDirection();
       }
 
       /**
