@@ -254,8 +254,16 @@ int main(int argc, char *argv[])
 
   DisplayForces(aHDR,empty,tcout);
   DisplayTorques(aHDR,empty, tcout);
-
+  
+  // Test torques.
+  tcout << "Test Torques:" << endl;
+  const matrixNxP& Torques = aHDR->currentTorques();
+  for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
+    {
+      tcout << Torques(i,0) << " " << 9.81 * InertiaMatrix(i,2) << endl;
+    }
   tcout.close();
+
   // ASCII Comparison between the generated output and the reference one
   // given in argument.
   if (argc==2)
