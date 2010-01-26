@@ -47,56 +47,57 @@ namespace dynamicsJRLJapan
   /*! \name Display robotic objects
     @{ */
 
-  /*! Display a body of the robot */
+  /*! \brief Display a body of the robot */
   void DisplayBody(CjrlBody *aBody,
 		   std::string &shifttab,
 		   std::ostream &tcout);
 
-  /*! Display a hand of the robot */
+  /*! \brief Display a hand of the robot */
   void DisplayHand(CjrlHand *ajrlHand,
 		   std::string &shifttab,
 		   std::ostream &tcout);
 
-  /*! Display a foot of the robot */
+  /*! \brief Display a foot of the robot */
   void DisplayFoot(CjrlFoot *aFoot,
 		   std::string &shifttab,
 		   std::ostream &tcout);
 
-  /*! Display actuated */
+  /*! \brief Display actuated */
   void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR,
 		       std::string &shifttab,
 		       std::ostream &tcout);
 
-  /*! Display forces */
+  /*! \brief Display forces */
   void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
 		     std::string &shifttab, 
 		     std::ostream &tcout);
 
-  /*! Display torques */
+  /*! \brief Display torques */
   void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
 		      std::string &shifttab, 
 		      std::ostream &tcout);
 
-  /*! Display full humanoid information */
+  /*! \brief Display full humanoid information */
   void DisplayHumanoid(CjrlHumanoidDynamicRobot *aHDR,
 		       std::ostream &tcout);
 
-  /*! Display all the joints of a kinematic subtree */
+  /*! \brief Display all the joints of a kinematic subtree */
   void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
 				std::ostream &tcout,
 				unsigned int verbosedisplay=0,
 				unsigned int ldepth=0);
 
-  /*! Display a matrix following an imposed format. */
+  /*! \brief Display a matrix following an imposed format. */
   void DisplayMatrix(MAL_MATRIX(,double) &aJ,std::ostream &os);
 
-  /*! Display a matrix following an imposed format. */
+  /*! \brief Display a matrix following an imposed format. */
   void DisplayMatrix(const MAL_MATRIX(,double) &aJ, std::ostream &os);
-  /*! @} */
+  /*!  @} */
 
-  /*! Compare two files for testing */
+  /*! \brief Compare two files for testing, and report in the third one */
   bool CompareTwoFiles(char *RefFileName,
-		       char *OurFileName);
+		       char *OurFileName,
+		       char *ReportFileName);
   /*! @} */
 };
 #endif

@@ -347,40 +347,67 @@ namespace dynamicsJRLJapan {
        << " COM: " << aHDR->positionCenterOfMass() << endl;
   }
 
-  bool CompareTwoFiles(char *RefFileName, char *OurFileName)
+  bool CompareTwoFiles(char *RefFileName, char *OurFileName, char *ReportFile)
   {
     std::ifstream reffile(RefFileName,ifstream::in), 
       ourfile(OurFileName,ifstream::in);
+    std::ofstream  reportfile(ReportFile,ofstream::out);
     unsigned int NbLine=0;
     bool readingok=true;
 
+    if (!reportfile.is_open())
+      cout << "Pb opening " << ReportFile<< endl;
+
+    // Go through the reference file
     while(!reffile.eof())
       {
 
 	char refline[25536],ourline[25536];
 	reffile.getline(refline,25536);
 	ourfile.getline(ourline,25536);
+
+	// Check that the two files are read the same
+	// manner.
 	if (reffile.gcount()!=ourfile.gcount())
-	  readingok=false;
+	  {
+	    reportfile << "Error reading at line " << NbLine 
+		       << endl << "ref (count): " << reffile.gcount() 
+		       << endl << "our (count): " << reffile.gcount() 
+		       << endl << "ref: " << refline 
+		       << endl << "our: " << ourline <<endl;
+
+	    readingok=false;
+	  }
 	else
 	  {
+	    // If they are read the same way
+	    // check if they provide the same data.
 	    for(int i=0;i<reffile.gcount();i++)
 	      if (refline[i]!=ourline[i])
 		{
 		  readingok=false;
-		  cerr << "Error at column " << i << endl;
+		  reportfile << "Error at column " << i << endl;
 		  break;
 		}
 	  }
-	if (readingok==false)
-	  {
-	    cerr << "Error at line "<< NbLine 
-		 << endl << "ref: " << refline 
-		 << endl << "our: " << ourline <<endl;
-	    break;
-	  }
+
 	NbLine++;
       }
+
+    if (readingok)
+      {
+	reportfile << "Comparison successfull." << endl;
+      }
+    // Close files.
+    if (reffile.is_open())
+      reffile.close();
+
+    if (ourfile.is_open())
+      ourfile.close();
+    
+    if (reportfile.is_open())
+      reportfile.close();
+    
     return readingok;
   }
 };
