@@ -67,7 +67,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
   /* 2nd term : -f_i x r_{i,ci} */
   vector3d lc = CurrentBody.localCenterOfMass();
-  MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
 
 
   /* 5th term : w_i x (I_i w_i)*/
@@ -76,7 +75,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   tmp = MAL_S3x3_RET_A_by_B(lI,tmp);
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.w,tmp);
 
-  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm -sndterm;
+  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm ;
 
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
@@ -84,18 +83,23 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
    * g_i is the gravity express in the i reference frame.
    */
 
+  matrix4d curtri;
+
+  if (CurrentBody.joint()!=0)
+    curtri = CurrentBody.joint()->currentTransformation();
+  else
+    MAL_S4x4_MATRIX_SET_IDENTITY(curtri);
 
   int IndexChild = CurrentBody.child;
-  //cout << "Body : " << CurrentBody.getName() << endl;
+
   while(IndexChild!=-1)
     {
       DynamicBodyPrivate *Child = m_listOfBodies[IndexChild];
       //cout << "Child Bodies : " << Child->getName() << endl;
-      aRt = Child->Riip1;
+      aRt = MAL_S3x3_RET_A_by_B(Child->R_static,Child->Riip1);
       //cout << "Riip1: " << aRt << endl;
       // /* Force computation. */
-      //// Other immediate child are sisters of the other immediate childs.
-      //cout << "Force: " << Child->m_Force << endl;
+      // R_i_{i+1} f_{i+1}
       tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);
       CurrentBody.m_Force += tmp;
 
@@ -103,8 +107,19 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       /* 1st term : R^i_{i+1} t_{i+1} */
       firstterm = MAL_S3x3_RET_A_by_B(aRt, Child->m_Torque);
 
-      /* 3rd term : R_i_{i+1} f_{i+1} */
-      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, CurrentBody.w_c);
+      /* 3rd term : (R_i_{i+1} f_{i+1}) x rip1,ci */
+      matrix4d curtrip1= Child->joint()->currentTransformation();
+      matrix4d invcurtrip1;
+      MAL_S4x4_INVERSE(curtrip1,invcurtrip1,double);      
+      matrix4d ip1Mi;
+      MAL_S4x4_C_eq_A_by_B(ip1Mi, invcurtrip1, curtri);
+
+      /* rip1,ci = (riip1)^(-1)rici */
+      vector4d lc4d; lc4d(0) = lc(0);lc4d(1)=lc(1);lc4d(2) = lc(2);lc4d(3) =1.0;
+      vector4d res4d;
+      MAL_S4x4_C_eq_A_by_B(res4d, ip1Mi, lc4d);
+      vector3d res3d; res3d(0) = res4d(0); res3d(1) = res4d(1); res3d(2) = res4d(2); 
+      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
 
       CurrentBody.m_Torque += firstterm + thirdterm;
 
@@ -113,6 +128,10 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       if (IndexChild!=-1)
 	Child=m_listOfBodies[IndexChild];
     }
+
+  //vector3d lc = CurrentBody.w_c;
+  MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
+  CurrentBody.m_Torque -= -sndterm;
 
   // Update the vector related to the computed quantities.
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)

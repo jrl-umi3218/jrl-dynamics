@@ -316,10 +316,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 			BackwardDynamics(*m_listOfBodies[currentNode]);
 
 		      /* Compute backward dynamics */
-		      BackwardDynamics(*m_listOfBodies[NextNode]);
+		      if (NextNode!=labelTheRoot)
+			BackwardDynamics(*m_listOfBodies[NextNode]);
                     }
 		  currentNode = NextNode;
 		  NextNode = m_listOfBodies[currentNode]->sister;
+
                 }
 	      else
 		NextNode=labelTheRoot;
