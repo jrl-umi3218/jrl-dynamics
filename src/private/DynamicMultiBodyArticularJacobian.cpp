@@ -46,380 +46,391 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
                                         unsigned int outOffset,
                                         bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
-    if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 6 ) ||
-            ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
+  if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 6 ) ||
+       ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    //This function should not erase the contents of argument outjacobian
-    //MAL_MATRIX_FILL ( outjacobian,0.0 );
-
-    unsigned int i,j;
-
-    //determine participating joints
-    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
-
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
-                            ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
-
-    for ( i=1; i< minChain; i++ )
+  // This function should compute a jacobian and let the rest untouched.
+  for(unsigned int i=0;
+      i<MAL_MATRIX_NB_ROWS(outjacobian);
+      i++)
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      for(unsigned int j=outOffset;
+	  j<MAL_MATRIX_NB_COLS(outjacobian);
+	  j++)
+	{
+	  outjacobian(i,j)=0.0;
+	}
+
     }
 
-    unsigned int rank;
-    JointPrivate* aJoint;
-    DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
-    tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
+  unsigned int i,j;
 
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  //determine participating joints
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
+
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+
+  for ( i=1; i< minChain; i++ )
     {
-        aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration()+outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
+    }
 
-        tempDP = tempP - aBody->p;
+  unsigned int rank;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
+  tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
-        switch ( aJoint->type() )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+    {
+      aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration()+outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
+
+      tempDP = tempP - aBody->p;
+
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank ) = tempLV[j];
-                    outjacobian ( j+3,rank ) = aBody->w_a[j];
-                }
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank ) = aBody->w_a[j];
-                }
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank+j ) = 1.0;
-                    outjacobian ( j+3,rank+j+3 ) = 1.0;
-                }
+	case JointPrivate::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank ) = tempLV[j];
+	      outjacobian ( j+3,rank ) = aBody->w_a[j];
+	    }
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank ) = aBody->w_a[j];
+	    }
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank+j ) = 1.0;
+	      outjacobian ( j+3,rank+j+3 ) = 1.0;
+	    }
 
-                outjacobian ( 0,rank+3 ) = 0.0;
-                outjacobian ( 0,rank+4 ) = tempDP[2];
-                outjacobian ( 0,rank+5 ) = -tempDP[1];
-                outjacobian ( 1,rank+3 ) = -tempDP[2];
-                outjacobian ( 1,rank+4 ) = 0.0;
-                outjacobian ( 1,rank+5 ) = tempDP[0];
+	  outjacobian ( 0,rank+3 ) = 0.0;
+	  outjacobian ( 0,rank+4 ) = tempDP[2];
+	  outjacobian ( 0,rank+5 ) = -tempDP[1];
+	  outjacobian ( 1,rank+3 ) = -tempDP[2];
+	  outjacobian ( 1,rank+4 ) = 0.0;
+	  outjacobian ( 1,rank+5 ) = tempDP[0];
 
-                outjacobian ( 2,rank+3 ) = tempDP[1];
-                outjacobian ( 2,rank+4 ) = -tempDP[0];
-                outjacobian ( 2,rank+5 ) = 0.0;
-                break;
+	  outjacobian ( 2,rank+3 ) = tempDP[1];
+	  outjacobian ( 2,rank+4 ) = -tempDP[0];
+	  outjacobian ( 2,rank+5 ) = 0.0;
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration()+outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration()+outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank ) = -tempLV[j];
-                    outjacobian ( j+3,rank ) = -aBody->w_a[j];
+	case JointPrivate::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank ) = -tempLV[j];
+	      outjacobian ( j+3,rank ) = -aBody->w_a[j];
 
-                }
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank ) = -aBody->w_a[j];
-                }
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                {
-                    outjacobian ( j,rank+j ) = -1.0;
-                    outjacobian ( j+3,rank+j+3 ) = -1.0;
-                }
-                outjacobian ( 0,rank+3 ) = 0.0;
-                outjacobian ( 0,rank+4 ) = -tempDP[2];
-                outjacobian ( 0,rank+5 ) = tempDP[1];
-                outjacobian ( 1,rank+3 ) = tempDP[2];
-                outjacobian ( 1,rank+4 ) = 0.0;
-                outjacobian ( 1,rank+5 ) = -tempDP[0];
-                outjacobian ( 2,rank+3 ) = -tempDP[1];
-                outjacobian ( 2,rank+4 ) = tempDP[0];
-                outjacobian ( 2,rank+5 ) = 0.0;
-                break;
+	    }
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank ) = -aBody->w_a[j];
+	    }
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    {
+	      outjacobian ( j,rank+j ) = -1.0;
+	      outjacobian ( j+3,rank+j+3 ) = -1.0;
+	    }
+	  outjacobian ( 0,rank+3 ) = 0.0;
+	  outjacobian ( 0,rank+4 ) = -tempDP[2];
+	  outjacobian ( 0,rank+5 ) = tempDP[1];
+	  outjacobian ( 1,rank+3 ) = tempDP[2];
+	  outjacobian ( 1,rank+4 ) = 0.0;
+	  outjacobian ( 1,rank+5 ) = -tempDP[0];
+	  outjacobian ( 2,rank+3 ) = -tempDP[1];
+	  outjacobian ( 2,rank+4 ) = tempDP[0];
+	  outjacobian ( 2,rank+5 ) = 0.0;
+	  break;
         }
     }
 
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
-        tempDP = tempP - StartJoint->linkedDBody()->p;
+      tempDP = tempP - StartJoint->linkedDBody()->p;
 
-        unsigned int ii,jj;
-        for (ii=0;ii<6;ii++)
+      unsigned int ii,jj;
+      for (ii=0;ii<6;ii++)
         {
-            for (jj=outOffset;jj<outOffset+6;jj++)
-                outjacobian(ii,jj) = 0.0;
-            outjacobian(ii,outOffset+ii) = 1.0;
+	  for (jj=outOffset;jj<outOffset+6;jj++)
+	    outjacobian(ii,jj) = 0.0;
+	  outjacobian(ii,outOffset+ii) = 1.0;
         }
 
-        unsigned k = outOffset+3;
-        outjacobian ( 1,k ) = -tempDP[2]; outjacobian ( 2,k ) = tempDP[1];k++;
-        outjacobian ( 0,k ) = tempDP[2]; outjacobian ( 2,k ) = -tempDP[0];k++;
-        outjacobian ( 0,k ) =  -tempDP[1]; outjacobian ( 1,k ) =  tempDP[0];;
+      unsigned k = outOffset+3;
+      outjacobian ( 1,k ) = -tempDP[2]; outjacobian ( 2,k ) = tempDP[1];k++;
+      outjacobian ( 0,k ) = tempDP[2]; outjacobian ( 2,k ) = -tempDP[0];k++;
+      outjacobian ( 0,k ) =  -tempDP[1]; outjacobian ( 1,k ) =  tempDP[0];;
 
     }
 
-    return true;
+  return true;
 }
 
 bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
-        const CjrlJoint& inEndJoint,
-        const vector3d& inFrameLocalPosition,
-        matrixNxP& outjacobian,
-        unsigned int outOffset,
-        bool includeFreeFlyer )
+						const CjrlJoint& inEndJoint,
+						const vector3d& inFrameLocalPosition,
+						matrixNxP& outjacobian,
+						unsigned int outOffset,
+						bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
 
-    if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    unsigned int i,j;
-    ////This function should not erase the contents of argument outJacobian
-    //MAL_MATRIX_FILL ( outjacobian,0.0 );
+  unsigned int i,j;
+  ////This function should not erase the contents of argument outJacobian
+  //MAL_MATRIX_FILL ( outjacobian,0.0 );
 
-    //determine participating joints
-    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
+  //determine participating joints
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
-                            ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
 
-    for ( i=1; i< minChain; i++ )
+  for ( i=1; i< minChain; i++ )
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
     }
 
-    unsigned int rank;
-    JointPrivate* aJoint;
-    DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
-    tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
+  unsigned int rank;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody = EndJoint->linkedDBody();
+  tempP = aBody->p + MAL_S3x3_RET_A_by_B ( aBody->R, inFrameLocalPosition );
 
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-        aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration()+outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration()+outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) =  tempLV[j];
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) = aBody->w_a[j];
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank+j ) = 1.0;
-                outjacobian ( 1,rank+3 ) =  -tempDP[2];
-                outjacobian ( 2,rank+3 ) =  tempDP[1];
-                outjacobian ( 0,rank+4 ) =  tempDP[2];
-                outjacobian ( 2,rank+4 ) =  -tempDP[0];
-                outjacobian ( 0,rank+5 ) =  -tempDP[1];
-                outjacobian ( 1,rank+5 ) =  tempDP[0];
-                break;
+	case JointPrivate::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) =  tempLV[j];
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) = aBody->w_a[j];
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank+j ) = 1.0;
+	  outjacobian ( 1,rank+3 ) =  -tempDP[2];
+	  outjacobian ( 2,rank+3 ) =  tempDP[1];
+	  outjacobian ( 0,rank+4 ) =  tempDP[2];
+	  outjacobian ( 2,rank+4 ) =  -tempDP[0];
+	  outjacobian ( 0,rank+5 ) =  -tempDP[1];
+	  outjacobian ( 1,rank+5 ) =  tempDP[0];
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration() +outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration() +outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) = -tempLV[j];
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) = -aBody->w_a[j];
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank+j ) = -1.0;
+	case JointPrivate::REVOLUTE_JOINT:
+	  MAL_S3_VECTOR_CROSS_PRODUCT ( tempLV,aBody->w_a,tempDP );
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) = -tempLV[j];
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) = -aBody->w_a[j];
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank+j ) = -1.0;
 
-                outjacobian ( 1,rank+3 ) =  tempDP[2];
-                outjacobian ( 2,rank+3 ) =  -tempDP[1];
-                outjacobian ( 0,rank+4 ) =  -tempDP[2];
-                outjacobian ( 2,rank+4 ) =  tempDP[0];
-                outjacobian ( 0,rank+5 ) =  tempDP[1];
-                outjacobian ( 1,rank+5 ) =  -tempDP[0];
-                break;
+	  outjacobian ( 1,rank+3 ) =  tempDP[2];
+	  outjacobian ( 2,rank+3 ) =  -tempDP[1];
+	  outjacobian ( 0,rank+4 ) =  -tempDP[2];
+	  outjacobian ( 2,rank+4 ) =  tempDP[0];
+	  outjacobian ( 0,rank+5 ) =  tempDP[1];
+	  outjacobian ( 1,rank+5 ) =  -tempDP[0];
+	  break;
         }
     }
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
-        tempDP = tempP - StartJoint->linkedDBody()->p;
+      tempDP = tempP - StartJoint->linkedDBody()->p;
 
-        unsigned k = outOffset;
-        outjacobian(0,k) = 1.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 0.0; k++;
-        outjacobian(0,k) = 0.0; outjacobian(1,k) = 1.0; outjacobian(2,k) = 0.0; k++;
-        outjacobian(0,k) = 0.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 1.0; k++;
+      unsigned k = outOffset;
+      outjacobian(0,k) = 1.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 0.0; k++;
+      outjacobian(0,k) = 0.0; outjacobian(1,k) = 1.0; outjacobian(2,k) = 0.0; k++;
+      outjacobian(0,k) = 0.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 1.0; k++;
 
-        outjacobian ( 0,k ) =  0.0; outjacobian ( 1,k ) = -tempDP[2]; outjacobian ( 2,k ) = tempDP[1];k++;
-        outjacobian ( 0,k ) = tempDP[2]; outjacobian ( 1,k ) =  0.0; outjacobian ( 2,k ) = -tempDP[0];k++;
-        outjacobian ( 0,k ) =  -tempDP[1]; outjacobian ( 1,k ) =  tempDP[0]; outjacobian ( 2,k ) =  0.0;
+      outjacobian ( 0,k ) =  0.0; outjacobian ( 1,k ) = -tempDP[2]; outjacobian ( 2,k ) = tempDP[1];k++;
+      outjacobian ( 0,k ) = tempDP[2]; outjacobian ( 1,k ) =  0.0; outjacobian ( 2,k ) = -tempDP[0];k++;
+      outjacobian ( 0,k ) =  -tempDP[1]; outjacobian ( 1,k ) =  tempDP[0]; outjacobian ( 2,k ) =  0.0;
 
     }
-    return true;
+  return true;
 }
 
 bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint,
-        const CjrlJoint& inEndJoint,
-        matrixNxP& outjacobian,
-        unsigned int outOffset,
-        bool includeFreeFlyer )
+						   const CjrlJoint& inEndJoint,
+						   matrixNxP& outjacobian,
+						   unsigned int outOffset,
+						   bool includeFreeFlyer )
 {
-    unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
-    unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
-    if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
-        return false;
+  unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
+  unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
+  if ( ( MAL_MATRIX_NB_ROWS ( outjacobian ) != 3 ) || ( lengthJacobian < valNumberDof + outOffset ) )
+    return false;
 
-    unsigned int i,j;
+  unsigned int i,j;
 
-    //This function should not erase the contents of argument outjacobian
-    //MAL_MATRIX_FILL(outjacobian,0.0);
+  //This function should not erase the contents of argument outjacobian
+  //MAL_MATRIX_FILL(outjacobian,0.0);
 
-    //determine participating joints
-    std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
-    robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
-    robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
+  //determine participating joints
+  std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
+  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+  robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
+  robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
-    unsigned int offset = 1;
-    unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
-                            ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
+  unsigned int offset = 1;
+  unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
+    ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
 
-    for ( i=1; i< minChain; i++ )
+  for ( i=1; i< minChain; i++ )
     {
-        if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
-            offset++;
+      if ( ( robotRoot2StartJoint[i]==robotRoot2EndJoint[i] ) )
+	offset++;
     }
 
-    unsigned int rank;
-    JointPrivate* aJoint;
-    DynamicBodyPrivate* aBody;
+  unsigned int rank;
+  JointPrivate* aJoint;
+  DynamicBodyPrivate* aBody;
 
-    for ( i=offset;i<robotRoot2EndJoint.size();i++ )
+  for ( i=offset;i<robotRoot2EndJoint.size();i++ )
     {
-        aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration() +outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration() +outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) = aBody->w_a[j];
+	case JointPrivate::REVOLUTE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) = aBody->w_a[j];
 
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank+j ) =  1.0;
-                break;
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank+j ) =  1.0;
+	  break;
         }
     }
 
-    for ( i=offset;i<robotRoot2StartJoint.size();i++ )
+  for ( i=offset;i<robotRoot2StartJoint.size();i++ )
     {
-        aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
-        aBody=  aJoint->linkedDBody();
-        if ( includeFreeFlyer )
-            rank = aJoint->rankInConfiguration() +outOffset;
-        else
-            rank = aJoint->rankInConfiguration()-6+outOffset;
+      aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
+      aBody=  aJoint->linkedDBody();
+      if ( includeFreeFlyer )
+	rank = aJoint->rankInConfiguration() +outOffset;
+      else
+	rank = aJoint->rankInConfiguration()-6+outOffset;
 
-        tempDP = tempP - aBody->p;
+      tempDP = tempP - aBody->p;
 
-        switch ( aJoint->type() )
+      switch ( aJoint->type() )
         {
-            case JointPrivate::REVOLUTE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank ) = -aBody->w_a[j];
-                break;
-            case JointPrivate::PRISMATIC_JOINT:
-                break;
-            case JointPrivate::FREE_JOINT:
-                for ( j=0;j<3;j++ )
-                    outjacobian ( j,rank+j ) =  -1.0;
-                break;
+	case JointPrivate::REVOLUTE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank ) = -aBody->w_a[j];
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  for ( j=0;j<3;j++ )
+	    outjacobian ( j,rank+j ) =  -1.0;
+	  break;
         }
     }
 
-    if ( includeFreeFlyer )
+  if ( includeFreeFlyer )
     {
-        for (unsigned int ii=0;ii<3;ii++)
-            for (unsigned int jj=outOffset;jj<outOffset+3;jj++)
-                outjacobian(ii,jj) = 0.0;
+      for (unsigned int ii=0;ii<3;ii++)
+	for (unsigned int jj=outOffset;jj<outOffset+3;jj++)
+	  outjacobian(ii,jj) = 0.0;
         
-        unsigned k = outOffset+3;
-        outjacobian(0,k) = 1.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 0.0; k++;
-        outjacobian(0,k) = 0.0; outjacobian(1,k) = 1.0; outjacobian(2,k) = 0.0; k++;
-        outjacobian(0,k) = 0.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 1.0;
+      unsigned k = outOffset+3;
+      outjacobian(0,k) = 1.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 0.0; k++;
+      outjacobian(0,k) = 0.0; outjacobian(1,k) = 1.0; outjacobian(2,k) = 0.0; k++;
+      outjacobian(0,k) = 0.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 1.0;
     }
-    return true;
+  return true;
 }
