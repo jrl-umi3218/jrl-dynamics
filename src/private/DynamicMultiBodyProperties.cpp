@@ -59,6 +59,15 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
       return true;
 
     }
+    else if (inProperty=="ComputeSkewCom")
+    {
+        if (m_ComputeSkewCoM)
+            outValue="true";
+        else
+            outValue="false";
+        return true;
+
+    }
   else if (inProperty=="ComputeCoM")
     {
       if (m_ComputeCoM)
@@ -143,6 +152,19 @@ bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string 
         {
 	  setComputeAcceleration(false);
 	  return true;
+        }
+    }
+    else if (inProperty=="ComputeSkewCom")
+    {
+        if (inValue=="true")
+        {
+            setComputeSkewCoM(true);
+            return true;
+        }
+        else if (inValue=="false")
+        {
+            setComputeSkewCoM(false);
+            return true;
         }
     }
   else if (inProperty=="ComputeMomentum")
@@ -237,6 +259,8 @@ bool DynMultiBodyPrivate::isSupported(const std::string &aName)
     return true;
   else if (aName=="ComputeZMP")
     return true;
+  else if (aName=="ComputeSkewCom")
+      return true;
   else if (aName=="TimeStep")
     return true;
   return false;
