@@ -15,8 +15,21 @@
 
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 #include "GenerateRobotForAMELIF.h"
+#include "GenerateRobotForVRML1.h"
 
 using namespace std;
+
+void ExportToAMELIF(CjrlHumanoidDynamicRobot *aHDR,
+		    std::vector<std::string> &aVectorOfURLs)
+{
+  dynamicsJRLJapan::GenerateRobotForAMELIF aGenerateRobotForAMELIF;
+
+  string aHRP2Normalized("HRP2Normalized");
+  aGenerateRobotForAMELIF.SetAccessToData(aVectorOfURLs);
+  aGenerateRobotForAMELIF.GenerateRobot(aHRP2Normalized,aHDR);
+
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -58,10 +71,5 @@ int main(int argc, char *argv[])
 					 aSpecificitiesFileName,
 					 aVectorOfURLs);
 
-  dynamicsJRLJapan::GenerateRobotForAMELIF aGenerateRobotForAMELIF;
-
-  string aHRP2Normalized("HRP2Normalized");
-  aGenerateRobotForAMELIF.SetAccessToData(aVectorOfURLs);
-  aGenerateRobotForAMELIF.GenerateRobot(aHRP2Normalized,aHDR);
-  
+  ExportToAMELIF(aHDR,aVectorOfURLs);
 }

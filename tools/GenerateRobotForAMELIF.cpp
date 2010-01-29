@@ -106,6 +106,7 @@ namespace dynamicsJRLJapan {
       for(unsigned int j=0;j<3;j++)
 	os << MAL_S3x3_MATRIX_ACCESS_I_J(Inertia,i,j) << " ";
     os << "</Inertia>" << endl;
+
     // Geometric file.
     os << shifttab << "  <File>" << m_AccessToData[gindex] << "</File>" << endl;
 

@@ -183,7 +183,11 @@ namespace dynamicsJRLJapan {
 	  << outForeFinger(0) << " " 
 	  << outForeFinger(1) << " "
 	  << outForeFinger(2) << endl;
-  
+
+    
+    RecursiveDisplayOfJoints((CjrlJoint *)ajrlHand->associatedWrist(),
+			     tcout, 2, 0);
+				 
   }
 
   void DisplayFoot(CjrlFoot *aFoot,string &shifttab,ostream &tcout)
@@ -215,6 +219,7 @@ namespace dynamicsJRLJapan {
 	  << ProjectionCenterLocalFrameInSole(0) << " , " 
 	  << ProjectionCenterLocalFrameInSole(1) << " , " 
 	  << ProjectionCenterLocalFrameInSole(2) << " ) " << std::endl;
+
   }
 
   void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
@@ -238,7 +243,7 @@ namespace dynamicsJRLJapan {
 	  <<  aJoint->numberDof() << endl;
   
 
-    if (verbosedisplay>3)
+    if (verbosedisplay>1)
       {
 	tcout << shifttab << "Initial Position " ;
 	matrix4d iP = aJoint->initialPosition();
@@ -248,49 +253,55 @@ namespace dynamicsJRLJapan {
 	matrix4d cT = aJoint->currentTransformation();
 	dm4d(cT,tcout,shifttab);
 
-	// Limits
-	tcout << shifttab << "llimit: " 
-	      << aJoint->lowerBound(0)*180/M_PI << " " 
-	      << shifttab << "ulimit: " 
-	      << aJoint->upperBound(0)*180/M_PI << " " << endl;
-
-	tcout << shifttab << "lvlimit: " 
-	      << aJoint->lowerVelocityBound(0)*180/M_PI << " " 
-	      << shifttab << "uvlimit: " 
-	      << aJoint->upperVelocityBound(0)*180/M_PI << " " << endl;
-      
-	// Path from the root to this joint.
-	std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
-	tcout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
-	      << shifttab << "Joint from root to here:" << endl << shifttab;
-	for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
-	  tcout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
-	tcout << endl;
-
-	// Current state of the joint.
-
-	// Rigid velocity:
-	CjrlRigidVelocity aRV = aJoint->jointVelocity();
-	tcout << shifttab << "Linear Velocity ";
-	vector3d av3d = aRV.linearVelocity();
-	dv3d(av3d,tcout);
-	tcout << shifttab << "Angular Velocity ";
-	av3d = aRV.rotationVelocity();
-	dv3d(av3d,tcout);
-
-	// Rigit Acceleration.
-	CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
-	tcout << shifttab << "Linear Acceleration ";
-	av3d = aRA.linearAcceleration();
-	dv3d(av3d,tcout);
-	tcout << shifttab << "Angular Acceleration ";
-	av3d = aRA.rotationAcceleration();
-	dv3d(av3d,tcout);
-      
-	CjrlBody * aBody = aJoint->linkedBody();
-	DisplayBody(aBody,shifttab,tcout);
+	if (verbosedisplay>2)
+	  {
+	    // Limits
+	    tcout << shifttab << "llimit: " 
+		  << aJoint->lowerBound(0)*180/M_PI << " " 
+		  << shifttab << "ulimit: " 
+		  << aJoint->upperBound(0)*180/M_PI << " " << endl;
+	    
+	    tcout << shifttab << "lvlimit: " 
+		  << aJoint->lowerVelocityBound(0)*180/M_PI << " " 
+		  << shifttab << "uvlimit: " 
+		  << aJoint->upperVelocityBound(0)*180/M_PI << " " << endl;
+	    
+	    // Path from the root to this joint.
+	    std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
+	    tcout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
+		  << shifttab << "Joint from root to here:" << endl << shifttab;
+	    for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
+	      tcout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
+	    tcout << endl;
+	    
+	    if (verbosedisplay>3)
+	      {
+		// Current state of the joint.
+		
+		// Rigid velocity:
+		CjrlRigidVelocity aRV = aJoint->jointVelocity();
+		tcout << shifttab << "Linear Velocity ";
+		vector3d av3d = aRV.linearVelocity();
+		dv3d(av3d,tcout);
+		tcout << shifttab << "Angular Velocity ";
+		av3d = aRV.rotationVelocity();
+		dv3d(av3d,tcout);
+		
+		// Rigit Acceleration.
+		CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
+		tcout << shifttab << "Linear Acceleration ";
+		av3d = aRA.linearAcceleration();
+		dv3d(av3d,tcout);
+		tcout << shifttab << "Angular Acceleration ";
+		av3d = aRA.rotationAcceleration();
+		dv3d(av3d,tcout);
+		
+		CjrlBody * aBody = aJoint->linkedBody();
+		DisplayBody(aBody,shifttab,tcout);
+	      }
+	  }
       }
-
+    
     if (NbChildren!=0)
       {
 	tcout << shifttab << "***********************************************" << endl;

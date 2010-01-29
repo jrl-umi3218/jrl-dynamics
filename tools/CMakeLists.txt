@@ -29,7 +29,11 @@ MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl")
 
-ADD_EXECUTABLE(	ReadOpenHRPFileAndExport GenerateRobotForAMELIF.cpp ReadOpenHRPFileAndExport.cpp)
+ADD_EXECUTABLE(	ReadOpenHRPFileAndExport 
+  GenerateRobotForAMELIF.cpp 
+  ReadOpenHRPFileAndExport.cpp)
+
+
 SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 	              PROPERTIES
 		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
@@ -37,13 +41,15 @@ SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
 
-ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl 
-  ${${PROJECT_NAME}_BINARY_DIR}/tools
-  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleSpecificities.xml
-  ${${PROJECT_NAME}_BINARY_DIR}/tools
-  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleLinkJointRank.xml
-  ${${PROJECT_NAME}_BINARY_DIR}/tools
+ADD_EXECUTABLE(	CreateVRMLPoseFile
+  GenerateRobotForVRML2.cpp
+  CreateVRMLPoseFile.cpp)
+
+SET_TARGET_PROPERTIES(CreateVRMLPoseFile
+	              PROPERTIES
+		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
 
 ADD_DEPENDENCIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
