@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
-  
+  aCurrentConf[2] = 0.705;
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = 0.0;
   
@@ -209,6 +209,11 @@ int main(int argc, char *argv[])
   tcout << aHDR->leftFoot()->associatedAnkle()->rankInConfiguration() << endl;
   CjrlFoot *leftFoot = aHDR->leftFoot();
   DisplayFoot(leftFoot,empty,tcout);
+
+  tcout << "Current transformation of left Ankle."<< endl;
+  tcout << aHDR->leftAnkle()->currentTransformation() << endl;
+  tcout << "Current transformation of right Ankle."<< endl;
+  tcout << aHDR->rightAnkle()->currentTransformation() << endl;
   
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
