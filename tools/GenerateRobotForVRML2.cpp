@@ -24,11 +24,9 @@ namespace dynamicsJRLJapan {
   {
   }
 
-
   Tools::GenerateRobotForVRML2::~GenerateRobotForVRML2()
   {
   }
-
 
   void Tools::GenerateRobotForVRML2::AxisAngle(matrix4d &data,
 					       vector3d &axis,
@@ -38,7 +36,7 @@ namespace dynamicsJRLJapan {
     angle = 0;
     double x,y,z;
     //    cout << "data:" << data << endl;
-
+    
     double  d0 = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,0);
     double d01 = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,1);
     double d02 = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,2);
@@ -60,7 +58,7 @@ namespace dynamicsJRLJapan {
 	    (fabs(d02 - d20)<epsilon2) &&
 	    (fabs(d12 - d21)<epsilon2))
 	  {
-	    MAL_S3_VECTOR_ACCESS(axis,0)= 0.0;MAL_S3_VECTOR_ACCESS(axis,1)= 1.0;MAL_S3_VECTOR_ACCESS(axis,2)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,0)= 1.0;MAL_S3_VECTOR_ACCESS(axis,1)= 0.0;MAL_S3_VECTOR_ACCESS(axis,2)= 0.0;
 	    angle=0.0;
 	    return;
 	  }
@@ -115,6 +113,7 @@ namespace dynamicsJRLJapan {
     //    cout << "r:" << r << endl;
     angle = acos(r);
     //angle = 0;
+    s = 2*sin(angle);
     //    cout << "angle:" << angle<<endl;
     MAL_S3_VECTOR_ACCESS(axis,0) = (d21 - d12)/s;
     MAL_S3_VECTOR_ACCESS(axis,1) = (d02 - d20)/s;
@@ -174,6 +173,32 @@ namespace dynamicsJRLJapan {
     
     MAL_S4x4_MATRIX(aTransformation,double);
     aTransformation = aJoint->currentTransformation();
+
+    matrix4d initialTr;
+    initialTr = aJoint->initialPosition();
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,0,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,1,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,2,3) = 0.0;
+
+    matrix4d invrot;
+
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	{
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=0.0;
+	  for(unsigned int k=0;k<3;k++)
+	    {
+	      MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)+=
+		MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k) *
+		MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,k);
+
+	    }
+	}
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j) =
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j);
+
     os << shifttab << "  translation ";
     for(unsigned int i=0;i<3;i++)
       os << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,3) << " ";

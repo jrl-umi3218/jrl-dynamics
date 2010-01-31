@@ -15,7 +15,6 @@
 
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 #include "GenerateRobotForAMELIF.h"
-#include "GenerateRobotForVRML1.h"
 
 using namespace std;
 
