@@ -194,58 +194,14 @@ void JointPrivate::computeLocalAndGlobalPoseFromGlobalFrame()
     }
 }
 
-void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
+void JointPrivate::NormalizeRotationFromAxis(vector4d &Axis, matrix3d &NormalizedRotation)
 {
-  /*
-    The pose of the joint has been defined in local frame of parent joint at construction.
-    Compute pose in global frame.
-  */
-  
-  /*
-    global       global      global
-    R         =  R           R
-    joint        parent      joint
-  */
-  ODEBUG(getName() << " m_poseInParentFrame=" << m_poseInParentFrame);
-  ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
-  
-  MAL_S4x4_C_eq_A_by_B(m_globalPoseAtConstruction,
-		       m_FatherJoint->m_globalPoseAtConstruction,
-		       m_poseInParentFrame);
-
-  if (m_type!=JointPrivate::REVOLUTE_JOINT)
-    {
-      m_globalPoseAtConstructionNormalized = m_globalPoseAtConstruction;
-      if( m_Body!=0)
-	{
-	  DynamicBodyPrivate * aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
-	  if (aDBP!=0)
-	    {
-	      ODEBUG3("R: " << aDBP->R);
-	      ODEBUG3("p: " << aDBP->p);
-	    }
-	}
-      return;
-    }
-
-  vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
-  LocalAxis[0] = m_axe[0];
-  LocalAxis[1] = m_axe[1];
-  LocalAxis[2] = m_axe[2];
-  LocalAxis[3] = 0;
-  MAL_S4x4_C_eq_A_by_B(GlobalAxis,m_FatherJoint->m_globalPoseAtConstruction,LocalAxis);
-  ODEBUG("GlobalAxis: " << GlobalAxis);
-  
-  LocalCenter[0] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3);
-  LocalCenter[1] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3);
-  LocalCenter[2] = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3);
-  LocalCenter[3] = 1.0;
-  MAL_S4x4_C_eq_A_by_B(GlobalCenter,m_FatherJoint->m_globalPoseAtConstruction,LocalCenter);
-  
-
   // Start normalization. 
   vector3d v1,v2,v3;
-  v1 = m_axe;
+
+  v1[0] = Axis[0];
+  v1[1] = Axis[1];
+  v1[2] = Axis[2];
   v2[0] = v2[1]=v2[2]=0.0;
   unsigned int smallestComponent=0;
   double valueSmallestComponent = fabs(v1[0]);
@@ -259,42 +215,99 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
     smallestComponent = 2;
     valueSmallestComponent = fabs(v1[2]);
   }
-  
+  // (v1, v2, v3) form an orthonormal basis  
   v2[smallestComponent] = 1.0;
   MAL_S3_VECTOR_CROSS_PRODUCT(v3,v1,v2);
   MAL_S3_VECTOR_CROSS_PRODUCT(v2,v3,v1);
   
-  // (v1, v2, v3) form an orthonormal basis
+  // Prepare the fixed rotation following the axis.
+  for (unsigned int iRow=0; iRow < 3; iRow++) {
+    MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,0) = v1[iRow];
+    MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,1) = v2[iRow];
+    MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,2) = v3[iRow];
+  }
+
+}
+
+void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
+{
+  /*
+    The pose of the joint has been defined in local frame of parent joint at construction.
+    Compute pose in global frame.
+  */
+  
+  /*
+    global       global      global
+    R         =  R           R
+    joint        parent      joint
+  */
+
+  // Initial static rotation after the joint.
+  matrix3d InitialRstatic;
+
+  ODEBUG(getName() << " m_poseInParentFrame=" << m_poseInParentFrame);
+  ODEBUG(" m_FatherJoint->m_globalPoseAtConstruction=" << m_FatherJoint->m_globalPoseAtConstruction);
+
+  // Compute the global pose at construction by using 
+  // father global pose and local pose in the father's frame.
+  MAL_S4x4_C_eq_A_by_B(m_globalPoseAtConstruction,
+		       m_FatherJoint->m_globalPoseAtConstruction,
+		       m_poseInParentFrame);
+
+  if (m_Body!=0)
+    {
+      DynamicBodyPrivate * aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
+      InitialRstatic = aDBP->R_static; 
+      ODEBUG3("Name: " << aDBP->getName());
+    }
+
+  // Express local axis in the global frame.
+  vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
+  LocalAxis[0] = m_axe[0];
+  LocalAxis[1] = m_axe[1];
+  LocalAxis[2] = m_axe[2];
+  LocalAxis[3] = 0;
+  MAL_S4x4_C_eq_A_by_B(GlobalAxis,m_globalPoseAtConstruction,LocalAxis);
+  
+  matrix3d NormalizedRotation;
+  NormalizeRotationFromAxis(GlobalAxis, NormalizedRotation);
+
+  // Default value.
+  ODEBUG3("NormalizedRotation:" << NormalizedRotation);
   
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstructionNormalized);
-  
+
   // Build normalized frame.
   for (unsigned int iRow=0; iRow < 3; iRow++) {
-    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 0) = v1[iRow];
-    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 1) = v2[iRow];
-    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 2) = v3[iRow];
-    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 3) = GlobalCenter[iRow];
+    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 0) = 
+      MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,0);
+    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 1) = 
+      MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,1);
+    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 2) = 
+      MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,2);
+    MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstructionNormalized,iRow, 3) = 
+      MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow,3);
   }
   
   MAL_S4x4_MATRIX(,double) poseInParentFrameUnnormalized;
   poseInParentFrameUnnormalized = m_poseInParentFrame;
   
   /* Get normalized global pose of parent joint 
-     to compute relative position in normalized local reference frame.
-  */
+     to compute relative position in normalized local reference frame.  */
   MAL_S4x4_MATRIX(, double) invParentGlobalPoseN;
   MAL_S4x4_INVERSE(m_FatherJoint->m_globalPoseAtConstructionNormalized, invParentGlobalPoseN, double);
   MAL_S4x4_MATRIX(, double) jointGlobalPoseN = m_globalPoseAtConstructionNormalized;
+
   /*
     parent     /  global \  -1   global
     R         = | R        |     R
     joint      \  parent /       joint
   */
-  
+  ODEBUG3("m_poseInParentFrame: " << m_poseInParentFrame);
   m_poseInParentFrame = MAL_S4x4_RET_A_by_B(invParentGlobalPoseN, jointGlobalPoseN);
-  
+  ODEBUG3("new m_poseInParentFrame: " << m_poseInParentFrame);
+
   // Rotate local center of mass and inertia matrix if present.
-  ODEBUG("m_Body:" <<m_Body);
   if (m_Body!=0)
     {
       // Compute transformation for rotation from Unnormalized to Normalized.
@@ -334,8 +347,6 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
       linertiam = MAL_S3x3_RET_A_by_B(rotParams,linertiam);
       m_Body->inertiaMatrix(linertiam);
       
-      
-      ODEBUG(getName() << "New m_poseInParentFrame=" << m_poseInParentFrame);
       DynamicBodyPrivate* aDBP=0;
       if (m_Body!=0)
 	{
@@ -344,20 +355,17 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 	    {
 	      vector3d laxes;
 	      laxes = m_axe;
-	      
+	      	      
 	      for (unsigned int i=0;i<3;i++)
 		{
 		  MAL_S3_VECTOR_ACCESS(aDBP->b,i) = 
 		    MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
 		  
-		  
 		  for (unsigned int j=0;j<3;j++)
-		    {			  
-		      MAL_S3x3_MATRIX_ACCESS_I_J(aDBP->R_static,i,j)=
-			MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
-		    }
+		    MAL_S3x3_MATRIX_ACCESS_I_J(aDBP->R_static,i,j) = 
+		      MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
 		}
-	      ODEBUG("aDBP->R_static:" << aDBP->R_static);
+
 	      MAL_S3_VECTOR_ACCESS(m_axe,0)=1.0;
 	      MAL_S3_VECTOR_ACCESS(m_axe,1)=0.0;
 	      MAL_S3_VECTOR_ACCESS(m_axe,2)=0.0;
@@ -366,6 +374,8 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 	}
       
     }
+
+  ODEBUG3("============================");
 }
 
 void JointPrivate::computeLocalAndGlobalPose()

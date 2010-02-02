@@ -129,6 +129,10 @@ namespace dynamicsJRLJapan
 
     /*! Compute local data from initialization using global information*/
     void computeLocalAndGlobalPoseFromLocalFrame();
+    
+    /*! Compute normalized rotation matrix (to create a rotation around x-axis)
+      from axis. */
+    void NormalizeRotationFromAxis(vector4d &Axis, matrix3d &NormalizedRotation);
 
   public: 
       
