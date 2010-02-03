@@ -258,7 +258,6 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
     {
       DynamicBodyPrivate * aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
       InitialRstatic = aDBP->R_static; 
-      ODEBUG3("Name: " << aDBP->getName());
     }
 
   // Express local axis in the global frame.
@@ -273,7 +272,6 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
   NormalizeRotationFromAxis(GlobalAxis, NormalizedRotation);
 
   // Default value.
-  ODEBUG3("NormalizedRotation:" << NormalizedRotation);
   
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstructionNormalized);
 
@@ -303,9 +301,7 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
     R         = | R        |     R
     joint      \  parent /       joint
   */
-  ODEBUG3("m_poseInParentFrame: " << m_poseInParentFrame);
   m_poseInParentFrame = MAL_S4x4_RET_A_by_B(invParentGlobalPoseN, jointGlobalPoseN);
-  ODEBUG3("new m_poseInParentFrame: " << m_poseInParentFrame);
 
   // Rotate local center of mass and inertia matrix if present.
   if (m_Body!=0)
@@ -374,8 +370,6 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 	}
       
     }
-
-  ODEBUG3("============================");
 }
 
 void JointPrivate::computeLocalAndGlobalPose()

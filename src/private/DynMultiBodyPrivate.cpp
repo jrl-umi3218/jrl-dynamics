@@ -111,7 +111,7 @@ bool DynMultiBodyPrivate::initialize()
 
 void DynMultiBodyPrivate::parserVRML(string path,
 				     char *option,
-				     vector<string> &aListOfURLs)
+				     vector<BodyGeometricalData> &aListOfURLs)
 {
   m_listOfBodies.clear();
   dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,path, aListOfURLs);

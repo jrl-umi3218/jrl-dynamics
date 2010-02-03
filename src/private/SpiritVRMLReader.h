@@ -15,13 +15,13 @@
 #include <string>
 #include <vector>
 #include "MultiBody.h"
-
+#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
 
 namespace dynamicsJRLJapan
 {
   namespace VRMLReader 
   {
-    int ParseVRMLFile(MultiBody *aMB, std::string FileName, std::vector<std::string> & VectorOfURLs);
+    int ParseVRMLFile(MultiBody *aMB, std::string FileName, std::vector<BodyGeometricalData> & VectorOfURLs);
   };
 };
 

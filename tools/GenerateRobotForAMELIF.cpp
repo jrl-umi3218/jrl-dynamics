@@ -108,7 +108,7 @@ namespace dynamicsJRLJapan {
     os << "</Inertia>" << endl;
 
     // Geometric file.
-    os << shifttab << "  <File>" << m_AccessToData[gindex] << "</File>" << endl;
+    os << shifttab << "  <File>" << m_AccessToData[gindex].getURL() << "</File>" << endl;
 
     gindex++;
     // Close body description.
@@ -122,7 +122,7 @@ namespace dynamicsJRLJapan {
   
   }
 
-  void GenerateRobotForAMELIF::SetAccessToData(vector<std::string> &AccessToData)
+  void GenerateRobotForAMELIF::SetAccessToData(vector<BodyGeometricalData> &AccessToData)
   {
     m_AccessToData = AccessToData;
   }

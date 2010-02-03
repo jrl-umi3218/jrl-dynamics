@@ -32,6 +32,8 @@
 
 #include <robotDynamics/jrlDynamicRobot.h>
 
+#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+
 using namespace::std;
 namespace dynamicsJRLJapan
 {
@@ -374,7 +376,7 @@ namespace dynamicsJRLJapan
     */
     virtual void parserVRML(string path, 
 			    char *option, 
-			    std::vector<string> &aListOfURLs);
+			    std::vector<BodyGeometricalData> &aListOfURLs);
 
     /**
        \brief Initialization of the kinematic chain

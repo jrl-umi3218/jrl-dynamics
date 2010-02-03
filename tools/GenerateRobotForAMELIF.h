@@ -36,7 +36,7 @@ namespace dynamicsJRLJapan
 		       CjrlHumanoidDynamicRobot *aHDR);
 
     /*! \brief Take the links towards the geometrical information */
-    void SetAccessToData(std::vector<std::string> &AccessToData);
+    void SetAccessToData(std::vector<BodyGeometricalData> &AccessToData);
   private:
     
     CjrlHumanoidDynamicRobot *m_HDR;
@@ -60,7 +60,7 @@ namespace dynamicsJRLJapan
 			std::string shifttab);
 
     
-    std::vector<std::string> m_AccessToData;
+    std::vector<BodyGeometricalData> m_AccessToData;
       
   };
 };

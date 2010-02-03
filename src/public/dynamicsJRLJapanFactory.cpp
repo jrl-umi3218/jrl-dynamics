@@ -79,12 +79,32 @@ namespace dynamicsJRLJapan
     return foot;
   }
 
+  const matrix3d & BodyGeometricalData::getRotationForDisplay()
+  {
+    return m_RotationForDisplay;
+  }
+
+  void BodyGeometricalData::setRotationForDisplay(const matrix3d & RotationForDisplay)
+  {
+    m_RotationForDisplay = RotationForDisplay;
+  }
+
+  const std::string & BodyGeometricalData::getURL()
+  {
+    return m_URL;
+  }
+
+  void BodyGeometricalData::setURL(const std::string &URLtoVRML)
+  {
+    m_URL = URLtoVRML;
+  }
+
   int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 			   std::string &OpenHRPVRMLFile,
 			   std::string &MapJointToRankFileName,
 			   std::string &SpecificitiesFileName)
   {
-    std::vector<std::string> lVectorOfURLs;
+    std::vector<BodyGeometricalData> lVectorOfURLs;
     return parseOpenHRPVRMLFile(ajrlHumanoidDynamicRobot,
 				OpenHRPVRMLFile,
 				MapJointToRankFileName,
@@ -96,7 +116,7 @@ namespace dynamicsJRLJapan
 			   std::string &OpenHRPVRMLFile,
 			   std::string &MapJointToRankFileName,
 			   std::string &SpecificitiesFileName,
-			   std::vector<std::string> &VectorOfURLs)
+			   std::vector<BodyGeometricalData> &VectorOfURLs)
   {
     dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR = 
       dynamic_cast<HumDynMultiBodyPrivate *>(&ajrlHumanoidDynamicRobot);

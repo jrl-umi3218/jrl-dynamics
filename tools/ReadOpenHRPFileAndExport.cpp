@@ -17,9 +17,10 @@
 #include "GenerateRobotForAMELIF.h"
 
 using namespace std;
+using namespace dynamicsJRLJapan;
 
 void ExportToAMELIF(CjrlHumanoidDynamicRobot *aHDR,
-		    std::vector<std::string> &aVectorOfURLs)
+		    std::vector<BodyGeometricalData> &aVectorOfURLs)
 {
   dynamicsJRLJapan::GenerateRobotForAMELIF aGenerateRobotForAMELIF;
 
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
     }
   string RobotFileName = aPath+aName;
   cout << "RobotFileNAme :" << RobotFileName << endl;
-  vector<string> aVectorOfURLs;
+  vector<BodyGeometricalData> aVectorOfURLs;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,
 					 aMapFromJointToRank,
 					 aSpecificitiesFileName,

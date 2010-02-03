@@ -120,7 +120,8 @@ namespace dynamicsJRLJapan
       }
       
       // String for the url.
-      string URLforGeometry;
+      BodyGeometricalData m_BodyGeometry;
+      
     };
 
     struct SkipGrammar : public grammar<SkipGrammar>
@@ -394,7 +395,7 @@ namespace dynamicsJRLJapan
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
 	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
-	m_ListOfURLs.push_back(m_DataForParsing->URLforGeometry);
+	m_ListOfURLs.push_back(m_DataForParsing->m_BodyGeometry);
       }
       void fJCDEFBlocks(char const *str, char const *end) const
       {
@@ -547,8 +548,14 @@ namespace dynamicsJRLJapan
 	matrix3d R;
 	AxeAngle2Matrix(m_DataForParsing->RotationAxis, lQuantity, R);
 	m_DataForParsing->CurrentLink.aJoint->setStaticRotation(R);
-	if (m_Verbose>1)
-	  std::cerr<< "JointRotation:" <<R << endl;
+	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(R);
+	if (lQ!=0.0)
+	  {
+	    std::cerr << m_DataForParsing->aName 
+		      << " JointRotation:" << R << endl;
+	    std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
+		      << " angle: " << lQuantity<<endl;
+	  }
       }
       
       void fBodyMass(double mass) const
@@ -583,7 +590,7 @@ namespace dynamicsJRLJapan
       {
 	string s(str,end);
 
-	m_DataForParsing->URLforGeometry = s;
+	m_DataForParsing->m_BodyGeometry.setURL(s);
 
 	if (m_Verbose>1)
 	  std::cout << "fBodyInlineUrl:" << s << endl;
@@ -943,7 +950,7 @@ namespace dynamicsJRLJapan
       // of variables, it keeps track of a reference to a common table.
       SpiritOpenHRP(MultiBody *aMB,
 		    struct s_DataForParsing *aDFP,
-		    vector<string> &aListOfURLs) : 
+		    vector<BodyGeometricalData> &aListOfURLs) : 
 	m_MultiBody(aMB),
 	m_DataForParsing(aDFP),
 	m_ListOfURLs(aListOfURLs)
@@ -1460,13 +1467,13 @@ namespace dynamicsJRLJapan
 
       MultiBody * m_MultiBody;
       struct s_DataForParsing *m_DataForParsing;
-      vector<string> &m_ListOfURLs;
+      vector<BodyGeometricalData> &m_ListOfURLs;
       int m_Verbose;
     };
 
     int ParseVRMLFile(MultiBody *aMB, 
 		      std::string aFileName,
-		      vector<string> &aListOfURLs)
+		      vector<BodyGeometricalData> &aListOfURLs)
     {
       if (aFileName == std::string("")) {
 	std::cout << "SpiritVRMLReader: do not read VRML file." << std::endl;

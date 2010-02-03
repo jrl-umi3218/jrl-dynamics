@@ -356,7 +356,7 @@ namespace jrlDelegate {
 							std::string &OpenHRPVRMLFile,
 							std::string &MapJointToRankFileName,
 							std::string &SpecificitiesFileName,
-							std::vector<std::string> &VectorOfURLs);
+							std::vector<BodyGeometricalData> &VectorOfURLs);
 
       /*! @} */
 

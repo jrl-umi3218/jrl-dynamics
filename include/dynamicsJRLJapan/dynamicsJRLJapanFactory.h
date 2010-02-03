@@ -59,6 +59,20 @@ namespace dynamicsJRLJapan
     CjrlFoot* createFoot(const CjrlJoint* inAnkle);
   };
 
+
+  class BodyGeometricalData
+  {
+  private:
+    matrix3d m_RotationForDisplay;
+    std::string m_URL;
+  public:
+    
+    const matrix3d & getRotationForDisplay();
+    void setRotationForDisplay(const matrix3d &RotationForDisplay);
+
+    const std::string & getURL();
+    void setURL(const std::string &URLtoVRML);
+  };
   
   /*! Populate a CjrlHumanoidDynamicRobot instance
     from a OpenHRP vrml file and a file of specificities
@@ -71,6 +85,7 @@ namespace dynamicsJRLJapan
     the VRML ID to the state vector.
     \param FileOfSpecificities Describe which joints are hands, arm...
     and so on.
+    \param Geometrical information returns bodies geometry description.
     \retval ajrlHumanoidDynamicRobot The robot built by parsing the file.
     \return Negative value if failed, 0 otherwise.
   */
@@ -85,7 +100,7 @@ namespace dynamicsJRLJapan
 			     std::string &OpenHRPVRMLFile,
 			     std::string &MapJointToRankFileName,
 			     std::string &FileOfSpecificities,
-			     std::vector<std::string> &VectorOfURLs);
+			     std::vector<BodyGeometricalData> &GeometricalDataonBodies);
   
 };
 #endif

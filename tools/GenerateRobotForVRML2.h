@@ -38,7 +38,7 @@ namespace dynamicsJRLJapan
 			 CjrlHumanoidDynamicRobot *aHDR);
       
       /*! \brief Take the links towards the geometrical information */
-      void SetAccessToData(std::vector<std::string> &AccessToData);
+      void SetAccessToData(std::vector<BodyGeometricalData> &AccessToData);
 
       /*! \brief Set path to the model files. */
       void SetPathToModelFiles(std::string &Path);
@@ -47,6 +47,8 @@ namespace dynamicsJRLJapan
     private:
 
       void AxisAngle(matrix4d &data, vector3d &axis, double &angle) const;
+
+      void AxisAngle2(matrix4d &data, vector3d &axis, double &angle) const;
 
       CjrlHumanoidDynamicRobot *m_HDR;
       
@@ -70,7 +72,8 @@ namespace dynamicsJRLJapan
       
       void CopyGeometricInformation(std::ostream &os,
 				    std::string FileName);
-      std::vector<std::string> m_AccessToData;
+
+      std::vector<BodyGeometricalData> m_AccessToData;
 
     };
   };

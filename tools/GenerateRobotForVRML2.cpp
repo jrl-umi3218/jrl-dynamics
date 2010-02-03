@@ -28,6 +28,85 @@ namespace dynamicsJRLJapan {
   {
   }
 
+  void Tools::GenerateRobotForVRML2::AxisAngle2(matrix4d &data,
+					       vector3d &axis,
+					       double &angle) const
+  {
+
+    MAL_S3_VECTOR_FILL(axis,0.0);
+    angle = 0;
+    cout << "data:" << data << endl;
+    
+    double Qxx = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,0);
+    double Qxy = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,1);
+    double Qxz = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,2);
+    double Qyx = MAL_S4x4_MATRIX_ACCESS_I_J(data,1,0);
+    double Qyy = MAL_S4x4_MATRIX_ACCESS_I_J(data,1,1);
+    double Qyz = MAL_S4x4_MATRIX_ACCESS_I_J(data,1,2);
+    double Qzx = MAL_S4x4_MATRIX_ACCESS_I_J(data,2,0);
+    double Qzy = MAL_S4x4_MATRIX_ACCESS_I_J(data,2,1);
+    double Qzz = MAL_S4x4_MATRIX_ACCESS_I_J(data,2,2);
+
+    MAL_S3_VECTOR_ACCESS(axis,0) = Qzy - Qyz;
+    MAL_S3_VECTOR_ACCESS(axis,1) = Qxz - Qzx;
+    MAL_S3_VECTOR_ACCESS(axis,2) = Qyx - Qxy;
+    double lr =sqrt(MAL_S3_VECTOR_ACCESS(axis,2)*MAL_S3_VECTOR_ACCESS(axis,2) 
+		    + MAL_S3_VECTOR_ACCESS(axis,1)*MAL_S3_VECTOR_ACCESS(axis,1));
+    double r = sqrt(MAL_S3_VECTOR_ACCESS(axis,0)*MAL_S3_VECTOR_ACCESS(axis,0)
+	     + lr*lr);
+    if (r==0.0)
+      {
+	if ((Qxx==-1.0) && (Qyy==-1.0))
+	  {
+	    MAL_S3_VECTOR_ACCESS(axis,0)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,1)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,2)= 1.0;
+	    angle=M_PI;
+	  }
+	else if ((Qxx==-1.0) && (Qzz==-1.0))
+	  {
+	    MAL_S3_VECTOR_ACCESS(axis,0)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,1)= 1.0;
+	    MAL_S3_VECTOR_ACCESS(axis,2)= 0.0;
+	    angle=M_PI;
+	  }
+	else if ((Qyy==-1.0) && (Qzz==-1.0))
+	  {
+	    MAL_S3_VECTOR_ACCESS(axis,0)= 1.0;
+	    MAL_S3_VECTOR_ACCESS(axis,1)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,2)= 0.0;
+	    angle=M_PI;
+	  }
+	else if ((Qyy==1.0) && (Qzz==1.0))
+	  {
+	    MAL_S3_VECTOR_ACCESS(axis,0)= 1.0;
+	    MAL_S3_VECTOR_ACCESS(axis,1)= 0.0;
+	    MAL_S3_VECTOR_ACCESS(axis,2)= 0.0;
+	    angle=0;
+	  }
+	else 
+	  {
+	    cout.precision(10);
+	    cout<< "Pb. " 
+		<< fabs(Qxx)-1.0 << " "
+		<< fabs(Qyy)-1.0 << " "
+		<< fabs(Qzz)-1.0 << " "
+		<< endl;
+	  }
+	return;
+      }
+    else
+      {
+	MAL_S3_VECTOR_ACCESS(axis,0) /=r;
+	MAL_S3_VECTOR_ACCESS(axis,1) /=r;
+	MAL_S3_VECTOR_ACCESS(axis,2) /=r;
+	angle=0.0;
+      }
+    double t = Qxx + Qyy +Qzz;
+    cout << "t: " << t<< endl;
+    angle =atan2(r,t-1.0);
+  }
+  
   void Tools::GenerateRobotForVRML2::AxisAngle(matrix4d &data,
 					       vector3d &axis,
 					       double &angle) const
@@ -159,7 +238,7 @@ namespace dynamicsJRLJapan {
   }
   
   /*! \brief Take the links towards the geometrical information */
-  void Tools::GenerateRobotForVRML2::SetAccessToData(std::vector<std::string> &AccessToData)
+  void Tools::GenerateRobotForVRML2::SetAccessToData(std::vector<BodyGeometricalData> &AccessToData)
   {
     m_AccessToData = AccessToData;
   }
@@ -199,6 +278,25 @@ namespace dynamicsJRLJapan {
 	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j) =
 	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j);
 
+    // Multiply by the local rotation of the joint reference frame
+    matrix3d RotationForDisplay3d;
+    RotationForDisplay3d = m_AccessToData[gindex].getRotationForDisplay();
+    cout << "=========================" << endl;
+    cout << "JOINT: " << m_AccessToData[gindex].getURL() << endl;
+    cout << "Rotation for display: " << RotationForDisplay3d << endl;
+
+    MAL_S4x4_MATRIX(aTransformationForDisplay,double);
+
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	{
+	  MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,j) = 0.0;
+	  for(unsigned int k=0;k<3;k++)
+	    MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,j)+=
+	      MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k)*
+	      MAL_S4x4_MATRIX_ACCESS_I_J(RotationForDisplay3d,k,j);
+	}
+    cout << aTransformationForDisplay << endl;
     os << shifttab << "  translation ";
     for(unsigned int i=0;i<3;i++)
       os << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,3) << " ";
@@ -206,12 +304,12 @@ namespace dynamicsJRLJapan {
     os << shifttab << "  rotation " ;
     vector3d laxis;
     double angle;
-    AxisAngle(aTransformation,laxis,angle);
+    AxisAngle2(aTransformationForDisplay,laxis,angle);
     for(unsigned int i=0;i<3;i++)
       os << MAL_S3_VECTOR_ACCESS(laxis,i) << " ";
-    
+    cout << "Rotation axis: " << laxis << " " << " angle: " << angle << endl;
     os << angle << endl;
-
+    cout << "=========================" << endl;
   }  
 
 
@@ -257,7 +355,7 @@ namespace dynamicsJRLJapan {
     os << shifttab << "  children [" << endl
        << shifttab << "    Inline {"<< endl
        << shifttab << "      url \"" 
-       << m_AccessToData[gindex] << "\"" << endl
+       << m_AccessToData[gindex].getURL() << "\"" << endl
        << shifttab << "    }" << endl;
     
       //    CopyGeometricInformation(os,m_AccessToData[gindex]);

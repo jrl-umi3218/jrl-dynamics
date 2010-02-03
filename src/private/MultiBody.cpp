@@ -378,8 +378,13 @@ void MultiBody::afficherLiaisons(void) {
 
 void dynamicsJRLJapan::AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
 {
-  const double c = cos(aQuantity);
-  const double s = sin(aQuantity);
+  double c = cos(aQuantity);
+  if (fabs(c)<1e-8)
+    c=0.0;
+  double s = sin(aQuantity);
+  if (fabs(s)<1e-8)
+    s=0.0;
+
   const double v = 1.0-c;
   const double xv  = AnAxis[0]*AnAxis[0]*v;
   const double yv  = AnAxis[1]*AnAxis[1]*v;
