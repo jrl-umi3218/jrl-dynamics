@@ -24,21 +24,12 @@
 
 #include "Debug.h"
 
-#if 0
 #include <boost/spirit.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/phoenix/binders.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#include <boost/spirit/actor/push_back_actor.hpp>
-#include <boost/spirit/utility.hpp>
-#else
-#include <boost/spirit.hpp>
+//#include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/phoenix/binders.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 #include <boost/spirit/utility/chset.hpp>
-#endif
 
 
 #include "MultiBody.h"
@@ -91,8 +82,11 @@ namespace dynamicsJRLJapan
       // Current Link.
       internalLink CurrentLink;
 
-       // Vector of current branch
+      // Vector of current branch
       vector<Body *> CurrentBody;
+
+      // Stack of Rotation Matrix for display.
+      vector<matrix3d> StackOfRotationMatrixDisplay;
 
       // CurrentTranslation.
       MAL_S3_VECTOR(,double) JointTranslation;
@@ -546,15 +540,39 @@ namespace dynamicsJRLJapan
       {
 	double lQuantity = lQ;
 	matrix3d R;
+	matrix3d displayR;
+	// Conversion from rotation axis to rotation matrix.
 	AxeAngle2Matrix(m_DataForParsing->RotationAxis, lQuantity, R);
+
+
+	// From the current branch of rotation computes
+	// the rotation at the global level for display.
+	if (m_DataForParsing->Depth!=0)
+	  {
+	    matrix3d pR = m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth-1];
+	    MAL_S3x3_C_eq_A_by_B(displayR,pR,R);
+	  }
+	else 
+	  {
+	    MAL_S3x3_MATRIX_SET_IDENTITY(displayR); 
+	  }
+
+	m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth] = displayR;
+	cout << "StackOfRotationMatrixDisplay[" 
+	     << m_DataForParsing->Depth << " ] = " 
+	     << displayR  << endl;
+
+	// Then set the static rotation at the level joint 
+	// and 
 	m_DataForParsing->CurrentLink.aJoint->setStaticRotation(R);
-	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(R);
+	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(displayR);
 	if (lQ!=0.0)
 	  {
 	    std::cerr << m_DataForParsing->aName 
 		      << " JointRotation:" << R << endl;
 	    std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
 		      << " angle: " << lQuantity<<endl;
+	    std::cerr << "displayR: " << displayR << endl;
 	  }
       }
       
@@ -1439,12 +1457,19 @@ namespace dynamicsJRLJapan
 
 	m_DataForParsing->NbOfBodies = 0;
 
-	// Creation du corps de reference
+	// Resize stacks
 	m_DataForParsing->CurrentBody.resize(DEPTH_MAX);
+	m_DataForParsing->StackOfRotationMatrixDisplay.resize(DEPTH_MAX);
+
+	// Creation du corps de reference
 	m_DataForParsing->CurrentBody[0] = new Body();
 	m_DataForParsing->CurrentBody[0]->setLabel(m_DataForParsing->NbOfBodies++);
 	m_MultiBody->ajouterCorps(*m_DataForParsing->CurrentBody[0]);
 	m_DataForParsing->Depth = 0;
+
+	// Initialization of the initial matrix.
+	MAL_S3x3_MATRIX_SET_IDENTITY(m_DataForParsing->StackOfRotationMatrixDisplay[0]);
+
 	MAL_S3_VECTOR(,double) dummy;
 	m_DataForParsing->CurrentLink.label= 0;
 	m_DataForParsing->CurrentLink.aJoint = new JointPrivate(JointPrivate::FIX_JOINT,dummy,0.0);
