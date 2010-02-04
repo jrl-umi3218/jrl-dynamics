@@ -558,6 +558,7 @@ namespace dynamicsJRLJapan
 	  }
 
 	m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth] = displayR;
+        if (m_Verbose>1)
 	cout << "StackOfRotationMatrixDisplay[" 
 	     << m_DataForParsing->Depth << " ] = " 
 	     << displayR  << endl;
@@ -568,11 +569,13 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(displayR);
 	if (lQ!=0.0)
 	  {
+              if (m_Verbose>1){
 	    std::cerr << m_DataForParsing->aName 
 		      << " JointRotation:" << R << endl;
 	    std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
 		      << " angle: " << lQuantity<<endl;
 	    std::cerr << "displayR: " << displayR << endl;
+              }
 	  }
       }
       
