@@ -35,7 +35,6 @@ namespace dynamicsJRLJapan {
 
     MAL_S3_VECTOR_FILL(axis,0.0);
     angle = 0;
-    cout << "data:" << data << endl;
     
     double Qxx = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,0);
     double Qxy = MAL_S4x4_MATRIX_ACCESS_I_J(data,0,1);
@@ -103,7 +102,7 @@ namespace dynamicsJRLJapan {
 	angle=0.0;
       }
     double t = Qxx + Qyy +Qzz;
-    cout << "t: " << t<< endl;
+
     angle =atan2(r,t-1.0);
   }
   
@@ -281,9 +280,6 @@ namespace dynamicsJRLJapan {
     // Multiply by the local rotation of the joint reference frame
     matrix3d RotationForDisplay3d;
     RotationForDisplay3d = m_AccessToData[gindex].getRotationForDisplay();
-    cout << "=========================" << endl;
-    cout << "JOINT: " << m_AccessToData[gindex].getURL() << endl;
-    cout << "Rotation for display: " << RotationForDisplay3d << endl;
 
     MAL_S4x4_MATRIX(aTransformationForDisplay,double);
 
@@ -294,9 +290,9 @@ namespace dynamicsJRLJapan {
 	  for(unsigned int k=0;k<3;k++)
 	    MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,j)+=
 	      MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k)*
-	      MAL_S4x4_MATRIX_ACCESS_I_J(RotationForDisplay3d,k,j);
+	      MAL_S3x3_MATRIX_ACCESS_I_J(RotationForDisplay3d,k,j);
 	}
-    cout << aTransformationForDisplay << endl;
+
     os << shifttab << "  translation ";
     for(unsigned int i=0;i<3;i++)
       os << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,3) << " ";
@@ -307,9 +303,9 @@ namespace dynamicsJRLJapan {
     AxisAngle2(aTransformationForDisplay,laxis,angle);
     for(unsigned int i=0;i<3;i++)
       os << MAL_S3_VECTOR_ACCESS(laxis,i) << " ";
-    cout << "Rotation axis: " << laxis << " " << " angle: " << angle << endl;
+
     os << angle << endl;
-    cout << "=========================" << endl;
+
   }  
 
 
