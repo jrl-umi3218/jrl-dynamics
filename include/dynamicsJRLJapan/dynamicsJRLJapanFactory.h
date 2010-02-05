@@ -60,7 +60,7 @@ namespace dynamicsJRLJapan
   };
 
 
-  class BodyGeometricalData
+  class DYN_JRL_JAPAN_EXPORT BodyGeometricalData
   {
   private:
     matrix3d m_RotationForDisplay;
