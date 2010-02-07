@@ -16,6 +16,13 @@ using namespace dynamicsJRLJapan;
 
 namespace dynamicsJRLJapan {
 
+  double filterprecision(double adb)
+  {
+    if (fabs(adb)<1e-8)
+      return 0.0;
+    return adb;
+  }
+
   void dv3d(vector3d &av3d, ostream &os) 
   {
     for(unsigned int i=0;i<3;i++)
@@ -93,7 +100,11 @@ namespace dynamicsJRLJapan {
 	    if (aJ(i,j)==0.0)
 	      os << "0 "; 
 	    else
-	      os << aJ(i,j) << " ";
+	      {
+		double adb;
+		adb = aJ(i,j);
+		os << filterprecision(adb) << " ";
+	      }
 	  }
 	os << std::endl;
       }

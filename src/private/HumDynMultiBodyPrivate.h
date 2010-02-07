@@ -211,14 +211,12 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get the hand clench value. This is a scalar value ranging between 0 
 	 and 1 which describes the hand clench (0 for open and 1 for closed hand)
-	 This method is customized for HRP2 with two-jaw hands (parallel mechanism)
       */
       virtual double getHandClench(CjrlHand* inHand);
       
       /**
 	 \brief Set the hand clench value. This is a scalar value ranging 
 	 between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand).
-	 This method is customized for HRP2 with two-jaw hands (parallel mechanism)
       */
       virtual bool  setHandClench(CjrlHand* inHand, double inClenchingValue);
       

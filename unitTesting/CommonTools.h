@@ -25,6 +25,10 @@ namespace dynamicsJRLJapan
   
   /*! \name Display mathematical objects
     @{ */
+  
+  /*! \brief filter precision for display. */
+  double filterprecision(double adb);
+
   /*! \brief Display horizontally in os a 3d vector. */
   void dvd3d(vector3d &av3d, std::ostream &os);
   

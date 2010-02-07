@@ -21,14 +21,15 @@ using namespace dynamicsJRLJapan;
 
 void ExportToVRML2(CjrlHumanoidDynamicRobot *aHDR,
 		   std::vector<BodyGeometricalData> &aVectorOfURLs,
-		   std::string &Path)
+		   std::string &Path,
+		   std::string &RobotFileName)
 {
   dynamicsJRLJapan::Tools::GenerateRobotForVRML2 aGenerateRobotForVRML2;
 
-  string aHRP2vrml("HRP2VRML2");
+  string aRobotVrml="ROBOT";
   aGenerateRobotForVRML2.SetAccessToData(aVectorOfURLs);
   aGenerateRobotForVRML2.SetPathToModelFiles(Path);
-  aGenerateRobotForVRML2.GenerateRobot(aHRP2vrml,aHDR);
+  aGenerateRobotForVRML2.GenerateRobot(aRobotVrml,aHDR);
 }
 
 
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
 
   RobotSetPosition(aHDR,aFileJointValue);
   
-  ExportToVRML2(aHDR,aVectorOfURLs,aPath);
+  ExportToVRML2(aHDR,aVectorOfURLs,aPath, RobotFileName);
 
   delete aHDR;
 }

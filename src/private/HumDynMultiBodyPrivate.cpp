@@ -128,7 +128,6 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   // Get the left hand.
   std::vector<int> JointForOneLimb = m_HS->GetArmJoints(1);
   int ListeJointsSize = JointForOneLimb.size();
-  //int EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   int EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
 
   m_LeftWristJoint = GetJointFromActuatedID(EndIndex);
@@ -137,7 +136,6 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetArmJoints(-1);
   ListeJointsSize = JointForOneLimb.size();
-  //EndIndex = JointForOneLimb[ListeJointsSize-1];// corresponds to hand opening joint (HRP2)
   EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
 
   m_RightWristJoint = GetJointFromActuatedID(EndIndex);

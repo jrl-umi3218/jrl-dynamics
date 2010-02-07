@@ -24,9 +24,9 @@ void ExportToAMELIF(CjrlHumanoidDynamicRobot *aHDR,
 {
   dynamicsJRLJapan::GenerateRobotForAMELIF aGenerateRobotForAMELIF;
 
-  string aHRP2Normalized("HRP2Normalized");
+  string aRobotNormalized("RobotNormalized");
   aGenerateRobotForAMELIF.SetAccessToData(aVectorOfURLs);
-  aGenerateRobotForAMELIF.GenerateRobot(aHRP2Normalized,aHDR);
+  aGenerateRobotForAMELIF.GenerateRobot(aRobotNormalized,aHDR);
 
 }
 

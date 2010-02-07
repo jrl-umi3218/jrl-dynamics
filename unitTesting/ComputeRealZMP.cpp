@@ -191,10 +191,14 @@ int main(int argc, char *argv[])
   string ActualLogFile;
   if (argc!=5)
     {
-      const char *openhrphome="OPENHRPHOME";
-      char *value = 0;
-      value = getenv(openhrphome);
-      if (value==0)
+      const char *envrobotpath="ROBOTPATH";
+      char *robotpath = 0;
+      const char *envrobotname="ROBOT";
+      char *robotname = 0;
+      robotpath = getenv(envrobotpath);
+      robotname = getenv(envrobotname);
+
+      if ((robotpath==0) || (robotname==0))
 	{
 	  cerr << " This program takes 6 arguments: " << endl;
 	  cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
@@ -204,15 +208,17 @@ int main(int argc, char *argv[])
 	}	
       else
 	{
-	  aPath=value;
-	  aPath+="Controller/IOserver/robot/HRP2JRL/model/";
-	  aName="HRP2JRLmain.wrl";
-	  aSpecificitiesFileName = value;
-	  aSpecificitiesFileName +="Controller/IOserver/robot/HRP2JRL/etc/";
-	  aSpecificitiesFileName += "HRP2Specificities.xml";
-	  aMapFromCjrlJointToRank = value;
-	  aMapFromCjrlJointToRank += "Controller/IOserver/robot/HRP2JRL/etc/";
-	  aMapFromCjrlJointToRank += "HRP2LinkJointRank.xml";
+	  aPath=robotpath;
+	  aName=robotname;
+	  aName+="main.wrl";
+	  aSpecificitiesFileName = robotpath;
+	  aSpecificitiesFileName +="/../etc/";
+	  aSpecificitiesFileName += robotname;
+	  aSpecificitiesFileName += "Specificities.xml";
+	  aMapFromCjrlJointToRank = robotpath;
+	  aMapFromCjrlJointToRank += "/../etc/";
+	  aMapFromCjrlJointToRank += robotname;
+	  aMapFromCjrlJointToRank += "JointRank.xml";
 	  
 	}
 
