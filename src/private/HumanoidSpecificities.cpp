@@ -36,8 +36,7 @@ HumanoidSpecificities::~HumanoidSpecificities()
 {
 }
 
-int HumanoidSpecificities::ReadXML(string &aFileName,
-				    string &HumanoidName)
+int HumanoidSpecificities::ReadXML(string &aFileName)
 {
   FILE *fp;
   fp = fopen((char *)aFileName.c_str(),"r");

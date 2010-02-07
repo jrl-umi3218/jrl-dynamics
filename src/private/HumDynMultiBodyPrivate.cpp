@@ -42,12 +42,11 @@ HumDynMultiBodyPrivate::HumDynMultiBodyPrivate(const DynMultiBodyPrivate& inDyna
 
 void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHumanoidSpecificities)
 {
-  string aHumanoidName="HRP2JRL";
   m_HS = new HumanoidSpecificities();
 
   if (m_HS!=0)
     {
-      m_HS->ReadXML(aFileNameForHumanoidSpecificities,aHumanoidName);
+      m_HS->ReadXML(aFileNameForHumanoidSpecificities);
 	
       double AnklePosition[3];
       // Take the right ankle position (should be equivalent)

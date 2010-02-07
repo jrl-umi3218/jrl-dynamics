@@ -53,8 +53,7 @@ namespace dynamicsJRLJapan
     
     // Returns the width of the foot given in parameter:
     // @param aFileName : Name of the file where the humanoid parameters are stored.
-    // @paran HumanoidName : Name of the humanoid. 
-    int ReadXML(string & aFileName, string & HumanoidName);
+    int ReadXML(string & aFileName);
 
     // Display the information stored inside the object.
     // Namely for debugging.
