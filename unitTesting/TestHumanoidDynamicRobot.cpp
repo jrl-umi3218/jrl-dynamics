@@ -19,6 +19,13 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
+double filterprecision(double adb)
+{
+  if (fabs(adb)<1e-8)
+    return 0.0;
+  return adb;
+}
+
 void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot,
 				    ostream &tcout)
 {
@@ -265,7 +272,8 @@ int main(int argc, char *argv[])
   const matrixNxP& Torques = aHDR->currentTorques();
   for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
     {
-      tcout << Torques(i,0) << " " << 9.81 * InertiaMatrix(i,2) << endl;
+      tcout << filterprecision(Torques(i,0)) << " " 
+	    << 9.81 * InertiaMatrix(i,2) << endl;
     }
   tcout.close();
 
