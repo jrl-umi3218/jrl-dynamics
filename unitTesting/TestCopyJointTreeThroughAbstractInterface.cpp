@@ -10,7 +10,8 @@ dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
 using namespace std;
 using namespace dynamicsJRLJapan;
 
-
+#define POSITION_STILL 0
+#define POSITION_HALF_SITTING 1
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,8 @@ int main(int argc, char *argv[])
   string aName;
   string JointToRank;
   string aSpecificitiesFileName;
+
+  int InitialPosition = POSITION_STILL;
 
   if (argc!=5)
     {
@@ -90,8 +93,10 @@ int main(int argc, char *argv[])
   
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     {
-      // aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
-      aCurrentConf[lindex++] = 0.0;
+      if (InitialPosition==POSITION_STILL)
+	aCurrentConf[lindex++] = 0.0;
+      else if (InitialPosition==POSITION_HALF_SITTING)
+	aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
     }
   
   aHDR->currentConfiguration(aCurrentConf);
