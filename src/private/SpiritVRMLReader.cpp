@@ -13,31 +13,50 @@
 
 */
 
+/*! System includes */
 #include <fstream>
 #include <sstream>
-
-//#define BOOST_SPIRIT_DEBUG
-#define BOOST_SPIRIT_RULE_SCANNERTYPE_LIMIT 2
-
-#define DEPTH_MAX 30
 #include <map>
 
+/*! Parsing related macros */
+//#define BOOST_SPIRIT_DEBUG
+#define BOOST_SPIRIT_RULE_SCANNERTYPE_LIMIT 2
+#define DEPTH_MAX 30
+
+
+/*!  Framework includes */
 #include "Debug.h"
 
+/*! Boost includes */
+#include "boost/version.hpp"
+
+#if BOOST_VERSION < 104000
 #include <boost/spirit.hpp>
-//#include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/phoenix/binders.hpp>
+#include <boost/spirit/utility/chset.hpp>
+#else
+#include <boost/spirit/include/classic.hpp>
+#include <boost/spirit/include/phoenix1_binders.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#endif
+
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
-#include <boost/spirit/utility/chset.hpp>
 
-
+/*!  Framework includes */
 #include "MultiBody.h"
 #include "SpiritVRMLReader.h"
 
 using namespace std;
 using namespace boost::spirit;
+
+#if BOOST_VERSION < 104000
 using namespace boost::spirit::utility;
+#else
+using namespace boost::spirit::classic;
+using namespace boost::spirit::classic::utility;
+#endif
+
 using namespace phoenix;
 
 //#define SVRBIND(x) bind(&SpiritVRMLReader::x,this,_1)
