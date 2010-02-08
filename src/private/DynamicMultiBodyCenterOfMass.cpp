@@ -277,7 +277,7 @@ void DynMultiBodyPrivate::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian
 {
   matrixNxP JCoM;
   getJacobianCenterOfMass(*rootJoint(),JCoM);
-  outjacobian = masse * JCoM;
+  outjacobian = m_mass * JCoM;
 }
 
 /**

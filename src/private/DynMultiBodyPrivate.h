@@ -889,7 +889,7 @@ namespace dynamicsJRLJapan
     */
      double mass() const
      {
-          return masse;
+          return m_mass;
      }
     /**
        @}

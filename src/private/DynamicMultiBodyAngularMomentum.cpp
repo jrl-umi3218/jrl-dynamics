@@ -201,12 +201,12 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
       ODEBUG("pAngularJacobian:" <<endl <<pAngularJacobian);
 
       // Used to compute the anti-symmetric matrix.
-      matrixNxP xkmxg_cp;double lmasse = aBody->getMasse();
+      matrixNxP xkmxg_cp;double lmass = aBody->getMass();
       MAL_MATRIX_RESIZE(xkmxg_cp,3,3);
       av =aBody->w_c - positionCoMPondere;
-      xkmxg_cp(0,0) =          0.0; xkmxg_cp(0,1) = -lmasse*av(2); xkmxg_cp(0,2) = lmasse*av(1);
-      xkmxg_cp(1,0) = lmasse*av(2); xkmxg_cp(1,1) =           0.0; xkmxg_cp(1,2) =-lmasse*av(0);
-      xkmxg_cp(2,0) =-lmasse*av(1); xkmxg_cp(2,1) =  lmasse*av(0); xkmxg_cp(2,2) =         0.0;
+      xkmxg_cp(0,0) =          0.0; xkmxg_cp(0,1) = -lmass*av(2); xkmxg_cp(0,2) = lmass*av(1);
+      xkmxg_cp(1,0) = lmass*av(2); xkmxg_cp(1,1) =           0.0; xkmxg_cp(1,2) =-lmass*av(0);
+      xkmxg_cp(2,0) =-lmass*av(1); xkmxg_cp(2,1) =  lmass*av(0); xkmxg_cp(2,2) =         0.0;
 
       ODEBUG("xkmxg_cp: " <<xkmxg_cp);
 

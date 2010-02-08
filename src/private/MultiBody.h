@@ -32,17 +32,10 @@
 
 using namespace std;
 
-
-//static int cptLiaison= 0;	//pour labeliser les liaisons
-
-
 namespace dynamicsJRLJapan
 {
     
     
-  static const int PROFONDEUR_MAX=30;
-
-
   /** @ingroup forwardynamics
        Internallink structure:
       Define a link between two bodys:
@@ -74,12 +67,12 @@ namespace dynamicsJRLJapan
 
   The equality operator is used with the find function of \<algorithm\>.
   */
-  struct appariement {
-    int corps;
-    int liaison;
+  struct matching {
+    int body;
+    int link;
   };
 
-  bool operator==(const appariement a1, const appariement a2);
+  bool operator==(const matching a1, const matching a2);
 
   /** @ingroup forwardynamics
        
@@ -87,36 +80,26 @@ namespace dynamicsJRLJapan
       bodies (Body) and the edges are joints (internalLink).
       
       The description is:
-      There is a list of nodes (listeCorps) and a list of edges (listeLiaisons).
-      The edges starting from an i-th node of listeCorps are stored in vector
-      liaisons[i], and store an instance of appariement for which the body 
+      There is a list of nodes (listeBodies) and a list of edges (listeInternalLinks).
+      The edges starting from an i-th node of listeBodies are stored in vector
+      links[i], and store an instance of matching for which the body 
       Body is the second node of the edge.
 
-      
-      La suppresion d'un noeud n'entraine pas la suppression effective du noeud et
-      des arcs correspondants dans les vecteurs concernes, mais seulement le
-      marquage des instances en questions comme "supprimees" par la mise a -1 de 
-      leur label.
-      
-      Les methodes necessitant un parcours du graphe se base sur l'hypothese qu'il
-      ne contienne pas de cycle.   
   */
   class MultiBody
   {
   protected:
     
     /*!  Robot's mass. */
-    double masse;
+    double m_mass;
     /*!  CoM of the robot */
-    vector3d positionCoMPondere;			//CoM*masse
+    vector3d positionCoMPondere;			//CoM*mass
     /*!  List of links. */
-    std::vector<internalLink> listeLiaisons;
+    std::vector<internalLink> listInternalLinks;
     /*!  List Of Bodies. */
-    std::vector<Body *> listeCorps;
+    std::vector<Body *> listBodies;
     /*!  Links with other bodies. */
-    std::vector<std::vector<appariement> > liaisons;
-    /*!  Counter for links. */
-    int cptLiaison;
+    std::vector<std::vector<matching> > links;
 
   public:
 
@@ -126,56 +109,42 @@ namespace dynamicsJRLJapan
     virtual ~MultiBody(void);
     
     /*!  Adds a body. */
-    void ajouterCorps(Body &b);
+    void addBody(Body &b);
 
     /*!  Adds a link. */
-    void ajouterLiaison(Body &corps1, Body &corps2, internalLink & l);
+    void addLink(Body &corps1, Body &corps2, internalLink & l);
 
-    /*!  Adds a fixed link. */
-    void ajouterLiaisonFixe(Body &corps1, Body &corps2, 
-			    vector3d translationStat, 
-			    vector3d axeRotationStat, 
-			    double angleRotationStat = 0);
-    /*!  Adds a link with rotation. */
-    void ajouterLiaisonRotation(Body &corps1, Body &corps2, 
-				vector3d axe , 
-				vector3d translationStat, 
-				vector3d axeRotationStat, 
-				double angleRotationStat = 0);
     /*! Return last body. */
-    Body * dernierCorps();
+    Body * lastBody();
 
     /*!  Remove a link between body corps1 and body corps. */
-    void supprimerLiaisonEntre(Body &corps1, Body &corps2);
+    void deleteLinkBetween(Body &corps1, Body &corps2);
 
     /*!  Remove a link by index. */
-    void supprimerLiaison(int index);
+    void removeLink(int index);
 
     /*!  Remove a link by label. */
-    void supprimerLiaisonLabel(int label);
+    void removeLinkLabel(int label);
 
     /*!  Remove the body b. */
-    void supprimerCorps(Body &b);
+    void removeBody(Body &b);
 
     /*!  Remove a body by index. */
-    void supprimerCorps(int index);
+    void removeBody(int index);
 
     /*!  Remove body by label. */
-    void supprimerCorpsLabel(int label);
-
-    /*!  Inverse the link i. */
-    void inverserLiaison(int i);
+    void removeBodyLabel(int label);
 
     /*!  Returns the CoM position. */ 
     vector3d getPositionCoM(void);
 
 
     /*!  Display bodies */
-    void afficherCorps(void);
+    void displayBodies(void);
     /*!  Display links */
-    void afficherLiaisons(void);
+    void displayLinks(void);
     /*!  Display everything.  */
-    void afficher(void);
+    void display(void);
 
     /*!  Returns the number of links. */
     int NbOfLinks() const;
@@ -187,7 +156,7 @@ namespace dynamicsJRLJapan
 
   // Create a matrix from an axis and a rotation around
   // this axis.
-  void AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
+  void AxisAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
   
 };
 

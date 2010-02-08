@@ -33,44 +33,36 @@ using namespace dynamicsJRLJapan;
 
 Body::Body(void)
 {
-  //  label = cptCorps++;
-  masse	= 0;
+  m_mass	= 0;
   attCoefMass = 0;
   posCoM[0] = 0;
   posCoM[1] = 0;
   posCoM[2] = 0;
   MAL_S3x3_MATRIX_SET_IDENTITY(inertie);
-  nombreObjets = 0;
   label=-1;
   labelMother=-1;
   m_Explored =0 ;
 }
 
-Body::Body(double lmasse) 
+Body::Body(double lmass) 
 {
-  //  label = cptCorps++;
-  this->masse		= lmasse;
-  nombreObjets = 0;
+  this->m_mass		= lmass;
   m_Explored =0 ;
 }
 
-Body::Body(double lmasse, 
+Body::Body(double lmass, 
 	   MAL_S3_VECTOR(positionCoM,double)) 
 {
-  //  label = cptCorps++;
-  this->masse		= lmasse;
-  nombreObjets = 0;
+  this->m_mass		= lmass;
   m_Explored =0 ;  
   this->posCoM	= positionCoM;
 }
-Body::Body(double lmasse, 
+Body::Body(double lmass, 
 	   MAL_S3_VECTOR(positionCoM,double), 
 	   MAL_S3x3_MATRIX(matriceInertie,double)) 
 {
-  //  label = cptCorps++;
   this->posCoM	= positionCoM;
-  this->masse		= lmasse;
-  nombreObjets = 0;
+  this->m_mass		= lmass;
   m_Explored =0 ;  
 
   this->inertie	= matriceInertie;
@@ -96,24 +88,9 @@ void Body::setLabel(int i)
   label = i;
 }
 
-double Body::getMasse(void) const
+double Body::getMass(void) const
 {
-  return masse;
-}
-
-void Body::setNbObjets(int n)
-{
-  nombreObjets = n;
-}
-
-void Body::afficherNombreObjets() {
-  cout << "corps " << label << " : " << nombreObjets << endl;
-}
-
-
-int Body::getNbObjets() const
-{
-  return nombreObjets;
+  return m_mass;
 }
 
 string Body::getName() const
@@ -129,10 +106,9 @@ void Body::setName(char *aname)
 Body & Body::operator=( Body const & r)
 {
   label = r.getLabel();
-  masse = r.getMasse();
+  m_mass = r.getMass();
   posCoM =r.localCenterOfMass();
   inertie = r.getInertie();
-  nombreObjets = r.getNbObjets();
   Name= r.getName();
   labelMother=r.getLabelMother();
   m_Explored = r.getExplored();
@@ -146,9 +122,9 @@ void Body::setInertie(double mi[9])
       inertie(i,j) = mi[i*3+j];
 }
 
-void Body::setMasse(double lmasse)
+void Body::setMass(double lmass)
 {
-  masse =lmasse;
+  m_mass =lmass;
 }
 
 
@@ -180,10 +156,10 @@ void Body::setExplored(int anEx)
 void Body::Display()
 {
   cout << "Name  :" << Name << endl;
-  cout << "Masse :" << masse << endl;
+  cout << "Mass :" << m_mass << endl;
   cout << "Center of Mass    : " << posCoM[0] << " " 
        << posCoM[1] << " " <<posCoM[2]<<endl;
-  cout << "Matrix of Inertie : " << endl;
+  cout << "Inertia Matrix : " << endl;
   for(int i=0;i<3;i++)
     {
       for(int j=0;j<3;j++)

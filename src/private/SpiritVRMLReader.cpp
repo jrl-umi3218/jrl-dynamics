@@ -399,12 +399,12 @@ namespace dynamicsJRLJapan
 	lCurrentBody->setLabel(m_DataForParsing->NbOfBodies++);
 	lCurrentBody->setName((char *)(m_DataForParsing->aName).c_str());
 	lCurrentBody->setInertie(m_DataForParsing->mi);
-	lCurrentBody->setMasse(m_DataForParsing->mass);
+	lCurrentBody->setMass(m_DataForParsing->mass);
 	lCurrentBody->localCenterOfMass(m_DataForParsing->cm);
 	if (m_DataForParsing->Depth!=0)
 	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
-	m_MultiBody->ajouterCorps(*lCurrentBody);
-	m_MultiBody->ajouterLiaison(*m_DataForParsing->CurrentBody[lDepth-1],
+	m_MultiBody->addBody(*lCurrentBody);
+	m_MultiBody->addLink(*m_DataForParsing->CurrentBody[lDepth-1],
 				    *lCurrentBody,
 				    m_DataForParsing->CurrentLink);
 	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
@@ -561,7 +561,7 @@ namespace dynamicsJRLJapan
 	matrix3d R;
 	matrix3d displayR;
 	// Conversion from rotation axis to rotation matrix.
-	AxeAngle2Matrix(m_DataForParsing->RotationAxis, lQuantity, R);
+	AxisAngle2Matrix(m_DataForParsing->RotationAxis, lQuantity, R);
 
 
 	// From the current branch of rotation computes
@@ -668,7 +668,7 @@ namespace dynamicsJRLJapan
 	MAL_S3_VECTOR(lxaxis,double);
 	lxaxis[0]=1.0;lxaxis[1]=0.0;lxaxis[2]=0.0;
 	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint->axe(lxaxis);
+	m_DataForParsing->CurrentLink.aJoint->axis(lxaxis);
       }
 
       void fJointYAxis(char const end)  const
@@ -677,7 +677,7 @@ namespace dynamicsJRLJapan
 	MAL_S3_VECTOR(lyaxis,double);
 	lyaxis[0]=0.0;lyaxis[1]=1.0;lyaxis[2]=0.0;
 	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint->axe(lyaxis);
+	m_DataForParsing->CurrentLink.aJoint->axis(lyaxis);
 
       }
       
@@ -686,7 +686,7 @@ namespace dynamicsJRLJapan
 	MAL_S3_VECTOR(lzaxis,double);
 	lzaxis[0]=0.0;lzaxis[1]=0.0;lzaxis[2]=1.0;
 	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
-	m_DataForParsing->CurrentLink.aJoint->axe(lzaxis);
+	m_DataForParsing->CurrentLink.aJoint->axis(lzaxis);
 
       }
 
@@ -1486,7 +1486,7 @@ namespace dynamicsJRLJapan
 	// Creation du corps de reference
 	m_DataForParsing->CurrentBody[0] = new Body();
 	m_DataForParsing->CurrentBody[0]->setLabel(m_DataForParsing->NbOfBodies++);
-	m_MultiBody->ajouterCorps(*m_DataForParsing->CurrentBody[0]);
+	m_MultiBody->addBody(*m_DataForParsing->CurrentBody[0]);
 	m_DataForParsing->Depth = 0;
 
 	// Initialization of the initial matrix.

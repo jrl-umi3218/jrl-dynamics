@@ -17,11 +17,11 @@
 
 using namespace dynamicsJRLJapan;
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
   m_inGlobalFrame(false),
   m_type(ltype),
-  m_axe(laxe),
+  m_axis(laxis),
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
   m_FatherJoint(0),
@@ -35,11 +35,11 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   CreateLimitsArray();
 }
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite, MAL_S3_VECTOR(,double) & translationStatic):
   m_inGlobalFrame(false),
   m_type(ltype),
-  m_axe(laxe),
+  m_axis(laxis),
   m_quantity(lquantite),
   m_FatherJoint(0),
   m_Body(0),
@@ -57,11 +57,11 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
   CreateLimitsArray();
 }
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite):
   m_inGlobalFrame(false),
   m_type(ltype),
-  m_axe(laxe),
+  m_axis(laxis),
   m_quantity(lquantite),
   m_FatherJoint(0),
   m_Body(0),
@@ -78,7 +78,7 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxe,
 JointPrivate::JointPrivate(const JointPrivate &r)
 {
   m_type = r.type();
-  m_axe = r.axe();
+  m_axis = r.axis();
   m_quantity=r.quantity();
   m_poseInParentFrame=r.pose();
   m_FatherJoint = 0;
@@ -108,9 +108,9 @@ JointPrivate::JointPrivate():
   m_dynBody(0),
   m_IDinActuated(-1)
 {
-  MAL_S3_VECTOR_ACCESS(m_axe,0) = 0.0;
-  MAL_S3_VECTOR_ACCESS(m_axe,1) = 0.0;
-  MAL_S3_VECTOR_ACCESS(m_axe,2) = 0.0;
+  MAL_S3_VECTOR_ACCESS(m_axis,0) = 0.0;
+  MAL_S3_VECTOR_ACCESS(m_axis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(m_axis,2) = 0.0;
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstructionNormalized);
@@ -263,9 +263,9 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 
   // Express local axis in the global frame.
   vector4d GlobalAxis,LocalAxis,GlobalCenter,LocalCenter;
-  LocalAxis[0] = m_axe[0];
-  LocalAxis[1] = m_axe[1];
-  LocalAxis[2] = m_axe[2];
+  LocalAxis[0] = m_axis[0];
+  LocalAxis[1] = m_axis[1];
+  LocalAxis[2] = m_axis[2];
   LocalAxis[3] = 0;
   MAL_S4x4_C_eq_A_by_B(GlobalAxis,m_globalPoseAtConstruction,LocalAxis);
   
@@ -350,8 +350,8 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 	  aDBP =dynamic_cast<DynamicBodyPrivate *>(m_Body);
 	  if (aDBP!=0)
 	    {
-	      vector3d laxes;
-	      laxes = m_axe;
+	      vector3d laxis;
+	      laxis = m_axis;
 	      	      
 	      for (unsigned int i=0;i<3;i++)
 		{
@@ -363,10 +363,10 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 		      MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
 		}
 
-	      MAL_S3_VECTOR_ACCESS(m_axe,0)=1.0;
-	      MAL_S3_VECTOR_ACCESS(m_axe,1)=0.0;
-	      MAL_S3_VECTOR_ACCESS(m_axe,2)=0.0;
-	      aDBP->a = m_axe;
+	      MAL_S3_VECTOR_ACCESS(m_axis,0)=1.0;
+	      MAL_S3_VECTOR_ACCESS(m_axis,1)=0.0;
+	      MAL_S3_VECTOR_ACCESS(m_axis,2)=0.0;
+	      aDBP->a = m_axis;
 	    }
 	}
       
@@ -395,7 +395,7 @@ void JointPrivate::computeLocalAndGlobalPose()
 JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 {
   m_type = r.type();
-  m_axe = r.axe();
+  m_axis = r.axis();
   m_quantity=r.quantity();
   m_poseInParentFrame=r.pose();
   m_Name = r.getName();
@@ -829,13 +829,13 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inI
   m_globalPoseAtConstruction = inInitialPosition;
 
   ODEBUG2("freeflyer: inInitialPosition" << inInitialPosition);
-  MAL_S3_VECTOR(axis, double);
+  MAL_S3_VECTOR(laxis, double);
 
-  MAL_S3_VECTOR_ACCESS(axis,0) = 1.0;
-  MAL_S3_VECTOR_ACCESS(axis,1) = 0.0;
-  MAL_S3_VECTOR_ACCESS(axis,2) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,0) = 1.0;
+  MAL_S3_VECTOR_ACCESS(laxis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,2) = 0.0;
 
-  axe(axis);
+  axis(laxis);
 }
 
 JointFreeflyerPrivate::~JointFreeflyerPrivate()
@@ -849,13 +849,13 @@ JointAnchorPrivate::JointAnchorPrivate(const MAL_S4x4_MATRIX(,double) &inInitial
   m_globalPoseAtConstruction = inInitialPosition;
 
   ODEBUG2("anchor: inInitialPosition" << inInitialPosition);
-  MAL_S3_VECTOR(axis, double);
+  MAL_S3_VECTOR(laxis, double);
 
-  MAL_S3_VECTOR_ACCESS(axis,0) = 1.0;
-  MAL_S3_VECTOR_ACCESS(axis,1) = 0.0;
-  MAL_S3_VECTOR_ACCESS(axis,2) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,0) = 1.0;
+  MAL_S3_VECTOR_ACCESS(laxis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,2) = 0.0;
 
-  axe(axis);
+  axis(laxis);
 }
 
 JointAnchorPrivate::~JointAnchorPrivate()
@@ -870,13 +870,13 @@ JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX(,double) &inIni
 
   ODEBUG2("rotation: inInitialPosition" << inInitialPosition);
 
-  MAL_S3_VECTOR(axis, double);
+  MAL_S3_VECTOR(laxis, double);
 
-  MAL_S3_VECTOR_ACCESS(axis,0) = 1.0;
-  MAL_S3_VECTOR_ACCESS(axis,1) = 0.0;
-  MAL_S3_VECTOR_ACCESS(axis,2) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,0) = 1.0;
+  MAL_S3_VECTOR_ACCESS(laxis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,2) = 0.0;
 
-  axe(axis);
+  axis(laxis);
 }
 
 JointRotationPrivate::~JointRotationPrivate()
@@ -890,13 +890,13 @@ JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX(,double) 
   m_globalPoseAtConstruction = inInitialPosition;
 
   ODEBUG2("translation: inInitialPosition" << inInitialPosition);
-  MAL_S3_VECTOR(axis, double);
+  MAL_S3_VECTOR(laxis, double);
 
-  MAL_S3_VECTOR_ACCESS(axis,0) = 1.0;
-  MAL_S3_VECTOR_ACCESS(axis,1) = 0.0;
-  MAL_S3_VECTOR_ACCESS(axis,2) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,0) = 1.0;
+  MAL_S3_VECTOR_ACCESS(laxis,1) = 0.0;
+  MAL_S3_VECTOR_ACCESS(laxis,2) = 0.0;
 
-  axe(axis);
+  axis(laxis);
 }
 
 JointTranslationPrivate::~JointTranslationPrivate()

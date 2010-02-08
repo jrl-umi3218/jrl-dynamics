@@ -36,7 +36,7 @@ namespace dynamicsJRLJapan
 {
 
   /** @ingroup forwardynamics
-      This object is used to compute the Center Of Masse,
+      This object is used to compute the Center Of Mass,
       and store some basic information of each body of the robot. 
   */    
   class Body : public CjrlBody
@@ -48,7 +48,7 @@ namespace dynamicsJRLJapan
     /*! \brief Label */
     int label;
     /*! \brief Mass */
-    double masse;
+    double m_mass;
     /*! \brief Position of the Center of Mass. */
     vector3d posCoM;
 
@@ -56,8 +56,6 @@ namespace dynamicsJRLJapan
     matrix3d inertie;
     //@}
   
-    /*! \brief Number of objects. */
-    int nombreObjets;
     /*! \brief Name of the body */
     std::string Name;
     
@@ -83,16 +81,16 @@ namespace dynamicsJRLJapan
     Body(void);
     
     /*! \brief Constructor while parsing.*/
-    Body(double masse);
+    Body(double mass);
 
     /*! \brief Constructor while parsing. */
-    Body(double masse, 
+    Body(double mass, 
 	 vector3d positionCoM);
 
     /*! \brief Constructor while parsing. */
-    Body(double masse, 
+    Body(double mass, 
 	 vector3d positionCoM, 
-	 matrix3d matriceInertie);
+	 matrix3d inertiaMatrix);
      
     /*! \brief Destructor. */
     virtual ~Body(void);
@@ -112,10 +110,10 @@ namespace dynamicsJRLJapan
     void setLabel(int i);
     
     /*! \brief Get the mass of the body. */
-    double getMasse(void) const;
+    double getMass(void) const;
     
     /*! \brief Set the mass of the body. */
-    void setMasse(double);
+    void setMass(double);
     
     /*! \brief Get the inertia matrix of the body. */
     inline const matrix3d & getInertie(void) const
@@ -162,9 +160,6 @@ namespace dynamicsJRLJapan
     /*! \brief  Display on stdout all the information of the body. */
     void Display();
     
-    /*! \brief  Display the number of geometric objects (stdout). */
-    void afficherNombreObjets(void);
-
     /** @} */
 
     
@@ -206,13 +201,13 @@ namespace dynamicsJRLJapan
     \brief Get mass.
      */
     inline double mass() const
-      {return masse;};
+      {return m_mass;};
 
     /**
     \brief Set mass.
      */
     inline void mass(double inMass)
-      { masse=inMass;};
+    { m_mass=inMass;};
 
 
     /*! @} */

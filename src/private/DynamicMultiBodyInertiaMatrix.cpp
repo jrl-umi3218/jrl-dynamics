@@ -75,12 +75,12 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
 				MAL_MATRIX_NB_COLS(pJacobian));
 
       // Used to compute the symmetric matrix.
-      double lmasse = aBody->getMasse();
+      double lmass = aBody->getMass();
       matrixNxP leftoperand;
 
       MAL_C_eq_A_by_B(leftoperand,MAL_RET_TRANSPOSE(pLinearJacobian),pLinearJacobian);
-      m_InertiaMatrix = m_InertiaMatrix + lmasse * leftoperand;
-      ODEBUG("masse* leftoperand: " << lmasse*leftoperand);
+      m_InertiaMatrix = m_InertiaMatrix + lmass * leftoperand;
+      ODEBUG("mass* leftoperand: " << lmass*leftoperand);
       matrixNxP rightoperand;
       matrix3d tmp2_3d,tmp2_3d2;
       matrixNxP tmp2,tmp3;

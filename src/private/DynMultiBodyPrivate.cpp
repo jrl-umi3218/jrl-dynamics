@@ -82,11 +82,11 @@ DynMultiBodyPrivate::~DynMultiBodyPrivate()
     {
       Body *body = m_listOfBodies[li];
       std::vector<Body *>::iterator it;
-      for (it = listeCorps.begin(); it != listeCorps.end(); it++)
+      for (it = listBodies.begin(); it != listBodies.end(); it++)
         {
 	  if (*it == body)
             {
-	      listeCorps.erase(it);
+	      listBodies.erase(it);
 	      break;
             }
         }
@@ -237,12 +237,12 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
 {
   double g= 9.80665;
 
-  px = ( g * positionCoMPondere[0]*masse +
-	 zmpz * dP[0] - dL[1])/(masse * g + dP[2]);
-  py = ( g * positionCoMPondere[1]*masse +
-	 zmpz * dP[1] + dL[0])/(masse * g + dP[2]);
+  px = ( g * positionCoMPondere[0]*m_mass +
+	 zmpz * dP[0] - dL[1])/(m_mass * g + dP[2]);
+  py = ( g * positionCoMPondere[1]*m_mass +
+	 zmpz * dP[1] + dL[0])/(m_mass * g + dP[2]);
 
-  ODEBUG(" CalculateZMP : Masse :"<< masse << " g:" << g  << " "
+  ODEBUG(" CalculateZMP : Masse :"<< mass << " g:" << g  << " "
 	 << dP << " " << dL << " " << positionCoMPondere );
 
 

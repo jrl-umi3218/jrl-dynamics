@@ -27,7 +27,7 @@ namespace dynamicsJRLJapan
        Define a transformation from a body to another
       Supported type:
       - Rotation around an axis with a quantity (type = ROTATION)
-      - Translation of a vector : quantite*axe	(type = TRANSLATION)
+      - Translation of a vector : quantite*axis	(type = TRANSLATION)
       - Rotation through a homogeneous matrix : *rotation (type = FREE_LIBRE)
 
       \note Two ways of constructing a kinematic chain are supported.
@@ -70,7 +70,7 @@ namespace dynamicsJRLJapan
     
     /*! Axis of the transformation,
       for the link with one DoF. */
-    vector3d m_axe;	
+    vector3d m_axis;	
     
     /*! Quantity of the rotation . */
     float m_quantity;
@@ -157,13 +157,13 @@ namespace dynamicsJRLJapan
     static const int PRISMATIC_JOINT=2;
     
     /*! \brief Constructor with full initialization. */
-    JointPrivate(int ltype, vector3d&  laxe, 
+    JointPrivate(int ltype, vector3d&  laxis, 
 	  float lquantite, matrix4d & apose);
 
-    JointPrivate(int ltype, vector3d& laxe, 
+    JointPrivate(int ltype, vector3d& laxis, 
 	  float lquantite, vector3d &translationStatic);
     
-    JointPrivate(int ltype, vector3d& laxe, 
+    JointPrivate(int ltype, vector3d& laxis, 
 	  float lquantite);
 
 	
@@ -217,13 +217,13 @@ namespace dynamicsJRLJapan
       @{
      */    
     
-    /*! Returns the axe of the rotation. */
-    inline const vector3d& axe() const
-      { return m_axe; };
+    /*! Returns the axis of the rotation. */
+    inline const vector3d& axis() const
+      { return m_axis; };
 
-    /*! Set the axe of the rotation */
-    inline void axe(const vector3d &anaxe)
-      { m_axe = anaxe; };
+    /*! Set the axis of the rotation */
+    inline void axis(const vector3d &anaxis)
+      { m_axis = anaxis; };
 
     /*! Quantity of the rotation */
     inline const float & quantity() const

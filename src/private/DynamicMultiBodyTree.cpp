@@ -46,16 +46,16 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
 
   // Right now it is assume that the first body is the world,
   // and that this body is related to another body.
-  // Thus liaisons[ID].size() should be equal to one.
+  // Thus links[ID].size() should be equal to one.
 
 
-  if (liaisons[ID].size()!=1)
+  if (links[ID].size()!=1)
     {
-      cout << "Wrong assumption concerning the initial body: " << liaisons[ID].size()<< endl;
+      cout << "Wrong assumption concerning the initial body: " << links[ID].size()<< endl;
       return;
     }
-  int ld = liaisons[ID][0].liaison;
-  m_RootOfTheJointsTree = listeLiaisons[ld].aJoint;
+  int ld = links[ID][0].link;
+  m_RootOfTheJointsTree = listInternalLinks[ld].aJoint;
   m_RootOfTheJointsTree->setLinkedBody(*m_listOfBodies[ID]);
   ODEBUG(" m_RootOfTheJointsTree->m_globalConfiguration"<<
 	  m_RootOfTheJointsTree->initialPosition());
@@ -106,34 +106,34 @@ void DynMultiBodyPrivate::UpdateBodyParametersFromJoint(int BodyID, int JointID,
 
   ODEBUG( "Update body :" << BodyID << " from Joint " << JointID);
   // Update the rotation axis.
-  m_listOfBodies[BodyID]->a =  listeLiaisons[JointID].aJoint->axe();
-  ODEBUG(" axe: " << m_listOfBodies[BodyID]->a);
+  m_listOfBodies[BodyID]->a =  listInternalLinks[JointID].aJoint->axis();
+  ODEBUG(" axis: " << m_listOfBodies[BodyID]->a);
   // Update the translation vector
-  listeLiaisons[JointID].aJoint->getStaticTranslation(m_listOfBodies[BodyID]->b);
+  listInternalLinks[JointID].aJoint->getStaticTranslation(m_listOfBodies[BodyID]->b);
   ODEBUG(" JointID: " << JointID << "BodyID: " << BodyID << ", static translation: " << m_listOfBodies[BodyID]->b);
   // Update the rotation matrix
-  listeLiaisons[JointID].aJoint->getStaticRotation(m_listOfBodies[BodyID]->R_static);
+  listInternalLinks[JointID].aJoint->getStaticRotation(m_listOfBodies[BodyID]->R_static);
   ODEBUG(" Rotation matrix: " << endl << m_listOfBodies[BodyID]->R_static);
-  listeLiaisons[JointID].aJoint->setLinkedBody(*m_listOfBodies[BodyID]);
-  m_listOfBodies[BodyID]->joint( listeLiaisons[JointID].aJoint);
+  listInternalLinks[JointID].aJoint->setLinkedBody(*m_listOfBodies[BodyID]);
+  m_listOfBodies[BodyID]->joint( listInternalLinks[JointID].aJoint);
 
 }
 
-void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
+void DynMultiBodyPrivate::ReLabelling(int currentBody, int sourceLink)
 {
   // This one has been nicely clean-up
-  for (unsigned int i=0; i<liaisons[corpsCourant].size(); i++)
+  for (unsigned int i=0; i<links[currentBody].size(); i++)
     {
-      int liaisonDestination = liaisons[corpsCourant][i].liaison;
-      if ((liaisonDestination == liaisonDeProvenance) &&
-	  (corpsCourant!=labelTheRoot))
+      int destinationLink = links[currentBody][i].link;
+      if ((destinationLink == sourceLink) &&
+	  (currentBody!=labelTheRoot))
 	continue;
 
-      int corps1 = listeLiaisons[liaisonDestination].indexCorps1;
-      int corps2 = listeLiaisons[liaisonDestination].indexCorps2;
+      int corps1 = listInternalLinks[destinationLink].indexCorps1;
+      int corps2 = listInternalLinks[destinationLink].indexCorps2;
       int corpsMother,corpsSon;
 
-      if ((corpsCourant == corps1) && (corpsCourant != corps2))
+      if ((currentBody == corps1) && (currentBody != corps2))
         {
 	  corpsSon = corps2;
 	  corpsMother = corps1;
@@ -145,30 +145,30 @@ void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
         }
       m_listOfBodies[corpsSon]->setLabelMother(corpsMother);
 
-      if(listeLiaisons[liaisonDestination].aJoint->getIDinActuated()!=-1)
+      if(listInternalLinks[destinationLink].aJoint->getIDinActuated()!=-1)
         {
 
 
 	  // Update the connections between the Joints.
-	  int lIDinActuated = listeLiaisons[liaisonDestination].aJoint->getIDinActuated();
+	  int lIDinActuated = listInternalLinks[destinationLink].aJoint->getIDinActuated();
 	  if (lIDinActuated!=-1)
             {
 	      ConvertIDInActuatedToBodyID[lIDinActuated] = corpsSon;
             }
 
 
-	  listeLiaisons[liaisonDeProvenance].aJoint->addChildJoint(*listeLiaisons[liaisonDestination].aJoint);
+	  listInternalLinks[sourceLink].aJoint->addChildJoint(*listInternalLinks[destinationLink].aJoint);
 
-	  listeLiaisons[liaisonDestination].aJoint->SetFatherJoint(listeLiaisons[liaisonDeProvenance].aJoint);
+	  listInternalLinks[destinationLink].aJoint->SetFatherJoint(listInternalLinks[sourceLink].aJoint);
 
 
 	  // Update the vector of joints.
-	  ODEBUG("Inside Relabelling :" << listeLiaisons[liaisonDestination].aJoint->getName().c_str());
-	  ODEBUG("JointRankFromName :" << JointRankFromName(listeLiaisons[liaisonDestination].aJoint));
-	  if (JointRankFromName(listeLiaisons[liaisonDestination].aJoint)!=-1)
-	    m_JointVector.insert(m_JointVector.end(),listeLiaisons[liaisonDestination].aJoint);
+	  ODEBUG("Inside Relabelling :" << listInternalLinks[destinationLink].aJoint->getName().c_str());
+	  ODEBUG("JointRankFromName :" << JointRankFromName(listInternalLinks[destinationLink].aJoint));
+	  if (JointRankFromName(listInternalLinks[destinationLink].aJoint)!=-1)
+	    m_JointVector.insert(m_JointVector.end(),listInternalLinks[destinationLink].aJoint);
 
-	  int lVRMLID = listeLiaisons[liaisonDestination].aJoint->getIDinActuated();
+	  int lVRMLID = listInternalLinks[destinationLink].aJoint->getIDinActuated();
 	  if (m_NbOfVRMLIDs < lVRMLID)
 	    m_NbOfVRMLIDs = lVRMLID;
 
@@ -178,8 +178,8 @@ void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
       // TODO : It is important to do the relabelling after the
       // TODO : recursive call to the relabelling as set father build
       // TODO : up the JointFromRootToThis vector. Should be fixed at the Joint object level.
-      ReLabelling(corpsSon, liaisonDestination);
-      UpdateBodyParametersFromJoint(corpsSon,liaisonDestination,liaisonDeProvenance);
+      ReLabelling(corpsSon, destinationLink);
+      UpdateBodyParametersFromJoint(corpsSon,destinationLink,sourceLink);
 
     }
 
@@ -187,15 +187,15 @@ void DynMultiBodyPrivate::ReLabelling(int corpsCourant, int liaisonDeProvenance)
 
 void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
 {
-  m_listOfBodies.resize(listeCorps.size());
+  m_listOfBodies.resize(listBodies.size());
   DynamicBodyPrivate *dbody;
-  for(unsigned int i=0;i<listeCorps.size();i++)
+  for(unsigned int i=0;i<listBodies.size();i++)
     {
-      dbody = dynamic_cast<DynamicBodyPrivate *>(listeCorps[i]);
+      dbody = dynamic_cast<DynamicBodyPrivate *>(listBodies[i]);
       if (!dbody)
         {
 	  dbody = new DynamicBodyPrivate();
-	  *dbody = *listeCorps[i];
+	  *dbody = *listBodies[i];
         }
       m_listOfBodies[i] = dbody;
     }
@@ -245,7 +245,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
   vectorOfBodies.resize(30);
   vectorOfBodies[0] = new DynamicBodyPrivate();
   vectorOfBodies[0]->setLabel(NbOfBodies++);
-  ajouterCorps(*vectorOfBodies[0]);
+  addBody(*vectorOfBodies[0]);
   Depth++;
 
   // Go through the Joints tree.
@@ -337,7 +337,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
         {
 	  lCurrentBody = new DynamicBodyPrivate();
 	  lCurrentBody->setInertie(mi);
-	  lCurrentBody->setMasse(1.0);// 1 kg per default.
+	  lCurrentBody->setMass(1.0);// 1 kg per default.
 	  vector3d cm;cm[0] = cm[1] =cm[2]=0.0;
 	  lCurrentBody->localCenterOfMass(cm);
         }
@@ -349,10 +349,10 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
       lCurrentBody->setLabelMother(vectorOfBodies[Depth-1]->getLabel());
 
 
-      ajouterCorps(*lCurrentBody);
-      ajouterLiaison(*vectorOfBodies[Depth-1],
-		     *lCurrentBody,
-		     CurrentLink);
+      addBody(*lCurrentBody);
+      addLink(*vectorOfBodies[Depth-1],
+	      *lCurrentBody,
+	      CurrentLink);
 
       // Find the next one.
       // 1. A children.

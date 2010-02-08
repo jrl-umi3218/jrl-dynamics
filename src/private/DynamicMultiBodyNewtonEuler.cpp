@@ -209,10 +209,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG(" lw_c: "<< currentNode <<" "<< NE_lw_c[0] 
 		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
 	  positionCoMPondere +=  
-	    NE_lw_c * m_listOfBodies[currentNode]->getMasse();
+	    NE_lw_c * m_listOfBodies[currentNode]->getMass();
 	  ODEBUG(" w_c: " << NE_lw_c[0] << " " 
 		 << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  ODEBUG(" Masse " << m_listOfBodies[currentNode]->getMasse());
+	  ODEBUG(" Mass " << m_listOfBodies[currentNode]->getMass());
 	  ODEBUG(" positionCoMPondere " << positionCoMPondere);
 	  m_listOfBodies[currentNode]->w_c = NE_lw_c;
         }
@@ -223,10 +223,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG("w: " << m_listOfBodies[currentNode]->w );
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_listOfBodies[currentNode]->w, NE_cl);
 	  ODEBUG("cl^w: " << NE_tmp);
-	  ODEBUG("masse: " << m_listOfBodies[currentNode]->getMasse());
+	  ODEBUG("mass: " << m_listOfBodies[currentNode]->getMass());
 	  ODEBUG("v0: " << m_listOfBodies[currentNode]->v0 );
 	  NE_lP=  (m_listOfBodies[currentNode]->v0 +
-		   NE_tmp )* m_listOfBodies[currentNode]->getMasse();
+		   NE_tmp )* m_listOfBodies[currentNode]->getMass();
 	  m_listOfBodies[currentNode]->P = NE_lP;
 	  ODEBUG("P: " << NE_lP );
 	  m_P += NE_lP;
@@ -348,7 +348,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       SkewCoM(2,2) =         0;
     }
 
-  positionCoMPondere = positionCoMPondere/masse;
+  positionCoMPondere = positionCoMPondere/m_mass;
   // Zero Momentum Point Computation.
   if (m_ComputeZMP)
     {

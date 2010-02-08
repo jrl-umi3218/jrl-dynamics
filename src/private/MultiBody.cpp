@@ -26,10 +26,10 @@
 using namespace dynamicsJRLJapan;
 
 // surcharge operateur
-bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::appariement a1, 
-				        const dynamicsJRLJapan::appariement a2) 
+bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::matching a1, 
+				  const dynamicsJRLJapan::matching a2) 
 {
-  return (a1.corps==a2.corps);
+  return (a1.body==a2.body);
 }
 
 
@@ -47,8 +47,7 @@ MAL_S3_VECTOR(,double) operator * (double* m, MAL_S3_VECTOR(,double) v)
 }
 
 
-//Pour matrice OpenGL
-void Matrix2AxeAngle(float R[16],double Axis[3], double & Angle)
+void Matrix2AxisAngle(float R[16],double Axis[3], double & Angle)
 {
   double q[4];
   double sum_x, sum_y, sum_z, sum_w, sum_max, S;
@@ -92,7 +91,7 @@ void Matrix2AxeAngle(float R[16],double Axis[3], double & Angle)
       q[3] = (R[4] - R[1] ) / S;
     } 
 
-  //passage des quaternions aux axes et angles
+  // Conversion from quaternions to axis and angles
   double sum;
   double cos_a,  sin_a;
 
@@ -124,259 +123,208 @@ void Matrix2AxeAngle(float R[16],double Axis[3], double & Angle)
 
 MultiBody::MultiBody(void)
 {
-    masse = 0.0;
+    m_mass = 0.0;
 }
 
 
 MultiBody::~MultiBody(void)
 {
-  for(unsigned int li=0;li<listeLiaisons.size();li++)
-    delete listeLiaisons[li].aJoint;
+  for(unsigned int li=0;li<listInternalLinks.size();li++)
+    delete listInternalLinks[li].aJoint;
 
-  for(unsigned int li=0;li<listeCorps.size();li++)
-    delete listeCorps[li];
+  for(unsigned int li=0;li<listBodies.size();li++)
+    delete listBodies[li];
 }
 
-void MultiBody::ajouterCorps(Body &b)
+void MultiBody::addBody(Body &b)
 {
-  masse += b.getMasse();
-  listeCorps.push_back(&b);
-  liaisons.push_back(vector<appariement>());
+  m_mass += b.getMass();
+  listBodies.push_back(&b);
+  links.push_back(vector<matching>());
 }
 
-Body * MultiBody::dernierCorps()
+Body * MultiBody::lastBody()
 {
-  return listeCorps[listeCorps.size()-1];
+  return listBodies[listBodies.size()-1];
 }
 
-void MultiBody::ajouterLiaison(Body &corps1, Body &corps2, internalLink & l)
+void MultiBody::addLink(Body &corps1, Body &corps2, internalLink & l)
 {
-  //recherche de l'index du premier corps dans listeCorps
+  // search for index of first body in listBodies
   unsigned int index1;
-  for (index1 = 0; index1<listeCorps.size(); index1++) {
-    if (corps1.getLabel() == listeCorps[index1]->getLabel()) {
+  for (index1 = 0; index1<listBodies.size(); index1++) {
+    if (corps1.getLabel() == listBodies[index1]->getLabel()) {
       break;
     }
   }
 
-  //recherche de l'index du deuxieme corps dans listeCorps
+  // search for index of second body in listBodies
   unsigned int index2;
-  for (index2 = 0; index2<listeCorps.size(); index2++) {
-    if (corps2.getLabel() == listeCorps[index2]->getLabel()) {
+  for (index2 = 0; index2<listBodies.size(); index2++) {
+    if (corps2.getLabel() == listBodies[index2]->getLabel()) {
       break;
     }
   }
 
   l.indexCorps1 = index1;
   l.indexCorps2 = index2;
-  listeLiaisons.push_back(l);		//ajout de la liaison a la liste
+  listInternalLinks.push_back(l);	// add link in the list
 
-  //creation de l'appariement corps2, liaison
-  appariement a2 = {index2, listeLiaisons.size()-1};
-  liaisons[index1].push_back(a2);	//et ajout
-  //creation de l'appariement corps1, liaison
-  appariement a1 = {index1, listeLiaisons.size()-1};
-  liaisons[index2].push_back(a1);	//et ajout
+  // create relation between  corps2, liaison
+  matching a2 = {index2, listInternalLinks.size()-1};
+  links[index1].push_back(a2);	
+  // create relation between  corps1, liaison
+  matching a1 = {index1, listInternalLinks.size()-1};
+  links[index2].push_back(a1);	
 }
 
-void MultiBody::ajouterLiaisonFixe(Body &corps1, Body &corps2, 
-				   MAL_S3_VECTOR(,double) translationStat, 
-				   MAL_S3_VECTOR(,double) axeRotationStat, 
-				   double angleRotationStat)
+void MultiBody::deleteLinkBetween(Body &corps1, Body &corps2)
 {
-  //recherche de l'index du premier corps dans listeCorps
-  unsigned int index1;
-  for (index1 = 0; index1<listeCorps.size(); index1++) {
-    if (corps1.getLabel() == listeCorps[index1]->getLabel()) {
-      break;
-    }
-  }
-
-  //recherche de l'index du deuxieme corps dans listeCorps
-  unsigned int index2;
-  for (index2 = 0; index2<listeCorps.size(); index2++) {
-    if (corps2.getLabel() == listeCorps[index2]->getLabel()) {
-      break;
-    }
-  }
-
-  //creation de la liaison
-  JointPrivate * aJoint= new JointPrivate(JointPrivate::FIX_JOINT,axeRotationStat,angleRotationStat,translationStat);
-
-  internalLink l = {cptLiaison++,aJoint,index1, index2};
-  listeLiaisons.push_back(l);		//ajout de la liaison a la liste
-  //creation de l'appariement corps2, liaison
-  appariement a2 = {index2, listeLiaisons.size()-1};
-  liaisons[index1].push_back(a2);	//et ajout
-  //creation de l'appariement corps1, liaison
-  appariement a1 = {index1, listeLiaisons.size()-1};
-  liaisons[index2].push_back(a1);	//et ajout
-}
-
-void MultiBody::supprimerLiaisonEntre(Body &corps1, Body &corps2)
-{
-  //recherche de l'index du premier corps dans listeCorps
+  // search index for the first body in listBodies
   unsigned int c1;
-  for (c1 = 0; c1<listeCorps.size(); c1++) {
-    if (corps1.getLabel() == listeCorps[c1]->getLabel()) {
+  for (c1 = 0; c1<listBodies.size(); c1++) {
+    if (corps1.getLabel() == listBodies[c1]->getLabel()) {
       break;
     }
   }
 
-  //recherche de l'index du deuxieme corps dans listeCorps
+  // search index for the second body in listBodies
   unsigned int c2;
-  for (c2 = 0; c2<listeCorps.size(); c2++) {
-    if (corps2.getLabel() == listeCorps[c2]->getLabel()) {
+  for (c2 = 0; c2<listBodies.size(); c2++) {
+    if (corps2.getLabel() == listBodies[c2]->getLabel()) {
       break;
     }
   }
 
-  appariement a1 = {c2, 0};
-  appariement a2 = {c1, 0};
-  //recherche de l'iterateur de la liaison parmis les liaisons de corps1
-  vector<appariement>::iterator it = find(liaisons[c1].begin(), liaisons[c1].end(), a1);
-  int index = it->liaison;
-  listeLiaisons[index].indexCorps1 = -1;
-  listeLiaisons[index].indexCorps2 = -1;
-  listeLiaisons[index].label = -1;
-  liaisons[c1].erase(it);		//et on l'enleve
-  //recherche de l'iterateur de la liaison parmis les liaisons de corps2
-  it = find(liaisons[c2].begin(), liaisons[c2].end(), a2);
-  liaisons[c2].erase(it);		//et on l'enleve
+  matching a1 = {c2, 0};
+  matching a2 = {c1, 0};
+  // search the iteratory of the link among links of body c1.
+  vector<matching>::iterator it = find(links[c1].begin(), links[c1].end(), a1);
+  int index = it->link;
+  listInternalLinks[index].indexCorps1 = -1;
+  listInternalLinks[index].indexCorps2 = -1;
+  listInternalLinks[index].label = -1;
+  links[c1].erase(it);		
+  // search the iteratory of the link among links of body c2.
+  it = find(links[c2].begin(), links[c2].end(), a2);
+  links[c2].erase(it);		
 }
 
-void MultiBody::supprimerLiaison(int index)
+void MultiBody::removeLink(int index)
 {
-  int c1 = listeLiaisons[index].indexCorps1;
-  int c2 = listeLiaisons[index].indexCorps2;
-  appariement a1 = {c2, 0};
-  appariement a2 = {c1, 0};
-  //recherche de l'iterateur de la liaison parmis les liaisons de corps1
-  vector<appariement>::iterator it = find(liaisons[c1].begin(), liaisons[c1].end(), a1);
-  listeLiaisons[index].indexCorps1 = -1;
-  listeLiaisons[index].indexCorps2 = -1;
-  listeLiaisons[index].label = -1;
-  liaisons[c1].erase(it);		//et on l'enleve
-  //recherche de l'iterateur de la liaison parmis les liaisons de corps2
-  it = find(liaisons[c2].begin(), liaisons[c2].end(), a2);
-  liaisons[c2].erase(it);		//et on l'enleve
+  int c1 = listInternalLinks[index].indexCorps1;
+  int c2 = listInternalLinks[index].indexCorps2;
+  matching a1 = {c2, 0};
+  matching a2 = {c1, 0};
+  //recherche de l'iterateur de la liaison parmis les links de corps1
+  vector<matching>::iterator it = find(links[c1].begin(), links[c1].end(), a1);
+  listInternalLinks[index].indexCorps1 = -1;
+  listInternalLinks[index].indexCorps2 = -1;
+  listInternalLinks[index].label = -1;
+  links[c1].erase(it);		//et on l'enleve
+  //recherche de l'iterateur de la liaison parmis les links de corps2
+  it = find(links[c2].begin(), links[c2].end(), a2);
+  links[c2].erase(it);		//et on l'enleve
 }
 
-void MultiBody::supprimerLiaisonLabel(int label)
+void MultiBody::removeLinkLabel(int label)
 {
   //recherche de l'index de la liaison
   unsigned int i;
-  for (i=0; i<listeLiaisons.size(); i++) {
-    if (listeLiaisons[i].label == label)
+  for (i=0; i<listInternalLinks.size(); i++) {
+    if (listInternalLinks[i].label == label)
       break;
   }
-  if (i==listeLiaisons.size())
+  if (i==listInternalLinks.size())
     return;
 
-  supprimerLiaison(i);
+  removeLink(i);
 }
 
-void MultiBody::supprimerCorps(Body &b)
+void MultiBody::removeBody(Body &b)
 {
   unsigned int i;
-  for (i=0; i<listeCorps.size(); i++) {
-    if (listeCorps[i]->getLabel() == b.getLabel())
+  for (i=0; i<listBodies.size(); i++) {
+    if (listBodies[i]->getLabel() == b.getLabel())
       break;
   }
-  if (i==listeCorps.size())
+  if (i==listBodies.size())
     return;
 
-  supprimerCorps(i);
+  removeBody(i);
 }
-void MultiBody::supprimerCorps(int index)
+void MultiBody::removeBody(int index)
 {
   int j = 0;
-  for (unsigned int i=0; i<liaisons[index].size(); j++) {
-    supprimerLiaison(liaisons[index][i].liaison);
-    cout << "suppression liaison\n";
+  for (unsigned int i=0; i<links[index].size(); j++) {
+    removeLink(links[index][i].link);
   }
-  listeCorps[index]->setLabel(-1);
+  listBodies[index]->setLabel(-1);
 
 }
-void MultiBody::supprimerCorpsLabel(int label)
+void MultiBody::removeBodyLabel(int label)
 {
   unsigned int i;
-  for (i=0; i<listeCorps.size(); i++) {
-    if (listeCorps[i]->getLabel() == label)
+  for (i=0; i<listBodies.size(); i++) {
+    if (listBodies[i]->getLabel() == label)
       break;
   }
-  if (i==listeCorps.size())
+  if (i==listBodies.size())
     return;
 
-  supprimerCorps(i);
+  removeBody(i);
 }
-
-void MultiBody::inverserLiaison(int i)
-{
-  cout << "inverserLiaison n'est pas correctement implemente" << endl;
-  /*
-    if ((unsigned int)i >= listeLiaisons.size()) {
-    cout << i << " : indice hors limite du vecteur de liaison" << endl;
-    return;
-    }
-    for (unsigned int j=0; j<listeLiaisons[i].listeJoints.size(); j++) {
-    listeLiaisons[i].listeJoints[j].axe = -listeLiaisons[i].listeJoints[j].axe;
-    }
-  */
-}
-
 
 
 MAL_S3_VECTOR(,double) MultiBody::getPositionCoM(void)
 {
-  return (positionCoMPondere/masse);
+  return (positionCoMPondere/m_mass);
 }
 
-
-void MultiBody::afficher()
+void MultiBody::display()
 {
-  afficherCorps();
-  afficherLiaisons();
+  displayBodies();
+  displayLinks();
 }
 
-void MultiBody::afficherCorps()
+void MultiBody::displayBodies()
 {
-  for (unsigned int i=0; i<listeCorps.size(); i++) {
+  for (unsigned int i=0; i<listBodies.size(); i++) {
     cout << "corps "<< i << " : \n";
-    listeCorps[i]->Display();
-    for (unsigned int j=0; j<liaisons[i].size(); j++) {
-      cout << "    lie a corps " << liaisons[i][j].corps << " par liaison " 
-	   << liaisons[i][j].liaison << " (label " << listeLiaisons[liaisons[i][j].liaison].label <<")\n";
+    listBodies[i]->Display();
+    for (unsigned int j=0; j<links[i].size(); j++) {
+      cout << "    lie a corps " << links[i][j].body << " par liaison " 
+	   << links[i][j].link << " (label " << listInternalLinks[links[i][j].link].label <<")\n";
     }
     cout << "\n";
   }
   cout << "\n";
 }
 
-void MultiBody::afficherLiaisons(void) {
-  for (unsigned int i=0; i<listeLiaisons.size(); i++) {
-    cout << "Name: "<< listeLiaisons[i].aJoint->getName()
+void MultiBody::displayLinks(void) {
+  for (unsigned int i=0; i<listInternalLinks.size(); i++) {
+    cout << "Name: "<< listInternalLinks[i].aJoint->getName()
 	 << " JointID in VRML " 
-	 << listeLiaisons[i].aJoint->getIDinActuated() << " " ;
-    cout << "liaison de type " << listeLiaisons[i].aJoint->type()
-	 << "  label "<< listeLiaisons[i].label 
-	 << "  liant le corps " 
-	 << listeLiaisons[i].indexCorps1 
-	 << " au corps " << listeLiaisons[i].indexCorps2 << "\n";
+	 << listInternalLinks[i].aJoint->getIDinActuated() << " " ;
+    cout << "Link type:  " << listInternalLinks[i].aJoint->type()
+	 << "  label "<< listInternalLinks[i].label 
+	 << "  bouding body " 
+	 << listInternalLinks[i].indexCorps1 
+	 << " to body  " << listInternalLinks[i].indexCorps2 << "\n";
     cout << "translationStatique : " << endl;
     MAL_S3_VECTOR(,double) aStaticTranslation;
-    listeLiaisons[i].aJoint->getStaticTranslation(aStaticTranslation);
+    listInternalLinks[i].aJoint->getStaticTranslation(aStaticTranslation);
     cout << aStaticTranslation << endl;
-    if (listeLiaisons[i].aJoint->type() > 0) {
-      cout << "    axe : " << endl;
-      cout << listeLiaisons[i].aJoint->axe();
+    if (listInternalLinks[i].aJoint->type() > 0) {
+      cout << "    axis : " << endl;
+      cout << listInternalLinks[i].aJoint->axis();
       cout << endl;
     }
   }
   cout << "\n";
 }
 
-void dynamicsJRLJapan::AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
+void dynamicsJRLJapan::AxisAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R)
 {
   double c = cos(aQuantity);
   if (fabs(c)<1e-8)
@@ -408,11 +356,11 @@ void dynamicsJRLJapan::AxeAngle2Matrix(const vector3d &AnAxis, double aQuantity,
 
 int MultiBody::NbOfLinks() const
 {
-  return listeLiaisons.size();
+  return listInternalLinks.size();
 }
 
 int MultiBody::NbOfJoints() const
 {
-  return listeLiaisons.size();
+  return listInternalLinks.size();
 }
 
