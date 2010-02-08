@@ -1504,8 +1504,8 @@ namespace dynamicsJRLJapan
 		      vector<BodyGeometricalData> &aListOfURLs)
     {
       if (aFileName == std::string("")) {
-	std::cout << "SpiritVRMLReader: do not read VRML file." << std::endl;
-	return 1;
+	std::cerr << "SpiritVRMLReader: Filename is empty." << std::endl;
+	return 0;
       }
       ifstream aif;
       struct s_DataForParsing DataForParsing;

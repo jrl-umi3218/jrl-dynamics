@@ -114,7 +114,9 @@ void DynMultiBodyPrivate::parserVRML(string path,
 				     vector<BodyGeometricalData> &aListOfURLs)
 {
   m_listOfBodies.clear();
-  dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,path, aListOfURLs);
+  // It is assumed that the parser has done a proper feedback.
+  if (dynamicsJRLJapan::VRMLReader::ParseVRMLFile(this,path, aListOfURLs)==0)
+    return;
   CreatesTreeStructure(option);
 }
 
