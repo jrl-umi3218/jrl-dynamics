@@ -128,28 +128,36 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   // Get the left hand.
   std::vector<int> JointForOneLimb = m_HS->GetArmJoints(1);
   int ListeJointsSize = JointForOneLimb.size();
-  int EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
+  int EndIndex(-1);
+  if (ListeJointsSize > 1)
+  {
+	  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
+	  m_LeftWristJoint = GetJointFromActuatedID(EndIndex);
+  }
 
-  m_LeftWristJoint = GetJointFromActuatedID(EndIndex);
-  
   // Get the right hand.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetArmJoints(-1);
   ListeJointsSize = JointForOneLimb.size();
-  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
-
-  m_RightWristJoint = GetJointFromActuatedID(EndIndex);
-  
+  if (ListeJointsSize > 1)
+  {
+	  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
+	  m_RightWristJoint = GetJointFromActuatedID(EndIndex);
+  } 
   
   // Get the left foot.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetFootJoints(1);
   ListeJointsSize = JointForOneLimb.size();
-  EndIndex = JointForOneLimb[ListeJointsSize-1];
-  ODEBUG("Joints for the left foot:" << EndIndex);
+  CjrlJoint* theLeftAnkle(0x0);
+  if(ListeJointsSize > 0)
+  {
+	  EndIndex = JointForOneLimb[ListeJointsSize-1];
+	  theLeftAnkle = GetJointFromActuatedID(EndIndex);
+	  ODEBUG("Joints for the left foot:" << EndIndex);
+  }
 
   Foot *theLeftFoot = new Foot();
-  CjrlJoint* theLeftAnkle = GetJointFromActuatedID(EndIndex);
   theLeftFoot->setAssociatedAnkle(theLeftAnkle);
   double AnklePosition[3];
   m_HS->GetAnklePosition(1,AnklePosition);
@@ -174,11 +182,15 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetFootJoints(-1);
   ListeJointsSize = JointForOneLimb.size();
-  EndIndex = JointForOneLimb[ListeJointsSize-1];
-  ODEBUG("Joints for the right foot:" << EndIndex);
+  CjrlJoint* theRightAnkle(0x0);
+  if (ListeJointsSize > 0)
+  {
+	  EndIndex = JointForOneLimb[ListeJointsSize-1];
+	  theRightAnkle = GetJointFromActuatedID(EndIndex);
+	  ODEBUG("Joints for the right foot:" << EndIndex);
+  }
 
   Foot *theRightFoot = new Foot();
-  CjrlJoint* theRightAnkle = GetJointFromActuatedID(EndIndex);
   theRightFoot->setAssociatedAnkle(theRightAnkle);
 
   m_HS->GetAnklePosition(-1,AnklePosition);
@@ -201,9 +213,11 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetHeadJoints();
   ListeJointsSize = JointForOneLimb.size();
-  EndIndex = JointForOneLimb[ListeJointsSize-1];
-
-  m_GazeJoint = GetJointFromActuatedID(EndIndex);
+  if (ListeJointsSize > 0)
+  {
+	  EndIndex = JointForOneLimb[ListeJointsSize-1];
+	  m_GazeJoint = GetJointFromActuatedID(EndIndex);
+  }
 
   // Get the waist joint of the humanoid.
   std::vector<int> JointsForWaist = m_HS->GetWaistJoints();
