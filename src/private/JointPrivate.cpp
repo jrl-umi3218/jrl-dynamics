@@ -218,6 +218,8 @@ void JointPrivate::NormalizeRotationFromAxis(vector4d &Axis, matrix3d &Normalize
   // (v1, v2, v3) form an orthonormal basis  
   v2[smallestComponent] = 1.0;
   MAL_S3_VECTOR_CROSS_PRODUCT(v3,v1,v2);
+  double n = MAL_S3_VECTOR_NORM(v3);
+  v3 = v3/n;
   MAL_S3_VECTOR_CROSS_PRODUCT(v2,v3,v1);
   
   // Prepare the fixed rotation following the axis.
@@ -226,7 +228,6 @@ void JointPrivate::NormalizeRotationFromAxis(vector4d &Axis, matrix3d &Normalize
     MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,1) = v2[iRow];
     MAL_S3x3_MATRIX_ACCESS_I_J(NormalizedRotation,iRow,2) = v3[iRow];
   }
-
 }
 
 void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
