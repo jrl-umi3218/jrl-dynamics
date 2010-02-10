@@ -328,10 +328,11 @@ std::vector<CjrlJoint*> DynMultiBodyPrivate::jointsBetween(const CjrlJoint& inSt
       if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
 	lastCommonJointRank++;
     }
-
+  
   for(i = robotRoot2StartJoint.size()-1; i>lastCommonJointRank; i--)
     outJoints.push_back(robotRoot2StartJoint[i]);
-
+  if(lastCommonJointRank==0)
+      outJoints.push_back(robotRoot2EndJoint[0]);  
   for(i=lastCommonJointRank+1; i< robotRoot2EndJoint.size(); i++)
     outJoints.push_back(robotRoot2EndJoint[i]);
 
