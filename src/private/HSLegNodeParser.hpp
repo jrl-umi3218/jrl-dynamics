@@ -1,0 +1,91 @@
+/* @doc Object used to parse Specificities Information
+
+   Copyright (c) 2010, 
+
+   @author : 
+   Olivier Stasse
+   
+   JRL-Japan, CNRS/AIST
+
+   All rights reserved.
+   
+   Please refers to file License.txt for details on the license.
+
+*/
+#ifndef _HSLEGNODEPARSER_HPP_
+#define _HSLEGNODEPARSER_HPP_
+
+/*! Framework specfic includes */
+#include <Debug.h>
+
+/*! Boost specific includes */
+#include <boost/config/warning_disable.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix_core.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
+#include <boost/spirit/include/phoenix_fusion.hpp>
+#include <boost/spirit/include/phoenix_stl.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/variant/recursive_variant.hpp>
+#include <boost/foreach.hpp>
+
+/*! System Includes */
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+#include "HumanoidSpecificitiesData.h"
+#include "HSSerialChainParser.hpp"
+
+namespace dynamicsJRLJapan {
+  namespace HumanoidSpecificitiesData {
+    
+    namespace fusion = boost::fusion;
+    namespace phoenix = boost::phoenix;
+    namespace qi = boost::spirit::qi;
+    namespace ascii = boost::spirit::ascii;
+
+    // Foot parser.
+
+    template <typename Iterator>
+    struct LegNode_parser : 
+      qi::grammar<Iterator, LegNode(), ascii::space_type>
+    {
+      LegNode_parser() : LegNode_parser::base_type(start)
+      {
+        using qi::double_;
+	using qi::lit;
+
+
+	hl_parser %= '<' >>  lit("HipLength") >>  '>' >>
+	  double_ >> // Implicit rule to fill HipLength.
+	  double_ >>
+	  double_ >>  lit("</") >>  lit("HipLength") >>  '>' ;
+
+	femurl_parser %= '<' >>  lit("FemurLength") >>  '>' >>
+	  double_ >> lit("</") >>  lit("FemurLength") >>  '>' ;
+	  
+	tibial_parser %= '<' >>  lit("TibiaLength") >>  '>' >>
+	  double_ >> lit("</") >>  lit("TibiaLength") >>  '>' ;
+	
+        start %=  hl_parser >> 
+	  femurl_parser >>
+	  tibial_parser >>
+	  serialchain_parser;
+      }
+
+      qi::rule<Iterator, LegNode(), ascii::space_type> start;
+      qi::rule<Iterator, std::string(), ascii::space_type> starthl_tag, endhl_tag;
+      qi::rule<Iterator, double, ascii::space_type> femurl_parser, tibial_parser;
+      qi::rule<Iterator, std::vector<double>, ascii::space_type> hl_parser;
+
+      SerialChain_parser<Iterator> serialchain_parser;
+    };
+
+
+
+  };
+};
+
+#endif /* _HSLEGNODEPARSER_HPP_ */

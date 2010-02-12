@@ -32,6 +32,7 @@ SET(libdyn_src
   private/DynMultiBodyPrivate.cpp 
   private/HumDynMultiBodyPrivate.cpp 
   private/HumanoidSpecificities.cpp  
+  private/HumanoidSpecificitiesParser.cpp  
   private/SpiritVRMLReader.cpp 
 )
 
