@@ -46,56 +46,6 @@ namespace dynamicsJRLJapan {
     namespace qi = boost::spirit::qi;
     namespace ascii = boost::spirit::ascii;
 
-    // Foot parser.
-
-    template <typename Iterator>
-    struct FootNode_parser : 
-      qi::grammar<Iterator, FootNode(), ascii::space_type>
-    {
-      FootNode_parser() : FootNode_parser::base_type(start)
-      {
-        using qi::int_;
-        using qi::lit;
-        using qi::double_;
-        using qi::lexeme;
-        using ascii::char_;
-
-	starts_tag %= '<' >>  lit("SizeX")|
-	  lit("SizeY")|
-	  lit("SizeZ") >>  '>' ;
-	endjs_tag %= lit("</") >>  lit("SizeX")|
-	  lit("SizeY")|
-	  lit("SizeZ") >>  '>' ;
-	
-	size_parser %= starts_tag >>
-	  double_ >> // Implicit rule to fill in sizeX, sizeY, sizeZ.
-	  endjs_tag ;
-	
-	startap_tag %= '<' >>  lit("AnklePosition") >>  '>' ;
-	endap_tag %= lit("</") >>  lit("AnklePosition") >>  '>' ;
-
-	ankleposition_parser %= 
-	  startap_tag >>
-	  double_ >> // Implicit rule to fill in anklePosition
-	  double_ >>
-	  double_ >> 
-	  endap_tag;
-
-	
-        start %= size_parser >> 
-	  ankleposition_parser >>
-	  serialchain_parser;
-      }
-
-      qi::rule<Iterator, FootNode(), ascii::space_type> start;
-      qi::rule<Iterator, std::string(), ascii::space_type> starts_tag,endjs_tag,
-	startap_tag,endap_tag;
-      qi::rule<Iterator, double, ascii::space_type> size_parser;
-      qi::rule<Iterator, std::vector<double>, ascii::space_type> ankleposition_parser;
-
-      struct SerialChain_parser<Iterator> serialchain_parser;
-    };
-
 
 
   };

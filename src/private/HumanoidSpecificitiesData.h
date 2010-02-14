@@ -46,15 +46,26 @@ namespace dynamicsJRLJapan {
     namespace ascii = boost::spirit::ascii;
 
     /*! Articular serial chain */
-    typedef struct
+    typedef struct s_SerialChain
     {
+      
       unsigned int nbOfJoints;
       std::vector<unsigned int> jointID;
+      
+      friend std::ostream & operator<< (std::ostream &out, const struct s_SerialChain &sc);
     } SerialChain;
-
     
+    std::ostream & operator<< (std::ostream &out, const struct s_SerialChain &sc)
+      {
+	out << "Nb Of Joints:" << sc.nbOfJoints << std::endl;
+	for(unsigned int i=0;i<sc.jointID.size();i++)
+	  out << sc.jointID[i] << " " ;
+	out << std::endl;
+	return out;
+      }
+
     /*! Foot description */
-    typedef struct 
+    typedef struct s_FootNode
     {
       // Foot size 
       double sizeX;
@@ -67,22 +78,49 @@ namespace dynamicsJRLJapan {
       // Serial Chain specifying the foot.
       SerialChain sChain;
 
+      friend std::ostream  & operator<< (std::ostream &out, const struct s_FootNode &fn);
     } FootNode;
 
+    std::ostream  & operator<< (std::ostream &out, const FootNode &fn)
+      {
+	out << "sizeX: " << fn.sizeX << std::endl;
+	out << "sizeY: " << fn.sizeY << std::endl;
+	out << "sizeZ: " << fn.sizeZ << std::endl;
+	for(unsigned int i=0;i<fn.anklePosition.size();i++)
+	  out <<fn.anklePosition[i]<< " ";
+	out <<std::endl;
+	
+	out <<fn.sChain;
+	return out;
+      }
 
     /*! Waist description:
      Connection from waist to legs.*/
-    typedef struct
+    typedef struct s_WaistNode
     {
       // Position to left hip.
       std::vector<double> leftWaistToHip;
       std::vector<double> rightWaistToHip;
 
       SerialChain sChain;
+
+      friend std::ostream  & operator<< (std::ostream &out, const struct s_WaistNode &wn);
     } WaistNode;
 
+    std::ostream  & operator<< (std::ostream &out, const WaistNode &wn)
+      {
+	for(unsigned int i=0;i<wn.leftWaistToHip.size();i++)
+	  out << wn.leftWaistToHip[i] << " ";
+	out << std::endl;
+
+	for(unsigned int i=0;i<wn.rightWaistToHip.size();i++)
+	  out << wn.rightWaistToHip[i] << " ";
+	out << std::endl;
+	return out;
+      }
+
     /*! Legs description */
-    typedef struct
+    typedef struct s_LegNode
     {
       // Hip length
       std::vector<double> hipLength;
@@ -91,27 +129,75 @@ namespace dynamicsJRLJapan {
       double tibiaLength;
 
       SerialChain sChain;
+
+      friend std::ostream  & operator<< (std::ostream &out, const struct s_LegNode &wn);
+
     } LegNode;
-    
+
+    std::ostream  & operator<< (std::ostream &out, const LegNode &wn)
+      {
+	for(unsigned int i=0;i<wn.hipLength.size();i++)
+	  out << wn.hipLength[i] << " ";
+	out << std::endl;
+	
+	out << wn.femurLength << std::endl;
+	out << wn.tibiaLength << std::endl;
+
+	out << wn.sChain <<std::endl;
+	return out;
+      }    
+
     /*! Hand description */
-    typedef struct
+    typedef struct s_HandNode
     {
       std::vector<double> center;
       std::vector<double> okayAxis;
       std::vector<double> showingAxis;
       std::vector<double> palmAxis;
+
+      friend std::ostream  & operator<< (std::ostream &out, const struct s_HandNode &hn);
       
     } HandNode;
+
+    std::ostream  & operator<< (std::ostream &out, const HandNode &hn)
+      {
+	for(unsigned int i=0;i<hn.center.size();i++)
+	  out << "center: " << hn.center[i] << " ";
+	out << std::endl;
+
+	for(unsigned int i=0;i<hn.okayAxis.size();i++)
+	  out << "okayAxis: " <<hn.okayAxis[i] << " ";
+	out << std::endl;
+
+	for(unsigned int i=0;i<hn.showingAxis.size();i++)
+	  out << "showingAxis:" << hn.showingAxis[i] << " ";
+	out << std::endl;
+
+	for(unsigned int i=0;i<hn.palmAxis.size();i++)
+	  out << "palmAxis:" << hn.palmAxis[i] << " ";
+	out << std::endl;
+	return out;
+      }
     /*! Arms description */
-    typedef struct
+    typedef struct s_ArmNode
     {
       double upperArmLength;
       double foreArmLength;
 
       SerialChain sChain;
+
+      friend     std::ostream  & operator<< (std::ostream &out, const struct s_ArmNode &an);
     } ArmNode;
 
-    typedef struct
+    std::ostream  & operator<< (std::ostream &out, const ArmNode &an)
+      {
+	out << "upperArmLength: " << an.upperArmLength << std::endl;
+	out << "foreArmLength: " << an.foreArmLength << std::endl;
+	out << an.sChain << std::endl;
+	return out;
+      }
+
+    typedef struct s_HumanoidNode
     {
       std::string Name;
 
@@ -126,64 +212,39 @@ namespace dynamicsJRLJapan {
       HandNode rightHand;
       HandNode leftHand;
 
+      ArmNode rightArm;
+      ArmNode leftArm;
+
       SerialChain head;
       SerialChain chest;
-    } HumanoidNode;
 
+      friend std::ostream  & operator<< (std::ostream &out, const struct s_HumanoidNode &humn);
+
+    } HumanoidNode;
+    
+    std::ostream  & operator<< (std::ostream &out, const HumanoidNode &humn)
+      {
+	out << "Name:" << humn.Name <<std::endl;
+	out << "rightFoot: "<< humn.rightFoot << std::endl;
+	out << "leftFoot: "<< humn.leftFoot << std::endl;
+
+	out << "Waist:" << humn.waist << std::endl;
+
+	out << "rightLeg:" << humn.rightLeg << std::endl;
+	out << "leftLeg:" << humn.leftLeg << std::endl;
+	
+	out << "rightHand:" << humn.rightHand << std::endl;
+	out << "leftHand:" << humn.leftHand << std::endl;
+
+	out << "rightArm:" << humn.rightArm << std::endl;
+	out << "leftArm:" << humn.leftArm << std::endl;
+	
+	out << "Head: " <<humn.head << std::endl;
+	out << "Chest: " <<humn.chest << std::endl;
+	return out;
+      }
   };
 };
 
-namespace dhs=dynamicsJRLJapan::HumanoidSpecificitiesData;
-
-// We need to tell fusion about our mini_xml struct
-    // to make it a first-class fusion citizen
-    BOOST_FUSION_ADAPT_STRUCT(
-			      dhs::SerialChain,
-			      (unsigned int, nbOfJoints)
-			      (std::vector<unsigned int>, jointID)
-			      )
-
-    BOOST_FUSION_ADAPT_STRUCT(
-			      dhs::FootNode,
-			      (double, sizeX)
-			      (double, sizeY)
-			      (double, sizeZ)
-			      (std::vector<double>, anklePosition)
-			      (dhs::SerialChain, sChain)
-			      )
-
-    BOOST_FUSION_ADAPT_STRUCT(dhs::WaistNode,
-			      (std::vector<double>, leftWaistToHip)
-			      (std::vector<double>, rightWaistToHip)
-			      (dhs::SerialChain, sChain)
-			      )
-    BOOST_FUSION_ADAPT_STRUCT(dhs::LegNode,
-			      (std::vector<double>,hipLength)
-			      (double, femurLength)
-			      (double, tibiaLength)
-			      (dhs::SerialChain, sChain)
-			      )
-    BOOST_FUSION_ADAPT_STRUCT(dhs::HandNode,
-			      (std::vector<double>, okayAxis)
-			      (std::vector<double>, showingAxis)
-			      (std::vector<double>, palmAxis)
-			      )
-    BOOST_FUSION_ADAPT_STRUCT(dhs::ArmNode,
-			      (double, upperArmLength)
-			      (double, foreArmLength)
-			      (dhs::SerialChain, sChain)
-			      )
-    BOOST_FUSION_ADAPT_STRUCT(dhs::HumanoidNode,
-			      (std::string, Name)
-			      (dhs::FootNode, rightFoot)
-			      (dhs::FootNode, leftFoot)
-			      (dhs::WaistNode, waist)
-			      (dhs::LegNode, rightLeg)
-			      (dhs::LegNode, leftLeg)
-			      (dhs::HandNode, rightHand)
-			      (dhs::HandNode, leftHand)
-			      (dhs::SerialChain, head)
-			      (dhs::SerialChain, chest)
-			      )
 
 #endif

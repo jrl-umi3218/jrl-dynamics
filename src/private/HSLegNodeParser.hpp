@@ -48,40 +48,6 @@ namespace dynamicsJRLJapan {
 
     // Foot parser.
 
-    template <typename Iterator>
-    struct LegNode_parser : 
-      qi::grammar<Iterator, LegNode(), ascii::space_type>
-    {
-      LegNode_parser() : LegNode_parser::base_type(start)
-      {
-        using qi::double_;
-	using qi::lit;
-
-
-	hl_parser %= '<' >>  lit("HipLength") >>  '>' >>
-	  double_ >> // Implicit rule to fill HipLength.
-	  double_ >>
-	  double_ >>  lit("</") >>  lit("HipLength") >>  '>' ;
-
-	femurl_parser %= '<' >>  lit("FemurLength") >>  '>' >>
-	  double_ >> lit("</") >>  lit("FemurLength") >>  '>' ;
-	  
-	tibial_parser %= '<' >>  lit("TibiaLength") >>  '>' >>
-	  double_ >> lit("</") >>  lit("TibiaLength") >>  '>' ;
-	
-        start %=  hl_parser >> 
-	  femurl_parser >>
-	  tibial_parser >>
-	  serialchain_parser;
-      }
-
-      qi::rule<Iterator, LegNode(), ascii::space_type> start;
-      qi::rule<Iterator, std::string(), ascii::space_type> starthl_tag, endhl_tag;
-      qi::rule<Iterator, double, ascii::space_type> femurl_parser, tibial_parser;
-      qi::rule<Iterator, std::vector<double>, ascii::space_type> hl_parser;
-
-      SerialChain_parser<Iterator> serialchain_parser;
-    };
 
 
 

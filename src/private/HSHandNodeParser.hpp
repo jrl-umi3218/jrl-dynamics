@@ -45,56 +45,6 @@ namespace dynamicsJRLJapan {
     namespace qi = boost::spirit::qi;
     namespace ascii = boost::spirit::ascii;
 
-    // Foot parser.
-
-    template <typename Iterator>
-    struct HandNode_parser : 
-      qi::grammar<Iterator, HandNode(), ascii::space_type>
-    {
-      HandNode_parser() : HandNode_parser::base_type(start)
-      {
-        using qi::double_;
-	using qi::lit;
-
-	starthl_tag %= '<' >>  lit("Center") >>  '>' ;
-	endhl_tag %= lit("</") >>  lit("Center") >>  '>' ;
-
-	center_parser %= starthl_tag >> 
-	  double_ >> // Implicit rule to fill center.
-	  double_ >>
-	  double_ >>
-	  endhl_tag;
-
-	okay_parser %= '<' >>  lit("okayAxis") >>  '>' >>
-	  double_ >> // Implicit rule to fill okay.
-	  double_ >>
-	  double_ >>
-	  double_ >> lit("</") >>  lit("okayAxis") >>  '>' ;
-	  
-	showing_parser %= '<' >>  lit("showingAxis") >>  '>' >>
-	  double_ >> // Implicit rule to fill showing.
-	  double_ >>
-	  double_ >>
-	  double_ >> lit("</") >>  lit("showingAxis") >>  '>' ;
-
-	palm_parser %= '<' >>  lit("palmAxis") >>  '>' >>
-	  double_ >> // Implicit rule to fill palm.
-	  double_ >>
-	  double_ >>
-	  double_ >> lit("</") >>  lit("palmAxis'") >>  '>' ;
-	
-        start %= center_parser >> 
-	  okay_parser >>
-	  showing_parser >>
-	  palm_parser;
-      }
-
-      qi::rule<Iterator, HandNode(), ascii::space_type> start;
-      qi::rule<Iterator, double[3], ascii::space_type> center_parser,
-	okay_parser, showing_parser, palm_parser;
-      qi::rule<Iterator, std::string(), ascii::space_type>
-        starthl_tag, endhl_tag;
-    };
 
 
 

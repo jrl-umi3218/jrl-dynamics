@@ -47,36 +47,6 @@ namespace dynamicsJRLJapan {
 
 
 
-    // Serial chain parser.
-
-    template <typename Iterator>
-    struct SerialChain_parser : 
-      qi::grammar<Iterator, SerialChain(), ascii::space_type>
-    {
-      SerialChain_parser() : SerialChain_parser::base_type(start)
-      {
-        using qi::uint_;
-        using qi::lit;
-        using ascii::char_;
-	
-	jointnb_tag %= '<' >>  lit("JointNb") >>  '>' >>
-	  uint_ >> // Implicit rule to fill in nbOfJoints.
-	  lit("</") >>  lit("JointNb") >>  '>' ;
-	
-
-	
-	jointid_tag %= '<' >>  lit("JointsID") >>  '>' >>
-	  *uint_ >> // Implicit rule to fill in JointsID.
-	  lit("</") >>  lit("JointsID") >>  '>' ;;
-	
-        start %= jointnb_tag >> jointid_tag;
-      }
-      
-      qi::rule<Iterator, SerialChain(), ascii::space_type> start;
-      qi::rule<Iterator, unsigned int , ascii::space_type> jointnb_tag;
-      qi::rule<Iterator, unsigned int, ascii::space_type> jointid_tag;
-
-    };
   };
 };
 

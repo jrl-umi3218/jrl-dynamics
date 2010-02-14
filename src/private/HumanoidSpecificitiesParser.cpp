@@ -34,6 +34,7 @@
 #include <string>
 #include <vector>
 
+
 #include "HSHumanoidNodeParser.hpp"
 
 namespace dynamicsJRLJapan {
@@ -69,6 +70,10 @@ namespace dynamicsJRLJapan {
       using boost::spirit::ascii::space;
       std::string::const_iterator iter = storage.begin();
       std::string::const_iterator end = storage.end();
+
+      // this will print something like: boost::fusion::vector2<int, double>
+      display_attribute_of_parser(hsxml);
+
       bool r = phrase_parse(iter, end, hsxml, space, ast);
       
       if (r && iter == end)

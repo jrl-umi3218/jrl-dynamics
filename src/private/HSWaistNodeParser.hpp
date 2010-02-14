@@ -48,40 +48,6 @@ namespace dynamicsJRLJapan {
 
     // Foot parser.
 
-    template <typename Iterator>
-    struct WaistNode_parser : 
-      qi::grammar<Iterator, WaistNode(), ascii::space_type>
-    {
-      WaistNode_parser() : WaistNode_parser::base_type(start)
-      {
-        using qi::int_;
-        using qi::lit;
-        using qi::double_;
-        using qi::lexeme;
-        using ascii::char_;
-
-	wth_parser %= '<' >>  lit("WaistToHip") >>  '>'  >>
-	  double_ >> // Implicit rule to fill in position
-	  double_ >> 
-	  double_ >> 
-	  lit("</") >>  lit("WaistToHip") >>  '>' ;
-	
-	start %= '<' >>  lit("Waist") >>  '>' >>
-	  '<' >>  lit("Right") >>  '>' >>
-	  wth_parser >>
-	  lit("</") >>  lit("Right") >>  '>' >>
-	  '<' >>  lit("Left") >>  '>'  >>
-	  wth_parser >>
-	  lit("</") >>  lit("Left") >>  '>' >>
-	  serialchain_parser >> 
-	  lit("</") >>  lit("Waist") >>  '>' ;
-      }
-
-      qi::rule<Iterator, WaistNode(), ascii::space_type> start;
-      qi::rule<Iterator, double[3], ascii::space_type> wth_parser;
-      SerialChain_parser<Iterator> serialchain_parser;
-    };
-
 
 
   };

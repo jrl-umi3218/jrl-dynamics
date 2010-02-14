@@ -57,13 +57,13 @@ namespace dynamicsJRLJapan {
         using qi::double_;
 	using qi::lit;
 
-	UpperArmLength_parser %= '<' >>  lit("UpperArmLength") 
-				     >>  '>' >>  double_ >> // Implicit rule to fill upper arm length.
-	  lit("</") >>  lit("UpperArmLength") >>  '>' ;
+	UpperArmLength_parser %= '<' >>  lit("UpperArmLength") >>  '>' 
+				     >>  double_ // Implicit rule to fill upper arm length.
+				     >>  lit("</") >>  lit("UpperArmLength") >>  '>' ;
 	  
-	ForeArmLength_parser %= '<' >>  lit("ForeArmLength") >>  '>' >>
-	  double_ >> // Implicit rule to fill fore Arm length.
-	  lit("</") >>  lit("ForeArmLength") >>  '>' ;
+	ForeArmLength_parser %= '<' >> lit("ForeArmLength") >>  '>' 
+				    >> double_ // Implicit rule to fill fore Arm length.
+				    >> lit("</") >>  lit("ForeArmLength") >>  '>' ;
 
 	start %= UpperArmLength_parser >> 
 	  ForeArmLength_parser >> 
