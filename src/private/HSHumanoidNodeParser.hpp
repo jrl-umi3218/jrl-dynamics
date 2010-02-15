@@ -52,7 +52,7 @@ namespace dhs=dynamicsJRLJapan::HumanoidSpecificitiesData;
     BOOST_FUSION_ADAPT_STRUCT(
 			      dhs::SerialChain,
 			      (unsigned int, nbOfJoints)
-			      (std::vector<unsigned int>, jointID)
+			      (std::vector<int>, jointID)
 			      )
 
     BOOST_FUSION_ADAPT_STRUCT(
@@ -138,18 +138,16 @@ namespace dynamicsJRLJapan {
       SerialChain_parser() : SerialChain_parser::base_type(start)
       {
         using qi::uint_;
+        using qi::int_;
         using qi::lit;
         using ascii::char_;
 	
-	jointnb_tag %= '<' >>  lit("JointNb") >>  '>' >>
-	  uint_ >> // Implicit rule to fill in nbOfJoints.
-	  lit("</") >>  lit("JointNb") >>  '>' ;
-
-	jointid_tag %= '<' >>  lit("JointsID") >>  '>' >>
-	  *uint_ >> // Implicit rule to fill in JointsID.
-	  lit("</") >>  lit("JointsID") >>  '>' ;;
-	
-        start %= jointnb_tag >> jointid_tag;
+	start%= '<' >>  lit("JointNb") >>  '>' 
+		    >>  uint_ // Implicit rule to fill in nbOfJoints.
+		    >>  "</" >>  lit("JointNb") >>  '>' 
+		    >> '<' >>  lit("JointsID") >>  '>' 
+		    >> *int_ // Implicit rule to fill in JointsID.
+		    >>  "</" >>  lit("JointsID") >>  '>' ;;
       }
       
       qi::rule<Iterator, SerialChain(), ascii::space_type> start;
@@ -171,16 +169,6 @@ namespace dynamicsJRLJapan {
 	using qi::lit;
         using qi::uint_;
         using ascii::char_;
-	
-
-	jointnb_tag %= '<' >>  lit("JointNb") >>  '>' >>
-	  uint_ >> // Implicit rule to fill in nbOfJoints.
-	  lit("</") >>  lit("JointNb") >>  '>' ;
-
-	jointid_tag %= '<' >>  lit("JointsID") >>  '>' >>
-	  *uint_ >> // Implicit rule to fill in JointsID.
-	  lit("</") >>  lit("JointsID") >>  '>' ;;
-	
 
 	start %= '<' >>  lit("SizeX") >>  '>' 
 		     >> double_  
@@ -194,16 +182,12 @@ namespace dynamicsJRLJapan {
 		     >> '<' >>  lit("AnklePosition") >>  '>' 
 		     >> *double_
 		     >> lit("</") >>  lit("AnklePosition") >>  '>' 
-		     >> jointnb_tag
-		     >> jointid_tag ;
-
+		     >> serialchain_parser;
 
       }
 
       qi::rule<Iterator, FootNode(), ascii::space_type> start;
       SerialChain_parser<Iterator> serialchain_parser;
-      qi::rule<Iterator, unsigned int , ascii::space_type> jointnb_tag;
-      qi::rule<Iterator, std::vector<unsigned int>, ascii::space_type> jointid_tag;
 
     };
 
@@ -255,7 +239,7 @@ namespace dynamicsJRLJapan {
 		     >> lit("</") >>  lit("showingAxis") >>  '>'
 		     >> '<' >>  lit("palmAxis") >>  '>' 
 		     >> *double_ // Implicit rule to fill palm.
-		     >> lit("</") >>  lit("palmAxis'") >>  '>' ;
+		     >> lit("</") >>  lit("palmAxis") >>  '>' ;
 	
       }
 
@@ -382,9 +366,9 @@ namespace dynamicsJRLJapan {
 			    >> aHandNode_parser 
 			    >> "</" >>  lit("Right") >>  '>' ;
 
-	lhand_parser %=  '<' >>  lit("Left") >>  '>' 
-			     >> aHandNode_parser 
-			     >> "</" >>  lit("Left") >>  '>' ;
+	lhand_parser %= '<' >>  lit("Left") >>  '>'  
+			    >> aHandNode_parser
+			    >> "</" >>  lit("Left") >>  '>' ;
 
 	rarm_parser %= '<' >>  lit("Right") >>  '>'  
 			   >> aArmNode_parser 
@@ -394,6 +378,7 @@ namespace dynamicsJRLJapan {
 			   >> aArmNode_parser 
 			   >> "</" >>  lit("Left") >>  '>';
 	chest_parser %=  '<' >>  lit("Chest") >>  '>'
+
 			      >> serialchain_parser  
 			      >> "</" >>  lit("Chest") >>  '>' ;
 
@@ -408,27 +393,100 @@ namespace dynamicsJRLJapan {
 	  >> lleg_parser
 	  >> "</" >>  lit("Legs") >>  '>'  
 	  >> '<' >>  lit("Hands") >>  '>' 
-	  >> rhand_parser
-	  >> lhand_parser
+	  >> '<' >>  lit("Right") >>  '>'  
+	  >> aHandNode_parser 
+	  >> "</" >>  lit("Right") >>  '>' 
+	  >> '<' >>  lit("Left") >>  '>'  
+	  >> aHandNode_parser 
+	  >> "</" >>  lit("Left") >>  '>'   
 	  >> "</" >>  lit("Hands") >>  '>' 
 	  >> '<' >>  lit("Arms") >>  '>'  
 	  >> rarm_parser 
 	  >> larm_parser
 	  >> "</" >>  lit("Humanoid") >>  '>' ; 
-	/*
-	start %= '{' >> lexeme[ +(char_ - '"')]
-		     >> rfeet_parser 
-		     >> lfeet_parser 
-		     >> aWaist_parser
-		     >> rleg_parser
-		     >> lleg_parser
-		     >> rhand_parser
-		     >> lhand_parser
-		     >> rarm_parser
-		     >> larm_parser
-		     >> '}';*/
 
 	  
+      }
+
+      SerialChain_parser<Iterator> serialchain_parser;
+      FootNode_parser<Iterator> aFootNode_parser;
+      LegNode_parser<Iterator> aLegNode_parser;
+      HandNode_parser<Iterator> aHandNode_parser;
+      ArmNode_parser<Iterator> aArmNode_parser;
+      WaistNode_parser<Iterator> aWaist_parser; 
+      HeadNode_parser<Iterator> aHeadNode_parser; 
+
+      qi::rule<Iterator, HumanoidNode(), ascii::space_type> start;
+      qi::rule<Iterator, FootNode(), ascii::space_type> rfeet_parser,lfeet_parser;
+      qi::rule<Iterator, LegNode(), ascii::space_type> lleg_parser,rleg_parser;
+      qi::rule<Iterator, HandNode(), ascii::space_type> rhand_parser,lhand_parser;
+      qi::rule<Iterator, ArmNode(), ascii::space_type> larm_parser,rarm_parser;
+      // qi::rule<Iterator, SerialChain(), ascii::space_type> head_parser;
+      qi::rule<Iterator, SerialChain(), ascii::space_type> chest_parser;
+      
+      qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
+      qi::rule<Iterator, std::string(), ascii::space_type> starthn_tag;
+      
+    };
+
+    // Intermediat Humanoid parser.
+
+    template <typename Iterator>
+    struct IHumanoidNode_parser : 
+      qi::grammar<Iterator, HumanoidNode(), ascii::space_type>
+    {
+     IHumanoidNode_parser() : IHumanoidNode_parser::base_type(start)
+      {
+        using qi::double_;
+	using qi::lit;
+	using qi::lexeme;
+	using qi::char_;
+        using qi::uint_;
+	
+	quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
+
+
+	rfeet_parser %= '<' >> lit("Right") >>  '>'  
+			    >> aFootNode_parser 
+			    >> "</" >>  lit("Right") >>  '>' ;
+	lfeet_parser %= '<' >> lit("Left") >>  '>'  
+			    >> aFootNode_parser 
+			    >> "</" >>  lit("Left") >>  '>';
+	rleg_parser %= '<' >>  lit("Right") >>  '>'  
+			   >> aLegNode_parser 
+			   >>  "</" >>  lit("Right") >>  '>';
+
+	lleg_parser %= '<' >>  lit("Left") >>  '>'  
+			   >> aLegNode_parser 
+			   >> "</" >>  lit("Left") >>  '>';
+
+	rhand_parser %= '<' >>  lit("Right") >>  '>'  
+			    >> aHandNode_parser 
+			    >> "</" >>  lit("Right") >>  '>' ;
+
+	lhand_parser %=  '<' >>  lit("Left") >>  '>' 
+			     >> aHandNode_parser 
+			     >> "</" >>  lit("Left") >>  '>' ;
+
+
+	start %= '<' >> lit("Humanoid") 
+		     >> lit("name")
+		     >> '=' 
+		     >> quoted_string >> '>'
+		     >> '<' >>  lit("Feet") >>  '>'  
+		     >> rfeet_parser 
+		     >> lfeet_parser 
+		     >> "</" >>  lit("Feet") >>  '>' 
+		     >> aWaist_parser
+		     >> '<' >>  lit("Legs") >>  '>'  
+		     >> rleg_parser
+		     >> lleg_parser
+		     >> "</" >>  lit("Legs") >>  '>'  
+		     >> '<' >>  lit("Hands") >>  '>' 
+		     >> rhand_parser
+		     >> lhand_parser
+		     >> "</" >>  lit("Hands") >>  '>' ;
+
       }
 
       SerialChain_parser<Iterator> serialchain_parser;

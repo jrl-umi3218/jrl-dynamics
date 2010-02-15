@@ -50,14 +50,15 @@ namespace dynamicsJRLJapan {
     {
       
       unsigned int nbOfJoints;
-      std::vector<unsigned int> jointID;
+      std::vector<int> jointID;
       
       friend std::ostream & operator<< (std::ostream &out, const struct s_SerialChain &sc);
     } SerialChain;
     
     std::ostream & operator<< (std::ostream &out, const struct s_SerialChain &sc)
       {
-	out << "Nb Of Joints:" << sc.nbOfJoints << std::endl;
+	out << "Nb Of Joints:" << sc.nbOfJoints << " "
+	    << sc.jointID.size() << std::endl;
 	for(unsigned int i=0;i<sc.jointID.size();i++)
 	  out << sc.jointID[i] << " " ;
 	out << std::endl;
@@ -116,6 +117,9 @@ namespace dynamicsJRLJapan {
 	for(unsigned int i=0;i<wn.rightWaistToHip.size();i++)
 	  out << wn.rightWaistToHip[i] << " ";
 	out << std::endl;
+	
+	out << wn.sChain ;
+	
 	return out;
       }
 
@@ -143,7 +147,7 @@ namespace dynamicsJRLJapan {
 	out << wn.femurLength << std::endl;
 	out << wn.tibiaLength << std::endl;
 
-	out << wn.sChain <<std::endl;
+	out << wn.sChain;
 	return out;
       }    
 
@@ -161,23 +165,28 @@ namespace dynamicsJRLJapan {
 
     std::ostream  & operator<< (std::ostream &out, const HandNode &hn)
       {
+	out << "center : ";
 	for(unsigned int i=0;i<hn.center.size();i++)
-	  out << "center: " << hn.center[i] << " ";
+	  out << hn.center[i] << " ";
 	out << std::endl;
 
+	out << "okayAxis: " ;
 	for(unsigned int i=0;i<hn.okayAxis.size();i++)
-	  out << "okayAxis: " <<hn.okayAxis[i] << " ";
+	  out <<hn.okayAxis[i] << " ";
 	out << std::endl;
 
+	out << "showingAxis: " ;
 	for(unsigned int i=0;i<hn.showingAxis.size();i++)
-	  out << "showingAxis:" << hn.showingAxis[i] << " ";
+	  out << hn.showingAxis[i] << " ";
 	out << std::endl;
 
+	out << "palmAxis: " ;
 	for(unsigned int i=0;i<hn.palmAxis.size();i++)
-	  out << "palmAxis:" << hn.palmAxis[i] << " ";
+	  out << hn.palmAxis[i] << " ";
 	out << std::endl;
 	return out;
       }
+
     /*! Arms description */
     typedef struct s_ArmNode
     {
@@ -186,14 +195,15 @@ namespace dynamicsJRLJapan {
 
       SerialChain sChain;
 
-      friend     std::ostream  & operator<< (std::ostream &out, const struct s_ArmNode &an);
+      friend std::ostream & operator<< (std::ostream &out, 
+					const struct s_ArmNode &an);
     } ArmNode;
 
     std::ostream  & operator<< (std::ostream &out, const ArmNode &an)
       {
 	out << "upperArmLength: " << an.upperArmLength << std::endl;
 	out << "foreArmLength: " << an.foreArmLength << std::endl;
-	out << an.sChain << std::endl;
+	out << an.sChain ;
 	return out;
       }
 
@@ -225,7 +235,9 @@ namespace dynamicsJRLJapan {
     std::ostream  & operator<< (std::ostream &out, const HumanoidNode &humn)
       {
 	out << "Name:" << humn.Name <<std::endl;
-	out << "rightFoot: "<< humn.rightFoot << std::endl;
+	out << "rightFoot: " 
+	    << std::endl
+	    << humn.rightFoot << std::endl;
 	out << "leftFoot: "<< humn.leftFoot << std::endl;
 
 	out << "Waist:" << humn.waist << std::endl;
