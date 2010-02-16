@@ -99,15 +99,15 @@ int main(int argc, char *argv[])
   aHDR->computeForwardKinematics();
   ZMPval = aHDR->zeroMomentumPoint();
   tcout << "First value of ZMP : " 
-	<< ZMPval(0) << " " 
-	<< ZMPval(1) << " " 
-	<< ZMPval(2) << endl;
+	<< filterprecision(ZMPval(0)) << " " 
+	<< filterprecision(ZMPval(1)) << " " 
+	<< filterprecision(ZMPval(2)) << endl;
   MAL_S3_VECTOR(poscom,double);
   poscom = aHDR->positionCenterOfMass();
   tcout << "Should be equal to the CoM: " 
-	<< poscom(0) << " "
-	<< poscom(1) << " "  
-	<< poscom(2) << endl;
+	<< filterprecision(poscom(0)) << " "
+	<< filterprecision(poscom(1)) << " "  
+	<< filterprecision(poscom(2)) << endl;
 
 
   matrixNxP InertiaMatrix;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
        << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
        << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
     
-  tcout << InertiaMatrix << endl;
+  DisplayMatrix(InertiaMatrix,tcout);
   
   ofstream aof;
   aof.open("InertiaMatrix.dat");
@@ -181,8 +181,7 @@ int main(int argc, char *argv[])
   aJoint = aHDR->waist();
   tcout << "****************************" << endl;
   aHDR->computeJacobianCenterOfMass();
-  tcout << "Value of the CoM's Jacobian:" << endl
-       << aHDR->jacobianCenterOfMass() << endl;
+  DisplayMatrix(aHDR->jacobianCenterOfMass(),tcout);
   tcout << "****************************" << endl;
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
 
@@ -237,14 +236,14 @@ int main(int argc, char *argv[])
       aHDR->computeForwardKinematics();
       ZMPval = aHDR->zeroMomentumPoint();
       tcout << i << "-th value of ZMP : " 	
-	    << ZMPval(0) << " " 
-	    << ZMPval(1) << " " 
-	    << ZMPval(2) << endl;
+	    << filterprecision(ZMPval(0)) << " " 
+	    << filterprecision(ZMPval(1)) << " " 
+	    << filterprecision(ZMPval(2)) << endl;
       poscom = aHDR->positionCenterOfMass();
       tcout << "Should be equal to the CoM: "  
-	    << poscom(0) << " "
-	    << poscom(1) << " "  
-	    << poscom(2) << endl;
+	    << filterprecision(poscom(0)) << " "
+	    << filterprecision(poscom(1)) << " "  
+	    << filterprecision(poscom(2)) << endl;
     }
 
 

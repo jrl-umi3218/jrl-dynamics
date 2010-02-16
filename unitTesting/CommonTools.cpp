@@ -26,7 +26,7 @@ namespace dynamicsJRLJapan {
   void dv3d(vector3d &av3d, ostream &os) 
   {
     for(unsigned int i=0;i<3;i++)
-      os << av3d(i) << " ";
+      os << filterprecision(av3d(i)) << " ";
     os << endl;
   }
 
@@ -36,7 +36,7 @@ namespace dynamicsJRLJapan {
       {
 	for(unsigned int j=0;j<3;j++)
 	  {
-	    os << MAL_S3x3_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	    os << filterprecision(MAL_S3x3_MATRIX_ACCESS_I_J(todisplay,i,j)) << " " ;
 	  }
 	os << endl;
 	if (i!=2)
@@ -66,7 +66,7 @@ namespace dynamicsJRLJapan {
       {
 	for(unsigned int j=0;j<4;j++)
 	  {
-	    os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) ;
+	    os << filterprecision(MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j)) ;
 	    if ((i!=3) || (j!=3))
 	      os << ",";
 	  }
@@ -83,7 +83,7 @@ namespace dynamicsJRLJapan {
 	    if (aJ(i,j)==0.0)
 	      os << "0 "; 
 	    else
-	      os << aJ(i,j) << " ";
+	      os << filterprecision(aJ(i,j)) << " ";
 	  }
 	os << std::endl;
       }
