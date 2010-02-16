@@ -131,8 +131,13 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   int EndIndex(-1);
   if (ListeJointsSize > 1)
   {
-	  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
-	  m_LeftWristJoint = GetJointFromActuatedID(EndIndex);
+    std::vector<int> JointsForWrist = m_HS->GetWrists(1);
+    ODEBUG("JointsForWrist:" << JointsForWrist.size());
+    if (JointsForWrist.size()>0)
+      {
+	m_LeftWristJoint = GetJointFromActuatedID(JointsForWrist[0]);
+	ODEBUG("JointsForWrist[0]: " << JointsForWrist[0]);
+      }
   }
 
   // Get the right hand.
@@ -141,8 +146,13 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   if (ListeJointsSize > 1)
   {
-	  EndIndex = JointForOneLimb[ListeJointsSize-2];//this is the wrist joint
-	  m_RightWristJoint = GetJointFromActuatedID(EndIndex);
+    std::vector<int> JointsForWrist = m_HS->GetWrists(-1);
+    ODEBUG("JointsForWrist:" << JointsForWrist.size());
+    if (JointsForWrist.size()>0)
+      {
+	m_RightWristJoint = GetJointFromActuatedID(JointsForWrist[0]);
+	ODEBUG("JointsForWrist[0]: " << JointsForWrist[0]);
+      }
   } 
   
   // Get the left foot.
@@ -152,9 +162,9 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   CjrlJoint* theLeftAnkle(0x0);
   if(ListeJointsSize > 0)
   {
-	  EndIndex = JointForOneLimb[ListeJointsSize-1];
-	  theLeftAnkle = GetJointFromActuatedID(EndIndex);
-	  ODEBUG("Joints for the left foot:" << EndIndex);
+    EndIndex = JointForOneLimb[ListeJointsSize-1];
+    theLeftAnkle = GetJointFromActuatedID(EndIndex);
+    ODEBUG("Joints for the left foot:" << EndIndex);
   }
 
   Foot *theLeftFoot = new Foot();

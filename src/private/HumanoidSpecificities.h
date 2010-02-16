@@ -136,6 +136,9 @@ namespace dynamicsJRLJapan
     // Returns the number of joints for the Waist.
     int GetWaistJointNb();
 
+    // Return the wrists index.
+    const std::vector<int> & GetWrists(int aSide);
+
     /*! \brief Returns the vector of joints index for the
       waist. */
     const std::vector<int> & GetWaistJoints();
@@ -225,6 +228,12 @@ namespace dynamicsJRLJapan
     
     /*! \brief List of waist joints. */
     std::vector<int> m_WaistJoints;
+
+    /*! \brief Number of waist joint. */
+    int m_WristsJointNb[2];
+    
+    /*! \brief List of waist joints. */
+    std::vector<int> m_WristsJoints[2];
 
   };
 

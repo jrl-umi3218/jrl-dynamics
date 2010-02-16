@@ -248,6 +248,41 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	    }
 	  
 	}
+
+      if (look_for(fp,"Wrists"))
+	{
+	  ODEBUG("Wrists");
+	  for(int i=0;i<2;i++)
+	    {
+	      if (look_for(fp,Side[i]))
+		{
+
+		  if (look_for(fp,"JointNb"))
+		    {
+		      fscanf(fp,"%d", &m_WristsJointNb[i]);
+		      ODEBUG("JointNb: " << m_ArmsJointNb[i]);
+		    }
+
+		  if (look_for(fp,"JointsID"))
+		    {
+		      int aJoint;
+		      for(int j=0;j<m_WristsJointNb[i];j++)
+			{
+			  fscanf(fp,"%d",&aJoint);
+			  m_WristsJoints[i].insert( m_WristsJoints[i].end(),aJoint);
+			}
+		      ODEBUG("Joints :");
+		      for(unsigned int j=0;j<m_WristsJoints[i].size();j++)
+			{
+			  ODEBUG(m_WristsJoints[i][j]);
+			}
+		      
+		    }
+
+		}
+	    }
+	}
+
       if (look_for(fp,"Arms"))
 	{
 	  ODEBUG("Arms");
@@ -508,7 +543,15 @@ const std::vector<int> & HumanoidSpecificities::GetArmJoints(int WhichSide)
   return m_ArmsJoints[r];
 }
 
+const std::vector<int> &HumanoidSpecificities::GetWrists(int WhichSide)
+{
+  int r=1;
+  
+  if (WhichSide==-1)
+    r=0;
 
+  return m_WristsJoints[r];
+}
 
 int HumanoidSpecificities::GetLegJointNb(int WhichSide)
 {

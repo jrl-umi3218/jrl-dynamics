@@ -57,6 +57,16 @@
       <palmAxis>0.0 -1.0 0.0</palmAxis>
     </Left>
   </Hands>
+  <Wrists>
+    <Right>
+       <JointNb> 1 </JointNb>
+       <JointsID> 12 </JointsID>
+    </Right>
+    <Left>
+       <JointNb> 1 </JointNb>
+       <JointsID> 25 </JointsID>
+    </Left>
+  </Wrists>
   <Arms>
     <Right>
         <UpperArmLength> 0.21 </UpperArmLength>
