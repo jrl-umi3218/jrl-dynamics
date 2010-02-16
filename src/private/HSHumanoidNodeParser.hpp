@@ -392,6 +392,7 @@ namespace dynamicsJRLJapan {
 	  >> rleg_parser
 	  >> lleg_parser
 	  >> "</" >>  lit("Legs") >>  '>'  
+
 	  >> '<' >>  lit("Hands") >>  '>' 
 	  >> '<' >>  lit("Right") >>  '>'  
 	  >> aHandNode_parser 
@@ -400,6 +401,16 @@ namespace dynamicsJRLJapan {
 	  >> aHandNode_parser 
 	  >> "</" >>  lit("Left") >>  '>'   
 	  >> "</" >>  lit("Hands") >>  '>' 
+
+	  >> '<' >>  lit("Wrists") >>  '>' 
+	  >> '<' >>  lit("Right") >>  '>'  
+	  >> aHandNode_parser 
+	  >> "</" >>  lit("Right") >>  '>' 
+	  >> '<' >>  lit("Left") >>  '>'  
+	  >> aHandNode_parser 
+	  >> "</" >>  lit("Left") >>  '>'   
+	  >> "</" >>  lit("Wrists") >>  '>' 
+
 	  >> '<' >>  lit("Arms") >>  '>'  
 	  >> rarm_parser 
 	  >> larm_parser

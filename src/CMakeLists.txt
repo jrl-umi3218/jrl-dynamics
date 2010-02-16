@@ -32,7 +32,6 @@ SET(libdyn_src
   private/DynMultiBodyPrivate.cpp 
   private/HumDynMultiBodyPrivate.cpp 
   private/HumanoidSpecificities.cpp  
-  private/HumanoidSpecificitiesParser.cpp  
   private/SpiritVRMLReader.cpp 
 )
 
@@ -148,10 +147,10 @@ IF(UNIX)
 
 ENDIF(UNIX)
 
-ADD_EXECUTABLE(	TestHumanoidParser private/TestHumanoidParser.cpp)
-SET_TARGET_PROPERTIES(TestHumanoidParser
-	              PROPERTIES
-	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-)
+#ADD_EXECUTABLE(	TestHumanoidParser private/TestHumanoidParser.cpp)
+#SET_TARGET_PROPERTIES(TestHumanoidParser
+#	              PROPERTIES
+#	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+#		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+#)
 

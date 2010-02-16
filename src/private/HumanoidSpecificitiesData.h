@@ -222,6 +222,9 @@ namespace dynamicsJRLJapan {
       HandNode rightHand;
       HandNode leftHand;
 
+      SerialChain rightWrist;
+      SerialChain leftWrist;
+
       ArmNode rightArm;
       ArmNode leftArm;
 
