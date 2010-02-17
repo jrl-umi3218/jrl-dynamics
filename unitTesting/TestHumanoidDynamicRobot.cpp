@@ -211,10 +211,11 @@ int main(int argc, char *argv[])
   DisplayFoot(leftFoot,empty,tcout);
 
   tcout << "Current transformation of left Ankle."<< endl;
-  tcout << aHDR->leftAnkle()->currentTransformation() << endl;
+  dm4d(aHDR->leftAnkle()->currentTransformation(),tcout,empty);
+  tcout << endl;
   tcout << "Current transformation of right Ankle."<< endl;
-  tcout << aHDR->rightAnkle()->currentTransformation() << endl;
-  
+  dm4d(aHDR->rightAnkle()->currentTransformation(),tcout,empty);
+  tcout << endl;
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
