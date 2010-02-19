@@ -58,7 +58,13 @@ namespace dynamicsJRLJapan
 
     void GenerateJoints(std::ostream &os,
 			std::string shifttab);
+    
+    void ComputeEulerAngles(matrix4d &aTransformation,
+			    vector3d &EulerAngles);
 
+    void StaticParameters(CjrlJoint *aJoint,
+			  std::ostream &os,
+			  std::string &shifttab);
     
     std::vector<BodyGeometricalData> m_AccessToData;
       

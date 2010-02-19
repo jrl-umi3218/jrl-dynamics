@@ -14,6 +14,7 @@
 
 using namespace std;
 namespace dynamicsJRLJapan {
+
   GenerateRobotForAMELIF::GenerateRobotForAMELIF()
   {
   }
@@ -27,7 +28,64 @@ namespace dynamicsJRLJapan {
     os << "<!DOCTYPE MultiBody SYSTEM \"./AMELIFMultiBody.xsd\">" << endl;
   }
 
+  void GenerateRobotForAMELIF::ComputeEulerAngles(matrix4d &aTransformation,
+						   vector3d &EulerAngles)
+  {
+    EulerAngles(0)= 0.0;
+    EulerAngles(1)= 0.0;
+    EulerAngles(2)= 0.0;
+    
+    EulerAngles(1) = asin(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,0));
+    double r = cos(EulerAngles(1));
 
+    if (fabs(r)<1e-8)
+      {
+	EulerAngles(2) = atan2(-MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,1),
+			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,2));
+      }
+    else
+      {
+	EulerAngles(0) = atan2(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,1)/r,
+			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,2)/r);	
+
+	EulerAngles(2) = atan2(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,0)/r,
+			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,1)/r);	
+      }
+  }
+
+  void GenerateRobotForAMELIF::StaticParameters(CjrlJoint *aJoint,
+						ostream &os,
+						string &shifttab)
+  {
+    matrix4d LocalTransformation;
+    
+    if (aJoint->parentJoint()!=0)
+      LocalTransformation = aJoint->initialPosition();
+    else
+      {
+	matrix4d FromParentToWorld = aJoint->parentJoint()->initialPosition();
+	matrix4d FromCurrentToWorld = aJoint->initialPosition();	
+	matrix4d FromWorldToParent;
+	MAL_S4x4_INVERSE(FromParentToWorld,FromWorldToParent,double);
+	
+	MAL_S4x4_C_eq_A_by_B(LocalTransformation,FromWorldToParent,FromCurrentToWorld);
+      }
+    
+    vector3d EulerAngles;
+    ComputeEulerAngles(LocalTransformation,
+		       EulerAngles);
+
+    os << "<StaticParameters>"    
+       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,0,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,1,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,2,3) << " "
+       << EulerAngles(0) << " " 
+       << EulerAngles(1) << " " 
+       << EulerAngles(2)
+       << "</StaticParameters>";
+    
+  }
+  
   void GenerateRobotForAMELIF::GenerateJoint(CjrlJoint *aJoint, 
 					     ostream &os,
 					     string shifttab, unsigned int &gindex)
@@ -40,11 +98,16 @@ namespace dynamicsJRLJapan {
     else
       os << "\" type=\"revolute\"";
     
-    os << " axis=\"x\" " 
-       << "innerID=\""<<aJoint->rankInConfiguration() 
-       << "\" outerID=\""<<aJoint->rankInConfiguration()+1
+    os << " axis=\"x\" " ;
+    if (aJoint->rankInConfiguration() ==0)
+      os << "innerID=\"0";
+    else if (aJoint->parentJoint()!=0)
+      os << "innerID=\""<<aJoint->parentJoint()->rankInConfiguration();
+    
+    os << "\" outerID=\""<<aJoint->rankInConfiguration()+1
        << "\"> " << endl;
-  
+
+    // Static parameters
     // Label
     os << shifttab << "  <Label>JOINT_" 
        << aJoint->rankInConfiguration() 
