@@ -47,10 +47,6 @@ namespace dynamicsJRLJapan
 
     private:
 
-      void AxisAngle(matrix4d &data, vector3d &axis, double &angle) const;
-
-      void AxisAngle2(matrix4d &data, vector3d &axis, double &angle) const;
-
       CjrlHumanoidDynamicRobot *m_HDR;
       
       std::string m_PathToModelFiles;
@@ -59,6 +55,9 @@ namespace dynamicsJRLJapan
 			std::ostream &os,
 			std::string shifttab,
 			unsigned int &gindex);
+
+      void GenerateJoints(std::ostream &os,
+			  std::string shifttab);
       
       void GenerateJoint(CjrlJoint *aJoint, 
 			 std::ostream &os,
@@ -68,15 +67,10 @@ namespace dynamicsJRLJapan
       void GenerateBodies(std::ostream &os,
 			  std::string shifttab);
       
-      void GenerateJoints(std::ostream &os,
-			  std::string shifttab);
       
-      void CopyGeometricInformation(std::ostream &os,
-				    std::string FileName);
-
       std::vector<BodyGeometricalData> m_AccessToData;
 
-      std::map<jrlJoint *, unsigned int> m_Indexes;
+      std::map<CjrlJoint *, unsigned int> m_Indexes;
     };
   };
 };

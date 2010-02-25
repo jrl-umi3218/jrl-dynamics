@@ -54,4 +54,14 @@ SET_TARGET_PROPERTIES(CreateVRMLPoseFile
 
 ADD_DEPENDENCIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
 
+ADD_EXECUTABLE( CreateMappleModel
+  GenerateRobotForMaple.cpp
+  CreateMappleModel.cpp)
+
+
+SET_TARGET_PROPERTIES(CreateMappleModel
+	              PROPERTIES
+		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
 
