@@ -25,14 +25,14 @@ namespace dynamicsJRLJapan
 {
   namespace Tools
   {
-    class GenerateRobotForMapple
+    class GenerateRobotForMaple
     {
     public:
       /*! \brief Default constructor */
-      GenerateRobotForMapple();
+      GenerateRobotForMaple();
       
       /*! \brief Default destructor */
-      ~GenerateRobotForMapple();
+      ~GenerateRobotForMaple();
       
       /*! \brief Generate hard coded robot */
       void GenerateRobot(std::string &RobotName,
@@ -53,11 +53,12 @@ namespace dynamicsJRLJapan
       
       void GenerateBody(CjrlJoint *aJoint, 
 			std::ostream &os,
-			std::string shifttab,
+			std::string & shifttab,
 			unsigned int &gindex);
 
       void GenerateJoints(std::ostream &os,
-			  std::string shifttab);
+			  std::string shifttab,
+			  CjrlHumanoidDynamicRobot *aHDR);
       
       void GenerateJoint(CjrlJoint *aJoint, 
 			 std::ostream &os,
@@ -65,8 +66,15 @@ namespace dynamicsJRLJapan
 			 unsigned int &gindex);
       
       void GenerateBodies(std::ostream &os,
-			  std::string shifttab);
+			  CjrlHumanoidDynamicRobot *aHDR);
       
+      void GenerateGPLv2License(std::ostream &os);
+      
+      void GenerateHeader(std::ostream &os,
+			  CjrlHumanoidDynamicRobot *aHDR);
+
+      void GenereateHeader(std::ostream &os,
+			   CjrlHumanoidDynamicRobot *aHDR);
       
       std::vector<BodyGeometricalData> m_AccessToData;
 

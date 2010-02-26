@@ -30,7 +30,7 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForMaple::GenerateGPLv2License(ostream &aof)
   {
-    aof << "# Copyright (C) "<< endl
+    aof << "# Copyright (C) "<< endl   
 	<< "# This program is free software; you can redistribute it and/or modify it" << endl
 	<< "# under the terms of the GNU General Public License version 2 as published" << endl
 	<< "# by the Free Software Foundation." << endl
@@ -163,20 +163,17 @@ namespace dynamicsJRLJapan {
       os << "Rz_"<< gindex << " := 0:" << endl;
 
     if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Tx_"<< gindex << " := " << 
-	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)<<  ":" << endl;
+      os << "Tx_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)<<  ":" << endl;
     else 
       os << "Tx_"<< gindex << " := 0:" << endl;
 
     if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Ty_"<< gindex << " := " << 
-	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,1,3)<<  ":" << endl;
+      os << "Ty_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,1,3)<<  ":" << endl;
     else 
       os << "Ty_"<< gindex << " := 0:" << endl;
 
     if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Tz_"<< gindex << " := " << 
-	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,3) <<  ":" << endl;
+      os << "Tz_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,3) <<  ":" << endl;
     else 
       os << "Tz_"<< gindex << " := 0:" << endl;
 
@@ -190,10 +187,10 @@ namespace dynamicsJRLJapan {
 
   }  
 
-  void Tools::GenerateBody(CjrlJoint *aJoint,
-			   ostream &os,
-			   string &shifttab,
-			   unsigned int &gindex)
+  void Tools::GenerateRobotForMaple::GenerateBody(CjrlJoint *aJoint,
+						  ostream &os,
+						  string &shifttab,
+						  unsigned int &gindex)
   {
     CjrlBody *aBody = aJoint->linkedBody();
     os << "m_" << gindex << " := "<<  aBody->mass() << ":"<<endl;
@@ -207,16 +204,16 @@ namespace dynamicsJRLJapan {
     
     matrix3d IG=aBody->inertiaMatrix();
     os << "IG_" << gindex 
-       << " := matrix([[" << 
-       << MATRIX_3x3_ACCESS_I_J(IG,0,0) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,0,1) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,0,2) << " ],[" 
-       << MATRIX_3x3_ACCESS_I_J(IG,1,0) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,1,1) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,1,2) << " ],[" 
-       << MATRIX_3x3_ACCESS_I_J(IG,2,0) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,2,1) << " , " 
-       << MATRIX_3x3_ACCESS_I_J(IG,2,2) << " ]]):" 
+       << " := matrix([[" 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,0,0) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,0,1) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,0,2) << " ],[" 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,1,0) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,1,1) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,1,2) << " ],[" 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,2,0) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,2,1) << " , " 
+       << MAL_S3x3_MATRIX_ACCESS_I_J(IG,2,2) << " ]]):" 
        << endl << endl;
 
 
@@ -230,15 +227,15 @@ namespace dynamicsJRLJapan {
   }
 
   void Tools::GenerateRobotForMaple::GenerateBodies(ostream &os,
-						     CjrlHumanoidDynamicRobot *aHDR)
+						    CjrlHumanoidDynamicRobot *aHDR)
   {
-    GenerateHeader(aos,aHDR);
+    GenerateHeader(os,aHDR);
     os << "Gravity := vector([0, -9.81, 0]):"  << endl;
     unsigned int gindex=0;
     CjrlJoint *RootJoint = aHDR->rootJoint();
     string empty("");
     
-    GenerateBody(RootJoint,os,shifttab,gindex);
+    GenerateBody(RootJoint,os,empty,gindex);
 
   }
 
