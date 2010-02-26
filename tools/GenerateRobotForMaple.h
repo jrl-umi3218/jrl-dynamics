@@ -44,11 +44,16 @@ namespace dynamicsJRLJapan
       /*! \brief Set path to the model files. */
       void SetPathToModelFiles(std::string &Path);
       
+      /*! \brief Generate Kinematic Data. */
+      void GenerateKinematicData(std::string &RobotName,
+				 CjrlHumanoidDynamicRobot *aHDR);
+
+      /*! \brief Generate Dynamic Data. */
+      void GenerateDynamicData(std::string &RobotName,
+			       CjrlHumanoidDynamicRobot *aHDR);
 
     private:
 
-      CjrlHumanoidDynamicRobot *m_HDR;
-      
       std::string m_PathToModelFiles;
       
       void GenerateBody(CjrlJoint *aJoint, 
@@ -75,7 +80,9 @@ namespace dynamicsJRLJapan
 
       void GenereateHeader(std::ostream &os,
 			   CjrlHumanoidDynamicRobot *aHDR);
-      
+
+      double FilterPrecision(double x);
+
       std::vector<BodyGeometricalData> m_AccessToData;
 
       std::map<CjrlJoint *, unsigned int> m_Indexes;

@@ -28,6 +28,14 @@ namespace dynamicsJRLJapan {
   {
   }
 
+  double Tools::GenerateRobotForMaple::FilterPrecision(double x)
+  {
+    if (fabs(x)<1e-8)
+      return 0.0;
+
+    return x;
+  }
+
   void Tools::GenerateRobotForMaple::GenerateGPLv2License(ostream &aof)
   {
     aof << "# Copyright (C) "<< endl   
@@ -48,26 +56,35 @@ namespace dynamicsJRLJapan {
   void Tools::GenerateRobotForMaple::GenerateHeader(ostream &aof,
 						    CjrlHumanoidDynamicRobot *aHDR)
   {
+
     aof << "# Number of Degree of freedom" << endl;
-    aof << "NDDL := " << aHDR->numberDof() << endl;
+    aof << "NDDL := " << aHDR->numberDof() << endl <<endl;
     
     aof << "# Definitions of coordinates and generalized speeds " << endl;
     aof << "q := vector(NDDL):" << endl;
-    aof << "qdot := vector(NDDL):" << endl;
+    aof << "qdot := vector(NDDL):" << endl << endl;
     
     aof << "#Cardan rotation: we begin with rotation around x, and after around y and" << endl;
-    aof << "#finally around z." << endl;
-
-    
+    aof << "#finally around z." << endl << endl;
 
   }
+
   /*! \brief Generate hard coded robot */
   void Tools::GenerateRobotForMaple::GenerateRobot(std::string &RobotName,
 						    CjrlHumanoidDynamicRobot *aHDR)
   {
-    m_HDR = aHDR;
+    GenerateKinematicData(RobotName,aHDR);
+    GenerateDynamicData(RobotName,aHDR);
+  }
+
+
+  void Tools::GenerateRobotForMaple::GenerateKinematicData(std::string &RobotName,
+							   CjrlHumanoidDynamicRobot *aHDR)
+
+  {
+
     ofstream aof;
-    string FileName = RobotName + "Data.maple";
+    string FileName = RobotName + "KinematicData.maple";
     aof.open((char *)FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
@@ -80,6 +97,29 @@ namespace dynamicsJRLJapan {
     GenerateJoints(aof,empty,aHDR);
 
     aof.close();
+
+    
+  }
+
+  void Tools::GenerateRobotForMaple::GenerateDynamicData(std::string &RobotName,
+							 CjrlHumanoidDynamicRobot *aHDR)
+  {
+
+    ofstream aof;
+    string FileName = RobotName + "DynamicData.maple";
+    aof.open((char *)FileName.c_str(),ofstream::out);
+
+    if(!aof.is_open())
+      return;
+
+    GenerateGPLv2License(aof);
+
+    string empty("");
+    GenerateBodies(aof,aHDR);
+
+    aof.close();
+
+    
   }
 
 
@@ -87,21 +127,40 @@ namespace dynamicsJRLJapan {
 						     string shifttab,
 						     CjrlHumanoidDynamicRobot *aHDR)
   {
-    CjrlJoint *RootJoint = m_HDR->rootJoint();
+    CjrlJoint *RootJoint = aHDR->rootJoint();
     unsigned int gindex=1;
 
-    m_Indexes[RootJoint] = gindex;
+
     
-    unsigned int IndexBase = aHDR->numberDof()+1;
+    os << "#Frame 1 : rotation absolute frame (x direction to front of robot, "   << endl;
+    os << "# y vertically upwards, z to the right of robot) to frame defined by " << endl;
+    os << "# (x direction to front of robot, y to the left of robot, z vertically " << endl;
+    os << "# upwards)" << endl;
+    os << "ref_"<<gindex << " :=0:" << endl;
+    os << "Rx_"<< gindex << " := -Pi/2:" << endl;
+    os << "Ry_"<< gindex << " := 0:" << endl;
+    os << "Rz_"<< gindex << " := 0:" << endl;
+    os << "Tx_"<< gindex << " := 0:" << endl;
+    os << "Ty_"<< gindex << " := 0:" << endl;
+    os << "Tz_"<< gindex << " := 0:" << endl << endl;
+    
+    gindex++;
+    m_Indexes[RootJoint] = gindex;    
+    unsigned int IndexBase = aHDR->numberDof()-5;
     os << "#Frame "<< gindex << endl;
+    os << "ref_"<<gindex << " := "<< gindex-1 << ":"<< endl;
     os << "Rx_"<< gindex << " := q["<< IndexBase+3<< "]:" << endl;
     os << "Ry_"<< gindex << " :=-q["<< IndexBase+5<< "]:" << endl;
     os << "Rz_"<< gindex << " := q["<< IndexBase+4<< "]:" << endl;
     os << "Tx_"<< gindex << " := q["<< IndexBase<< "]:" << endl;
     os << "Ty_"<< gindex << " :=-q["<< IndexBase+2<< "]:" << endl;
-    os << "Tz_"<< gindex << " := q["<< IndexBase+1<< "]:" << endl;
-
-    GenerateJoint(RootJoint,os,shifttab,gindex);
+    os << "Tz_"<< gindex << " := q["<< IndexBase+1<< "]:" << endl << endl;
+    
+    gindex++;
+    for(unsigned int i=0;i<RootJoint->countChildJoints();i++)
+      {
+	GenerateJoint(RootJoint->childJoint(i),os,shifttab,gindex);
+      }
 
   }
   
@@ -148,36 +207,30 @@ namespace dynamicsJRLJapan {
     
     os << "ref_"<<gindex << " := "<< indexparent << ":" << endl;
     if (fabs(fabs(aRealAxis(0))-1.0)<1e-8)
-      os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration() << "]:" << endl;
+      os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"  << endl;
     else 
       os << "Rx_"<< gindex << " := 0:" << endl;
 
     if (fabs(fabs(aRealAxis(1))-1.0)<1e-8)
-      os << "Ry_"<< gindex << " := q["<< aJoint->rankInConfiguration() << "]:" << endl;
+      os << "Ry_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"  << endl;
     else 
       os << "Ry_"<< gindex << " := 0:" << endl;
 
     if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Rz_"<< gindex << " := q["<< aJoint->rankInConfiguration() << "]:" << endl;
+      os << "Rz_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"   << endl;
     else 
       os << "Rz_"<< gindex << " := 0:" << endl;
 
-    if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Tx_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)<<  ":" << endl;
-    else 
-      os << "Tx_"<< gindex << " := 0:" << endl;
-
-    if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Ty_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,1,3)<<  ":" << endl;
-    else 
-      os << "Ty_"<< gindex << " := 0:" << endl;
-
-    if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Tz_"<< gindex << " := " << MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,3) <<  ":" << endl;
-    else 
-      os << "Tz_"<< gindex << " := 0:" << endl;
-
-
+    os << "Tx_"<< gindex << " := " 
+       << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)) 
+       <<  ":" << endl;
+    os << "Ty_"<< gindex << " := " 
+       << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,1,3)) 
+       <<  ":" << endl;
+    os << "Tz_"<< gindex << " := " 
+       << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,3)) 
+       << ":" << endl;
+    os << endl;
     gindex++;
     // Call the sons.
     for(unsigned int i=0;i<aJoint->countChildJoints();i++)
