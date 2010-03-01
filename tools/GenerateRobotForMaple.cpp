@@ -199,26 +199,16 @@ namespace dynamicsJRLJapan {
   void Tools::GenerateRobotForMaple::GenerateJointFilePart(CjrlJoint *aJoint, 
 							   ostream &os,
 							   unsigned &indexparent, unsigned int &gindex,
-							   vector3d &aRealAxis,
+							   vector3d &EulerAngles,
 							   matrix4d &aTransformation)
   {
     /* Generate file */
     os << "ref_"<<gindex << " := "<< indexparent << ":" << endl;
-    if (fabs(fabs(aRealAxis(0))-1.0)<1e-8)
-      os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"  << endl;
-    else 
-      os << "Rx_"<< gindex << " := 0:" << endl;
-
-    if (fabs(fabs(aRealAxis(1))-1.0)<1e-8)
-      os << "Ry_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"  << endl;
-    else 
-      os << "Ry_"<< gindex << " := 0:" << endl;
-
-    if (fabs(fabs(aRealAxis(2))-1.0)<1e-8)
-      os << "Rz_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]:"   << endl;
-    else 
-      os << "Rz_"<< gindex << " := 0:" << endl;
-
+    os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]+" 
+       << EulerAngles(0) << " :"  << endl;
+    os << "Ry_"<< gindex << " := " << EulerAngles(1) << ":" << endl;
+    os << "Rz_"<< gindex << " := " << EulerAngles(2) << ":" << endl;
+    
     os << "Tx_"<< gindex << " := " 
        << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)) 
        <<  ":" << endl;
@@ -230,7 +220,47 @@ namespace dynamicsJRLJapan {
        << ":" << endl;
     os << endl;
     gindex++;
-						       }
+  }
+
+  void Tools::GenerateRobotForMaple::ExtractEulerAngles(matrix3d &aRotationMatrix,
+							vector3d &EulerAngles)
+  {
+    double r11 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,0);
+    double r12 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,1);
+    double r13 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,2);
+
+    double r21 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,1,0);
+
+    double r31 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,0);
+    double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
+    double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
+    
+    if (fabs(fabs(r31)-1.0)>1e-8)
+      {
+
+	EulerAngles(1) = -asin(r31);
+	double c0 = cos(EulerAngles(0));
+	EulerAngles(0) = atan2(r32/c0,r33/c0);
+	EulerAngles(2) = atan2(r21/c0,r11/c0);
+	
+      }
+    else
+      {
+	EulerAngles(2) = 0.0;
+	double d = atan2(r12,r13);
+	if (fabs(r31+1.0)<1e-8)
+	  {
+	    EulerAngles(1) = M_PI/2;
+	    EulerAngles(0) = EulerAngles(2) + d;
+	  }
+	else
+	  {
+	    EulerAngles(1) = -M_PI/2;
+	    EulerAngles(0) = EulerAngles(2) + d;
+	  }
+      }
+  }
+
   void Tools::GenerateRobotForMaple::GenerateJoint(CjrlJoint *aJoint, 
 						    ostream &os,
 						    string shifttab, unsigned int &gindex)
@@ -259,18 +289,19 @@ namespace dynamicsJRLJapan {
     /* Project rotation axis */
 
     matrix3d aRotation;
-    vector3d anAxis, aRealAxis;
+    vector3d anAxis, EulerAngles;
     for(unsigned int i=0;i<3;i++)
       {
 	for(unsigned int j=0;j<3;j++)
 	  MAL_S3x3_MATRIX_ACCESS_I_J(aRotation,i,j) = 
 	    MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j);
       }
-    anAxis(0) = 1.0; anAxis(1) = 0.0; anAxis(2) = 0.0;
-    MAL_S3x3_C_eq_A_by_B(aRealAxis,aRotation,anAxis);
-    
+    ExtractEulerAngles(aRotation,EulerAngles);
+    cout << gindex << " EulerAngles:" << EulerAngles(0) << " " 
+	 << EulerAngles(1) << " " 
+	 << EulerAngles(2) << endl;
     GenerateJointFilePart(aJoint, os, indexparent,gindex,
-			  aRealAxis,aTransformation);
+			  EulerAngles,aTransformation);
     // Call the sons.
     for(unsigned int i=0;i<aJoint->countChildJoints();i++)
       {
@@ -377,10 +408,6 @@ namespace dynamicsJRLJapan {
 			 SoleCenterInAnkleFrame4d);
     double outLength, outWidth;
     aFoot->getSoleSize(outLength,outWidth);
-    ODEBUG3("Size of the foot: " << outLength << " " << outWidth) ;
-    ODEBUG3("AnkleTransformation: " << AnkleTransformation);
-    ODEBUG3("SoleCenterInWorldFrame: " << SoleCenterInWorldFrame);
-
     double LocalShift[4][2];
     LocalShift[0][0] = outLength/2.0; LocalShift[0][1] = outWidth/2.0;
     LocalShift[1][0] = outLength/2.0; LocalShift[1][1] = -outWidth/2.0;
@@ -467,6 +494,44 @@ namespace dynamicsJRLJapan {
 
   }
 
+  void Tools::GenerateDummyTag(unsigned int gindex,
+			       std::string &JointName,
+			       unsigned int JointRank)
+  {
+    os << "# Tag "<< gindex << " : " << JointName << endl;
+    os << "reftag_" << gindex << " := " << JointRank << ":" << endl;
+    os << "tag_"<< gindex << " := " << "vector([0.0, 0.0, 0.0]):"<< endl << endl;
+    
+  }
+
+  void Tools::GenerateSupplementaryTags(std::ostream &os,
+					CjrlHumanoidDynamicRobot *aHDR,
+					unsigned int &gindex)
+  {
+    
+    string JointName;
+    unsigned int JointRank;
+
+    /*! Tag for the head */
+    CjrlJoint *Joint = aHDR->gazeJoint();
+    JointRank = Joint->rankInConfiguration();
+    JointName = "Head";
+    GenerateDummyTag(gindex++,JointName,JointRank);
+
+    /*! Tag for the right wrist */
+    Joint = aHDR->rightWrist();
+    JointRank = Joint->rankInConfiguration();
+    JointName = "Right Wrist";
+    GenerateDummyTag(gindex++,JointName,JointRank);
+
+    /*! Tag for the left wrist */
+    Joint = aHDR->leftWrist();
+    JointRank = Joint->rankInConfiguration();
+    JointName = "Left Wrist";
+    GenerateDummyTag(gindex++,JointName,JointRank);
+    
+  }
+  
   void Tools::GenerateRobotForMaple::GenerateMapleScript(std::string &RobotName)
   {
     ofstream aof;

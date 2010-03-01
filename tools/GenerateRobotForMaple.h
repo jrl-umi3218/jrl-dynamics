@@ -114,6 +114,8 @@ namespace dynamicsJRLJapan
 					   vector4d ContactPoints[4],
 					   unsigned int &gindex);
 
+      void ExtractEulerAngles(matrix3d &aRotationMatrix,
+			      vector3d &EulerAngles);
       /*! @} */
 
       void GenerateMapleScript(std::string &RobotName);
