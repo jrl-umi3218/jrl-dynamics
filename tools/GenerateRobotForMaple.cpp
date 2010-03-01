@@ -204,10 +204,17 @@ namespace dynamicsJRLJapan {
   {
     /* Generate file */
     os << "ref_"<<gindex << " := "<< indexparent << ":" << endl;
-    os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]+" 
-       << EulerAngles(0) << " :"  << endl;
-    os << "Ry_"<< gindex << " := " << EulerAngles(1) << ":" << endl;
-    os << "Rz_"<< gindex << " := " << EulerAngles(2) << ":" << endl;
+    os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]";
+    if (fabs(EulerAngles(0))>=1e-8)
+      {
+	if (EulerAngles(0)>0.0)
+	  os << "+"  << EulerAngles(0);
+	else
+	  os << EulerAngles(0) ;
+      }
+    os <<  " :"  << endl;
+    os << "Ry_"<< gindex << " := " << FilterPrecision(EulerAngles(1)) << ":" << endl;
+    os << "Rz_"<< gindex << " := " << FilterPrecision(EulerAngles(2)) << ":" << endl;
     
     os << "Tx_"<< gindex << " := " 
        << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)) 
@@ -237,26 +244,46 @@ namespace dynamicsJRLJapan {
     
     if (fabs(fabs(r31)-1.0)>1e-8)
       {
+	double Y1 = -asin(r31);
+	double Y2 = M_PI - Y1;
+	Y2 = fmod(Y2,2*M_PI);
+	double c0_1 = cos(Y1);
+	double c0_2 = cos(Y2);
+	
+	double X1 = atan2(r32/c0_1,r33/c0_1);
+	double X2 = atan2(r32/c0_2,r33/c0_2);
 
-	EulerAngles(1) = -asin(r31);
-	double c0 = cos(EulerAngles(0));
-	EulerAngles(0) = atan2(r32/c0,r33/c0);
+	double c0;
+	if (fabs(X1)<fabs(X2))
+	  {
+	    EulerAngles(1) = Y1;
+	    EulerAngles(0) = X1;
+	    c0 = c0_1;
+	  }
+	else 
+	  {
+	    EulerAngles(1) = Y2;
+	    EulerAngles(0) = X2;
+	    c0 = c0_2;
+	  }
+	  
 	EulerAngles(2) = atan2(r21/c0,r11/c0);
 	
       }
     else
       {
-	EulerAngles(2) = 0.0;
 	double d = atan2(r12,r13);
 	if (fabs(r31+1.0)<1e-8)
 	  {
 	    EulerAngles(1) = M_PI/2;
+	    EulerAngles(2) = -d;
 	    EulerAngles(0) = EulerAngles(2) + d;
 	  }
 	else
 	  {
 	    EulerAngles(1) = -M_PI/2;
-	    EulerAngles(0) = EulerAngles(2) + d;
+	    EulerAngles(2) = d;
+	    EulerAngles(0) = -EulerAngles(2) + d;
 	  }
       }
   }
