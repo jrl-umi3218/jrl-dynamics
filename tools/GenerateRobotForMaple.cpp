@@ -317,7 +317,7 @@ namespace dynamicsJRLJapan {
   {
 
     CjrlBody *aBody = aJoint->linkedBody();
-    os << "# Body " << gindex<< " Rank:" << aJoint->rankInConfiguration() << endl;
+    os << "# Body " << gindex<< " Rank:" << aJoint->rankInConfiguration()-5 << endl;
     os << "m_" << gindex << " := "<<  aBody->mass() << ":"<<endl;
     
     vector3d aCom=aBody->localCenterOfMass();
@@ -476,7 +476,7 @@ namespace dynamicsJRLJapan {
     os << "NCONT := 8:" <<endl << endl;
    
     os << "# Number of tags" << endl;
-    os << "NTAG := 8:" << endl <<  endl;
+    os << "NTAG := 11:" << endl <<  endl;
 
     unsigned int gindex = 1;
 
@@ -492,11 +492,14 @@ namespace dynamicsJRLJapan {
     GenerateContactPointsForOneFoot(os, aHDR,
 				    1, ContactPoints,gindex);
 
+    
+    GenerateSupplementaryTags(os,aHDR,gindex);
   }
 
-  void Tools::GenerateDummyTag(unsigned int gindex,
-			       std::string &JointName,
-			       unsigned int JointRank)
+  void Tools::GenerateRobotForMaple::GenerateDummyTag(std::ostream &os,
+						      unsigned int gindex,
+						      std::string &JointName,
+						      unsigned int JointRank)
   {
     os << "# Tag "<< gindex << " : " << JointName << endl;
     os << "reftag_" << gindex << " := " << JointRank << ":" << endl;
@@ -504,9 +507,9 @@ namespace dynamicsJRLJapan {
     
   }
 
-  void Tools::GenerateSupplementaryTags(std::ostream &os,
-					CjrlHumanoidDynamicRobot *aHDR,
-					unsigned int &gindex)
+  void Tools::GenerateRobotForMaple::GenerateSupplementaryTags(std::ostream &os,
+							       CjrlHumanoidDynamicRobot *aHDR,
+							       unsigned int &gindex)
   {
     
     string JointName;
@@ -516,19 +519,19 @@ namespace dynamicsJRLJapan {
     CjrlJoint *Joint = aHDR->gazeJoint();
     JointRank = Joint->rankInConfiguration();
     JointName = "Head";
-    GenerateDummyTag(gindex++,JointName,JointRank);
+    GenerateDummyTag(os,gindex++,JointName,JointRank);
 
     /*! Tag for the right wrist */
     Joint = aHDR->rightWrist();
-    JointRank = Joint->rankInConfiguration();
+    JointRank = Joint->rankInConfiguration()-4;
     JointName = "Right Wrist";
-    GenerateDummyTag(gindex++,JointName,JointRank);
+    GenerateDummyTag(os,gindex++,JointName,JointRank);
 
     /*! Tag for the left wrist */
     Joint = aHDR->leftWrist();
-    JointRank = Joint->rankInConfiguration();
+    JointRank = Joint->rankInConfiguration()-4;
     JointName = "Left Wrist";
-    GenerateDummyTag(gindex++,JointName,JointRank);
+    GenerateDummyTag(os,gindex++,JointName,JointRank);
     
   }
   

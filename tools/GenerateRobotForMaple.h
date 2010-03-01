@@ -117,6 +117,15 @@ namespace dynamicsJRLJapan
       void ExtractEulerAngles(matrix3d &aRotationMatrix,
 			      vector3d &EulerAngles);
       /*! @} */
+      
+      void GenerateDummyTag(std::ostream &os,
+			    unsigned int gindex,
+			    std::string &JointName,
+			    unsigned int JointRank);
+
+      void GenerateSupplementaryTags(std::ostream &os,
+				     CjrlHumanoidDynamicRobot *aHDR,
+				     unsigned int &gindex);
 
       void GenerateMapleScript(std::string &RobotName);
 
