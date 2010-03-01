@@ -115,6 +115,9 @@ namespace dynamicsJRLJapan
 					   unsigned int &gindex);
 
       /*! @} */
+
+      void GenerateMapleScript(std::string &RobotName);
+
       void GenerateGPLv2License(std::ostream &os);
       
       void GenerateHeader(std::ostream &os,

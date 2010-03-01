@@ -82,6 +82,7 @@ namespace dynamicsJRLJapan {
     GenerateKinematicData(RobotName,aHDR);
     GenerateDynamicData(RobotName,aHDR);
     GenerateContactData(RobotName,aHDR);
+    GenerateMapleScript(RobotName);
   }
 
 
@@ -464,6 +465,22 @@ namespace dynamicsJRLJapan {
     GenerateContactPointsForOneFoot(os, aHDR,
 				    1, ContactPoints,gindex);
 
+  }
+
+  void Tools::GenerateRobotForMaple::GenerateMapleScript(std::string &RobotName)
+  {
+    ofstream aof;
+    string FileName = RobotName + ".shmaple";
+    aof.open((char *)FileName.c_str(),ofstream::out);
+
+    aof << "#!/usr/bin/env maple"<< endl << endl;
+    aof << "read(\"" << RobotName << "KinematicData.maple\");" << endl;
+    aof << "read(\"" << RobotName << "DynamicData.maple\");" << endl;
+    aof << "read(\"" << RobotName << "AdditionalData.maple\");" << endl;
+    aof << "read(\"ModelGeneration.maple\");" << endl;
+    aof << "GenerateModel();" << endl;
+    
+    aof.close();
   }
 }
 
