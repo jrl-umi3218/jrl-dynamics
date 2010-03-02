@@ -16,8 +16,6 @@
 /*! Includes of the framework */
 #include "GenerateRobotForMaple.h"
 
-#define ODEBUG3(x) \
-  cout << x << endl;
 
 using namespace std;
 
@@ -242,7 +240,6 @@ namespace dynamicsJRLJapan {
     double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
     double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
     
-    cout << __FUNCTION__ << "aRotationMatrix:" << aRotationMatrix << endl;
 
     if (fabs(fabs(r31)-1.0)>1e-8)
       {
@@ -329,13 +326,7 @@ namespace dynamicsJRLJapan {
 	  MAL_S3x3_MATRIX_ACCESS_I_J(aRotation,i,j) = 
 	    MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,i,j);
       }
-    cout << "=========================================" << endl;
     ExtractEulerAngles(aRotation,EulerAngles);
-    cout << "Transformation: " << FinalTransformation << endl;
-    cout << gindex << " EulerAngles:" << EulerAngles(0) << " " 
-	 << EulerAngles(1) << " " 
-	 << EulerAngles(2) << endl;
-    cout << "=========================================" << endl;
     GenerateJointFilePart(aJoint, os, indexparent,gindex,
 			  EulerAngles,FinalTransformation);
     // Call the sons.
