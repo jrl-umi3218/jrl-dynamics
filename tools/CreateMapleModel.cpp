@@ -57,12 +57,7 @@ void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
 	}
       aif.close();
     }
-  
-  for(unsigned int i=0;i<NbOfDofs;i++)
-    {
-      cout << aCurrentConf[i] << endl;
-    }
-    
+      
   aHDR->currentConfiguration(aCurrentConf);
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentVel,0.0);

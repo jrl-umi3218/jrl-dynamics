@@ -43,7 +43,8 @@ namespace dynamicsJRLJapan
 
       /*! \brief Set path to the model files. */
       void SetPathToModelFiles(std::string &Path);
-      
+
+    private:      
       /*! \brief Generate Kinematic Data. */
       void GenerateKinematicData(std::string &RobotName,
 				 CjrlHumanoidDynamicRobot *aHDR);
@@ -52,27 +53,82 @@ namespace dynamicsJRLJapan
       void GenerateDynamicData(std::string &RobotName,
 			       CjrlHumanoidDynamicRobot *aHDR);
 
-    private:
+      /*! \brief Generate Dynamic Data. */
+      void GenerateContactData(std::string &RobotName,
+			       CjrlHumanoidDynamicRobot *aHDR);
+
 
       std::string m_PathToModelFiles;
-      
+
+      /*! \name Part related to the dynamic information generation
+	@{
+      */
+      /*! \brief Main entry point */
+      void GenerateBodies(std::ostream &os,
+			  CjrlHumanoidDynamicRobot *aHDR);
+
+      /*! \brief Generate dynamic information for one body */
       void GenerateBody(CjrlJoint *aJoint, 
 			std::ostream &os,
 			std::string & shifttab,
 			unsigned int &gindex);
 
+      /*! @} */
+
+      /*! /name Part related to the kinematic information generation
+	@{
+       */
+      /*! \brief Main entry point 
+       */
       void GenerateJoints(std::ostream &os,
 			  std::string shifttab,
 			  CjrlHumanoidDynamicRobot *aHDR);
       
+      /*! \brief Compute and generate information for one joint */
       void GenerateJoint(CjrlJoint *aJoint, 
 			 std::ostream &os,
 			 std::string shifttab,
 			 unsigned int &gindex);
+
+      /*! \brief Generate file for one joint */
+      void GenerateJointFilePart(CjrlJoint *aJoint, 
+				 std::ostream &os,
+				 unsigned &indexparent, unsigned int &gindex,
+				 vector3d &aRealAxis,
+				 matrix4d &aTransformation);
+      /*! @} */
+
+      /*! \name Part related to the contact point information 
+	@{
+       */
+      void GenerateContactPointFile(std::ostream &os,
+				    CjrlHumanoidDynamicRobot *aHDR);
       
-      void GenerateBodies(std::ostream &os,
-			  CjrlHumanoidDynamicRobot *aHDR);
+      void ComputeContactPointsForOneFoot(CjrlHumanoidDynamicRobot *aHDR,
+					  int LeftOrRight,
+					  vector4d ContactPoints[4]);
+
+      void GenerateContactPointsForOneFoot(std::ostream &os,
+					   CjrlHumanoidDynamicRobot *aHDR,
+					   int LeftOrRight,
+					   vector4d ContactPoints[4],
+					   unsigned int &gindex);
+
+      void ExtractEulerAngles(matrix3d &aRotationMatrix,
+			      vector3d &EulerAngles);
+      /*! @} */
       
+      void GenerateDummyTag(std::ostream &os,
+			    unsigned int gindex,
+			    std::string &JointName,
+			    unsigned int JointRank);
+
+      void GenerateSupplementaryTags(std::ostream &os,
+				     CjrlHumanoidDynamicRobot *aHDR,
+				     unsigned int &gindex);
+
+      void GenerateMapleScript(std::string &RobotName);
+
       void GenerateGPLv2License(std::ostream &os);
       
       void GenerateHeader(std::ostream &os,
