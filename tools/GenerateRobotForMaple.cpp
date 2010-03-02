@@ -176,11 +176,11 @@ namespace dynamicsJRLJapan {
     os << "# Frame "<< gindex << endl;
     os << "ref_"<<gindex << " := "<< gindex-1 << ":"<< endl;
     os << "Rx_"<< gindex << " := q["<< IndexBase+3<< "]:" << endl;
-    os << "Ry_"<< gindex << " :=-q["<< IndexBase+5<< "]:" << endl;
-    os << "Rz_"<< gindex << " := q["<< IndexBase+4<< "]:" << endl;
+    os << "Ry_"<< gindex << " := q["<< IndexBase+4<< "]:" << endl;
+    os << "Rz_"<< gindex << " := q["<< IndexBase+5<< "]:" << endl;
     os << "Tx_"<< gindex << " := q["<< IndexBase<< "]:" << endl;
-    os << "Ty_"<< gindex << " :=-q["<< IndexBase+2<< "]:" << endl;
-    os << "Tz_"<< gindex << " := q["<< IndexBase+1<< "]:" << endl << endl;
+    os << "Ty_"<< gindex << " := q["<< IndexBase+1<< "]:" << endl;
+    os << "Tz_"<< gindex << " := q["<< IndexBase+2<< "]:" << endl << endl;
     
     gindex++;
     for(unsigned int i=0;i<RootJoint->countChildJoints();i++)
@@ -242,11 +242,14 @@ namespace dynamicsJRLJapan {
     double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
     double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
     
+    cout << __FUNCTION__ << "aRotationMatrix:" << aRotationMatrix << endl;
+
     if (fabs(fabs(r31)-1.0)>1e-8)
       {
+
 	double Y1 = -asin(r31);
 	double Y2 = M_PI - Y1;
-	Y2 = fmod(Y2,2*M_PI);
+	Y2 = fmod(Y2,M_PI);
 	double c0_1 = cos(Y1);
 	double c0_2 = cos(Y2);
 	
@@ -272,18 +275,18 @@ namespace dynamicsJRLJapan {
       }
     else
       {
+	EulerAngles(2) = 0;
 	double d = atan2(r12,r13);
+	d = fmod(d,M_PI);
 	if (fabs(r31+1.0)<1e-8)
 	  {
 	    EulerAngles(1) = M_PI/2;
-	    EulerAngles(2) = -d;
-	    EulerAngles(0) = EulerAngles(2) + d;
+	    EulerAngles(0) = d;
 	  }
 	else
 	  {
 	    EulerAngles(1) = -M_PI/2;
-	    EulerAngles(2) = d;
-	    EulerAngles(0) = -EulerAngles(2) + d;
+	    EulerAngles(0) = -d;
 	  }
       }
   }
@@ -297,6 +300,7 @@ namespace dynamicsJRLJapan {
     os << "# Frame "<< gindex << endl;
     
     MAL_S4x4_MATRIX(aTransformation,double);
+    MAL_S4x4_MATRIX(FinalTransformation,double);
     aTransformation = aJoint->currentTransformation();
     unsigned int indexparent=0;
 
@@ -310,8 +314,10 @@ namespace dynamicsJRLJapan {
 	MAL_S4x4_MATRIX(invParentTransformation,double);
 	MAL_S4x4_INVERSE(parentTransformation,invParentTransformation,double);
 	indexparent = m_Indexes[parentJoint];
-	aTransformation = MAL_S4x4_RET_A_by_B(invParentTransformation,aTransformation);
+	MAL_S4x4_C_eq_A_by_B(FinalTransformation,invParentTransformation,aTransformation);
       }
+    else
+      FinalTransformation = aTransformation;
 
     /* Project rotation axis */
 
@@ -321,14 +327,17 @@ namespace dynamicsJRLJapan {
       {
 	for(unsigned int j=0;j<3;j++)
 	  MAL_S3x3_MATRIX_ACCESS_I_J(aRotation,i,j) = 
-	    MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j);
+	    MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,i,j);
       }
+    cout << "=========================================" << endl;
     ExtractEulerAngles(aRotation,EulerAngles);
+    cout << "Transformation: " << FinalTransformation << endl;
     cout << gindex << " EulerAngles:" << EulerAngles(0) << " " 
 	 << EulerAngles(1) << " " 
 	 << EulerAngles(2) << endl;
+    cout << "=========================================" << endl;
     GenerateJointFilePart(aJoint, os, indexparent,gindex,
-			  EulerAngles,aTransformation);
+			  EulerAngles,FinalTransformation);
     // Call the sons.
     for(unsigned int i=0;i<aJoint->countChildJoints();i++)
       {
