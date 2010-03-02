@@ -13,6 +13,17 @@
 #include "GenerateRobotForAMELIF.h"
 
 using namespace std;
+
+namespace {
+	double sign(double val)
+	{
+		if(val < 0.0)
+			return -1.0;
+
+		return 1.0;
+	}
+}
+
 namespace dynamicsJRLJapan {
 
   GenerateRobotForAMELIF::GenerateRobotForAMELIF()
@@ -28,39 +39,41 @@ namespace dynamicsJRLJapan {
     os << "<!DOCTYPE MultiBody SYSTEM \"./AMELIFMultiBody.xsd\">" << endl;
   }
 
-  void GenerateRobotForAMELIF::ComputeEulerAngles(matrix4d &aTransformation,
-						   vector3d &EulerAngles)
+  void GenerateRobotForAMELIF::ComputeEulerAngles(const matrix4d &R,
+	  vector3d &u)
   {
-    EulerAngles(0)= 0.0;
-    EulerAngles(1)= 0.0;
-    EulerAngles(2)= 0.0;
-    
-    EulerAngles(1) = asin(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,0));
-    double r = cos(EulerAngles(1));
+	  double nz_ay = static_cast<double>(R[5] - R[7]);
+	  double ax_sz = static_cast<double>(R[6] - R[2]);
+	  double sy_nx = static_cast<double>(R[1] - R[3]);
 
-    if (fabs(r)<1e-8)
-      {
-	EulerAngles(2) = atan2(-MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,1),
-			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,2));
-      }
-    else
-      {
-	EulerAngles(0) = atan2(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,1)/r,
-			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,2,2)/r);	
+	  double ctheta = 0.5 * (static_cast<double>(R[0] + R[4] + R[8]) - 1.0);
+	  double stheta = 0.5 * sqrt(nz_ay*nz_ay + ax_sz*ax_sz + sy_nx*sy_nx);
+	  double theta  = atan2(stheta, ctheta);
 
-	EulerAngles(2) = atan2(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,0)/r,
-			       MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,1)/r);	
-      }
+	  double denom = 1.0 - ctheta;
+	  if(denom > 1e-24) {
+		  u[0] = -sign(nz_ay) * sqrt(abs((static_cast<double>(R[0]) - ctheta)	/ denom));
+		  u[1] = -sign(ax_sz) * sqrt(abs((static_cast<double>(R[4]) - ctheta)	/ denom));
+		  u[2] = -sign(sy_nx) * sqrt(abs((static_cast<double>(R[8]) - ctheta) / denom));
+	  }
+	  else {
+		  theta = 0.0;
+		  u[0] = 1.0;
+		  u[1] = 0.0;
+		  u[2] = 0.0;
+	  }
+	  u *= theta;
   }
+
 
   void GenerateRobotForAMELIF::StaticParameters(CjrlJoint *aJoint,
 						ostream &os,
 						string &shifttab)
   {
-    matrix4d LocalTransformation;
+    matrix4d FromCurrentToParent(0);
     
-    if (aJoint->parentJoint()!=0)
-      LocalTransformation = aJoint->initialPosition();
+    if (aJoint->parentJoint()==0)
+      FromCurrentToParent = aJoint->initialPosition();
     else
       {
 	matrix4d FromParentToWorld = aJoint->parentJoint()->initialPosition();
@@ -68,28 +81,37 @@ namespace dynamicsJRLJapan {
 	matrix4d FromWorldToParent;
 	MAL_S4x4_INVERSE(FromParentToWorld,FromWorldToParent,double);
 	
-	MAL_S4x4_C_eq_A_by_B(LocalTransformation,FromWorldToParent,FromCurrentToWorld);
+	MAL_S4x4_C_eq_A_by_B(FromCurrentToParent,FromCurrentToWorld,FromWorldToParent);
       }
-    
     vector3d EulerAngles;
-    ComputeEulerAngles(LocalTransformation,
-		       EulerAngles);
+    ComputeEulerAngles(FromCurrentToParent, EulerAngles);
 
-    os << "<StaticParameters>"    
-       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,0,3) << " "
-       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,1,3) << " "
-       << MAL_S4x4_MATRIX_ACCESS_I_J(LocalTransformation,2,3) << " "
-       << EulerAngles(0) << " " 
-       << EulerAngles(1) << " " 
-       << EulerAngles(2)
-       << "</StaticParameters>";
-    
+    os << shifttab
+       << "  <StaticParameters> "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,0,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,1,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,2,3) << " "
+       << EulerAngles(0) * 180.0/M_PI << " " 
+       << EulerAngles(1) * 180.0/M_PI << " " 
+       << EulerAngles(2) * 180.0/M_PI
+       << "</StaticParameters>"
+	   << std::endl;
   }
   
   void GenerateRobotForAMELIF::GenerateJoint(CjrlJoint *aJoint, 
 					     ostream &os,
 					     string shifttab, unsigned int &gindex)
   {
+	os.precision(15);
+	if (aJoint->rankInConfiguration() == 0)
+	{
+		gindex++;
+		// Call the sons.
+		for(unsigned int i=0;i<aJoint->countChildJoints();i++)
+			GenerateJoint(aJoint->childJoint(i),os,shifttab,gindex);
+		return;
+	}
+
     // Joint name and type.
     os << shifttab << "<Joint id=\""      
        << aJoint->rankInConfiguration() ;
@@ -99,28 +121,28 @@ namespace dynamicsJRLJapan {
       os << "\" type=\"revolute\"";
     
     os << " axis=\"x\" " ;
-    if (aJoint->rankInConfiguration() ==0)
-      os << "innerID=\"0";
-    else if (aJoint->parentJoint()!=0)
-      os << "innerID=\""<<aJoint->parentJoint()->rankInConfiguration();
+
+    if (aJoint->parentJoint()!=0)
+      os << "innerId=\""<<aJoint->parentJoint()->rankInConfiguration();
     
-    os << "\" outerID=\""<<aJoint->rankInConfiguration()+1
+    os << "\" outerId=\""<<aJoint->rankInConfiguration()
        << "\"> " << endl;
 
-    // Static parameters
     // Label
     os << shifttab << "  <Label>JOINT_" 
        << aJoint->rankInConfiguration() 
        << "  </Label>" << endl;
   
-
+    // Static parameters
+    StaticParameters(aJoint, os, shifttab);
+  
     // Position min and max.
     os << shifttab << "  <PositionMin>"
-       << aJoint->lowerBound(0) 
+       << (aJoint->lowerBound(0)  * 180.0/M_PI)
        <<"</PositionMin>" << endl;
   
     os << shifttab << "  <PositionMax>"
-       << aJoint->upperBound(0)
+       << (aJoint->upperBound(0) * 180.0/M_PI)
        << "</PositionMax>" << endl;
 
     // Close the joint description
@@ -141,6 +163,7 @@ namespace dynamicsJRLJapan {
 					    string shifttab,
 					    unsigned int &gindex)
   {
+	os.precision(15);
     CjrlBody *aBody= aJoint->linkedBody();
     if (aBody==0)
       return;
@@ -153,6 +176,10 @@ namespace dynamicsJRLJapan {
     os << shifttab << "  <Label>LINK_"  
        << aJoint->rankInConfiguration()
        << "</Label>" << endl;
+
+	// Mass
+	const double mass = aBody->mass();
+    os << shifttab << "  <Mass>"<< mass <<"</Mass>" << endl;
 
     // CoM
     const  vector3d lcom = aBody->localCenterOfMass();
@@ -230,7 +257,7 @@ namespace dynamicsJRLJapan {
     string shifttab;
     aof << "<MultiBody>" << endl;
     shifttab = "  ";
-    aof << shifttab << "<Root id=\"0\">" << endl;
+    aof << shifttab << "<Root id=\"0\" />" << endl;
     GenerateBodies(aof, shifttab);
     GenerateJoints(aof, shifttab);
     aof << "</MultiBody>" << endl;
