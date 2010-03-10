@@ -73,7 +73,10 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
   tmp = MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.w);
   tmp = MAL_S3x3_RET_A_by_B(lI,tmp);
-  MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.w,tmp);
+
+  vector3d lw;
+  MAL_S3x3_C_eq_A_by_B(lw,currentBodyR,CurrentBody.w);
+  MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,lw,tmp);
 
   CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm ;
 
