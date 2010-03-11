@@ -207,7 +207,7 @@ void JointPrivate::NormalizeRotationFromAxis(vector4d &Axis, matrix3d &Normalize
   double valueSmallestComponent = fabs(v1[0]);
   
   if (fabs(v1[1]) < fabs(v1[smallestComponent])) {
-    smallestComponent = 1.0;
+    smallestComponent = 1;
     valueSmallestComponent = fabs(v1[1]);
   }
   
