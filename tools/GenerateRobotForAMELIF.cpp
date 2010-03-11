@@ -11,16 +11,77 @@
 
 */
 #include "GenerateRobotForAMELIF.h"
+#include <cmath>
 
 using namespace std;
 
 namespace {
-	double sign(double val)
+	double FilterPrecision(double x)
 	{
-		if(val < 0.0)
-			return -1.0;
+		x *= 1e6;
+		x =floor(x+0.5);
+		x *= 1e-6;
+		return x;
+	}
 
-		return 1.0;
+	void ComputeEulerAngles(const matrix3d &aRotationMatrix, vector3d &EulerAngles)
+	{
+		double r11 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,0);
+		double r12 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,1);
+		double r13 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,2);
+
+		double r21 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,1,0);
+
+		double r31 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,0);
+		double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
+		double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
+
+
+		if (fabs(fabs(r31)-1.0)>1e-8)
+		{
+
+			double Y1 = -asin(r31);
+			double Y2 = M_PI - Y1;
+			Y2 = fmod(Y2,M_PI);
+			double c0_1 = cos(Y1);
+			double c0_2 = cos(Y2);
+
+			double X1 = atan2(r32/c0_1,r33/c0_1);
+			double X2 = atan2(r32/c0_2,r33/c0_2);
+
+			double c0;
+			if (fabs(X1)<fabs(X2))
+			{
+				EulerAngles(1) = Y1;
+				EulerAngles(0) = X1;
+				c0 = c0_1;
+			}
+			else 
+			{
+				EulerAngles(1) = Y2;
+				EulerAngles(0) = X2;
+				c0 = c0_2;
+			}
+
+			EulerAngles(2) = atan2(r21/c0,r11/c0);
+
+		}
+		else
+		{
+			EulerAngles(2) = 0;
+			double d = atan2(r12,r13);
+			d = fmod(d,M_PI);
+			if (fabs(r31+1.0)<1e-8)
+			{
+				EulerAngles(1) = M_PI/2;
+				EulerAngles(0) = d;
+			}
+			else
+			{
+				EulerAngles(1) = -M_PI/2;
+				EulerAngles(0) = -d;
+			}
+		}
 	}
 }
 
@@ -39,61 +100,50 @@ namespace dynamicsJRLJapan {
     os << "<!DOCTYPE MultiBody SYSTEM \"./AMELIFMultiBody.xsd\">" << endl;
   }
 
-  void GenerateRobotForAMELIF::ComputeEulerAngles(const matrix4d &R,
-	  vector3d &u)
-  {
-	  double nz_ay = static_cast<double>(R[5] - R[7]);
-	  double ax_sz = static_cast<double>(R[6] - R[2]);
-	  double sy_nx = static_cast<double>(R[1] - R[3]);
-
-	  double ctheta = 0.5 * (static_cast<double>(R[0] + R[4] + R[8]) - 1.0);
-	  double stheta = 0.5 * sqrt(nz_ay*nz_ay + ax_sz*ax_sz + sy_nx*sy_nx);
-	  double theta  = atan2(stheta, ctheta);
-
-	  double denom = 1.0 - ctheta;
-	  if(denom > 1e-24) {
-		  u[0] = -sign(nz_ay) * sqrt(abs((static_cast<double>(R[0]) - ctheta)	/ denom));
-		  u[1] = -sign(ax_sz) * sqrt(abs((static_cast<double>(R[4]) - ctheta)	/ denom));
-		  u[2] = -sign(sy_nx) * sqrt(abs((static_cast<double>(R[8]) - ctheta) / denom));
-	  }
-	  else {
-		  theta = 0.0;
-		  u[0] = 1.0;
-		  u[1] = 0.0;
-		  u[2] = 0.0;
-	  }
-	  u *= theta;
-  }
-
-
   void GenerateRobotForAMELIF::StaticParameters(CjrlJoint *aJoint,
 						ostream &os,
 						string &shifttab)
   {
-    matrix4d FromCurrentToParent(0);
-    
-    if (aJoint->parentJoint()==0)
-      FromCurrentToParent = aJoint->initialPosition();
-    else
+    MAL_S4x4_MATRIX(aTransformation,double);
+    MAL_S4x4_MATRIX(FinalTransformation,double);
+    aTransformation = aJoint->currentTransformation();
+    unsigned int indexparent=0;
+
+    /* Compute transformation in local coordinates */
+    CjrlJoint *parentJoint = aJoint->parentJoint();
+    if (parentJoint!=0)
       {
-	matrix4d FromParentToWorld = aJoint->parentJoint()->initialPosition();
-	matrix4d FromCurrentToWorld = aJoint->initialPosition();	
-	matrix4d FromWorldToParent;
-	MAL_S4x4_INVERSE(FromParentToWorld,FromWorldToParent,double);
-	
-	MAL_S4x4_C_eq_A_by_B(FromCurrentToParent,FromCurrentToWorld,FromWorldToParent);
+	MAL_S4x4_MATRIX(parentTransformation,double);
+	parentTransformation = parentJoint->currentTransformation();
+
+	MAL_S4x4_MATRIX(invParentTransformation,double);
+	MAL_S4x4_INVERSE(parentTransformation,invParentTransformation,double);
+	MAL_S4x4_C_eq_A_by_B(FinalTransformation,invParentTransformation,aTransformation);
       }
-    vector3d EulerAngles;
-    ComputeEulerAngles(FromCurrentToParent, EulerAngles);
+    else
+      FinalTransformation = aTransformation;
+
+    /* Project rotation axis */
+
+    matrix3d aRotation;
+    vector3d anAxis, EulerAngles;
+    for(unsigned int i=0;i<3;i++)
+      {
+	for(unsigned int j=0;j<3;j++)
+	  MAL_S3x3_MATRIX_ACCESS_I_J(aRotation,i,j) = 
+	    MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,i,j);
+      }
+
+    ComputeEulerAngles(aRotation, EulerAngles);
 
     os << shifttab
        << "  <StaticParameters> "
-       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,0,3) << " "
-       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,1,3) << " "
-       << MAL_S4x4_MATRIX_ACCESS_I_J(FromCurrentToParent,2,3) << " "
-       << EulerAngles(0) * 180.0/M_PI << " " 
-       << EulerAngles(1) * 180.0/M_PI << " " 
-       << EulerAngles(2) * 180.0/M_PI
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,0,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,1,3) << " "
+       << MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,2,3) << " "
+       << FilterPrecision(EulerAngles(0) * 180.0/M_PI) << " " 
+       << FilterPrecision(EulerAngles(1) * 180.0/M_PI) << " " 
+       << FilterPrecision(EulerAngles(2) * 180.0/M_PI)
        << "</StaticParameters>"
 	   << std::endl;
   }
@@ -138,11 +188,11 @@ namespace dynamicsJRLJapan {
   
     // Position min and max.
     os << shifttab << "  <PositionMin>"
-       << (aJoint->lowerBound(0)  * 180.0/M_PI)
+       << FilterPrecision(aJoint->lowerBound(0)  * 180.0/M_PI)
        <<"</PositionMin>" << endl;
   
     os << shifttab << "  <PositionMax>"
-       << (aJoint->upperBound(0) * 180.0/M_PI)
+       << FilterPrecision(aJoint->upperBound(0) * 180.0/M_PI)
        << "</PositionMax>" << endl;
 
     // Close the joint description

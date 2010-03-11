@@ -71,5 +71,7 @@ int main(int argc, char *argv[])
 					 aSpecificitiesFileName,
 					 aVectorOfURLs);
 
+  aHDR->computeForwardKinematics();
+
   ExportToAMELIF(aHDR,aVectorOfURLs);
 }
