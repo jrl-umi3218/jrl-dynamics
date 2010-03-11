@@ -214,10 +214,8 @@ namespace dynamicsJRLJapan {
 
     aof << "#VRML V2.0 utf8" << endl;
     aof << endl;
-    aof << "Separator {" << endl;
-    string shifttab="  ";
+    string shifttab="";
     GenerateBodies(aof,shifttab);
-    aof << "}" << endl;
     aof.close();
   }
 
@@ -226,13 +224,15 @@ namespace dynamicsJRLJapan {
 						    string shifttab)
   {
     CjrlJoint *RootJoint = m_HDR->rootJoint();
-    string lshifttab = shifttab+"  ";
+    string lshifttab  = shifttab+"  ";
+    string lshifttab2 = lshifttab+"  ";
     unsigned int gindex=0;
 
     GenerateJoint(RootJoint,os,shifttab,gindex);
-    os << shifttab << "children [" << endl;
-    GenerateBody(RootJoint,os, lshifttab,gindex);
-    os << shifttab << "]" << endl;
+    os << lshifttab << "children [" << endl;
+    GenerateBody(RootJoint,os, lshifttab2,gindex);
+    os << lshifttab << "]" << endl;
+    os << shifttab << "}" << endl;  
 
   }
   
