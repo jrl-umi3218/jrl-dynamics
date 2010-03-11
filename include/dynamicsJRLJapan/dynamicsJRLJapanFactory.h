@@ -64,14 +64,16 @@ namespace dynamicsJRLJapan
   {
   private:
     matrix3d m_RotationForDisplay;
-    std::string m_URL;
+	std::vector < std::string > m_URLs;
   public:
-    
+    BodyGeometricalData();
+
     const matrix3d & getRotationForDisplay();
     void setRotationForDisplay(const matrix3d &RotationForDisplay);
 
-    const std::string & getURL();
-    void setURL(const std::string &URLtoVRML);
+    const std::vector< std::string > & getURLs();
+    void resetURL( );
+    void addURL(const std::string &URLtoVRML);
   };
   
   /*! Populate a CjrlHumanoidDynamicRobot instance

@@ -348,12 +348,15 @@ namespace dynamicsJRLJapan {
     GenerateJoint(aJoint,os,shifttab,gindex);
 
         // Geometric file.
-    os << shifttab << "  children [" << endl
-       << shifttab << "    Inline {"<< endl
+    os << shifttab << "  children [" << endl;
+	const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
+	for(unsigned i=0; i < urls.size(); ++i)
+	{
+       os << shifttab << "    Inline {"<< endl
        << shifttab << "      url \"" 
-       << m_AccessToData[gindex].getURL() << "\"" << endl
+       << urls[i] << "\"" << endl
        << shifttab << "    }" << endl;
-    
+	}
       //    CopyGeometricInformation(os,m_AccessToData[gindex]);
     os << shifttab << "  ]"<< endl;;
     os << shifttab << "}" << endl;  

@@ -248,7 +248,9 @@ namespace dynamicsJRLJapan {
     os << "</Inertia>" << endl;
 
     // Geometric file.
-    os << shifttab << "  <File>" << m_AccessToData[gindex].getURL() << "</File>" << endl;
+	const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
+	for(unsigned i=0; i < urls.size(); ++i)
+		os << shifttab << "  <File>" << urls[i] << "</File>" << endl;
 
     gindex++;
     // Close body description.

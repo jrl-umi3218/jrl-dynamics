@@ -84,19 +84,30 @@ namespace dynamicsJRLJapan
     return m_RotationForDisplay;
   }
 
+  BodyGeometricalData::BodyGeometricalData():
+    m_RotationForDisplay(1,0,0, 0,1,0, 0,0,1)
+    , m_URLs(0)
+  {}
+
   void BodyGeometricalData::setRotationForDisplay(const matrix3d & RotationForDisplay)
   {
     m_RotationForDisplay = RotationForDisplay;
   }
 
-  const std::string & BodyGeometricalData::getURL()
+  const std::vector< std::string > & BodyGeometricalData::getURLs()
   {
-    return m_URL;
+    return m_URLs;
   }
 
-  void BodyGeometricalData::setURL(const std::string &URLtoVRML)
+  void BodyGeometricalData::resetURL( )
   {
-    m_URL = URLtoVRML;
+	  m_URLs.clear();
+	  m_URLs.resize(0);
+  }
+
+  void BodyGeometricalData::addURL(const std::string &URLtoVRML)
+  {
+    m_URLs.push_back(URLtoVRML);
   }
 
   int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,

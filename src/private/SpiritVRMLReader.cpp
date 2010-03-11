@@ -460,6 +460,7 @@ namespace dynamicsJRLJapan
 	    }*/
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
+	m_DataForParsing->m_BodyGeometry.resetURL( );
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the JointPrivate: |" << m_DataForParsing->aName<<"|" << endl;
       }
@@ -630,7 +631,7 @@ namespace dynamicsJRLJapan
       {
 	string s(str,end);
 
-	m_DataForParsing->m_BodyGeometry.setURL(s);
+	m_DataForParsing->m_BodyGeometry.addURL(s);
 
 	if (m_Verbose>1)
 	  std::cout << "fBodyInlineUrl:" << s << endl;
