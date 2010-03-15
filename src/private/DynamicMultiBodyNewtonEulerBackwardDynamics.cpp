@@ -1,18 +1,6 @@
-/* @doc Computation of the dynamic aspect for a robot.
-   This class will load the description of a robot from a VRML file
-   following the OpenHRP syntax. Using ForwardVelocity it is then
-   possible specifying the angular velocity and the angular value 
-   to get the absolute position, and absolute velocity of each 
-   body separetly. Heavy rewriting from the original source
-   of Adrien and Jean-Remy. 
- 
-   This implantation is an updated based on a mixture between 
-   the code provided by Jean-Remy and Adrien.
- 
-   Copyright (c) 2005-2006, 
-   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
-   Copyright (c) 2007-2009
-   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro.
+/* @doc Computation of the torques and forces.
+   Copyright (c) 2009-2010
+   @author Olivier Stasse,
    JRL-Japan, CNRS/AIST
  
    All rights reserved.
@@ -43,9 +31,17 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
   MAL_S3x3_MATRIX(,double) aRt;
 
-  MAL_S3x3_MATRIX(,double) currentBodyR;
-  currentBodyR = MAL_S3x3_RET_TRANSPOSE(CurrentBody.R);
+  MAL_S3x3_MATRIX(,double) currentBodyRt;
+  currentBodyRt = MAL_S3x3_RET_TRANSPOSE(CurrentBody.R);
+  
+  /*//MAL_S3x3_MATRIX(,double) currentBodyinitialRt;
+  matrix4d initialTransform  = CurrentBody.joint()->initialPosition();
+  for(unsigned int li=0;li<3;li++)
+    for(unsigned int lj=0;lj<3;lj++)
+      currentBodyRt = MAL_S4x4_MATRIX_ACCESS_I_J(initialTransform,lj,li);
 
+  // currentBodyRt = MAL_S3x3_RET_A_by_B(currentBodyRt,currentBodyinitialRt);
+  */
   MAL_S3_VECTOR(,double) lg;
   lg(0) = 0.0;
   lg(1) = 0.0;
@@ -60,26 +56,31 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
     sndterm, thirdterm, fifthterm,tmp;
   // Do not fourth term because it is the angular acceleration.
 
-  /* Constant part */
+  /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
+     m_i a_{c,i} - m_i g_i
+   */
   tmp = CurrentBody.dv_c - lg;
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,tmp);
+  tmp = MAL_S3x3_RET_A_by_B(currentBodyRt,tmp);
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
 
-  /* 2nd term : -f_i x r_{i,ci} */
+  /* Get the local center of mass */
   vector3d lc = CurrentBody.localCenterOfMass();
 
-
-  /* 5th term : w_i x (I_i w_i)*/
-  MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.w);
-  tmp = MAL_S3x3_RET_A_by_B(lI,tmp);
-
+  /* Torque - 5th term : (R_i w_i )x (I_i R_i w_i)*/
   vector3d lw;
-  MAL_S3x3_C_eq_A_by_B(lw,currentBodyR,CurrentBody.w);
+  MAL_S3x3_C_eq_A_by_B(lw,currentBodyRt,CurrentBody.w);
+  
+  MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
+  tmp = MAL_S3x3_RET_A_by_B(lI,lw);
+  //  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody.w);
+
+
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,lw,tmp);
 
-  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyR,CurrentBody.dw) + fifthterm ;
-
+  /* Torque - 4th term and 5th term 
+  Torque_i = alpha_i +  (R_i w_i )x (I_i R_i w_i) */
+  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyRt,CurrentBody.dw) + fifthterm ;
+  
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
    * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
@@ -104,6 +105,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       DynamicBodyPrivate *Child = m_listOfBodies[IndexChild];
       //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = MAL_S3x3_RET_A_by_B(Child->R_static,Child->Riip1);
+
       //cout << "Riip1: " << aRt << endl;
       // /* Force computation. */
       // R_i_{i+1} f_{i+1}
@@ -142,7 +144,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 	Child=m_listOfBodies[IndexChild];
     }
 
-  //vector3d lc = CurrentBody.w_c;
+  /* 2nd term : -f_i x r_{i,ci} */
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
   CurrentBody.m_Torque = CurrentBody.m_Torque - sndterm;
 
