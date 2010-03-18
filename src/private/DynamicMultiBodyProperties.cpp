@@ -122,6 +122,10 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
     {
       ResetIterationNumber();
     }
+  else 
+  {
+	  std::cout << " Unknown property '" << inProperty << "'" << std::endl;
+  }
   outValue="false";
   return false;
 }
@@ -242,6 +246,10 @@ bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string 
       istringstream iss(inValue);
       iss >> m_TimeStep;
     }
+  else 
+  {
+	  std::cout << " Unknown property '" << inProperty << "'" << std::endl;
+  }
   return false;
 }
 
