@@ -219,15 +219,15 @@ void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
 	aJP->computeLocalAndGlobalPose();
     }
 
-  MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);
-  MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);
-  MAL_VECTOR_RESIZE(m_Acceleration,m_NbDofs);
+  MAL_VECTOR_RESIZE(m_Configuration,m_NbDofs);	MAL_VECTOR_FILL(m_Configuration, 0);
+  MAL_VECTOR_RESIZE(m_Velocity,m_NbDofs);		MAL_VECTOR_FILL(m_Velocity, 0);
+  MAL_VECTOR_RESIZE(m_Acceleration,m_NbDofs);	MAL_VECTOR_FILL(m_Acceleration, 0);
 
-  MAL_MATRIX_RESIZE(m_Forces ,m_NbDofs,3);
-  MAL_MATRIX_RESIZE(m_Torques,m_NbDofs,3);
+  MAL_MATRIX_RESIZE(m_Forces ,m_NbDofs,3);		MAL_MATRIX_FILL(m_Forces, 0);
+  MAL_MATRIX_RESIZE(m_Torques,m_NbDofs,3);		MAL_MATRIX_FILL(m_Torques, 0);
 
-  MAL_VECTOR_RESIZE(m_pastConfiguration,m_NbDofs);
-  MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);
+  MAL_VECTOR_RESIZE(m_pastConfiguration,m_NbDofs);	MAL_VECTOR_FILL(m_pastConfiguration, 0);
+  MAL_VECTOR_RESIZE(m_pastVelocity,m_NbDofs);	MAL_VECTOR_FILL(m_pastVelocity, 0);
 }
 
 void DynMultiBodyPrivate::InitializeFromJointsTree()
