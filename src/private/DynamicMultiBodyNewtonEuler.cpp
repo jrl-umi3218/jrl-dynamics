@@ -193,7 +193,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  currentBody->w  = currentMotherBody->w  + NE_tmp;
 
 	  // In the local frame.
-	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
+	  NE_tmp = currentBody->w_a * currentBody->dq;
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,currentBody->R_static, currentMotherBody->lw);
 
 	  currentBody->lw  = NE_tmp2  + NE_tmp;
