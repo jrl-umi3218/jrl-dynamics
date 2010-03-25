@@ -83,7 +83,7 @@ namespace dynamicsJRLJapan
       - \a dw = angular acceleration (Global reference frame),
       - \a ldw = angular acceleration (Local reference frame),
 
-      - \a w_a = axis for revolute joint in the local reference frame.
+      - \a w_a = axis for revolute joint in the global reference frame.
     */
     vector3d a, b, w_c, p,
       v0,  dv,  
