@@ -59,7 +59,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
      m_i a_{c,i} - m_i g_i
    */
-  tmp = CurrentBody.dv_c - lg;
+  tmp = CurrentBody.ldv_c - lg;
   tmp = MAL_S3x3_RET_A_by_B(currentBodyRt,tmp);
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
 

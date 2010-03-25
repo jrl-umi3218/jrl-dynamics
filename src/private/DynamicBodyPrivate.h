@@ -46,7 +46,6 @@ namespace dynamicsJRLJapan
     /*! Torque vector applied to the body.  */
     vector3d m_Torque;
 
-    vector3d dv_c;
     matrix3d Riip1;
     
     /*! This relationship does make sense only if we are considering the
@@ -75,7 +74,9 @@ namespace dynamicsJRLJapan
       - \a p  = position,
 
       - \a v0 = linear velocity in reference frame,
-      - \a dv = linear acceleration,
+      - \a dv = linear acceleration global frame,
+      - \a ldv = linear acceleration local frame,
+      - \a ldv_c = linear acceleration of center of mass in local frame,
 
       - \a w  = angular velocity (Global reference frame),
       - \a lw = angular velocity (Local reference frame)
@@ -89,7 +90,8 @@ namespace dynamicsJRLJapan
       v0,  dv,  
       w, lw,  
       dw, ldw,
-      w_a;
+      w_a,
+      ldv_c;
 
     /*! Transformation
       (It is redundant, but required to implement CjrlJoint::currentTransformation)
