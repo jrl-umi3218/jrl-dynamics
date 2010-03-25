@@ -223,10 +223,10 @@ int main(int argc, char *argv[])
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
   {
-    string inProperty[4]={"TimeStep","ComputeAcceleration",
-			  "ComputeBackwardDynamics", "ComputeZMP"};
-    string inValue[4]={"0.005","true","true","true"};
-    for(unsigned int i=0;i<4;i++)
+    string inProperty[5]={"TimeStep","ComputeAcceleration",
+			  "ComputeBackwardDynamics", "ComputeZMP","ComputeAccelerationCoM"};
+    string inValue[5]={"0.005","true","true","true","true"};
+    for(unsigned int i=0;i<5;i++)
       aHDR->setProperty(inProperty[i],inValue[i]);
 
   }
