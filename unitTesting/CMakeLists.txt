@@ -32,14 +32,8 @@ MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl")
 
-ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp TestHumanoidDynamicRobotDebugLayale.cpp)
+ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp )
 SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
-	              PROPERTIES
-		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl
-)
-SET_TARGET_PROPERTIES(TestHumanoidDynamicRobotDebugLayale
 	              PROPERTIES
 		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
@@ -54,6 +48,15 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleLinkJointRank.xml
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
 )
+ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
+
+ADD_EXECUTABLE(	TestHumanoidDynamicRobotDebugLayale CommonTools.cpp TestHumanoidDynamicRobotDebugLayale.cpp)
+SET_TARGET_PROPERTIES(TestHumanoidDynamicRobotDebugLayale
+	              PROPERTIES
+		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl
+)
 
 ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl 
@@ -64,7 +67,6 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
 )
 
-ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
