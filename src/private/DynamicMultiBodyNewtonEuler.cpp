@@ -178,7 +178,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 			     currentBody->R_static);
 	ltmp2 = MAL_S3x3_RET_TRANSPOSE(ltmp1);
        	MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
-			     ltmp1, currentBody->a);
+			     ltmp2, currentBody->a);
       }
 
       if (m_ComputeVelocity)
