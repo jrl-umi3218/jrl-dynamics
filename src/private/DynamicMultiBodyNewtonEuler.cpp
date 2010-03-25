@@ -187,14 +187,15 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  // In the global frame.
 	  ODEBUG("dq: "<< currentBody->dq );
-	  NE_tmp = currentBody->a * currentBody->dq;
+	  NE_tmp = currentBody->w_a * currentBody->dq;
 	  //	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
 
 	  currentBody->w  = currentMotherBody->w  + NE_tmp;
 
 	  // In the local frame.
-	  NE_tmp = currentBody->w_a * currentBody->dq;
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,currentBody->R_static, currentMotherBody->lw);
+	  NE_tmp = currentBody->a * currentBody->dq;
+	  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
 
 	  currentBody->lw  = NE_tmp2  + NE_tmp;
 
