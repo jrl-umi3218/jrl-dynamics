@@ -66,19 +66,29 @@ namespace dynamicsJRLJapan
     
 
     /*! Here are the physical parameters
-      (as defined in Kajita's book page 46 figure 2.20):
+      (as defined in Kajita's book page 46 figure 2.20)
+      / addition with M.W. Spong Book. 
       - \a a  = rotation vector,
       - \a b  = translation vector,
       - \a w_c = center of mass in reference frame,
+
       - \a p  = position,
+
       - \a v0 = linear velocity in reference frame,
       - \a dv = linear acceleration,
-      - \a w  = angular velocity,
-      - \a dw = angular acceleration,
+
+      - \a w  = angular velocity (Global reference frame),
+      - \a lw = angular velocity (Local reference frame)
+
+      - \a dw = angular acceleration (Global reference frame),
+      - \a ldw = angular acceleration (Local reference frame),
+
       - \a w_a = axis for revolute joint in the world reference frame.
     */
     vector3d a, b, w_c, p,
-      v0,  dv,  w,  dw,
+      v0,  dv,  
+      w, lw,  
+      dw, ldw,
       w_a;
 
     /*! Transformation

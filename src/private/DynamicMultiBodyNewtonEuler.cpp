@@ -73,7 +73,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int lMother=0;
   unsigned int i,j;
   double NORME_EPSILON=1e-6;
-  DynamicBodyPrivate *aDB;
+  DynamicBodyPrivate *currentBody, *currentMotherBody;
 
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
   m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
@@ -101,12 +101,13 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   do
     {
 
-      aDB = m_listOfBodies[currentNode];
+      currentBody = m_listOfBodies[currentNode];
 
-      norm_w = MAL_S3_VECTOR_NORM(aDB->a);
-      lMother = aDB->getLabelMother();
+      norm_w = MAL_S3_VECTOR_NORM(currentBody->a);
+      lMother = currentBody->getLabelMother();
+      currentMotherBody = m_listOfBodies[lMother];
 
-      ODEBUG("CurrentBody " << m_listOfBodies[currentNode]->getName());
+      ODEBUG("CurrentBody " << currentBody->getName());
 
       // ----------------------------------
       // Rodrigues formula. (p33)
@@ -116,9 +117,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
         }
       else
         {
-	  th = norm_w * aDB->q;
-	  NE_wn = aDB->a / norm_w;
-	  ODEBUG("aDB->a :" << aDB->a );
+	  th = norm_w * currentBody->q;
+	  NE_wn = currentBody->a / norm_w;
+	  ODEBUG("currentBody->a :" << currentBody->a );
 	  ODEBUG("norm_w:" << norm_w);
 
 	  double ct = cos(th);
@@ -136,114 +137,121 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
         }
 
       ODEBUG("Ro:" << endl << NE_Ro );
-      ODEBUG("MR:" << m_listOfBodies[lMother]->R );
-      ODEBUG("b: " << aDB->b);
-      ODEBUG("Mp: " << m_listOfBodies[lMother]->p);
+      ODEBUG("MR:" << currentMotherBody->R );
+      ODEBUG("b: " << currentBody->b);
+      ODEBUG("Mp: " << currentMotherBody->p);
       // End Rodrigues formula
       //-------------------------------
 
       // Position and orientation in reference frame
-      m_listOfBodies[currentNode]->p = 
-	MAL_S3x3_RET_A_by_B(m_listOfBodies[lMother]->R , aDB->b )
-	+ m_listOfBodies[lMother]->p;
-      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,m_listOfBodies[lMother]->R , 
-			   m_listOfBodies[currentNode]->R_static);
-      MAL_S3x3_C_eq_A_by_B(m_listOfBodies[currentNode]->R ,NE_Rtmp , NE_Ro);
-      m_listOfBodies[currentNode]->Riip1 = NE_Ro;
+      currentBody->p = 
+	MAL_S3x3_RET_A_by_B(currentMotherBody->R , currentBody->b )
+	+ currentMotherBody->p;
+      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,currentMotherBody->R , 
+			   currentBody->R_static);
+      MAL_S3x3_C_eq_A_by_B(currentBody->R ,NE_Rtmp , NE_Ro);
+      currentBody->Riip1 = NE_Ro;
 
       for( i=0;i<3;i++)
 	for( j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J(m_listOfBodies[currentNode]->m_transformation,i,j) 
-	    = m_listOfBodies[currentNode]->R(i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,j) 
+	    = currentBody->R(i,j);
 
       for( i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_listOfBodies[currentNode]->m_transformation,i,3) 
-	  = m_listOfBodies[currentNode]->p(i);
+	MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) 
+	  = currentBody->p(i);
 
-      ODEBUG("q: "<< aDB->q );
+      ODEBUG("q: "<< currentBody->q );
       ODEBUG("p: "
-	     << m_listOfBodies[currentNode]->p[0] << " "
-	     << m_listOfBodies[currentNode]->p[1] << " "
-	     << m_listOfBodies[currentNode]->p[2] << " " );
-      ODEBUG(m_listOfBodies[currentNode]->getName());
+	     << currentBody->p[0] << " "
+	     << currentBody->p[1] << " "
+	     << currentBody->p[2] << " " );
+      ODEBUG(currentBody->getName());
 
 
       //update the translation/rotation axis of joint
-      ODEBUG("a:" << endl << aDB->a );
-      MAL_S3x3_C_eq_A_by_B(m_listOfBodies[currentNode]->w_a,
-			   m_listOfBodies[currentNode]->R, aDB->a);
+      ODEBUG("a:" << endl << currentBody->a );
+      MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
+			   currentBody->R, currentBody->a);
 
       if (m_ComputeVelocity)
         {
+	  
+	  // Computes the angular velocity
 
-	  ODEBUG("dq: "<< aDB->dq );
-	  NE_tmp = m_listOfBodies[currentNode]->a * m_listOfBodies[currentNode]->dq;
-	  NE_tmp = MAL_S3x3_RET_A_by_B(m_listOfBodies[currentNode]->R,NE_tmp);
+	  // In the global frame.
+	  ODEBUG("dq: "<< currentBody->dq );
+	  NE_tmp = currentBody->a * currentBody->dq;
+	  //	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
 
-	  m_listOfBodies[currentNode]->w  = m_listOfBodies[lMother]->w  + NE_tmp;
+	  currentBody->w  = currentMotherBody->w  + NE_tmp;
 
-	  ODEBUG("w: " << m_listOfBodies[currentNode]->w );
+	  // In the local frame.
+	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,currentBody->R_static, currentMotherBody->lw);
 
+	  currentBody->lw  = NE_tmp2  + NE_tmp;
+
+	  ODEBUG("w: " << currentBody->w );
+	  
 	  // Computes the linear velocity.
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_listOfBodies[lMother]->R,
-			       m_listOfBodies[currentNode]->b);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w , 
+				      currentBody->b);
 
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[lMother]->w , NE_tmp);
-
-	  m_listOfBodies[currentNode]->v0 = m_listOfBodies[lMother]->v0 + NE_tmp2;
+	  currentBody->v0 = currentMotherBody->v0 + NE_tmp2;
 
 	  ODEBUG("v0: "
-		 << m_listOfBodies[currentNode]->v0[0] << " "
-		 << m_listOfBodies[currentNode]->v0[1] << " "
-		 << m_listOfBodies[currentNode]->v0[2] << " " );
+		 << currentBody->v0[0] << " "
+		 << currentBody->v0[1] << " "
+		 << currentBody->v0[2] << " " );
         }
 
-      vector3d lc = aDB->localCenterOfMass();
+      vector3d lc = currentBody->localCenterOfMass();
 	    
       // Computes also the center of mass in the reference frame.
       if (m_ComputeCoM)
         {
 	  ODEBUG(" c: " << lc);
-	  MAL_S3x3_C_eq_A_by_B(NE_cl,m_listOfBodies[currentNode]->R,lc);
-	  NE_lw_c = NE_cl + m_listOfBodies[currentNode]->p;
+	  MAL_S3x3_C_eq_A_by_B(NE_cl,currentBody->R,lc);
+	  NE_lw_c = NE_cl + currentBody->p;
 	  ODEBUG(" lw_c: "<< currentNode <<" "<< NE_lw_c[0] 
 		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
 	  positionCoMPondere +=  
-	    NE_lw_c * m_listOfBodies[currentNode]->getMass();
+	    NE_lw_c * currentBody->getMass();
 	  ODEBUG(" w_c: " << NE_lw_c[0] << " " 
 		 << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  ODEBUG(" Mass " << m_listOfBodies[currentNode]->getMass());
+	  ODEBUG(" Mass " << currentBody->getMass());
 	  ODEBUG(" positionCoMPondere " << positionCoMPondere);
-	  m_listOfBodies[currentNode]->w_c = NE_lw_c;
+	  currentBody->w_c = NE_lw_c;
         }
       if (m_ComputeMomentum)
         {
 
 	  // Computes momentum matrix P.
-	  ODEBUG("w: " << m_listOfBodies[currentNode]->w );
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_listOfBodies[currentNode]->w, NE_cl);
+	  ODEBUG("w: " << currentBody->w );
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->w, NE_cl);
 	  ODEBUG("cl^w: " << NE_tmp);
-	  ODEBUG("mass: " << m_listOfBodies[currentNode]->getMass());
-	  ODEBUG("v0: " << m_listOfBodies[currentNode]->v0 );
-	  NE_lP=  (m_listOfBodies[currentNode]->v0 +
-		   NE_tmp )* m_listOfBodies[currentNode]->getMass();
-	  m_listOfBodies[currentNode]->P = NE_lP;
+	  ODEBUG("mass: " << currentBody->getMass());
+	  ODEBUG("v0: " << currentBody->v0 );
+	  NE_lP=  (currentBody->v0 +
+		   NE_tmp )* currentBody->getMass();
+	  currentBody->P = NE_lP;
 	  ODEBUG("P: " << NE_lP );
 	  m_P += NE_lP;
 
 	  // Computes angular momentum matrix L
 	  // Lk = xc x Pk + R * I * Rt * w
-	  MAL_S3x3_TRANSPOSE_A_in_At(m_listOfBodies[currentNode]->R,NE_Rt);
+	  MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
 
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,NE_lw_c,NE_lP);
 
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , m_listOfBodies[currentNode]->w);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp, m_listOfBodies[currentNode]->getInertie(),NE_tmp2);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2, m_listOfBodies[currentNode]->R,NE_tmp);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , currentBody->w);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
 	  NE_lL = NE_tmp3 + NE_tmp2;
 	  ODEBUG("L: " << lL);
 
-	  m_listOfBodies[currentNode]->L = NE_lL;
+	  currentBody->L = NE_lL;
 	  m_L+= NE_lL;
 
         }
@@ -251,39 +259,48 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       if (m_ComputeAcceleration)
         {
 	  // ******************* Computes the angular acceleration for joint i. ********************
+	  // In global reference frame.
 	  // NE_tmp2 = z_{i-1} * dqi
-	  NE_tmp2 = m_listOfBodies[currentNode]->w_a * m_listOfBodies[currentNode]->dq;
+	  NE_tmp2 = currentBody->a * currentBody->dq;
 	  // NE_tmp3 = w^{(0)}_i x z_{i-1} * dqi
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
 	  // NE_tmp2 = z_{i-1} * ddqi
-	  NE_tmp2 = m_listOfBodies[currentNode]->w_a * m_listOfBodies[currentNode]->ddq;
-	  m_listOfBodies[currentNode]->dw = NE_tmp2 + NE_tmp3 + m_listOfBodies[lMother]->dw;
+	  NE_tmp2 = currentBody->a * currentBody->ddq;
+	  currentBody->dw = NE_tmp2 + NE_tmp3 + currentMotherBody->dw;
+
+	  // In local reference frame.
+	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw, currentBody->R_static, currentMotherBody->ldw);
+	  NE_tmp = currentBody->w_a * currentBody->ddq;
+	  NE_tmp2 = currentBody->w_a * currentBody->dq;
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
+	  currentBody->ldw= currentBody->ldw + NE_tmp + NE_tmp3;
+
 
 	  // ******************* Computes the linear acceleration for joint i. ********************
-	  MAL_S3x3_C_eq_A_by_B(NE_aRb, m_listOfBodies[currentNode]->R, aDB->b);
+	  MAL_S3x3_C_eq_A_by_B(NE_aRb, currentBody->R, currentBody->b);
 	  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->w,NE_aRb);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->w,NE_aRb);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->dw,NE_aRb);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->dw,NE_aRb);
 	  NE_Rot = MAL_S3x3_RET_TRANSPOSE(NE_Ro);
-	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,NE_Rot,m_listOfBodies[lMother]->dv);
-	  m_listOfBodies[currentNode]->dv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,NE_Rot,currentMotherBody->dv);
+	  currentBody->dv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
         }
 
       if (m_ComputeAccCoM)
         {
 
 	  // *******************  Acceleration for the center of mass of body  i ************************
-	  MAL_S3x3_C_eq_A_by_B(NE_aRc, m_listOfBodies[currentNode]->R, lc);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->w,NE_aRc);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,m_listOfBodies[currentNode]->w,NE_tmp2);
+	  MAL_S3x3_C_eq_A_by_B(NE_aRc, currentBody->R, lc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->w,NE_aRc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,m_listOfBodies[currentNode]->dw,NE_aRc);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->dw,NE_aRc);
 	  //
-	  m_listOfBodies[currentNode]->dv_c = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  currentBody->dv_c = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
         }
 
       // TO DO if necessary : cross velocity.
@@ -294,33 +311,36 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  if (step==0)
             {
-	      NextNode = m_listOfBodies[currentNode]->child;
+	      NextNode = currentBody->child;
 	      step++;
             }
 	  else if(step==1)
             {
-	      NextNode = m_listOfBodies[currentNode]->sister;
+	      NextNode = currentBody->sister;
 	      step++;
             }
 	  else if (step==2)
             {
-	      NextNode = m_listOfBodies[currentNode]->getLabelMother();
+	      NextNode = currentBody->getLabelMother();
 	      if (NextNode>=0)
                 {
 		  /* Test if current node is leaf,
 		     because in this case the force are not set properly. */
 		  if (m_ComputeBackwardDynamics)
                     {
-		      if ((m_listOfBodies[currentNode]->sister==-1) &&
-			  (m_listOfBodies[currentNode]->child==-1))
-			BackwardDynamics(*m_listOfBodies[currentNode]);
+		      if ((currentBody->sister==-1) &&
+			  (currentBody->child==-1))
+			BackwardDynamics(*currentBody);
 
 		      /* Compute backward dynamics */
 		      if (NextNode!=labelTheRoot)
 			BackwardDynamics(*m_listOfBodies[NextNode]);
                     }
+
 		  currentNode = NextNode;
-		  NextNode = m_listOfBodies[currentNode]->sister;
+		  currentBody = m_listOfBodies[currentNode];
+
+		  NextNode = currentBody->sister;
 
                 }
 	      else
