@@ -81,16 +81,41 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = 0.0;
   aCurrentConf[2] = 0.705;
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-    aCurrentConf[lindex++] = 0.0;
-  
+  aCurrentConf[lindex++] = 0.0;
+ /* aCurrentConf[8]= -0.4538;    
+  aCurrentConf[9]= 0.8727;
+  aCurrentConf[10]= -0.4189;
+  aCurrentConf[14]= -0.4538;       
+  aCurrentConf[15]= 0.8727;
+  aCurrentConf[16]= -0.4189;
+  aCurrentConf[22]= 0.2618;   
+  aCurrentConf[23]= -0.1745;
+  aCurrentConf[25]= -0.5236;
+  aCurrentConf[28]=  0.1745;    
+  aCurrentConf[29]= 0.2618;
+  aCurrentConf[30]= 0.1745;
+  aCurrentConf[32]= -0.5236;
+  aCurrentConf[35]= 0.1745; */
+  tcout << "NbOfDofs:" << NbOfDofs << std::endl; 
+  tcout << "Current Configuration :" << aCurrentConf << std::endl;
   aHDR->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
-  
+	aCurrentVel[6]=1;
   MAL_S3_VECTOR(ZMPval,double);
+
+ /* {
+	unsigned int i=0;
+    aCurrentConf[i++] = 	0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 2.83203; aCurrentConf[i++] = -1.15485e-005; aCurrentConf[i++] = -0.453805; aCurrentConf[i++] = 0.872699; aCurrentConf[i++] = -0.4189; aCurrentConf[i++] = -4.43866e-007; aCurrentConf[i++] = 3.95636e-024; aCurrentConf[i++] = -6.41384e-019; aCurrentConf[i++] = -0.4538; aCurrentConf[i++] = 0.8727; aCurrentConf[i++] = -0.4189; aCurrentConf[i++] = -1.22267e-019; aCurrentConf[i++] = 9.08039e-025; aCurrentConf[i++] = -1.22882e-018; aCurrentConf[i++] = 2.48871e-026; aCurrentConf[i++] = 4.32195e-020; aCurrentConf[i++] = 0.2618; aCurrentConf[i++] = -0.1745; aCurrentConf[i++] = 2.227e-021; aCurrentConf[i++] = -0.5236; aCurrentConf[i++] = 8.41298e-021; aCurrentConf[i++] = -5.98639e-020; aCurrentConf[i++] = 0.1745; aCurrentConf[i++] = 0.2618; aCurrentConf[i++] = 0.1745; aCurrentConf[i++] = 5.32895e-019; aCurrentConf[i++] = -0.5236; aCurrentConf[i++] = 1.39771e-019; aCurrentConf[i++] = 5.62899e-021; aCurrentConf[i++] = 0.1745;
+  }
+  tcout << "Current (real) Configuration :" << aCurrentConf << std::endl;
+  aHDR->currentConfiguration(aCurrentConf);*/
+
+
+//dynamicDrift = [ 0.00106856, -3.65827, -3.24512, 3.39716, -0.0415928, -0.0752126, -2.19959e-016, 3.65805, -3.2449, 3.38531, -0.0423655, 0.0753855, 1.11009e-016, 4.43083, -2.0292e-020, -0.12657, 1.03213, -2.57379, -0.499568, -1.39763, -0.00344316, -0.302932, -0.00679369, 1.07342, 2.5637, 0.489739, -1.35744, -2.65727e-005, -0.262741, 0.00685521]
 
   aHDR->currentVelocity(aCurrentVel);
   //  aHDR->setComputeZMP(true);
@@ -142,7 +167,7 @@ int main(int argc, char *argv[])
   MAL_MATRIX(,double) aJ;
   aJ = aJoint->jacobianJointWrtConfig();  
   DisplayMatrix(aJ,tcout);
-
+ 
   // Get the articular Jacobian from the right ankle to the right wrist.
   vector3d origin; origin(0) = 0.0; origin(1) = 0.0; origin(2) = 0.0;
   aHDR->getJacobian(*aHDR->rightAnkle(),
@@ -151,7 +176,6 @@ int main(int argc, char *argv[])
 		    aJ);
   tcout << "Jacobian from the right ankle to the right wrist. " << endl;
   DisplayMatrix(aJ,tcout);
-  
   MAL_MATRIX_RESIZE(aJ,3, MAL_MATRIX_NB_COLS(aJ));
   // Get the linear part of the articular Jacobian from the right ankle to the right wrist.
   aHDR->getPositionJacobian(*aHDR->rightAnkle(),
@@ -216,7 +240,7 @@ int main(int argc, char *argv[])
   tcout << "Current transformation of right Ankle."<< endl;
   dm4d(aHDR->rightAnkle()->currentTransformation(),tcout,empty);
   tcout << endl;
-  MAL_VECTOR_FILL(aCurrentVel,0.0);
+  //MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
 
@@ -262,13 +286,18 @@ int main(int argc, char *argv[])
   DisplayTorques(aHDR,empty, tcout);
   
   // Test torques.
+
+
+  
+  
+  //double dynamicDrift [] = { 0,0,0,0,0,0, 0.00106856, -3.65827, -3.24512, 3.39716, -0.0415928, -0.0752126, -2.19959e-016, 3.65805, -3.2449, 3.38531, -0.0423655, 0.0753855, 1.11009e-016, 4.43083, -2.0292e-020, -0.12657, 1.03213, -2.57379, -0.499568, -1.39763, -0.00344316, -0.302932, -0.00679369, 1.07342, 2.5637, 0.489739, -1.35744, -2.65727e-005, -0.262741, 0.00685521 };
   tcout << "Test Torques:" << endl;
   const matrixNxP& Torques = aHDR->currentTorques();
   for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
     {
       double torquefrominertia = 9.81 * InertiaMatrix(i,2);
       tcout << filterprecision(Torques(i,0)) << " " 
-	    << filterprecision(torquefrominertia) << endl;
+	    << filterprecision(torquefrominertia) << " \t DD \t " << Torques(i,0)-torquefrominertia << endl;
     }
   tcout.close();
 
