@@ -172,11 +172,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       //update the translation/rotation axis of joint
       ODEBUG("a:" << endl << currentBody->a );
       {
-	matrix3d ltmp1;
+	matrix3d ltmp1,ltmp2;
 	MAL_S3x3_C_eq_A_by_B(ltmp1,
 			     currentMotherBody->R, 
 			     currentBody->R_static);
-	MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
+	ltmp2 = MAL_S3x3_RET_TRANSPOSE(ltmp1);
+       	MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
 			     ltmp1, currentBody->a);
       }
 
