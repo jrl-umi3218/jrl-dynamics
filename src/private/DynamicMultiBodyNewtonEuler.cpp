@@ -294,7 +294,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,currentBody->b);
 
-	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->dv);
+	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->ldv);
 	  currentBody->ldv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
         }
 
