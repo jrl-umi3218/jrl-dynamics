@@ -202,8 +202,11 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG("w: " << currentBody->w );
 	  
 	  // Computes the linear velocity.
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w , 
-				      currentBody->b);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R,
+			       currentBody->b);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,
+				      currentMotherBody->w , 
+				      NE_tmp);
 
 	  currentBody->v0 = currentMotherBody->v0 + NE_tmp2;
 
