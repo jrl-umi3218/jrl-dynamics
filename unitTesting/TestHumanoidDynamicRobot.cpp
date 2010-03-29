@@ -270,6 +270,8 @@ int main(int argc, char *argv[])
       tcout << filterprecision(Torques(i,0)) << " " 
 	    << filterprecision(torquefrominertia) << endl;
     }
+
+
   tcout.close();
 
   // ASCII Comparison between the generated output and the reference one

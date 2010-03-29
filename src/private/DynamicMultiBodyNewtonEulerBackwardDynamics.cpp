@@ -47,6 +47,9 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   lg(1) = 0.0;
   lg(2) = -9.81;
 
+  /* lg should be expressed in frame i */
+  lg = MAL_S3x3_RET_A_by_B(currentBodyRt,lg);
+
   /* Compute the torque
    * with eq. (7.147) Spong RMC p. 277
    *
@@ -61,7 +64,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
    */
   tmp = CurrentBody.ldv_c - lg;
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
-
   /* Get the local center of mass */
   vector3d lc = CurrentBody.localCenterOfMass();
 

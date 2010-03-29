@@ -1,85 +1,104 @@
-/* @doc \file Common Tools for unitary testing
+ /* @doc \file Common Tools for unitary testing
 
-   Copyright (c) 2010
-   @author Olivier Stasse
-   JRL-Japan, CNRS/AIST
- 
-   All rights reserved.
+    Copyright (c) 2010
+    @author Olivier Stasse
+    JRL-Japan, CNRS/AIST
 
-   Please refers to file License.txt for details on the license.
+    All rights reserved.
 
-*/
+    Please refers to file License.txt for details on the license.
 
-#ifndef _DYNAMIC_JRL_JAPAN_COMMON_TOOLS_H_
-#define _DYNAMIC_JRL_JAPAN_COMMON_TOOLS_H_
+ */
 
-#include <string>
-#include <iostream>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+ #ifndef _DYNAMIC_JRL_JAPAN_COMMON_TOOLS_H_
+ #define _DYNAMIC_JRL_JAPAN_COMMON_TOOLS_H_
 
-namespace dynamicsJRLJapan
-{
-  /*! \name Display related functions. 
-     @{
-   */
-  
-  /*! \name Display mathematical objects
-    @{ */
-  
-  /*! \brief filter precision for display. */
-  double filterprecision(double adb);
+ #include <string>
+ #include <iostream>
+ #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
-  /*! \brief Display horizontally in os a 3d vector. */
-  void dvd3d(vector3d &av3d, std::ostream &os);
-  
-  /*! \brief Display a 3x3 matrix in os with a shift. */
-  void dm3d(const matrix3d &todisplay, 
-	    std::ostream &os,
-	    std::string shifttab);
+ namespace dynamicsJRLJapan
+ {
+   /*! \name Display related functions. 
+      @{
+    */
 
-  /*! \brief Display a 4x4 matrix in os with a shift. */
-  void dm4d(const matrix4d &todisplay, 
-	    std::ostream &os,
-	    std::string shifttab);
+   /*! \name Display mathematical objects
+     @{ */
 
-  /*! \brief Display a 4x4 matrix in os as a vector. */
-  void dm4dv(const matrix4d &todisplay, 
-	    std::ostream &os);
+   /*! \brief filter precision for display. */
+   double filterprecision(double adb);
 
-  /*! @} */
+   /*! \brief Display horizontally in os a 3d vector. */
+   void dvd3d(vector3d &av3d, std::ostream &os);
 
-  /*! \name Display robotic objects
-    @{ */
+   /*! \brief Display a 3x3 matrix in os with a shift. */
+   void dm3d(const matrix3d &todisplay, 
+	     std::ostream &os,
+	     std::string shifttab);
 
-  /*! \brief Display a body of the robot */
-  void DisplayBody(CjrlBody *aBody,
-		   std::string &shifttab,
-		   std::ostream &tcout);
+   /*! \brief Display a 4x4 matrix in os with a shift. */
+   void dm4d(const matrix4d &todisplay, 
+	     std::ostream &os,
+	     std::string shifttab);
 
-  /*! \brief Display a hand of the robot */
-  void DisplayHand(CjrlHand *ajrlHand,
-		   std::string &shifttab,
-		   std::ostream &tcout);
+   /*! \brief Display a 4x4 matrix in os as a vector. */
+   void dm4dv(const matrix4d &todisplay, 
+	     std::ostream &os);
 
-  /*! \brief Display a foot of the robot */
-  void DisplayFoot(CjrlFoot *aFoot,
-		   std::string &shifttab,
-		   std::ostream &tcout);
+   /*! @} */
 
-  /*! \brief Display actuated */
-  void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR,
-		       std::string &shifttab,
-		       std::ostream &tcout);
+   /*! \name Display robotic objects
+     @{ */
 
-  /*! \brief Display forces */
-  void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
-		     std::string &shifttab, 
-		     std::ostream &tcout);
+   /*! \brief Display a body of the robot */
+   void DisplayBody(CjrlBody *aBody,
+		    std::string &shifttab,
+		    std::ostream &tcout);
 
-  /*! \brief Display torques */
-  void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
+   /*! \brief Display a hand of the robot */
+   void DisplayHand(CjrlHand *ajrlHand,
+		    std::string &shifttab,
+		    std::ostream &tcout);
+
+   /*! \brief Display a foot of the robot */
+   void DisplayFoot(CjrlFoot *aFoot,
+		    std::string &shifttab,
+		    std::ostream &tcout);
+
+   /*! \brief Display actuated */
+   void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR,
+			std::string &shifttab,
+			std::ostream &tcout);
+
+   /*! \brief Display forces */
+   void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
 		      std::string &shifttab, 
 		      std::ostream &tcout);
+
+   /*! \brief Display torques */
+   void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
+		       std::string &shifttab, 
+		       std::ostream &tcout);
+
+   /*! \brief Display linear velocity */
+   void DisplayLinearVelocity(CjrlHumanoidDynamicRobot * aHDR,
+				  std::ostream &tcout);
+
+   /*! \brief Display angular velocity */
+   void DisplayAngularVelocity(CjrlHumanoidDynamicRobot * aHDR,
+				  std::ostream &tcout);
+
+
+
+   /*! \brief Display linear acceleration */
+   void DisplayLinearAcceleration(CjrlHumanoidDynamicRobot * aHDR,
+				  std::ostream &tcout);
+
+   /*! \brief Display angular acceleration */
+   void DisplayAngularAcceleration(CjrlHumanoidDynamicRobot * aHDR,
+				  std::ostream &tcout);
+
 
   /*! \brief Display full humanoid information */
   void DisplayHumanoid(CjrlHumanoidDynamicRobot *aHDR,

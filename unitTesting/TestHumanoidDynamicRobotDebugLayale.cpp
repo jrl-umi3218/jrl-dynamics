@@ -299,6 +299,16 @@ int main(int argc, char *argv[])
       tcout << filterprecision(Torques(i,0)) << " " 
 	    << filterprecision(torquefrominertia) << " \t DD \t " << Torques(i,0)-torquefrominertia << endl;
     }
+  tcout << "Test Linear Velocity:" << endl;
+  DisplayLinearVelocity(aHDR,tcout);
+  tcout << "Test Angular Velocity:" << endl;
+  DisplayAngularVelocity(aHDR,tcout);
+
+  tcout << "Test Linear Acceleration:" << endl;
+  DisplayLinearAcceleration(aHDR,tcout);
+  tcout << "Test Angular Acceleration:" << endl;
+  DisplayAngularAcceleration(aHDR,tcout);
+
   tcout.close();
 
   // ASCII Comparison between the generated output and the reference one

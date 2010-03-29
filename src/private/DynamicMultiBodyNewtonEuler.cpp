@@ -287,6 +287,17 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 
 	  // ******************* Computes the linear acceleration for joint i. ********************
+	  // In global reference frame
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R , currentBody->b);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->w,NE_tmp);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
+
+	  // NE_tmp2 = dw_I x r_{i,i+1}
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dv,currentBody->b);
+
+	  currentBody->dv = NE_tmp2 + NE_tmp3;
+
+	  // In local reference frame.
 	  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,currentBody->b);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);

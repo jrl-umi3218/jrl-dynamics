@@ -326,7 +326,55 @@ namespace dynamicsJRLJapan {
 	  }
       }
   }
+  void DisplayLinearVelocity(CjrlHumanoidDynamicRobot *aHDR,
+			   ostream &tcout)
+  {
+    std::vector<CjrlJoint *> aVec = aHDR->jointVector();
+    for(unsigned int i=0;i<aVec.size();i++)
+      {
+	CjrlRigidVelocity aRA =aVec[i]->jointVelocity(); 
+	vector3d av3d = aRA.linearVelocity();
+	dv3d(av3d,tcout);
+      }
+  }
 
+  void DisplayAngularVelocity(CjrlHumanoidDynamicRobot *aHDR,
+			   ostream &tcout)
+  {
+    std::vector<CjrlJoint *> aVec = aHDR->jointVector();
+    for(unsigned int i=0;i<aVec.size();i++)
+      {
+	CjrlRigidVelocity aRA =aVec[i]->jointVelocity(); 
+	vector3d av3d = aRA.rotationVelocity();
+	dv3d(av3d,tcout);
+      }
+  }
+
+  void DisplayLinearAcceleration(CjrlHumanoidDynamicRobot *aHDR,
+			   ostream &tcout)
+  {
+    std::vector<CjrlJoint *> aVec = aHDR->jointVector();
+    for(unsigned int i=0;i<aVec.size();i++)
+      {
+	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration(); 
+	vector3d av3d = aRA.linearAcceleration();
+	dv3d(av3d,tcout);
+      }
+  }
+
+  void DisplayAngularAcceleration(CjrlHumanoidDynamicRobot *aHDR,
+			   ostream &tcout)
+  {
+    std::vector<CjrlJoint *> aVec = aHDR->jointVector();
+    for(unsigned int i=0;i<aVec.size();i++)
+      {
+	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration(); 
+	vector3d av3d = aRA.rotationAcceleration();
+	dv3d(av3d,tcout);
+      }
+  }
+  
+  
   void DisplayEndEffectors(CjrlHumanoidDynamicRobot *aHDR,
 			   ostream &tcout)
   {
