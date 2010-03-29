@@ -60,26 +60,22 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
      m_i a_{c,i} - m_i g_i
    */
   tmp = CurrentBody.ldv_c - lg;
-  tmp = MAL_S3x3_RET_A_by_B(currentBodyRt,tmp);
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
 
   /* Get the local center of mass */
   vector3d lc = CurrentBody.localCenterOfMass();
 
-  /* Torque - 5th term : (R_i w_i )x (I_i R_i w_i)*/
-  vector3d lw;
-  MAL_S3x3_C_eq_A_by_B(lw,currentBodyRt,CurrentBody.w);
-  
+  /* Torque - 5th term : w_i x (I_i w_i)*/  
   MAL_S3x3_MATRIX(,double) lI = CurrentBody.getInertie();
-  tmp = MAL_S3x3_RET_A_by_B(lI,lw);
+  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody.lw);
   //  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody.w);
 
 
-  MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,lw,tmp);
+  MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.lw,tmp);
 
   /* Torque - 4th term and 5th term 
   Torque_i = alpha_i +  (R_i w_i )x (I_i R_i w_i) */
-  CurrentBody.m_Torque =  MAL_S3x3_RET_A_by_B(currentBodyRt,CurrentBody.dw) + fifthterm ;
+  CurrentBody.m_Torque =  CurrentBody.ldw + fifthterm ;
   
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
@@ -106,7 +102,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
       //cout << "Child Bodies : " << Child->getName() << endl;
       aRt = MAL_S3x3_RET_A_by_B(Child->R_static,Child->Riip1);
 
-      //cout << "Riip1: " << aRt << endl;
       // /* Force computation. */
       // R_i_{i+1} f_{i+1}
       tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);

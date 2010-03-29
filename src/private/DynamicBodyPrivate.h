@@ -90,7 +90,7 @@ namespace dynamicsJRLJapan
       v0,  dv,  
       w, lw,  
       dw, ldw,
-      w_a,
+      w_a, ldv,
       ldv_c;
 
     /*! Transformation
