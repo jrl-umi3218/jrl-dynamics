@@ -62,6 +62,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
      m_i a_{c,i} - m_i g_i
    */
+  ODEBUG(" Body name: " << CurrentBody.getName() << " : " << lg << " mass: " << CurrentBody.mass());
   tmp = CurrentBody.ldv_c - lg;
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
   /* Get the local center of mass */

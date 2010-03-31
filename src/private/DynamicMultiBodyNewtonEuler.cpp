@@ -71,9 +71,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   double norm_w, th;
   int currentNode = labelTheRoot;
   int lMother=0;
+  int lChild=0;
   unsigned int i,j;
   double NORME_EPSILON=1e-6;
-  DynamicBodyPrivate *currentBody, *currentMotherBody;
+  DynamicBodyPrivate *currentBody, *currentMotherBody, *currentChildBody;
 
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
   m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
@@ -105,7 +106,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
       norm_w = MAL_S3_VECTOR_NORM(currentBody->a);
       lMother = currentBody->getLabelMother();
+      lChild = currentBody->child;
+      
       currentMotherBody = m_listOfBodies[lMother];
+      currentChildBody = m_listOfBodies[lChild];
       matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
 
       ODEBUG("CurrentBody " << currentBody->getName());
@@ -289,24 +293,25 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  // ******************* Computes the linear acceleration for joint i. ********************
 	  // In global reference frame
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R , currentBody->b);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->w,NE_tmp);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w,NE_tmp);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->w,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dv,currentBody->b);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dw,NE_tmp);
 
-	  currentBody->dv = NE_tmp2 + NE_tmp3;
+	  currentBody->dv = NE_tmp2 + NE_tmp3 + currentMotherBody->dv;
 
 	  // In local reference frame.
 	  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,currentBody->b);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->lw,currentBody->b);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->lw,NE_tmp2);
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,currentBody->b);
-
+	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
 	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->ldv);
+
 	  currentBody->ldv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+
         }
 
       if (m_ComputeAccCoM)
@@ -315,11 +320,20 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  // *******************  Acceleration for the center of mass of body  i ************************
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
-
+	  
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
 	  //
-	  currentBody->ldv_c = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
+	  ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
+	  ODEBUG(" lc = " << lc);
+	  ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
+	  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
+	  ODEBUG(" ldv: " << currentBody->ldv);
+	  ODEBUG(" R_static: " << currentBody->R_static);
+	  ODEBUG(" R: " << currentBody->R);
+	  ODEBUG(" ldv_c: " << currentBody->ldv_c);
+	  
         }
 
       // TO DO if necessary : cross velocity.
