@@ -389,7 +389,7 @@ namespace dynamicsJRLJapan
       for(unsigned int j=0;j<3;j++)
 	{
 	  if (fabs(AnalyticalForces[i](j) - 
-		   GenericForces(i,j) > 1e-8))
+		   GenericForces(i,j)) > 1e-8)
 	    {
 	      cout << testname << " Pb in link " << i << " Force component "<< j 
 		   << " Generic: " << GenericForces(i,j) 
@@ -398,7 +398,7 @@ namespace dynamicsJRLJapan
 	    }
 	  
 	  if (fabs(AnalyticalTorques[i](j) - 
-		   GenericTorques(i,j) > 1e-8))
+		   GenericTorques(i,j)) > 1e-8)
 	    {
 	      cout << testname << " Pb in link " << i << " Torque component "<< j 
 		   << " Generic: " << GenericTorques(i,j) 
