@@ -196,14 +196,16 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  //	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
 
 	  currentBody->w  = currentMotherBody->w  + NE_tmp;
-
+	  ODEBUG("w: " << currentBody->w );
 	  // In the local frame.
 	  NE_tmp = currentBody->a * currentBody->dq;
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
 
 	  currentBody->lw  = NE_tmp2  + NE_tmp;
 
-	  ODEBUG("w: " << currentBody->w );
+	  ODEBUG("lw: " << currentBody->w << 
+		  " a: " << currentBody->a << 
+		  " dq:" << currentBody->dq);
 	  
 	  // Computes the linear velocity.
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R,
@@ -310,6 +312,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
 	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->ldv);
 
+	  matrix3d MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentMotherBody->Riip1);
+	  
+	  NE_RotByMotherdv = MAL_S3x3_RET_A_by_B(MRiip1t,NE_RotByMotherdv);
+
 	  currentBody->ldv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
 
         }
@@ -323,8 +329,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
-	  //
-	  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
+	  matrix3d NE_Rot = MAL_S3x3_RET_TRANSPOSE(NE_Ro);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp,NE_Rot,currentBody->ldv);
+	  currentBody->ldv_c = NE_tmp + NE_tmp2 + NE_tmp3;
 	  ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
 	  ODEBUG(" lc = " << lc);
 	  ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
@@ -474,7 +481,6 @@ bool DynMultiBodyPrivate::computeForwardKinematics()
   for(unsigned int i=0;i<3;i++)
     {
       lPositionForRoot(i)=(*m_RootOfTheJointsTree)(i,3);
-      lLinearVelocityForRoot(i)=m_Velocity(i);
     }
 
   for(unsigned int i=0;i<3;i++)
