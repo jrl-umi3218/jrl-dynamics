@@ -80,6 +80,16 @@ SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface
 )
 ADD_DEPENDENCIES (TestCopyJointTreeThroughAbstractInterface ${PROJECT_NAME})
 
+ADD_EXECUTABLE(	TestTwoLinksModel
+  TwoLinksModel.cpp
+  TestTwoLinksModel.cpp )
+SET_TARGET_PROPERTIES( TestTwoLinksModel
+	              PROPERTIES
+	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+                      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
+ADD_DEPENDENCIES (TestTwoLinksModel ${PROJECT_NAME})
+
 ADD_EXECUTABLE(	Test2Models Test2Models.cpp)
 SET_TARGET_PROPERTIES(Test2Models
 	              PROPERTIES
@@ -102,3 +112,5 @@ CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
 ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")
 
 ADD_TEST(TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface)
+
+ADD_TEST(TestTwoLinksModel TestTwoLinksModel)

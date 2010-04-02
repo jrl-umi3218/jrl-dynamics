@@ -49,7 +49,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
   /* lg should be expressed in frame i */
   lg = MAL_S3x3_RET_A_by_B(currentBodyRt,lg);
-
+  ODEBUG(" lg :" << lg);
   /* Compute the torque
    * with eq. (7.147) Spong RMC p. 277
    *
