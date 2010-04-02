@@ -24,7 +24,7 @@ HumanoidCopy::~HumanoidCopy()
 }
 
 void HumanoidCopy::CopyAndInstanciateBody(CjrlJoint *initJoint, 
-			    CjrlJoint *newJoint)
+					  CjrlJoint *newJoint)
 {
   CjrlBody * CopiedBody =newJoint->linkedBody();
   CjrlBody * OriginalBody = initJoint->linkedBody();
