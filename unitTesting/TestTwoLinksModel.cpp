@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
       aCurrentVelocity[i] = 0.0;
       aCurrentAcceleration[i] = 0.0;
     }
-  
+
   testname = "Test 1";
   if (!aTwoLinksModel->TestInstance(aCurrentConf,
 				    aCurrentVelocity,

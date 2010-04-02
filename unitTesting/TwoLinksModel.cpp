@@ -228,7 +228,7 @@ namespace dynamicsJRLJapan
     vector3d firstterm, secondterm, thirdterm, tmp;
 
     MAL_S3x3_C_eq_A_by_B(firstterm, m_SetOfParameters.I[1],ldw2);
-    ODEBUG("first term:" << firstterm );
+    ODEBUG("first term:" << firstterm << " ldw2: " << ldw2);
     MAL_S3x3_C_eq_A_by_B(tmp,m_SetOfParameters.I[1],w2);
     MAL_S3_VECTOR_CROSS_PRODUCT(secondterm,w2,tmp);
     ODEBUG("second term:" << secondterm)
@@ -323,7 +323,7 @@ namespace dynamicsJRLJapan
     lw[0] = m_k * lcurrentVelocity[0];
     ldw[0] = m_k * lcurrentAcceleration[0];
     lw[1] = m_k * (lcurrentVelocity[0] + lcurrentVelocity[1]);
-    ldw[1] = m_k * (lcurrentAcceleration[0] + lcurrentAcceleration[0]);
+    ldw[1] = m_k * (lcurrentAcceleration[0] + lcurrentAcceleration[1]);
     
     // Compute vectors. 7.163 & 7.164
     rf1c1 = m_i * m_SetOfParameters.lc[0]; 

@@ -79,7 +79,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   /* Torque - 4th term and 5th term 
   Torque_i = alpha_i +  (R_i w_i )x (I_i R_i w_i) */
   CurrentBody.m_Torque =  CurrentBody.ldw + fifthterm ;
-  
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
    * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
