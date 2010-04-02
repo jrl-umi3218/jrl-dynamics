@@ -109,7 +109,8 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       lChild = currentBody->child;
       
       currentMotherBody = m_listOfBodies[lMother];
-      currentChildBody = m_listOfBodies[lChild];
+	  if (lChild >= 0)
+	    currentChildBody = m_listOfBodies[lChild];
       matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
 
       ODEBUG("CurrentBody " << currentBody->getName());
