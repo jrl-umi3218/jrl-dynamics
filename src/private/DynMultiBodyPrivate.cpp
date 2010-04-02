@@ -537,8 +537,8 @@ bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR(,double)& inConf
             }
 	  else
             {
-	      m_ConfigurationToJoints[i]->quantity(0.0);
-	      m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->q = 0.0;
+	      m_ConfigurationToJoints[i]->quantity(inConfig[lindex]);
+	      m_ConfigurationToJoints[lindex]->linkedDBody()->q = inConfig[lindex];
             }
 
 	  lindex++;
@@ -625,7 +625,7 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 		 << " dq: " << m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq ); */
             }
 	  else
-	    m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq = 0.0;
+	    m_ConfigurationToJoints[lindex]->linkedDBody()->dq = inVelocity[lindex];
 
 	  lindex++;
         }
@@ -705,7 +705,7 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
 		 << " dq: " << m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq ); */
             }
 	  else
-	    m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->ddq = 0.0;
+	    m_ConfigurationToJoints[lindex]->linkedDBody()->ddq = inAcceleration[lindex];
 
 	  lindex++;
         }
