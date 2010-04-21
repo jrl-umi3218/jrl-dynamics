@@ -40,7 +40,7 @@
 using namespace dynamicsJRLJapan;
 
 /*! Implements methods related to propertis for DynamicsMultiBody */
-bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string &outValue)
+bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string &outValue) const
 {
   if (inProperty=="ComputeVelocity")
     {
@@ -253,7 +253,7 @@ bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string 
   return false;
 }
 
-bool DynMultiBodyPrivate::isSupported(const std::string &aName)
+bool DynMultiBodyPrivate::isSupported(const std::string &aName) const
 {
   if (aName=="ComputeVelocity")
     return true;
