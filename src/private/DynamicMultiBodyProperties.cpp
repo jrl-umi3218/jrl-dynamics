@@ -120,7 +120,7 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
     }
   else 
   {
-	  std::cout << " Unknown property '" << inProperty << "'" << std::endl;
+	  std::cout << " Unknown getProperty '" << inProperty << "'" << std::endl;
   }
   outValue="false";
   return false;
@@ -248,7 +248,7 @@ bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string 
   }
   else 
   {
-	  std::cout << " Unknown property '" << inProperty << "'" << std::endl;
+	  std::cout << " Unknown setProperty '" << inProperty << "'" << std::endl;
   }
   return false;
 }
