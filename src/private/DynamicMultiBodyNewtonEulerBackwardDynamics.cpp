@@ -15,7 +15,6 @@
 #include <fstream>
 #include <string.h>
 
-#define DEBUG_MODE
 #include "Debug.h"
 
 /*! Local library includes. */
@@ -82,7 +81,9 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   Torque_i = I_i * alpha_i +  (R_i w_i )x (I_i R_i w_i) */
   MAL_S3x3_C_eq_A_by_B(tmp,lI,CurrentBody.ldw);
   CurrentBody.m_Torque =  tmp + fifthterm ;
+
   //CurrentBody.m_Torque = CurrentBody.ldw + fifthterm;
+  //std::cout << "alpha_i: " << CurrentBody.ldw << std::endl;
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
    * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i
@@ -149,6 +150,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody.m_Force, lc);
   CurrentBody.m_Torque = CurrentBody.m_Torque - sndterm;
 
+  
   // Update the vector related to the computed quantities.
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
     {

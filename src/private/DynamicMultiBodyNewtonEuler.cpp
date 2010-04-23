@@ -185,7 +185,6 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
        	MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
 			     ltmp1, currentBody->a);
       }
-
       matrix3d MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentBody->Riip1);
 	  
       if (m_ComputeVelocity)
@@ -206,7 +205,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
 	  NE_tmp2 = MAL_S3x3_RET_A_by_B(MRiip1t,NE_tmp2);
+
 	  currentBody->lw  = NE_tmp2  + NE_tmp;
+	  ODEBUG(" " <<currentBody->getName() << " currentBody->lw:" << currentBody->lw);
 
 	  ODEBUG("lw: " << currentBody->w << 
 		  " a: " << currentBody->a << 
@@ -291,14 +292,13 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  // In local reference frame.
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp,RstaticT,currentMotherBody->ldw);
-
 	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw,MRiip1t, NE_tmp);
 	  
 	  NE_tmp = currentBody->a * currentBody->ddq;
 	  NE_tmp2 = currentBody->a * currentBody->dq;
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
 	  currentBody->ldw= currentBody->ldw + NE_tmp + NE_tmp3;
-
+	  ODEBUG(" " <<currentBody->getName() << " currentBody->ldw:" << currentBody->ldw);
 
 	  // ******************* Computes the linear acceleration for joint i. ********************
 	  // In global reference frame
@@ -318,12 +318,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
-	  
-	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->ldv);
-	  
-	  NE_RotByMotherdv = MAL_S3x3_RET_A_by_B(MRiip1t,NE_RotByMotherdv);
 
-	  currentBody->ldv = NE_RotByMotherdv + NE_tmp2 + NE_tmp3;
+	  NE_tmp = NE_tmp2 + NE_tmp3 + currentMotherBody->ldv;
+
+	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,NE_tmp);
+	  currentBody->ldv = MAL_S3x3_RET_A_by_B(MRiip1t,NE_RotByMotherdv);
+	  ODEBUG(" " << currentBody->getName() << " Mother->ldv:" <<currentMotherBody->ldv);
 
         }
 
@@ -336,16 +336,16 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
-	  //	  matrix3d NE_Rot = MAL_S3x3_RET_TRANSPOSE(NE_Ro);
-	  //	  MAL_S3x3_C_eq_A_by_B(NE_tmp,NE_Rot,currentBody->ldv);
+
 	  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
+
 	  ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
 	  ODEBUG(" lc = " << lc);
 	  ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
 	  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
 	  ODEBUG(" ldv: " << currentBody->ldv);
 	  ODEBUG(" R_static: " << currentBody->R_static);
-	  ODEBUG(" R: " << currentBody->R);
+	  ODEBUG(" MRiip1t: " << MRiip1t);
 	  ODEBUG(" ldv_c: " << currentBody->ldv_c);
 	  
         }

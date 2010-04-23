@@ -116,6 +116,8 @@ namespace dynamicsJRLJapan
     tmp = m_k * lcurrentVelocity[0];
     MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,tmp,tmp2);
     MAL_S3_VECTOR_CROSS_PRODUCT(secondterm,tmp,tmp3);
+    ODEBUG("lw1 = "<< m_k*lcurrentVelocity[0]);
+    ODEBUG("ldw1 = "<< m_k*lcurrentAcceleration[0]);
     ODEBUG("lw x (lw x lc): " << secondterm );
     ac1 = firstterm + secondterm;
     
@@ -175,14 +177,14 @@ namespace dynamicsJRLJapan
    
     double addacceleration = (lcurrentAcceleration[0] + lcurrentAcceleration[1]);
     tmp = m_i * m_SetOfParameters.lc[1];
-    MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,m_k, tmp);
+    MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,m_k,tmp);
     sndterm = tmp2 * addacceleration;
    
     double addvelocity = (lcurrentVelocity[0] + lcurrentVelocity[1]);    
     tmp3 = tmp2 * addvelocity;
     tmp = m_k * addvelocity;
     MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp,tmp3);
-    
+    ODEBUG("ac2 first term : " << firstterm);
     ac2 = firstterm + sndterm + thirdterm;
 
     // Gravity for link 2 
@@ -205,6 +207,8 @@ namespace dynamicsJRLJapan
     ODEBUG("i * -g: " << tmp);
     MAL_S3x3_C_eq_A_by_B(g2,Rf2f0t,tmp);
     ODEBUG("g2: " << g2);
+    ODEBUG("lw2 = "<< m_k*(lcurrentVelocity[0]+lcurrentVelocity[1]));
+    ODEBUG("ldw2 = "<< m_k*(lcurrentAcceleration[0]+lcurrentAcceleration[1]));
 
   }
 
