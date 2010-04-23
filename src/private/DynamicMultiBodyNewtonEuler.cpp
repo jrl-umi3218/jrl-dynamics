@@ -186,6 +186,8 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 			     ltmp1, currentBody->a);
       }
 
+      matrix3d MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentMotherBody->Riip1);
+	  
       if (m_ComputeVelocity)
         {
 	  
@@ -200,8 +202,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG("w: " << currentBody->w );
 	  // In the local frame.
 	  NE_tmp = currentBody->a * currentBody->dq;
+	  
+	  
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
-
+	  NE_tmp2 = MAL_S3x3_RET_A_by_B(MRiip1t,NE_tmp2);
 	  currentBody->lw  = NE_tmp2  + NE_tmp;
 
 	  ODEBUG("lw: " << currentBody->w << 
@@ -286,7 +290,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  currentBody->dw = NE_tmp2 + NE_tmp3 + currentMotherBody->dw;
 
 	  // In local reference frame.
-	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw, RstaticT, currentMotherBody->ldw);
+	  MAL_S3x3_C_eq_A_by_B(NE_tmp,RstaticT,currentMotherBody->ldw);
+
+	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw,MRiip1t, NE_tmp);
+	  
 	  NE_tmp = currentBody->a * currentBody->ddq;
 	  NE_tmp2 = currentBody->a * currentBody->dq;
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
@@ -311,9 +318,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  // NE_tmp2 = dw_I x r_{i,i+1}
 	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
+	  
+	  MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentMotherBody->Riip1);
 	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,currentMotherBody->ldv);
-
-	  matrix3d MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentMotherBody->Riip1);
 	  
 	  NE_RotByMotherdv = MAL_S3x3_RET_A_by_B(MRiip1t,NE_RotByMotherdv);
 

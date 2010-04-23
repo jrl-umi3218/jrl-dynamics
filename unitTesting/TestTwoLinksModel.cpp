@@ -38,7 +38,11 @@ int main(int argc, char *argv[])
 
   // Fix inertia matrices.
   MAL_S3x3_MATRIX_SET_IDENTITY(aSetOfPlanarElbowParameters.I[0]);
+  MAL_S3x3_MATRIX_ACCESS_I_J(aSetOfPlanarElbowParameters.I[0],0,0)= 3.0;
+  MAL_S3x3_MATRIX_ACCESS_I_J(aSetOfPlanarElbowParameters.I[0],1,1)= 2.0;
   MAL_S3x3_MATRIX_SET_IDENTITY(aSetOfPlanarElbowParameters.I[1]);
+  MAL_S3x3_MATRIX_ACCESS_I_J(aSetOfPlanarElbowParameters.I[1],0,0)= 3.0;
+  MAL_S3x3_MATRIX_ACCESS_I_J(aSetOfPlanarElbowParameters.I[1],1,1)= 2.0;
 
   CTwoLinksModel * aTwoLinksModel = new CTwoLinksModel(&robotDynamicsObjectConstructor,
 						       aSetOfPlanarElbowParameters);

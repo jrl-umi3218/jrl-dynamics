@@ -17,7 +17,6 @@ CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/doc/package.dox.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/package.dox
 )
 
-
 ADD_CUSTOM_COMMAND(OUTPUT ${${PROJECT_NAME}_SOURCE_DIR}/doc/html/index.html
                    COMMAND ${DOXYGEN_EXECUTABLE} \"${CMAKE_CURRENT_BINARY_DIR}/package.dox\"
                    DEPENDS ${docfiles}
