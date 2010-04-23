@@ -1011,7 +1011,7 @@ namespace dynamicsJRLJapan
        \li ComputeBackwardDynamics: Compute the force and the torque of each joint.
        \retval 
       */
-     bool isSupported(const std::string &inProperty );
+     bool isSupported(const std::string &inProperty ) const;
        
      /*! \brief Get property corresponding to command name.
 
@@ -1019,7 +1019,7 @@ namespace dynamicsJRLJapan
      \retval outValue value of the property.
 
      \note The returned string needs to be cast into boolean .*/ 
-     bool getProperty(const std::string &inProperty,std::string &outValue);
+     bool getProperty(const std::string &inProperty,std::string &outValue) const;
 
      /**
 	\brief Set property corresponding to command name.
