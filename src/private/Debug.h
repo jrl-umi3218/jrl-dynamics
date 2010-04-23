@@ -49,12 +49,13 @@
 
 #ifdef DEBUG_MODE
 
-#define ODEBUG(x) cerr << __FILE << ":" << __LINE__ <<  x << endl
-#define ODEBUG(x,level) {\
+#define ODEBUG(x) cerr << __FILE__ << ":" << __LINE__ <<  x << endl
+#define ODEBUGL(x,level) {\
   if (DEBUG_MODE>level) \
     cerr << __FILE << ":" << __LINE__ <<  x << endl; }
 #else
 #define ODEBUG(x)
+#define ODEBUGL(x)
 #endif
 
 #ifdef DEBUG_MODE

@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string.h>
 
+#define DEBUG_MODE
 #include "Debug.h"
 
 /*! Local library includes. */
@@ -64,6 +65,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
    */
   ODEBUG(" Body name: " << CurrentBody.getName() << " : " << lg << " mass: " << CurrentBody.mass());
   tmp = CurrentBody.ldv_c - lg;
+  ODEBUG(" Acceleration: " << CurrentBody.ldv_c);
   CurrentBody.m_Force =  tmp * CurrentBody.mass();
   /* Get the local center of mass */
   vector3d lc = CurrentBody.localCenterOfMass();

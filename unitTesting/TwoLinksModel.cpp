@@ -16,7 +16,11 @@ using namespace std;
 
 #define ODEBUG3(x) { cerr << __FILE__ << ":" << __LINE__ <<  " " << x << endl; }
 
+#if 1
+#define ODEBUG(x) { cerr << __FILE__ << ":" << __LINE__ <<  " " << x << endl; }
+#else
 #define ODEBUG(x)
+#endif
 
 namespace dynamicsJRLJapan
 {
