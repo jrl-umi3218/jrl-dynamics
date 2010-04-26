@@ -78,7 +78,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody.lw,tmp);
 
   /* Torque - 4th term and 5th term 
-  Torque_i = I_i * alpha_i +  (R_i w_i )x (I_i R_i w_i) */
+  Torque_i = I_i * alpha_i +  w_i x I_i w_i) */
   MAL_S3x3_C_eq_A_by_B(tmp,lI,CurrentBody.ldw);
   CurrentBody.m_Torque =  tmp + fifthterm ;
 
@@ -127,6 +127,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 	 Note: rip1,c1 is expressed in the frame of link i.
        */
       vector3d res3d; 
+      /*
       MAL_S3_VECTOR_ACCESS(res3d,0) = 
 	MAL_S3_VECTOR_ACCESS(lc,0)-
 	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3); 
@@ -137,6 +138,9 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 	MAL_S3_VECTOR_ACCESS(lc,2)-
 	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,2,3);
       MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
+      */
+      res3d = CurrentBody.b;
+      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,res3d,tmp);
 
       CurrentBody.m_Torque += firstterm + thirdterm;
 
