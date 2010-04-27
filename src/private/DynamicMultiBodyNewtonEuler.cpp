@@ -345,6 +345,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
 	  ODEBUG(" ldv: " << currentBody->ldv);
 	  ODEBUG(" R_static: " << currentBody->R_static);
+	  ODEBUG(" b: " << currentBody->b);
 	  ODEBUG(" MRiip1t: " << MRiip1t);
 	  ODEBUG(" ldv_c: " << currentBody->ldv_c);
 	  
