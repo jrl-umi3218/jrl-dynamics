@@ -104,24 +104,20 @@ int main(int argc, char *argv[])
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
-  aCurrentVel[6]=1;
-  aCurrentVel[7]=1;
+  aCurrentVel[6]=1.0;
+  aCurrentVel[7]=1.0;
+  aCurrentVel[8]=1.0;
+  aCurrentVel[9]=1.0;
+
   MAL_S3_VECTOR(ZMPval,double);
 
- /* {
-	unsigned int i=0;
-    aCurrentConf[i++] = 	0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 0; aCurrentConf[i++] = 2.83203; aCurrentConf[i++] = -1.15485e-005; aCurrentConf[i++] = -0.453805; aCurrentConf[i++] = 0.872699; aCurrentConf[i++] = -0.4189; aCurrentConf[i++] = -4.43866e-007; aCurrentConf[i++] = 3.95636e-024; aCurrentConf[i++] = -6.41384e-019; aCurrentConf[i++] = -0.4538; aCurrentConf[i++] = 0.8727; aCurrentConf[i++] = -0.4189; aCurrentConf[i++] = -1.22267e-019; aCurrentConf[i++] = 9.08039e-025; aCurrentConf[i++] = -1.22882e-018; aCurrentConf[i++] = 2.48871e-026; aCurrentConf[i++] = 4.32195e-020; aCurrentConf[i++] = 0.2618; aCurrentConf[i++] = -0.1745; aCurrentConf[i++] = 2.227e-021; aCurrentConf[i++] = -0.5236; aCurrentConf[i++] = 8.41298e-021; aCurrentConf[i++] = -5.98639e-020; aCurrentConf[i++] = 0.1745; aCurrentConf[i++] = 0.2618; aCurrentConf[i++] = 0.1745; aCurrentConf[i++] = 5.32895e-019; aCurrentConf[i++] = -0.5236; aCurrentConf[i++] = 1.39771e-019; aCurrentConf[i++] = 5.62899e-021; aCurrentConf[i++] = 0.1745;
-  }
-  tcout << "Current (real) Configuration :" << aCurrentConf << std::endl;
-  aHDR->currentConfiguration(aCurrentConf);*/
-
-
-//dynamicDrift = [ 0.00106856, -3.65827, -3.24512, 3.39716, -0.0415928, -0.0752126, -2.19959e-016, 3.65805, -3.2449, 3.38531, -0.0423655, 0.0753855, 1.11009e-016, 4.43083, -2.0292e-020, -0.12657, 1.03213, -2.57379, -0.499568, -1.39763, -0.00344316, -0.302932, -0.00679369, 1.07342, 2.5637, 0.489739, -1.35744, -2.65727e-005, -0.262741, 0.00685521]
 
   aHDR->currentVelocity(aCurrentVel);
   //MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
+  aCurrentAcc[7]=2.0;
+  aCurrentAcc[10]=2.0;
   aHDR->currentAcceleration(aCurrentAcc);
 
   //  aHDR->setComputeZMP(true);

@@ -31,8 +31,8 @@ t=zeros(3,6);
 
 // Initialize robot state, velocities and accelerations.
 q   = [ 0.0; 0.0; 0.0; 0.0; 0.0; 0.0;];
-dq  = [ 1.0; 1.0; 0.0; 0.0; 0.0; 0.0;];
-ddq = [ 0.0; 0.0; 0.0; 0.0; 0.0; 0.0;];
+dq  = [ 1.0; 1.0; 1.0; 1.0; 0.0; 0.0;];
+ddq = [ 0.0; 2.0; 0.0; 0.0; 2.0; 0.0;];
 
 // Initialize angular velocities (local frame)
 mw = zeros(3,6);
