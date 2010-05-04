@@ -297,18 +297,6 @@ bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
   return true;
 }
 
-double HumDynMultiBodyPrivate::footHeight() const
-{
-  if (m_HS){
-    double lWidth, lHeight, lDepth;
-    m_HS->GetFootSize(1, lDepth, lWidth, lHeight);
-  
-    return lHeight;
-  }else{
-    return 0;
-  }  
-}
-
 
 void HumDynMultiBodyPrivate::waist(CjrlJoint * inWaist)
 {

@@ -298,11 +298,6 @@ namespace dynamicsJRLJapan
 	 \brief Get the direction of gaze
       */
       const vector3d & gazeDirection() const {return m_LineVector;}
-      
-      /** 
-	  \brief Return the distance between the sole of a foot and its joint center
-      */
-      double footHeight() const;
 
 
       /*! \brief Specify which joint is the chest. */

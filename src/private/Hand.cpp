@@ -35,26 +35,6 @@ const CjrlJoint* Hand::associatedWrist()
     return attAssociatedWrist;
 }
 
-vector3d& Hand::centerInWristFrame()
-{
-    return attCenter;
-}
-
-vector3d& Hand::okayAxisInWristFrame()
-{
-    return attOkayAxis;
-}
-
-vector3d& Hand::showingAxisInWristFrame()
-{
-    return attShowingAxis;
-}
-
-vector3d& Hand::palmAxisInWristFrame()
-{
-    return attPalmAxis;
-}
-
 void Hand::getCenter(vector3d& outCenter) const
 {
   outCenter = attCenter;
