@@ -416,20 +416,12 @@ namespace jrlDelegate {
     /**
        \brief Compute the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
-    JRLDEPRECATED(virtual void computeJacobianCenterOfMass())
-    {
-      assert(m_DR != 0);
-      m_DR->computeJacobianCenterOfMass();
-    }
+    JRLDEPRECATED(virtual void computeJacobianCenterOfMass();)
 
     /**
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
     */
-    JRLDEPRECATED(virtual const matrixNxP& jacobianCenterOfMass() const) 
-      {
-	assert(m_DR != 0);
-	return m_DR->jacobianCenterOfMass();
-      }
+    JRLDEPRECATED(virtual const matrixNxP& jacobianCenterOfMass() const;) 
 
     /**
        @}

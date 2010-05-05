@@ -38,6 +38,7 @@ SET(libdyn_src
 SET(libdyn_src ${libdyn_src}
   public/Joint.cpp
   public/DynamicBody.cpp
+  public/deprecated.cpp
   public/dynamicsJRLJapanFactory.cpp
 )
 
