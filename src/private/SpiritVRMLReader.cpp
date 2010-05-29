@@ -21,10 +21,11 @@
 /*! Parsing related macros */
 //#define BOOST_SPIRIT_DEBUG
 #define BOOST_SPIRIT_RULE_SCANNERTYPE_LIMIT 2
-#define DEPTH_MAX 30
+#define DEPTH_MAX 40
 
 
 /*!  Framework includes */
+#define _DEBUG_MODE_ON_
 #include "Debug.h"
 
 /*! Boost includes */
@@ -96,8 +97,8 @@ namespace dynamicsJRLJapan
       int Depth;
 
       // Joint memory allocation done for new depth.
-      bool JointMemoryAllocationForNewDepth;
-
+      //bool JointMemoryAllocationForNewDepth;
+      
       // Current Link.
       internalLink CurrentLink;
 
@@ -228,7 +229,7 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<< "fTCBChildren: " << s<< endl;
       }
-      
+       
       void fDisplay(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -385,6 +386,21 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<< "Reading the infoline of the Humanoid: |" << s<<"|" << endl;
       }
+      void fBodyChildren(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Block of the body children: |" << s<<"|" << endl;
+	
+      }
+      void fBodySubBlock(char const *str, char const *end) const
+      {
+	string s(str,end);
+	if (m_Verbose>1)
+	  std::cout<< "Sub Block of the body : |" << s<<"|" << endl;
+	
+      }
+      
       void fProtoName(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -394,6 +410,10 @@ namespace dynamicsJRLJapan
     
       void fAddBody() const
       {
+	if (m_Verbose>1)
+	  {
+	    std::cout << "Starting Body." << std::endl;
+	  }
 	int lDepth = m_DataForParsing->Depth;
 	Body * lCurrentBody = m_DataForParsing->CurrentBody[lDepth];
 	lCurrentBody->setLabel(m_DataForParsing->NbOfBodies++);
@@ -402,13 +422,21 @@ namespace dynamicsJRLJapan
 	lCurrentBody->setMass(m_DataForParsing->mass);
 	lCurrentBody->localCenterOfMass(m_DataForParsing->cm);
 	if (m_DataForParsing->Depth!=0)
-	      lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
+	  {
+	    lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
+	    
+	  }
 	m_MultiBody->addBody(*lCurrentBody);
 	m_MultiBody->addLink(*m_DataForParsing->CurrentBody[lDepth-1],
-				    *lCurrentBody,
-				    m_DataForParsing->CurrentLink);
-	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
+			     *lCurrentBody,
+			     m_DataForParsing->CurrentLink);
+	//	m_DataForParsing->JointMemoryAllocationForNewDepth=false;
 	m_ListOfURLs.push_back(m_DataForParsing->m_BodyGeometry);
+	lCurrentBody->setInitialized(true);
+	if (m_Verbose>1)
+	  {
+	    std::cout << "Adding Body." << std::endl;
+	  }
       }
       void fJCDEFBlocks(char const *str, char const *end) const
       {
@@ -419,35 +447,20 @@ namespace dynamicsJRLJapan
 	
       }
     
-      void fJointName(char const *str, char const *end) const
+      void fDEFName(char const *str, char const *end) const
       {
 	string s(str,end);
 	m_DataForParsing->aName=s;
-
 	
-	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
-	  delete m_DataForParsing->CurrentLink.aJoint;
-	
-	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
-	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
-	m_DataForParsing->CurrentLink.aJoint->setName(s);
-	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
-		
 	if (m_Verbose>1)
-	  std::cout<< "Reading the name of the JointPrivate: |" << s<<"|" << endl;
+	  std::cout<< "Reading the name of the DEF block: |" << s<<"|" << endl;
       }
 
-      void fJointSubBlockName() const
+      void fJointBlockName() const
       {
-	if (m_DataForParsing->JointMemoryAllocationForNewDepth)
-	  delete m_DataForParsing->CurrentLink.aJoint;
-
-	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
-	m_DataForParsing->JointMemoryAllocationForNewDepth=true;
-	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
-	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 	if (m_Verbose>1)
-	  std::cout<< "Reading the `name of the JointPrivate SubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
+	  std::cout<< "Reading the `name of the JointPrivate BlockName: |" 
+		   << m_DataForParsing->aName<<"| p: " << m_DataForParsing->CurrentLink.aJoint << endl;
       }
 
       void fBodySubBlockName() const
@@ -458,11 +471,14 @@ namespace dynamicsJRLJapan
 	    delete m_DataForParsing->CurrentBody[m_DataForParsing->Depth];
 	    std::cout << "Current depth :" << m_DataForParsing->Depth << std::endl;
 	    }*/
-	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
 	m_DataForParsing->m_BodyGeometry.resetURL( );
 	if (m_Verbose>1)
-	  std::cout<< "Reading the name of the JointPrivate: |" << m_DataForParsing->aName<<"|" << endl;
+	  {
+	    std::cout<< "Reading the name of the BodySubBlockName: |" << m_DataForParsing->aName<<"|" << endl;
+	    std::cout<< "Depth: " << m_DataForParsing->Depth << " "
+		     <<m_DataForParsing->CurrentBody[m_DataForParsing->Depth] << endl;
+	  }
       }
     
       void fSFVec3f_0(char const *str, char const *end) const
@@ -653,6 +669,10 @@ namespace dynamicsJRLJapan
 	else if (s=="rotate")
 	  {
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
+	  }
+	else 
+	  {
+	    cout << "Unknown joint Type: " << s << endl;
 	  }
 	  
       }
@@ -975,7 +995,43 @@ namespace dynamicsJRLJapan
       
       void fIncreaseDepth() const
       {
+	int lDepth = m_DataForParsing->Depth;
+	// After the initial body.
+	if (lDepth>0)
+	  {
+
+	    // Check wether or not the current body is virtual or not.
+	    if (!m_DataForParsing->CurrentBody[lDepth]->getInitialized())
+	      {
+		// If it is virtual then do a basic initialization.
+		Body * lCurrentBody = m_DataForParsing->CurrentBody[lDepth];
+		lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
+		
+		char Buffer[1024];
+		memset(Buffer,0,1024);
+		sprintf(Buffer,"VIRTUAL_%d", m_DataForParsing->NbOfBodies);
+		lCurrentBody->setLabel(m_DataForParsing->NbOfBodies++);
+		lCurrentBody->setName(Buffer);
+		m_MultiBody->addBody(*lCurrentBody);
+		m_MultiBody->addLink(*m_DataForParsing->CurrentBody[lDepth-1],
+				     *lCurrentBody,
+				     m_DataForParsing->CurrentLink);
+		
+		lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
+		lCurrentBody->setInitialized(true);
+	      }
+	  }
+
+	// Increase Depth.
 	m_DataForParsing->Depth++;
+
+	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
+	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
+	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
+
+	// Creates a default body.
+	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
+
 	if (m_Verbose>1)
 	  std::cout << "Increased depth "<< m_DataForParsing->Depth << endl;
       }
@@ -983,9 +1039,11 @@ namespace dynamicsJRLJapan
       void fDecreaseDepth() const
       {
 	m_DataForParsing->Depth--;
+	
 	if (m_Verbose>1)
 	  std::cout << "Decreased depth "<< m_DataForParsing->Depth << endl;
       }
+
 
       // The parser object is copied a lot, so instead of keeping its own table
       // of variables, it keeps track of a reference to a common table.
@@ -1044,11 +1102,11 @@ namespace dynamicsJRLJapan
       
 	  // Fields of Transform block.
 	  TCBChildrenBlock_r = ch_p('[') 
-	    >> *(GroupBlock_r|TransformBlock_r |Sensors_r | Shape_r )
+	    >> *(GroupBlock_r|TransformBlock_r | ShapeInline_r | Sensors_r | Shape_r )
 	    >> ch_p(']');
 	  TCBChildren_r = (str_p("children"))
 	    [SVRBIND2(fTCBChildren,(self,arg1,arg2))]
-	    >> Shape_r | GroupBlock_r|TransformBlock_r |Sensors_r | TCBChildrenBlock_r ;
+	    >> Shape_r | GroupBlock_r| ShapeInline_r | TransformBlock_r |Sensors_r | TCBChildrenBlock_r ;
       
 	  TransformChildrenBlock_r = ch_p('[') 
 	    >> *(GroupBlock_r | TCBChildren_r) 
@@ -1319,16 +1377,17 @@ namespace dynamicsJRLJapan
 	    >> *ShapeBlock_r >> ch_p('}');
 
 	  BodySubBlock_r =CenterOfMass_r | Mass_r | MomentsOfInertia_r ;
-	  BodyChildrenInlineUrl_r = str_p("url") 
+	  ShapeInlineUrl_r = str_p("url") 
 	    >> ch_p('"') 
 	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[SVRBIND2(fBodyInlineUrl,(self,arg1,arg2))] 
 	    >> ch_p('"');
 
-	  BodyChildrenInline_r = ch_p('{') >> 
-	    *(BodyChildrenInlineUrl_r)>> ch_p('}');
+	  ShapeBlockInline_r = ch_p('{') >> 
+	    *(ShapeInlineUrl_r)>> ch_p('}');
   
-	  BodyChildrenField_r= (str_p("Inline") >> BodyChildrenInline_r ) |
-	    Sensors_r | Shape_r | TransformBlock_r;
+	  ShapeInline_r = (str_p("Inline") >> ShapeBlockInline_r );
+
+	  BodyChildrenField_r=  ShapeInline_r | Sensors_r | Shape_r | TransformBlock_r;
 	
 	  BodyChildren_r = str_p("children") >> (ch_p('[') 
 						 >> *BodyChildrenField_r
@@ -1336,26 +1395,29 @@ namespace dynamicsJRLJapan
 	    Shape_r;
 	  // Define the entry rules for body and hint
 	  BodyBlock_r =  (str_p("Segment"))[SVRBIND2(fBodySubBlockName,(self))]
-	    >> ch_p('{') >> *(BodySubBlock_r |
-			      (BodyChildren_r)[SVRBIND2(fProtoName,(self,arg1,arg2))])
-	    >> (ch_p('}'))[SVRBIND2(fAddBody,(self))];
+	    >> ch_p('{')
+	    >> *((BodySubBlock_r)[SVRBIND2(fBodySubBlock,(self,arg1,arg2))] |
+		 (BodyChildren_r)[SVRBIND2(fBodyChildren,(self,arg1,arg2))] )
+	    >> ch_p('}');
 	  
 	  JointChildrenDEFBlocks_r = str_p("DEF") >> (lexeme_d[+(alnum_p|ch_p('_'))])
 	    [SVRBIND2(fJCDEFBlocks,(self,arg1,arg2))] |
-	    ( BodyBlock_r| 
-	      JointSubBlock_r |
+	    ( (BodyBlock_r)[SVRBIND2(fAddBody,(self))]| 
+	      JointBlock_r |
 	      ListSensors_r);
 
-	  JointChildren_r = str_p("children") >> (ch_p('['))[SVRBIND2(fIncreaseDepth,(self))]
+	  JointChildren_r = str_p("children") >> (ch_p('['))
 					      >> *( JointChildrenDEFBlocks_r ) 
-					      >> ch_p(']')[SVRBIND2(fDecreaseDepth,(self))];
+					      >> ch_p(']');
 
-	  JointSubBlock_r = (str_p("Joint"))[SVRBIND2(fJointSubBlockName,(self))] >> ch_p('{') 
-					   >> *(JointField_r | JointChildren_r ) >> ch_p('}');
+	  JointBlock_r = (str_p("Joint"))[SVRBIND2(fJointBlockName,(self))] 
+	    >> ch_p('{')[SVRBIND2(fIncreaseDepth,(self))]  
+	    >> *(JointField_r | JointChildren_r ) 
+	    >> ch_p('}')[SVRBIND2(fDecreaseDepth,(self))];
 
-	  JointBlock_r = str_p("DEF") 
-	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[SVRBIND2(fJointName,(self,arg1,arg2))] 
-	    >> JointSubBlock_r;
+	  DEFBlock_r = str_p("DEF") 
+	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[SVRBIND2(fDEFName,(self,arg1,arg2))] 
+	    >> JointBlock_r;
 
 	  HumanoidVersion_r = str_p("version") >> ch_p('"') 
 					       >> (lexeme_d[+(alnum_p|'.')])
@@ -1375,7 +1437,7 @@ namespace dynamicsJRLJapan
 	  
 	  // Define the entry rules for huanoid.
 	  HumanoidBlock_r =  *(str_p("humanoidBody") 
-	    >> ch_p('[') >> *JointBlock_r >> ch_p(']') |
+	    >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
 			       HumanoidName_r | HumanoidVersion_r |
 			       HumanoidInfo_r );
   
@@ -1418,6 +1480,132 @@ namespace dynamicsJRLJapan
 			 Background_r | 
 			 NavigationInfo_r | 
 			 Viewpoint_r );  
+
+	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
+	  BOOST_SPIRIT_DEBUG_RULE(NameToField_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformToField_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformInstanceRotation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformInstanceTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(GroupBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Route_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TCBChildren_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TCBChildrenBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformChildrenBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformChildren_r);
+	  BOOST_SPIRIT_DEBUG_RULE(TransformLine_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFVec3f_r);
+	  BOOST_SPIRIT_DEBUG_RULE(MF_brackets_r);
+	  BOOST_SPIRIT_DEBUG_RULE(MFNode_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFNode_r);
+	  BOOST_SPIRIT_DEBUG_RULE(MFFloat_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFRotation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFString_r);
+	  BOOST_SPIRIT_DEBUG_RULE(MFString_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFFloat_r);
+	  BOOST_SPIRIT_DEBUG_RULE(SFInt32_r);
+	  
+	  BOOST_SPIRIT_DEBUG_RULE(ProtoLineTitle_r);
+	  BOOST_SPIRIT_DEBUG_RULE(ProtoLine_r);
+	  BOOST_SPIRIT_DEBUG_RULE(ProtoBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(ProtoSndBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Proto_r);
+
+	  BOOST_SPIRIT_DEBUG_RULE(JointTranslation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointType_r);
+	  BOOST_SPIRIT_DEBUG_RULE(JointID_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointAxis_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(Jointdh_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(Jointllimit_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Jointulimit_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Jointlvlimit_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(Jointuvlimit_r); 
+          BOOST_SPIRIT_DEBUG_RULE(Jointequivalentinertia_r); 
+          BOOST_SPIRIT_DEBUG_RULE(JointField_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(DEFBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointBlock_r);
+	  
+	  BOOST_SPIRIT_DEBUG_RULE(FSTranslation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(FSRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(FSID_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ForceSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ForceSensor_r);
+	  
+	  BOOST_SPIRIT_DEBUG_RULE(BodyChildren_r);
+	  BOOST_SPIRIT_DEBUG_RULE(BodyBlock_r);
+
+	  BOOST_SPIRIT_DEBUG_RULE(GyroRotation_r);  
+	  BOOST_SPIRIT_DEBUG_RULE(GyroTranslation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(GyroID_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(GyrometerSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(GyrometerSensor_r);
+
+	  BOOST_SPIRIT_DEBUG_RULE(ASTranslation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ASRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ASID_r);
+	  BOOST_SPIRIT_DEBUG_RULE(AccelerationSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(AccelerationSensor_r);
+
+	  BOOST_SPIRIT_DEBUG_RULE(VSTranslation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSID_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSFrontClipDistance_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSBackClipDistance_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSwidth_r);  
+	  BOOST_SPIRIT_DEBUG_RULE(VSheight_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VStype_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSFieldOfView_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSName_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VisionSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VisionSensor_r);
+	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensor_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(CSAngle_r);
+
+	  BOOST_SPIRIT_DEBUG_RULE(ListSensors_r); 
+	  BOOST_SPIRIT_DEBUG_RULE( Sensors_r); 
+	  BOOST_SPIRIT_DEBUG_RULE( CenterOfMass_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(Mass_r); 
+	  BOOST_SPIRIT_DEBUG_RULE( MomentsOfInertia_r);
+	  
+	  BOOST_SPIRIT_DEBUG_RULE(BodySubBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeInlineUrl_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlockInline_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeInline_r);
+	  BOOST_SPIRIT_DEBUG_RULE( BodyChildrenField_r);
+	  BOOST_SPIRIT_DEBUG_RULE( BodyChildren_r);
+	  BOOST_SPIRIT_DEBUG_RULE( BodyBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE( GeometryHeader_r);
+	  BOOST_SPIRIT_DEBUG_RULE( GeometryBox_r);
+	  BOOST_SPIRIT_DEBUG_RULE( GeometryCylinder_r);
+	  BOOST_SPIRIT_DEBUG_RULE( Shape_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(AppearanceBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE( AppearanceHeader_r);
+	  BOOST_SPIRIT_DEBUG_RULE(  AppearanceUse_r);
+	  BOOST_SPIRIT_DEBUG_RULE( AppearanceDef_r);
+	  BOOST_SPIRIT_DEBUG_RULE( MaterialBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE( JointChildrenDEFBlocks_r);
+	  BOOST_SPIRIT_DEBUG_RULE( JointChildren_r);
+	  BOOST_SPIRIT_DEBUG_RULE(  HumanoidBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE( HumanoidTrail_r);
+	  BOOST_SPIRIT_DEBUG_RULE( Humanoid_r);
+	  BOOST_SPIRIT_DEBUG_RULE(HumanoidVersion_r);
+	  BOOST_SPIRIT_DEBUG_RULE( HumanoidName_r);
+	  BOOST_SPIRIT_DEBUG_RULE( HumanoidInfo_r);
+	  BOOST_SPIRIT_DEBUG_RULE(HumanoidInfoLine_r);
+	  BOOST_SPIRIT_DEBUG_RULE( NIavatarSize_r);
+	  BOOST_SPIRIT_DEBUG_RULE( NIHeadlight_r);
+	  BOOST_SPIRIT_DEBUG_RULE( NIType_r);
+	  BOOST_SPIRIT_DEBUG_RULE( NavigationInfo_r);
+	  BOOST_SPIRIT_DEBUG_RULE(skyColor_r);
+	  BOOST_SPIRIT_DEBUG_RULE( Background_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ViewpointOri_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ViewpointPos_r);
+	  BOOST_SPIRIT_DEBUG_RULE( Viewpoint_r);
+	  BOOST_SPIRIT_DEBUG_RULE( EntryPoint);
+	  
 	}
     
 	rule<ScannerT> scaleMultiple_r, NameToField_r, TransformToField_r,
@@ -1434,7 +1622,7 @@ namespace dynamicsJRLJapan
 	  Jointllimit_r, Jointulimit_r,
 	  Jointlvlimit_r, Jointuvlimit_r, 
           Jointequivalentinertia_r, 
-          JointField_r, JointBlock_r, JointSubBlock_r;
+          JointField_r, DEFBlock_r, JointBlock_r;
 
 	rule<ScannerT> FSTranslation_r, FSRotation_r, FSID_r, 
 	  ForceSensorBlock_r, ForceSensor_r;
@@ -1453,7 +1641,7 @@ namespace dynamicsJRLJapan
 
 	rule<ScannerT> ListSensors_r, Sensors_r, CenterOfMass_r,Mass_r, MomentsOfInertia_r;
 
-	rule<ScannerT> BodySubBlock_r, BodyChildrenInlineUrl_r, BodyChildrenInline_r,
+	rule<ScannerT> BodySubBlock_r, ShapeInlineUrl_r, ShapeBlockInline_r, ShapeInline_r,
 	  BodyChildrenField_r, BodyChildren_r, BodyBlock_r;
 
 	rule<ScannerT> GeometryHeader_r, GeometryBox_r, GeometryCylinder_r;
@@ -1499,7 +1687,7 @@ namespace dynamicsJRLJapan
 	ODEBUG(" m_DataForParsing->CurrentLink.aJoint->m_globalConfiguration"<<
 	  m_DataForParsing->CurrentLink.aJoint->initialPosition());
 
-	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
+	//	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
 	m_DataForParsing->CurrentLink.indexCorps2 = 0;
 	m_DataForParsing->index_mi = 0;
@@ -1562,8 +1750,6 @@ namespace dynamicsJRLJapan
       aif.read(buffer,length);
       aif.close();
   
-      //  BOOST_SPIRIT_DEBUG_RULE(BodyBlock_r);
-      //  BOOST_SPIRIT_DEBUG_RULE(Humanoid_r);
       aSpiritOpenHRP.Init();
       aSpiritOpenHRP.setVerbose(0);
       
@@ -1574,3 +1760,5 @@ namespace dynamicsJRLJapan
     };
   };
 };
+
+

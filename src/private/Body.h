@@ -64,6 +64,9 @@ namespace dynamicsJRLJapan
   
     /*! \brief Says if the body has been explored. */
     int m_Explored;
+
+    /*! \brief Says if the body has been initialized. */
+    bool m_Initialized;
     
     /*! \brief JointPrivate to which the body is attached inside a tree
      structure. */
@@ -146,6 +149,16 @@ namespace dynamicsJRLJapan
 
     /*! \brief  Set the object as explored. */
     void setExplored(int anEx);
+
+    /*! \brief  Returns if the object has been initialized or not. 
+      This is used to handle the case of virtual body,
+      to handle complex joints. For instance, they appear in the case of
+      compound of several straigh simple joints.
+     */
+    bool getInitialized() const;
+
+    /*! \brief  Set the object as explored. */
+    void setInitialized(bool anEx);
   
     /*! \brief  Returns the name of the object. */
     std::string getName() const;

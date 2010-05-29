@@ -42,12 +42,14 @@ Body::Body(void)
   label=-1;
   labelMother=-1;
   m_Explored =0 ;
+  m_Initialized = false;
 }
 
 Body::Body(double lmass) 
 {
   this->m_mass		= lmass;
   m_Explored =0 ;
+  m_Initialized = false;
 }
 
 Body::Body(double lmass, 
@@ -55,6 +57,7 @@ Body::Body(double lmass,
 {
   this->m_mass		= lmass;
   m_Explored =0 ;  
+  m_Initialized = false;
   this->posCoM	= positionCoM;
 }
 Body::Body(double lmass, 
@@ -64,7 +67,7 @@ Body::Body(double lmass,
   this->posCoM	= positionCoM;
   this->m_mass		= lmass;
   m_Explored =0 ;  
-
+  m_Initialized = false;
   this->inertie	= matriceInertie;
 }
 
@@ -147,6 +150,16 @@ void Body::setExplored(int anEx)
 {
   m_Explored = anEx;
 
+}
+
+bool Body::getInitialized() const
+{
+  return m_Initialized;
+}
+
+void Body::setInitialized(bool anInitialized)
+{
+  m_Initialized = anInitialized;
 }
 
 /***********************************************/
