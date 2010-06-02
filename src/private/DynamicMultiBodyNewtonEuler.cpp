@@ -26,7 +26,7 @@
 #include <sstream>
 #include <fstream>
 #include <string.h>
-
+#include <assert.h>
 #include "Debug.h"
 
 /*! Local library includes. */
@@ -72,7 +72,6 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int currentNode = labelTheRoot;
   int lMother=0;
   int lChild=0;
-  unsigned int i,j;
   double NORME_EPSILON=1e-6;
   DynamicBodyPrivate *currentBody, *currentMotherBody, *currentChildBody;
 
@@ -141,31 +140,32 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  NE_Ro(2,1) = NE_wn[0]*st + NE_wn[1]*NE_wn[2]*lct;
 	  NE_Ro(2,2) = ct + NE_wn[2]*NE_wn[2]*lct;
         }
-
+      
       ODEBUG("Ro:" << endl << NE_Ro );
       ODEBUG("MR:" << currentMotherBody->R );
       ODEBUG("b: " << currentBody->b);
       ODEBUG("Mp: " << currentMotherBody->p);
       // End Rodrigues formula
       //-------------------------------
-
+      
       // Position and orientation in reference frame
-      currentBody->p = 
+      /* currentBody->p = 
 	MAL_S3x3_RET_A_by_B(currentMotherBody->R , currentBody->b )
 	+ currentMotherBody->p;
       MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,currentMotherBody->R , 
 			   currentBody->R_static);
-      MAL_S3x3_C_eq_A_by_B(currentBody->R ,NE_Rtmp , NE_Ro);
+			   MAL_S3x3_C_eq_A_by_B(currentBody->R ,NE_Rtmp , NE_Ro);  */
       currentBody->Riip1 = NE_Ro;
-
-      for( i=0;i<3;i++)
-	for( j=0;j<3;j++)
+      
+      /*      for( unsigned int i=0;i<3;i++)
+	for( unsigned int  j=0;j<3;j++)
 	  MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,j) 
 	    = currentBody->R(i,j);
-
-      for( i=0;i<3;i++)
+      
+      for( unsigned int i=0;i<3;i++)
 	MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) 
-	  = currentBody->p(i);
+	= currentBody->p(i); */
+      currentBody->getJointPrivate()->updateTransformation(m_Configuration);
 
       ODEBUG("q: "<< currentBody->q );
       ODEBUG("p: "
@@ -173,7 +173,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	     << currentBody->p[1] << " "
 	     << currentBody->p[2] << " " );
       ODEBUG(currentBody->getName());
-
+      
 
       //update the translation/rotation axis of joint
       ODEBUG("a:" << endl << currentBody->a );

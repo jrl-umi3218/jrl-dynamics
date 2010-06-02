@@ -14,6 +14,10 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "dynamicsJRLJapan/Joint.h"
 #include "../private/JointPrivate.h"
+#include "../private/JointAnchorPrivate.h"
+#include "../private/JointFreeFlyerPrivate.h"
+#include "../private/JointRotationPrivate.h"
+#include "../private/JointTranslationPrivate.h"
 
 using namespace dynamicsJRLJapan;
 
@@ -25,8 +29,37 @@ Joint::Joint()
 
 Joint::Joint(const Joint& inJoint)
 {
-  JointPrivate* obj = new JointPrivate(*inJoint.m_privateObj);
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  JointPrivate* obj=0;
+  
+  JointFreeflyerPrivate *aFFP = dynamic_cast<JointFreeflyerPrivate *>(inJoint.m_privateObj.get());
+  if (aFFP!=0)
+    obj = new JointFreeflyerPrivate(*aFFP);
+  else
+    {
+      JointRotationPrivate *aRP = dynamic_cast<JointRotationPrivate *>(inJoint.m_privateObj.get());
+      if (aRP!=0)
+	obj = new JointRotationPrivate(*aRP);
+      else
+	{
+	  
+	  JointTranslationPrivate *aTP = dynamic_cast<JointTranslationPrivate *>(inJoint.m_privateObj.get());
+	  if (aTP!=0)
+	    obj = new JointTranslationPrivate(*aTP);
+	  else
+	    {
+	      JointAnchorPrivate *aAP = dynamic_cast<JointAnchorPrivate *>(inJoint.m_privateObj.get());
+	      if (aAP!=0)
+		obj = new JointAnchorPrivate(*aAP);
+	      if (obj!=0)
+		m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+	      else
+		{
+		  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+		  std::cerr<< "Type not recognized";
+		}
+	    }
+	}
+    }
 }
 
 JointFreeflyer::JointFreeflyer(const matrix4d& inInitialPosition)

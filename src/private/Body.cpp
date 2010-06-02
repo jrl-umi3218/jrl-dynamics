@@ -214,9 +214,16 @@ const CjrlJoint* Body::joint() const
   return m_AttachedJoint;
 }
 
+JointPrivate* Body::getJointPrivate()
+{
+  return m_AttachedJoint;
+}
+
 void Body::joint(JointPrivate * ajoint)
 {
   m_AttachedJoint = ajoint;
+  if (m_AttachedJoint!=0)
+    m_AttachedJoint->setLinkedBody(*this);
 }
 
 

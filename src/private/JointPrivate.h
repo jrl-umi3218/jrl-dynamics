@@ -27,8 +27,9 @@ namespace dynamicsJRLJapan
        Define a transformation from a body to another
       Supported type:
       - Rotation around an axis with a quantity (type = ROTATION)
-      - Translation of a vector : quantite*axis	(type = TRANSLATION)
+      - Primsatic joint : quantite*axis	(type = PRISMATIC)
       - Rotation through a homogeneous matrix : *rotation (type = FREE_LIBRE)
+
 
       \note Two ways of constructing a kinematic chain are supported.
         \li through VRML parser VRMLReader::ParseVRMLFile
@@ -350,10 +351,11 @@ namespace dynamicsJRLJapan
     const matrix4d &currentTransformation() const;
     
      /**
-    \brief Update this joint's transformation according to the given vector of DoF values, and the parent joint's transformation if this is not a free flyer joint.
-    \return false if the required number of dof values is not met in given paramter
+    \brief Update this joint's transformation according to the given vector of DoF values, 
+    and the parent joint's transformation if this is not a free flyer joint.
+    \return false if the required number of dof values is not met.
       */
-    virtual bool updateTransformation(const vectorN& inRobotConfigVector);
+    virtual bool updateTransformation(const vectorN& inRobotConfigVector)=0;
     
     /**
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
@@ -550,14 +552,7 @@ namespace dynamicsJRLJapan
     \brief compute the rotation matrix correponding to axis of rotation inAxis and angle inAngle.
     */
     void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
-    
-    /**
-    \brief Convenient variables to avoid online matrix/vector allocation
-     */
-    matrix3d localR;
-    vector3d wn3d, vek;
-    vectorN dof6D;
-    
+        
     /**
        \name Body linked to the joint
        @{
@@ -609,32 +604,5 @@ namespace dynamicsJRLJapan
 
   };
 
-  class JointFreeflyerPrivate : public JointPrivate
-  {
-  public:
-    JointFreeflyerPrivate(const matrix4d &inInitialPosition);
-    virtual ~JointFreeflyerPrivate();
-  };
-
-  class JointRotationPrivate : public JointPrivate
-  {
-  public:
-    JointRotationPrivate(const matrix4d &inInitialPosition);
-    virtual ~JointRotationPrivate();
-  };
-
-  class JointTranslationPrivate : public JointPrivate
-  {
-  public:
-    JointTranslationPrivate(const matrix4d &inInitialPosition);
-    virtual ~JointTranslationPrivate();
-  };
-
-  class  JointAnchorPrivate : public JointPrivate
-  {
-  public:
-    JointAnchorPrivate(const matrix4d &inInitialPosition);
-    virtual ~JointAnchorPrivate();
-  };
 };
 #endif /* JOINTPRIVATE_H */

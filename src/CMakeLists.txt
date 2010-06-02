@@ -14,6 +14,10 @@
 SET(libdyn_src
   private/fileReader.cpp 
   private/JointPrivate.cpp 
+  private/JointRotationPrivate.cpp 
+  private/JointFreeFlyerPrivate.cpp 
+  private/JointTranslationPrivate.cpp 
+  private/JointAnchorPrivate.cpp 
   private/Body.cpp 
   private/Hand.cpp 
   private/Foot.cpp

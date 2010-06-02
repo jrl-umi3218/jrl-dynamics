@@ -19,6 +19,10 @@
 #include "dynamicsJRLJapan/humanoidDynamicRobot.h"
 #include "dynamicsJRLJapan/Hand.h"
 #include "dynamicsJRLJapan/Foot.h"
+#include "../private/JointFreeFlyerPrivate.h"
+#include "../private/JointRotationPrivate.h"
+#include "../private/JointTranslationPrivate.h"
+#include "../private/JointAnchorPrivate.h"
 
 namespace dynamicsJRLJapan
 {

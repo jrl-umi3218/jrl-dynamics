@@ -181,7 +181,10 @@ namespace dynamicsJRLJapan
     /** Set mass of body divided by mass of robot*/
     void massCoef(double inCoef){attCoefMass = inCoef;}
     
-    
+
+    /*! Provide pointer to the Joint Private. */
+    JointPrivate * getJointPrivate();
+
     /*! \name Interface from jrlBody 
       @{
     */

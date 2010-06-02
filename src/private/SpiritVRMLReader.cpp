@@ -17,6 +17,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <string.h>
 
 /*! Parsing related macros */
 //#define BOOST_SPIRIT_DEBUG
@@ -45,6 +46,10 @@
 #include <boost/lambda/bind.hpp>
 
 /*!  Framework includes */
+#include "JointFreeFlyerPrivate.h"
+#include "JointTranslationPrivate.h"
+#include "JointAnchorPrivate.h"
+#include "JointRotationPrivate.h"
 #include "MultiBody.h"
 #include "SpiritVRMLReader.h"
 
@@ -661,18 +666,33 @@ namespace dynamicsJRLJapan
 	string s(str,end);
 	if (m_Verbose>1)
 	  cout << "jointType: " << s << endl;
+	
 
 	if (s=="free")
 	  {
+	    
+	    m_DataForParsing->CurrentLink.aJoint = new JointFreeflyerPrivate();
+	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
+	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
+	    
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::FREE_JOINT);
 	  }
 	else if (s=="rotate")
 	  {
+	    m_DataForParsing->CurrentLink.aJoint = new JointRotationPrivate();
+	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
+	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
+	    
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	  }
-	else 
+	else if (s=="slide")
 	  {
-	    cout << "Unknown joint Type: " << s << endl;
+	    m_DataForParsing->CurrentLink.aJoint = new JointTranslationPrivate();
+	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
+	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
+	    
+	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::PRISMATIC_JOINT);
+	    
 	  }
 	  
       }
@@ -1024,10 +1044,6 @@ namespace dynamicsJRLJapan
 
 	// Increase Depth.
 	m_DataForParsing->Depth++;
-
-	m_DataForParsing->CurrentLink.aJoint = new JointPrivate();
-	m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
-	m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
 
 	// Creates a default body.
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
@@ -1681,9 +1697,10 @@ namespace dynamicsJRLJapan
 	// Initialization of the initial matrix.
 	MAL_S3x3_MATRIX_SET_IDENTITY(m_DataForParsing->StackOfRotationMatrixDisplay[0]);
 
-	MAL_S3_VECTOR(,double) dummy;
+	matrix4d eye;
+	MAL_S4x4_MATRIX_SET_IDENTITY(eye);
 	m_DataForParsing->CurrentLink.label= 0;
-	m_DataForParsing->CurrentLink.aJoint = new JointPrivate(JointPrivate::FIX_JOINT,dummy,0.0);
+	m_DataForParsing->CurrentLink.aJoint = new JointFreeflyerPrivate(eye);
 	ODEBUG(" m_DataForParsing->CurrentLink.aJoint->m_globalConfiguration"<<
 	  m_DataForParsing->CurrentLink.aJoint->initialPosition());
 
