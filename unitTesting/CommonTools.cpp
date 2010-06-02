@@ -50,7 +50,7 @@ namespace dynamicsJRLJapan {
       {
 	for(unsigned int j=0;j<4;j++)
 	  {
-	    os << MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j) << " " ;
+	    os << filterprecision(MAL_S4x4_MATRIX_ACCESS_I_J(todisplay,i,j)) << " " ;
 	  }
 	os << endl;
 	if (i!=3)
