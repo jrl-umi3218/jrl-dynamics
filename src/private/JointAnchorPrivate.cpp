@@ -39,5 +39,11 @@ JointAnchorPrivate::~JointAnchorPrivate()
 
 bool JointAnchorPrivate::updateTransformation(const vectorN & inDofVector)
 {
+  return true;
 }
 
+bool JointAnchorPrivate::updateVelocity(const vectorN &inRobotConfigVector,
+					const vectorN &inRobotConfigSpeed)
+{
+  return true;
+}

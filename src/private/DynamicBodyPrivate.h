@@ -46,7 +46,7 @@ namespace dynamicsJRLJapan
     /*! Torque vector applied to the body.  */
     vector3d m_Torque;
 
-    matrix3d Riip1;
+    matrix3d Riip1,Riip1t;
     
     /*! This relationship does make sense only if we are considering the
       relationship between this body and its mother in a given oriented

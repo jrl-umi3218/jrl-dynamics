@@ -48,7 +48,6 @@ JointFreeflyerPrivate::~JointFreeflyerPrivate()
 
 bool JointFreeflyerPrivate::updateTransformation(const vectorN & inDofVector)
 {
-
   
   for (unsigned int i=0; i<6; i++)
     m_dof6D(i) = inDofVector(rankInConfiguration() + i);
@@ -57,3 +56,15 @@ bool JointFreeflyerPrivate::updateTransformation(const vectorN & inDofVector)
   return true;
 }
 
+bool JointFreeflyerPrivate::updateVelocity(const vectorN & inRobotConfigVector,
+					   const vectorN & inRobotSpeedVector)
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  
+  for(unsigned int i=0;i<3;i++)
+    {
+      currentBody->v0[i] = inRobotSpeedVector(rankInConfiguration()+i);
+      currentBody->w[i] = inRobotSpeedVector(rankInConfiguration()+i+3);
+    }
+  return true;
+}

@@ -36,7 +36,23 @@ namespace dynamicsJRLJapan
        */
       JointFreeflyerPrivate(const matrix4d &inInitialPosition);
       virtual ~JointFreeflyerPrivate();
+
+      /*! 
+	\brief Compute position and orientation for state vector 
+	given inDofVector. 
+	\param inDofVector: The current configuration of the robot.
+	\return false is the number of dofs is not sufficient. */
       bool updateTransformation(const vectorN & inDofVector);
+
+
+      /*! \brief Computes speed in joint and global reference frame. */
+      bool updateVelocity(const vectorN& inRobotConfigVector,
+			  const vectorN& inRobotSpeedVector);
+
+      /*! \brief Here the number of DOFs is 6. */
+      unsigned int numberDof() const 
+      { return 6;};
+
 
     private:
       /*! Store variables */

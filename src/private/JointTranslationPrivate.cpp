@@ -61,3 +61,27 @@ bool JointTranslationPrivate::updateTransformation(const vectorN& inDofVector)
   return true;
 }
 
+bool JointTranslationPrivate::updateVelocity(const vectorN & inRobotConfigVector,
+					   const vectorN & inRobotSpeedVector)
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  DynamicBodyPrivate* currentMotherBody = 0;
+  vector3d NE_tmp, NE_tmp2; 
+  if ((DynamicBodyPrivate*)(parentJoint())!=0)
+    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
+  
+  /* TO BE CHECKED ! */
+  if (currentMotherBody!=0)
+    {
+      for(unsigned int i=0;i<3;i++)
+	currentBody->v0[i] = inRobotConfigVector(rankInConfiguration()+i) + currentMotherBody->v0[i];
+    }
+  else 
+    {
+      for(unsigned int i=0;i<3;i++)
+	currentBody->v0[i] = inRobotConfigVector(rankInConfiguration()+i);
+	  
+      MAL_S3_VECTOR_FILL(currentBody->w,0.0);
+    }
+  return true;
+}

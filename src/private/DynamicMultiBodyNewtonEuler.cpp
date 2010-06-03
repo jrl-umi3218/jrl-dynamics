@@ -68,11 +68,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
   /* End of intermediate */
 
-  double norm_w, th;
   int currentNode = labelTheRoot;
   int lMother=0;
   int lChild=0;
-  double NORME_EPSILON=1e-6;
   DynamicBodyPrivate *currentBody, *currentMotherBody, *currentChildBody;
 
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
@@ -103,129 +101,23 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
       currentBody = m_listOfBodies[currentNode];
 
-      norm_w = MAL_S3_VECTOR_NORM(currentBody->a);
       lMother = currentBody->getLabelMother();
       lChild = currentBody->child;
       
       currentMotherBody = m_listOfBodies[lMother];
-	  if (lChild >= 0)
-	    currentChildBody = m_listOfBodies[lChild];
+      if (lChild >= 0)
+	currentChildBody = m_listOfBodies[lChild];
       matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
 
       ODEBUG("CurrentBody " << currentBody->getName());
-
-      // ----------------------------------
-      // Rodrigues formula. (p33)
-      if (norm_w< NORME_EPSILON)
-        {
-	  MAL_S3x3_MATRIX_SET_IDENTITY(NE_Ro);
-        }
-      else
-        {
-	  th = norm_w * currentBody->q;
-	  NE_wn = currentBody->a / norm_w;
-	  ODEBUG("currentBody->a :" << currentBody->a );
-	  ODEBUG("norm_w:" << norm_w);
-
-	  double ct = cos(th);
-	  double lct= (1-ct);
-	  double st = sin(th);
-	  NE_Ro(0,0) = ct + NE_wn[0]*NE_wn[0]* lct;
-	  NE_Ro(0,1) = NE_wn[0]*NE_wn[1]*lct-NE_wn[2]*st;
-	  NE_Ro(0,2) = NE_wn[1] * st+NE_wn[0]*NE_wn[2]*lct;
-	  NE_Ro(1,0) = NE_wn[2]*st +NE_wn[0]*NE_wn[1]*lct;
-	  NE_Ro(1,1) = ct + NE_wn[1]*NE_wn[1]*lct;
-	  NE_Ro(1,2) = -NE_wn[0]*st+NE_wn[1]*NE_wn[2]*lct;
-	  NE_Ro(2,0) = -NE_wn[1]*st+NE_wn[0]*NE_wn[2]*lct;
-	  NE_Ro(2,1) = NE_wn[0]*st + NE_wn[1]*NE_wn[2]*lct;
-	  NE_Ro(2,2) = ct + NE_wn[2]*NE_wn[2]*lct;
-        }
-      
-      ODEBUG("Ro:" << endl << NE_Ro );
-      ODEBUG("MR:" << currentMotherBody->R );
-      ODEBUG("b: " << currentBody->b);
-      ODEBUG("Mp: " << currentMotherBody->p);
-      // End Rodrigues formula
-      //-------------------------------
-      
+      JointPrivate * currentJoint = currentBody->getJointPrivate();
       // Position and orientation in reference frame
-      /* currentBody->p = 
-	MAL_S3x3_RET_A_by_B(currentMotherBody->R , currentBody->b )
-	+ currentMotherBody->p;
-      MAL_S3x3_C_eq_A_by_B(NE_Rtmp ,currentMotherBody->R , 
-			   currentBody->R_static);
-			   MAL_S3x3_C_eq_A_by_B(currentBody->R ,NE_Rtmp , NE_Ro);  */
-      currentBody->Riip1 = NE_Ro;
-      
-      /*      for( unsigned int i=0;i<3;i++)
-	for( unsigned int  j=0;j<3;j++)
-	  MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,j) 
-	    = currentBody->R(i,j);
-      
-      for( unsigned int i=0;i<3;i++)
-	MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) 
-	= currentBody->p(i); */
-      currentBody->getJointPrivate()->updateTransformation(m_Configuration);
-
-      ODEBUG("q: "<< currentBody->q );
-      ODEBUG("p: "
-	     << currentBody->p[0] << " "
-	     << currentBody->p[1] << " "
-	     << currentBody->p[2] << " " );
-      ODEBUG(currentBody->getName());
-      
-
-      //update the translation/rotation axis of joint
-      ODEBUG("a:" << endl << currentBody->a );
-      {
-	matrix3d ltmp1,ltmp2;
-	MAL_S3x3_C_eq_A_by_B(ltmp1,
-			     currentMotherBody->R, 
-			     currentBody->R_static);
-       	MAL_S3x3_C_eq_A_by_B(currentBody->w_a,
-			     ltmp1, currentBody->a);
-      }
-      matrix3d MRiip1t = MAL_S3x3_RET_TRANSPOSE(currentBody->Riip1);
+      currentJoint->updateTransformation(m_Configuration);
 	  
       if (m_ComputeVelocity)
         {
-	  
-	  // Computes the angular velocity
-
-	  // In the global frame.
-	  ODEBUG("dq: "<< currentBody->dq );
-	  NE_tmp = currentBody->w_a * currentBody->dq;
-	  //	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
-
-	  currentBody->w  = currentMotherBody->w  + NE_tmp;
-	  ODEBUG("w: " << currentBody->w );
-	  // In the local frame.
-	  NE_tmp = currentBody->a * currentBody->dq;
-	  
-	  
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
-	  NE_tmp2 = MAL_S3x3_RET_A_by_B(MRiip1t,NE_tmp2);
-
-	  currentBody->lw  = NE_tmp2  + NE_tmp;
-	  ODEBUG(" " <<currentBody->getName() << " currentBody->lw:" << currentBody->lw);
-
-	  ODEBUG("lw: " << currentBody->w << 
-		  " a: " << currentBody->a << 
-		  " dq:" << currentBody->dq);
-	  
-	  // Computes the linear velocity.
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R,
-			       currentBody->b);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,
-				      currentMotherBody->w , 
-				      NE_tmp);
-
-	  currentBody->v0 = currentMotherBody->v0 + NE_tmp2;
-
-	  ODEBUG("v0: "
-		 << currentBody->v0[0] << " "
-		 << currentBody->v0[1] << " "
-		 << currentBody->v0[2] << " " );
+	  currentJoint->updateVelocity(m_Configuration,
+				       m_Velocity);
         }
 
       vector3d lc = currentBody->localCenterOfMass();
@@ -233,49 +125,15 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       // Computes also the center of mass in the reference frame.
       if (m_ComputeCoM)
         {
-	  ODEBUG(" c: " << lc);
-	  MAL_S3x3_C_eq_A_by_B(NE_cl,currentBody->R,lc);
-	  NE_lw_c = NE_cl + currentBody->p;
-	  ODEBUG(" lw_c: "<< currentNode <<" "<< NE_lw_c[0] 
-		 << " " << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  positionCoMPondere +=  
-	    NE_lw_c * currentBody->getMass();
-	  ODEBUG(" w_c: " << NE_lw_c[0] << " " 
-		 << NE_lw_c[1] << " " << NE_lw_c[2]);
-	  ODEBUG(" Mass " << currentBody->getMass());
-	  ODEBUG(" positionCoMPondere " << positionCoMPondere);
-	  currentBody->w_c = NE_lw_c;
+	  currentJoint->updateWorldCoMPosition();
+	  positionCoMPondere +=  currentBody->w_c * currentBody->getMass();
         }
+
       if (m_ComputeMomentum)
         {
-
-	  // Computes momentum matrix P.
-	  ODEBUG("w: " << currentBody->w );
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->w, NE_cl);
-	  ODEBUG("cl^w: " << NE_tmp);
-	  ODEBUG("mass: " << currentBody->getMass());
-	  ODEBUG("v0: " << currentBody->v0 );
-	  NE_lP=  (currentBody->v0 +
-		   NE_tmp )* currentBody->getMass();
-	  currentBody->P = NE_lP;
-	  ODEBUG("P: " << NE_lP );
-	  m_P += NE_lP;
-
-	  // Computes angular momentum matrix L
-	  // Lk = xc x Pk + R * I * Rt * w
-	  MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
-
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,NE_lw_c,NE_lP);
-
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , currentBody->w);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
-	  NE_lL = NE_tmp3 + NE_tmp2;
-	  ODEBUG("L: " << lL);
-
-	  currentBody->L = NE_lL;
-	  m_L+= NE_lL;
-
+	  currentJoint->updateMomentum();
+	  m_P += currentBody->P;
+	  m_L+= currentBody->L;
         }
 
       if (m_ComputeAcceleration)
@@ -292,7 +150,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 	  // In local reference frame.
 	  MAL_S3x3_C_eq_A_by_B(NE_tmp,RstaticT,currentMotherBody->ldw);
-	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw,MRiip1t, NE_tmp);
+	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw,currentBody->Riip1t, NE_tmp);
 	  
 	  NE_tmp = currentBody->a * currentBody->ddq;
 	  NE_tmp2 = currentBody->a * currentBody->dq;
@@ -322,7 +180,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  NE_tmp = NE_tmp2 + NE_tmp3 + currentMotherBody->ldv;
 
 	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,NE_tmp);
-	  currentBody->ldv = MAL_S3x3_RET_A_by_B(MRiip1t,NE_RotByMotherdv);
+	  currentBody->ldv = MAL_S3x3_RET_A_by_B(currentBody->Riip1t,NE_RotByMotherdv);
 	  ODEBUG(" " << currentBody->getName() << " Mother->ldv:" <<currentMotherBody->ldv);
 
         }
@@ -346,7 +204,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  ODEBUG(" ldv: " << currentBody->ldv);
 	  ODEBUG(" R_static: " << currentBody->R_static);
 	  ODEBUG(" b: " << currentBody->b);
-	  ODEBUG(" MRiip1t: " << MRiip1t);
+	  ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);
 	  ODEBUG(" ldv_c: " << currentBody->ldv_c);
 	  
         }

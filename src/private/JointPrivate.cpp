@@ -484,54 +484,55 @@ CjrlRigidVelocity JointPrivate::jointVelocity()
 
 void JointPrivate::computeSubTreeMCom()
 {
-  for (attId = 0; attId< 3;attId++)
-    attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
 
-  attSTcoef = linkedDBody()->massCoef();
+  for (unsigned int Id = 0; Id< 3;Id++)
+    m_STmcom[Id] = linkedDBody()->massCoef()*linkedDBody()->w_c[Id];
 
-  for (attId = 0; attId< countChildJoints();attId++)
+  m_STcoef = linkedDBody()->massCoef();
+
+  for (unsigned int Id = 0; Id< countChildJoints();Id++)
     {
-      m_Children[attId]->computeSubTreeMCom();
-      attSTmcom += m_Children[attId]->subTreeMCom();
-      attSTcoef += m_Children[attId]->subTreeCoef();
+      m_Children[Id]->computeSubTreeMCom();
+      m_STmcom += m_Children[Id]->subTreeMCom();
+      m_STcoef += m_Children[Id]->subTreeCoef();
     }
 }
 
 void JointPrivate::computeSubTreeMComExceptChild(const CjrlJoint* inJoint)
 {
-  for (attId = 0; attId< 3;attId++)
-    attSTmcom[attId] = linkedDBody()->massCoef()*linkedDBody()->w_c[attId];
+  for (unsigned int Id = 0; Id< 3;Id++)
+    m_STmcom[Id] = linkedDBody()->massCoef()*linkedDBody()->w_c[Id];
 
-  attSTcoef = linkedDBody()->massCoef();
+  m_STcoef = linkedDBody()->massCoef();
 
-  for (attId = 0; attId< countChildJoints();attId++)
+  for (unsigned int Id = 0; Id< countChildJoints();Id++)
     {
-      if (inJoint == m_Children[attId])
+      if (inJoint == m_Children[Id])
 	continue;
-      m_Children[attId]->computeSubTreeMCom();
-      attSTmcom += m_Children[attId]->subTreeMCom();
-      attSTcoef += m_Children[attId]->subTreeCoef();
+      m_Children[Id]->computeSubTreeMCom();
+      m_STmcom += m_Children[Id]->subTreeMCom();
+      m_STcoef += m_Children[Id]->subTreeCoef();
     }
 }
 
 void JointPrivate::subTreeMCom(const vector3d& inReplacement)
 {
-  attSTmcom = inReplacement;
+  m_STmcom = inReplacement;
 }
 
 const vector3d& JointPrivate::subTreeMCom() const
 {
-  return attSTmcom;
+  return m_STmcom;
 }
 
 double JointPrivate::subTreeCoef()
 {
-  return attSTcoef;
+  return m_STcoef;
 }
 
 void JointPrivate::subTreeCoef(double inReplacement)
 {
-  attSTcoef = inReplacement;
+  m_STcoef = inReplacement;
 }
 
 CjrlRigidAcceleration JointPrivate::jointAcceleration()
@@ -554,27 +555,6 @@ CjrlRigidAcceleration JointPrivate::jointAcceleration()
 
 }
 
-unsigned int JointPrivate::numberDof() const
-{
-  unsigned int r=0;
-
-  switch(m_type)
-    {
-    case (FREE_JOINT):
-      r=6;
-      break;
-    case (FIX_JOINT):
-      r=0;
-      break;
-    case (REVOLUTE_JOINT):
-      r=1;
-      break;
-    case (PRISMATIC_JOINT):
-      r=1;
-      break;
-    }
-  return r;
-}
 
 const MAL_MATRIX(,double) & JointPrivate::jacobianJointWrtConfig() const
 {
@@ -595,7 +575,7 @@ void JointPrivate::computeJacobianJointWrtConfig()
 }
 
 void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
-					   matrixNxP& outJ) const
+						  matrixNxP& outJ) const
 {
   vector3d dp,lv;
   
@@ -706,6 +686,7 @@ void JointPrivate::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
   m_dynBody = (DynamicBodyPrivate*)m_Body;
+  
 }
 
 void JointPrivate::SetFatherJoint(JointPrivate *aFather)
@@ -824,5 +805,39 @@ void JointPrivate::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d&
     }
 }
 
+void JointPrivate::updateWorldCoMPosition()
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  vector3d NE_cl,lc = currentBody->localCenterOfMass();
+  MAL_S3x3_C_eq_A_by_B(m_wlc,
+		       currentBody->R,lc);
+  currentBody->w_c  = m_wlc + currentBody->p;
+}
 
+void JointPrivate::updateMomentum()
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  vector3d NE_tmp,NE_tmp2, NE_tmp3;
+  matrix3d NE_Rt;
+  // Computes momentum matrix P.
+  ODEBUG("w: " << currentBody->w );
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->w, m_wlc);
+  ODEBUG("cl^w: " << NE_tmp);
+  ODEBUG("mass: " << currentBody->getMass());
+  ODEBUG("v0: " << currentBody->v0 );
+  currentBody->P=  (currentBody->v0 +
+	   NE_tmp )* currentBody->getMass();
+  ODEBUG("P: " << currentBody->P);
+  // Computes angular momentum matrix L
+  // Lk = xc x Pk + R * I * Rt * w
+  MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
+  
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w_c,currentBody->P);
+  
+  MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , currentBody->w);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
+  currentBody->L = NE_tmp3 + NE_tmp2;
+  ODEBUG("L: " << lL);
 
+}

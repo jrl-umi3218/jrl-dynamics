@@ -58,16 +58,15 @@ namespace dynamicsJRLJapan
 
   private:
       
-      /** */
-      double attSTcoef;
-      /** */
-      unsigned int attId, attNumberLifted;
-      /** */
-      vector3d attSTmcom;
-      
+      /** Coefficient of the mass related to the subtree of this joint. */
+      double m_STcoef;
+      /** CoM of the subtree reaching this joint. */
+      vector3d m_STmcom;
+      /*! Local CoM oriented in the world reference frame . */
+      vector3d m_wlc;
       
     /*!  Type of the transformation */ 
-    int m_type;
+      int m_type;
     
     /*! Axis of the transformation,
       for the link with one DoF. */
@@ -351,11 +350,30 @@ namespace dynamicsJRLJapan
     const matrix4d &currentTransformation() const;
     
      /**
-    \brief Update this joint's transformation according to the given vector of DoF values, 
+    \brief Update this joint and body transformation according to the given vector of DoF values, 
     and the parent joint's transformation if this is not a free flyer joint.
     \return false if the required number of dof values is not met.
       */
     virtual bool updateTransformation(const vectorN& inRobotConfigVector)=0;
+
+     /**
+	\brief Update the joint and body velocity according to the given vector of DoF values, 
+	and the parent joint's transformation if this is not a free flyer joint.
+	\return false if the required number of dof values is not met.
+     */
+    virtual bool updateVelocity(const vectorN& inRobotConfigVector,
+				const vectorN& inRobotSpeedVector)=0;
+
+    /**
+       \brief Update the world position of the CoM. 
+    */
+    void updateWorldCoMPosition();
+
+    /**
+       \brief Update the momentum according the current transformation
+       and speed. 
+    */
+    void updateMomentum();
     
     /**
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
@@ -378,7 +396,8 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the number of degrees of freedom of the joint.
     */
-    unsigned int numberDof() const;
+    virtual unsigned int numberDof() const
+    { return 0;};
 
     /**
        \brief Returns the rank of the JointPrivate in the state vector.
@@ -402,7 +421,9 @@ namespace dynamicsJRLJapan
     */
     inline double lowerBound(unsigned int inDofRank) const
     {
-      return m_LowerLimits[inDofRank];
+      if (inDofRank<m_LowerLimits.size())
+	return m_LowerLimits[inDofRank];
+      return 0.0;
     };
 
     /**
@@ -412,7 +433,9 @@ namespace dynamicsJRLJapan
     */
     inline double upperBound(unsigned int inDofRank) const
     {
-      return m_UpperLimits[inDofRank];
+      if (inDofRank<m_UpperLimits.size())
+	return m_UpperLimits[inDofRank];
+      return 0.0;
     };
 
     /**
@@ -423,7 +446,8 @@ namespace dynamicsJRLJapan
     */
     inline void lowerBound(unsigned int inDofRank, double inLowerBound) 
     {
-      m_LowerLimits[inDofRank] = inLowerBound;
+      if (inDofRank<m_LowerLimits.size())
+	m_LowerLimits[inDofRank] = inLowerBound;
     };
 
     /**
@@ -434,7 +458,8 @@ namespace dynamicsJRLJapan
     */
     inline void upperBound(unsigned int inDofRank, double inUpperBound)
     {
-      m_UpperLimits[inDofRank] = inUpperBound;
+      if (inDofRank<m_UpperLimits.size())
+	m_UpperLimits[inDofRank] = inUpperBound;
     };
 
     /**
@@ -445,7 +470,8 @@ namespace dynamicsJRLJapan
     */
     inline void upperVelocityBound(unsigned int inDofRank, double inUpperVelocityBound)
     {
-      m_UpperVelocityLimits[inDofRank] = inUpperVelocityBound;
+      if (inDofRank<m_UpperVelocityLimits.size())
+	m_UpperVelocityLimits[inDofRank] = inUpperVelocityBound;
     };
 
     /**
@@ -455,7 +481,9 @@ namespace dynamicsJRLJapan
     */
     inline double lowerVelocityBound(unsigned int inDofRank) const
     {
-      return m_LowerVelocityLimits[inDofRank];
+      if (inDofRank<m_LowerVelocityLimits.size())
+	return m_LowerVelocityLimits[inDofRank];
+      return 0.0;
     };
 
     /** \brief Returns the equivalent inertia */
@@ -477,7 +505,9 @@ namespace dynamicsJRLJapan
     */
     inline double upperVelocityBound(unsigned int inDofRank) const
     {
-      return m_UpperVelocityLimits[inDofRank];
+      if (inDofRank<m_UpperVelocityLimits.size())
+	return m_UpperVelocityLimits[inDofRank];
+      return 0.0;
     };
 
     /**
@@ -488,7 +518,8 @@ namespace dynamicsJRLJapan
     */
     inline void lowerVelocityBound(unsigned int inDofRank, double inLowerVelocityBound) 
     {
-      m_LowerVelocityLimits[inDofRank] = inLowerVelocityBound;
+      if (inDofRank<m_LowerVelocityLimits.size())
+	m_LowerVelocityLimits[inDofRank] = inLowerVelocityBound;
     };
 
     /*! @} */
