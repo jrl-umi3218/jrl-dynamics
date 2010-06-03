@@ -64,26 +64,6 @@ bool JointTranslationPrivate::updateTransformation(const vectorN& inDofVector)
 bool JointTranslationPrivate::updateVelocity(const vectorN & inRobotConfigVector,
 					   const vectorN & inRobotSpeedVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
-  vector3d NE_tmp, NE_tmp2; 
-  if ((DynamicBodyPrivate*)(parentJoint())!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-  
-  /* TO BE CHECKED ! */
-  if (currentMotherBody!=0)
-    {
-      for(unsigned int i=0;i<3;i++)
-	currentBody->v0[i] = inRobotSpeedVector(rankInConfiguration()+i) + currentMotherBody->v0[i];
-      currentBody->w = currentMotherBody->w;
-    }
-  else 
-    {
-      for(unsigned int i=0;i<3;i++)
-	currentBody->v0[i] = inRobotSpeedVector(rankInConfiguration()+i);
-	  
-      MAL_S3_VECTOR_FILL(currentBody->w,0.0);
-    }
   return true;
 }
 
@@ -91,24 +71,5 @@ bool JointTranslationPrivate::updateAcceleration(const vectorN & inRobotConfigVe
 						 const vectorN & inRobotSpeedVector,
 						 const vectorN & inRobotAccelerationVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
-  vector3d NE_tmp, NE_tmp2; 
-  if ((DynamicBodyPrivate*)(parentJoint())!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-  
-  /* TO BE CHECKED ! */
-  if (currentMotherBody!=0)
-    {
-      for(unsigned int i=0;i<3;i++)
-	currentBody->dv[i] = inRobotConfigVector(rankInConfiguration()+i) + currentMotherBody->dv[i];
-    }
-  else 
-    {
-      for(unsigned int i=0;i<3;i++)
-	currentBody->dv[i] = inRobotAccelerationVector(rankInConfiguration()+i);
-	  
-      MAL_S3_VECTOR_FILL(currentBody->dw,0.0);
-    }
   return true;
 }
