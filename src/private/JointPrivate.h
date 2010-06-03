@@ -348,7 +348,9 @@ namespace dynamicsJRLJapan
        The current transformation is determined by the configuration \f${\bf q}\f$ of the robot.
     */
     const matrix4d &currentTransformation() const;
-    
+
+    /*! \name Methods related to inverse dynamics computation.
+      @{ */
      /**
     \brief Update this joint and body transformation according to the given vector of DoF values, 
     and the parent joint's transformation if this is not a free flyer joint.
@@ -364,10 +366,26 @@ namespace dynamicsJRLJapan
     virtual bool updateVelocity(const vectorN& inRobotConfigVector,
 				const vectorN& inRobotSpeedVector)=0;
 
+     /**
+	\brief Update the joint and body acceleration according to the given vector of DoF values, 
+	and the parent joint's transformation if this is not a free flyer joint.
+	\return false if the required number of dof values is not met.
+     */
+    virtual bool updateAcceleration(const vectorN& inRobotConfigVector,
+				    const vectorN& inRobotSpeedVector,
+				    const vectorN& inRobotAccelerationVector)=0;
+
+    /*! @} */
+
     /**
        \brief Update the world position of the CoM. 
     */
     void updateWorldCoMPosition();
+
+    /**
+       \brief Update the world position of the CoM. 
+    */
+    void updateAccelerationCoM();
 
     /**
        \brief Update the momentum according the current transformation

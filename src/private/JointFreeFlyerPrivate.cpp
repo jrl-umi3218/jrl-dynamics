@@ -68,3 +68,17 @@ bool JointFreeflyerPrivate::updateVelocity(const vectorN & inRobotConfigVector,
     }
   return true;
 }
+
+bool JointFreeflyerPrivate::updateAcceleration(const vectorN & inRobotConfigVector,
+					       const vectorN & inRobotSpeedVector,
+					       const vectorN & inRobotAccelerationVector)
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  
+  for(unsigned int i=0;i<3;i++)
+    {
+      currentBody->dv[i] = inRobotAccelerationVector(rankInConfiguration()+i);
+      currentBody->dw[i] = inRobotAccelerationVector(rankInConfiguration()+i+3);
+    }
+  return true;
+}

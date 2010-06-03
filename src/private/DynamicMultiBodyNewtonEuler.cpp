@@ -59,19 +59,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 					    MAL_S3_VECTOR(&dvForRoot,double),
 					    MAL_S3_VECTOR(&dwForRoot,double))
 {
-  /** Intermediate variables. The mantra is :
-      "To optimize those variables, in the Compiler we trust"
-      (with the appropriate compilation options).
-  */
-  vector3d NE_tmp3, NE_tmp2, NE_wn,NE_cl, NE_lw_c, NE_aRc, NE_aRb,  
-    NE_lpComP, NE_RotByMotherdv, NE_lP,NE_lL, NE_tmp;
-  matrix3d NE_Rtmp, NE_Rt, NE_Ro, NE_Rot;
-  /* End of intermediate */
 
   int currentNode = labelTheRoot;
-  int lMother=0;
-  int lChild=0;
-  DynamicBodyPrivate *currentBody, *currentMotherBody, *currentChildBody;
+  DynamicBodyPrivate *currentBody=0;
 
   m_listOfBodies[labelTheRoot]->p = PosForRoot;
   m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
@@ -83,131 +73,54 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
   currentNode = m_listOfBodies[labelTheRoot]->child;
 
+  // Initialize momentum
   if (m_ComputeMomentum)
     {
       MAL_S3_VECTOR_FILL(m_P,0);
       MAL_S3_VECTOR_FILL(m_L,0);
     }
 
+  // Initialize CoM value.
   positionCoMPondere[0] = 0;
   positionCoMPondere[1] = 0;
   positionCoMPondere[2] = 0;
 
-  ODEBUG("PosForRoot: " << PosForRoot );
-  ODEBUG("v0ForRoot: " << v0ForRoot );
-  ODEBUG("OrientationForRoot: " << OrientationForRoot );
   do
     {
 
-      currentBody = m_listOfBodies[currentNode];
-
-      lMother = currentBody->getLabelMother();
-      lChild = currentBody->child;
-      
-      currentMotherBody = m_listOfBodies[lMother];
-      if (lChild >= 0)
-	currentChildBody = m_listOfBodies[lChild];
-      matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
-
-      ODEBUG("CurrentBody " << currentBody->getName());
+      currentBody = m_listOfBodies[currentNode];      
       JointPrivate * currentJoint = currentBody->getJointPrivate();
+
       // Position and orientation in reference frame
       currentJoint->updateTransformation(m_Configuration);
 	  
       if (m_ComputeVelocity)
-        {
-	  currentJoint->updateVelocity(m_Configuration,
-				       m_Velocity);
-        }
-
-      vector3d lc = currentBody->localCenterOfMass();
-	    
+	currentJoint->updateVelocity(m_Configuration,
+				     m_Velocity);
       // Computes also the center of mass in the reference frame.
       if (m_ComputeCoM)
         {
 	  currentJoint->updateWorldCoMPosition();
 	  positionCoMPondere +=  currentBody->w_c * currentBody->getMass();
         }
-
+      
+      // Update the momentum 
       if (m_ComputeMomentum)
         {
 	  currentJoint->updateMomentum();
 	  m_P += currentBody->P;
 	  m_L+= currentBody->L;
         }
-
+      
+      // Update the acceleration of the body.
       if (m_ComputeAcceleration)
-        {
-	  // ******************* Computes the angular acceleration for joint i. ********************
-	  // In global reference frame.
-	  // NE_tmp2 = z_{i-1} * dqi
-	  NE_tmp2 = currentBody->w_a * currentBody->dq;
-	  // NE_tmp3 = w^{(0)}_i x z_{i-1} * dqi
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
-	  // NE_tmp2 = z_{i-1} * ddqi
-	  NE_tmp2 = currentBody->w_a * currentBody->ddq;
-	  currentBody->dw = NE_tmp2 + NE_tmp3 + currentMotherBody->dw;
+	currentJoint->updateAcceleration(m_Configuration,
+					 m_Velocity,
+					 m_Acceleration);
 
-	  // In local reference frame.
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp,RstaticT,currentMotherBody->ldw);
-	  MAL_S3x3_C_eq_A_by_B(currentBody->ldw,currentBody->Riip1t, NE_tmp);
-	  
-	  NE_tmp = currentBody->a * currentBody->ddq;
-	  NE_tmp2 = currentBody->a * currentBody->dq;
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
-	  currentBody->ldw= currentBody->ldw + NE_tmp + NE_tmp3;
-	  ODEBUG(" " <<currentBody->getName() << " currentBody->ldw:" << currentBody->ldw);
-
-	  // ******************* Computes the linear acceleration for joint i. ********************
-	  // In global reference frame
-	  MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R , currentBody->b);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w,NE_tmp);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->w,NE_tmp2);
-
-	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dw,NE_tmp);
-
-	  currentBody->dv = NE_tmp2 + NE_tmp3 + currentMotherBody->dv;
-
-	  // In local reference frame.
-	  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->lw,currentBody->b);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->lw,NE_tmp2);
-
-	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
-
-	  NE_tmp = NE_tmp2 + NE_tmp3 + currentMotherBody->ldv;
-
-	  MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,NE_tmp);
-	  currentBody->ldv = MAL_S3x3_RET_A_by_B(currentBody->Riip1t,NE_RotByMotherdv);
-	  ODEBUG(" " << currentBody->getName() << " Mother->ldv:" <<currentMotherBody->ldv);
-
-        }
-
+      // Update the acceleration of the joint's CoM
       if (m_ComputeAccCoM)
-        {
-
-	  // *******************  Acceleration for the center of mass of body  i ************************
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
-	  
-	  // NE_tmp2 = dw_I x r_{i,i+1}
-	  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
-
-	  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
-
-	  ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
-	  ODEBUG(" lc = " << lc);
-	  ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
-	  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
-	  ODEBUG(" ldv: " << currentBody->ldv);
-	  ODEBUG(" R_static: " << currentBody->R_static);
-	  ODEBUG(" b: " << currentBody->b);
-	  ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);
-	  ODEBUG(" ldv_c: " << currentBody->ldv_c);
-	  
-        }
+	  currentJoint->updateAccelerationCoM();
 
       // TO DO if necessary : cross velocity.
       int step=0;
@@ -263,23 +176,23 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
   if (m_ComputeSkewCoM)
     {
-      SkewCoM(0,0) =         0;
-      SkewCoM(0,1) = - positionCoMPondere[2];
+      SkewCoM(0,0) = 0;
+      SkewCoM(0,1) =-positionCoMPondere[2];
       SkewCoM(0,2) = positionCoMPondere[1];
       SkewCoM(1,0) = positionCoMPondere[2];
-      SkewCoM(1,1) =           0;
+      SkewCoM(1,1) = 0;
       SkewCoM(1,2) =-positionCoMPondere[0];
       SkewCoM(2,0) =-positionCoMPondere[1];
-      SkewCoM(2,1) =   positionCoMPondere[0];
-      SkewCoM(2,2) =         0;
+      SkewCoM(2,1) = positionCoMPondere[0];
+      SkewCoM(2,2) = 0;
     }
 
   positionCoMPondere = positionCoMPondere/m_mass;
+
   // Zero Momentum Point Computation.
   if (m_ComputeZMP)
     {
 
-      ODEBUG4( m_P << " " << m_L,"DebugDataPL.dat");
       // Update the momentum derivative
       if (m_IterationNumber>1)
         {
@@ -304,14 +217,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  m_ZMP(2) = 0.0;
         }
 
-      ODEBUG4( m_IterationNumber << " "
-	       << m_ZMP(0) << " "
-	       << m_ZMP(1) << " "
-	       << m_ZMP(2) << " "
-	       << m_P << " "
-	       << m_L ,"DebugDataDMB_ZMP.dat" );
-
-      // Update the store previous value.
+     // Update the store previous value.
       if (m_IterationNumber>=1)
         {
 	  m_Prev_P = m_P;

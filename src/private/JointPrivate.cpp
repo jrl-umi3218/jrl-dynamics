@@ -841,3 +841,29 @@ void JointPrivate::updateMomentum()
   ODEBUG("L: " << lL);
 
 }
+
+void JointPrivate::updateAccelerationCoM()
+{
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  vector3d lc = currentBody->localCenterOfMass();
+  vector3d NE_tmp2,NE_tmp3;
+  
+  // *******************  Acceleration for the center of mass of body  i ************************
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
+  
+  // NE_tmp2 = dw_I x r_{i,i+1}
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
+  
+  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
+  
+  ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
+  ODEBUG(" lc = " << lc);
+  ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
+  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
+  ODEBUG(" ldv: " << currentBody->ldv);
+  ODEBUG(" R_static: " << currentBody->R_static);
+  ODEBUG(" b: " << currentBody->b);
+  ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);
+  ODEBUG(" ldv_c: " << currentBody->ldv_c);
+}	  

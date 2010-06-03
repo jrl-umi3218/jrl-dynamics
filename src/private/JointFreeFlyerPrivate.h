@@ -48,6 +48,11 @@ namespace dynamicsJRLJapan
       /*! \brief Computes speed in joint and global reference frame. */
       bool updateVelocity(const vectorN& inRobotConfigVector,
 			  const vectorN& inRobotSpeedVector);
+      
+      /*! \brief Computes acceleration in joint and global reference frame. */
+      bool updateAcceleration(const vectorN & inRobotConfigVector,
+			      const vectorN & inRobotSpeedVector,
+			      const vectorN & inRobotAccelerationVector);
 
       /*! \brief Here the number of DOFs is 6. */
       unsigned int numberDof() const 

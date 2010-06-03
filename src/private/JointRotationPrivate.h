@@ -47,6 +47,11 @@ namespace dynamicsJRLJapan
       bool updateVelocity(const vectorN& inRobotConfigVector,
 			  const vectorN& inRobotSpeedVector);
 
+      /*! \brief Computes acceleration in joint and global reference frame. */
+      bool updateAcceleration(const vectorN& inRobotConfigVector,
+			      const vectorN& inRobotSpeedVector,
+			      const vectorN& inRobotAccelerationVector);
+
       
       /*! \brief Here the number of DOFs is one. */
       unsigned int numberDof() const 

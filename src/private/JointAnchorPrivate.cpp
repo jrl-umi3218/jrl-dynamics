@@ -47,3 +47,10 @@ bool JointAnchorPrivate::updateVelocity(const vectorN &inRobotConfigVector,
 {
   return true;
 }
+
+bool JointAnchorPrivate::updateAcceleration(const vectorN &inRobotConfigVector,
+					    const vectorN &inRobotSpeedVector,
+					    const vectorN &inRobotAccelerationVector)
+{
+  return true;
+}

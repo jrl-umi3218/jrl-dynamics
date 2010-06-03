@@ -105,7 +105,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
 }
 
 bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
-					  const vectorN &inRobotConfigSpeed)
+					  const vectorN &inRobotSpeedVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   DynamicBodyPrivate* currentMotherBody = 0;
@@ -113,6 +113,7 @@ bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
   if ((DynamicBodyPrivate*)(parentJoint())!=0)
       currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
+  currentBody->dq = inRobotSpeedVector(rankInConfiguration());
   matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);    
   // Computes the angular velocity
   
@@ -157,3 +158,82 @@ bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
   return true;
 }
 
+bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector,
+					      const vectorN &inRobotSpeedVector,
+					      const vectorN &inRobotAccelerationVector)
+{
+ 
+  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);    
+  DynamicBodyPrivate* currentMotherBody = 0;
+  vector3d NE_tmp, NE_tmp2, NE_tmp3, NE_RotByMotherdv;
+  if ((DynamicBodyPrivate*)(parentJoint())!=0)
+      currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
+
+  currentBody->ddq = inRobotAccelerationVector(rankInConfiguration());
+
+  // ******************* Computes the angular acceleration for joint i. ********************
+  // In global reference frame.
+  // NE_tmp2 = z_{i-1} * dqi
+  NE_tmp2 = currentBody->w_a * currentBody->dq;
+  // NE_tmp3 = w^{(0)}_i x z_{i-1} * dqi
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w,NE_tmp2);
+  // NE_tmp2 = z_{i-1} * ddqi
+  NE_tmp2 = currentBody->w_a * currentBody->ddq;
+  currentBody->dw = NE_tmp2 + NE_tmp3;
+  if (currentMotherBody!=0)
+    currentBody->dw += currentMotherBody->dw;
+  
+  // In local reference frame.
+  if (currentMotherBody!=0)
+    {
+      MAL_S3x3_C_eq_A_by_B(NE_tmp,RstaticT,currentMotherBody->ldw);
+      MAL_S3x3_C_eq_A_by_B(currentBody->ldw,currentBody->Riip1t, NE_tmp);
+    }
+  else
+    MAL_S3_VECTOR_FILL(currentBody->ldw,0.0);
+  
+  NE_tmp = currentBody->a * currentBody->ddq;
+  NE_tmp2 = currentBody->a * currentBody->dq;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
+  currentBody->ldw= currentBody->ldw + NE_tmp + NE_tmp3;
+  ODEBUG(" " <<currentBody->getName() << " currentBody->ldw:" << currentBody->ldw);
+  
+  // ******************* Computes the linear acceleration for joint i. ********************
+  // In global reference frame
+  if (currentMotherBody!=0)
+    {
+      MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R , currentBody->b);
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w,NE_tmp);
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->w,NE_tmp2);
+      
+      // NE_tmp2 = dw_I x r_{i,i+1}
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dw,NE_tmp);
+      
+      currentBody->dv = NE_tmp2 + NE_tmp3 + currentMotherBody->dv;
+    }
+  else 
+    MAL_S3_VECTOR_FILL(currentBody->dv,0.0);
+
+  // In local reference frame.
+  // NE_tmp3 = w_i x (w_i x r_{i,i+1})
+  if (currentMotherBody!=0)
+    {
+      
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->lw,currentBody->b);
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->lw,NE_tmp2);
+      
+      // NE_tmp2 = dw_I x r_{i,i+1}
+      MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
+      
+      NE_tmp = NE_tmp2 + NE_tmp3 + currentMotherBody->ldv;
+      
+      MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,NE_tmp);
+      currentBody->ldv = MAL_S3x3_RET_A_by_B(currentBody->Riip1t,NE_RotByMotherdv);
+      ODEBUG(" " << currentBody->getName() << " Mother->ldv:" <<currentMotherBody->ldv);
+    }
+  else 
+    MAL_S3_VECTOR_FILL(currentBody->ldv,0);
+
+  return true;
+}
