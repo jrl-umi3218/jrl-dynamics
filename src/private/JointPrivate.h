@@ -18,13 +18,15 @@
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
 
+#include "Spatial.h"
+
 using namespace std;
 
 namespace dynamicsJRLJapan
 {  
-    class DynamicBodyPrivate;
+  class DynamicBodyPrivate;
   /** @ingroup forwardynamics
-       Define a transformation from a body to another
+      Define a transformation from a body to another
       Supported type:
       - Rotation around an axis with a quantity (type = ROTATION)
       - Primsatic joint : quantite*axis	(type = PRISMATIC)
@@ -32,9 +34,10 @@ namespace dynamicsJRLJapan
 
 
       \note Two ways of constructing a kinematic chain are supported.
-        \li through VRML parser VRMLReader::ParseVRMLFile
-        \li through abstract robot dynamics interfaces. When using this solution, 
-	the joints should be inserted in the kinematic tree with increasing depth. For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
+      \li through VRML parser VRMLReader::ParseVRMLFile
+      \li through abstract robot dynamics interfaces. When using this solution, 
+      the joints should be inserted in the kinematic tree with increasing depth. 
+      For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
   */
   class JointPrivate: public CjrlJoint
   {
@@ -58,36 +61,36 @@ namespace dynamicsJRLJapan
 
   private:
       
-      /** Coefficient of the mass related to the subtree of this joint. */
-      double m_STcoef;
-      /** CoM of the subtree reaching this joint. */
-      vector3d m_STmcom;
-      /*! Local CoM oriented in the world reference frame . */
-      vector3d m_wlc;
+    /** Coefficient of the mass related to the subtree of this joint. */
+    double m_STcoef;
+    /** CoM of the subtree reaching this joint. */
+    vector3d m_STmcom;
+    /*! Local CoM oriented in the world reference frame . */
+    vector3d m_wlc;
       
     /*!  Type of the transformation */ 
-      int m_type;
-    
+    int m_type;
+      
     /*! Axis of the transformation,
       for the link with one DoF. */
     vector3d m_axis;	
-    
+      
     /*! Quantity of the rotation . */
     float m_quantity;
-
+      
     /*! 
       \brief 4x4 matrix for pose 
       This homogeneous matrix represents the position of this joint frame in the frame of the parent joint.
     */
     matrix4d m_poseInParentFrame;
-
+      
     /*! Father joint */
     JointPrivate * m_FatherJoint;
-
-
+      
+      
     /*! Vector of childs */
     std::vector< JointPrivate*> m_Children;
-
+      
     /*! Vector of joints from the root to this joint. */
     std::vector< CjrlJoint*> m_FromRootToThis;
 
@@ -136,18 +139,18 @@ namespace dynamicsJRLJapan
 
   public: 
       
-      /** */
-      double subTreeCoef();
-      /** */
-      void subTreeCoef(double inReplacement);
-      /** */
-      void computeSubTreeMCom();
-      /** */
-      void computeSubTreeMComExceptChild(const CjrlJoint* inJoint);
-      /** */
-      const vector3d& subTreeMCom() const;
-      /** */
-      void subTreeMCom(const vector3d& inReplacement);
+    /** */
+    double subTreeCoef();
+    /** */
+    void subTreeCoef(double inReplacement);
+    /** */
+    void computeSubTreeMCom();
+    /** */
+    void computeSubTreeMComExceptChild(const CjrlJoint* inJoint);
+    /** */
+    const vector3d& subTreeMCom() const;
+    /** */
+    void subTreeMCom(const vector3d& inReplacement);
     
     /*! \brief Static constant to define the kind of joints
       available */
@@ -158,13 +161,13 @@ namespace dynamicsJRLJapan
     
     /*! \brief Constructor with full initialization. */
     JointPrivate(int ltype, vector3d&  laxis, 
-	  float lquantite, matrix4d & apose);
+		 float lquantite, matrix4d & apose);
 
     JointPrivate(int ltype, vector3d& laxis, 
-	  float lquantite, vector3d &translationStatic);
+		 float lquantite, vector3d &translationStatic);
     
     JointPrivate(int ltype, vector3d& laxis, 
-	  float lquantite);
+		 float lquantite);
 
 	
     /*! \brief Constructor by copy. */
@@ -181,115 +184,115 @@ namespace dynamicsJRLJapan
 
     /*! \brief Operator to get one element of the rotation 
       
-    \f$
-    R= \left[ 
-    \begin{matrix}
-    r_{0} & r_{1} & r_{2} & r_{3} \\
-    r_{4} & r_{5} & r_{6} & r_{7} \\
-    r_{8} & r_{9} & r_{10} & r_{11} \\
-    r_{12} & r_{13} & r_{14} & r_{15} \\
-    \end{matrix}
-    \right]
-    \f$
-    where \f$pose(i) = r_{i}\f$.
-     */
+      \f$
+      R= \left[ 
+      \begin{matrix}
+      r_{0} & r_{1} & r_{2} & r_{3} \\
+      r_{4} & r_{5} & r_{6} & r_{7} \\
+      r_{8} & r_{9} & r_{10} & r_{11} \\
+      r_{12} & r_{13} & r_{14} & r_{15} \\
+      \end{matrix}
+      \right]
+      \f$
+      where \f$pose(i) = r_{i}\f$.
+    */
     float pose(unsigned r) ;
 
     /*! Returns the matrix corresponding to the rigid motion */
     inline const matrix4d & pose() const
-      {return m_poseInParentFrame;};
+    {return m_poseInParentFrame;};
 
     /*! Sets the matrix corresponding to the rigid motion */
     inline void pose(const matrix4d & pose ) 
-      {m_poseInParentFrame=pose;};
+    {m_poseInParentFrame=pose;};
     
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i) 
-      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i/4,i%4);}
+    {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i/4,i%4);}
 
     /*! Operator to access the rotation matrix */
     inline double & operator()(unsigned int i,
 			       unsigned int j) 
-      {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);}
+    {return MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);}
     
     
     /*! \name Getter and setter for the parameter 
       @{
-     */    
+    */    
     
     /*! Returns the axis of the rotation. */
     inline const vector3d& axis() const
-      { return m_axis; };
+    { return m_axis; };
 
     /*! Set the axis of the rotation */
     inline void axis(const vector3d &anaxis)
-      { m_axis = anaxis; };
+    { m_axis = anaxis; };
 
     /*! Quantity of the rotation */
     inline const float & quantity() const
-      { return m_quantity; } 
+    { return m_quantity; } 
 
     /*! Set the rotation of the joint */
     inline void quantity(const float & aquantity)
-      { m_quantity = aquantity; }
+    { m_quantity = aquantity; }
 
     /*! Returns the type of the joint */
     inline const int & type() const
-      { return m_type; } 
+    { return m_type; } 
 
     /*! Set the type of the joint */
     inline void type(const int atype) 
-      { m_type = atype; } 
+    { m_type = atype; } 
 
     /*! Set the name */
     inline void setName(string & aname)
-      { m_Name = aname; }
+    { m_Name = aname; }
 
     /*! Get the name */
     inline const string & getName() const
-      { return m_Name;}
+    { return m_Name;}
 
     /*! Set the Identifier of the joint inside
       the VRML file. */
     inline void setIDinActuated(int IDinActuated)
-      { m_IDinActuated = IDinActuated;}
+    { m_IDinActuated = IDinActuated;}
 
     /*! Get the Identifier of the joint insidie
       the VRML file. */
     inline const int & getIDinActuated() const
-      { return m_IDinActuated;}
+    { return m_IDinActuated;}
 
     /*! Get the static translation. */
     inline void getStaticTranslation(vector3d & staticTranslation) 
-      { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3);
-	staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3);
-	staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3); }
+    { staticTranslation(0) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3);
+      staticTranslation(1) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3);
+      staticTranslation(2) = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3); }
 
     /*! Set the static translation. */
     inline void setStaticTranslation(vector3d & staticTranslation) 
-      { MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) =staticTranslation(0);
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = staticTranslation(1);
-	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = staticTranslation(2) ; }
+    { MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) =staticTranslation(0);
+      MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = staticTranslation(1);
+      MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = staticTranslation(2) ; }
 
     /*! Get the static rotation. */
     inline void getStaticRotation(matrix3d & staticRotation) 
-      { for (int i=0; i<3; i++){
-	  for (int j=0; j<3; j++){
-	    MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation,i,j) 
-	      = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame, i,j);
-	  }
+    { for (int i=0; i<3; i++){
+	for (int j=0; j<3; j++){
+	  MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation,i,j) 
+	    = MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame, i,j);
 	}
       }
+    }
 
     /*! Set the static rotation. */
     inline void setStaticRotation(matrix3d & staticRotation) 
-      { for (int i=0; i<3; i++){
-	  for (int j=0; j<3; j++){
-	    MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j) 
-	      = MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation, i,j);
-	  }
+    { for (int i=0; i<3; i++){
+	for (int j=0; j<3; j++){
+	  MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j) 
+	    = MAL_S3x3_MATRIX_ACCESS_I_J(staticRotation, i,j);
 	}
       }
+    }
 
     /*! Compute pose from a vector x,y,z, Theta, Psi, Phi. */
     void UpdatePoseFrom6DOFsVector(vectorN a6DVector);
@@ -302,10 +305,10 @@ namespace dynamicsJRLJapan
 
     /*! \name Implements the virtual function inherited from CjrlJoint
       @{
-     */
+    */
     /*! \name JointPrivate hierarchy 
       @{
-     */
+    */
     /*! \brief parent JointPrivate */
     CjrlJoint*  parentJoint() const ;
 
@@ -320,10 +323,10 @@ namespace dynamicsJRLJapan
     JointPrivate* child_JointPrivate(unsigned int givenRank) const;
 
     /**
-    ! \brief Get a vector containing references of the joints 
-    between the rootJoint and this joint. 
-    The root JointPrivate and this JointPrivate are included in the vector.
-     */
+       ! \brief Get a vector containing references of the joints 
+       between the rootJoint and this joint. 
+       The root JointPrivate and this JointPrivate are included in the vector.
+    */
     std::vector< CjrlJoint* > jointsFromRootToThis() const ;
     
     std::vector< JointPrivate* > jointsFromRootToThisJoint() const ;
@@ -331,12 +334,12 @@ namespace dynamicsJRLJapan
     
     /*! \name JointPrivate Kinematics 
       @{
-     */
+    */
     
     /** \brief Get the initial position of the joint.
 	The initial position of the joint is the position
 	of the local frame of the joint.
-     */
+    */
     const matrix4d & initialPosition();
     /**
        \brief Get the current transformation of the joint.
@@ -351,26 +354,26 @@ namespace dynamicsJRLJapan
 
     /*! \name Methods related to inverse dynamics computation.
       @{ */
-     /**
-    \brief Update this joint and body transformation according to the given vector of DoF values, 
-    and the parent joint's transformation if this is not a free flyer joint.
-    \return false if the required number of dof values is not met.
-      */
+    /**
+       \brief Update this joint and body transformation according to the given vector of DoF values, 
+       and the parent joint's transformation if this is not a free flyer joint.
+       \return false if the required number of dof values is not met.
+    */
     virtual bool updateTransformation(const vectorN& inRobotConfigVector)=0;
 
-     /**
-	\brief Update the joint and body velocity according to the given vector of DoF values, 
-	and the parent joint's transformation if this is not a free flyer joint.
-	\return false if the required number of dof values is not met.
-     */
+    /**
+       \brief Update the joint and body velocity according to the given vector of DoF values, 
+       and the parent joint's transformation if this is not a free flyer joint.
+       \return false if the required number of dof values is not met.
+    */
     virtual bool updateVelocity(const vectorN& inRobotConfigVector,
 				const vectorN& inRobotSpeedVector)=0;
 
-     /**
-	\brief Update the joint and body acceleration according to the given vector of DoF values, 
-	and the parent joint's transformation if this is not a free flyer joint.
-	\return false if the required number of dof values is not met.
-     */
+    /**
+       \brief Update the joint and body acceleration according to the given vector of DoF values, 
+       and the parent joint's transformation if this is not a free flyer joint.
+       \return false if the required number of dof values is not met.
+    */
     virtual bool updateAcceleration(const vectorN& inRobotConfigVector,
 				    const vectorN& inRobotSpeedVector,
 				    const vectorN& inRobotAccelerationVector)=0;
@@ -422,7 +425,7 @@ namespace dynamicsJRLJapan
        If the JointPrivate has several dimensions, it is the rank of the first dimension.
     */
     inline unsigned int rankInConfiguration() const
-      { return m_StateVectorPosition; }
+    { return m_StateVectorPosition; }
     
     /**
        @}
@@ -506,15 +509,15 @@ namespace dynamicsJRLJapan
 
     /** \brief Returns the equivalent inertia */
     inline double equivalentInertia() const
-      {
-	return m_EquivalentInertia;
-      }
+    {
+      return m_EquivalentInertia;
+    }
 
     /** \brief Set the equivalent inertia */
     inline void equivalentInertia(double &lequivalentInertia) 
-      {
-	m_EquivalentInertia = lequivalentInertia;
-      }
+    {
+      m_EquivalentInertia = lequivalentInertia;
+    }
 
     /**
        \brief Get the upper velocity bound of a given degree of freedom of the joint.
@@ -574,17 +577,17 @@ namespace dynamicsJRLJapan
     void computeJacobianJointWrtConfig();
     
     /**
-        \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
-    The output matrix outjacobian is automatically resized if necessary
+       \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
+       The output matrix outjacobian is automatically resized if necessary
 
-     */
+    */
     void getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outjacobian) const;
 
     /**
-        \brief Get the jacobian of the point specified in world frame by inPointWorldFrame.
-	The output matrix outjacobian must have appropriate size.
+       \brief Get the jacobian of the point specified in world frame by inPointWorldFrame.
+       The output matrix outjacobian must have appropriate size.
 
-     */
+    */
     void getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame, 
 					matrixNxP& outjacobian) const;
 
@@ -598,7 +601,7 @@ namespace dynamicsJRLJapan
     */
 
     /**
-    \brief compute the rotation matrix correponding to axis of rotation inAxis and angle inAngle.
+       \brief compute the rotation matrix correponding to axis of rotation inAxis and angle inAngle.
     */
     void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
         
@@ -629,11 +632,11 @@ namespace dynamicsJRLJapan
 
     /*! Set the state vector position. */
     inline const unsigned int & stateVectorPosition() const
-      { return m_StateVectorPosition; }
+    { return m_StateVectorPosition; }
     
     
     inline void stateVectorPosition(unsigned aStateVectorPosition)
-      { m_StateVectorPosition = aStateVectorPosition;}
+    { m_StateVectorPosition = aStateVectorPosition;}
 
     /**
        \brief Compute the pose of the joint in the global frame or in local frame of parent
@@ -651,6 +654,50 @@ namespace dynamicsJRLJapan
     */
     void computeLocalAndGlobalPose();
 
+    /*! \name Methods related to Spatial notations.
+     @{ */
+    /*! \brief Returns the transformation of the joint 
+      following a Plucker transformation according to table 1.5 of the HoR */
+     */
+    virtual Spatial::PluckerTransform xjcalc(vectorN qi);
+    
+    /*! \brief Returns the position of the joint in the link reference frame
+      following a Plucker transformation according to table 1.5 of the HoR */
+    
+    const Spatial::PluckerTransform & XL();
+    
+  /*! \brief Returns the position of the joint in the world reference frame
+      following a Plucker transformation according to table 1.5 of the HoR */  
+    const Spatial::PluckerTransform & X0();
+
+    /*! \brief Returns the free modes of the  joint.
+     */
+    virtual matrixN pcalc(vectorN qi);
+
+    /*! \brief Returns the derivative of the free modes of the  joint. */
+    virtual matrixN pdcalc(vectorN qi);
+    
+    /*! @} */
+
+  private:
+
+    /*! \brief Position of the joint in the link
+      reference frame using Plucker coordinate.
+      @{ */
+    /*! \brief Initialize the position 
+     using other parameters */
+    void initXL();
+
+    /*! \brief Store the position itself. */
+    Spatial::PluckerTransform m_XL;
+    
+    /*! \brief Store the position of the body in the father joint reference frame. */
+    Spatial::PluckerTransform m_iXpi;
+    
+    /*! \brief Store the position of the body in the world 
+      reference frame.  */
+    Spatial::PluckerTransform m_X0;
+	
   };
 
 };

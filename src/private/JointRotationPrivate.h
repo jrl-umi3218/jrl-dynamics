@@ -1,4 +1,4 @@
-/* Class to implement a Joint object.
+/* \file This class implements the behavior of a revolute joint.
 
    Copyright (c) 2007, 
    @author Olivier Stasse, Florent Lamiraux, Francois Keith
@@ -25,6 +25,9 @@ namespace dynamicsJRLJapan
 {  
     class DynamicBodyPrivate;
     
+    /*! \brief This class computes quantities such as position, velocity, acceleration, 
+      force and torques specific to revolute joints and its associated body.
+     */
     class JointRotationPrivate : public JointPrivate
     {
     public:

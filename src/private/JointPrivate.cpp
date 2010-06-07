@@ -14,8 +14,9 @@
 #include "JointPrivate.h"
 #include "DynamicBodyPrivate.h"
 
-
+using namespace dynamicsJRLJapan::Spatial;
 using namespace dynamicsJRLJapan;
+
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
@@ -390,6 +391,9 @@ void JointPrivate::computeLocalAndGlobalPose()
     {
       computeLocalAndGlobalPoseFromLocalFrame();
     }
+  /*! Initialize spatial representation of the joint
+    in the link reference frame. */
+  initXL();
 }
 
 JointPrivate & JointPrivate::operator=(const JointPrivate & r)
@@ -867,3 +871,46 @@ void JointPrivate::updateAccelerationCoM()
   ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);
   ODEBUG(" ldv_c: " << currentBody->ldv_c);
 }	  
+
+/*! Spatial notations specifications */
+
+PluckerTransform JointPrivate::xjcalc(vectorN qi)
+{
+  matrix3d lR;
+  vector3d lp;
+  
+  MAL_S3x3_MATRIX_SET_IDENTITY(lR);
+  
+  for(unsigned int i=0;i<3;i++)
+    MAL_S3_VECTOR_ACCESS(lp,i) = 0.0;
+  
+  return  PluckerTransform(lR,lp);
+}
+
+PluckerTransform JointPrivate::XL()
+{
+  return m_XL;
+}
+
+PluckerTransform JointPrivate::X0()
+{
+  return m_X0;
+}
+
+void JointPrivate::initXL()
+{
+  matrix3d lR;
+  vector3d lp;
+  for(unsigned int i=0;i<3;i++)
+    for(unsigned int j=0;j<3;j++)
+      MAL_S3x3_MATRIX_ACCESS_I_J(lR,i,j) = 
+	MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
+  
+  for(unsigned int i=0;i<3;i++)
+    MAL_S3_VECTOR_ACCESS(lp,i) = 
+      MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
+ 
+  m_XL = PluckerTransform(lR,lp);
+  m_iXpi = m_XL;
+}
+

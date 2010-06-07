@@ -48,7 +48,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
   DynamicBodyPrivate* body = (DynamicBodyPrivate*)(linkedBody());
   
   DynamicBodyPrivate* parentbody = 0;
-  if ((DynamicBodyPrivate*)(parentJoint())!=0)
+  if (parentJoint()!=0)
       parentbody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
   
   // Read body variables in the state vector
@@ -110,7 +110,7 @@ bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   DynamicBodyPrivate* currentMotherBody = 0;
   vector3d NE_tmp, NE_tmp2; 
-  if ((DynamicBodyPrivate*)(parentJoint())!=0)
+  if (parentJoint()!=0)
       currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
   currentBody->dq = inRobotSpeedVector(rankInConfiguration());
@@ -167,7 +167,7 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
   matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);    
   DynamicBodyPrivate* currentMotherBody = 0;
   vector3d NE_tmp, NE_tmp2, NE_tmp3, NE_RotByMotherdv;
-  if ((DynamicBodyPrivate*)(parentJoint())!=0)
+  if (parentJoint()!=0)
       currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
   currentBody->ddq = inRobotAccelerationVector(rankInConfiguration());
