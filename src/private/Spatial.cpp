@@ -2,24 +2,11 @@
    Copyright (c) 2010
    Olivier Stasse
    
- */
+*/
 #include "Spatial.h"
 
 using namespace dynamicsJRLJapan::Spatial;
 
-template<class T> void mult(T &c,
-			    const T &a,
-			    const T &b)
-{
-  // Rotation part.
-  MAL_S3x3_C_eq_A_by_B(c.R, a.R, b.R);
-  
-  // Translation part.
-  matrix3d aRT;
-  MAL_S3x3_TRANSPOSE(aRT,b.R);
-  MAL_S3x3_C_eq_A_by_B(c.p, aRT, a.p);
-  c.p = c.p + b.p;
-}
 
 Velocity::Velocity()
 {
@@ -126,6 +113,13 @@ Motion Motion::operator-(Motion &a)
   return Motion(m_p - a.m_p, m_theta - a.m_theta);
 }
 
+Inertia::Inertia()
+{
+  MAL_S3x3_MATRIX_SET_IDENTITY(m_I);
+  MAL_S3_VECTOR_FILL(m_h,0.0);
+  m_m = 0.0;
+}
+
 Inertia::Inertia(matrix3d lI,
 		 vector3d lh,
 		 double lm)
@@ -134,15 +128,15 @@ Inertia::Inertia(matrix3d lI,
 }
 
 void Inertia::addInertia(Inertia &c,
-			 const Inertia &a,
-			 const Inertia &b) const
+			 Inertia &a,
+			 Inertia &b) const
 {
   c.m_m = a.m_m + b.m_m;
   c.m_h = a.m_h + b.m_h;
   c.m_I = a.m_I + b.m_I;
 }
   
-Inertia Inertia::operator+(const Inertia &a)
+Inertia Inertia::operator+( Inertia &a)
 {
   Inertia c;
   c.m_m = a.m_m + m_m;
@@ -172,7 +166,7 @@ Velocity operator*(Inertia & sI, Velocity &v)
   Velocity c;
   vector3d NE_tmp,NE_tmp2;
   // Angular velocity
-  MAL_S3x3_C_eq_A_by_B(NE_tmp , sI.I(), v.w());
+  NE_tmp = sI.I() * v.w();
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.v0());
   c.w(NE_tmp2 + NE_tmp);
       
@@ -193,49 +187,56 @@ PluckerTransform::PluckerTransform(matrix3d lR,
 				   vector3d lp):
   m_R(lR), m_p(lp) {}
   
-PluckerTransform  PluckerTransform::operator*(const PluckerTransform &a)
+PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
 {
   PluckerTransform c;
   // Rotation
-  MAL_S3x3_C_eq_A_by_B(c.R, R, a.R);
+  MAL_S3x3_C_eq_A_by_B(c.m_R, m_R, a.m_R);
   // position
   matrix3d aRT;
-  MAL_S3x3_TRANSPOSE(aRT,a.R);
-  c.p = p + aRT * a.p;
+  MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,aRT);
+  c.m_p = m_p + aRT * a.m_p;
+  return c;
 }
 
-Velocity  operator*( PluckerTransform &X, const Velocity &v)
+Velocity  operator*( PluckerTransform &X, Velocity &v)
 {
   Velocity c;
   // Computes the angular velocity
   vector3d NE_tmp,NE_tmp2;
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,X.p,v.w);
-  NE_tmp2=v.v0-NE_tmp;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,X.p(),v.w());
+  NE_tmp2=v.v0()-NE_tmp;
     
-  MAL_S3x3_C_eq_A_by_B(c.w,X.R,NE_tmp2);
+  c.w(MAL_S3x3_RET_A_by_B(X.R(),NE_tmp2));
     
   // Computes the linear velocity
-  MAL_S3x3_C_eq_A_by_B(c.v,X.R,v.w);
+  c.v0(MAL_S3x3_RET_A_by_B(X.R(),v.w()));
   return c;
 }
   
-Force  PluckerTransform::operator*( const Force &f)
+Force  PluckerTransform::operator*( Force &f)
 {
   Force c;
   // Computes the angular velocity
-  vector3d NE_tmp,NE_tmp2;
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,p,f.f);
-  NE_tmp2=f.n0-NE_tmp;
+  vector3d NE_tmp,NE_tmp2,NE_tmp3;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,f.f());
+  NE_tmp2=f.n0()-NE_tmp;
     
-  MAL_S3x3_C_eq_A_by_B(c.n0,R,NE_tmp2);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp2)
+    c.n0(NE_tmp);
     
   // Computes the linear velocity
-  MAL_S3x3_C_eq_A_by_B(c.f,R,f.f);
+  NE_tmp3 = f.f();
+  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp3);
+  c.f(NE_tmp);
   return c;
 };
 
-void PluckerTransform::inverse(const PluckerTransform &a)
+void PluckerTransform::inverse( PluckerTransform &a)
 {
-  MAL_S3x3_TRANSPOSE(R,a.R);
-  MAL_S3x3_C_eq_A_by_B(p,a.R,-a.p);
+  MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,m_R);
+  vector3d NE_tmp;
+  NE_tmp = -a.p();
+  MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
 }
+

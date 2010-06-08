@@ -26,18 +26,7 @@ namespace dynamicsJRLJapan
 {  
   class DynamicBodyPrivate;
   /** @ingroup forwardynamics
-      Define a transformation from a body to another
-      Supported type:
-      - Rotation around an axis with a quantity (type = ROTATION)
-      - Primsatic joint : quantite*axis	(type = PRISMATIC)
-      - Rotation through a homogeneous matrix : *rotation (type = FREE_LIBRE)
-
-
-      \note Two ways of constructing a kinematic chain are supported.
-      \li through VRML parser VRMLReader::ParseVRMLFile
-      \li through abstract robot dynamics interfaces. When using this solution, 
-      the joints should be inserted in the kinematic tree with increasing depth. 
-      For instance, in chain J1 -> J2 -> J3, J2 should be inserted as J1 child before J3 is inserted as J2 child.
+      \class JointPrivate
   */
   class JointPrivate: public CjrlJoint
   {
@@ -58,6 +47,10 @@ namespace dynamicsJRLJapan
        \brief Normalized position of the joint in the global frame at construction (joint value is equal to 0).
     */
     matrix4d m_globalPoseAtConstructionNormalized;
+
+      
+    /*! Vector of childs */
+    std::vector< JointPrivate*> m_Children;
 
   private:
       
@@ -86,11 +79,7 @@ namespace dynamicsJRLJapan
       
     /*! Father joint */
     JointPrivate * m_FatherJoint;
-      
-      
-    /*! Vector of childs */
-    std::vector< JointPrivate*> m_Children;
-      
+            
     /*! Vector of joints from the root to this joint. */
     std::vector< CjrlJoint*> m_FromRootToThis;
 
@@ -359,7 +348,7 @@ namespace dynamicsJRLJapan
        and the parent joint's transformation if this is not a free flyer joint.
        \return false if the required number of dof values is not met.
     */
-    virtual bool updateTransformation(const vectorN& inRobotConfigVector)=0;
+    virtual bool updateTransformation(const vectorN& inRobotConfigVector);
 
     /**
        \brief Update the joint and body velocity according to the given vector of DoF values, 
@@ -367,7 +356,7 @@ namespace dynamicsJRLJapan
        \return false if the required number of dof values is not met.
     */
     virtual bool updateVelocity(const vectorN& inRobotConfigVector,
-				const vectorN& inRobotSpeedVector)=0;
+				const vectorN& inRobotSpeedVector);
 
     /**
        \brief Update the joint and body acceleration according to the given vector of DoF values, 
@@ -383,18 +372,25 @@ namespace dynamicsJRLJapan
     /**
        \brief Update the world position of the CoM. 
     */
-    void updateWorldCoMPosition();
+    virtual void updateWorldCoMPosition();
 
     /**
        \brief Update the world position of the CoM. 
     */
-    void updateAccelerationCoM();
+    virtual void updateAccelerationCoM();
 
     /**
        \brief Update the momentum according the current transformation
        and speed. 
     */
-    void updateMomentum();
+    virtual void updateMomentum();
+
+    /**
+       \brief Update the torque and forces of the associated body  
+       according to the previously computed body. 
+    */
+    virtual void updateTorqueAndForce();
+
     
     /**
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
@@ -658,7 +654,6 @@ namespace dynamicsJRLJapan
      @{ */
     /*! \brief Returns the transformation of the joint 
       following a Plucker transformation according to table 1.5 of the HoR */
-     */
     virtual Spatial::PluckerTransform xjcalc(vectorN qi);
     
     /*! \brief Returns the position of the joint in the link reference frame
@@ -672,10 +667,10 @@ namespace dynamicsJRLJapan
 
     /*! \brief Returns the free modes of the  joint.
      */
-    virtual matrixN pcalc(vectorN qi);
+    virtual matrixNxP pcalc(vectorN qi);
 
     /*! \brief Returns the derivative of the free modes of the  joint. */
-    virtual matrixN pdcalc(vectorN qi);
+    virtual matrixNxP pdcalc(vectorN qi);
     
     /*! @} */
 
@@ -688,15 +683,18 @@ namespace dynamicsJRLJapan
      using other parameters */
     void initXL();
 
-    /*! \brief Store the position itself. */
+    /*! \brief Store the position of the joint in the body reference frame. */
     Spatial::PluckerTransform m_XL;
     
-    /*! \brief Store the position of the body in the father joint reference frame. */
+    /*! \brief Store the position of the joint in the father joint reference frame. */
     Spatial::PluckerTransform m_iXpi;
     
-    /*! \brief Store the position of the body in the world 
+    /*! \brief Store the position of the joint in the world 
       reference frame.  */
     Spatial::PluckerTransform m_X0;
+
+    /*! \brief Store the velocity. */
+    Spatial::Velocity m_sv;
 	
   };
 

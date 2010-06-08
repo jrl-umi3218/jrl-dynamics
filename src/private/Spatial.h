@@ -32,12 +32,12 @@ namespace dynamicsJRLJapan
       friend Velocity operator*(Inertia & ,Velocity &);
       friend Velocity operator*(PluckerTransform &c, Velocity &v);
       
-      const vector3d& v0()
+      vector3d v0()
       { return m_v0;}
       void v0(const vector3d &lv0)
       { m_v0 = lv0;}
 
-      const vector3d& w()
+      vector3d w()
       { return m_w;};
       void w(const vector3d& lw)
       { m_w = lw;};
@@ -56,10 +56,15 @@ namespace dynamicsJRLJapan
       Acceleration operator+(Acceleration &a);
       Acceleration operator-(Acceleration &a);
 
-      const vector3d& dv0()
+      vector3d dv0()
       { return m_dv0;}
-      const vector3d& dw()
+      void dv0(const vector3d &lv0)
+      { m_dv0 = lv0;}
+
+      vector3d dw()
       { return m_dw;};
+      void dw(const vector3d &ldw)
+      { m_dw = ldw; };
 
     private:
       vector3d m_dv0, m_dw;
@@ -73,9 +78,9 @@ namespace dynamicsJRLJapan
       cAcceleration operator+(cAcceleration &a);
       cAcceleration operator-(cAcceleration &a);
 
-      const vector3d& dv0()
+      vector3d dv0()
       { return m_dv0;}
-      const vector3d& dw()
+      vector3d dw()
       { return m_dw;};
 
     private:  
@@ -90,11 +95,15 @@ namespace dynamicsJRLJapan
       Force operator+(Force &a);
       Force operator-(Force &a);
       
-      const vector3d & f()
+      vector3d f()
       {return m_f;};
-      const vector3d & n0()
+      vector3d n0()
       {return m_n0;};
-      
+      void f(vector3d &lf)
+      {m_f = lf;}
+      void n0(vector3d &ln0)
+      {m_n0 = ln0;}
+	
     private:  
 
       vector3d m_f, m_n0;
@@ -108,8 +117,11 @@ namespace dynamicsJRLJapan
       Motion operator+(Motion &a);
       Motion operator-(Motion &a);
 
-      const vector3d & p();
-      const vector3d & theta();
+      vector3d p()
+      { return m_p; }
+      vector3d theta()
+      { return m_theta; }
+
     private:  
       vector3d m_p, m_theta;
     };
@@ -120,15 +132,15 @@ namespace dynamicsJRLJapan
       Inertia();
       Inertia(matrix3d lI,   vector3d lh, double lm);
       void addInertia(Inertia &c,
-		      const Inertia &a,
-		      const Inertia &b) const;
+		      Inertia &a,
+		      Inertia &b) const;
 	
-      Inertia operator+(const Inertia &a);
+      Inertia operator+(Inertia &a);
       friend Velocity operator*(Inertia & ,Velocity &);
 
-      const matrix3d & I()
+      matrix3d  I()
       { return m_I;};
-      const vector3d & h()
+      vector3d  h()
       { return m_h;};
       double m()
       { return m_m;};
@@ -145,13 +157,14 @@ namespace dynamicsJRLJapan
     public:
       PluckerTransform();
       PluckerTransform(matrix3d lR, vector3d lp) ;
-      PluckerTransform operator*(const PluckerTransform &a);
-      Velocity operator*(const Velocity &a);
-      void inverse(const PluckerTransform &a);
+      PluckerTransform operator*(PluckerTransform &a);
+      Velocity operator*(Velocity &a);
+      Force operator*(Force &f);
+      void inverse(PluckerTransform &a);
 
-      const matrix3d & R()
+      matrix3d R()
       {return m_R;}
-      const vector3d & p()
+      vector3d p()
       {return m_p;}
 
     private:
@@ -165,4 +178,6 @@ namespace dynamicsJRLJapan
     };
   };
 };
+
+    
 #endif /* _SPATIAL_ALGEBRA_H_ */

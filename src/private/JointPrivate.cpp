@@ -14,7 +14,6 @@
 #include "JointPrivate.h"
 #include "DynamicBodyPrivate.h"
 
-using namespace dynamicsJRLJapan::Spatial;
 using namespace dynamicsJRLJapan;
 
 
@@ -541,9 +540,6 @@ void JointPrivate::subTreeCoef(double inReplacement)
 
 CjrlRigidAcceleration JointPrivate::jointAcceleration()
 {
-  // TODO : Update the member of this object
-  // TODO : when calling ForwardDynamics.
-  // TODO : This will avoid the dynamic cast.
   MAL_S3_VECTOR(,double) a,b;
 
   if (m_Body!=0)
@@ -872,10 +868,15 @@ void JointPrivate::updateAccelerationCoM()
   ODEBUG(" ldv_c: " << currentBody->ldv_c);
 }	  
 
+
+
 /*! Spatial notations specifications */
 
-PluckerTransform JointPrivate::xjcalc(vectorN qi)
+Spatial::PluckerTransform JointPrivate::xjcalc(vectorN qi)
 {
+  // Default value.
+  // This method should be re-implemented according
+  // to the nature of the joint.
   matrix3d lR;
   vector3d lp;
   
@@ -884,15 +885,15 @@ PluckerTransform JointPrivate::xjcalc(vectorN qi)
   for(unsigned int i=0;i<3;i++)
     MAL_S3_VECTOR_ACCESS(lp,i) = 0.0;
   
-  return  PluckerTransform(lR,lp);
+  return  Spatial::PluckerTransform(lR,lp);
 }
 
-PluckerTransform JointPrivate::XL()
+const Spatial::PluckerTransform & JointPrivate::XL()
 {
   return m_XL;
 }
 
-PluckerTransform JointPrivate::X0()
+const Spatial::PluckerTransform & JointPrivate::X0()
 {
   return m_X0;
 }
@@ -910,7 +911,37 @@ void JointPrivate::initXL()
     MAL_S3_VECTOR_ACCESS(lp,i) = 
       MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
  
-  m_XL = PluckerTransform(lR,lp);
+  m_XL = Spatial::PluckerTransform(lR,lp);
+  // Assuming at first an identity matrix for Xj(i).
   m_iXpi = m_XL;
+}
+
+/* Updates methods using Spatial notations */
+
+/* Rigid transformation */
+bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
+{
+  Spatial::PluckerTransform Xj = xjcalc(inRobotConfigVector);
+  m_iXpi = Xj * m_XL;
+  
+  if (m_FatherJoint!=0)
+    {
+      m_X0 = m_iXpi * m_FatherJoint->X0();
+    }
+  return true;
+}
+
+/* Velocity update */
+bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
+				  const vectorN& inRobotSpeedVector)
+{
+  m_sv = m_iXpi *m_sv;
+  
+}
+
+void JointPrivate::updateTorqueAndForce()
+{
+  
+  
 }
 
