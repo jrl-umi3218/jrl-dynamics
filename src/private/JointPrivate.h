@@ -654,23 +654,24 @@ namespace dynamicsJRLJapan
      @{ */
     /*! \brief Returns the transformation of the joint 
       following a Plucker transformation according to table 1.5 of the HoR */
-    virtual Spatial::PluckerTransform xjcalc(vectorN qi);
+    virtual Spatial::PluckerTransform xjcalc(const vectorN &qi);
     
     /*! \brief Returns the position of the joint in the link reference frame
       following a Plucker transformation according to table 1.5 of the HoR */
-    
     const Spatial::PluckerTransform & XL();
     
-  /*! \brief Returns the position of the joint in the world reference frame
+    /*! \brief Returns the position of the joint in the world reference frame
       following a Plucker transformation according to table 1.5 of the HoR */  
     const Spatial::PluckerTransform & X0();
 
-    /*! \brief Returns the free modes of the  joint.
-     */
-    virtual matrixNxP pcalc(vectorN qi);
+    /*! \brief Returns the free modes of the  joint. */
+    virtual matrixNxP pcalc(vectorN &qi);
 
     /*! \brief Returns the derivative of the free modes of the  joint. */
-    virtual matrixNxP pdcalc(vectorN qi);
+    virtual matrixNxP pdcalc(vectorN &qi);
+
+    /*! \brief Returns the spatial velocity. */
+    const Spatial::Velocity & vs();
     
     /*! @} */
 

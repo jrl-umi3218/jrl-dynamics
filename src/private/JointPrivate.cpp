@@ -872,7 +872,7 @@ void JointPrivate::updateAccelerationCoM()
 
 /*! Spatial notations specifications */
 
-Spatial::PluckerTransform JointPrivate::xjcalc(vectorN qi)
+Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 {
   // Default value.
   // This method should be re-implemented according
@@ -886,6 +886,11 @@ Spatial::PluckerTransform JointPrivate::xjcalc(vectorN qi)
     MAL_S3_VECTOR_ACCESS(lp,i) = 0.0;
   
   return  Spatial::PluckerTransform(lR,lp);
+}
+
+const Spatial::Velocity & JointPrivate::vs()
+{
+  return m_sv;
 }
 
 const Spatial::PluckerTransform & JointPrivate::XL()
@@ -926,7 +931,8 @@ bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
   
   if (m_FatherJoint!=0)
     {
-      m_X0 = m_iXpi * m_FatherJoint->X0();
+      Spatial::PluckerTransform piX0 = m_FatherJoint->X0();
+      m_X0 = m_iXpi * piX0;
     }
   return true;
 }
@@ -935,13 +941,26 @@ bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
 bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
 				  const vectorN& inRobotSpeedVector)
 {
-  m_sv = m_iXpi *m_sv;
-  
+  Spatial::Velocity psv = m_FatherJoint->vs();
+  m_sv = m_iXpi * psv;
+  return true;
 }
 
 void JointPrivate::updateTorqueAndForce()
 {
-  
-  
 }
 
+matrixNxP JointPrivate::pcalc(vectorN &qi)
+{
+  matrixNxP res;
+  
+  return res;
+}
+
+matrixNxP JointPrivate::pdcalc(vectorN &qi)
+{
+  matrixNxP res;
+  
+
+  return res;
+}

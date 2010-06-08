@@ -158,7 +158,7 @@ namespace dynamicsJRLJapan
       PluckerTransform();
       PluckerTransform(matrix3d lR, vector3d lp) ;
       PluckerTransform operator*(PluckerTransform &a);
-      Velocity operator*(Velocity &a);
+      //Velocity operator*(Velocity &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
 
