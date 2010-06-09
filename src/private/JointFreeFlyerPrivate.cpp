@@ -82,3 +82,4 @@ bool JointFreeflyerPrivate::updateAcceleration(const vectorN & inRobotConfigVect
     }
   return true;
 }
+

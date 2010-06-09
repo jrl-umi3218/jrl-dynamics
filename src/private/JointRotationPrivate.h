@@ -54,10 +54,7 @@ namespace dynamicsJRLJapan
       bool updateAcceleration(const vectorN& inRobotConfigVector,
 			      const vectorN& inRobotSpeedVector,
 			      const vectorN& inRobotAccelerationVector);
-      
-      /*! \brief Computes Torque and force. */
-      void updateTorqueAndForce();
-      
+            
       /*! \brief Here the number of DOFs is one. */
       unsigned int numberDof() const 
       { return 1;};
