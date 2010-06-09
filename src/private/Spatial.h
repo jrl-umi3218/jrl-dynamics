@@ -30,7 +30,6 @@ namespace dynamicsJRLJapan
 
       friend Velocity operator*(double ad, Velocity &a);
       friend Velocity operator*(Inertia & ,Velocity &);
-      friend Velocity operator*(PluckerTransform &c, Velocity &v);
       
       vector3d v0()
       { return m_v0;}
@@ -45,7 +44,8 @@ namespace dynamicsJRLJapan
     private:
       vector3d m_v0,m_w;
     };
-
+    
+    Velocity operator*(double ad, Velocity &a);
     Velocity operator*(Inertia &, Velocity &);
 
     class Acceleration
@@ -151,14 +151,13 @@ namespace dynamicsJRLJapan
       double m_m;
     };
 
-    
     class PluckerTransform
     {
     public:
       PluckerTransform();
       PluckerTransform(matrix3d lR, vector3d lp) ;
       PluckerTransform operator*(PluckerTransform &a);
-      //Velocity operator*(Velocity &a);
+      Velocity operator*(Velocity &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
 
@@ -171,11 +170,8 @@ namespace dynamicsJRLJapan
       matrix3d m_R;
       vector3d m_p;
 
-    public:
-      friend Velocity operator*(const Velocity &v);
-      friend Velocity operator*(PluckerTransform &c, Velocity &v);
-
     };
+
   };
 };
 

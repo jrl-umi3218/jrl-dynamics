@@ -199,20 +199,6 @@ PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
   return c;
 }
 
-Velocity  operator*( PluckerTransform &X, Velocity &v)
-{
-  Velocity c;
-  // Computes the angular velocity
-  vector3d NE_tmp,NE_tmp2;
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,X.p(),v.w());
-  NE_tmp2=v.v0()-NE_tmp;
-    
-  c.w(MAL_S3x3_RET_A_by_B(X.R(),NE_tmp2));
-    
-  // Computes the linear velocity
-  c.v0(MAL_S3x3_RET_A_by_B(X.R(),v.w()));
-  return c;
-}
   
 Force  PluckerTransform::operator*( Force &f)
 {
@@ -238,5 +224,20 @@ void PluckerTransform::inverse( PluckerTransform &a)
   vector3d NE_tmp;
   NE_tmp = -a.p();
   MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
+}
+
+Velocity PluckerTransform::operator*( Velocity &v)
+{
+  Velocity c;
+  // Computes the angular velocity
+  vector3d NE_tmp,NE_tmp2;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.w());
+  NE_tmp2=v.v0()-NE_tmp;
+    
+  c.w(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
+    
+  // Computes the linear velocity
+  c.v0(MAL_S3x3_RET_A_by_B(m_R,v.w()));
+  return c;
 }
 

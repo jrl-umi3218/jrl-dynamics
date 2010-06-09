@@ -12,32 +12,32 @@
 # Create list of source files
 # ---------------------------
 SET(libdyn_src
-  private/fileReader.cpp 
-  private/JointPrivate.cpp 
-  private/JointRotationPrivate.cpp 
-  private/JointFreeFlyerPrivate.cpp 
-  private/JointTranslationPrivate.cpp 
-  private/JointAnchorPrivate.cpp 
   private/Body.cpp 
-  private/Hand.cpp 
-  private/Foot.cpp
   private/DynamicBodyPrivate.cpp 
+  private/DynamicMultiBodyActuated.cpp
+  private/DynamicMultiBodyAngularMomentum.cpp
   private/DynamicMultiBodyArticularJacobian.cpp
-  private/DynamicMultiBodyTree.cpp
+  private/DynamicMultiBodyCenterOfMass.cpp
+  private/DynamicMultiBodyInertiaMatrix.cpp
+  private/DynamicMultiBodyJointRank.cpp
   private/DynamicMultiBodyNewtonEuler.cpp
   private/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp
-  private/DynamicMultiBodyJointRank.cpp
-  private/DynamicMultiBodyCenterOfMass.cpp
   private/DynamicMultiBodyProperties.cpp
-  private/DynamicMultiBodyAngularMomentum.cpp
-  private/DynamicMultiBodyInertiaMatrix.cpp
-  private/DynamicMultiBodyActuated.cpp
-  private/MultiBody.cpp 
+  private/DynamicMultiBodyTree.cpp
   private/DynMultiBodyPrivate.cpp 
-  private/HumDynMultiBodyPrivate.cpp 
+  private/Foot.cpp
+  private/fileReader.cpp 
+  private/Hand.cpp 
   private/HumanoidSpecificities.cpp  
-  private/SpiritVRMLReader.cpp 
+  private/HumDynMultiBodyPrivate.cpp 
+  private/JointAnchorPrivate.cpp 
+  private/JointFreeFlyerPrivate.cpp 
+  private/JointPrivate.cpp 
+  private/JointRotationPrivate.cpp 
+  private/JointTranslationPrivate.cpp 
+  private/MultiBody.cpp 
   private/Spatial.cpp
+  private/SpiritVRMLReader.cpp 
 )
 
 SET(libdyn_src ${libdyn_src}
