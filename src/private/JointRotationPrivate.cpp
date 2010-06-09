@@ -275,9 +275,9 @@ void JointRotationPrivate::updateTorqueAndForce()
   /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
      m_i a_{c,i} - m_i g_i
    */
-  ODEBUG(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
+  ODEBUG3(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
   tmp = CurrentBody->ldv_c - lg;
-  ODEBUG(" Acceleration: " << CurrentBody->ldv_c);
+  ODEBUG3(" Acceleration: " << CurrentBody->ldv_c);
   CurrentBody->m_Force =  tmp * CurrentBody->mass();
   /* Get the local center of mass */
   vector3d lc = CurrentBody->localCenterOfMass();
@@ -304,12 +304,7 @@ void JointRotationPrivate::updateTorqueAndForce()
    */
 
   matrix4d curtri;
-
-  if (CurrentBody->joint()!=0)
-    curtri = CurrentBody->joint()->currentTransformation();
-  else
-    MAL_S4x4_MATRIX_SET_IDENTITY(curtri);
-
+  curtri = currentTransformation();
 
   matrix4d invcurtri;
   MAL_S4x4_INVERSE(curtri,invcurtri,double);      
@@ -317,44 +312,52 @@ void JointRotationPrivate::updateTorqueAndForce()
   for(unsigned int IndexChild = 0;
       IndexChild< m_Children.size();IndexChild++)
     {
-      DynamicBodyPrivate *Child = (DynamicBodyPrivate *)m_Children[IndexChild];
-      //cout << "Child Bodies : " << Child->getName() << endl;
-      aRt = MAL_S3x3_RET_A_by_B(Child->R_static,Child->Riip1);
-
-      // /* Force computation. */
-      // R_i_{i+1} f_{i+1}
-      tmp= MAL_S3x3_RET_A_by_B(aRt, Child->m_Force);
-      CurrentBody->m_Force += tmp;
-
-      /* Torque computation. */
-      /* 1st term : R^i_{i+1} t_{i+1} */
-      firstterm = MAL_S3x3_RET_A_by_B(aRt, Child->m_Torque);
-
-      /* 3rd term : (R_i_{i+1} f_{i+1}) x rip1,ci */
-      matrix4d curtrip1= Child->joint()->currentTransformation();
-      matrix4d ip1Mi;
-      MAL_S4x4_C_eq_A_by_B(ip1Mi, invcurtri, curtrip1);
-
-      /* rip1,ci = (riip1)^(-1)rici 
-	 Note: rip1,c1 is expressed in the frame of link i.
-       */
-      vector3d res3d; 
-
-      MAL_S3_VECTOR_ACCESS(res3d,0) = 
-	MAL_S3_VECTOR_ACCESS(lc,0)-
-	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3); 
-      MAL_S3_VECTOR_ACCESS(res3d,1) = 
-	MAL_S3_VECTOR_ACCESS(lc,1) - 
-	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,1,3) ;
-      MAL_S3_VECTOR_ACCESS(res3d,2) = 
-	MAL_S3_VECTOR_ACCESS(lc,2)-
-	MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,2,3);
-      MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
-
-      CurrentBody->m_Torque += firstterm + thirdterm;
-
+      JointPrivate * ChildJoint = m_Children[IndexChild];
+      if (ChildJoint!=0)
+	{
+	  DynamicBodyPrivate *ChildBody = ChildJoint->linkedDBody();
+	  
+	  //cout << "Child Bodies : " << Child->getName() << endl;
+	  aRt = MAL_S3x3_RET_A_by_B(ChildBody->R_static,ChildBody->Riip1);
+	  
+	  // /* Force computation. */
+	  // R_i_{i+1} f_{i+1}
+	  tmp= MAL_S3x3_RET_A_by_B(aRt, ChildBody->m_Force);
+	  CurrentBody->m_Force += tmp;
+	  
+	  /* Torque computation. */
+	  /* 1st term : R^i_{i+1} t_{i+1} */
+	  firstterm = MAL_S3x3_RET_A_by_B(aRt, ChildBody->m_Torque);
+	  
+	  /* 3rd term : (R_i_{i+1} f_{i+1}) x rip1,ci */
+	  matrix4d curtrip1= ChildBody->joint()->currentTransformation();
+	  matrix4d ip1Mi;
+	  MAL_S4x4_C_eq_A_by_B(ip1Mi, invcurtri, curtrip1);
+	  
+	  /* rip1,ci = (riip1)^(-1)rici 
+	     Note: rip1,c1 is expressed in the frame of link i.
+	  */
+	  vector3d res3d; 
+	  
+	  MAL_S3_VECTOR_ACCESS(res3d,0) = 
+	    MAL_S3_VECTOR_ACCESS(lc,0)-
+	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3); 
+	  MAL_S3_VECTOR_ACCESS(res3d,1) = 
+	    MAL_S3_VECTOR_ACCESS(lc,1) - 
+	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,1,3) ;
+	  MAL_S3_VECTOR_ACCESS(res3d,2) = 
+	    MAL_S3_VECTOR_ACCESS(lc,2)-
+	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,2,3);
+	  MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
+	  
+	  CurrentBody->m_Torque += firstterm + thirdterm;
+	}
+      else 
+	{
+	  cout << "Strange " << getName() << " has a NIL child at " << IndexChild << endl;
+	}
     }
-
+  ODEBUG3(" " << getName() << ":" << CurrentBody->m_Force);
   /* 2nd term : -f_i x r_{i,ci} */
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody->m_Force, lc);
   CurrentBody->m_Torque = CurrentBody->m_Torque - sndterm;
