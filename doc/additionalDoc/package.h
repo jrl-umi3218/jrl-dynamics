@@ -1,4 +1,4 @@
-/** \mainpage
+/** \mainpage dynamicsJRLJapan
 
 \section intro Introduction
 
@@ -23,8 +23,8 @@ using the abstract interface or by parsing a VRML file following the
 The documentation is divided in the following sections:
 <ul>
  <li> \subpage Installing</li>
- <li> \subpage User documentation</li>
- <li> \subpage Developper documentation</li>
+ <li> \subpage userdocumentation </li>
+ <li> \subpage developperdocumentation</li>
  <li> \subpage Acknowledgments</li>
 </ul>
 
@@ -33,6 +33,8 @@ The documentation is divided in the following sections:
 */
 
 #include "install.h"
+#include "UserDocumentation.h"
+#include "DevelopperDocumentation.h"
 
 /*! \page Acknowledgments
 \section author Authors
