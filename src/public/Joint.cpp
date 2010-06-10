@@ -23,8 +23,8 @@ using namespace dynamicsJRLJapan;
 
 Joint::Joint()
 {
-  JointPrivate* obj = NULL;
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  CjrlJoint* obj = NULL;
+  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 }
 
 Joint::Joint(const Joint& inJoint)
@@ -51,10 +51,10 @@ Joint::Joint(const Joint& inJoint)
 	      if (aAP!=0)
 		obj = new JointAnchorPrivate(*aAP);
 	      if (obj!=0)
-		m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+		m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 	      else
 		{
-		  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+		  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 		  std::cerr<< "Type not recognized";
 		}
 	    }
@@ -64,168 +64,170 @@ Joint::Joint(const Joint& inJoint)
 
 JointFreeflyer::JointFreeflyer(const matrix4d& inInitialPosition)
 {
-  JointPrivate* obj = new JointFreeflyerPrivate(inInitialPosition);
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  CjrlJoint* obj = new JointFreeflyerPrivate(inInitialPosition);
+  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 }
 
 JointRotation::JointRotation(const matrix4d& inInitialPosition)
 {
-  JointPrivate* obj = new JointRotationPrivate(inInitialPosition);
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  CjrlJoint* obj = new JointRotationPrivate(inInitialPosition);
+  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 }
 
 JointTranslation::JointTranslation(const matrix4d& inInitialPosition)
 {
-  JointPrivate* obj = new JointTranslationPrivate(inInitialPosition);
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  CjrlJoint* obj = new JointTranslationPrivate(inInitialPosition);
+  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 }
 
 JointAnchor::JointAnchor(const matrix4d& inInitialPosition)
 {
-  JointPrivate* obj = new JointAnchorPrivate(inInitialPosition);
-  m_privateObj = boost::shared_ptr<JointPrivate>(obj);
+  CjrlJoint* obj = new JointAnchorPrivate(inInitialPosition);
+  m_privateObj = boost::shared_ptr<CjrlJoint>(obj);
 }
 
 
+#define DERIVPRIVATE dynamic_cast<JointPrivate *>(m_privateObj.get())
+
 CjrlJoint* Joint::parentJoint() const
 {
-  return m_privateObj->parentJoint();
+  return DERIVPRIVATE->parentJoint();
 }
 
 
 bool Joint::addChildJoint (CjrlJoint& inJoint)
 {
-  return m_privateObj->addChildJoint(inJoint);
+  return DERIVPRIVATE->addChildJoint(inJoint);
 }
 
 
 unsigned int Joint::countChildJoints() const
 {
-  return m_privateObj->countChildJoints();
+  return DERIVPRIVATE->countChildJoints();
 }
 
 
 CjrlJoint* Joint::childJoint(unsigned int inJointRank) const
 {
-  return m_privateObj->childJoint(inJointRank);
+  return DERIVPRIVATE->childJoint(inJointRank);
 }
 
 
 std::vector<CjrlJoint*> Joint::jointsFromRootToThis() const
 {
-  return m_privateObj->jointsFromRootToThis();
+  return DERIVPRIVATE->jointsFromRootToThis();
 }
 
 
 unsigned int Joint::rankInConfiguration() const
 {
-  return m_privateObj->rankInConfiguration();
+  return DERIVPRIVATE->rankInConfiguration();
 }
 
 
 const matrix4d& Joint::initialPosition()
 {
-  return m_privateObj->initialPosition();
+  return DERIVPRIVATE->initialPosition();
 }
 
 
 bool Joint::updateTransformation(const vectorN& inDofVector)
 {
-  return m_privateObj->updateTransformation(inDofVector);
+  return DERIVPRIVATE->updateTransformation(inDofVector);
 }
 
 
 const matrix4d &Joint::currentTransformation() const
 {
-  return m_privateObj->currentTransformation();
+  return DERIVPRIVATE->currentTransformation();
 }
 
 
 CjrlRigidVelocity Joint::jointVelocity()
 {
-  return m_privateObj->jointVelocity();
+  return DERIVPRIVATE->jointVelocity();
 }
 
 
 CjrlRigidAcceleration Joint::jointAcceleration()
 {
-  return m_privateObj->jointAcceleration();
+  return DERIVPRIVATE->jointAcceleration();
 }
 
 
 unsigned int Joint::numberDof() const
 {
-  return m_privateObj->numberDof();
+  return DERIVPRIVATE->numberDof();
 }
 
 
 double Joint::lowerBound(unsigned int inDofRank) const
 {
-  return m_privateObj->lowerBound(inDofRank);
+  return DERIVPRIVATE->lowerBound(inDofRank);
 }
 
 
 double Joint::upperBound(unsigned int inDofRank) const
 {
-  return m_privateObj->upperBound(inDofRank);
+  return DERIVPRIVATE->upperBound(inDofRank);
 }
 
 
 void Joint::lowerBound(unsigned int inDofRank, double inLowerBound)
 {
-  m_privateObj->lowerBound(inDofRank, inLowerBound);
+  DERIVPRIVATE->lowerBound(inDofRank, inLowerBound);
 }
 
 void Joint::upperBound(unsigned int inDofRank, double inUpperBound)
 {
-  m_privateObj->upperBound(inDofRank, inUpperBound);
+  DERIVPRIVATE->upperBound(inDofRank, inUpperBound);
 }
 
 
 double Joint::lowerVelocityBound(unsigned int inDofRank) const
 {
-  return m_privateObj->lowerVelocityBound(inDofRank);
+  return DERIVPRIVATE->lowerVelocityBound(inDofRank);
 }
 
 double Joint::upperVelocityBound(unsigned int inDofRank) const
 {
-  return m_privateObj->upperVelocityBound(inDofRank);
+  return DERIVPRIVATE->upperVelocityBound(inDofRank);
 }
 
 void Joint::lowerVelocityBound(unsigned int inDofRank, double inLowerBound)
 {
-  m_privateObj->lowerVelocityBound(inDofRank, inLowerBound);
+  DERIVPRIVATE->lowerVelocityBound(inDofRank, inLowerBound);
 }
 
 void Joint::upperVelocityBound(unsigned int inDofRank, double inUpperBound)
 {
-  m_privateObj->upperVelocityBound(inDofRank, inUpperBound);
+  DERIVPRIVATE->upperVelocityBound(inDofRank, inUpperBound);
 }
 
 const matrixNxP& Joint::jacobianJointWrtConfig() const
 {
-  return m_privateObj->jacobianJointWrtConfig();
+  return DERIVPRIVATE->jacobianJointWrtConfig();
 }
 
 void Joint::computeJacobianJointWrtConfig()
 {
-  m_privateObj->computeJacobianJointWrtConfig();
+  DERIVPRIVATE->computeJacobianJointWrtConfig();
 }
 
 void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, 
 				      matrixNxP& outjacobian) const
 {
-  m_privateObj->getJacobianPointWrtConfig(inPointJointFrame, outjacobian);
+  DERIVPRIVATE->getJacobianPointWrtConfig(inPointJointFrame, outjacobian);
 }
 
 CjrlBody* Joint::linkedBody() const
 {
-  return m_privateObj->linkedBody();
+  return DERIVPRIVATE->linkedBody();
 }
 
 void Joint::setLinkedBody (CjrlBody& inBody)
 {
-  m_privateObj->setLinkedBody(inBody);
+  DERIVPRIVATE->setLinkedBody(inBody);
 }
 
 

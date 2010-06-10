@@ -25,22 +25,17 @@ class CjrlBody;
 
 namespace dynamicsJRLJapan {
 
-  /*
-    Forward declaration
+
+  /** \ingroup userclasses
+      \brief This class represents a robot joint.
+      
+      Implements abstract interface CjrlJoint.
   */
-  class JointPrivate;
-
-/**
-   \brief This class represents a robot joint.
-
-   Implements abstract interface CjrlJoint.
-*/
-
   class DYN_JRL_JAPAN_EXPORT Joint : public virtual CjrlJoint
   {
   public:
 
-    boost::shared_ptr<JointPrivate> m_privateObj;
+    boost::shared_ptr<CjrlJoint> m_privateObj;
 
     /**
        \name Constructor and destructor

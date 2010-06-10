@@ -19,48 +19,53 @@ using namespace dynamicsJRLJapan;
 
 DynamicBody::DynamicBody()
 {
-  DynamicBodyPrivate* obj = new DynamicBodyPrivate();
-  m_privateObj = boost::shared_ptr<DynamicBodyPrivate>(obj);
+  CjrlBody* obj = new DynamicBodyPrivate();
+  m_privateObj = boost::shared_ptr<CjrlBody>(obj);
 }
 
 DynamicBody::DynamicBody(const DynamicBody& inBody)
 {
-  DynamicBodyPrivate* obj = new DynamicBodyPrivate(*inBody.m_privateObj);
-  m_privateObj = boost::shared_ptr<DynamicBodyPrivate>(obj);
+  DynamicBodyPrivate *aDBP = dynamic_cast<DynamicBodyPrivate *>(inBody.m_privateObj.get());
+  CjrlBody* obj = 0;
+  if (aDBP!=0)
+    obj= new DynamicBodyPrivate(*aDBP);
+  m_privateObj = boost::shared_ptr<CjrlBody>(obj);
 }
+
+#define DERIVPRIVATE dynamic_cast<DynamicBodyPrivate *>(m_privateObj.get())
 
 const vector3d& DynamicBody::localCenterOfMass() const
 {
-  return m_privateObj->localCenterOfMass();
+  return DERIVPRIVATE->localCenterOfMass();
 }
 
 void DynamicBody::localCenterOfMass(const vector3d& inlocalCenterOfMass)
 {
-  m_privateObj->localCenterOfMass(inlocalCenterOfMass);
+  DERIVPRIVATE->localCenterOfMass(inlocalCenterOfMass);
 }
 
 const matrix3d& DynamicBody::inertiaMatrix() const
 {
-  return m_privateObj->inertiaMatrix();
+  return DERIVPRIVATE->inertiaMatrix();
 }
 
 void DynamicBody::inertiaMatrix(const matrix3d& inInertiaMatrix)
 {
-  m_privateObj->inertiaMatrix(inInertiaMatrix);
+  DERIVPRIVATE->inertiaMatrix(inInertiaMatrix);
 }
 
 double DynamicBody::mass() const
 {
-  return m_privateObj->mass();
+  return DERIVPRIVATE->mass();
 }
 
 void DynamicBody::mass(double inMass)
 {
-  m_privateObj->mass(inMass);
+  DERIVPRIVATE->mass(inMass);
 }
 
 const CjrlJoint* DynamicBody::joint() const
 {
-  return m_privateObj->joint();
+  return DERIVPRIVATE->joint();
 }
 

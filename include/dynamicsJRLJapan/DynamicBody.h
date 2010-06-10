@@ -25,12 +25,7 @@ class CjrlJoint;
 
 namespace dynamicsJRLJapan {
 
-  /*
-    Forward declaration
-  */
-  class DynamicBodyPrivate;
-
-  /**
+  /** \ingroup userclasses
      \brief This class implements a body
 
      See CjrlJoint for documentation.
@@ -39,7 +34,7 @@ namespace dynamicsJRLJapan {
   {
   public:
 
-    boost::shared_ptr<DynamicBodyPrivate> m_privateObj;
+    boost::shared_ptr<CjrlBody> m_privateObj;
 
     /**
        \name Constructor and destructor
