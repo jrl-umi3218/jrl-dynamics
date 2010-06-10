@@ -24,7 +24,7 @@
 
 namespace dynamicsJRLJapan
 {
-    /**
+    /** \ingroup userclasses
     \brief This class represents a hand.
         A hand has a central point referenced in the wrist joint frame, 
 	three axis and a scalar value ranging between 0 and 1 to describe the grasping degree (0 for open and 1 for closed hand)

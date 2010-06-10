@@ -35,8 +35,8 @@
 
 namespace dynamicsJRLJapan
 {
-  /*! Hooks for to create objects. */
-
+  /*! \ingroup userclasses
+    \brief Hooks for to create objects. */
   class DYN_JRL_JAPAN_EXPORT ObjectFactory: public CjrlRobotDynamicsObjectFactory
   {
   public:

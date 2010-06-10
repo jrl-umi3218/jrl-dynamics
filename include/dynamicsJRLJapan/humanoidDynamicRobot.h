@@ -21,7 +21,7 @@
 
 namespace jrlDelegate {
 
-  /**
+  /** \ingroup userclasses
      \brief Template to implement a non abstract class describing a humanoid robot with dynamics.
      This template takes a class implementing the methods of the template
      CjrlRobotDynamicsObjectConstructor.

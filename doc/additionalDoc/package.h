@@ -20,46 +20,21 @@ The robot model used in this library is a kinematic tree which can be build
 using the abstract interface or by parsing a VRML file following the  
 <a href="http://www.openrtp.jp/openhrp3/">OpenHRP</a> format.
 
-\section Installation
-
-\subsection robotpkg
-In order to have a coherent installation it is strongly recommended to install 
-dynamicsJRLJapan using the tool named robotpkg. 
-For instructions in how to install it please look
-<a href="http://homepages.laas.fr/mallet/robotpkg">here</a>.
-
-\subsection Dependencies
-This package depends upon the following packages:
+The documentation is divided in the following sections:
 <ul>
-  <li> System Packages: </li>
-  <ul>
-    <li> boost (last tested on 1.41)</li>
-    <li> pkgconfig </li>
-    <li> cmake </li>
-  </ul>
-  <li> JRL packages: </li>
-  <ul>
-   <li> Matrix Abstract Layer</li>
-   <li> abstractRobotDynamics</li>
-  </ul
+ <li> \subpage Installing</li>
+ <li> \subpage User documentation</li>
+ <li> \subpage Developper documentation</li>
+ <li> \subpage Acknowledgments</li>
 </ul>
 
-\subsection Compiling
+@defgroup userclasses User Classes
+@defgroup devclasses Developper Classes
+*/
 
-<ol>
-<li> Uncompress the source package<br>
-tar zxvf dynamicsJRLJapan.tgz </li>
-<li> Create a build directory and go inside it: <br>
-mkdir build<br></li>
-<li> Setup the installation with :<br>
-cmake -DCMAKE_INSTALL_PREFIX=/your/prefix -DCMAKE_BUILD_TYPE=RELEASE ..<br></li>
-<li> Compile with: <br>
-make <br></li>
-<li> The installation is realized with: <br>
-make install <br></li>
-</ol>
+#include "install.h"
 
-
+/*! \page Acknowledgments
 \section author Authors
 The package has been strongly modified since its inception 
 but the people mentionned here participated in a significant way:

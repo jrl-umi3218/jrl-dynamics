@@ -17,14 +17,13 @@
 #include <robotDynamics/jrlJoint.h>
 #include <robotDynamics/jrlDynamicRobot.h>
 #include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
-/**
-   \brief Class to implement a non abstract class for a robot with dynamic properties
-   from an object factory.
-
-*/
 
 namespace jrlDelegate {
 
+  /** \ingroup userclasses
+   \brief Classes to implement a non abstract class for a robot with dynamic properties
+   from an object factory.
+  */
   class dynamicRobot : public virtual CjrlDynamicRobot
   {
   private:

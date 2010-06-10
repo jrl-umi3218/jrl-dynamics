@@ -22,7 +22,8 @@
 
 namespace dynamicsJRLJapan
 {
-  /*! This class represents a foot of a humanoid robot.
+  /*! \ingroup userclasses 
+    This class represents a foot of a humanoid robot.
     It assumes some geometrical information available.
     They are described in more details in the original 
     class jrlFoot. */
