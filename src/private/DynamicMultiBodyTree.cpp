@@ -325,7 +325,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	  lCurrentBody->localCenterOfMass(jrlBody->localCenterOfMass());
 	} 
 	else if (DynamicBody* dBody = dynamic_cast<DynamicBody*>(jrlBody)) {
-	  lCurrentBody = dBody->m_privateObj.get();
+	  lCurrentBody = dynamic_cast<DynamicBodyPrivate*>(dBody->m_privateObj.get());
 	} else {
 	  std::cerr <<
 	    "dynamicsJRLJapan: body is not of ab expected type."
