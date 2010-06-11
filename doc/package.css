@@ -13,8 +13,18 @@ dl {
     color: #330077;
 }
 
-code {
-    color: #3C9A35;
+code, pre.fragment {
+    font-size: 120%;
+    font-family: monospace;
+}
+
+pre.fragment {
+    background: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 td.md {
