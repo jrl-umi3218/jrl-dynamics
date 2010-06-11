@@ -132,9 +132,11 @@ namespace dynamicsJRLJapan
     double subTreeCoef();
     /** */
     void subTreeCoef(double inReplacement);
-    /** */
+    /** \brief Compute the CoM of the joint subtree.
+     */
     void computeSubTreeMCom();
-    /** */
+    /** 
+     */
     void computeSubTreeMComExceptChild(const CjrlJoint* inJoint);
     /** */
     const vector3d& subTreeMCom() const;
@@ -696,7 +698,16 @@ namespace dynamicsJRLJapan
 
     /*! \brief Store the velocity. */
     Spatial::Velocity m_sv;
-	
+    
+    /*! \brief Store the constraints on motion 
+      also known as \f$[\phi \f$] or called the modes
+     */
+    matrixNxP m_phi;
+    
+    /*! \brief Store the derivative of the constraints on motion
+      also known as \f$[\phi \f$]
+    */
+    matrixNxP m_dotphi;
   };
 
 };
