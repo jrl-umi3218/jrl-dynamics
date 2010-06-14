@@ -30,6 +30,40 @@ Velocity Velocity::operator-(Velocity &a)
   return Velocity(m_v0 - a.m_v0, m_w - a.m_w);
 }
 
+Velocity Velocity::operator+(vectorN &a)
+{
+  Velocity av;
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      for(unsigned int i=0;i<3;i++)
+	av.m_v0(i) = m_v0(i) + a(i);
+
+      for(unsigned int i=0;i<3;i++)
+	av.m_w(i) = m_w(i) + a(i+3);
+    }
+  return av;
+}
+
+Velocity operator+(vectorN &a, Velocity &b)
+{
+  Velocity c;
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      vector3d bv0 = b.v0();
+      vector3d bw = b.w();
+      vector3d cv0, cw;
+      for(unsigned int i=0;i<3;i++)
+	cv0(i) = bv0(i) + a(i);
+
+      c.v0(cv0);
+      for(unsigned int i=0;i<3;i++)
+	cw(i) = bw(i) + a(i+3);
+      
+      c.w(cw);
+    }
+  return c;
+}
+
 Acceleration::Acceleration()
 {
   MAL_S3_VECTOR_FILL(m_dv0,0.0);
@@ -153,6 +187,23 @@ Velocity Velocity::operator*(double ad)
   return c;
 }
 
+vectorN Velocity::operator^(vectorN &a)
+{
+  vectorN c;
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      // c x w
+      c(3) =               -m_w(2)*a(4) + m_w(1)*a(5);
+      c(4) = m_w(2)* a(3)                -m_w(0)*a(5);
+      c(5) =-m_w(1)* a(3)  +m_w(0)*a(4);
+      // v0 x m + w x m0
+      c(0) =                -m_v0(2)*a(4) + m_v0(1)*a(5)               -m_w(2)*a(1) + m_w(1)*a(2);
+      c(1) = m_v0(2)* a(3)                 -m_v0(0)*a(5)+m_w(2)* a(0)                -m_w(0)*a(2);
+      c(2) =-m_v0(1)* a(3)  +m_v0(0)*a(4)               -m_w(1)* a(0)  +m_w(0)*a(1) ;
+
+    }
+  return c;
+}
   
 Velocity operator*(double ad, Velocity &a)
 {

@@ -19,9 +19,9 @@
 	       </ol>
             </li>
 	    <li> \f$\text{end}\f$</li>
-	    <li> \f${\bf \phi}_i = pcalc(jtype(i),{\bf q}_i)\f$</li>
-	    <li> \f${\mathring{\bf \phi}}c_i = pdcalc(jtype(i),{\bf q}_i)\f$</li>
-	    <li> \f${\bf v}_i = {^i{\bf X}_{p(i)}}{\bf v}_{p(i)} + \phi_i\dot{q}_i\f$</li>
+	    <li> \f${\bf \Phi}_i = pcalc(jtype(i),{\bf q}_i)\f$</li>
+	    <li> \f${\mathring{\bf \Phi}}c_i = pdcalc(jtype(i),{\bf q}_i)\f$</li>
+	    <li> \f${\bf v}_i = {^i{\bf X}_{p(i)}}{\bf v}_{p(i)} + \Phi_i\dot{q}_i\f$</li>
 	  </ol> 
       </ol>
 	

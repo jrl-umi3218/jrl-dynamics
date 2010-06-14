@@ -666,14 +666,18 @@ namespace dynamicsJRLJapan
       following a Plucker transformation according to table 1.5 of the HoR */  
     const Spatial::PluckerTransform & X0();
 
-    /*! \brief Returns the free modes of the  joint. */
-    virtual matrixNxP pcalc(vectorN &qi);
+    /*! \brief Returns the free modes of the  joint. 
+      Currently this will return an empty matrix.
+     */
+    const virtual matrixNxP & pcalc(vectorN &qi);
 
-    /*! \brief Returns the derivative of the free modes of the  joint. */
-    virtual matrixNxP pdcalc(vectorN &qi);
+    /*! \brief Returns the derivative of the free modes of the  joint. 
+      Currently this will return an empty matrix.
+     */
+    const virtual matrixNxP & pdcalc(vectorN &qi);
 
     /*! \brief Returns the spatial velocity. */
-    const Spatial::Velocity & vs();
+    const Spatial::Velocity & sv();
     
     /*! @} */
 
@@ -708,6 +712,9 @@ namespace dynamicsJRLJapan
       also known as \f$[\phi \f$]
     */
     matrixNxP m_dotphi;
+
+    /*! \brief Store Zeta the momentum */
+    vectorN m_Zeta;
   };
 
 };

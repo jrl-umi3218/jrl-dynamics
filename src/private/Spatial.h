@@ -25,11 +25,14 @@ namespace dynamicsJRLJapan
       Velocity();
       Velocity(vector3d lv0,vector3d lw);       
       Velocity operator+(Velocity &a);
+      Velocity operator+(vectorN &a);
       Velocity operator-(Velocity &a);
       Velocity operator*(double ad);
+      vectorN  operator^(vectorN &a);
 
       friend Velocity operator*(double ad, Velocity &a);
       friend Velocity operator*(Inertia & ,Velocity &);
+      friend Velocity operator+(vectorN & ,Velocity &);
       
       vector3d v0()
       { return m_v0;}
@@ -47,6 +50,7 @@ namespace dynamicsJRLJapan
     
     Velocity operator*(double ad, Velocity &a);
     Velocity operator*(Inertia &, Velocity &);
+    Velocity operator+(vectorN &, Velocity &);
 
     class Acceleration
     {

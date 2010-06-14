@@ -33,6 +33,10 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstructionNormalized);
   m_FromRootToThis.push_back(this);
   CreateLimitsArray();
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
 }
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
@@ -55,6 +59,11 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
   m_FromRootToThis.push_back(this);
 
   CreateLimitsArray();
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
+
 }
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
@@ -73,6 +82,11 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
   MAL_S4x4_MATRIX_SET_IDENTITY(m_poseInParentFrame);
   m_FromRootToThis.push_back(this);
   CreateLimitsArray();
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
+
 }
 
 JointPrivate::JointPrivate(const JointPrivate &r)
@@ -98,6 +112,11 @@ JointPrivate::JointPrivate(const JointPrivate &r)
       m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
     }
 
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
+
 }
 
 JointPrivate::JointPrivate():
@@ -118,6 +137,11 @@ JointPrivate::JointPrivate():
   m_type = FREE_JOINT;
   m_FromRootToThis.push_back(this);
   CreateLimitsArray();
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
+
 }
 
 JointPrivate::~JointPrivate()
@@ -888,7 +912,7 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
   return  Spatial::PluckerTransform(lR,lp);
 }
 
-const Spatial::Velocity & JointPrivate::vs()
+const Spatial::Velocity & JointPrivate::sv()
 {
   return m_sv;
 }
@@ -941,13 +965,30 @@ bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
 bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
 				  const vectorN& inRobotSpeedVector)
 {
-  Spatial::Velocity psv = m_FatherJoint->vs();
-  m_sv = m_iXpi * psv;
+  vectorN localSpeed;
+  MAL_VECTOR_RESIZE(localSpeed,numberDof());
+  for(unsigned int i=0;i<numberDof();i++)
+    localSpeed(i) = inRobotSpeedVector(rankInConfiguration()+i);
+
+  Spatial::Velocity psv = m_FatherJoint->sv();
+  
+  m_sv = (m_iXpi * psv);
+  vectorN a = MAL_RET_A_by_B(m_phi,localSpeed);
+  m_sv = m_sv + a;
+
+  m_Zeta = MAL_RET_A_by_B(m_dotphi,localSpeed);
+  m_Zeta = m_Zeta + m_sv^a;
   return true;
 }
 
-void JointPrivate::updateTorqueAndForce()
+bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
+				      const vectorN& inRobotSpeedVector,
+				      const vectorN& inRobotAccelerationVector)
 {
+  
+}
+
+void JointPrivate::updateTorqueAndForce()
 {
   DynamicBodyPrivate * CurrentBody = (DynamicBodyPrivate*)(linkedBody());
 
@@ -1070,21 +1111,15 @@ void JointPrivate::updateTorqueAndForce()
   /* 2nd term : -f_i x r_{i,ci} */
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody->m_Force, lc);
   CurrentBody->m_Torque = CurrentBody->m_Torque - sndterm;
-}
 
 }
 
-matrixNxP JointPrivate::pcalc(vectorN &qi)
+const matrixNxP & JointPrivate::pcalc(vectorN &qi)
 {
-  matrixNxP res;
-  
-  return res;
+  return m_phi;
 }
 
-matrixNxP JointPrivate::pdcalc(vectorN &qi)
+const matrixNxP & JointPrivate::pdcalc(vectorN &qi)
 {
-  matrixNxP res;
-  
-
-  return res;
+  return m_dotphi;
 }
