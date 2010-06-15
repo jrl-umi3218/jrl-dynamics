@@ -3,6 +3,7 @@
    Olivier Stasse
    
 */
+
 #include "Spatial.h"
 
 using namespace dynamicsJRLJapan::Spatial;
@@ -84,6 +85,20 @@ Acceleration Acceleration::operator+(Acceleration &a)
 Acceleration Acceleration::operator-(Acceleration &a)
 {
   return Acceleration(m_dv0 - a.m_dv0, m_dw - a.m_dw);
+}
+
+Acceleration Acceleration::operator+(vectorN &a)
+{
+  Acceleration av;
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      for(unsigned int i=0;i<3;i++)
+	av.m_dv0(i) = m_dv0(i) + a(i);
+
+      for(unsigned int i=0;i<3;i++)
+	av.m_dw(i) = m_dw(i) + a(i+3);
+    }
+  return av;
 }
 
 cAcceleration::cAcceleration()
@@ -178,6 +193,51 @@ Inertia Inertia::operator+( Inertia &a)
   c.m_I = a.m_I + m_I;
   return c;
 }
+
+Momentum::Momentum()
+{
+  MAL_S3_VECTOR_FILL(m_v,0.0);
+  MAL_S3_VECTOR_FILL(m_w,0.0);
+}
+
+Momentum Inertia::operator*(Velocity &v)
+{
+  Momentum c;
+  vector3d NE_tmp,NE_tmp2;
+  // Angular acceleration
+  NE_tmp = m_I * v.w();
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.v0());
+  vector3d lw = NE_tmp2 + NE_tmp;
+  c.w(lw);
+      
+  // Linear acceleration
+  NE_tmp = v.v0() * m_m;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.w());
+  vector3d lv = NE_tmp2 + NE_tmp;
+  c.v(lv);
+      
+  return c;
+}
+  
+
+Force Inertia::operator*(Acceleration &a)
+{
+  Force c;
+  vector3d NE_tmp,NE_tmp2;
+  // Angular acceleration
+  NE_tmp = m_I * a.dw();
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dv0());
+  vector3d ln0 = NE_tmp2 + NE_tmp;
+  c.n0(ln0);
+      
+  // Linear acceleration
+  NE_tmp = a.dv0() * m_m;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dw());
+  vector3d lf = NE_tmp2 + NE_tmp;
+  c.f(lf);
+      
+  return c;
+}
   
 Velocity Velocity::operator*(double ad)
 {
@@ -204,7 +264,28 @@ vectorN Velocity::operator^(vectorN &a)
     }
   return c;
 }
+
+Force Velocity::operator^(Momentum &a)
+{
+  vector3d dn0,df;
+  vector3d aw  = a.w();
+  vector3d av0 = a.v();
+
+  // c x w
+  dn0(0) =               -m_w(2)*aw(1) + m_w(1)*aw(2);
+  dn0(1) = m_w(2)* aw(0)                -m_w(0)*aw(2);
+  dn0(2) =-m_w(1)* aw(0) +m_w(0)*aw(1);
+
+  // v0 x m + w x m0
+  df(0) =               -m_v0(2)*aw(1)+ m_v0(1)*aw(2)                 -m_w(2)*av0(1) + m_w(1)*av0(2);
+  df(1) = m_v0(2)* aw(0)               -m_v0(0)*aw(2)+m_w(2)* av0(0)                 - m_w(0)*av0(2);
+  df(2) =-m_v0(1)* aw(0)+m_v0(0)*aw(1)               -m_w(1)* av0(0)  +m_w(0)*av0(1) ;
   
+  Spatial::Force c(df,dn0);
+  
+  return c;
+} 
+ 
 Velocity operator*(double ad, Velocity &a)
 {
   Velocity c;
@@ -212,19 +293,21 @@ Velocity operator*(double ad, Velocity &a)
   return c;
 }
 
-Velocity operator*(Inertia & sI, Velocity &v)
+Momentum operator*(Inertia & sI, Velocity &v)
 {
-  Velocity c;
+  Momentum c;
   vector3d NE_tmp,NE_tmp2;
   // Angular velocity
   NE_tmp = sI.I() * v.w();
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.v0());
-  c.w(NE_tmp2 + NE_tmp);
+  vector3d hm = NE_tmp2 + NE_tmp;
+  c.w(hm);
       
   // Linear velocity
   NE_tmp = v.v0() * sI.m();
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.w());
-  c.v0(NE_tmp2 + NE_tmp);
+  vector3d lv = NE_tmp2 + NE_tmp;
+  c.v(lv);
       
   return c;
 }
@@ -289,6 +372,21 @@ Velocity PluckerTransform::operator*( Velocity &v)
     
   // Computes the linear velocity
   c.v0(MAL_S3x3_RET_A_by_B(m_R,v.w()));
+  return c;
+}
+
+Acceleration PluckerTransform::operator*( Acceleration &v)
+{
+  Acceleration c;
+  // Computes the angular velocity
+  vector3d NE_tmp,NE_tmp2;
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.dw());
+  NE_tmp2=v.dv0()-NE_tmp;
+    
+  c.dw(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
+    
+  // Computes the linear velocity
+  c.dv0(MAL_S3x3_RET_A_by_B(m_R,v.dw()));
   return c;
 }
 

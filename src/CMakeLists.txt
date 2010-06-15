@@ -33,6 +33,9 @@ SET(libdyn_src
   private/JointAnchorPrivate.cpp 
   private/JointFreeFlyerPrivate.cpp 
   private/JointPrivate.cpp 
+  private/JointPrivateInterface.cpp 
+  private/JointPrivateNormalization.cpp 
+  private/JointPrivateSpatial.cpp
   private/JointRotationPrivate.cpp 
   private/JointTranslationPrivate.cpp 
   private/MultiBody.cpp 

@@ -17,6 +17,9 @@ namespace dynamicsJRLJapan
     class Acceleration;
     class cAcceleration;
     class Inertia;
+    class Momentum;
+    class Motion;
+    class Force;
     class PluckerTransform;
 
     class Velocity
@@ -29,9 +32,9 @@ namespace dynamicsJRLJapan
       Velocity operator-(Velocity &a);
       Velocity operator*(double ad);
       vectorN  operator^(vectorN &a);
+      Force operator^(Momentum &a);
 
       friend Velocity operator*(double ad, Velocity &a);
-      friend Velocity operator*(Inertia & ,Velocity &);
       friend Velocity operator+(vectorN & ,Velocity &);
       
       vector3d v0()
@@ -49,7 +52,6 @@ namespace dynamicsJRLJapan
     };
     
     Velocity operator*(double ad, Velocity &a);
-    Velocity operator*(Inertia &, Velocity &);
     Velocity operator+(vectorN &, Velocity &);
 
     class Acceleration
@@ -59,7 +61,9 @@ namespace dynamicsJRLJapan
       Acceleration(vector3d ldv0, vector3d ldw);
       Acceleration operator+(Acceleration &a);
       Acceleration operator-(Acceleration &a);
-
+      Acceleration operator+(vectorN &a);
+      
+      friend Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
       { return m_dv0;}
       void dv0(const vector3d &lv0)
@@ -74,6 +78,7 @@ namespace dynamicsJRLJapan
       vector3d m_dv0, m_dw;
     };
 
+    Acceleration operator+(vectorN &, Acceleration &);
     class cAcceleration
     {
     public:
@@ -130,6 +135,25 @@ namespace dynamicsJRLJapan
       vector3d m_p, m_theta;
     };
 
+    class Momentum
+    {
+    public:
+      Momentum();
+      Momentum(vector3d v, vector3d w);
+
+      vector3d v()
+      { return m_v;}
+      vector3d w()
+      { return m_w;}
+      void v(vector3d &lv)
+      { m_v = lv;}
+      void w(vector3d &lw)
+      { m_w = lw;}
+
+    private:
+      vector3d m_v, m_w;
+    };
+
     class Inertia
     {
     public:
@@ -140,7 +164,8 @@ namespace dynamicsJRLJapan
 		      Inertia &b) const;
 	
       Inertia operator+(Inertia &a);
-      friend Velocity operator*(Inertia & ,Velocity &);
+      Momentum operator*(Velocity &);
+      Force operator*(Acceleration &);
 
       matrix3d  I()
       { return m_I;};
@@ -149,7 +174,8 @@ namespace dynamicsJRLJapan
       double m()
       { return m_m;};
 
-    private:
+
+     private:
       matrix3d m_I;
       vector3d m_h;
       double m_m;
@@ -162,6 +188,7 @@ namespace dynamicsJRLJapan
       PluckerTransform(matrix3d lR, vector3d lp) ;
       PluckerTransform operator*(PluckerTransform &a);
       Velocity operator*(Velocity &a);
+      Acceleration operator*(Acceleration &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
 

@@ -652,69 +652,86 @@ namespace dynamicsJRLJapan
     */
     void computeLocalAndGlobalPose();
 
-    /*! \name Methods related to Spatial notations.
-     @{ */
-    /*! \brief Returns the transformation of the joint 
-      following a Plucker transformation according to table 1.5 of the HoR */
-    virtual Spatial::PluckerTransform xjcalc(const vectorN &qi);
-    
-    /*! \brief Returns the position of the joint in the link reference frame
-      following a Plucker transformation according to table 1.5 of the HoR */
-    const Spatial::PluckerTransform & XL();
-    
-    /*! \brief Returns the position of the joint in the world reference frame
-      following a Plucker transformation according to table 1.5 of the HoR */  
-    const Spatial::PluckerTransform & X0();
 
-    /*! \brief Returns the free modes of the  joint. 
-      Currently this will return an empty matrix.
-     */
-    const virtual matrixNxP & pcalc(vectorN &qi);
-
-    /*! \brief Returns the derivative of the free modes of the  joint. 
-      Currently this will return an empty matrix.
-     */
-    const virtual matrixNxP & pdcalc(vectorN &qi);
-
-    /*! \brief Returns the spatial velocity. */
-    const Spatial::Velocity & sv();
+      
+      /*! \name Methods related to Spatial notations.
+	@{ */
+      /*! \brief Returns the transformation of the joint 
+	following a Plucker transformation according to table 1.5 of the HoR */
+      virtual Spatial::PluckerTransform xjcalc(const vectorN &qi);
     
-    /*! @} */
+      /*! \brief Returns the position of the joint in the link reference frame
+	following a Plucker transformation according to table 1.5 of the HoR */
+      const Spatial::PluckerTransform & XL();
+    
+      /*! \brief Returns the position of the joint in the world reference frame
+	following a Plucker transformation according to table 1.5 of the HoR */  
+      const Spatial::PluckerTransform & X0();
+
+      /*! \brief Returns the free modes of the  joint. 
+	Currently this will return an empty matrix.
+      */
+      const virtual matrixNxP & pcalc(vectorN &qi);
+
+      /*! \brief Returns the derivative of the free modes of the  joint. 
+	Currently this will return an empty matrix.
+      */
+      const virtual matrixNxP & pdcalc(vectorN &qi);
+
+      /*! \brief Returns the spatial velocity. */
+      const Spatial::Velocity & sv();
+
+      /*! \brief Returns the spatial accelaration. */
+      const Spatial::Acceleration & sa();
+      
+    
+      /*! @} */
+      
 
   private:
 
-    /*! \brief Position of the joint in the link
-      reference frame using Plucker coordinate.
-      @{ */
-    /*! \brief Initialize the position 
-     using other parameters */
-    void initXL();
+      /*! \brief Position of the joint in the link
+	reference frame using Plucker coordinate.
+	@{ */
+      /*! \brief Initialize the position 
+	using other parameters */
+      void initXL();
+      
+      /*! \brief Store the position of the joint in the body reference frame. */
+      Spatial::PluckerTransform m_XL;
+    
+      /*! \brief Store the position of the joint in the father joint reference frame. */
+      Spatial::PluckerTransform m_iXpi;
+    
+      /*! \brief Store the position of the joint in the world 
+	reference frame.  */
+      Spatial::PluckerTransform m_X0;
 
-    /*! \brief Store the position of the joint in the body reference frame. */
-    Spatial::PluckerTransform m_XL;
-    
-    /*! \brief Store the position of the joint in the father joint reference frame. */
-    Spatial::PluckerTransform m_iXpi;
-    
-    /*! \brief Store the position of the joint in the world 
-      reference frame.  */
-    Spatial::PluckerTransform m_X0;
+      /*! \brief Store the velocity. */
+      Spatial::Velocity m_sv;
 
-    /*! \brief Store the velocity. */
-    Spatial::Velocity m_sv;
-    
-    /*! \brief Store the constraints on motion 
-      also known as \f$[\phi \f$] or called the modes
-     */
-    matrixNxP m_phi;
-    
-    /*! \brief Store the derivative of the constraints on motion
-      also known as \f$[\phi \f$]
-    */
-    matrixNxP m_dotphi;
+      /*! \brief Store the spatial acceleration. */
+      Spatial::Acceleration m_sa;
 
-    /*! \brief Store Zeta the momentum */
-    vectorN m_Zeta;
+      /*! \brief Store the spatial force. */
+      Spatial::Force m_sf;
+
+      /*! \brief Store the spatial inertia of the related body. */
+      Spatial::Inertia m_sI;
+
+      /*! \brief Store the constraints on motion 
+	also known as \f$[\phi \f$] or called the modes
+      */
+      matrixNxP m_phi;
+    
+      /*! \brief Store the derivative of the constraints on motion
+	also known as \f$[\phi \f$]
+      */
+      matrixNxP m_dotphi;
+
+      /*! \brief Store Zeta the momentum */
+      vectorN m_Zeta;
+
   };
 
 };
