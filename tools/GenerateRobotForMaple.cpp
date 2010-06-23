@@ -1,4 +1,5 @@
-/* @doc \file Object to generate a file following VRML 1.0 format.
+/* @doc \file Object to generate a file for Maple model generation
+   using the HuMAnS package.
 
    Copyright (c) 2010
    @author Olivier Stasse
@@ -23,19 +24,33 @@ namespace dynamicsJRLJapan {
 
   Tools::GenerateRobotForMaple::GenerateRobotForMaple()
   {
+    m_NormalizationFlag = true;
   }
 
   Tools::GenerateRobotForMaple::~GenerateRobotForMaple()
   {
   }
 
+  void Tools::GenerateRobotForMaple::setNormalization(bool lNormalization)
+  {
+    m_NormalizationFlag = lNormalization;
+  }
+
+  bool Tools::GenerateRobotForMaple::getNormalization()
+  {
+    return m_NormalizationFlag;
+  }
   double Tools::GenerateRobotForMaple::FilterPrecision(double x)
   {
+    if (isnan(x))
+      return 0.0;
+
     if (fabs(x)<1e-8)
       return 0.0;
 
     return x;
   }
+
 
   void Tools::GenerateRobotForMaple::GenerateGPLv2License(ostream &aof)
   {
@@ -95,7 +110,8 @@ namespace dynamicsJRLJapan {
 
     if(!aof.is_open())
       return;
-
+    //    aof.precision(10);
+    //    aof.setf(ios::fixed,ios::floatfield);
     GenerateGPLv2License(aof);
     GenerateHeader(aof,aHDR);
 
@@ -118,6 +134,9 @@ namespace dynamicsJRLJapan {
     if(!aof.is_open())
       return;
 
+    //    aof.precision(10);
+    //    aof.setf(ios::fixed,ios::floatfield);
+
     GenerateGPLv2License(aof);
 
     GenerateBodies(aof,aHDR);
@@ -137,6 +156,9 @@ namespace dynamicsJRLJapan {
 
     if(!aof.is_open())
       return;
+
+    //    aof.precision(10);
+    //aof.setf(ios::fixed,ios::floatfield);
 
     GenerateGPLv2License(aof);
 
@@ -160,8 +182,8 @@ namespace dynamicsJRLJapan {
     os << "# y vertically upwards, z to the right of robot) to frame defined by " << endl;
     os << "# (x direction to front of robot, y to the left of robot, z vertically " << endl;
     os << "# upwards)" << endl;
-    os << "ref_"<<gindex << " :=0:" << endl;
-    os << "Rx_"<< gindex << " := -Pi/2:" << endl;
+    os << "ref_"<<gindex << " := 0:" << endl;
+    os << "Rx_"<< gindex << " := 0:" << endl;
     os << "Ry_"<< gindex << " := 0:" << endl;
     os << "Rz_"<< gindex << " := 0:" << endl;
     os << "Tx_"<< gindex << " := 0:" << endl;
@@ -200,19 +222,61 @@ namespace dynamicsJRLJapan {
 							   vector3d &EulerAngles,
 							   matrix4d &aTransformation)
   {
+    // Compute inverse normalized rotation
+    matrix4d initialTr;
+    initialTr = aJoint->initialPosition();
+    matrix3d rot,invrot;
+    vector3d xaxis, uaxis;
+    xaxis(0) =1.0; xaxis(1) = 0.0; xaxis(2) = 0.0;
+    
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	{
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=
+	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(rot,i,j)=
+	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,i);
+	}
+    if (m_NormalizationFlag)
+      uaxis = xaxis;
+    else
+      uaxis = invrot * xaxis;
+
     /* Generate file */
     os << "ref_"<<gindex << " := "<< indexparent << ":" << endl;
-    os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "]";
-    if (fabs(EulerAngles(0))>=1e-8)
+    
+    if (uaxis(0)!=0.0)
       {
-	if (EulerAngles(0)>0.0)
-	  os << "+"  << EulerAngles(0);
-	else
-	  os << EulerAngles(0) ;
+	os << "Rx_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "] " ;
+	if (EulerAngles(0)>=0.0)
+	  os << " + ";
+	os  <<  FilterPrecision(EulerAngles(0));
       }
+    else 
+      os << "Rx_"<< gindex << " := " << FilterPrecision(EulerAngles(0));
     os <<  " :"  << endl;
-    os << "Ry_"<< gindex << " := " << FilterPrecision(EulerAngles(1)) << ":" << endl;
-    os << "Rz_"<< gindex << " := " << FilterPrecision(EulerAngles(2)) << ":" << endl;
+
+    if (uaxis(1)!=0.0)
+      {
+	os << "Ry_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "] ";
+	if (EulerAngles(0)>=0.0)
+	  os << " + ";
+	os << FilterPrecision(EulerAngles(1));
+      }
+    else 
+      os << "Ry_"<< gindex << " := " << FilterPrecision(EulerAngles(1)) ;
+    os << ":" << endl;
+
+    if (uaxis(2)!=0.0)
+      {
+	os << "Rz_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "] " ;
+	if (EulerAngles(0)>=0.0)
+	  os << " + ";
+	os << FilterPrecision(EulerAngles(2));
+      }
+    else 
+      os << "Rz_"<< gindex << " := " << FilterPrecision(EulerAngles(2));
+    os << ":" << endl;
     
     os << "Tx_"<< gindex << " := " 
        << FilterPrecision(MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,0,3)) 
@@ -288,6 +352,76 @@ namespace dynamicsJRLJapan {
       }
   }
 
+  void Tools::GenerateRobotForMaple::UnnormalizedTransformation(CjrlJoint * aJoint,
+								MAL_S4x4_MATRIX(,double) &aTransformation)
+  {
+    aTransformation = aJoint->currentTransformation();
+
+    matrix4d initialTr;
+    initialTr = aJoint->initialPosition();
+    cout << "initialTr" << endl;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,0,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,1,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,2,3) = 0.0;
+
+    matrix4d invrot;
+
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	{
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=0.0;
+	  for(unsigned int k=0;k<3;k++)
+	    {
+	      MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)+=
+		MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k) *
+		MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,k);
+
+	    }
+	}
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j) =
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j);
+
+  }
+
+  void Tools::GenerateRobotForMaple::UnnormalizedComAndInertia(CjrlJoint * aJoint,
+							       vector3d &uCom,
+							       matrix3d &uIG)
+  {
+    CjrlBody *aBody = aJoint->linkedBody();
+
+    // Compute inverse normalized rotation
+    matrix4d initialTr;
+    initialTr = aJoint->initialPosition();
+    cout << "Rank:" << aJoint->rankInConfiguration() << endl << 
+      " initialTr: " << initialTr << endl;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,0,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,1,3) = 0.0;
+    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,2,3) = 0.0;
+
+    matrix3d rot,invrot;
+
+    for(unsigned int i=0;i<3;i++)
+      for(unsigned int j=0;j<3;j++)
+	{
+	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=
+	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,i,j);
+	  MAL_S4x4_MATRIX_ACCESS_I_J(rot,i,j)=
+	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,i);
+	}
+    
+    // Unnormalized CoM.
+    vector3d lcom = aBody->localCenterOfMass();
+    uCom = MAL_S3x3_RET_A_by_B(invrot,lcom);
+    
+    // Unnormalized Inertia matrix
+    matrix3d linertiam = aBody->inertiaMatrix();
+    linertiam = MAL_S3x3_RET_A_by_B(linertiam, rot);
+    uIG = MAL_S3x3_RET_A_by_B(invrot,linertiam);
+
+  }
+
   void Tools::GenerateRobotForMaple::GenerateJoint(CjrlJoint *aJoint, 
 						    ostream &os,
 						    string shifttab, unsigned int &gindex)
@@ -298,24 +432,40 @@ namespace dynamicsJRLJapan {
     
     MAL_S4x4_MATRIX(aTransformation,double);
     MAL_S4x4_MATRIX(FinalTransformation,double);
-    aTransformation = aJoint->currentTransformation();
+    if (m_NormalizationFlag)
+      aTransformation = aJoint->currentTransformation();
+    else 
+      UnnormalizedTransformation(aJoint,aTransformation);
     unsigned int indexparent=0;
-
     /* Compute transformation in local coordinates */
     CjrlJoint *parentJoint = aJoint->parentJoint();
     if (parentJoint!=0)
       {
 	MAL_S4x4_MATRIX(parentTransformation,double);
-	parentTransformation = parentJoint->currentTransformation();
+	if (m_NormalizationFlag)
+	  parentTransformation = parentJoint->currentTransformation();
+	else
+	  UnnormalizedTransformation(parentJoint,parentTransformation);
 
 	MAL_S4x4_MATRIX(invParentTransformation,double);
+	/*	for(unsigned int i=0;i<3;i++)
+	  for(unsigned int j=0;j<3;j++)
+	    MAL_S4x4_MATRIX_ACCESS_I_J(invParentTransformation,i,j) =
+	      MAL_S4x4_MATRIX_ACCESS_I_J(parentTransformation,j,i);
+
+	for(unsigned int i=0;i<3;i++)
+	  for(unsigned int j=0;j<3;j++)
+	    MAL_S4x4_MATRIX_ACCESS_I_J(invParentTransformation,i,3) =
+	      -MAL_S4x4_MATRIX_ACCESS_I_J(parentTransformation,i,j)*
+	      MAL_S4x4_MATRIX_ACCESS_I_J(parentTransformation,j,3); */
 	MAL_S4x4_INVERSE(parentTransformation,invParentTransformation,double);
+
 	indexparent = m_Indexes[parentJoint];
 	MAL_S4x4_C_eq_A_by_B(FinalTransformation,invParentTransformation,aTransformation);
       }
     else
       FinalTransformation = aTransformation;
-
+    
     /* Project rotation axis */
 
     matrix3d aRotation;
@@ -326,6 +476,9 @@ namespace dynamicsJRLJapan {
 	  MAL_S3x3_MATRIX_ACCESS_I_J(aRotation,i,j) = 
 	    MAL_S4x4_MATRIX_ACCESS_I_J(FinalTransformation,i,j);
       }
+    cout << "Rank:" << aJoint->rankInConfiguration() << endl << 
+      " Rotation: " << aRotation <<  endl <<
+      " Transformation" << aTransformation << endl;
     ExtractEulerAngles(aRotation,EulerAngles);
     GenerateJointFilePart(aJoint, os, indexparent,gindex,
 			  EulerAngles,FinalTransformation);
@@ -347,14 +500,22 @@ namespace dynamicsJRLJapan {
     os << "# Body " << gindex<< " Rank:" << aJoint->rankInConfiguration()-5 << endl;
     os << "m_" << gindex << " := "<<  aBody->mass() << ":"<<endl;
     
-    vector3d aCom=aBody->localCenterOfMass();
+    vector3d aCom;//aBody->localCenterOfMass();
+    matrix3d IG;//aBody->inertiaMatrix();
+    if(m_NormalizationFlag)
+      {
+	aCom = aBody->localCenterOfMass();
+	IG = aBody->inertiaMatrix();
+      }
+    else
+      UnnormalizedComAndInertia(aJoint,aCom,IG);
+
     os << "G_" << gindex 
        << " := vector(["
        << aCom(0) << " , "
        << aCom(1) << " , " 
        << aCom(2) << "]):" << endl;
     
-    matrix3d IG=aBody->inertiaMatrix();
     os << "IG_" << gindex 
        << " := matrix([[" 
        << MAL_S3x3_MATRIX_ACCESS_I_J(IG,0,0) << " , " 

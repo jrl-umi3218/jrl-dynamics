@@ -31,34 +31,13 @@ void ExportToMapple(CjrlHumanoidDynamicRobot *aHDR,
 }
 
 
-void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
-		      std::string FileOfJointValues)
+void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR)
 {
   unsigned int NbOfDofs = aHDR->numberDof();
 
-  ifstream aif((char *)FileOfJointValues.c_str(),
-		ifstream::in);
-
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
-  int lindex=0;
-  for(unsigned int i=0;i<6;i++)
-      aCurrentConf[lindex++] = 0.0;
-
-  if (!aif.is_open())
-    for(unsigned int i=6;i<NbOfDofs;i++)
-      aCurrentConf[lindex++] = 0.0;
-  else
-    {
-      for(unsigned int i=6;i<NbOfDofs;i++)
-	{
-	  aif >> aCurrentConf[lindex] ;
-	  aCurrentConf[lindex]= aCurrentConf[lindex] * M_PI/180.0; 
-	  lindex++;
-	}
-      aif.close();
-    }
-      
-  aHDR->currentConfiguration(aCurrentConf);
+  aHDR->currentConfiguration(aCurrentConf);  
+  MAL_VECTOR_FILL(aCurrentConf,0.0);
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
@@ -74,7 +53,6 @@ void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
       aHDR->setProperty(inProperty[i],inValue[i]);
 
   }
-  
   aHDR->currentVelocity(aCurrentVel);
   aHDR->currentAcceleration(aCurrentAcc);
   aHDR->computeForwardKinematics();
@@ -91,13 +69,12 @@ int main(int argc, char *argv[])
 
   ofstream tcout("output.txt",ofstream::out);
 
-  if (argc!=6)
+  if (argc!=5)
     {
       aPath="./";
       aName="sample.wrl";
       aSpecificitiesFileName = "sampleSpecificities.xml";
       aMapFromJointToRank = "sampleLinkJointRank.xml";
-      aFileJointValue="position.articular";
     }
   else 
     {
@@ -105,7 +82,6 @@ int main(int argc, char *argv[])
       aPath=argv[1];
       aName=argv[2];
       aMapFromJointToRank=argv[4];
-      aFileJointValue = argv[5];
     }
   dynamicsJRLJapan::ObjectFactory aRobotDynamicsObjectConstructor;
   
@@ -124,7 +100,7 @@ int main(int argc, char *argv[])
 					 aSpecificitiesFileName,
 					 aVectorOfURLs);
 
-  RobotSetPosition(aHDR,aFileJointValue);
+  RobotSetPosition(aHDR);
   
   ExportToMapple(aHDR,aVectorOfURLs,aPath, RobotFileName);
 

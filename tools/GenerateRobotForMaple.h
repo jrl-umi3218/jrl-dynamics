@@ -44,6 +44,14 @@ namespace dynamicsJRLJapan
       /*! \brief Set path to the model files. */
       void SetPathToModelFiles(std::string &Path);
 
+      /*! \name Getter/Setter on normalisation flag.
+	The normalization aligned the axis along the x-axis
+	with revolute join. */
+      void setNormalization(bool lNormalization);
+
+      bool getNormalization();
+	
+      
     private:      
       /*! \brief Generate Kinematic Data. */
       void GenerateKinematicData(std::string &RobotName,
@@ -142,6 +150,17 @@ namespace dynamicsJRLJapan
       std::vector<BodyGeometricalData> m_AccessToData;
 
       std::map<CjrlJoint *, unsigned int> m_Indexes;
+
+      /*! Extract an unnormalized transformation for the joint aJoint. */
+      void UnnormalizedTransformation(CjrlJoint * aJoint,
+				      MAL_S4x4_MATRIX(,double) &aTransformation);
+
+      /*! Extract an unnormalized CoM and IG for the body related to joint aJoint. */
+      void UnnormalizedComAndInertia(CjrlJoint * aJoint,
+				     vector3d &uCom,
+				     matrix3d &uIG);
+
+      bool m_NormalizationFlag;
     };
   };
 };
