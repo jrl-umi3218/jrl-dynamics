@@ -393,9 +393,9 @@ void JointPrivate::updateTorqueAndForce()
   /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
      m_i a_{c,i} - m_i g_i
    */
-  ODEBUG3(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
+  ODEBUG(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
   tmp = CurrentBody->ldv_c - lg;
-  ODEBUG3(" Acceleration: " << CurrentBody->ldv_c);
+  ODEBUG(" Acceleration: " << CurrentBody->ldv_c);
   CurrentBody->m_Force =  tmp * CurrentBody->mass();
   /* Get the local center of mass */
   vector3d lc = CurrentBody->localCenterOfMass();
@@ -475,7 +475,7 @@ void JointPrivate::updateTorqueAndForce()
 	  cout << "Strange " << getName() << " has a NIL child at " << IndexChild << endl;
 	}
     }
-  ODEBUG3(" " << getName() << ":" << CurrentBody->m_Force);
+  ODEBUG(" " << getName() << ":" << CurrentBody->m_Force);
   /* 2nd term : -f_i x r_{i,ci} */
   MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,CurrentBody->m_Force, lc);
   CurrentBody->m_Torque = CurrentBody->m_Torque - sndterm;

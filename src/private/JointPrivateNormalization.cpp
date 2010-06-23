@@ -210,9 +210,13 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
       // Inertia matrix
       // Rotation using similarity transformation.
       matrix3d linertiam = m_Body->inertiaMatrix();
+      ODEBUG(getName() << endl << 
+	      "old inertia:" << endl <<
+	      linertiam);
       linertiam = MAL_S3x3_RET_A_by_B(linertiam, trRotParams);
       linertiam = MAL_S3x3_RET_A_by_B(rotParams,linertiam);
       m_Body->inertiaMatrix(linertiam);
+      ODEBUG("new inertia:" << endl << linertiam) ;
       
       DynamicBodyPrivate* aDBP=0;
       if (m_Body!=0)

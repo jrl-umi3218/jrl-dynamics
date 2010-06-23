@@ -26,7 +26,7 @@
 
 
 /*!  Framework includes */
-#define _DEBUG_MODE_ON_
+//#define DEBUG_MODE
 #include "Debug.h"
 
 /*! Boost includes */
