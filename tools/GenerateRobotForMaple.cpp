@@ -259,7 +259,7 @@ namespace dynamicsJRLJapan {
     if (uaxis(1)!=0.0)
       {
 	os << "Ry_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "] ";
-	if (EulerAngles(0)>=0.0)
+	if (EulerAngles(1)>=0.0)
 	  os << " + ";
 	os << FilterPrecision(EulerAngles(1));
       }
@@ -270,7 +270,7 @@ namespace dynamicsJRLJapan {
     if (uaxis(2)!=0.0)
       {
 	os << "Rz_"<< gindex << " := q["<< aJoint->rankInConfiguration()-5 << "] " ;
-	if (EulerAngles(0)>=0.0)
+	if (EulerAngles(2)>=0.0)
 	  os << " + ";
 	os << FilterPrecision(EulerAngles(2));
       }
@@ -478,7 +478,7 @@ namespace dynamicsJRLJapan {
       }
     cout << "Rank:" << aJoint->rankInConfiguration() << endl << 
       " Rotation: " << aRotation <<  endl <<
-      " Transformation" << aTransformation << endl;
+      " Transformation:" << aTransformation << endl;
     ExtractEulerAngles(aRotation,EulerAngles);
     GenerateJointFilePart(aJoint, os, indexparent,gindex,
 			  EulerAngles,FinalTransformation);
