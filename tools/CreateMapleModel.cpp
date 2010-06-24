@@ -36,8 +36,8 @@ void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR)
   unsigned int NbOfDofs = aHDR->numberDof();
 
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
-  aHDR->currentConfiguration(aCurrentConf);  
   MAL_VECTOR_FILL(aCurrentConf,0.0);
+  aHDR->currentConfiguration(aCurrentConf);  
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
