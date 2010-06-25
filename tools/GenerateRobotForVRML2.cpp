@@ -90,7 +90,8 @@ namespace dynamicsJRLJapan {
 		<< fabs(Qxx)-1.0 << " "
 		<< fabs(Qyy)-1.0 << " "
 		<< fabs(Qzz)-1.0 << " "
-		<< endl;
+		<< endl
+		<< data << endl;
 	  }
 	return;
       }

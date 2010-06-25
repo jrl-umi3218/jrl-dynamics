@@ -471,11 +471,11 @@ namespace dynamicsJRLJapan
       void fBodySubBlockName() const
       {
 	/*
-	if (m_DataForParsing->CurrentBody[m_DataForParsing->Depth]!=0)
+	  if (m_DataForParsing->CurrentBody[m_DataForParsing->Depth]!=0)
 	  {
-	    delete m_DataForParsing->CurrentBody[m_DataForParsing->Depth];
-	    std::cout << "Current depth :" << m_DataForParsing->Depth << std::endl;
-	    }*/
+	  delete m_DataForParsing->CurrentBody[m_DataForParsing->Depth];
+	  std::cout << "Current depth :" << m_DataForParsing->Depth << std::endl;
+	  }*/
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth]->setName((char *)m_DataForParsing->aName.c_str());
 	m_DataForParsing->m_BodyGeometry.resetURL( );
 	if (m_Verbose>1)
@@ -600,23 +600,23 @@ namespace dynamicsJRLJapan
 
 	m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth] = displayR;
         if (m_Verbose>1)
-	cout << "StackOfRotationMatrixDisplay[" 
-	     << m_DataForParsing->Depth << " ] = " 
-	     << displayR  << endl;
-
+	  cout << "StackOfRotationMatrixDisplay[" 
+	       << m_DataForParsing->Depth << " ] = " 
+	       << displayR  << endl;
+	
 	// Then set the static rotation at the level joint 
 	// and 
 	m_DataForParsing->CurrentLink.aJoint->setStaticRotation(R);
 	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(displayR);
 	if (lQ!=0.0)
 	  {
-              if (m_Verbose>1){
-	    std::cerr << m_DataForParsing->aName 
-		      << " JointRotation:" << R << endl;
-	    std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
-		      << " angle: " << lQuantity<<endl;
-	    std::cerr << "displayR: " << displayR << endl;
-              }
+	    if (m_Verbose>1){
+	      std::cerr << m_DataForParsing->aName 
+			<< " JointRotation:" << R << endl;
+	      std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
+			<< " angle: " << lQuantity<<endl;
+	      std::cerr << "displayR: " << displayR << endl;
+	    }
 	  }
       }
       
@@ -1048,6 +1048,8 @@ namespace dynamicsJRLJapan
 	// Creates a default body.
 	m_DataForParsing->CurrentBody[m_DataForParsing->Depth] = new Body() ;
 
+	MAL_S3x3_MATRIX_SET_IDENTITY(m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth]);
+
 	if (m_Verbose>1)
 	  std::cout << "Increased depth "<< m_DataForParsing->Depth << endl;
       }
@@ -1373,9 +1375,9 @@ namespace dynamicsJRLJapan
 	  AppearanceDef_r = str_p("DEF")  >>
 	    ( (lexeme_d[+(alnum_p|'_')][SVRBIND2(fDisplay,(self,arg1,arg2))] >>
 	       str_p("Appearance")) | str_p("Appearance") )
-					>>  ch_p('{') 
-					>> AppearanceBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]
-					>> ch_p('}') ;
+									     >>  ch_p('{') 
+									     >> AppearanceBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]
+									     >> ch_p('}') ;
 	  AppearanceHeader_r = str_p("appearance")[SVRBIND2(fDisplay,(self,arg1,arg2))] >>
 	    (AppearanceDef_r[SVRBIND2(fDisplay,(self,arg1,arg2))] | AppearanceUse_r[SVRBIND2(fDisplay,(self,arg1,arg2))]);
 	  
@@ -1438,7 +1440,7 @@ namespace dynamicsJRLJapan
 	  HumanoidVersion_r = str_p("version") >> ch_p('"') 
 					       >> (lexeme_d[+(alnum_p|'.')])
 	    [SVRBIND2(fHumanoidversion,(self,arg1,arg2))]
-	     >> ch_p('"');
+					       >> ch_p('"');
           HumanoidName_r = str_p("name") >> ch_p('"') >> (lexeme_d[+(alnum_p)])
 	    [SVRBIND2(fHumanoidname,(self,arg1,arg2))]
 					 >> ch_p('"');
@@ -1453,7 +1455,7 @@ namespace dynamicsJRLJapan
 	  
 	  // Define the entry rules for huanoid.
 	  HumanoidBlock_r =  *(str_p("humanoidBody") 
-	    >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
+			       >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
 			       HumanoidName_r | HumanoidVersion_r |
 			       HumanoidInfo_r );
   
@@ -1702,7 +1704,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->CurrentLink.label= 0;
 	m_DataForParsing->CurrentLink.aJoint = new JointFreeflyerPrivate(eye);
 	ODEBUG(" m_DataForParsing->CurrentLink.aJoint->m_globalConfiguration"<<
-	  m_DataForParsing->CurrentLink.aJoint->initialPosition());
+	       m_DataForParsing->CurrentLink.aJoint->initialPosition());
 
 	//	m_DataForParsing->JointMemoryAllocationForNewDepth = true;
 	m_DataForParsing->CurrentLink.indexCorps1 = 0;
