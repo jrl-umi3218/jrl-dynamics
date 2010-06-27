@@ -28,6 +28,44 @@ namespace dynamicsJRLJapan {
   {
   }
 
+  void RotationMatrixFromThetaU(vector3d &axis,
+				double &angle,
+				matrix3d &rmat)
+  {
+    double ux = axis(0),
+      uy = axis(1), uz = axis(2);
+    double c = cos(angle), s = sin(angle);
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,0,0) =
+      ux*ux + (1-ux*ux)*c;
+    
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,0,1) =
+      ux*uy*(1-c) - uz * s;
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,0,2) =
+      ux*uz*(1-c) + uy * s;
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,1,0) =
+      ux*uy*(1-c) + uz*s;
+    
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,1,1) =
+      uy*uy+ (1-uy*uy) * c;
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,1,2) =
+      uy*uz*(1-c) - ux * s;
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,2,0) =
+      ux*uz*(1-c) - uy*s;
+    
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,2,1) =
+      uy*uz*(1-c) + ux*s;
+
+    MAL_S3x3_MATRIX_ACCESS_I_J(rmat,2,2) =
+      uz*uz+ (1-uz*uz) * c;
+    
+
+  }
+
   void Tools::GenerateRobotForVRML2::AxisAngle2(matrix4d &data,
 					       vector3d &axis,
 					       double &angle) const
@@ -57,6 +95,7 @@ namespace dynamicsJRLJapan {
 
     angle =atan2(r,t);
 
+    cout << "t:" << t << " r: " << r << endl;
     if ((r>1e-8) || (t>0.0))
       {
 	double sinca;
@@ -75,18 +114,44 @@ namespace dynamicsJRLJapan {
 	MAL_S3_VECTOR_ACCESS(axis,0) = sqrt((Qxx - t)/(1-t));
 	if ((Qzy - Qyz)<0.0)
 	  MAL_S3_VECTOR_ACCESS(axis,0) = -MAL_S3_VECTOR_ACCESS(axis,0);
+	else if (Qzy==Qyz)
+	  {
+	    if (Qzy<0)
+	      MAL_S3_VECTOR_ACCESS(axis,0) = -MAL_S3_VECTOR_ACCESS(axis,0);
+	  }
 
 	MAL_S3_VECTOR_ACCESS(axis,1) = sqrt((Qyy - t)/(1-t));
 	if ((Qxz - Qzx)<0.0)
-	  MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
+	  {
+	    MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
+	  }
+	else if (Qxz==Qzx)
+	  {
+	    if (Qxz<0)
+	      {
+		MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
+	      }
+	  }
 
 	MAL_S3_VECTOR_ACCESS(axis,2) = sqrt((Qzz - t)/(1-t));
 	if ((Qyx - Qxy)<0.0)
 	  MAL_S3_VECTOR_ACCESS(axis,2) = -MAL_S3_VECTOR_ACCESS(axis,2);
+	else if (Qyx==Qxy)
+	  {
+	    if (Qyx<0)
+	      MAL_S3_VECTOR_ACCESS(axis,2) = -MAL_S3_VECTOR_ACCESS(axis,2);
+	  }
 	
       }
     cout << "data:" << data<< endl;
     cout << "axis:" << axis  << " angle:" << angle << endl;
+    {
+      matrix3d check;
+      RotationMatrixFromThetaU(axis,angle,check);
+      cout << "Checking rotation "<< endl<<
+	check<<endl;
+      
+    }
   }
   
   void Tools::GenerateRobotForVRML2::AxisAngle(matrix4d &data,
