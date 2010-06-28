@@ -261,7 +261,7 @@ namespace dynamicsJRLJapan
 
     /*! Set the static translation. */
     inline void setStaticTranslation(vector3d & staticTranslation) 
-    { MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) =staticTranslation(0);
+    { MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,0,3) = staticTranslation(0);
       MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,1,3) = staticTranslation(1);
       MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,2,3) = staticTranslation(2) ; }
 
