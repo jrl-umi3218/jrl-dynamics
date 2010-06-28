@@ -69,11 +69,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
       body->p = parentbody->p + MAL_S3x3_RET_A_by_B(parentbody->R,body->b);
 
       //update the translation/rotation axis of joint
-      matrix3d ltmp1;
-      MAL_S3x3_C_eq_A_by_B(ltmp1,
-			   parentbody->R, 
-			   body->R_static);
-      MAL_S3x3_C_eq_A_by_B(body->w_a,ltmp1, body->a);
+      MAL_S3x3_C_eq_A_by_B(body->w_a,Rtmp, body->a);
   
     }
   else
