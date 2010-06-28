@@ -95,7 +95,6 @@ namespace dynamicsJRLJapan {
 
     angle =atan2(r,t);
 
-    cout << "t:" << t << " r: " << r << endl;
     if ((r>1e-8) || (t>0.0))
       {
 	double sinca;
@@ -114,42 +113,43 @@ namespace dynamicsJRLJapan {
 	MAL_S3_VECTOR_ACCESS(axis,0) = sqrt((Qxx - t)/(1-t));
 	if ((Qzy - Qyz)<0.0)
 	  MAL_S3_VECTOR_ACCESS(axis,0) = -MAL_S3_VECTOR_ACCESS(axis,0);
-	else if (Qzy==Qyz)
-	  {
-	    if (Qzy<0)
-	      MAL_S3_VECTOR_ACCESS(axis,0) = -MAL_S3_VECTOR_ACCESS(axis,0);
-	  }
-
+	
 	MAL_S3_VECTOR_ACCESS(axis,1) = sqrt((Qyy - t)/(1-t));
 	if ((Qxz - Qzx)<0.0)
-	  {
-	    MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
-	  }
-	else if (Qxz==Qzx)
-	  {
-	    if (Qxz<0)
-	      {
-		MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
-	      }
-	  }
+	  MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
 
+	
 	MAL_S3_VECTOR_ACCESS(axis,2) = sqrt((Qzz - t)/(1-t));
 	if ((Qyx - Qxy)<0.0)
 	  MAL_S3_VECTOR_ACCESS(axis,2) = -MAL_S3_VECTOR_ACCESS(axis,2);
-	else if (Qyx==Qxy)
+
+	if ((r==0) && (angle==M_PI))
 	  {
-	    if (Qyx<0)
-	      MAL_S3_VECTOR_ACCESS(axis,2) = -MAL_S3_VECTOR_ACCESS(axis,2);
+	    if ((MAL_S3_VECTOR_ACCESS(axis,2)==0.0) && 
+		(Qyx==Qxy))
+	      {
+		if (MAL_S3_VECTOR_ACCESS(axis,0)!=0)
+		  MAL_S3_VECTOR_ACCESS(axis,0) = -MAL_S3_VECTOR_ACCESS(axis,0);
+	      }
+	    
+	    if ((MAL_S3_VECTOR_ACCESS(axis,0)==0.0) && 
+		(Qzy==Qyz))
+	      {
+		if (MAL_S3_VECTOR_ACCESS(axis,1)!=0)
+		  MAL_S3_VECTOR_ACCESS(axis,1) = -MAL_S3_VECTOR_ACCESS(axis,1);
+	      }
+
+	    if ((MAL_S3_VECTOR_ACCESS(axis,1)==0) && 
+		(Qxz==Qzx))
+	      {
+		if (MAL_S3_VECTOR_ACCESS(axis,2)!=0)
+		  MAL_S3_VECTOR_ACCESS(axis,2) = -MAL_S3_VECTOR_ACCESS(axis,2);
+	      }
 	  }
-	
       }
-    cout << "data:" << data<< endl;
-    cout << "axis:" << axis  << " angle:" << angle << endl;
     {
       matrix3d check;
       RotationMatrixFromThetaU(axis,angle,check);
-      cout << "Checking rotation "<< endl<<
-	check<<endl;
       
     }
   }
@@ -306,22 +306,13 @@ namespace dynamicsJRLJapan {
     MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,1,3) = 0.0;
     MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,2,3) = 0.0;
 
-    matrix4d invrot;
+    matrix4d invrot,invInitialTr;
+    MAL_S4x4_INVERSE(initialTr,invInitialTr,double);
+    
+    MAL_S4x4_C_eq_A_by_B(invrot,aTransformation,invInitialTr);
 
-    for(unsigned int i=0;i<3;i++)
-      for(unsigned int j=0;j<3;j++)
-	{
-	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=0.0;
-	  for(unsigned int k=0;k<3;k++)
-	    {
-	      MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)+=
-		MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k) *
-		MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,k);
-
-	    }
-	}
-    for(unsigned int i=0;i<3;i++)
-      for(unsigned int j=0;j<3;j++)
+    for(unsigned int i=0;i<4;i++)
+      for(unsigned int j=0;j<4;j++)
 	MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,j) =
 	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j);
 
@@ -335,18 +326,12 @@ namespace dynamicsJRLJapan {
       for(unsigned int j=0;j<3;j++)
 	{
 	  MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,j) = 0.0;
-	  MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,3) = 0.0;
 	  for(unsigned int k=0;k<3;k++)
 	    {
 	      MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,j)+=
 		MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,i,k)*
 		MAL_S3x3_MATRIX_ACCESS_I_J(RotationForDisplay3d,k,j);
-
-	    }
-	  MAL_S4x4_MATRIX_ACCESS_I_J(aTransformationForDisplay,i,3)+=
-	    MAL_S4x4_MATRIX_ACCESS_I_J(aTransformation,j,3)*
-	    -MAL_S3x3_MATRIX_ACCESS_I_J(RotationForDisplay3d,i,j);
-
+ 	    }
 	}
 
     os << shifttab << "  translation ";
