@@ -53,11 +53,11 @@ void DynMultiBodyPrivate::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
 
 /*! Implementation of the Newton-Euler algorithm */
 void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double),
-					    MAL_S3x3_MATRIX(&OrientationForRoot,double),
-					    MAL_S3_VECTOR(&v0ForRoot,double),
-					    MAL_S3_VECTOR(&wForRoot,double),
-					    MAL_S3_VECTOR(&dvForRoot,double),
-					    MAL_S3_VECTOR(&dwForRoot,double))
+					       MAL_S3x3_MATRIX(&OrientationForRoot,double),
+					       MAL_S3_VECTOR(&v0ForRoot,double),
+					       MAL_S3_VECTOR(&wForRoot,double),
+					       MAL_S3_VECTOR(&dvForRoot,double),
+					       MAL_S3_VECTOR(&dwForRoot,double))
 {
 
   int currentNode = labelTheRoot;
