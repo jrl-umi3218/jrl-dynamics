@@ -342,8 +342,8 @@ Force  PluckerTransform::operator*( Force &f)
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,f.f());
   NE_tmp2=f.n0()-NE_tmp;
     
-  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp2)
-    c.n0(NE_tmp);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp2);
+  c.n0(NE_tmp);
     
   // Computes the linear velocity
   NE_tmp3 = f.f();
@@ -356,7 +356,7 @@ void PluckerTransform::inverse( PluckerTransform &a)
 {
   MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,m_R);
   vector3d NE_tmp;
-  NE_tmp = -a.p();
+  NE_tmp = a.p()* -1.0;
   MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
 }
 
