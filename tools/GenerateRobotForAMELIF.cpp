@@ -107,7 +107,6 @@ namespace dynamicsJRLJapan {
     MAL_S4x4_MATRIX(aTransformation,double);
     MAL_S4x4_MATRIX(FinalTransformation,double);
     aTransformation = aJoint->currentTransformation();
-    unsigned int indexparent=0;
 
     /* Compute transformation in local coordinates */
     CjrlJoint *parentJoint = aJoint->parentJoint();
