@@ -61,11 +61,11 @@ void JointPrivate::initXL()
   for(unsigned int i=0;i<3;i++)
     for(unsigned int j=0;j<3;j++)
       MAL_S3x3_MATRIX_ACCESS_I_J(lR,i,j) = 
-	MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
+	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
   
   for(unsigned int i=0;i<3;i++)
     MAL_S3_VECTOR_ACCESS(lp,i) = 
-      MAL_S3x3_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
+      MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
  
   m_XL = Spatial::PluckerTransform(lR,lp);
   // Assuming at first an identity matrix for Xj(i).
