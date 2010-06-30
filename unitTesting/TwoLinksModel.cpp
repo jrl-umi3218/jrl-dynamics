@@ -227,7 +227,7 @@ namespace dynamicsJRLJapan
     
     // Force. (7.172)
     f2 = ( ac2 -g2);
-    f2 *= m_SetOfParameters.m[1];
+    f2 = f2 * m_SetOfParameters.m[1];
     ODEBUG("g2:" << g2 );
     ODEBUG("ac2:" << ac2);
     ODEBUG("Result f2:" << f2);

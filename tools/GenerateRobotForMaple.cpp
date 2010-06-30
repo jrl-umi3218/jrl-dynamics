@@ -405,9 +405,9 @@ namespace dynamicsJRLJapan {
     for(unsigned int i=0;i<3;i++)
       for(unsigned int j=0;j<3;j++)
 	{
-	  MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j)=
+	  MAL_S3x3_MATRIX_ACCESS_I_J(invrot,i,j)=
 	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,i,j);
-	  MAL_S4x4_MATRIX_ACCESS_I_J(rot,i,j)=
+	  MAL_S3x3_MATRIX_ACCESS_I_J(rot,i,j)=
 	    MAL_S4x4_MATRIX_ACCESS_I_J(initialTr,j,i);
 	}
     
