@@ -9,6 +9,22 @@
    Please refers to file License.txt for details on the license.
 
 */
+#include <string>
+#include <exception>
+
+
+#define LTHROW(x) \
+  { \
+    class Exception: public std::exception \
+    { \
+      virtual const char * what() const throw() \
+      {  \
+        return x; \
+      } \
+    }; \
+  \
+  Exception almsg; \
+  throw almsg; }
 
 #ifdef RESETDEBUG5 
 #undef RESETDEBUG5

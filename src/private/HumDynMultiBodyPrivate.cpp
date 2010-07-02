@@ -24,6 +24,7 @@
 using namespace dynamicsJRLJapan;
 
 
+
 HumDynMultiBodyPrivate::HumDynMultiBodyPrivate() : DynMultiBodyPrivate()
 {
   m_rightHand = m_leftHand = 0;
@@ -90,7 +91,10 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
 
       if (numberDof()!=0)
 	LinkBetweenJointsAndEndEffectorSemantic();
-      
+      else
+	{
+	  throw "No degree of freedom";
+	}
     }
   else
     {
@@ -103,6 +107,7 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
       m_Dt(1) = 0.04;
       m_Dt(2) = 0.0;
 
+      LTHROW("Warning:No appropriate definition of Humanoid Specifities");
     }
 
 }
@@ -138,6 +143,8 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 	m_LeftWristJoint = GetJointFromActuatedID(JointsForWrist[0]);
 	ODEBUG("JointsForWrist[0]: " << JointsForWrist[0]);
       }
+    else 
+      LTHROW("No left wrist");
   }
 
   // Get the right hand.
@@ -195,9 +202,9 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   CjrlJoint* theRightAnkle(0x0);
   if (ListeJointsSize > 0)
   {
-	  EndIndex = JointForOneLimb[ListeJointsSize-1];
-	  theRightAnkle = GetJointFromActuatedID(EndIndex);
-	  ODEBUG("Joints for the right foot:" << EndIndex);
+    EndIndex = JointForOneLimb[ListeJointsSize-1];
+    theRightAnkle = GetJointFromActuatedID(EndIndex);
+    ODEBUG("Joints for the right foot:" << EndIndex);
   }
 
   Foot *theRightFoot = new Foot();
@@ -225,8 +232,8 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   ListeJointsSize = JointForOneLimb.size();
   if (ListeJointsSize > 0)
   {
-	  EndIndex = JointForOneLimb[ListeJointsSize-1];
-	  m_GazeJoint = GetJointFromActuatedID(EndIndex);
+    EndIndex = JointForOneLimb[ListeJointsSize-1];
+    m_GazeJoint = GetJointFromActuatedID(EndIndex);
   }
 
   // Get the waist joint of the humanoid.
@@ -240,7 +247,6 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   unsigned NbChestJoints = JointsForChest.size();
   if (NbChestJoints>0)
     m_ChestJoint = GetJointFromActuatedID(JointsForChest[NbChestJoints-1]);
-
 
   // Take care of the hands information.
   HandsData HumHands = m_HS->GetHandsData();

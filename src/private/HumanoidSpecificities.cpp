@@ -12,7 +12,6 @@
    Please refers to file License.txt for details on the license.
 
 */
-
 #include "Debug.h"
 
 #include "HumanoidSpecificities.h"
@@ -111,6 +110,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		}
 	    }
 	}
+      else LTHROW("No feet in humanoid specificities file.");
 
       if (look_for(fp,"Waist"))
 	{
@@ -379,6 +379,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	    }
 	}
     }
+  else LTHROW("Did not find any humanoid in humanoid specificities file.");
   fclose(fp);
   return 0;
 }
