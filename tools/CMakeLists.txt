@@ -65,3 +65,9 @@ SET_TARGET_PROPERTIES(CreateMapleModel
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
 
+ADD_EXECUTABLE(	ReadPosFile ReadPosFile.cpp)
+SET_TARGET_PROPERTIES(ReadPosFile
+	              PROPERTIES
+	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
