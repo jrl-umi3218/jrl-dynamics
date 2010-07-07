@@ -56,7 +56,7 @@ namespace dynamicsJRLJapan
 			      const vectorN& inRobotAccelerationVector);
             
       /*! \brief Here the number of DOFs is one. */
-      unsigned int numberDof() const 
+      virtual unsigned int numberDof() 
       { return 1;};
 
     };

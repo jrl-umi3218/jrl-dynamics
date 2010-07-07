@@ -20,10 +20,16 @@ using namespace dynamicsJRLJapan;
 JointRotationPrivate::JointRotationPrivate()
   :JointPrivate()
 {
+  m_nbDofs=1;
+  CreateLimitsArray();
 }
 
 JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+  :JointPrivate()
 {
+  m_nbDofs=1;
+  CreateLimitsArray();
+
   type(JointPrivate::REVOLUTE_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;

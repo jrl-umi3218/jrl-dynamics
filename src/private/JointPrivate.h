@@ -14,6 +14,7 @@
 #define JOINTPRIVATE_H
 
 #include <vector>
+#include <Debug.h>
 
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlJoint.h"
@@ -51,6 +52,13 @@ namespace dynamicsJRLJapan
       
     /*! Vector of childs */
     std::vector< JointPrivate*> m_Children;
+    
+    /*! Nb of dofs for this joint. */
+    unsigned int m_nbDofs;
+
+    /*! Create the arrays (when the type is known). */
+    void CreateLimitsArray();
+
 
   private:
       
@@ -111,11 +119,7 @@ namespace dynamicsJRLJapan
 
     /*! First entry into the state vector */
     unsigned int m_StateVectorPosition;
-    
-    /*! Create the arrays (when the type is known). */
-    void CreateLimitsArray();
-
-    
+        
     /*! Compute global data from initialization using Local information*/
     void computeLocalAndGlobalPoseFromGlobalFrame();
 
@@ -416,7 +420,7 @@ namespace dynamicsJRLJapan
        \brief Get the number of degrees of freedom of the joint.
     */
     virtual unsigned int numberDof() const
-    { return 0;};
+    { return m_nbDofs;};
 
     /**
        \brief Returns the rank of the JointPrivate in the state vector.

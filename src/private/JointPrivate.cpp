@@ -20,13 +20,13 @@ using namespace dynamicsJRLJapan;
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
   m_inGlobalFrame(false),
+  m_nbDofs(0),
   m_type(ltype),
   m_axis(laxis),
   m_quantity(lquantite),
   m_poseInParentFrame(lpose),
   m_FatherJoint(0),
   m_Body(0),
-  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -42,12 +42,12 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite, MAL_S3_VECTOR(,double) & translationStatic):
   m_inGlobalFrame(false),
+  m_nbDofs(0),
   m_type(ltype),
   m_axis(laxis),
   m_quantity(lquantite),
   m_FatherJoint(0),
   m_Body(0),
-  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -69,12 +69,12 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
              float lquantite):
   m_inGlobalFrame(false),
+  m_nbDofs(0),
   m_type(ltype),
   m_axis(laxis),
   m_quantity(lquantite),
   m_FatherJoint(0),
   m_Body(0),
-  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
@@ -101,7 +101,7 @@ JointPrivate::JointPrivate(const JointPrivate &r)
   m_FromRootToThis.push_back(this);
   m_inGlobalFrame=r.m_inGlobalFrame;
   m_Body = 0;
-  m_dynBody = 0;
+  m_nbDofs = r.m_nbDofs;
   CreateLimitsArray();
 
   for(unsigned int i=0;i<numberDof();i++)
@@ -121,10 +121,10 @@ JointPrivate::JointPrivate(const JointPrivate &r)
 
 JointPrivate::JointPrivate():
   m_inGlobalFrame(false),
+  m_nbDofs(0),
   m_quantity(0.0),
   m_FatherJoint(0),
   m_Body(0),
-  m_dynBody(0),
   m_IDinActuated(-1)
 {
   MAL_S3_VECTOR_ACCESS(m_axis,0) = 0.0;
@@ -149,6 +149,7 @@ JointPrivate::~JointPrivate()
 
 void JointPrivate::CreateLimitsArray()
 {
+  ODEBUG("CreateLimitsArray: "<< numberDof() << " " << getName());
   if (numberDof()!=0)
     {
       m_LowerLimits.resize(numberDof());
