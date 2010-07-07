@@ -679,6 +679,7 @@ namespace dynamicsJRLJapan
 	  }
 	else if (s=="rotate")
 	  {
+	    ODEBUG("Joint Rotation Private");
 	    m_DataForParsing->CurrentLink.aJoint = new JointRotationPrivate();
 	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
