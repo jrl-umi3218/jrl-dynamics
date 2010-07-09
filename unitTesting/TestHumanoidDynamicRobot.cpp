@@ -91,7 +91,6 @@ int main(int argc, char *argv[])
   aCurrentConf[lindex++] = InitPos[i]; */
   for(int i=0;i<NbOfDofs-6 ;i++)
     aCurrentConf[lindex++] = 0.0;
-  
   aHDR->currentConfiguration(aCurrentConf);
 
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
@@ -189,8 +188,15 @@ int main(int argc, char *argv[])
 
   aJoint = aHDR->waist();
   tcout << "****************************" << endl;
+#if 1
   aHDR->computeJacobianCenterOfMass();
   DisplayMatrix(aHDR->jacobianCenterOfMass(),tcout);
+#else
+  matrixNxP JCM;
+  MAL_MATRIX_RESIZE(JCM,3,MAL_MATRIX_NB_COLS(aJ));
+  aHDR->getJacobianCenterOfMass(*aHDR->rootJoint(),JCM);
+  DisplayMatrix(JCM,tcout);
+#endif
   tcout << "****************************" << endl;
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
 
