@@ -106,6 +106,14 @@ SET_TARGET_PROPERTIES(ComputeRealZMP
 )
 ADD_DEPENDENCIES (ComputeRealZMP ${PROJECT_NAME})
 
+ADD_EXECUTABLE(	TestFreeFlyer TestFreeFlyer.cpp CommonTools.cpp)
+SET_TARGET_PROPERTIES( TestFreeFlyer
+  PROPERTIES
+  COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+  LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
+ADD_DEPENDENCIES(TestFreeFlyer ${PROJECT_NAME})
+
 CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
 		 ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/output.ascii )
 
