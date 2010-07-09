@@ -94,9 +94,7 @@ int main(int argc, char *argv[])
       aCurrentVel[i] = 0.0;
     }
   aCurrentConf[9] = 1.0;
-//   aCurrentVel[3] = 1.0;
-//   aCurrentVel[6] = 1.0;
-aCurrentAcc[2] = 1.0;
+  aCurrentAcc[2] = 1.0;
   aHDR->currentConfiguration(aCurrentConf);
   aHDR->currentVelocity(aCurrentVel);
   aHDR->currentAcceleration(aCurrentAcc);
