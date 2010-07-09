@@ -28,7 +28,7 @@ namespace dynamicsJRLJapan
 				 TwoLinksModelParameters &aSetOfParameters) 
   : dynamicRobot(anObjectFactory)
   {
-    m_g = 9.81;
+    m_g = -9.81;
 
     /*! Specify the orthonormal basis.
       (different from Spong orientation, because
@@ -133,8 +133,8 @@ namespace dynamicsJRLJapan
     MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,2) = 
       cos(lcurrentConfiguration[0]);
     ODEBUG("Rf1f0t1: " << Rf1f0t );
-    tmp = m_i * -m_g;
-    ODEBUG("i * -g: " << tmp );
+    tmp = m_i * +m_g;
+    ODEBUG("i * +g: " << tmp );
     MAL_S3x3_C_eq_A_by_B(g1,Rf1f0t,tmp);
     ODEBUG("g1: " << g1);
     // Compute linear acceleration of the end of link 1.
@@ -203,7 +203,7 @@ namespace dynamicsJRLJapan
       cos(lcurrentConfiguration[0]+
 	  lcurrentConfiguration[1]);
     ODEBUG("Rf2f0t1: " << Rf2f0t );
-    tmp = m_i * -m_g;
+    tmp = m_i * +m_g;
     ODEBUG("i * -g: " << tmp);
     MAL_S3x3_C_eq_A_by_B(g2,Rf2f0t,tmp);
     ODEBUG("g2: " << g2);
@@ -226,7 +226,7 @@ namespace dynamicsJRLJapan
     vectorN lcurrentAcceleration = currentAcceleration();
     
     // Force. (7.172)
-    f2 = ( ac2 -g2);
+    f2 = ( ac2 +g2);
     f2 = f2 * m_SetOfParameters.m[1];
     ODEBUG("g2:" << g2 );
     ODEBUG("ac2:" << ac2);
@@ -282,7 +282,7 @@ namespace dynamicsJRLJapan
     ODEBUG("intermediate f1:" << f1 );
     ODEBUG("g1:" << g1 );
     ODEBUG("ac1:" << ac1 );
-    f1 = f2inf1 + ( ac1 -g1) * m_SetOfParameters.m[0];
+    f1 = f2inf1 + ( ac1 +g1) * m_SetOfParameters.m[0];
     ODEBUG("f1:" << f1 );
 
     // Torque
