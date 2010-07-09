@@ -1,0 +1,133 @@
+# Olivier Stasse,  JRL, CNRS/AIST
+# Creation: 09/07/2010
+# History:
+#
+# Copyright CNRS/AIST
+
+cmake_minimum_required(VERSION 2.6)
+
+enable_language(CXX)
+
+ENABLE_TESTING()
+
+# Debug mode for cmake.
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(PROJECT_NAME "dyn-examples")
+
+project(${PROJECT_NAME})
+
+# Check for required packages
+# ---------------------------
+INCLUDE(FindPkgConfig)
+
+# -------------------------------------------------------------------
+# --- UTILS ---------------------------------------------------------
+# -------------------------------------------------------------------
+MACRO(LIST2STRING _VAR_ARG _LIST_ARG)
+  SET(${_VAR_ARG})
+  SET(_FIRST_STEP 1)
+  FOREACH(_ITEM ${ARGV})
+     IF(_FIRST_STEP)
+	SET(_FIRST_STEP 0)
+     ELSE(_FIRST_STEP)
+           SET (${_VAR_ARG} "${${_VAR_ARG}} ${_ITEM}")
+     ENDIF(_FIRST_STEP)
+  ENDFOREACH(_ITEM)
+ENDMACRO(LIST2STRING)
+
+# --- MATRIXABSTRACTLAYER -------------------------------------
+SET(_MatrixAbstractLayer_FOUND 0)
+SET(_MatrixAbstractLayer_REQUIRED "MatrixAbstractLayer >= 1.8.0")
+PKG_CHECK_MODULES(_MatrixAbstractLayer REQUIRED ${_MatrixAbstractLayer_REQUIRED})
+
+IF(NOT ${_MatrixAbstractLayer_FOUND})
+  MESSAGE(FATAL_ERROR "Check that package MatrixAbstractLayer is installed in a directory pointed out by PKG_CONFIG_PATH.")
+ENDIF(NOT ${_MatrixAbstractLayer_FOUND})
+
+SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_MatrixAbstractLayer_CFLAGS}") 
+SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_MatrixAbstractLayer_LDFLAGS}")
+
+# --- DYNAMICSJRLJAPAN ---------------------------------------
+SET(_dynamicsJRLJapan_FOUND 0)
+SET(_dynamicsJRLJapan_REQUIRED "dynamicsJRLJapan >= 1.16.1")
+PKG_CHECK_MODULES(_dynamicsJRLJapan ${_dynamicsJRLJapan_REQUIRED})
+
+SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_dynamicsJRLJapan_CFLAGS}") 
+SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_dynamicsJRLJapan_LDFLAGS}")
+
+# -------------------------------------------------------------------
+# --- UTILS ---------------------------------------------------------
+# -------------------------------------------------------------------
+MACRO(LIST2STRING _VAR_ARG _LIST_ARG)
+  SET(${_VAR_ARG})
+  SET(_FIRST_STEP 1)
+  FOREACH(_ITEM ${ARGV})
+     IF(_FIRST_STEP)
+	SET(_FIRST_STEP 0)
+     ELSE(_FIRST_STEP)
+           SET (${_VAR_ARG} "${${_VAR_ARG}} ${_ITEM}")
+     ENDIF(_FIRST_STEP)
+  ENDFOREACH(_ITEM)
+ENDMACRO(LIST2STRING)
+
+LIST2STRING( PLF ${${PROJECT_NAME}_LINK_FLAGS})
+
+MESSAGE(STATUS "Compilation time: ${${PROJECT_NAME}_CXX_FLAGS}")
+MESSAGE(STATUS "Linking time: ${PLF}")  
+
+# --- TARGETS
+ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp )
+SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
+	              PROPERTIES
+		      COMPILE_FLAGS ${${PROJECT_NAME}_CXX_FLAGS}
+		      LINK_FLAGS ${PLF}
+		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/data/sample.wrl
+)
+
+ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/data/sample.wrl 
+  ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/data/sampleSpecificities.xml
+  ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/data/sampleLinkJointRank.xml
+  ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
+)
+
+ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
+  CommonTools.cpp 
+  HumanoidCopy.cpp
+  TestCopyJointTreeThroughAbstractInterface.cpp)
+SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface
+	              PROPERTIES
+	              COMPILE_FLAGS ${${PROJECT_NAME}_CXX_FLAGS}
+                      LINK_FLAGS ${PLF}
+)
+
+ADD_EXECUTABLE(	TestTwoLinksModel
+  TwoLinksModel.cpp
+  TestTwoLinksModel.cpp )
+SET_TARGET_PROPERTIES( TestTwoLinksModel
+   	              PROPERTIES	
+	              COMPILE_FLAGS ${${PROJECT_NAME}_CXX_FLAGS}
+                      LINK_FLAGS ${PLF}
+)
+
+ADD_EXECUTABLE(	ComputeRealZMP ComputeRealZMP.cpp)
+SET_TARGET_PROPERTIES(ComputeRealZMP	
+      PROPERTIES
+      COMPILE_FLAGS ${${PROJECT_NAME}_CXX_FLAGS}
+      LINK_FLAGS ${PLF}
+)
+
+ADD_EXECUTABLE(	TestFreeFlyer TestFreeFlyer.cpp CommonTools.cpp)
+SET_TARGET_PROPERTIES( TestFreeFlyer
+  PROPERTIES
+  COMPILE_FLAGS ${${PROJECT_NAME}_CXX_FLAGS}
+  LINK_FLAGS ${PLF}
+)
+			       
+MESSAGE(STATUS "Here:${${PROJECT_NAME}_SOURCE_DIR}")
+
+CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/data/output.ascii.cmake
+		 ${${PROJECT_NAME}_BINARY_DIR}/data/output.ascii )	
+

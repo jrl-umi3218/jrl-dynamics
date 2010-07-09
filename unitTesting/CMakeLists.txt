@@ -122,3 +122,33 @@ ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")
 ADD_TEST(TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface)
 
 ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
+
+SET(${PROJECT_NAME}_EXAMPLES 
+  CommonTools.cpp 
+  CommonTools.h
+  TestHumanoidDynamicRobot.cpp
+  TestCopyJointTreeThroughAbstractInterface.cpp
+  TestFreeFlyer.cpp
+  ComputeRealZMP.cpp
+  TwoLinksModel.cpp
+  TwoLinksModel.h
+  TestTwoLinksModel.cpp
+  HumanoidCopy.cpp
+  HumanoidCopy.h
+  examples.CMakeList
+  )
+
+INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES}
+  DESTINATION examples/${PROJECT_NAME}/
+  PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
+
+SET(${PROJECT_NAME}_EXAMPLES_DATA
+  output.ascii.cmake
+  sample.wrl
+  sampleSpecificities.xml
+  sampleLinkJointRank.xml
+  )
+INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES_DATA}
+  DESTINATION examples/${PROJECT_NAME}/data
+  PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
+  
