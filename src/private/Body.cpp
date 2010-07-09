@@ -33,6 +33,7 @@ using namespace dynamicsJRLJapan;
 
 Body::Body(void)
 {
+  m_AttachedJoint =0;
   m_mass	= 0;
   attCoefMass = 0;
   posCoM[0] = 0;
@@ -47,6 +48,7 @@ Body::Body(void)
 
 Body::Body(double lmass) 
 {
+  m_AttachedJoint =0;
   this->m_mass		= lmass;
   m_Explored =0 ;
   m_Initialized = false;
@@ -55,6 +57,7 @@ Body::Body(double lmass)
 Body::Body(double lmass, 
 	   MAL_S3_VECTOR(positionCoM,double)) 
 {
+  m_AttachedJoint =0;
   this->m_mass		= lmass;
   m_Explored =0 ;  
   m_Initialized = false;
@@ -64,6 +67,7 @@ Body::Body(double lmass,
 	   MAL_S3_VECTOR(positionCoM,double), 
 	   MAL_S3x3_MATRIX(matriceInertie,double)) 
 {
+  m_AttachedJoint =0;
   this->posCoM	= positionCoM;
   this->m_mass		= lmass;
   m_Explored =0 ;  
