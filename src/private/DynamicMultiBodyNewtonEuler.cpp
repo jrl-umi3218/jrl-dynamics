@@ -41,11 +41,11 @@ using namespace dynamicsJRLJapan;
 
 /*! Kept for backward compatibility. */
 void DynMultiBodyPrivate::ForwardVelocity(MAL_S3_VECTOR(&PosForRoot,double),
-                                       MAL_S3x3_MATRIX(&OrientationForRoot,double),
-                                       MAL_S3_VECTOR(&v0ForRoot,double),
-                                       MAL_S3_VECTOR(&wForRoot,double),
-                                       MAL_S3_VECTOR(&dvForRoot,double),
-                                       MAL_S3_VECTOR(&dwForRoot,double))
+					  MAL_S3x3_MATRIX(&OrientationForRoot,double),
+					  MAL_S3_VECTOR(&v0ForRoot,double),
+					  MAL_S3_VECTOR(&wForRoot,double),
+					  MAL_S3_VECTOR(&dvForRoot,double),
+					  MAL_S3_VECTOR(&dwForRoot,double))
 {
   NewtonEulerAlgorithm(PosForRoot,OrientationForRoot,v0ForRoot,wForRoot,dvForRoot,dwForRoot);
 }
@@ -63,21 +63,26 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int currentNode = labelTheRoot;
   DynamicBodyPrivate *currentBody=0;
 
-  m_listOfBodies[labelTheRoot]->p = PosForRoot;
-  m_listOfBodies[labelTheRoot]->v0 = v0ForRoot;
-  m_listOfBodies[labelTheRoot]->R = OrientationForRoot;
-  MAL_S3x3_MATRIX_SET_IDENTITY(m_listOfBodies[labelTheRoot]->R_static);
-  m_listOfBodies[labelTheRoot]->w = wForRoot;
-  m_listOfBodies[labelTheRoot]->dv = dvForRoot;
-  m_listOfBodies[labelTheRoot]->dw = dwForRoot;
+  currentBody = m_listOfBodies[currentNode];      
+  JointPrivate * currentJoint = currentBody->getJointPrivate();
 
-  currentNode = m_listOfBodies[labelTheRoot]->child;
+  currentBody->p = PosForRoot;
+  currentBody->v0 = v0ForRoot;
+  currentBody->R = OrientationForRoot;
+  MAL_S3x3_MATRIX_SET_IDENTITY(currentBody->R_static);
+  currentBody->w = wForRoot;
+  currentBody->dv = dvForRoot;
+  currentBody->ldv = dvForRoot;
+  currentBody->ldv_c = dvForRoot;
+  currentBody->dw = dwForRoot;
+  currentBody->ldw = dwForRoot;
 
   // Initialize momentum
   if (m_ComputeMomentum)
     {
       MAL_S3_VECTOR_FILL(m_P,0);
       MAL_S3_VECTOR_FILL(m_L,0);
+      //currentJoint->updateMomentum();
     }
 
   // Initialize CoM value.
@@ -85,11 +90,13 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   positionCoMPondere[1] = 0;
   positionCoMPondere[2] = 0;
 
+  currentNode = m_listOfBodies[labelTheRoot]->child;
+
   do
     {
 
       currentBody = m_listOfBodies[currentNode];      
-      JointPrivate * currentJoint = currentBody->getJointPrivate();
+      currentJoint = currentBody->getJointPrivate();
 
       // Position and orientation in reference frame
       currentJoint->updateTransformation(m_Configuration);
