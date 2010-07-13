@@ -235,7 +235,7 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
                                     MAL_S3_VECTOR(,double) dL,
                                     double zmpz)
 {
-  double g= 9.80665;
+  double g= 9.81;
 
   px = ( g * positionCoMPondere[0]*m_mass +
 	 zmpz * dP[0] - dL[1])/(m_mass * g + dP[2]);
