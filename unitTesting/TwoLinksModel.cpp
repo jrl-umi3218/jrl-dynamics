@@ -133,7 +133,7 @@ namespace dynamicsJRLJapan
     MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,2) = 
       cos(lcurrentConfiguration[0]);
     ODEBUG("Rf1f0t1: " << Rf1f0t );
-    tmp = m_i * +m_g;
+    tmp = m_i *  -m_g;
     ODEBUG("i * +g: " << tmp );
     MAL_S3x3_C_eq_A_by_B(g1,Rf1f0t,tmp);
     ODEBUG("g1: " << g1);
@@ -203,7 +203,7 @@ namespace dynamicsJRLJapan
       cos(lcurrentConfiguration[0]+
 	  lcurrentConfiguration[1]);
     ODEBUG("Rf2f0t1: " << Rf2f0t );
-    tmp = m_i * +m_g;
+    tmp = m_i * -m_g;
     ODEBUG("i * -g: " << tmp);
     MAL_S3x3_C_eq_A_by_B(g2,Rf2f0t,tmp);
     ODEBUG("g2: " << g2);
