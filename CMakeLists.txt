@@ -187,16 +187,17 @@ ADD_CUSTOM_TARGET(uninstall
 #---------------
 # Package target
 #---------------
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "dynamicsJRLJapan")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "dynamicsJRLJapan - Provides an implementation of the Recursive Newton-Euler Algorithm (RNEA).")
 set(CPACK_PACKAGE_VENDOR "JRL CNRS/AIST")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README)
 set(CPACK_PACKAGE_CONTACT "Olivier Stasse (olivier.stasse@aist.go.jp)")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "MatrixAbstractLayer (>=1.8.3), abstractRobotDynamics(>=1.16)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "matrixabstractlayer (>=1.8.3), abstractrobotdynamics (>=1.16)")
 set(
 CPACK_SOURCE_PACKAGE_FILE_NAME
 "dynamicsjrljapan-${PROJECT_VERSION}"
 CACHE INTERNAL "tarball basename"
 )
+
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_GENERATOR DEB)
 
