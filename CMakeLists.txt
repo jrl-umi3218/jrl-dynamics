@@ -194,10 +194,10 @@ set(CPACK_PACKAGE_CONTACT "Olivier Stasse (olivier.stasse@aist.go.jp)")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "matrixabstractlayer (>=1.8.3), abstractrobotdynamics (>=1.16)")
 set(
 CPACK_SOURCE_PACKAGE_FILE_NAME
-"dynamicsjrljapan-${PROJECT_VERSION}"
+"dynamicsjrljapan-src-${PROJECT_VERSION}"
 CACHE INTERNAL "tarball basename"
 )
-
+set(CPACK_PACKAGE_NAME "dynamicsjrljapan")
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_GENERATOR DEB)
 
