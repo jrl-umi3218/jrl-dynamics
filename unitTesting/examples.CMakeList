@@ -93,11 +93,11 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
 )
 
-ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
+ADD_EXECUTABLE(	TestAbstractInterface 
   CommonTools.cpp 
   HumanoidCopy.cpp
-  TestCopyJointTreeThroughAbstractInterface.cpp)
-SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface
+  TestAbstractInterface.cpp)
+SET_TARGET_PROPERTIES( TestAbstractInterface
 	              PROPERTIES
 	              COMPILE_FLAGS "${PCF}"
                       LINK_FLAGS "${PLF}"
