@@ -65,20 +65,23 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleLinkJointRank.xml
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/examples.CMakeList
+  ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/CMakeLists.txt
+
 )
 
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 
-ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
+ADD_EXECUTABLE(	TestAbstractInterface 
   CommonTools.cpp 
   HumanoidCopy.cpp
-  TestCopyJointTreeThroughAbstractInterface.cpp)
-SET_TARGET_PROPERTIES( TestCopyJointTreeThroughAbstractInterface
+  TestAbstractInterface.cpp)
+SET_TARGET_PROPERTIES( TestAbstractInterface
 	              PROPERTIES
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
                       LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
-ADD_DEPENDENCIES (TestCopyJointTreeThroughAbstractInterface ${PROJECT_NAME})
+ADD_DEPENDENCIES (TestAbstractInterface ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestTwoLinksModel
   TwoLinksModel.cpp
@@ -119,7 +122,7 @@ CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
 
 ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")
 
-ADD_TEST(TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstractInterface)
+ADD_TEST(TestAbstractInterface TestAbstractInterface)
 
 ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
 
@@ -127,7 +130,7 @@ SET(${PROJECT_NAME}_EXAMPLES
   CommonTools.cpp 
   CommonTools.h
   TestHumanoidDynamicRobot.cpp
-  TestCopyJointTreeThroughAbstractInterface.cpp
+  TestAbstractInterface.cpp
   TestFreeFlyer.cpp
   ComputeRealZMP.cpp
   TwoLinksModel.cpp
@@ -140,9 +143,6 @@ SET(${PROJECT_NAME}_EXAMPLES
 INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES}
   DESTINATION share/examples/${PROJECT_NAME}/
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
-
-CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/examples.CMakeList
-		 ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/CMakeLists.txt )
 
 INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/CMakeLists.txt
   DESTINATION share/examples/${PROJECT_NAME}/
