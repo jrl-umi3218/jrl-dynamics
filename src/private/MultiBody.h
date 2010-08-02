@@ -141,8 +141,10 @@ namespace dynamicsJRLJapan
 
     /*!  Display bodies */
     void displayBodies(void);
+
     /*!  Display links */
     void displayLinks(void);
+
     /*!  Display everything.  */
     void display(void);
 
@@ -153,7 +155,7 @@ namespace dynamicsJRLJapan
     int NbOfJoints() const;
 
     /*! Operator = */
-    MultiBody & operator=(MultiBody &rhs);
+    MultiBody & operator=(const MultiBody &rhs);
 
   };
 

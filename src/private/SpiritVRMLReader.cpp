@@ -31,7 +31,7 @@
 #include "SpiritVRMLGrammar.hpp"
 #include "SpiritVRMLActions.hpp"
 
-#include "DynamicMultiBodyCopy.h"
+//#include "DynamicMultiBodyCopy.h"
 
 namespace dynamicsJRLJapan 
 {

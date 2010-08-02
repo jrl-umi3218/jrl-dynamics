@@ -55,7 +55,7 @@ using namespace boost::spirit::classic::utility;
 #endif
 
 #include "MultiBody.h"
-#include "SpiritVRMLError.hpp"
+//#include "SpiritVRMLError.hpp"
 
 using namespace phoenix;
 
@@ -313,7 +313,7 @@ namespace dynamicsJRLJapan
 
 	  // Upper Speed Limit for the joint.
 	  Jointequivalentinertia_r = str_p("equivalentInertia") >> 
-	    ( (real_p)[self.actions.fEquivalentInertia] | error_real);
+	    (real_p)[self.actions.fEquivalentInertia];
 					    
  
 	  JointField_r = JointType_r | 

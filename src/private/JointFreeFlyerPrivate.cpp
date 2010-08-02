@@ -26,6 +26,14 @@ JointFreeflyerPrivate::JointFreeflyerPrivate()
   CreateLimitsArray();
 }
 
+JointFreeflyerPrivate::JointFreeflyerPrivate(const JointFreeflyerPrivate &a)
+ :JointPrivate(a)
+{
+  m_dof6D.resize(6,false);
+  m_nbDofs = 6;
+  CreateLimitsArray();
+}
+
 JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::FREE_JOINT);

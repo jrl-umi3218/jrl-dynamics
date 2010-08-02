@@ -18,7 +18,6 @@ SET(libdyn_src
   private/DynamicMultiBodyAngularMomentum.cpp
   private/DynamicMultiBodyArticularJacobian.cpp
   private/DynamicMultiBodyCenterOfMass.cpp
-  private/DynamicMultiBodyCopy.cpp
   private/DynamicMultiBodyInertiaMatrix.cpp
   private/DynamicMultiBodyJointRank.cpp
   private/DynamicMultiBodyNewtonEuler.cpp

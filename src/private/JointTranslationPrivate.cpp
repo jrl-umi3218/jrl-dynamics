@@ -23,6 +23,13 @@ JointTranslationPrivate::JointTranslationPrivate()
   m_nbDofs = 1;
   CreateLimitsArray();
 }
+
+JointTranslationPrivate::JointTranslationPrivate(const JointTranslationPrivate &a)
+  :JointPrivate(a)
+{
+  m_nbDofs = 1;
+  CreateLimitsArray();
+}
 JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::PRISMATIC_JOINT);

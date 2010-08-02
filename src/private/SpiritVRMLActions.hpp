@@ -106,7 +106,7 @@ namespace dynamicsJRLJapan
       // Current Proto being parser.
       struct Proto_t cProto;
 
-      MultiBody  & m_MultiBody;
+      MultiBody m_MultiBody;
       vector<BodyGeometricalData> m_ListOfURLs;
     };
 

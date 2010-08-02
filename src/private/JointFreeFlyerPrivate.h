@@ -30,6 +30,9 @@ namespace dynamicsJRLJapan
       /*! \brief Constructor when the initial position is not known 
 	This call for a renormalization of the object. */
       JointFreeflyerPrivate();
+      
+      /*! \brief Constructor by copy. */
+      JointFreeflyerPrivate(const JointFreeflyerPrivate &a);
 
       /*! \brief Constructor when the initial position is known 
 	Do not renormalize the object.

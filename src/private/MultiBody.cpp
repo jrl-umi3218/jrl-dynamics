@@ -22,6 +22,9 @@
 #include "Debug.h"
 #include "MultiBody.h"
 #include "SpiritVRMLReader.h"
+#include "JointRotationPrivate.h"
+#include "JointTranslationPrivate.h"
+#include "JointFreeFlyerPrivate.h"
 
 using namespace dynamicsJRLJapan;
 
@@ -365,7 +368,7 @@ int MultiBody::NbOfJoints() const
 }
 
 
-MultiBody & MultiBody::operator=(MultiBody &rhs) 
+MultiBody & MultiBody::operator=(const MultiBody &rhs) 
 {
   listInternalLinks.clear();
   links.clear();
@@ -385,22 +388,31 @@ MultiBody & MultiBody::operator=(MultiBody &rhs)
       i<rhs.listBodies.size();
       i++)
     {
+      JointRotationPrivate *aJRP = 0;
+      JointFreeflyerPrivate * aJFP = 0;
+      JointTranslationPrivate * aJTP = 0;
+
       switch(rhs.listInternalLinks[i].aJoint->type())
 	{
 	case JointPrivate::REVOLUTE_JOINT:
-	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  aJRP = dynamic_cast<JointRotationPrivate*>(rhs.listInternalLinks[i].aJoint);
+	  CurrentLink.aJoint = new JointRotationPrivate(*aJRP);
 	  break;
+
 	case JointPrivate::FREE_JOINT:
-	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  aJFP = dynamic_cast<JointFreeflyerPrivate*>(rhs.listInternalLinks[i].aJoint);
+	  CurrentLink.aJoint = new JointFreeflyerPrivate(*aJFP);
 	  break;
+
 	case JointPrivate::PRISMATIC_JOINT:
-	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  aJTP = dynamic_cast<JointTranslationPrivate *>(rhs.listInternalLinks[i].aJoint);
+	  CurrentLink.aJoint = new JointTranslationPrivate(*aJTP);
 	  break;
 		  
 	}
 
-      addLink(rhs.listInternalLinks[i].indexCorps1,
-	      rhs.listInternalLinks[i].indexCorps2,
+      addLink(*listBodies[rhs.listInternalLinks[i].indexCorps1],
+	      *listBodies[rhs.listInternalLinks[i].indexCorps2],
 	      CurrentLink);
     }
 
