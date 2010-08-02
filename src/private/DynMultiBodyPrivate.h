@@ -596,6 +596,10 @@ namespace dynamicsJRLJapan
     */
     std::vector<CjrlJoint*> jointVector();
     
+    /**
+       \brief Get a vector containing all the joints.
+    */
+    const std::vector<CjrlJoint*> jointVectorCst() const;
     
     /**
        \brief Get the number of degrees of freedom of the robot.

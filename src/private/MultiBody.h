@@ -151,7 +151,10 @@ namespace dynamicsJRLJapan
 
     /*!  Returns the number of Joints. */
     int NbOfJoints() const;
-    
+
+    /*! Operator = */
+    MultiBody & operator=(MultiBody &rhs);
+
   };
 
   // Create a matrix from an axis and a rotation around

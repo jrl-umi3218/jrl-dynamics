@@ -44,7 +44,6 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 
-//#include "SpiritVRMLReader.t.cpp"
 using namespace std;
 using namespace boost::spirit;
 
@@ -54,6 +53,9 @@ using namespace boost::spirit::utility;
 using namespace boost::spirit::classic;
 using namespace boost::spirit::classic::utility;
 #endif
+
+#include "MultiBody.h"
+#include "SpiritVRMLError.hpp"
 
 using namespace phoenix;
 
@@ -81,6 +83,7 @@ namespace dynamicsJRLJapan
       };
     };
 
+
     template <typename tActions>
     struct SpiritOpenHRP: 
       boost::spirit::classic::grammar<SpiritOpenHRP<tActions> >
@@ -106,7 +109,11 @@ namespace dynamicsJRLJapan
 			| ch_p(','));
 
 	  MFInt32_r = *(int_p | ch_p(','));
-	  
+
+	  MFString_r = ch_p('[') 
+	    >> *( ch_p('"') >> (*alpha_p) >> ch_p('"') )
+	    >> ch_p(']');
+
 	  // Coordinate rules
 	  Coordinate_r = str_p("Coordinate")
 	    >> ch_p('{') 
@@ -222,9 +229,11 @@ namespace dynamicsJRLJapan
 	    >> *(alnum_p|ch_p('.')) 
 	    >> ch_p('"');
 
-	  MFStringD_r= str_p("MFString") >> (+alpha_p);
+	  MFStringD_r= str_p("MFString") 
+	    >> (+alpha_p) 
+	    >> MFString_r ;
 	  
-	  SFFloatD_r = str_p("SFFloat") >> (+alpha_p);
+	  SFFloatD_r = str_p("SFFloat") >> (+alpha_p) >> real_p;
 	  
 	  SFInt32D_r = str_p("SFInt32") >> (+alpha_p) >> *(int_p); 
 	  
@@ -245,7 +254,7 @@ namespace dynamicsJRLJapan
 	     MFStringD_r   | 
 	     SFFloatD_r);
 
-	  ProtoBlock_r = ch_p('[') >> *(ProtoLine_r) >> ch_p(']');
+	  ProtoBlock_r = ch_p('[') >> *((ProtoLine_r)[self.actions.fDisplay]) >> ch_p(']');
 	  
 	  ProtoSndBlock_r = ch_p('{') >> *(TransformBlock_r| GroupBlock_r|Route_r )>> ch_p('}');
 	  
@@ -263,59 +272,60 @@ namespace dynamicsJRLJapan
 
 	  // Read the rotation of the joint.
 	  JointRotation_r = str_p("rotation") >> 
-	    (real_p) >> 
-	    (real_p) >> 
-	    (real_p) >>
-	    (real_p);
+	    (real_p)[self.actions.fJointRotationX] >> 
+	    (real_p)[self.actions.fJointRotationY] >> 
+	    (real_p)[self.actions.fJointRotationZ] >>
+	    (real_p)[self.actions.fJointRotationAngle];
     
 	  // Type of the joint.
 	  JointType_r = str_p("jointType") >> ch_p('"')
-					   >> (+alpha_p)
+					   >> (+alpha_p)[self.actions.fJointType]
 					   >> ch_p('"');
 
 	  // Identifient of the joint.
-	  JointID_r = str_p("jointId") >> (int_p);
+	  JointID_r = str_p("jointId") >> (int_p)[self.actions.fJointID];
 
 	  // Specify the axis along which the rotation take place for this joint.
 	  JointAxis_r = str_p("jointAxis") >> ch_p('"') 
-					   >> ( (ch_p('X')) | 
-						(ch_p('Y')) | 
-						(ch_p('Z')) )
+					   >> ( (ch_p('X'))[self.actions.fJointXAxis] | 
+						(ch_p('Y'))[self.actions.fJointYAxis] | 
+						(ch_p('Z'))[self.actions.fJointZAxis] )
 					   >> ch_p('"');
 	  // Not used
 	  Jointdh_r = str_p("dh") >> ch_p('[') >> *(real_p)
 				  >> ch_p(']'); // not used.
 
 	  // Lower Position Limit for the joint.
-	  Jointllimit_r = str_p("llimit") >> ch_p('[') >> (real_p) 
+	  Jointllimit_r = str_p("llimit") >> ch_p('[') >> (real_p)[self.actions.fJointLLimit]
 					  >> ch_p(']'); 
 
 	  // Upper Position Limit for the joint.
-	  Jointulimit_r = str_p("ulimit") >> ch_p('[') >> (real_p) 
+	  Jointulimit_r = str_p("ulimit") >> ch_p('[') >> (real_p)[self.actions.fJointULimit]
 					  >> ch_p(']'); 
  
 	  // Lower Speed Limit for the joint 
-	  Jointlvlimit_r = str_p("lvlimit") >> ch_p('[') >> (real_p)
+	  Jointlvlimit_r = str_p("lvlimit") >> ch_p('[') >> (real_p)[self.actions.fJointLVLimit]
 					    >> ch_p(']'); 
 
 	  // Upper Speed Limit for the joint.
-	  Jointuvlimit_r = str_p("uvlimit") >> ch_p('[') >> (real_p)
+	  Jointuvlimit_r = str_p("uvlimit") >> ch_p('[') >> (real_p)[self.actions.fJointUVLimit]
 					    >> ch_p(']'); 
 
 	  // Upper Speed Limit for the joint.
-	  Jointequivalentinertia_r = str_p("equivalentInertia") >> (real_p) ;
+	  Jointequivalentinertia_r = str_p("equivalentInertia") >> 
+	    ( (real_p)[self.actions.fEquivalentInertia] | error_real);
 					    
  
 	  JointField_r = JointType_r | 
-	    JointTranslation_r | 
-	    JointAxis_r | 
-	    JointRotation_r | 
-	    JointID_r |
-	    Jointdh_r |
-	    Jointllimit_r |
-	    Jointulimit_r |
-	    Jointlvlimit_r |
-	    Jointuvlimit_r |
+	    JointTranslation_r       | 
+	    JointAxis_r              |  
+	    JointRotation_r          | 
+	    JointID_r                |
+	    Jointdh_r                |
+	    Jointllimit_r            |
+	    Jointulimit_r            |
+	    Jointlvlimit_r           |
+	    Jointuvlimit_r           |
             Jointequivalentinertia_r ;
 	
 	  // Parts of the force sensor
@@ -463,11 +473,10 @@ namespace dynamicsJRLJapan
 	  
 	  // Geometry block
 
-	  // 
 	  // Box
 	  GeometryBox_r = str_p("Box")
-	    >>  ch_p('{') 
-	    >>  str_p("size") >> real_p >> real_p >>real_p 
+	    >> ch_p('{') 
+	    >> str_p("size") >> real_p >> real_p >>real_p 
 	    >> ch_p('}');
 	  
 	  // Cylinder
@@ -506,7 +515,6 @@ namespace dynamicsJRLJapan
 	  GeometryHeader_r = str_p("geometry")
 	    >>  GeometryBox_r |  
 	    GeometryCylinder_r;
-	  
 	
 	  // Shape block
 	  ShapeBlock_r = AppearanceHeader_r | 
@@ -553,9 +561,9 @@ namespace dynamicsJRLJapan
 					      >> ch_p(']');
 
 	  JointBlock_r = (str_p("Joint"))
-	    >> ch_p('{')
+	    >> ch_p('{')[self.actions.fIncreaseDepth]
 	    >> *(JointField_r | JointChildren_r ) 
-	    >> ch_p('}');
+	    >> ch_p('}')[self.actions.fDecreaseDepth];
 
 	  DEFBlock_r = str_p("DEF") 
 	    >> (lexeme_d[+(alnum_p|ch_p('_'))])
@@ -756,11 +764,11 @@ namespace dynamicsJRLJapan
 	  TransformBlock_r, TCBChildren_r, TCBChildrenBlock_r, TransformChildrenBlock_r,
 	  TransformChildren_r, 
 	  TransformLine_r, SFVec3f_r, MF_brackets_r, MFNodeD_r, SFNodeD_r, MFFloatD_r,
-	  SFRotationD_r, SFStringD_r, MFStringD_r, SFFloatD_r, SFInt32D_r,
+	  SFRotationD_r, SFStringD_r, MFStringD_r, SFFloatD_r, SFInt32D_r,SFVec3fD_r,
 	  ProtoLineTitle_r, ProtoLine_r, ProtoBlock_r, ProtoSndBlock_r, Proto_r;
 
 	// Definitions of variables.
-	rule<ScannerT> SFVec3fD_r,SFInt32D_r;
+	rule<ScannerT>  MFString_r;
 	 
 	rule<ScannerT> JointTranslation_r, JointRotation_r, JointType_r,
 	  JointID_r, JointAxis_r, Jointdh_r, 
@@ -819,13 +827,12 @@ namespace dynamicsJRLJapan
 
       }; // end of definition.
       
-      explicit SpiritOpenHRP(const tActions & lactions = tActions()):
+      explicit SpiritOpenHRP(const tActions &lactions = tActions()):
 	actions(lactions)
-      {};
+      {
+      };
       
-    private:
       const tActions & actions;
-      
 
     };
 

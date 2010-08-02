@@ -364,3 +364,46 @@ int MultiBody::NbOfJoints() const
   return listInternalLinks.size();
 }
 
+
+MultiBody & MultiBody::operator=(MultiBody &rhs) 
+{
+  listInternalLinks.clear();
+  links.clear();
+  listBodies.clear();
+  internalLink CurrentLink;
+
+  m_mass = rhs.m_mass;
+
+  for(unsigned int i=0;
+      i<rhs.listBodies.size();
+      i++)
+    {
+      addBody(*rhs.listBodies[i]);
+    }
+  
+  for(unsigned int i=0;
+      i<rhs.listBodies.size();
+      i++)
+    {
+      switch(rhs.listInternalLinks[i].aJoint->type())
+	{
+	case JointPrivate::REVOLUTE_JOINT:
+	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  break;
+	case JointPrivate::FREE_JOINT:
+	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  break;
+	case JointPrivate::PRISMATIC_JOINT:
+	  CurrentLink.aJoint = new JointPrivate(rhs.listInternalLinks[i].aJoint);
+	  break;
+		  
+	}
+
+      addLink(rhs.listInternalLinks[i].indexCorps1,
+	      rhs.listInternalLinks[i].indexCorps2,
+	      CurrentLink);
+    }
+
+  return this;
+}
+

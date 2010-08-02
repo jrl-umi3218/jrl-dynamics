@@ -1,3 +1,4 @@
+
 /* @doc Computation of the dynamic aspect for a robot.
    This class will load the description of a robot from a VRML file
    following the OpenHRP syntax. Using ForwardVelocity it is then
@@ -306,6 +307,12 @@ CjrlJoint* DynMultiBodyPrivate::rootJoint() const
 
 // Get a vector containning all the joints
 std::vector<CjrlJoint*> DynMultiBodyPrivate::jointVector()
+{
+  return m_JointVector;
+}
+
+// Get a vector containning all the joints
+const std::vector<CjrlJoint *> DynMultiBodyPrivate::jointVectorCst() const
 {
   return m_JointVector;
 }
