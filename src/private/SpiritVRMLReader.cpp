@@ -18,6 +18,10 @@
 #include <sstream>
 #include <map>
 #include <string.h>
+
+#include "SpiritVRMLGrammar.hpp"
+#include "SpiritVRMLActions.hpp"
+
 #include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/include/classic_actor.hpp>
 #include <boost/spirit/include/classic_dynamic.hpp>
@@ -27,9 +31,6 @@
 #include <boost/spirit/include/classic_functor_parser.hpp>
 
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
-
-#include "SpiritVRMLGrammar.hpp"
-#include "SpiritVRMLActions.hpp"
 
 //#include "DynamicMultiBodyCopy.h"
 
