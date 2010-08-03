@@ -86,7 +86,7 @@ namespace dynamicsJRLJapan
 
     template <typename tActions>
     struct SpiritOpenHRP: 
-      boost::spirit::classic::grammar<SpiritOpenHRP<tActions> >
+      grammar<SpiritOpenHRP<tActions> >
     {
       template <typename ScannerT>
       struct definition
