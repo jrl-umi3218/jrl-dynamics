@@ -35,10 +35,6 @@ namespace dynamicsJRLJapan
 	Does trigger a normalization */
       JointTranslationPrivate(const JointTranslationPrivate &a);
 
-      /*! \brief Translation joint with no know position 
-	Does trigger a normalization */
-      JointTranslationPrivate(JointTranslationPrivate &a);
-
       /*! \brief Translation joint with know position 
        Does not trigger any normalization*/
       JointTranslationPrivate(const matrix4d &inInitialPosition);

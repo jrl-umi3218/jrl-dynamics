@@ -32,12 +32,6 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const JointFreeflyerPrivate &a)
   m_dof6D.resize(6,false);
 }
 
-JointFreeflyerPrivate::JointFreeflyerPrivate(JointFreeflyerPrivate &a)
- :JointPrivate(a)
-{
-  m_dof6D.resize(6,false);
-}
-
 JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::FREE_JOINT);

@@ -38,9 +38,6 @@ namespace dynamicsJRLJapan
 
       /*! \brief Constructor for copy.*/
       JointRotationPrivate(const JointRotationPrivate &a);
-
-      /*! \brief Constructor for copy.*/
-      JointRotationPrivate(JointRotationPrivate &a);
       
       /*! \brief Constructor when the initial position is known.
        Do not do any normalization. */

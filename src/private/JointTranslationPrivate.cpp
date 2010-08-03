@@ -29,11 +29,6 @@ JointTranslationPrivate::JointTranslationPrivate(const JointTranslationPrivate &
 {
 }
 
-JointTranslationPrivate::JointTranslationPrivate(JointTranslationPrivate &a)
-  :JointPrivate(a)
-{
-}
-
 JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
 {
   type(JointPrivate::PRISMATIC_JOINT);
