@@ -17,6 +17,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <queue>
 
 #include <string.h>
 
@@ -107,7 +108,11 @@ namespace dynamicsJRLJapan
       struct Proto_t cProto;
 
       MultiBody m_MultiBody;
+      
       vector<BodyGeometricalData> m_ListOfURLs;
+      
+      queue<string> m_QueueOfFiles;
+
     };
 
     struct Actions
@@ -712,6 +717,7 @@ namespace dynamicsJRLJapan
 	
       } fDecreaseDepth;
 
+      
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;
 

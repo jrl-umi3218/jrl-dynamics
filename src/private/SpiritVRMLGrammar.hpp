@@ -83,6 +83,31 @@ namespace dynamicsJRLJapan
       };
     };
 
+    struct fURL_t {
+
+      typedef nil_t result_t;
+
+      explicit fURL_t(Actions &actions):
+	m_actions(actions){};
+      
+      template<typename ScannerT>
+      std::ptrdiff_t operator()(ScannerT const &scan, 
+				result_t &result) const
+      {
+	file_position afp;
+	vector<BodyGeometricalData> &lListOfURLs=
+	  m_actions.m_DataForParsing.m_ListsOfURLs;
+
+	afp.file = lListOfURLs[lListOfURLs.size()-1];
+	afp.line = 1; afp.column=1;
+	scan.first.set_position(afp)
+      }
+      
+    private:
+      Actions & m_actions;
+      
+    };
+
 
     template <typename tActions>
     struct SpiritOpenHRP: 
@@ -628,7 +653,10 @@ namespace dynamicsJRLJapan
 	    >> *ShapeBlock_r 
 	    >> ch_p('}');
 
-	  BodySubBlock_r =CenterOfMass_r | Mass_r | MomentsOfInertia_r ;
+	  BodySubBlock_r =CenterOfMass_r | 
+	    Mass_r | 
+	    MomentsOfInertia_r ;
+
 	  ShapeInlineUrl_r = str_p("url") 
 	    >> ch_p('"') 
 	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])
