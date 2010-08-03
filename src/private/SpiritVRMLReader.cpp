@@ -94,9 +94,7 @@ namespace dynamicsJRLJapan
       
       delete [] buffer;
 
-      MultiBodyCopy aDMBC;
-      aDMBC.PerformCopyFromJointsTree(&aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody,
-				      aMB);
+      *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
       
       return 1;
 

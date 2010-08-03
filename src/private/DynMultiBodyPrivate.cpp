@@ -365,7 +365,7 @@ void DynMultiBodyPrivate::ComputeNumberOfJoints()
 
   if (r!=m_NbDofs)
     m_NbDofs=r;
-
+  ODEBUG("m_NbDofs: " << m_NbDofs);
   // Resize the jacobian of the CoM.
   MAL_MATRIX_RESIZE(m_JacobianOfTheCoM,3,m_NbDofs);
   MAL_MATRIX_RESIZE(m_InertiaMatrix,m_NbDofs,m_NbDofs);

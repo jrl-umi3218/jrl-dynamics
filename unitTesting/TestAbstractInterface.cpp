@@ -104,11 +104,9 @@ int main(int argc, char *argv[])
   aHDR->currentAcceleration(aCurrentAcc);
   aHDR->computeForwardKinematics();
   
-  cout << "Copy First Humanoid Robot" <<endl;
   HumanoidCopy aHumanoidCopier;
   aHumanoidCopier.PerformCopyFromJointsTree(aHDR, a2HDR);
 
-  cout << "Copy Second Humanoid Robot" <<endl;
   aHumanoidCopier.PerformCopyFromJointsTree(a2HDR, a3HDR);
 
   NbOfDofs = a2HDR->numberDof();
@@ -191,7 +189,6 @@ int main(int argc, char *argv[])
     {
       return 0;
     }
-  
   return -1;
 
 }

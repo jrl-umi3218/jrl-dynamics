@@ -14,7 +14,7 @@
 #include "JointPrivate.h"
 #include "DynamicBodyPrivate.h"
 
-using namespace dynamicsJRLJapan;
+namespace dynamicsJRLJapan {
 
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
@@ -99,9 +99,12 @@ JointPrivate::JointPrivate(const JointPrivate &r)
   m_Name=r.getName();
   m_IDinActuated=r.getIDinActuated();
   m_FromRootToThis.push_back(this);
-  m_inGlobalFrame=r.m_inGlobalFrame;
+  m_poseInParentFrame = r.pose();
+  m_inGlobalFrame = r.getinGlobalFrame();
   m_Body = 0;
   m_nbDofs = r.m_nbDofs;
+  m_globalPoseAtConstruction = r.m_globalPoseAtConstruction;
+  m_globalPoseAtConstructionNormalized = r.initialPosition();
   CreateLimitsArray();
 
   for(unsigned int i=0;i<numberDof();i++)
@@ -111,7 +114,6 @@ JointPrivate::JointPrivate(const JointPrivate &r)
       m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
       m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
     }
-
 
   /*! Initialize spatial quantities */
   MAL_MATRIX_RESIZE(m_phi,6,0);
@@ -173,6 +175,11 @@ void JointPrivate::CreateLimitsArray()
     }
 }
 
+const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition() const
+{
+  return m_globalPoseAtConstructionNormalized;
+}
+
 
 JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 {
@@ -180,11 +187,19 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
   m_axis = r.axis();
   m_quantity=r.quantity();
   m_poseInParentFrame=r.pose();
-  m_Name = r.getName();
-  m_IDinActuated = r.getIDinActuated();
-  m_inGlobalFrame = r.m_inGlobalFrame;
+  m_FatherJoint = 0;
+  m_Name=r.getName();
+  m_IDinActuated=r.getIDinActuated();
+  m_FromRootToThis.push_back(this);
+  m_inGlobalFrame = r.getinGlobalFrame();
 
+  const  MAL_S4x4_MATRIX(,double) & aGlobalPoseAtConstructionNormalized = r.initialPosition();
+  m_globalPoseAtConstruction = aGlobalPoseAtConstructionNormalized;
+  m_globalPoseAtConstructionNormalized  = aGlobalPoseAtConstructionNormalized ;
+  m_Body = 0;
+  m_nbDofs = r.numberDof();
   CreateLimitsArray();
+
   for(unsigned int i=0;i<numberDof();i++)
     {
       m_LowerLimits[i] = r.lowerBound(i);
@@ -192,10 +207,52 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
       m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
       m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
     }
+
+
+  /*! Initialize spatial quantities */
+  MAL_MATRIX_RESIZE(m_phi,6,0);
+  MAL_MATRIX_RESIZE(m_dotphi,6,0);
   return *this;
 };
 
+ostream & operator<<(ostream & os, const JointPrivate &r)
+{
+  os << "Type: "; 
+  if (r.type()==JointPrivate::FREE_JOINT)
+    os << "FREE_JOINT" ;
+  else if (r.type()==JointPrivate::PRISMATIC_JOINT)
+    os << "PRISMATIC_JOINT";
+  else if (r.type()==JointPrivate::REVOLUTE_JOINT)
+    os << "REVOLUTE_JOINT";
+  else if (r.type()==JointPrivate::FIX_JOINT)
+    os << "FIX_JOINT";
+  os << endl;
 
+  os << "Number of DOFs:" << r.numberDof() << endl;
+
+  os << "Axis:" << r.axis() << endl;
+
+  os << "Quantity: " << r.quantity() << endl;
+
+  os << "Name : " << r.getName() << endl;
+
+  os << "ID in Actuated: " << r.getIDinActuated() << endl;
+
+  os << "Position in parent frame:" << r.pose() << endl;
+
+  os << "Initial position in global frame:" << r.initialPosition() << endl;
+
+  os << "In global frame :" << r.getinGlobalFrame() << endl;
+
+  os << "Position & Velocity Limits: " << endl;
+  for(unsigned int i=0;i<r.numberDof();i++)
+    {
+      os << i << " [ " << r.lowerBound(i) << " , "  << r.upperBound(i) << "]"
+	 << " [ " << r.lowerVelocityBound(i) << " , "  << r.upperVelocityBound(i) << "]"
+	 << endl;
+    }
+  return os;
+}
 
 void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 {
@@ -482,3 +539,10 @@ void JointPrivate::updateTorqueAndForce()
   CurrentBody->m_Torque = CurrentBody->m_Torque - sndterm;
 
 }
+
+bool JointPrivate::getinGlobalFrame() const
+{
+  return m_inGlobalFrame;
+}
+
+};

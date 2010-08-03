@@ -130,6 +130,7 @@ namespace dynamicsJRLJapan
 	fBodyCenterOfMassZ(*this,2),
 	fProtoName(*this),
 	fProtoExposedField(*this),
+	fDEFName(*this),
 	fJointType(*this),
 	fJointID(*this),
 	fJointXAxis(*this,0),
@@ -140,9 +141,11 @@ namespace dynamicsJRLJapan
 	fJointLVLimit(*this,1,0),
 	fJointUVLimit(*this,1,1),
 	fEquivalentInertia(*this),
+	fUpdateAndAddBody(*this),
+	fFillMomentsOfInertia(*this),
 	fIncreaseDepth(*this),
 	fDecreaseDepth(*this),
-	m_Verbose(2)
+	m_Verbose(0)
       { }
       
       // Generic action for display 
@@ -152,7 +155,7 @@ namespace dynamicsJRLJapan
 			const IteratorT &end) const 
 	{
 	  std::string x(begin,end);
-	  std::cout << "Display: " << x << std::endl;
+	  //	  std::cout << "Display: " << x << std::endl;
 	} 
       } fDisplay;
 
@@ -367,6 +370,27 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
       } fProtoExposedField;
 
+      // Extract the name of a definition.
+      struct fDEFName_t {
+
+	explicit fDEFName_t(Actions &actions): 
+	  m_actions(actions)
+	  {};
+	  
+	template <typename IteratorT>
+	void operator()(const IteratorT & begin, 
+			const IteratorT & end) const 
+	{
+
+	  string x(begin, end);
+	  m_actions.m_DataForParsing.aName = x;
+	  if (m_actions.m_Verbose>1)
+	    std::cout<< "fDEFName:" << x<<"|" << endl;
+	}
+      private:
+	Actions & m_actions;
+      } fDEFName;
+	    
       // In case of Joint type.      
       struct fJointType_t {
 
@@ -511,6 +535,81 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
       } fEquivalentInertia;
 
+      // Update the data in a body and a new body.
+      struct fUpdateAndAddBody_t {
+
+	explicit fUpdateAndAddBody_t(Actions &actions): 
+	  m_actions(actions){};
+
+	template <typename IteratorT>
+	void operator()(IteratorT &, 
+			IteratorT &) const 
+	{
+	  if (m_actions.m_Verbose>1)
+	    {
+	      std::cout << "Starting Body." << std::endl;
+	    }
+	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
+	  
+	  int lDepth = aDataForParsing.Depth;
+	  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
+	  lCurrentBody->setLabel(aDataForParsing.NbOfBodies++);
+	  lCurrentBody->setName((char *)(aDataForParsing.aName).c_str());
+	  lCurrentBody->setInertie(aDataForParsing.mi);
+	  lCurrentBody->setMass(aDataForParsing.mass);
+	  lCurrentBody->localCenterOfMass(aDataForParsing.cm);
+	  if (aDataForParsing.Depth!=0)
+	    {
+	      lCurrentBody->setLabelMother(aDataForParsing.CurrentBody[lDepth-1]->getLabel());
+	      
+	    }
+	  aDataForParsing.m_MultiBody.addBody(*lCurrentBody);
+	  aDataForParsing.m_MultiBody.addLink(*aDataForParsing.CurrentBody[lDepth-1],
+					      *lCurrentBody,
+					      aDataForParsing.CurrentLink);
+	  //	aDataForParsing.JointMemoryAllocationForNewDepth=false;
+	  aDataForParsing.m_ListOfURLs.push_back(aDataForParsing.m_BodyGeometry);
+	  lCurrentBody->setInitialized(true);
+	  if (m_actions.m_Verbose>1)
+	    {
+	      std::cout << "Adding Body." << std::endl;
+	    }
+	}
+	
+      private:
+	Actions & m_actions;
+
+      } fUpdateAndAddBody;
+
+      struct fFillMomentsOfInertia_t {
+
+	explicit fFillMomentsOfInertia_t(Actions &actions): 
+	  m_actions(actions){};
+	
+	void operator()(const double z) const 
+	{
+	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
+	  aDataForParsing.mi[aDataForParsing.index_mi++]=z;
+	  if (aDataForParsing.index_mi==9)
+	    {
+	      if (m_actions.m_Verbose>1)
+		{
+		  for(int i=0;i<9;i++)
+		  {
+		    cout << aDataForParsing.mi[i] << " ";
+		    if (i%3==2)
+		      cout<< endl;
+		  }
+		}
+	      aDataForParsing.index_mi=0;
+	    }
+	}
+	
+      private:
+	Actions & m_actions;
+	
+      } fFillMomentsOfInertia;
+
       // Increase depth when parsing the robot tree.
       struct fIncreaseDepth_t {
 
@@ -519,7 +618,7 @@ namespace dynamicsJRLJapan
 
 	void LocalAction() const
 	{
-	  DataForParsing_t<aMB> &aDataForParsing = m_actions.m_DataForParsing;
+	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
 
 	  int lDepth = aDataForParsing.Depth;
 	  // After the initial body.

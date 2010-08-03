@@ -433,7 +433,7 @@ namespace dynamicsJRLJapan
 
 	  Mass_r = str_p("mass") >> (real_p)[self.actions.fBodyMass];
 	  MomentsOfInertia_r = str_p("momentsOfInertia") >> ch_p('[') 
-							 >> *((real_p))
+							 >> *((real_p)[self.actions.fFillMomentsOfInertia])
 							 >> ch_p(']') ;
 	
 	  // Material block
@@ -551,8 +551,9 @@ namespace dynamicsJRLJapan
 	    >> ch_p('}');
 	  
 	  JointChildrenDEFBlocks_r = str_p("DEF") >> (lexeme_d[+(alnum_p|ch_p('_'))])
+	    [self.actions.fDEFName]
 	     |
-	    ( (BodyBlock_r)| 
+	    ( (BodyBlock_r)[self.actions.fUpdateAndAddBody] | 
 	      JointBlock_r |
 	      ListSensors_r);
 
@@ -566,7 +567,7 @@ namespace dynamicsJRLJapan
 	    >> ch_p('}')[self.actions.fDecreaseDepth];
 
 	  DEFBlock_r = str_p("DEF") 
-	    >> (lexeme_d[+(alnum_p|ch_p('_'))])
+	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[self.actions.fDEFName]
 	    >> JointBlock_r;
 
 	  HumanoidVersion_r = str_p("version") >> ch_p('"') 

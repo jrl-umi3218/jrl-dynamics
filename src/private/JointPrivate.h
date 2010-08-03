@@ -59,7 +59,9 @@ namespace dynamicsJRLJapan
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
-
+    /*! \brief True if the Joint is initially in global frame, false it is a local reference frame*/
+    bool getinGlobalFrame() const;
+    
   private:
       
     /** Coefficient of the mass related to the subtree of this joint. */
@@ -622,7 +624,7 @@ namespace dynamicsJRLJapan
        \brief Link a body to the joint.
     */
     void setLinkedBody (CjrlBody& inBody);
-  
+    void setLinkedDBody(DynamicBodyPrivate* aDBP);
     /**
        @}
     */
@@ -691,6 +693,9 @@ namespace dynamicsJRLJapan
     
       /*! @} */
       
+      friend ostream & operator<<(ostream & os, const JointPrivate &a);
+
+      const MAL_S4x4_MATRIX(,double) & initialPosition()  const;
 
   private:
 
@@ -738,5 +743,6 @@ namespace dynamicsJRLJapan
 
   };
 
+  ostream & operator<<(ostream & os, const JointPrivate &a);
 };
 #endif /* JOINTPRIVATE_H */

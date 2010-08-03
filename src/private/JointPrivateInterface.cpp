@@ -285,6 +285,12 @@ void JointPrivate::setLinkedBody(CjrlBody& inBody)
   
 }
 
+void JointPrivate::setLinkedDBody(DynamicBodyPrivate * inBody)
+{
+  m_dynBody = inBody;
+  m_Body = m_dynBody;  
+}
+
 void JointPrivate::SetFatherJoint(JointPrivate *aFather)
 {
   m_FatherJoint = aFather;
@@ -301,7 +307,8 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
     }
 }
 
-const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
+const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition() 
 {
   return m_globalPoseAtConstructionNormalized;
 }
+

@@ -171,7 +171,7 @@ namespace dynamicsJRLJapan
     /*! \name Methods to display informations */
     /** @{ */
     /*! \brief  Display on stdout all the information of the body. */
-    void Display();
+    void Display(ostream &os);
     
     /** @} */
 
@@ -227,9 +227,11 @@ namespace dynamicsJRLJapan
 
 
     /*! @} */
-    
+
+    friend ostream & operator<<(ostream &os, const Body &r);
   };
 
+  ostream & operator<<(ostream &os, const Body &r);
 
 };
 #endif /* Body_H_*/

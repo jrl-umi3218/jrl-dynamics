@@ -34,6 +34,9 @@ namespace dynamicsJRLJapan
       /*! \brief Constructor by copy. */
       JointFreeflyerPrivate(const JointFreeflyerPrivate &a);
 
+      /*! \brief Constructor by copy. */
+      JointFreeflyerPrivate(JointFreeflyerPrivate &a);
+
       /*! \brief Constructor when the initial position is known 
 	Do not renormalize the object.
        */

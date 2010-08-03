@@ -27,8 +27,11 @@ JointRotationPrivate::JointRotationPrivate()
 JointRotationPrivate::JointRotationPrivate(const JointRotationPrivate &a)
   :JointPrivate(a)
 {
-  m_nbDofs=1;
-  CreateLimitsArray();
+}
+
+JointRotationPrivate::JointRotationPrivate(JointRotationPrivate &a)
+  :JointPrivate(a)
+{
 }
 
 JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)

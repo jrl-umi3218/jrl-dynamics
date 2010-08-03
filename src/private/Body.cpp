@@ -25,7 +25,8 @@
 
 #include "Body.h"
 
-using namespace dynamicsJRLJapan;
+namespace dynamicsJRLJapan
+{
 
 /**************************************************/
 /* Implementation of constructors and destructors */
@@ -170,20 +171,20 @@ void Body::setInitialized(bool anInitialized)
 /* Implementation of the methods for display   */
 /***********************************************/
 
-void Body::Display()
+void Body::Display(ostream &os)
 {
-  cout << "Name  :" << Name << endl;
-  cout << "Mass :" << m_mass << endl;
-  cout << "Center of Mass    : " << posCoM[0] << " " 
+  os << "Name  :" << Name << endl;
+  os << "Mass :" << m_mass << endl;
+  os << "Center of Mass    : " << posCoM[0] << " " 
        << posCoM[1] << " " <<posCoM[2]<<endl;
-  cout << "Inertia Matrix : " << endl;
+  os << "Inertia Matrix : " << endl;
   for(int i=0;i<3;i++)
     {
       for(int j=0;j<3;j++)
-	cout << inertie(i,j) << " ";
-      cout << endl;
+	os << inertie(i,j) << " ";
+      os << endl;
     }
-  cout << "Mother: " << labelMother<< endl;
+  os << "Mother: " << labelMother<< endl;
 }
 
 
@@ -230,5 +231,25 @@ void Body::joint(JointPrivate * ajoint)
     m_AttachedJoint->setLinkedBody(*this);
 }
 
+ostream & operator<<(ostream & os, const Body & r)
+{
+  os << "Name  :" << r.getName() << endl;
+  os << "Mass :" << r.mass() << endl;
 
+  vector3d posCoM = r.localCenterOfMass();
 
+  os << "Center of Mass    : " << posCoM[0] << " " 
+       << posCoM[1] << " " <<posCoM[2]<<endl;
+  matrix3d inertie = r.inertiaMatrix();
+  os << "Inertia Matrix : " << endl;
+  for(int i=0;i<3;i++)
+    {
+      for(int j=0;j<3;j++)
+	os << inertie(i,j) << " ";
+      os << endl;
+    }
+  os << "Mother: " << r.getLabelMother() << endl;
+  return os;
+}
+
+};

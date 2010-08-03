@@ -19,6 +19,8 @@
    Please refers to file License.txt for details on the license.
 
 */
+#include <map>
+
 #include "Debug.h"
 #include "MultiBody.h"
 #include "SpiritVRMLReader.h"
@@ -294,7 +296,7 @@ void MultiBody::displayBodies()
 {
   for (unsigned int i=0; i<listBodies.size(); i++) {
     cout << "corps "<< i << " : \n";
-    listBodies[i]->Display();
+    listBodies[i]->Display(cout);
     for (unsigned int j=0; j<links[i].size(); j++) {
       cout << "    lie a corps " << links[i][j].body << " par liaison " 
 	   << links[i][j].link << " (label " << listInternalLinks[links[i][j].link].label <<")\n";
@@ -370,52 +372,98 @@ int MultiBody::NbOfJoints() const
 
 MultiBody & MultiBody::operator=(const MultiBody &rhs) 
 {
+
   listInternalLinks.clear();
   links.clear();
   listBodies.clear();
-  internalLink CurrentLink;
+  std::map<DynamicBodyPrivate *,DynamicBodyPrivate *> MapBodiesFromOriginalToNew;
+  std::map<JointPrivate *, JointPrivate *> 
+    MapJointsFromOriginalToNew;
 
-  m_mass = rhs.m_mass;
+  internalLink CurrentLink ;
 
   for(unsigned int i=0;
       i<rhs.listBodies.size();
       i++)
     {
       addBody(*rhs.listBodies[i]);
+      ODEBUG("Body:" << *listBodies[i]);
+      DynamicBodyPrivate *Origin = (DynamicBodyPrivate *)(rhs.listBodies[i]);
+      DynamicBodyPrivate *Destination = (DynamicBodyPrivate *)(listBodies[i]);
+      if ((Origin!=0) && (Destination!=0))
+	MapBodiesFromOriginalToNew[Origin] = Destination;
+      else
+	{
+	  exit(-1);
+	}
     }
   
   for(unsigned int i=0;
-      i<rhs.listBodies.size();
+      i<rhs.listInternalLinks.size();
       i++)
     {
-      JointRotationPrivate *aJRP = 0;
-      JointFreeflyerPrivate * aJFP = 0;
-      JointTranslationPrivate * aJTP = 0;
 
-      switch(rhs.listInternalLinks[i].aJoint->type())
+      if (rhs.listInternalLinks[i].aJoint->type()==JointPrivate::REVOLUTE_JOINT)
 	{
-	case JointPrivate::REVOLUTE_JOINT:
-	  aJRP = dynamic_cast<JointRotationPrivate*>(rhs.listInternalLinks[i].aJoint);
+	  JointRotationPrivate * aJRP = dynamic_cast<JointRotationPrivate*>(rhs.listInternalLinks[i].aJoint);
 	  CurrentLink.aJoint = new JointRotationPrivate(*aJRP);
-	  break;
-
-	case JointPrivate::FREE_JOINT:
-	  aJFP = dynamic_cast<JointFreeflyerPrivate*>(rhs.listInternalLinks[i].aJoint);
-	  CurrentLink.aJoint = new JointFreeflyerPrivate(*aJFP);
-	  break;
-
-	case JointPrivate::PRISMATIC_JOINT:
-	  aJTP = dynamic_cast<JointTranslationPrivate *>(rhs.listInternalLinks[i].aJoint);
-	  CurrentLink.aJoint = new JointTranslationPrivate(*aJTP);
-	  break;
-		  
 	}
-
+      else if (rhs.listInternalLinks[i].aJoint->type()==JointPrivate::FREE_JOINT)
+	{
+	  JointFreeflyerPrivate * aJFP = dynamic_cast<JointFreeflyerPrivate*>(rhs.listInternalLinks[i].aJoint);
+	  CurrentLink.aJoint = new JointFreeflyerPrivate(*aJFP);
+	}
+      else if (rhs.listInternalLinks[i].aJoint->type()==JointPrivate::PRISMATIC_JOINT)
+	{
+	  JointTranslationPrivate * aJTP = dynamic_cast<JointTranslationPrivate *>(rhs.listInternalLinks[i].aJoint);
+	  CurrentLink.aJoint = new JointTranslationPrivate(*aJTP);
+	}
+      ODEBUG("=================================");
+      ODEBUG("Original Joint " << endl 
+	     << *rhs.listInternalLinks[i].aJoint );
+      ODEBUG( "Copied Joint "<< endl
+	      << *CurrentLink.aJoint );
+      ODEBUG("=================================");
       addLink(*listBodies[rhs.listInternalLinks[i].indexCorps1],
 	      *listBodies[rhs.listInternalLinks[i].indexCorps2],
-	      CurrentLink);
-    }
+	      CurrentLink); 
 
-  return this;
+      MapJointsFromOriginalToNew[rhs.listInternalLinks[i].aJoint] = CurrentLink.aJoint;
+            
+    }
+  
+  ODEBUG("Now bound objects together.");
+  for(unsigned int i=0;
+      i<rhs.listInternalLinks.size();
+      i++)  
+  {
+    // Now bound objects together.
+    DynamicBodyPrivate * OriginalBody = rhs.listInternalLinks[i].aJoint->linkedDBody();
+    ODEBUG(" i:"<<i);
+    CurrentLink.aJoint->setLinkedDBody(MapBodiesFromOriginalToNew[OriginalBody]);
+    ODEBUG(" Set linkedDBody");
+    ODEBUG("rhs.listInternalLinks[i].aJoint:" << rhs.listInternalLinks[i].aJoint
+	    << " " << MapJointsFromOriginalToNew.size());
+    JointPrivate *OriginalFatherJoint = 0;
+    JointPrivate *FatherJointInNewTree = 0;
+    if (rhs.listInternalLinks[i].aJoint!=0)
+      {
+	OriginalFatherJoint = (JointPrivate *)rhs.listInternalLinks[i].aJoint->parentJoint();
+	if (OriginalFatherJoint!=0)
+	  {
+	    FatherJointInNewTree = MapJointsFromOriginalToNew[OriginalFatherJoint];
+	  }
+      }
+
+    ODEBUG("Found father in new tree.");
+    CurrentLink.aJoint->SetFatherJoint(FatherJointInNewTree);
+    ODEBUG(" Set FatherJoint.");
+    
+  }
+
+  m_mass = rhs.m_mass;
+
+  ODEBUG("Finished bindings.");
+  return *this;
 }
 
