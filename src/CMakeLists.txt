@@ -48,6 +48,7 @@ SET(libdyn_src ${libdyn_src}
   public/DynamicBody.cpp
   public/deprecated.cpp
   public/dynamicsJRLJapanFactory.cpp
+  public/GeometricData.cpp
 )
 
 # Create list of headers files

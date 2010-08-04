@@ -35,30 +35,38 @@ namespace dynamicsJRLJapan
 {
   namespace Geometry
   {
+
+    struct DYN_JRL_JAPAN_EXPORT IndexedFaceSet
+    {
+      bool ccw;
+      std::vector<int> colorIndex;
+      bool colorPerVertex;
+      bool convex;
+      std::vector<int> coordIndex;
+      float creaseAngle;
+      std::vector<int> normalIndex;
+      bool normalPerVertex;
+      bool solid;
+      std::vector<int> texCoordIndex;      
+    };    
+
     struct DYN_JRL_JAPAN_EXPORT Material
     {
       float ambientIntensity;
       float diffuseColor[3];
       float emissiveColor[3];
+      float shininess;
       float specularColor[3];
-      float shininess[3];
       float transparency;
       
-    Material():
-      ambientIntensity(0.2),
-	diffuseColor({0.8,0.8,0.8}),
-	emissiveColor({0.0,0.0,0.0}),
-	shininess({0.2}),
-	specularColor({0.0,0.0,0.0}),
-	transparency({0})
-      {};
+      Material();
 
     };
 
     struct DYN_JRL_JAPAN_EXPORT Texture
     {
       std::string FileName;
-    }
+    };
     
     struct DYN_JRL_JAPAN_EXPORT TextureTransform
     {
@@ -67,13 +75,8 @@ namespace dynamicsJRLJapan
       float scale[2];
       float translation[2];
 
-    TextureTransform():
-      center({0.0,0.0}),
-	rotation(0),
-	scale({1.0,1.0}),
-	translation({0.0,0.0})
-      {};
-    }
+      TextureTransform();
+    };
 
     
     class DYN_JRL_JAPAN_EXPORT Appearance
@@ -96,16 +99,51 @@ namespace dynamicsJRLJapan
       void setTexture(Texture &aTexture);
       const Texture &getTexture() const;
       
-      void setTextureTransform(TextureTransform &aTexture);
+      void setTextureTransform(TextureTransform &aTextureTransform);
       const TextureTransform &getTextureTransform() const;
       /*! @} */
     };
 
     class DYN_JRL_JAPAN_EXPORT Shape 
     {
-      
+    private:
+      Appearance m_Appearance;
+      IndexedFaceSet m_IndexedFaceSet;
+
+    public:
+      Shape();
+      ~Shape();
+      void setAppearance(Appearance &anAppearance);
+      Appearance & getAppearance();
+
+      void setIndexedFaceSet(IndexedFaceSet &anIndexedFaceSet);
+      IndexedFaceSet & getIndexedFaceSet();
+
     };
+
   };
+
+  class DYN_JRL_JAPAN_EXPORT BodyGeometricalData
+  {
+  private:
+    matrix3d m_RotationForDisplay;
+    std::vector < std::string > m_URLs;
+    std::vector < Geometry::Shape> m_Shapes;
+
+  public:
+    BodyGeometricalData();
+
+    const matrix3d & getRotationForDisplay();
+    void setRotationForDisplay(const matrix3d &RotationForDisplay);
+
+    const std::vector< std::string > & getURLs();
+    void resetURL( );
+    void addURL(const std::string &URLtoVRML);
+    
+    const std::vector<Geometry::Shape> & getShapes();
+    void addShape(const Geometry::Shape &aShape);
+  };
+
 };
 
 #endif /*! _DYNAMICS_JRL_GEOMETRIC_DATA_H_ */

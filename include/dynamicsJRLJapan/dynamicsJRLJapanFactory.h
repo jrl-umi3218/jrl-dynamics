@@ -33,6 +33,8 @@
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 
+#include "GeometricData.h"
+
 namespace dynamicsJRLJapan
 {
   /*! \ingroup userclasses
@@ -60,22 +62,6 @@ namespace dynamicsJRLJapan
   };
 
 
-  class DYN_JRL_JAPAN_EXPORT BodyGeometricalData
-  {
-  private:
-    matrix3d m_RotationForDisplay;
-    std::vector < std::string > m_URLs;
-
-  public:
-    BodyGeometricalData();
-
-    const matrix3d & getRotationForDisplay();
-    void setRotationForDisplay(const matrix3d &RotationForDisplay);
-
-    const std::vector< std::string > & getURLs();
-    void resetURL( );
-    void addURL(const std::string &URLtoVRML);
-  };
   
   /*! Populate a CjrlHumanoidDynamicRobot instance
     from a OpenHRP vrml file and a file of specificities
