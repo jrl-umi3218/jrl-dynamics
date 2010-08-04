@@ -83,32 +83,6 @@ namespace dynamicsJRLJapan
       };
     };
 
-    struct fURL_t {
-
-      typedef nil_t result_t;
-
-      explicit fURL_t(Actions &actions):
-	m_actions(actions){};
-      
-      template<typename ScannerT>
-      std::ptrdiff_t operator()(ScannerT const &scan, 
-				result_t &result) const
-      {
-	file_position afp;
-	vector<BodyGeometricalData> &lListOfURLs=
-	  m_actions.m_DataForParsing.m_ListsOfURLs;
-
-	afp.file = lListOfURLs[lListOfURLs.size()-1];
-	afp.line = 1; afp.column=1;
-	scan.first.set_position(afp)
-      }
-      
-    private:
-      Actions & m_actions;
-      
-    };
-
-
     template <typename tActions>
     struct SpiritOpenHRP: 
       grammar<SpiritOpenHRP<tActions> >
@@ -659,7 +633,7 @@ namespace dynamicsJRLJapan
 
 	  ShapeInlineUrl_r = str_p("url") 
 	    >> ch_p('"') 
-	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])
+	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fAddURL]
 	    >> ch_p('"');
 
 	  ShapeBlockInline_r = ch_p('{') >> 
@@ -779,11 +753,12 @@ namespace dynamicsJRLJapan
 		 ) 
 	    >> ch_p('}');
 	  
-	  EntryPoint = *(Proto_r| 
-			 Humanoid_r| 
-			 Background_r | 
+	  EntryPoint = *(Proto_r          | 
+			 Humanoid_r       | 
+			 Background_r     | 
 			 NavigationInfo_r | 
-			 Viewpoint_r );  
+			 Viewpoint_r      |
+			 TransformBlock_r );  
 	
 
 	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
@@ -979,6 +954,7 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> skyColor_r, Background_r, ViewpointOri_r, 
 	  ViewpointPos_r, Viewpoint_r, EntryPoint;
 
+ 
 	rule<ScannerT> const& start() const {return EntryPoint;}
 
       }; // end of definition.

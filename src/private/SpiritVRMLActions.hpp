@@ -111,7 +111,7 @@ namespace dynamicsJRLJapan
       
       vector<BodyGeometricalData> m_ListOfURLs;
       
-      queue<string> m_QueueOfFiles;
+      queue<file_position> m_QueueOfFiles;
 
     };
 
@@ -150,6 +150,9 @@ namespace dynamicsJRLJapan
 	fFillMomentsOfInertia(*this),
 	fIncreaseDepth(*this),
 	fDecreaseDepth(*this),
+	fAddURL(*this),
+	fInURL(*this),
+	fOutURL(*this),
 	m_Verbose(0)
       { }
       
@@ -284,6 +287,7 @@ namespace dynamicsJRLJapan
 	      // and 
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setStaticRotation(R);
 	      m_actions.m_DataForParsing.m_BodyGeometry.setRotationForDisplay(displayR);
+	      m_actions.m_DataForParsing.m_BodyGeometry.resetURL();
 	      if (lQuantity!=0.0)
 		{
 		  if (m_actions.m_Verbose>1){
@@ -574,6 +578,7 @@ namespace dynamicsJRLJapan
 					      aDataForParsing.CurrentLink);
 	  //	aDataForParsing.JointMemoryAllocationForNewDepth=false;
 	  aDataForParsing.m_ListOfURLs.push_back(aDataForParsing.m_BodyGeometry);
+	  aDataForParsing.m_BodyGeometry.resetURL();
 	  lCurrentBody->setInitialized(true);
 	  if (m_actions.m_Verbose>1)
 	    {
@@ -717,6 +722,96 @@ namespace dynamicsJRLJapan
 	
       } fDecreaseDepth;
 
+
+      // Add URL information
+      struct fAddURL_t {
+
+	explicit fAddURL_t(Actions &actions): 
+	  m_actions(actions){};
+
+
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
+	{
+	  string s(begin,end);
+	  file_position fp_cur;
+	  
+	  // Store the current file position
+	  fp_cur = begin.get_position();
+	  std::cout << "Current file: " << fp_cur.file << std::endl;
+	  std::cout << "Line   : " << fp_cur.line  
+		    << " Column : " << fp_cur.column 
+		    << endl
+		    << "File to be included : " << s;
+	  
+	  //	  begin.set_position(fp_new);
+	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(s);
+	}
+	
+      private:
+	Actions & m_actions;
+	
+      } fAddURL;
+
+      struct fInURL_t {
+	
+	explicit fInURL_t(Actions &actions):
+	  m_actions(actions){};
+
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const	
+	{
+	  file_position fp_cur, fp_new;
+	  
+	  // Store the current file position
+	  fp_cur = begin.get_position();
+	  m_actions.m_DataForParsing.m_QueueOfFiles.push(fp_cur);
+	  std::cout << "Current file: " << fp_cur.file << std::endl;
+	  std::cout << "Line   : " << fp_cur.line  
+		    << "Column : " << fp_cur.column
+		    << endl;
+	  
+	  // Create the new file position
+	  vector<std::string> aListOfFiles = m_actions.m_DataForParsing.m_BodyGeometry.getURLs();
+	  fp_new.file = aListOfFiles[0];
+	  fp_new.line = 1; fp_new.column=1;
+	  begin.set_position(fp_new);
+	return 0;
+	}
+      
+      private:
+	const Actions & m_actions;
+	
+      } fInURL;
+
+
+    struct fOutURL_t {
+
+      explicit fOutURL_t(Actions &actions):
+	m_actions(actions){};
+
+      template <typename IteratorT>
+      void operator()(const IteratorT &begin,
+		      const IteratorT &end) const	
+      {
+	file_position fp_new;
+	
+	if (begin.at_end())
+	  {
+	    // Store the current file position
+	    fp_new = m_actions.m_DataForParsing.m_QueueOfFiles.back();
+	    
+	    begin.set_position(fp_new);
+	  }
+	return 0;
+      }
+      
+    private:
+      Actions & m_actions;
+      
+    } fOutURL;
       
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;

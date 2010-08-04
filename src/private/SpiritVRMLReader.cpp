@@ -38,7 +38,7 @@ namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
-  
+    
     int ParseVRMLFile(MultiBody *aMB, 
 		      std::string aFileName,
 		      vector<BodyGeometricalData> &aListOfURLs)
@@ -64,20 +64,7 @@ namespace dynamicsJRLJapan
 	    cout << "Succeeded in opening " << aFileName <<endl;
 	    } */
       }
-      unsigned int length;
-  
-      // get length of file:
-      aif.seekg (0, ios::end);
-      length = aif.tellg();
-
-      aif.seekg (0, ios::beg);
-  
-      // allocate memory:
-      char * buffer = new char [length+1];
-      // read data as a block:
-      aif.read(buffer,length);
-      aif.close();
-  
+    
       aif.open(aFileName.c_str(),ifstream::in|ifstream::binary);
 
       typedef multi_pass<istreambuf_iterator<char> > multi_pass_iterator_t;
@@ -92,9 +79,50 @@ namespace dynamicsJRLJapan
       iterator_t first(in_begin, in_end, aFileName), last;
       
       parse(first,last,aSpiritOpenHRP,aSkipGrammar);
-      
-      delete [] buffer;
+      aif.close();
 
+      // Iterate over the included files if there is some. 
+      vector<BodyGeometricalData> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
+      vector<BodyGeometricalData>::iterator it_BGD; 
+
+      it_BGD = aLOU.begin();
+
+      string Path;
+      unsigned int npos = aFileName.find_last_of('/');
+      Path = aFileName.substr(0,npos+1);
+
+      cout << "Path: " << Path << endl;
+      unsigned int i=0;
+      while (it_BGD!= aLOU.end())
+	{
+	  i++;
+	  const vector<string> URLs = (*it_BGD).getURLs();
+	  
+	  for(unsigned int j=0;j<URLs.size();j++)
+	    {
+	      string GeomFileName = Path + URLs[j];
+	      aif.open(GeomFileName.c_str(),ifstream::in|ifstream::binary);
+
+	      if (!aif.is_open())
+		{
+		  cerr<<" Unable to open :" << GeomFileName << endl;
+		}
+	      else
+		{
+		  cerr<< "Open :" << GeomFileName << endl;
+		  multi_pass_iterator_t
+		    lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
+		    lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
+		  
+		  iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
+		  
+		  parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar);
+		}
+	      aif.close();
+	    }
+	  it_BGD++;
+	}
+      
       *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
       
       return 1;

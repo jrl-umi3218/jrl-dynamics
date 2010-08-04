@@ -105,8 +105,7 @@ namespace dynamicsJRLJapan
 
   void BodyGeometricalData::resetURL( )
   {
-	  m_URLs.clear();
-	  m_URLs.resize(0);
+    m_URLs.clear();
   }
 
   void BodyGeometricalData::addURL(const std::string &URLtoVRML)
