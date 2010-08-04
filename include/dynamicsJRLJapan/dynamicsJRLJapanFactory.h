@@ -64,7 +64,8 @@ namespace dynamicsJRLJapan
   {
   private:
     matrix3d m_RotationForDisplay;
-	std::vector < std::string > m_URLs;
+    std::vector < std::string > m_URLs;
+
   public:
     BodyGeometricalData();
 

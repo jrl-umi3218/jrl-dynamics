@@ -83,7 +83,6 @@ namespace dynamicsJRLJapan
       };
     };
 
-
     template <typename tActions>
     struct SpiritOpenHRP: 
       grammar<SpiritOpenHRP<tActions> >
@@ -196,7 +195,9 @@ namespace dynamicsJRLJapan
 			       (str_p("Transform"))
 			       |(str_p("Transform"))))
 	    >> ch_p('{') 
-	    >> *(TransformLine_r | TransformInstanceRotation_r | TransformInstanceTranslation_r) 
+	    >> *(TransformLine_r | 
+		 TransformInstanceRotation_r | 
+		 TransformInstanceTranslation_r) 
 	    >> ch_p('}');
 	  
 	  // Fields of Proto []block.
@@ -254,66 +255,87 @@ namespace dynamicsJRLJapan
 	     MFStringD_r   | 
 	     SFFloatD_r);
 
-	  ProtoBlock_r = ch_p('[') >> *((ProtoLine_r)[self.actions.fDisplay]) >> ch_p(']');
+	  ProtoBlock_r = ch_p('[') 
+	    >> *((ProtoLine_r)[self.actions.fDisplay]) 
+	    >> ch_p(']');
 	  
-	  ProtoSndBlock_r = ch_p('{') >> *(TransformBlock_r| GroupBlock_r|Route_r )>> ch_p('}');
+	  ProtoSndBlock_r = ch_p('{') 
+	    >> *(TransformBlock_r| 
+		 GroupBlock_r|
+		 Route_r )
+	    >> ch_p('}');
 	  
-	  Proto_r= str_p("PROTO") >> (+alpha_p)[self.actions.fProtoName] 
-				  >> (ProtoBlock_r)
-				  >> (ProtoSndBlock_r);
+	  Proto_r= str_p("PROTO") 
+	    >> (+alpha_p)[self.actions.fProtoName] 
+	    >> (ProtoBlock_r)
+	    >> (ProtoSndBlock_r);
 	
 	  // Part of the joints.
 
 	  // Read the translation of the joint.
-	  JointTranslation_r = str_p("translation") >> 
-	    (real_p)[self.actions.fJointTranslationX] >> 
-	    (real_p)[self.actions.fJointTranslationY] >> 
-	    (real_p)[self.actions.fJointTranslationZ];
+	  JointTranslation_r = str_p("translation") 
+	    >> (real_p)[self.actions.fJointTranslationX] 
+	    >> (real_p)[self.actions.fJointTranslationY] 
+	    >> (real_p)[self.actions.fJointTranslationZ];
 
 	  // Read the rotation of the joint.
-	  JointRotation_r = str_p("rotation") >> 
-	    (real_p)[self.actions.fJointRotationX] >> 
-	    (real_p)[self.actions.fJointRotationY] >> 
-	    (real_p)[self.actions.fJointRotationZ] >>
-	    (real_p)[self.actions.fJointRotationAngle];
+	  JointRotation_r = str_p("rotation") 
+	    >> (real_p)[self.actions.fJointRotationX] 
+	    >> (real_p)[self.actions.fJointRotationY] 
+	    >> (real_p)[self.actions.fJointRotationZ] 
+	    >> (real_p)[self.actions.fJointRotationAngle];
     
 	  // Type of the joint.
-	  JointType_r = str_p("jointType") >> ch_p('"')
-					   >> (+alpha_p)[self.actions.fJointType]
-					   >> ch_p('"');
+	  JointType_r = str_p("jointType") 
+	    >> ch_p('"')
+	    >> (+alpha_p)[self.actions.fJointType]
+	    >> ch_p('"');
 
 	  // Identifient of the joint.
-	  JointID_r = str_p("jointId") >> (int_p)[self.actions.fJointID];
+	  JointID_r = str_p("jointId") 
+	    >> (int_p)[self.actions.fJointID];
 
 	  // Specify the axis along which the rotation take place for this joint.
-	  JointAxis_r = str_p("jointAxis") >> ch_p('"') 
-					   >> ( (ch_p('X'))[self.actions.fJointXAxis] | 
-						(ch_p('Y'))[self.actions.fJointYAxis] | 
-						(ch_p('Z'))[self.actions.fJointZAxis] )
-					   >> ch_p('"');
+	  JointAxis_r = str_p("jointAxis") 
+	    >> ch_p('"') 
+	    >> ( (ch_p('X'))[self.actions.fJointXAxis] | 
+		 (ch_p('Y'))[self.actions.fJointYAxis] | 
+		 (ch_p('Z'))[self.actions.fJointZAxis] )
+	    >> ch_p('"');
+
 	  // Not used
-	  Jointdh_r = str_p("dh") >> ch_p('[') >> *(real_p)
-				  >> ch_p(']'); // not used.
+	  Jointdh_r = str_p("dh") 
+	    >> ch_p('[') 
+	    >> *(real_p)
+	    >> ch_p(']'); // not used.
 
 	  // Lower Position Limit for the joint.
-	  Jointllimit_r = str_p("llimit") >> ch_p('[') >> (real_p)[self.actions.fJointLLimit]
-					  >> ch_p(']'); 
+	  Jointllimit_r = str_p("llimit") 
+	    >> ch_p('[') 
+	    >> (real_p)[self.actions.fJointLLimit]
+	    >> ch_p(']'); 
 
 	  // Upper Position Limit for the joint.
-	  Jointulimit_r = str_p("ulimit") >> ch_p('[') >> (real_p)[self.actions.fJointULimit]
-					  >> ch_p(']'); 
+	  Jointulimit_r = str_p("ulimit") 
+	    >> ch_p('[') 
+	    >> (real_p)[self.actions.fJointULimit]
+	    >> ch_p(']'); 
  
 	  // Lower Speed Limit for the joint 
-	  Jointlvlimit_r = str_p("lvlimit") >> ch_p('[') >> (real_p)[self.actions.fJointLVLimit]
-					    >> ch_p(']'); 
+	  Jointlvlimit_r = str_p("lvlimit") 
+	    >> ch_p('[') 
+	    >> (real_p)[self.actions.fJointLVLimit]
+	    >> ch_p(']'); 
 
 	  // Upper Speed Limit for the joint.
-	  Jointuvlimit_r = str_p("uvlimit") >> ch_p('[') >> (real_p)[self.actions.fJointUVLimit]
-					    >> ch_p(']'); 
+	  Jointuvlimit_r = str_p("uvlimit") 
+	    >> ch_p('[') 
+	    >> (real_p)[self.actions.fJointUVLimit]
+	    >> ch_p(']'); 
 
 	  // Upper Speed Limit for the joint.
-	  Jointequivalentinertia_r = str_p("equivalentInertia") >> 
-	    (real_p)[self.actions.fEquivalentInertia];
+	  Jointequivalentinertia_r = str_p("equivalentInertia") 
+	    >> (real_p)[self.actions.fEquivalentInertia];
 					    
  
 	  JointField_r = JointType_r | 
@@ -340,9 +362,18 @@ namespace dynamicsJRLJapan
 	    (real_p) >> 
 	    (real_p) >>
 	    (real_p);
-	  FSID_r = str_p("sensorId") >> (int_p);
-	  ForceSensorBlock_r = *(FSTranslation_r | FSRotation_r | FSID_r );
-	  ForceSensor_r = str_p("ForceSensor") >> ch_p('{') >> ForceSensorBlock_r >> ch_p('}');
+
+	  FSID_r = str_p("sensorId") 
+	    >> (int_p);
+
+	  ForceSensorBlock_r = *(FSTranslation_r | 
+				 FSRotation_r | 
+				 FSID_r );
+
+	  ForceSensor_r = str_p("ForceSensor") 
+	    >> ch_p('{') 
+	    >> ForceSensorBlock_r 
+	    >> ch_p('}');
 
 	  // Parts of the Gyroscope sensor
 	  GyroTranslation_r = str_p("translation") >> 
@@ -356,11 +387,18 @@ namespace dynamicsJRLJapan
 	    (real_p) >> 
 	    (real_p) >>
 	    (real_p);
-	  GyroID_r = str_p("sensorId") >> (int_p);
-	  GyrometerSensorBlock_r = *(GyroTranslation_r | GyroRotation_r | GyroID_r);
-	  GyrometerSensor_r =  str_p("Gyro") >> ch_p('{') >> GyrometerSensorBlock_r >> ch_p('}');
-  
 
+	  GyroID_r = str_p("sensorId") 
+	    >> (int_p);
+
+	  GyrometerSensorBlock_r = *(GyroTranslation_r | 
+				     GyroRotation_r | 
+				     GyroID_r);
+	  GyrometerSensor_r =  str_p("Gyro") 
+	    >> ch_p('{') 
+	    >> GyrometerSensorBlock_r 
+	    >> ch_p('}');
+  
 	  // Parts of the Acceleration sensor
 	  ASTranslation_r = str_p("translation") >> 
 	    (real_p) >> 
@@ -373,10 +411,18 @@ namespace dynamicsJRLJapan
 	    (real_p) >> 
 	    (real_p) >>
 	    (real_p);
-	  ASID_r = str_p("sensorId") >> (int_p);
-	  AccelerationSensorBlock_r = *(ASTranslation_r | ASRotation_r | ASID_r);
-	  AccelerationSensor_r =  str_p("AccelerationSensor") >> ch_p('{') 
-							      >> AccelerationSensorBlock_r >> ch_p('}');
+
+	  ASID_r = str_p("sensorId") 
+	    >> (int_p);
+
+	  AccelerationSensorBlock_r = *(ASTranslation_r | 
+					ASRotation_r | 
+					ASID_r);
+
+	  AccelerationSensor_r =  str_p("AccelerationSensor") 
+	    >> ch_p('{') 
+	    >> AccelerationSensorBlock_r 
+	    >> ch_p('}');
   
 	  // Read the vision sensor.
   
@@ -395,35 +441,67 @@ namespace dynamicsJRLJapan
 
 	  VSID_r = str_p("sensorId") >> (int_p);
   
-	  VSFrontClipDistance_r = str_p("frontClipDistance") >> real_p;
-	  VSBackClipDistance_r = str_p("backClipDistance") >> real_p;
-	  VSwidth_r = str_p("width") >> int_p;
-	  VSheight_r = str_p("height") >> int_p;
-	  VStype_r = str_p("type") >> ch_p('"') >> lexeme_d[+alnum_p] >> ch_p('"');
-	  VSFieldOfView_r = str_p("fieldOfView") >> real_p;
-	  VSName_r = str_p("name") >> ch_p('"') >> lexeme_d[+alnum_p] >> ch_p('"');
+	  VSFrontClipDistance_r = str_p("frontClipDistance") 
+	    >> real_p;
 
-	  VisionSensorBlock_r = *(VSTranslation_r | VSRotation_r | VSID_r |
-				  VSFrontClipDistance_r | VSBackClipDistance_r  |
-				  VSwidth_r | VSheight_r | VStype_r | VSName_r | 
+	  VSBackClipDistance_r = str_p("backClipDistance") 
+	    >> real_p;
+
+	  VSwidth_r = str_p("width") 
+	    >> int_p;
+
+	  VSheight_r = str_p("height") 
+	    >> int_p;
+
+	  VStype_r = str_p("type") 
+	    >> ch_p('"') 
+	    >> lexeme_d[+alnum_p] 
+	    >> ch_p('"');
+
+	  VSFieldOfView_r = str_p("fieldOfView") 
+	    >> real_p;
+
+	  VSName_r = str_p("name") 
+	    >> ch_p('"') 
+	    >> lexeme_d[+alnum_p] 
+	    >> ch_p('"');
+
+	  VisionSensorBlock_r = *(VSTranslation_r       | 
+				  VSRotation_r          | 
+				  VSID_r                |
+				  VSFrontClipDistance_r | 
+				  VSBackClipDistance_r  |
+				  VSwidth_r             | 
+				  VSheight_r            | 
+				  VStype_r              | 
+				  VSName_r              | 
 				  VSFieldOfView_r  );
-	  VisionSensor_r = str_p("VisionSensor") >> ch_p('{') >> VisionSensorBlock_r >> ch_p('}');
+
+	  VisionSensor_r = str_p("VisionSensor") 
+	    >> ch_p('{') 
+	    >> VisionSensorBlock_r 
+	    >> ch_p('}');
   
 	  CSAngle_r = (lexeme_d[+alnum_p])
-	    >> str_p("IS") >> (lexeme_d[+alnum_p]);
+	    >> str_p("IS") 
+	    >> (lexeme_d[+alnum_p]);
+
 	  CylinderSensorBlock_r = *(CSAngle_r);
 
 	  CylinderSensor_r = (str_p("CylinderSensor"))
-	    >> ch_p('{') >> CylinderSensorBlock_r >> ch_p('}');
+	    >> ch_p('{') 
+	    >> CylinderSensorBlock_r 
+	    >> ch_p('}');
 
 	  ListSensors_r =  VisionSensor_r |
-	    AccelerationSensor_r |
-	    ForceSensor_r |
-	    GyrometerSensor_r |
+	    AccelerationSensor_r          |
+	    ForceSensor_r                 |
+	    GyrometerSensor_r             |
 	    CylinderSensor_r;
 
-	  Sensors_r =  str_p("DEF") >> (lexeme_d[+(alpha_p|ch_p('_'))] )
-				    >> ListSensors_r ;
+	  Sensors_r =  str_p("DEF") 
+	    >> (lexeme_d[+(alpha_p|ch_p('_'))] )
+	    >> ListSensors_r ;
 
 	  // Parts of the body
 	  CenterOfMass_r = str_p("centerOfMass") >> 
@@ -431,21 +509,38 @@ namespace dynamicsJRLJapan
 	    (real_p)[self.actions.fBodyCenterOfMassY] >> 
 	    (real_p)[self.actions.fBodyCenterOfMassZ];
 
-	  Mass_r = str_p("mass") >> (real_p)[self.actions.fBodyMass];
-	  MomentsOfInertia_r = str_p("momentsOfInertia") >> ch_p('[') 
-							 >> *((real_p)[self.actions.fFillMomentsOfInertia])
-							 >> ch_p(']') ;
+	  Mass_r = str_p("mass") 
+	    >> (real_p)[self.actions.fBodyMass];
+	  
+	  MomentsOfInertia_r = str_p("momentsOfInertia") 
+	    >> ch_p('[') 
+	    >> *((real_p)[self.actions.fFillMomentsOfInertia])
+	    >> ch_p(']') ;
 	
 	  // Material block
-	  DiffuseColor_r = str_p("diffuseColor") >> 
-	    real_p >> real_p >> real_p ;
-	  SpecularColor_r = str_p("specularColor") >>
-	    real_p >> real_p >> real_p;
-	  EmissiveColor_r = str_p("emissiveColor") >>
-	    real_p >> real_p >> real_p;
-	  Shininess_r = str_p("shininess") >> real_p;
-	  Transparency_r = str_p("transparency") >> real_p;
-	  AmbientIntensity_r = str_p("ambientIntensity") >> real_p;
+	  DiffuseColor_r = str_p("diffuseColor") 
+	    >> real_p 
+	    >> real_p 
+	    >> real_p ;
+
+	  SpecularColor_r = str_p("specularColor") 
+	    >> real_p 
+	    >> real_p 
+	    >> real_p;
+
+	  EmissiveColor_r = str_p("emissiveColor") 
+	    >> real_p 
+	    >> real_p 
+	    >> real_p;
+
+	  Shininess_r = str_p("shininess") 
+	    >> real_p;
+
+	  Transparency_r = str_p("transparency") 
+	    >> real_p;
+
+	  AmbientIntensity_r = str_p("ambientIntensity") 
+	    >> real_p;
 	
 	  MaterialBlock_r = *( DiffuseColor_r  | 
 			       SpecularColor_r |
@@ -457,12 +552,17 @@ namespace dynamicsJRLJapan
 	  // Appearance block
 	  AppearanceBlock_r = (str_p("material"))
 	    >> str_p("Material")
-	    >> ch_p('{') >> *(MaterialBlock_r) >> ch_p('}');
+	    >> ch_p('{') 
+	    >> *(MaterialBlock_r) 
+	    >> ch_p('}');
 	  
-	  AppearanceUse_r = str_p("USE")  >>  lexeme_d[+(alnum_p|'_')];
+	  AppearanceUse_r = str_p("USE")  
+	    >>  lexeme_d[+(alnum_p|'_')];
+	  
 	  AppearanceDef_r = str_p("DEF")  
 	    >> ( (lexeme_d[+(alnum_p|'_')] 
-		  >> str_p("Appearance")) | str_p("Appearance") )
+		  >> str_p("Appearance")) | 
+		 str_p("Appearance") )
 	    >>  ch_p('{') 
 	    >> AppearanceBlock_r
 	    >> ch_p('}') ;
@@ -476,7 +576,8 @@ namespace dynamicsJRLJapan
 	  // Box
 	  GeometryBox_r = str_p("Box")
 	    >> ch_p('{') 
-	    >> str_p("size") >> real_p >> real_p >>real_p 
+	    >> str_p("size") 
+	    >> real_p >> real_p >>real_p 
 	    >> ch_p('}');
 	  
 	  // Cylinder
@@ -511,6 +612,7 @@ namespace dynamicsJRLJapan
 	    IFScreaseAngle_r |
 	    IFScoord_r 
 	    >> ch_p ('{');
+
 	  // Header
 	  GeometryHeader_r = str_p("geometry")
 	    >>  GeometryBox_r |  
@@ -525,10 +627,13 @@ namespace dynamicsJRLJapan
 	    >> *ShapeBlock_r 
 	    >> ch_p('}');
 
-	  BodySubBlock_r =CenterOfMass_r | Mass_r | MomentsOfInertia_r ;
+	  BodySubBlock_r =CenterOfMass_r | 
+	    Mass_r | 
+	    MomentsOfInertia_r ;
+
 	  ShapeInlineUrl_r = str_p("url") 
 	    >> ch_p('"') 
-	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])
+	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fAddURL]
 	    >> ch_p('"');
 
 	  ShapeBlockInline_r = ch_p('{') >> 
@@ -536,11 +641,14 @@ namespace dynamicsJRLJapan
   
 	  ShapeInline_r = (str_p("Inline") >> ShapeBlockInline_r );
 
-	  BodyChildrenField_r=  ShapeInline_r | Sensors_r | Shape_r | TransformBlock_r;
+	  BodyChildrenField_r=  
+	    ShapeInline_r   | 
+	    Sensors_r       | 
+	    Shape_r         | 
+	    TransformBlock_r;
 	
-	  BodyChildren_r = str_p("children") >> (ch_p('[') 
-						 >> *BodyChildrenField_r
-						 >> ch_p(']')) |
+	  BodyChildren_r = str_p("children") 
+	    >> (ch_p('[') >> *BodyChildrenField_r >> ch_p(']')) |
 	        Shape_r;
 	  
 	  // Define the entry rules for body and hint
@@ -550,16 +658,16 @@ namespace dynamicsJRLJapan
 		 (BodyChildren_r) )
 	    >> ch_p('}');
 	  
-	  JointChildrenDEFBlocks_r = str_p("DEF") >> (lexeme_d[+(alnum_p|ch_p('_'))])
-	    [self.actions.fDEFName]
-	     |
+	  JointChildrenDEFBlocks_r = str_p("DEF") 
+	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[self.actions.fDEFName] |
 	    ( (BodyBlock_r)[self.actions.fUpdateAndAddBody] | 
 	      JointBlock_r |
 	      ListSensors_r);
 
-	  JointChildren_r = str_p("children") >> (ch_p('['))
-					      >> *( JointChildrenDEFBlocks_r ) 
-					      >> ch_p(']');
+	  JointChildren_r = str_p("children") 
+	    >> (ch_p('['))
+	    >> *( JointChildrenDEFBlocks_r ) 
+	    >> ch_p(']');
 
 	  JointBlock_r = (str_p("Joint"))
 	    >> ch_p('{')[self.actions.fIncreaseDepth]
@@ -570,28 +678,37 @@ namespace dynamicsJRLJapan
 	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[self.actions.fDEFName]
 	    >> JointBlock_r;
 
-	  HumanoidVersion_r = str_p("version") >> ch_p('"') 
-					       >> (lexeme_d[+(alnum_p|'.')])
-					       >> ch_p('"');
-          HumanoidName_r = str_p("name") >> ch_p('"') >> (lexeme_d[+(alnum_p)])
-					 >> ch_p('"');
+	  HumanoidVersion_r = str_p("version") 
+	    >> ch_p('"') 
+	    >> (lexeme_d[+(alnum_p|'.')])
+	    >> ch_p('"');
+
+          HumanoidName_r = str_p("name") 
+	    >> ch_p('"') 
+	    >> (lexeme_d[+(alnum_p)])
+	    >> ch_p('"');
+
 	  HumanoidInfoLine_r = ch_p('"')
 	    >> *((lexeme_d[+(alnum_p|':'|'.'|',')]))
 	    >> ch_p('"');
 	    
-				
-
 	  HumanoidInfo_r = (str_p("info"))
-	    >> ch_p('[') >> *(HumanoidInfoLine_r) >> ch_p(']');
+	    >> ch_p('[') 
+	    >> *(HumanoidInfoLine_r) 
+	    >> ch_p(']');
 	  
 	  // Define the entry rules for huanoid.
-	  HumanoidBlock_r =  *(str_p("humanoidBody") 
-			       >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
-			       HumanoidName_r | HumanoidVersion_r |
-			       HumanoidInfo_r );
-  
+	  HumanoidBlock_r =  
+	    *(str_p("humanoidBody") 
+	      >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
+	      HumanoidName_r | 
+	      HumanoidVersion_r |
+	      HumanoidInfo_r );
+	  
 	  HumanoidTrail_r = str_p("Humanoid")
-	    >> ch_p('{') >> HumanoidBlock_r >> ch_p('}');
+	    >> ch_p('{') 
+	    >> HumanoidBlock_r 
+	    >> ch_p('}');
 
 	  Humanoid_r = (str_p("DEF"))
 	    >> (lexeme_d[+alnum_p]) 
@@ -600,35 +717,48 @@ namespace dynamicsJRLJapan
 	  // Navigation Info
 	  NIavatarSize_r = str_p("avatarSize") >> (real_p);
 	  NIHeadlight_r = str_p("headlight") >> SFBool_r;
-	  NIType_r = str_p("type") >> ch_p('[')
-				   >> ch_p('"') >> str_p("EXAMINE") >> ch_p('"')
-				   >> ch_p(',')
-				   >> ch_p('"') >> str_p("ANY")  >> ch_p('"')
-				   >> ch_p(']');
-	  NavigationInfo_r = str_p("NavigationInfo") >> ch_p('{') >> 
+	  NIType_r = str_p("type") 
+	    >> ch_p('[')
+	    >> ch_p('"') >> str_p("EXAMINE") >> ch_p('"')
+	    >> ch_p(',')
+	    >> ch_p('"') >> str_p("ANY")  >> ch_p('"')
+	    >> ch_p(']');
+
+	  NavigationInfo_r = str_p("NavigationInfo") 
+	    >> ch_p('{') >> 
 	    *((NIType_r) | 
 	      (NIHeadlight_r) | 
 	      (NIavatarSize_r))>> ch_p('}');
   
 	  // Background 
 	  skyColor_r = str_p("skyColor") >> real_p >> real_p >> real_p;
+
 	  Background_r = str_p("Background") 
-	    >> ch_p('{') >> *( (skyColor_r) )
+	    >> ch_p('{') 
+	    >> *( (skyColor_r) )
 	    >> ch_p('}');
 
 	  // Viewpoint
-	  ViewpointOri_r = str_p("orientation")>> real_p >> real_p >> real_p >> real_p;
-	  ViewpointPos_r = str_p("position") >> real_p >> real_p >> real_p;
-	  Viewpoint_r = str_p("Viewpoint") >> ch_p('{') >> *(
-							     (ViewpointPos_r)|
-							     (ViewpointOri_r)
-							     ) >> ch_p('}');
-	
-	  EntryPoint = *(Proto_r| 
-			 Humanoid_r| 
-			 Background_r | 
+	  ViewpointOri_r = str_p("orientation")
+	    >> real_p >> real_p >> real_p >> real_p;
+
+	  ViewpointPos_r = str_p("position") 
+	    >> real_p >> real_p >> real_p;
+
+	  Viewpoint_r = str_p("Viewpoint") 
+	    >> ch_p('{') 
+	    >> *(
+		 (ViewpointPos_r)|
+		 (ViewpointOri_r)
+		 ) 
+	    >> ch_p('}');
+	  
+	  EntryPoint = *(Proto_r          | 
+			 Humanoid_r       | 
+			 Background_r     | 
 			 NavigationInfo_r | 
-			 Viewpoint_r );  
+			 Viewpoint_r      |
+			 TransformBlock_r );  
 	
 
 	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
@@ -824,6 +954,7 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> skyColor_r, Background_r, ViewpointOri_r, 
 	  ViewpointPos_r, Viewpoint_r, EntryPoint;
 
+ 
 	rule<ScannerT> const& start() const {return EntryPoint;}
 
       }; // end of definition.
