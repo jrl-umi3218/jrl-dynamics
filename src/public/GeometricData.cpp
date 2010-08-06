@@ -54,7 +54,7 @@ namespace dynamicsJRLJapan
       m_Material = aMaterial;
     }
     
-    const Material & Appearance::getMaterial() const
+    Material & Appearance::getMaterial() 
     {
       return m_Material;
     }
@@ -64,7 +64,7 @@ namespace dynamicsJRLJapan
       m_Texture = aTexture;
     }
     
-    const Texture & Appearance::getTexture() const
+    Texture & Appearance::getTexture() 
     {
       return m_Texture;
     }
@@ -74,7 +74,7 @@ namespace dynamicsJRLJapan
       m_TextureTransform = aTextureTransform;
     }
     
-    const TextureTransform & Appearance::getTextureTransform() const
+    TextureTransform & Appearance::getTextureTransform()
     {
       return m_TextureTransform;
     }
@@ -115,8 +115,9 @@ namespace dynamicsJRLJapan
   }
 
   BodyGeometricalData::BodyGeometricalData():
-    m_RotationForDisplay(1,0,0, 0,1,0, 0,0,1)
-    , m_URLs(0)
+    m_RotationForDisplay(1,0,0, 0,1,0, 0,0,1),
+    m_URLs(0),
+    m_Shapes(0)
   {}
 
   void BodyGeometricalData::setRotationForDisplay(const matrix3d & RotationForDisplay)
@@ -134,12 +135,12 @@ namespace dynamicsJRLJapan
     m_URLs.clear();
   }
 
-  void BodyGeometricalData::addURL(const std::string &URLtoVRML)
+  void BodyGeometricalData::addURL(const std::string & URLtoVRML)
   {
     m_URLs.push_back(URLtoVRML);
   }
 
-  void BodyGeometricalData::addShape(const Geometry::Shape &aShape)
+  void BodyGeometricalData::addShape(Geometry::Shape &aShape)
   {
     m_Shapes.push_back(aShape);
   }

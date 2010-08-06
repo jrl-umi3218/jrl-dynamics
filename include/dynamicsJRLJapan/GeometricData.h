@@ -94,13 +94,13 @@ namespace dynamicsJRLJapan
 	@{
        */
       void setMaterial(Material &aMaterial);
-      const Material &getMaterial() const;
+      Material &getMaterial();
 
       void setTexture(Texture &aTexture);
-      const Texture &getTexture() const;
+      Texture &getTexture();
       
       void setTextureTransform(TextureTransform &aTextureTransform);
-      const TextureTransform &getTextureTransform() const;
+      TextureTransform &getTextureTransform();
       /*! @} */
     };
 
@@ -113,23 +113,22 @@ namespace dynamicsJRLJapan
     public:
       Shape();
       ~Shape();
-      void setAppearance(Appearance &anAppearance);
-      Appearance & getAppearance();
+       void setAppearance(Appearance &anAppearance);
+       Appearance & getAppearance();
 
-      void setIndexedFaceSet(IndexedFaceSet &anIndexedFaceSet);
-      IndexedFaceSet & getIndexedFaceSet();
+       void setIndexedFaceSet(IndexedFaceSet &anIndexedFaceSet);
+       IndexedFaceSet & getIndexedFaceSet();
 
-    };
+     };
 
-  };
+   };
 
-  class DYN_JRL_JAPAN_EXPORT BodyGeometricalData
-  {
-  private:
-    matrix3d m_RotationForDisplay;
-    std::vector < std::string > m_URLs;
-    std::vector < Geometry::Shape> m_Shapes;
-
+   class DYN_JRL_JAPAN_EXPORT BodyGeometricalData
+   {
+   private:
+     matrix3d m_RotationForDisplay;
+     std::vector < std::string > m_URLs;
+     std::vector < Geometry::Shape> m_Shapes;
   public:
     BodyGeometricalData();
 
@@ -138,10 +137,10 @@ namespace dynamicsJRLJapan
 
     const std::vector< std::string > & getURLs();
     void resetURL( );
-    void addURL(const std::string &URLtoVRML);
+    void addURL(const std::string & URLtoVRML);
     
     const std::vector<Geometry::Shape> & getShapes();
-    void addShape(const Geometry::Shape &aShape);
+    void addShape(Geometry::Shape &aShape);
   };
 
 };

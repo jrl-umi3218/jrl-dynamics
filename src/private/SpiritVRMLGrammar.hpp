@@ -519,28 +519,28 @@ namespace dynamicsJRLJapan
 	
 	  // Material block
 	  DiffuseColor_r = str_p("diffuseColor") 
-	    >> real_p 
-	    >> real_p 
-	    >> real_p ;
+	    >> real_p[self.actions.fMaterialDiffuseColorR]
+	    >> real_p[self.actions.fMaterialDiffuseColorG] 
+	    >> real_p[self.actions.fMaterialDiffuseColorB];
 
 	  SpecularColor_r = str_p("specularColor") 
-	    >> real_p 
-	    >> real_p 
-	    >> real_p;
+	    >> real_p[self.actions.fMaterialSpecularColorR]  
+	    >> real_p[self.actions.fMaterialSpecularColorG]   
+	    >> real_p[self.actions.fMaterialSpecularColorB];
 
 	  EmissiveColor_r = str_p("emissiveColor") 
-	    >> real_p 
-	    >> real_p 
-	    >> real_p;
+	    >> real_p[self.actions.fMaterialEmissiveColorR] 
+	    >> real_p[self.actions.fMaterialEmissiveColorG] 
+	    >> real_p[self.actions.fMaterialEmissiveColorB];
 
 	  Shininess_r = str_p("shininess") 
-	    >> real_p;
+            >> real_p[self.actions.fMaterialShininess];
 
 	  Transparency_r = str_p("transparency") 
-	    >> real_p;
+	    >> real_p[self.actions.fMaterialTransparency];
 
 	  AmbientIntensity_r = str_p("ambientIntensity") 
-	    >> real_p;
+	    >> real_p[self.actions.fMaterialAmbientIntensity];
 	
 	  MaterialBlock_r = *( DiffuseColor_r  | 
 			       SpecularColor_r |
@@ -558,7 +558,7 @@ namespace dynamicsJRLJapan
 	  
 	  AppearanceUse_r = str_p("USE")  
 	    >>  lexeme_d[+(alnum_p|'_')];
-	  
+	 
 	  AppearanceDef_r = str_p("DEF")  
 	    >> ( (lexeme_d[+(alnum_p|'_')] 
 		  >> str_p("Appearance")) | 
@@ -567,7 +567,7 @@ namespace dynamicsJRLJapan
 	    >> AppearanceBlock_r
 	    >> ch_p('}') ;
 
-	  AppearanceHeader_r = str_p("appearance") >>
+	  AppearanceHeader_r = str_p("appearance")[self.actions.fDisplay] >>
 	    (AppearanceDef_r | 
 	     AppearanceUse_r);
 	  
@@ -610,19 +610,21 @@ namespace dynamicsJRLJapan
 	    IFSconvexfield_r |
 	    IFSsolidfield_r  |
 	    IFScreaseAngle_r |
-	    IFScoord_r 
+	    IFScoord_r       |
+	    IFScoordIndex_r 
 	    >> ch_p ('{');
 
 	  // Header
 	  GeometryHeader_r = str_p("geometry")
-	    >>  GeometryBox_r |  
-	    GeometryCylinder_r;
+	    >>  GeometryBox_r  |  
+	    GeometryCylinder_r |
+	    IndexedFaceSet_r;
 	
 	  // Shape block
 	  ShapeBlock_r = AppearanceHeader_r | 
 	    GeometryHeader_r;
 	  
-	  Shape_r = (str_p("Shape"))
+	  Shape_r = (str_p("Shape")[self.actions.fDisplay])
 	    >> ch_p('{') 
 	    >> *ShapeBlock_r 
 	    >> ch_p('}');

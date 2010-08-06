@@ -90,6 +90,9 @@ namespace dynamicsJRLJapan
       DataForParsing_t()
       {
 	CurrentLink.aJoint = 0;
+	mass = 0.0;
+	index_mi = -1;
+	Depth = 0.0;
       }
       
       // String for the url.
@@ -110,8 +113,8 @@ namespace dynamicsJRLJapan
       MultiBody m_MultiBody;
       
       vector<BodyGeometricalData> m_ListOfURLs;
-      
-      queue<file_position> m_QueueOfFiles;
+
+      Geometry::Shape m_Shape;
 
     };
 
@@ -151,9 +154,19 @@ namespace dynamicsJRLJapan
 	fIncreaseDepth(*this),
 	fDecreaseDepth(*this),
 	fAddURL(*this),
-	fInURL(*this),
-	fOutURL(*this),
-	m_Verbose(0)
+	fMaterialAmbientIntensity(*this,0),
+	fMaterialDiffuseColorR(*this,1),
+	fMaterialDiffuseColorG(*this,2),
+	fMaterialDiffuseColorB(*this,3),
+	fMaterialEmissiveColorR(*this,4),
+	fMaterialEmissiveColorG(*this,5),
+	fMaterialEmissiveColorB(*this,6),
+	fMaterialShininess(*this,7),
+	fMaterialSpecularColorR(*this,8),
+	fMaterialSpecularColorG(*this,9),
+	fMaterialSpecularColorB(*this,10),	
+	fMaterialTransparency(*this,11),
+	m_Verbose(2)
       { }
       
       // Generic action for display 
@@ -344,7 +357,7 @@ namespace dynamicsJRLJapan
 
 	explicit fProtoName_t(Actions &actions): 
 	  m_actions(actions)
-	  {};
+	{};
 	  
 	template <typename IteratorT>
 	void operator()(const IteratorT & begin, 
@@ -364,7 +377,7 @@ namespace dynamicsJRLJapan
 
 	explicit fProtoExposedField_t(Actions &actions): 
 	  m_actions(actions)
-	  {};
+	{};
 	  
 	template <typename IteratorT>
 	void operator()(const IteratorT & begin, 
@@ -384,7 +397,7 @@ namespace dynamicsJRLJapan
 
 	explicit fDEFName_t(Actions &actions): 
 	  m_actions(actions)
-	  {};
+	{};
 	  
 	template <typename IteratorT>
 	void operator()(const IteratorT & begin, 
@@ -495,8 +508,8 @@ namespace dynamicsJRLJapan
       struct fJointLimits_t {
 
 	explicit fJointLimits_t(Actions &actions,
-			      unsigned int PV,
-			      unsigned int LU): 
+				unsigned int PV,
+				unsigned int LU): 
 	  m_actions(actions),
 	  m_PV(PV),
 	  m_LU(LU){};
@@ -512,7 +525,7 @@ namespace dynamicsJRLJapan
 	    }
 	  else if (m_PV==1)
 	    {
-	       if (m_LU==0)
+	      if (m_LU==0)
 		m_actions.m_DataForParsing.CurrentLink.aJoint->lowerVelocityBound(0,aLimit);
 	      else if (m_LU==1)
 		m_actions.m_DataForParsing.CurrentLink.aJoint->upperVelocityBound(0,aLimit);
@@ -561,6 +574,7 @@ namespace dynamicsJRLJapan
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
 	  
 	  int lDepth = aDataForParsing.Depth;
+	  std::cout << "depth: "<< lDepth << endl;
 	  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
 	  lCurrentBody->setLabel(aDataForParsing.NbOfBodies++);
 	  lCurrentBody->setName((char *)(aDataForParsing.aName).c_str());
@@ -580,6 +594,7 @@ namespace dynamicsJRLJapan
 	  aDataForParsing.m_ListOfURLs.push_back(aDataForParsing.m_BodyGeometry);
 	  aDataForParsing.m_BodyGeometry.resetURL();
 	  lCurrentBody->setInitialized(true);
+
 	  if (m_actions.m_Verbose>1)
 	    {
 	      std::cout << "Adding Body." << std::endl;
@@ -605,11 +620,11 @@ namespace dynamicsJRLJapan
 	      if (m_actions.m_Verbose>1)
 		{
 		  for(int i=0;i<9;i++)
-		  {
-		    cout << aDataForParsing.mi[i] << " ";
-		    if (i%3==2)
-		      cout<< endl;
-		  }
+		    {
+		      cout << aDataForParsing.mi[i] << " ";
+		      if (i%3==2)
+			cout<< endl;
+		    }
 		}
 	      aDataForParsing.index_mi=0;
 	    }
@@ -629,7 +644,7 @@ namespace dynamicsJRLJapan
 	void LocalAction() const
 	{
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
-
+	  cout << "Here in localAction :" << endl;
 	  int lDepth = aDataForParsing.Depth;
 	  // After the initial body.
 	  if (lDepth>0)
@@ -649,8 +664,8 @@ namespace dynamicsJRLJapan
 		  lCurrentBody->setName(Buffer);
 		  aDataForParsing.m_MultiBody.addBody(*lCurrentBody);
 		  aDataForParsing.m_MultiBody.addLink(*aDataForParsing.CurrentBody[lDepth-1],
-						       *lCurrentBody,
-						       aDataForParsing.CurrentLink);
+						      *lCurrentBody,
+						      aDataForParsing.CurrentLink);
 		  
 		  lCurrentBody->setLabelMother(aDataForParsing.CurrentBody[lDepth-1]->getLabel());
 		  lCurrentBody->setInitialized(true);
@@ -743,10 +758,11 @@ namespace dynamicsJRLJapan
 	  std::cout << "Line   : " << fp_cur.line  
 		    << " Column : " << fp_cur.column 
 		    << endl
-		    << "File to be included : " << s;
+		    << "File to be included : " << s
+		    << endl;
 	  
 	  //	  begin.set_position(fp_new);
-	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(s);
+	  //	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(s);
 	}
 	
       private:
@@ -754,64 +770,60 @@ namespace dynamicsJRLJapan
 	
       } fAddURL;
 
-      struct fInURL_t {
-	
-	explicit fInURL_t(Actions &actions):
-	  m_actions(actions){};
 
-	template <typename IteratorT>
-	void operator()(const IteratorT &begin,
-			const IteratorT &end) const	
+
+      struct fMaterial_t {
+	explicit fMaterial_t(Actions &actions,
+			     unsigned int anIndex):
+	  m_actions(actions),
+	  m_index(anIndex){};
+	
+	void operator()(double x) const
 	{
-	  file_position fp_cur, fp_new;
-	  
-	  // Store the current file position
-	  fp_cur = begin.get_position();
-	  m_actions.m_DataForParsing.m_QueueOfFiles.push(fp_cur);
-	  std::cout << "Current file: " << fp_cur.file << std::endl;
-	  std::cout << "Line   : " << fp_cur.line  
-		    << "Column : " << fp_cur.column
-		    << endl;
-	  
-	  // Create the new file position
-	  vector<std::string> aListOfFiles = m_actions.m_DataForParsing.m_BodyGeometry.getURLs();
-	  fp_new.file = aListOfFiles[0];
-	  fp_new.line = 1; fp_new.column=1;
-	  begin.set_position(fp_new);
-	return 0;
+	  cout << "fMaterial ("<<m_index << ")=" << x <<endl;
+ 
+	  Geometry::Material &aMaterial = m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial();
+	  if (m_index==0)
+	    aMaterial.ambientIntensity = x;
+	  else if (m_index==1)
+	    aMaterial.diffuseColor[0] = x;
+	  else if (m_index==2)
+	    aMaterial.diffuseColor[1] = x;
+	  else if (m_index==3)
+	    aMaterial.diffuseColor[2] = x;
+ 	  else if (m_index==4)
+	    aMaterial.emissiveColor[0] = x;
+ 	  else if (m_index==5)
+	    aMaterial.emissiveColor[1] = x;
+ 	  else if (m_index==6)
+	    aMaterial.emissiveColor[2] = x;
+ 	  else if (m_index==7)
+	    aMaterial.shininess = x;
+ 	  else if (m_index==8)
+	    aMaterial.specularColor[0] = x;
+ 	  else if (m_index==9)
+	    aMaterial.specularColor[1] = x;
+ 	  else if (m_index==10)
+	    aMaterial.specularColor[2] = x;
+	  else if (m_index==10)
+	    aMaterial.transparency = x;
 	}
-      
+	
       private:
-	const Actions & m_actions;
-	
-      } fInURL;
-
-
-    struct fOutURL_t {
-
-      explicit fOutURL_t(Actions &actions):
-	m_actions(actions){};
-
-      template <typename IteratorT>
-      void operator()(const IteratorT &begin,
-		      const IteratorT &end) const	
-      {
-	file_position fp_new;
-	
-	if (begin.at_end())
-	  {
-	    // Store the current file position
-	    fp_new = m_actions.m_DataForParsing.m_QueueOfFiles.back();
-	    
-	    begin.set_position(fp_new);
-	  }
-	return 0;
-      }
-      
-    private:
-      Actions & m_actions;
-      
-    } fOutURL;
+	Actions &m_actions;
+	unsigned int m_index;
+      } fMaterialAmbientIntensity, 
+	fMaterialDiffuseColorR,
+	fMaterialDiffuseColorG, 
+	fMaterialDiffuseColorB,       
+	fMaterialEmissiveColorR,
+	fMaterialEmissiveColorG, 
+	fMaterialEmissiveColorB,
+        fMaterialShininess,
+	fMaterialSpecularColorR,
+	fMaterialSpecularColorG, 
+	fMaterialSpecularColorB,
+	fMaterialTransparency;
       
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;
@@ -848,9 +860,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing.index_mi = 0;
       }
 
-
     };
-
     
   };
 };
