@@ -180,20 +180,27 @@ namespace dynamicsJRLJapan
 	    Sensors_r           | 
 	    TCBChildrenBlock_r ;
 	  
-	  TransformChildrenBlock_r = ch_p('[') 
-	    >> *(GroupBlock_r | TCBChildren_r) 
+	  TransformChildrenBlock_r = ch_p('[')[self.actions.fDisplay]
+	    >> *(GroupBlock_r       | 
+		 TransformBlock_r   | 
+		 ShapeInline_r      | 
+		 Sensors_r          | 
+		 Shape_r            |
+		 TCBChildren_r      ) 
 	    >> ch_p(']');
 	  
-	  TransformChildren_r= str_p("children")
+	  TransformChildren_r= str_p("children")[self.actions.fDisplay]
 	    >> ((str_p("IS")  >> str_p("children")) |
-		TransformChildrenBlock_r);
+		TransformChildrenBlock_r            );
 	  
 	  TransformLine_r = (TransformToField_r) |
-	    TransformChildren_r | TCBChildren_r  ;
+	    TransformChildren_r | 
+	    TCBChildren_r  ;
 	  
 	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >> 
 			       (str_p("Transform"))
-			       |(str_p("Transform"))))
+			       |(str_p("Transform")[self.actions.fDisplay]
+				 )))
 	    >> ch_p('{') 
 	    >> *(TransformLine_r | 
 		 TransformInstanceRotation_r | 
@@ -559,16 +566,19 @@ namespace dynamicsJRLJapan
 	  AppearanceUse_r = str_p("USE")  
 	    >>  lexeme_d[+(alnum_p|'_')];
 	 
-	  AppearanceDef_r = str_p("DEF")  
-	    >> ( (lexeme_d[+(alnum_p|'_')] 
+	  AppearanceBlockTitle_r = 
+	    ( (lexeme_d[+(alnum_p|'_')] 
 		  >> str_p("Appearance")) | 
 		 str_p("Appearance") )
 	    >>  ch_p('{') 
 	    >> AppearanceBlock_r
 	    >> ch_p('}') ;
 
+	  AppearanceDef_r = str_p("DEF") >> AppearanceBlockTitle_r;
+
 	  AppearanceHeader_r = str_p("appearance")[self.actions.fDisplay] >>
-	    (AppearanceDef_r | 
+	    (AppearanceDef_r        |
+	     AppearanceBlockTitle_r |
 	     AppearanceUse_r);
 	  
 	  // Geometry block
@@ -624,7 +634,7 @@ namespace dynamicsJRLJapan
 	  ShapeBlock_r = AppearanceHeader_r | 
 	    GeometryHeader_r;
 	  
-	  Shape_r = (str_p("Shape")[self.actions.fDisplay])
+	  Shape_r = str_p("Shape")[self.actions.fDisplay]
 	    >> ch_p('{') 
 	    >> *ShapeBlock_r 
 	    >> ch_p('}');
@@ -865,7 +875,8 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(AppearanceBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE( AppearanceHeader_r);
-	  BOOST_SPIRIT_DEBUG_RULE(  AppearanceUse_r);
+	  BOOST_SPIRIT_DEBUG_RULE( AppearanceUse_r);
+	  BOOST_SPIRIT_DEBUG_RULE( AppearanceBlockTitle_r);
 	  BOOST_SPIRIT_DEBUG_RULE( AppearanceDef_r);
 	  BOOST_SPIRIT_DEBUG_RULE( MaterialBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE( JointChildrenDEFBlocks_r);
@@ -944,7 +955,7 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> Transparency_r,AmbientIntensity_r;
 
 	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r, 
-	  AppearanceUse_r, AppearanceDef_r, MaterialBlock_r,
+	  AppearanceUse_r, AppearanceDef_r, AppearanceBlockTitle_r, MaterialBlock_r,
 	  DiffuseColor_r, SpecularColor_r, EmissiveColor_r, Shininess_r;
 
 	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r, 

@@ -171,12 +171,27 @@ namespace dynamicsJRLJapan
       
       // Generic action for display 
       struct fDisplay_t {
+
+	void operator()(const char &c) const
+	{
+	  std::cout << "Display " << c  << endl;
+	}
+
 	template <typename IteratorT>
 	void operator()(const IteratorT &begin, 
 			const IteratorT &end) const 
 	{
 	  std::string x(begin,end);
-	  //	  std::cout << "Display: " << x << std::endl;
+	  file_position fp_cur;
+	  
+	  // Store the current file position
+	  fp_cur = begin.get_position();
+	  std::cout << "Display - Current file: " << fp_cur.file << std::endl;
+	  std::cout << "Line   : " << fp_cur.line  
+		    << " Column : " << fp_cur.column 
+		    << endl
+		    << "Parsed : " << x
+		    << endl;
 	} 
       } fDisplay;
 
@@ -762,7 +777,8 @@ namespace dynamicsJRLJapan
 		    << endl;
 	  
 	  //	  begin.set_position(fp_new);
-	  //	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(s);
+	  string sp2 = s;
+	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(sp2);
 	}
 	
       private:
