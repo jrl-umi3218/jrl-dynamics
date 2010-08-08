@@ -128,9 +128,11 @@ namespace dynamicsJRLJapan
    private:
      matrix3d m_RotationForDisplay;
      std::vector < std::string > m_URLs;
-     std::vector < Geometry::Shape> m_Shapes;
+     std::vector < Geometry::Shape > m_Shapes;
+
   public:
     BodyGeometricalData();
+    ~BodyGeometricalData();
 
     const matrix3d & getRotationForDisplay();
     void setRotationForDisplay(const matrix3d &RotationForDisplay);
@@ -139,7 +141,7 @@ namespace dynamicsJRLJapan
     void resetURL( );
     void addURL(const std::string & URLtoVRML);
     
-    const std::vector<Geometry::Shape> & getShapes();
+    const std::vector<Geometry::Shape *> & getShapes();
     void addShape(Geometry::Shape &aShape);
   };
 

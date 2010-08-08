@@ -390,14 +390,14 @@ namespace dynamicsJRLJapan {
 
         // Geometric file.
     os << shifttab << "  children [" << endl;
-	const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
-	for(unsigned i=0; i < urls.size(); ++i)
-	{
-       os << shifttab << "    Inline {"<< endl
-       << shifttab << "      url \"" 
-       << urls[i] << "\"" << endl
-       << shifttab << "    }" << endl;
-	}
+    const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
+    for(unsigned i=0; i < urls.size(); ++i)
+      {
+	os << shifttab << "    Inline {"<< endl
+	   << shifttab << "      url \"" 
+	   << urls[i] << "\"" << endl
+	   << shifttab << "    }" << endl;
+      }
       //    CopyGeometricInformation(os,m_AccessToData[gindex]);
     os << shifttab << "  ]"<< endl;;
     os << shifttab << "}" << endl;  

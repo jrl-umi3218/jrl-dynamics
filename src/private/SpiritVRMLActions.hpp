@@ -93,10 +93,21 @@ namespace dynamicsJRLJapan
 	mass = 0.0;
 	index_mi = -1;
 	Depth = 0.0;
+	m_BodyGeometry =0;
       }
       
+      // Destructor.
+      ~DataForParsing_t()
+      {
+	for (unsigned int i=0;
+	     i<m_ListOfURLs.size();
+	     i++)
+	  delete m_ListOfURLs[i];
+      }
+      
+      
       // String for the url.
-      BodyGeometricalData m_BodyGeometry;
+      BodyGeometricalData * m_BodyGeometry;
       
       // Generic vector3d.
       vector3d m_Genericvec3d;
@@ -112,7 +123,7 @@ namespace dynamicsJRLJapan
 
       MultiBody m_MultiBody;
       
-      vector<BodyGeometricalData> m_ListOfURLs;
+      vector<BodyGeometricalData * > m_ListOfURLs;
 
       Geometry::Shape m_Shape;
 
@@ -314,8 +325,15 @@ namespace dynamicsJRLJapan
 	      // Then set the static rotation at the level joint 
 	      // and 
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setStaticRotation(R);
-	      m_actions.m_DataForParsing.m_BodyGeometry.setRotationForDisplay(displayR);
-	      m_actions.m_DataForParsing.m_BodyGeometry.resetURL();
+	      if (m_actions.m_DataForParsing.m_BodyGeometry!=0)
+		{
+		  m_actions.m_DataForParsing.m_BodyGeometry->setRotationForDisplay(displayR);
+		  m_actions.m_DataForParsing.m_BodyGeometry->resetURL();
+		}
+	      else
+		{
+		  throw("Problem regarding m_BodyGeometry allocation");
+		}
 	      if (lQuantity!=0.0)
 		{
 		  if (m_actions.m_Verbose>1){
@@ -607,7 +625,7 @@ namespace dynamicsJRLJapan
 					      aDataForParsing.CurrentLink);
 	  //	aDataForParsing.JointMemoryAllocationForNewDepth=false;
 	  aDataForParsing.m_ListOfURLs.push_back(aDataForParsing.m_BodyGeometry);
-	  aDataForParsing.m_BodyGeometry.resetURL();
+	  aDataForParsing.m_BodyGeometry = new BodyGeometricalData ();
 	  lCurrentBody->setInitialized(true);
 
 	  if (m_actions.m_Verbose>1)
@@ -776,9 +794,8 @@ namespace dynamicsJRLJapan
 		    << "File to be included : " << s
 		    << endl;
 	  
-	  //	  begin.set_position(fp_new);
 	  string sp2 = s;
-	  m_actions.m_DataForParsing.m_BodyGeometry.addURL(sp2);
+	  m_actions.m_DataForParsing.m_BodyGeometry->addURL(sp2);
 	}
 	
       private:
@@ -874,6 +891,8 @@ namespace dynamicsJRLJapan
 	m_DataForParsing.CurrentLink.indexCorps1 = 0;
 	m_DataForParsing.CurrentLink.indexCorps2 = 0;
 	m_DataForParsing.index_mi = 0;
+
+	m_DataForParsing.m_BodyGeometry = new BodyGeometricalData ();
       }
 
     };

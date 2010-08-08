@@ -120,6 +120,11 @@ namespace dynamicsJRLJapan
     m_Shapes(0)
   {}
 
+
+  BodyGeometricalData::~BodyGeometricalData()
+  {
+  }
+
   void BodyGeometricalData::setRotationForDisplay(const matrix3d & RotationForDisplay)
   {
     m_RotationForDisplay = RotationForDisplay;
@@ -137,6 +142,7 @@ namespace dynamicsJRLJapan
 
   void BodyGeometricalData::addURL(const std::string & URLtoVRML)
   {
+    //    std::string * mys= new std::string(URLtoVRML);
     m_URLs.push_back(URLtoVRML);
   }
 

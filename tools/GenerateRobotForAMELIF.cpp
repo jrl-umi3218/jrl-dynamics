@@ -16,73 +16,73 @@
 using namespace std;
 
 namespace {
-	double FilterPrecision(double x)
-	{
-		x *= 1e6;
-		x =floor(x+0.5);
-		x *= 1e-6;
-		return x;
-	}
+  double FilterPrecision(double x)
+  {
+    x *= 1e6;
+    x =floor(x+0.5);
+    x *= 1e-6;
+    return x;
+  }
 
-	void ComputeEulerAngles(const matrix3d &aRotationMatrix, vector3d &EulerAngles)
-	{
-		double r11 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,0);
-		double r12 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,1);
-		double r13 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,2);
+  void ComputeEulerAngles(const matrix3d &aRotationMatrix, vector3d &EulerAngles)
+  {
+    double r11 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,0);
+    double r12 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,1);
+    double r13 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,0,2);
 
-		double r21 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,1,0);
+    double r21 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,1,0);
 
-		double r31 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,0);
-		double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
-		double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
+    double r31 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,0);
+    double r32 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,1);
+    double r33 = MAL_S3x3_MATRIX_ACCESS_I_J(aRotationMatrix,2,2);
 
 
-		if (fabs(fabs(r31)-1.0)>1e-8)
-		{
+    if (fabs(fabs(r31)-1.0)>1e-8)
+      {
 
-			double Y1 = -asin(r31);
-			double Y2 = M_PI - Y1;
-			Y2 = fmod(Y2,M_PI);
-			double c0_1 = cos(Y1);
-			double c0_2 = cos(Y2);
+	double Y1 = -asin(r31);
+	double Y2 = M_PI - Y1;
+	Y2 = fmod(Y2,M_PI);
+	double c0_1 = cos(Y1);
+	double c0_2 = cos(Y2);
 
-			double X1 = atan2(r32/c0_1,r33/c0_1);
-			double X2 = atan2(r32/c0_2,r33/c0_2);
+	double X1 = atan2(r32/c0_1,r33/c0_1);
+	double X2 = atan2(r32/c0_2,r33/c0_2);
 
-			double c0;
-			if (fabs(X1)<fabs(X2))
-			{
-				EulerAngles(1) = Y1;
-				EulerAngles(0) = X1;
-				c0 = c0_1;
-			}
-			else 
-			{
-				EulerAngles(1) = Y2;
-				EulerAngles(0) = X2;
-				c0 = c0_2;
-			}
+	double c0;
+	if (fabs(X1)<fabs(X2))
+	  {
+	    EulerAngles(1) = Y1;
+	    EulerAngles(0) = X1;
+	    c0 = c0_1;
+	  }
+	else 
+	  {
+	    EulerAngles(1) = Y2;
+	    EulerAngles(0) = X2;
+	    c0 = c0_2;
+	  }
 
-			EulerAngles(2) = atan2(r21/c0,r11/c0);
+	EulerAngles(2) = atan2(r21/c0,r11/c0);
 
-		}
-		else
-		{
-			EulerAngles(2) = 0;
-			double d = atan2(r12,r13);
-			d = fmod(d,M_PI);
-			if (fabs(r31+1.0)<1e-8)
-			{
-				EulerAngles(1) = M_PI/2;
-				EulerAngles(0) = d;
-			}
-			else
-			{
-				EulerAngles(1) = -M_PI/2;
-				EulerAngles(0) = -d;
-			}
-		}
-	}
+      }
+    else
+      {
+	EulerAngles(2) = 0;
+	double d = atan2(r12,r13);
+	d = fmod(d,M_PI);
+	if (fabs(r31+1.0)<1e-8)
+	  {
+	    EulerAngles(1) = M_PI/2;
+	    EulerAngles(0) = d;
+	  }
+	else
+	  {
+	    EulerAngles(1) = -M_PI/2;
+	    EulerAngles(0) = -d;
+	  }
+      }
+  }
 }
 
 namespace dynamicsJRLJapan {
@@ -144,22 +144,22 @@ namespace dynamicsJRLJapan {
        << FilterPrecision(EulerAngles(1) * 180.0/M_PI) << " " 
        << FilterPrecision(EulerAngles(2) * 180.0/M_PI)
        << "</StaticParameters>"
-	   << std::endl;
+       << std::endl;
   }
   
   void GenerateRobotForAMELIF::GenerateJoint(CjrlJoint *aJoint, 
 					     ostream &os,
 					     string shifttab, unsigned int &gindex)
   {
-	os.precision(15);
-	if (aJoint->rankInConfiguration() == 0)
-	{
-		gindex++;
-		// Call the sons.
-		for(unsigned int i=0;i<aJoint->countChildJoints();i++)
-			GenerateJoint(aJoint->childJoint(i),os,shifttab,gindex);
-		return;
-	}
+    os.precision(15);
+    if (aJoint->rankInConfiguration() == 0)
+      {
+	gindex++;
+	// Call the sons.
+	for(unsigned int i=0;i<aJoint->countChildJoints();i++)
+	  GenerateJoint(aJoint->childJoint(i),os,shifttab,gindex);
+	return;
+      }
 
     // Joint name and type.
     os << shifttab << "<Joint id=\""      
@@ -212,7 +212,7 @@ namespace dynamicsJRLJapan {
 					    string shifttab,
 					    unsigned int &gindex)
   {
-	os.precision(15);
+    os.precision(15);
     CjrlBody *aBody= aJoint->linkedBody();
     if (aBody==0)
       return;
@@ -226,8 +226,8 @@ namespace dynamicsJRLJapan {
        << aJoint->rankInConfiguration()
        << "</Label>" << endl;
 
-	// Mass
-	const double mass = aBody->mass();
+    // Mass
+    const double mass = aBody->mass();
     os << shifttab << "  <Mass>"<< mass <<"</Mass>" << endl;
 
     // CoM
@@ -247,9 +247,9 @@ namespace dynamicsJRLJapan {
     os << "</Inertia>" << endl;
 
     // Geometric file.
-	const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
-	for(unsigned i=0; i < urls.size(); ++i)
-		os << shifttab << "  <File>" << urls[i] << "</File>" << endl;
+    const std::vector< std::string > & urls = m_AccessToData[gindex].getURLs();
+    for(unsigned i=0; i < urls.size(); ++i)
+      os << shifttab << "  <File>" << urls[i] << "</File>" << endl;
 
     gindex++;
     // Close body description.

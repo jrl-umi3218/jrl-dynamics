@@ -82,8 +82,8 @@ namespace dynamicsJRLJapan
       aif.close();
 
       // Iterate over the included files if there is some. 
-      vector<BodyGeometricalData> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
-      vector<BodyGeometricalData>::iterator it_BGD; 
+      vector<BodyGeometricalData*> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
+      vector<BodyGeometricalData*>::iterator it_BGD; 
 
       it_BGD = aLOU.begin();
 
@@ -91,13 +91,16 @@ namespace dynamicsJRLJapan
       unsigned int npos = aFileName.find_last_of('/');
       Path = aFileName.substr(0,npos+1);
 
-      cout << "Path: " << Path << endl;
+      cout << "Path: " << Path 
+	   << " Size of m_ListOfURLs: " 
+	   << aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs.size()
+	   <<endl;
       unsigned int i=0;
       while (it_BGD!= aLOU.end())
 	{
 	  i++;
-	  const vector<string> URLs = (*it_BGD).getURLs();
-	  
+	  const vector<string > URLs = (*it_BGD)->getURLs();
+	  cout << " i: " << i << " URLs.size():" << URLs.size() << endl;
 	  for(unsigned int j=0;j<URLs.size();j++)
 	    {
 	      string GeomFileName = Path + URLs[j];
