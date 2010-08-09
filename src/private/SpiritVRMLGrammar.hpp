@@ -76,7 +76,6 @@ namespace dynamicsJRLJapan
       std::ptrdiff_t
       operator()(ScannerT const& scan, result_t& result) const
       {
-	using namespace boost::spirit::classic;
 	using namespace phoenix;
 	typedef typename match_result<ScannerT, result_t>::type match_t;
 	
