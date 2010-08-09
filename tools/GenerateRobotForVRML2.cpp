@@ -1,4 +1,4 @@
-/* @doc \file Object to generate a file following VRML 1.0 format.
+/* @doc \file Object to generate a file following VRML 2.0 format.
 
    Copyright (c) 2010
    @author Olivier Stasse

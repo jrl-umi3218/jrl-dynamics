@@ -41,7 +41,8 @@ namespace dynamicsJRLJapan
     
     int ParseVRMLFile(MultiBody *aMB, 
 		      std::string aFileName,
-		      vector<BodyGeometricalData> &aListOfURLs)
+		      vector<BodyGeometricalData> &aListOfURLs,
+		      bool ReadGeometry)
     {
       if (aFileName == std::string("")) {
 	std::cerr << "SpiritVRMLReader: Filename is empty." << std::endl;
@@ -60,9 +61,9 @@ namespace dynamicsJRLJapan
 	}
       else {
 	/*	if (aSpiritOpenHRP.getVerbose()>10)
-	  {
-	    cout << "Succeeded in opening " << aFileName <<endl;
-	    } */
+		{
+		cout << "Succeeded in opening " << aFileName <<endl;
+		} */
       }
     
       aif.open(aFileName.c_str(),ifstream::in|ifstream::binary);
@@ -81,55 +82,57 @@ namespace dynamicsJRLJapan
       parse(first,last,aSpiritOpenHRP,aSkipGrammar);
       aif.close();
 
-      // Iterate over the included files if there is some. 
-      vector<BodyGeometricalData*> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
-      vector<BodyGeometricalData*>::iterator it_BGD; 
-
-      it_BGD = aLOU.begin();
-
-      string Path;
-      unsigned int npos = aFileName.find_last_of('/');
-      Path = aFileName.substr(0,npos+1);
-
-      cout << "Path: " << Path 
-	   << " Size of m_ListOfURLs: " 
-	   << aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs.size()
-	   <<endl;
-      unsigned int i=0;
-      while (it_BGD!= aLOU.end())
+      if (ReadGeometry)
 	{
-	  i++;
-	  const vector<string > URLs = (*it_BGD)->getURLs();
-	  cout << " i: " << i << " URLs.size():" << URLs.size() << endl;
-	  for(unsigned int j=0;j<URLs.size();j++)
+	  // Iterate over the included files if there is some. 
+	  vector<BodyGeometricalData*> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
+	  vector<BodyGeometricalData*>::iterator it_BGD; 
+	  
+	  it_BGD = aLOU.begin();
+	  
+	  string Path;
+	  unsigned int npos = aFileName.find_last_of('/');
+	  Path = aFileName.substr(0,npos+1);
+	  
+	  ODEBUG( "Path: " << Path 
+		  << " Size of m_ListOfURLs: " 
+		  << aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs.size());
+
+	  unsigned int i=0;
+	  while (it_BGD!= aLOU.end())
 	    {
-	      string GeomFileName = Path + URLs[j];
-	      aif.open(GeomFileName.c_str(),ifstream::in|ifstream::binary);
+	      i++;
+	      const vector<string > URLs = (*it_BGD)->getURLs();
+	      ODEBUG(" i: " << i << " URLs.size():" << URLs.size());
+	      for(unsigned int j=0;j<URLs.size();j++)
+		{
+		  string GeomFileName = Path + URLs[j];
+		  aif.open(GeomFileName.c_str(),ifstream::in|ifstream::binary);
 
-	      if (!aif.is_open())
-		{
-		  cerr<<" Unable to open :" << GeomFileName << endl;
-		}
-	      else
-		{
-		  cerr<< "Open :" << GeomFileName << endl;
-		  multi_pass_iterator_t
-		    lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
-		    lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
+		  if (!aif.is_open())
+		    {
+		      ODEBUG(" Unable to open :" << GeomFileName );
+		    }
+		  else
+		    {
+		      ODEBUG( "Open :" << GeomFileName );
+		      multi_pass_iterator_t
+			lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
+			lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
 		  
-		  iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
+		      iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
 		  
-		  parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar);
+		      parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar);
+		    }
+		  aif.close();
 		}
-	      aif.close();
+	      it_BGD++;
 	    }
-	  it_BGD++;
-	}
-      
-      *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
-      
-      return 1;
+	};      
 
+      *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
+
+      return 1;
     };
   };
 };

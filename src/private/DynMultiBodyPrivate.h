@@ -376,7 +376,8 @@ namespace dynamicsJRLJapan
     */
     virtual void parserVRML(string path, 
 			    char *option, 
-			    std::vector<BodyGeometricalData> &aListOfURLs);
+			    std::vector<BodyGeometricalData> &aListOfURLs,
+			    bool ReadGeometry);
 
     /**
        \brief Initialization of the kinematic chain

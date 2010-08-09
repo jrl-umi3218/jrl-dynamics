@@ -67,6 +67,28 @@ namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
+    struct boolean_parser
+    {
+      
+      typedef bool result_t;
+      
+      template <typename ScannerT>
+      std::ptrdiff_t
+      operator()(ScannerT const& scan, result_t& result) const
+      {
+	using namespace boost::spirit::classic;
+	using namespace phoenix;
+	typedef typename match_result<ScannerT, result_t>::type match_t;
+	
+	match_t match
+	  = ( str_p("TRUE")[var(result)=true] |
+	      str_p("FALSE")[var(result)=false]
+	     ).parse(scan);
+	  return match.length();
+        }
+    };
+    
+    functor_parser<boolean_parser> boolean_parser_p;
 
     struct SkipGrammar : public grammar<SkipGrammar>
     {
@@ -100,21 +122,23 @@ namespace dynamicsJRLJapan
 	  SFBool_r = str_p("TRUE") | str_p("FALSE");
 	  
 	  SFVec3f_r = 
-	    real_p[self.actions.fSFVec3fX] >> 
+	    real_p[self.actions.fSFVec3fX] >>
 	    real_p[self.actions.fSFVec3fY] >> 
 	    real_p[self.actions.fSFVec3fZ];
 
 	  MFVec3f_r = *((SFVec3f_r)[self.actions.fPushGenericvec3d]
 			| ch_p(','));
 
-	  MFInt32_r = *(int_p | ch_p(','));
+	  MFInt32_r = *( int_p| ch_p(','));
+
+	  MFUInt32_r = *( uint_p[self.actions.fPushGenericvecint32] | ch_p(','));
 
 	  MFString_r = ch_p('[') 
 	    >> *( ch_p('"') >> (*alpha_p) >> ch_p('"') )
 	    >> ch_p(']');
 
 	  // Coordinate rules
-	  Coordinate_r = str_p("Coordinate")
+	  Coordinate_r = str_p("Coordinate")[self.actions.fDisplay]
 	    >> ch_p('{') 
 	    >> str_p("point")
 	    >> str_p('[')
@@ -549,12 +573,12 @@ namespace dynamicsJRLJapan
 	  AmbientIntensity_r = str_p("ambientIntensity") 
 	    >> real_p[self.actions.fMaterialAmbientIntensity];
 	
-	  MaterialBlock_r = *( DiffuseColor_r  | 
-			       SpecularColor_r |
-			       EmissiveColor_r |
-			       Shininess_r     |
-			       Transparency_r  |
-			       AmbientIntensity_r );
+	  MaterialBlock_r = DiffuseColor_r  | 
+			    SpecularColor_r |
+			    EmissiveColor_r |
+			    Shininess_r     |
+			    Transparency_r  |
+			    AmbientIntensity_r ;
 
 	  // Appearance block
 	  AppearanceBlock_r = (str_p("material"))
@@ -571,7 +595,7 @@ namespace dynamicsJRLJapan
 		  >> str_p("Appearance")) | 
 		 str_p("Appearance") )
 	    >>  ch_p('{') 
-	    >> AppearanceBlock_r
+	    >> AppearanceBlock_r[self.actions.fDisplay]
 	    >> ch_p('}') ;
 
 	  AppearanceDef_r = str_p("DEF") >> AppearanceBlockTitle_r;
@@ -599,36 +623,44 @@ namespace dynamicsJRLJapan
 	  
 	  // IndexedFaceSet
 
-	  IFSccwfield_r = str_p("ccw") >> SFBool_r;
-	  IFSconvexfield_r = str_p("convex") >> SFBool_r;
-	  IFSsolidfield_r = str_p("solid") >> SFBool_r;
-	  IFScreaseAngle_r = str_p("creaseAngle") >> real_p;
-	  IFScoord_r = str_p("coord") >> Coordinate_r;
+	  IFSccwfield_r = str_p("ccw") 
+	    >> boolean_parser_p[self.actions.fIndexedFaceSetccw];
+	  IFSconvexfield_r = str_p("convex") 
+	    >> boolean_parser_p[self.actions.fIndexedFaceSetconvex];
+	  IFSsolidfield_r = str_p("solid") 
+	    >> boolean_parser_p[self.actions.fIndexedFaceSetsolid];
+	  IFScreaseAngle_r = str_p("creaseAngle") 
+	    >> real_p;
+	  IFScoord_r = str_p("coord")[self.actions.fDisplay] 
+	    >> Coordinate_r[self.actions.fCoordinates];
 
 	  IFScoordIndex_r = str_p("coordIndex")
 	    >> ch_p('[')
-	    >> *( MFInt32_r 
+	    >> *( MFUInt32_r 
 		  >> ((str_p("-1") >> ch_p(','))
 		      | str_p("-1")
 		      )
 		  ) 
 	    >> ch_p(']');
 	
-	  IndexedFaceSet_r = str_p("IndexedFaceSet")
-	    >> ch_p ('{')
-	    >> IFSccwfield_r |
+	  IndexedFaceBlock_r = 
+	    IFSccwfield_r |
 	    IFSconvexfield_r |
 	    IFSsolidfield_r  |
 	    IFScreaseAngle_r |
 	    IFScoord_r       |
-	    IFScoordIndex_r 
-	    >> ch_p ('{');
+	    IFScoordIndex_r[self.actions.fCoordIndex] ;
+
+	  IndexedFaceSet_r = str_p("IndexedFaceSet")[self.actions.fDisplay]
+	    >> ch_p ('{')
+	    >> *IndexedFaceBlock_r
+	    >> ch_p ('}');
 
 	  // Header
-	  GeometryHeader_r = str_p("geometry")
-	    >>  GeometryBox_r  |  
-	    GeometryCylinder_r |
-	    IndexedFaceSet_r;
+	  GeometryHeader_r = str_p("geometry")[self.actions.fDisplay]
+	    >>  IndexedFaceSet_r |
+	    GeometryBox_r  |  
+	    GeometryCylinder_r ;
 	
 	  // Shape block
 	  ShapeBlock_r = AppearanceHeader_r | 
@@ -898,7 +930,13 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( ViewpointPos_r);
 	  BOOST_SPIRIT_DEBUG_RULE( Viewpoint_r);
 	  BOOST_SPIRIT_DEBUG_RULE( EntryPoint);
-	  
+
+	  BOOST_SPIRIT_DEBUG_RULE(IndexedFaceSet_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFSccwfield_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFSconvexfield_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFSsolidfield_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFScreaseAngle_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFScoord_r);
 	}
 	
 	// Tree of the robot.
@@ -921,7 +959,7 @@ namespace dynamicsJRLJapan
           Jointequivalentinertia_r, 
           JointField_r, DEFBlock_r, JointBlock_r;
 
-	rule<ScannerT> SFBool_r,MFVec3f_r,MFInt32_r;
+	rule<ScannerT> SFBool_r,MFVec3f_r,MFInt32_r, MFUInt32_r;
 
 	rule<ScannerT> Coordinate_r;
 
@@ -946,9 +984,9 @@ namespace dynamicsJRLJapan
 	  BodyChildrenField_r, BodyChildren_r, BodyBlock_r;
 
 	// IndexedFaceSet
-	rule<ScannerT> IndexedFaceSet_r, IFSccwfield_r,
-	  IFSconvexfield_r, IFSsolidfield_r, IFScreaseAngle_r,
-	  IFScoord_r, IFScoordIndex_r;
+	rule<ScannerT> IndexedFaceSet_r, IndexedFaceBlock_r,
+	  IFSccwfield_r, IFSconvexfield_r, IFSsolidfield_r, 
+	  IFScreaseAngle_r, IFScoord_r, IFScoordIndex_r;
 
 	rule<ScannerT> GeometryHeader_r, GeometryBox_r, GeometryCylinder_r;
 

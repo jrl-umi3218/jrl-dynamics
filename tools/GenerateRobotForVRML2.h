@@ -9,8 +9,8 @@
    Please refers to file License.txt for details on the license.
 
 */
-#ifndef _DYNAMIC_JRL_JAPAN_ROBOT_FOR_VRML1_H_
-#define _DYNAMIC_JRL_JAPAN_ROBOT_FOR_VRML1_H_
+#ifndef _DYNAMIC_JRL_JAPAN_ROBOT_FOR_VRML2_H_
+#define _DYNAMIC_JRL_JAPAN_ROBOT_FOR_VRML2_H_
 
 #include <string>
 #include <ostream>
@@ -78,4 +78,4 @@ namespace dynamicsJRLJapan
     };
   };
 };
-#endif /* _DYNAMIC_JRL_JAPAN_FOR_VRML1_H_ */
+#endif /* _DYNAMIC_JRL_JAPAN_FOR_VRML2_H_ */

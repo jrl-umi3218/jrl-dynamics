@@ -21,7 +21,10 @@ namespace dynamicsJRLJapan
 {
   namespace VRMLReader 
   {
-    int ParseVRMLFile(MultiBody *aMB, std::string FileName, std::vector<BodyGeometricalData> & VectorOfURLs);
+    int ParseVRMLFile(MultiBody *aMB, 
+		      std::string FileName, 
+		      std::vector<BodyGeometricalData> & VectorOfURLs,
+		      bool ReadGeometry=false);
   };
 };
 

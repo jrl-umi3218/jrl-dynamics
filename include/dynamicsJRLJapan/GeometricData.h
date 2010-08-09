@@ -36,18 +36,21 @@ namespace dynamicsJRLJapan
   namespace Geometry
   {
 
+    typedef std::vector<int> polygonIndex;
+
     struct DYN_JRL_JAPAN_EXPORT IndexedFaceSet
     {
       bool ccw;
       std::vector<int> colorIndex;
       bool colorPerVertex;
       bool convex;
-      std::vector<int> coordIndex;
+      std::vector<polygonIndex> coordIndex;
       float creaseAngle;
       std::vector<int> normalIndex;
       bool normalPerVertex;
       bool solid;
       std::vector<int> texCoordIndex;      
+      std::vector<vector3d> coord;
     };    
 
     struct DYN_JRL_JAPAN_EXPORT Material
@@ -141,7 +144,7 @@ namespace dynamicsJRLJapan
     void resetURL( );
     void addURL(const std::string & URLtoVRML);
     
-    const std::vector<Geometry::Shape *> & getShapes();
+    const std::vector<Geometry::Shape > & getShapes();
     void addShape(Geometry::Shape &aShape);
   };
 

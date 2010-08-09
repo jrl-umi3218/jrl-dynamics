@@ -89,7 +89,8 @@ namespace dynamicsJRLJapan
 			     std::string &OpenHRPVRMLFile,
 			     std::string &MapJointToRankFileName,
 			     std::string &FileOfSpecificities,
-			     std::vector<BodyGeometricalData> &GeometricalDataonBodies);
+			     std::vector<BodyGeometricalData> &GeometricalDataonBodies,
+			     bool ReadGeometricalInformation=false);
   
 };
 #endif

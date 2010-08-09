@@ -101,7 +101,8 @@ namespace dynamicsJRLJapan
 			   std::string &OpenHRPVRMLFile,
 			   std::string &MapJointToRankFileName,
 			   std::string &SpecificitiesFileName,
-			   std::vector<BodyGeometricalData> &VectorOfURLs)
+			   std::vector<BodyGeometricalData> &VectorOfURLs,
+			   bool ReadGeometricalInformation)
   {
     dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR = 
       dynamic_cast<HumDynMultiBodyPrivate *>(&ajrlHumanoidDynamicRobot);
@@ -112,7 +113,8 @@ namespace dynamicsJRLJapan
     if (aHDR!=0)
       {
 	aHDR->parserVRML(OpenHRPVRMLFile, (char *)MapJointToRankFileName.c_str(),
-			 VectorOfURLs);
+			 VectorOfURLs,
+			 ReadGeometricalInformation);
 	aHDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
 	return 0;
       }
@@ -129,7 +131,8 @@ namespace dynamicsJRLJapan
 	      {
 		a4HDR->parserVRML(OpenHRPVRMLFile,
 				  (char *)MapJointToRankFileName.c_str(),
-				  VectorOfURLs);
+				  VectorOfURLs,
+				  ReadGeometricalInformation);
 		a4HDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
 		return 0;
 	      }

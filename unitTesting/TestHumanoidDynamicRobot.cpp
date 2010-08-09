@@ -80,15 +80,7 @@ int main(int argc, char *argv[])
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
   aCurrentConf[2] = 0.705;
-  /*  double InitPos[30] =  { 0, 0, -0.4538, 0.8727, -0.4189, 0, 
-			  0, 0, -0.4538, 0.8727, -0.4189, 0, 
-			  0, 0, 
-			  0, 0, 
-			  0.2618, -0.1745, 0, -0.5236, 0, 0, 0, 
-			  0.2618,  0.1745, 0, -0.5236, 0, 0, 0};
 
-  for(int i=0;i<(NbOfDofs-6 < 30 ? NbOfDofs-6 : 30  );i++)
-  aCurrentConf[lindex++] = InitPos[i]; */
   for(int i=0;i<NbOfDofs-6 ;i++)
     aCurrentConf[lindex++] = 0.0;
   aHDR->currentConfiguration(aCurrentConf);

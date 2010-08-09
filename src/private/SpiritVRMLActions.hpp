@@ -30,6 +30,8 @@
 #include "MultiBody.h"
 #include "SpiritVRMLReader.h"
 
+#include "Debug.h"
+
 using namespace std;
 
 namespace dynamicsJRLJapan 
@@ -112,8 +114,11 @@ namespace dynamicsJRLJapan
       // Generic vector3d.
       vector3d m_Genericvec3d;
 
-      // vector of vector3d.
+      // Generic vector of vector3d.
       std::vector<vector3d> m_vectorgvec3d;
+
+      // Generic vector of int32d.
+      std::vector<int> m_vectorgint32;
 
       // Map of Proto.
       std::map<std::string, struct Proto_t> Protos;
@@ -136,6 +141,7 @@ namespace dynamicsJRLJapan
 	fSFVec3fY(*this,1),
 	fSFVec3fZ(*this,2),
 	fPushGenericvec3d(*this),
+	fPushGenericvecint32(*this),
 	fJointTranslationX(*this,0),
 	fJointTranslationY(*this,1),
 	fJointTranslationZ(*this,2),
@@ -177,7 +183,14 @@ namespace dynamicsJRLJapan
 	fMaterialSpecularColorG(*this,9),
 	fMaterialSpecularColorB(*this,10),	
 	fMaterialTransparency(*this,11),
-	m_Verbose(2)
+	fIndexedFaceSetccw(*this,0),
+	fIndexedFaceSetcolorPerVertex(*this,1),
+	fIndexedFaceSetconvex(*this,2),
+	fIndexedFaceSetnormalPerVertex(*this,3),
+	fIndexedFaceSetsolid(*this,4),
+	fCoordinates(*this),
+	fCoordIndex(*this),
+	m_Verbose(0)
       { }
       
       // Generic action for display 
@@ -185,7 +198,7 @@ namespace dynamicsJRLJapan
 
 	void operator()(const char &c) const
 	{
-	  std::cout << "Display " << c  << endl;
+	  ODEBUG("Display " << c  );
 	}
 
 	template <typename IteratorT>
@@ -197,12 +210,11 @@ namespace dynamicsJRLJapan
 	  
 	  // Store the current file position
 	  fp_cur = begin.get_position();
-	  std::cout << "Display - Current file: " << fp_cur.file << std::endl;
-	  std::cout << "Line   : " << fp_cur.line  
-		    << " Column : " << fp_cur.column 
-		    << endl
-		    << "Parsed : " << x
-		    << endl;
+	  ODEBUG("Display - Current file: " << fp_cur.file );
+	  ODEBUG( "Line   : " << fp_cur.line  
+		  << " Column : " << fp_cur.column 
+		  << endl
+		  << "Parsed : " << x );
 	} 
       } fDisplay;
 
@@ -220,6 +232,7 @@ namespace dynamicsJRLJapan
 	  if (m_actions.m_Verbose>1)
 	    std::cout<< "SFVec3f_" << m_index << " : " <<x<<"|" << endl;
 	}
+
       private:
 	Actions & m_actions;
 	unsigned int m_index;
@@ -234,11 +247,36 @@ namespace dynamicsJRLJapan
 	template <typename IteratorT>
 	void operator()(IteratorT, IteratorT) const 
 	{
-	  m_actions.m_DataForParsing.m_vectorgvec3d.push_back(m_actions.m_DataForParsing.m_Genericvec3d);
+	  ODEBUG("Pushing :" 
+		 << m_actions.m_DataForParsing.m_Genericvec3d(0) << " " 
+		 << m_actions.m_DataForParsing.m_Genericvec3d(1) << " " 
+		 << m_actions.m_DataForParsing.m_Genericvec3d(2) );
+	  m_actions.m_DataForParsing.
+	    m_vectorgvec3d.push_back(m_actions.m_DataForParsing.
+				     m_Genericvec3d);
+	  
 	}
       private:
 	Actions & m_actions;
       } fPushGenericvec3d;
+
+      // Build an array of int
+      struct fPushGenericvecint32_t {
+
+	explicit fPushGenericvecint32_t(Actions &actions): 
+	  m_actions(actions) {};
+	
+	void operator()(int x) const 
+	{
+
+	  ODEBUG("Pushing :" << x );
+	  m_actions.m_DataForParsing.
+	    m_vectorgint32.push_back(x);	  
+	}
+
+      private:
+	Actions & m_actions;
+      } fPushGenericvecint32;
       
       // Action for a translation.
       struct fJointTranslation_i_t {
@@ -270,10 +308,12 @@ namespace dynamicsJRLJapan
 		}
 	      
 	      if (m_actions.m_Verbose>1)
-		cout << "JointPrivate" 
-		     << m_actions.m_DataForParsing.CurrentLink.aJoint->getName()
-		     << ":" 
-		     << m_actions.m_DataForParsing.JointTranslation << endl;
+		{
+		  cout << "JointPrivate" 
+		       << m_actions.m_DataForParsing.CurrentLink.aJoint->getName()
+		       << ":" 
+		       << m_actions.m_DataForParsing.JointTranslation << endl;
+		}
 	    }
 	}
       private:
@@ -580,7 +620,6 @@ namespace dynamicsJRLJapan
 	  
 	void operator()(const double x) const 
 	{
-	  std::cout << "Here." << endl;
 	  double lx = x;
 	  m_actions.m_DataForParsing.CurrentLink.aJoint->equivalentInertia(lx);
 	  if (m_actions.m_Verbose>1)
@@ -607,7 +646,7 @@ namespace dynamicsJRLJapan
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
 	  
 	  int lDepth = aDataForParsing.Depth;
-	  std::cout << "depth: "<< lDepth << endl;
+	  ODEBUG("depth: "<< lDepth);
 	  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
 	  lCurrentBody->setLabel(aDataForParsing.NbOfBodies++);
 	  lCurrentBody->setName((char *)(aDataForParsing.aName).c_str());
@@ -654,7 +693,7 @@ namespace dynamicsJRLJapan
 		{
 		  for(int i=0;i<9;i++)
 		    {
-		      cout << aDataForParsing.mi[i] << " ";
+		      ODEBUG(aDataForParsing.mi[i]);
 		      if (i%3==2)
 			cout<< endl;
 		    }
@@ -677,7 +716,7 @@ namespace dynamicsJRLJapan
 	void LocalAction() const
 	{
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
-	  cout << "Here in localAction :" << endl;
+
 	  int lDepth = aDataForParsing.Depth;
 	  // After the initial body.
 	  if (lDepth>0)
@@ -787,12 +826,11 @@ namespace dynamicsJRLJapan
 	  
 	  // Store the current file position
 	  fp_cur = begin.get_position();
-	  std::cout << "Current file: " << fp_cur.file << std::endl;
-	  std::cout << "Line   : " << fp_cur.line  
-		    << " Column : " << fp_cur.column 
-		    << endl
-		    << "File to be included : " << s
-		    << endl;
+	  ODEBUG( "Current file: " << fp_cur.file );
+	  ODEBUG("Line   : " << fp_cur.line  
+		 << " Column : " << fp_cur.column 
+		 << endl
+		 << "File to be included : " << s);
 	  
 	  string sp2 = s;
 	  m_actions.m_DataForParsing.m_BodyGeometry->addURL(sp2);
@@ -813,7 +851,7 @@ namespace dynamicsJRLJapan
 	
 	void operator()(double x) const
 	{
-	  cout << "fMaterial ("<<m_index << ")=" << x <<endl;
+	  ODEBUG("fMaterial ("<<m_index << ")=" << x);
  
 	  Geometry::Material &aMaterial = m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial();
 	  if (m_index==0)
@@ -858,6 +896,74 @@ namespace dynamicsJRLJapan
 	fMaterialSpecularColorB,
 	fMaterialTransparency;
       
+
+      struct fIndexedFaceSet_t {
+	explicit fIndexedFaceSet_t(Actions &actions,
+				   unsigned int anIndex):
+	  m_actions(actions),
+	  m_index(anIndex){};
+	
+	void operator()(bool x) const
+	{
+	  ODEBUG( "fIndexedFaceSet ("<<m_index << ")=" << x);
+ 
+	  Geometry::IndexedFaceSet &aIndexedFaceSet = m_actions.
+	    m_DataForParsing.m_Shape.getIndexedFaceSet();
+	  
+	  if (m_index==0)
+	    { aIndexedFaceSet.ccw = x; }
+	  else if (m_index==1)
+	    { aIndexedFaceSet.colorPerVertex = x; }
+	  else if (m_index==2)
+            { aIndexedFaceSet.convex=x;}
+          else if (m_index==3)
+            { aIndexedFaceSet.normalPerVertex=x;}
+          else if (m_index==4)
+	    { aIndexedFaceSet.solid=x;}
+	}
+	
+      private:
+	Actions &m_actions;
+	unsigned int m_index;
+	
+      } fIndexedFaceSetccw,
+        fIndexedFaceSetcolorPerVertex,
+        fIndexedFaceSetconvex,
+        fIndexedFaceSetnormalPerVertex,
+        fIndexedFaceSetsolid;
+
+      struct fCoordinates_t {
+
+	explicit fCoordinates_t(Actions &actions):
+	  m_actions(actions) {};
+	  
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin, 
+			const IteratorT &end) const 
+	{
+	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord =
+	    m_actions.m_DataForParsing.m_vectorgvec3d;
+	}
+      private:
+	Actions & m_actions;
+      } fCoordinates;
+
+      struct fCoordIndex_t {
+
+	explicit fCoordIndex_t(Actions &actions):
+	  m_actions(actions) {};
+	  
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin, 
+			const IteratorT &end) const 
+	{
+	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.
+	    push_back(m_actions.m_DataForParsing.m_vectorgint32);
+	}
+      private:
+	Actions & m_actions;
+      } fCoordIndex;
+
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;
 
