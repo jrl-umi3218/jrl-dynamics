@@ -29,10 +29,10 @@ MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl")
 
+# ReadOpenHRPFileAndExport 
 ADD_EXECUTABLE(	ReadOpenHRPFileAndExport 
   GenerateRobotForAMELIF.cpp 
   ReadOpenHRPFileAndExport.cpp)
-
 
 SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 	              PROPERTIES
@@ -40,7 +40,9 @@ SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
+ADD_DEPENDENCIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
 
+# CreateVRMLPoseFile 
 ADD_EXECUTABLE(	CreateVRMLPoseFile
   GenerateRobotForVRML2.cpp
   CreateVRMLPoseFile.cpp)
@@ -51,26 +53,29 @@ SET_TARGET_PROPERTIES(CreateVRMLPoseFile
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
+ADD_DEPENDENCIES (CreateVRMLPoseFile ${PROJECT_NAME})
 
-ADD_DEPENDENCIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
-
+# CreateMapleModel 
 ADD_EXECUTABLE( CreateMapleModel
   GenerateRobotForMaple.cpp
   CreateMapleModel.cpp)
-
 
 SET_TARGET_PROPERTIES(CreateMapleModel
 	              PROPERTIES
 		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+ADD_DEPENDENCIES (CreateMapleModel ${PROJECT_NAME})
 
+# ReadPosFile 
 ADD_EXECUTABLE(	ReadPosFile ReadPosFile.cpp)
 SET_TARGET_PROPERTIES(ReadPosFile
 	              PROPERTIES
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+ADD_DEPENDENCIES (ReadPosFile ${PROJECT_NAME})
+
 
 SET(${PROJECT_NAME}_TOOLS
   ReadOpenHRPFileAndExport
