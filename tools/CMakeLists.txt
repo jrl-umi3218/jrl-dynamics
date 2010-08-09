@@ -77,6 +77,16 @@ SET_TARGET_PROPERTIES(ReadPosFile
 ADD_DEPENDENCIES (ReadPosFile ${PROJECT_NAME})
 
 
+ADD_EXECUTABLE(CreateHPPBuilder 
+  GenerateRobotForHppBuilder.cpp
+  CreateHPPBuilder.cpp)
+
+SET_TARGET_PROPERTIES(CreateHPPBuilder
+	              PROPERTIES
+	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
+
 SET(${PROJECT_NAME}_TOOLS
   ReadOpenHRPFileAndExport
   CreateVRMLPoseFile

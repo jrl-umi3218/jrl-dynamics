@@ -144,7 +144,7 @@ namespace dynamicsJRLJapan
     void resetURL( );
     void addURL(const std::string & URLtoVRML);
     
-    const std::vector<Geometry::Shape > & getShapes();
+    const std::vector<Geometry::Shape  > & getShapes();
     void addShape(Geometry::Shape &aShape);
   };
 
