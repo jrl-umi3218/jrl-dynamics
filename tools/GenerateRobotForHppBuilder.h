@@ -37,7 +37,6 @@ namespace dynamicsJRLJapan
       void GenerateRobot(std::string &RobotName,
 			 CjrlHumanoidDynamicRobot *aHDR);
 
-
       void SetAccessToData(std::vector<BodyGeometricalData > &AccessToData);
       
       /*! \brief Take the links towards the geometrical information */
@@ -70,10 +69,6 @@ namespace dynamicsJRLJapan
 			  std::string shifttab);
       
 			 
-      void GenerateBodies(std::ostream &os,
-			  std::string shifttab,
-			  std::string &JointName);
-
       void CopyGeometricInformation(std::ostream &os,
 				    std::string FileName);
 

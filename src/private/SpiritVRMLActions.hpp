@@ -96,6 +96,7 @@ namespace dynamicsJRLJapan
 	index_mi = -1;
 	Depth = 0.0;
 	m_BodyGeometry =0;
+	m_LOUIndex = new int;
       }
       
       // Destructor.
@@ -105,6 +106,8 @@ namespace dynamicsJRLJapan
 	     i<m_ListOfURLs.size();
 	     i++)
 	  delete m_ListOfURLs[i];
+
+	delete m_LOUIndex;
       }
       
       
@@ -129,6 +132,8 @@ namespace dynamicsJRLJapan
       MultiBody m_MultiBody;
       
       vector<BodyGeometricalData * > m_ListOfURLs;
+
+      int * m_LOUIndex;
 
       Geometry::Shape m_Shape;
 
@@ -190,6 +195,7 @@ namespace dynamicsJRLJapan
 	fIndexedFaceSetsolid(*this,4),
 	fCoordinates(*this),
 	fCoordIndex(*this),
+	fStoreShape(*this),
 	m_Verbose(0)
       { }
       
@@ -254,7 +260,6 @@ namespace dynamicsJRLJapan
 	  m_actions.m_DataForParsing.
 	    m_vectorgvec3d.push_back(m_actions.m_DataForParsing.
 				     m_Genericvec3d);
-	  
 	}
       private:
 	Actions & m_actions;
@@ -833,6 +838,7 @@ namespace dynamicsJRLJapan
 		 << "File to be included : " << s);
 	  
 	  string sp2 = s;
+	  ODEBUG3( " " << sp2);
 	  m_actions.m_DataForParsing.m_BodyGeometry->addURL(sp2);
 	}
 	
@@ -853,7 +859,9 @@ namespace dynamicsJRLJapan
 	{
 	  ODEBUG("fMaterial ("<<m_index << ")=" << x);
  
-	  Geometry::Material &aMaterial = m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial();
+	  Geometry::Material & aMaterial = 
+	    m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial();
+
 	  if (m_index==0)
 	    aMaterial.ambientIntensity = x;
 	  else if (m_index==1)
@@ -878,6 +886,7 @@ namespace dynamicsJRLJapan
 	    aMaterial.specularColor[2] = x;
 	  else if (m_index==10)
 	    aMaterial.transparency = x;
+
 	}
 	
       private:
@@ -943,6 +952,7 @@ namespace dynamicsJRLJapan
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord =
 	    m_actions.m_DataForParsing.m_vectorgvec3d;
+	  m_actions.m_DataForParsing.m_vectorgvec3d.clear();
 	}
       private:
 	Actions & m_actions;
@@ -959,11 +969,41 @@ namespace dynamicsJRLJapan
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.
 	    push_back(m_actions.m_DataForParsing.m_vectorgint32);
+	  m_actions.m_DataForParsing.m_vectorgint32.clear();
 	}
       private:
 	Actions & m_actions;
       } fCoordIndex;
 
+      struct fStoreShape_t {
+
+	explicit fStoreShape_t(Actions &actions):
+	  m_actions(actions) {};
+	  
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin, 
+			const IteratorT &end) const 
+	{
+	  file_position fp_cur;
+	  fp_cur = begin.get_position();
+	  ODEBUG3("Display - Current file: " << fp_cur.file );
+	  ODEBUG3( "Line   : " << fp_cur.line  
+		  << " Column : " << fp_cur.column );
+
+	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;
+	  if (lindex!=-1)
+	    {
+	      ODEBUG3(" Store inside :"<< lindex );
+	      m_actions.m_DataForParsing.m_ListOfURLs[lindex]->addShape(m_actions.m_DataForParsing.m_Shape);
+	      ODEBUG3(m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial());
+	      m_actions.m_DataForParsing.m_Shape.reset();
+	    }
+	}
+      private:
+	Actions & m_actions;
+      } fStoreShape;
+
+      
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;
 

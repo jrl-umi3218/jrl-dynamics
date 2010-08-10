@@ -14,7 +14,7 @@
 #include <fstream>
 
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
-#include "GenerateRobotForVRML2.h"
+#include "GenerateRobotForHppBuilder.h"
 
 using namespace std;
 using namespace dynamicsJRLJapan;
@@ -24,7 +24,7 @@ void ExportToHPPBuilder(CjrlHumanoidDynamicRobot *aHDR,
 		   std::string &Path,
 		   std::string &RobotFileName)
 {
-  dynamicsJRLJapan::Tools::GenerateRobotForVRML2 aGenerateRobotForVRML2;
+  dynamicsJRLJapan::Tools::GenerateRobotForHppBuilder aGenerateRobotForHppBuilder;
 
   string aRobotVrml="ROBOT";
   aGenerateRobotForHppBuilder.SetAccessToData(aVectorOfURLs);

@@ -12,6 +12,7 @@
  */
 #include <dynamicsJRLJapan/GeometricData.h>
 
+
 namespace dynamicsJRLJapan
 {
   namespace Geometry
@@ -33,6 +34,27 @@ namespace dynamicsJRLJapan
 	specularColor[2] = 0.0;
       transparency=0.0;
     }
+    
+    std::ostream & operator<<(std::ostream &os, const Material &a)
+    {
+      os << "ambientIntensity:"  << a.ambientIntensity << std::endl;
+      os << "diffuseColor:" 
+	 << a.diffuseColor[0] << " " 
+	 << a.diffuseColor[1] << " "
+	 << a.diffuseColor[2] << std::endl;
+      os << "emissiveColor:" 
+	 << a.emissiveColor[0] << " " 
+	 << a.emissiveColor[1] << " "
+	 << a.emissiveColor[2] << std::endl;
+      os << "shininess:" << a.shininess<< std::endl;
+      os << "specularColor:" 
+	 << a.specularColor[0] << " " 
+	 << a.specularColor[1] << " "
+	 << a.specularColor[2] << std::endl;
+      os << "transparency:" << a.transparency << std::endl;
+      return os;
+    }
+
     /*! Texture Transform */
     TextureTransform::TextureTransform()
     {
@@ -41,8 +63,18 @@ namespace dynamicsJRLJapan
       scale[0] = scale[1] = 1.0;
       translation[0] = 0.0;
       translation[1] = 0.0;
+
     }
-    
+
+    void IndexedFaceSet::reset()
+    {
+      colorIndex.clear();
+      coordIndex.clear();
+      normalIndex.clear();
+      texCoordIndex.clear();
+      coord.clear();
+    }
+
     /*! Appearance object */
     Appearance::Appearance()
     {}
@@ -54,6 +86,11 @@ namespace dynamicsJRLJapan
       m_Material = aMaterial;
     }
     
+    const Material & Appearance::getMaterial() const
+    {
+      return m_Material;
+    }
+
     Material & Appearance::getMaterial() 
     {
       return m_Material;
@@ -64,6 +101,11 @@ namespace dynamicsJRLJapan
       m_Texture = aTexture;
     }
     
+    const Texture & Appearance::getTexture() const 
+    {
+      return m_Texture;
+    }
+
     Texture & Appearance::getTexture() 
     {
       return m_Texture;
@@ -74,6 +116,11 @@ namespace dynamicsJRLJapan
       m_TextureTransform = aTextureTransform;
     }
     
+    const TextureTransform & Appearance::getTextureTransform() const
+    {
+      return m_TextureTransform;
+    }
+
     TextureTransform & Appearance::getTextureTransform()
     {
       return m_TextureTransform;
@@ -91,14 +138,25 @@ namespace dynamicsJRLJapan
       m_Appearance = anAppearance;
     }
 
-    Appearance & Shape::getAppearance()
+    const Appearance & Shape::getAppearance() const
     {
       return m_Appearance;
     }
 
+    Appearance & Shape::getAppearance() 
+    {
+      return m_Appearance;
+    }
+
+
     void Shape::setIndexedFaceSet(IndexedFaceSet &anIndexedFaceSet)
     {
       m_IndexedFaceSet = anIndexedFaceSet;
+    }
+
+    const IndexedFaceSet & Shape::getIndexedFaceSet() const
+    {
+      return m_IndexedFaceSet;
     }
 
     IndexedFaceSet & Shape::getIndexedFaceSet()
@@ -106,13 +164,13 @@ namespace dynamicsJRLJapan
       return m_IndexedFaceSet;
     }
     
+    void Shape::reset()
+    {
+      m_IndexedFaceSet.reset();
+    }
 
   };
 
-  const matrix3d & BodyGeometricalData::getRotationForDisplay()
-  {
-    return m_RotationForDisplay;
-  }
 
   BodyGeometricalData::BodyGeometricalData():
     m_RotationForDisplay(1,0,0, 0,1,0, 0,0,1),
@@ -125,12 +183,17 @@ namespace dynamicsJRLJapan
   {
   }
 
+  const matrix3d & BodyGeometricalData::getRotationForDisplay() const
+  {
+    return m_RotationForDisplay;
+  }
+
   void BodyGeometricalData::setRotationForDisplay(const matrix3d & RotationForDisplay)
   {
     m_RotationForDisplay = RotationForDisplay;
   }
 
-  const std::vector< std::string > & BodyGeometricalData::getURLs()
+  const std::vector< std::string > & BodyGeometricalData::getURLs() const
   {
     return m_URLs;
   }
@@ -146,8 +209,23 @@ namespace dynamicsJRLJapan
     m_URLs.push_back(URLtoVRML);
   }
 
-  void BodyGeometricalData::addShape(Geometry::Shape &aShape)
+  void BodyGeometricalData::addShape(Geometry::Shape aShape)
   {
     m_Shapes.push_back(aShape);
   }
+
+  const std::vector< Geometry::Shape > & BodyGeometricalData::getShapes() const
+  {
+    return m_Shapes;
+  }
+  
+  BodyGeometricalData & BodyGeometricalData::operator=(const BodyGeometricalData & r)
+  {
+    const std::vector<std::string> &lURLs = r.getURLs();
+    m_URLs = lURLs;
+    m_Shapes = r.getShapes();
+    m_RotationForDisplay = r.getRotationForDisplay();
+    return *this;
+  }
+
 };

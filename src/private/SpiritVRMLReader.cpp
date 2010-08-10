@@ -86,9 +86,6 @@ namespace dynamicsJRLJapan
 	{
 	  // Iterate over the included files if there is some. 
 	  vector<BodyGeometricalData*> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
-	  vector<BodyGeometricalData*>::iterator it_BGD; 
-	  
-	  it_BGD = aLOU.begin();
 	  
 	  string Path;
 	  unsigned int npos = aFileName.find_last_of('/');
@@ -98,12 +95,12 @@ namespace dynamicsJRLJapan
 		  << " Size of m_ListOfURLs: " 
 		  << aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs.size());
 
-	  unsigned int i=0;
-	  while (it_BGD!= aLOU.end())
+	  for(unsigned int iIndexBDG=0;
+	      iIndexBDG<aLOU.size();
+	      iIndexBDG++)
 	    {
-	      i++;
-	      const vector<string > URLs = (*it_BGD)->getURLs();
-	      ODEBUG(" i: " << i << " URLs.size():" << URLs.size());
+	      const vector<string > URLs = aLOU[iIndexBDG]->getURLs();
+	      ODEBUG(" i: " << iIndexBDG << " URLs.size():" << URLs.size());
 	      for(unsigned int j=0;j<URLs.size();j++)
 		{
 		  string GeomFileName = Path + URLs[j];
@@ -115,23 +112,36 @@ namespace dynamicsJRLJapan
 		    }
 		  else
 		    {
-		      ODEBUG( "Open :" << GeomFileName );
+		      ODEBUG3( "Open :" << GeomFileName );
 		      multi_pass_iterator_t
 			lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
 			lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
 		  
 		      iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
-		  
+		      *aSpiritOpenHRP.actions.m_DataForParsing.m_LOUIndex = 
+			iIndexBDG;
 		      parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar);
 		    }
 		  aif.close();
 		}
+	    }
+	  
+	  // Copy the list of URLS.
+	  aListOfURLs.resize(aLOU.size());
+	  vector<BodyGeometricalData *>::iterator it_BGD = aLOU.begin();
+	  unsigned int i=0;
+	  while (it_BGD!= aLOU.end())
+	    {
+	      aListOfURLs[i] = *(*it_BGD);
+	      i++;
 	      it_BGD++;
 	    }
 	};      
 
+      // Copy multibody structure.
       *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
 
+      
       return 1;
     };
   };

@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <string>
+#include <ostream>
 
 #include <MatrixAbstractLayer/MatrixAbstractLayer.h>
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
@@ -51,6 +52,9 @@ namespace dynamicsJRLJapan
       bool solid;
       std::vector<int> texCoordIndex;      
       std::vector<vector3d> coord;
+
+      void reset();
+	
     };    
 
     struct DYN_JRL_JAPAN_EXPORT Material
@@ -64,7 +68,10 @@ namespace dynamicsJRLJapan
       
       Material();
 
+      friend std::ostream & operator<<(std::ostream &, const Material &);
     };
+
+    std::ostream &operator<<(std::ostream &,const Material &);
 
     struct DYN_JRL_JAPAN_EXPORT Texture
     {
@@ -98,12 +105,15 @@ namespace dynamicsJRLJapan
        */
       void setMaterial(Material &aMaterial);
       Material &getMaterial();
+      const Material &getMaterial() const ;
 
       void setTexture(Texture &aTexture);
-      Texture &getTexture();
+      Texture & getTexture();
+      const Texture &getTexture() const;
       
       void setTextureTransform(TextureTransform &aTextureTransform);
-      TextureTransform &getTextureTransform();
+      TextureTransform & getTextureTransform();
+      const TextureTransform &getTextureTransform() const;
       /*! @} */
     };
 
@@ -117,11 +127,14 @@ namespace dynamicsJRLJapan
       Shape();
       ~Shape();
        void setAppearance(Appearance &anAppearance);
+       const Appearance & getAppearance() const;
        Appearance & getAppearance();
 
        void setIndexedFaceSet(IndexedFaceSet &anIndexedFaceSet);
+       const IndexedFaceSet & getIndexedFaceSet() const ;
        IndexedFaceSet & getIndexedFaceSet();
-
+       
+       void reset();
      };
 
    };
@@ -137,16 +150,18 @@ namespace dynamicsJRLJapan
     BodyGeometricalData();
     ~BodyGeometricalData();
 
-    const matrix3d & getRotationForDisplay();
+    const matrix3d & getRotationForDisplay() const;
     void setRotationForDisplay(const matrix3d &RotationForDisplay);
 
-    const std::vector< std::string > & getURLs();
+    const std::vector< std::string > & getURLs() const;
     void resetURL( );
     void addURL(const std::string & URLtoVRML);
     
-    const std::vector<Geometry::Shape  > & getShapes();
-    void addShape(Geometry::Shape &aShape);
-  };
+    const std::vector<Geometry::Shape > & getShapes() const;
+    void addShape(Geometry::Shape aShape);
+    
+    BodyGeometricalData & operator=(const BodyGeometricalData & );
+   };
 
 };
 

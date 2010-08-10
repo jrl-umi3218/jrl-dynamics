@@ -130,7 +130,8 @@ namespace dynamicsJRLJapan
 
 	  MFInt32_r = *( int_p| ch_p(','));
 
-	  MFUInt32_r = *( uint_p[self.actions.fPushGenericvecint32] | ch_p(','));
+	  MFUInt32_r = *( uint_p[self.actions.fPushGenericvecint32] 
+			  | ch_p(','));
 
 	  MFString_r = ch_p('[') 
 	    >> *( ch_p('"') >> (*alpha_p) >> ch_p('"') )
@@ -188,37 +189,37 @@ namespace dynamicsJRLJapan
 	  
 	  // Fields of Transform block.
 	  TCBChildrenBlock_r = ch_p('[') 
-	    >> *(GroupBlock_r     |
-		 TransformBlock_r | 
-		 ShapeInline_r    | 
-		 Sensors_r        | 
-		 Shape_r )
+	    >> *(GroupBlock_r     
+		 | TransformBlock_r 
+		 | ShapeInline_r 
+		 | Sensors_r
+		 | Shape_r [self.actions.fStoreShape])
 	    >> ch_p(']');
 
 	  TCBChildren_r = (str_p("children"))
-	    >> Shape_r          | 
-	    GroupBlock_r        | 
-	    ShapeInline_r       | 
-	    TransformBlock_r    |
-	    Sensors_r           | 
-	    TCBChildrenBlock_r ;
+	    >> Shape_r [self.actions.fStoreShape]
+	    | GroupBlock_r         
+	    | ShapeInline_r        
+	    | TransformBlock_r    
+	    | Sensors_r            
+	    | TCBChildrenBlock_r ;
 	  
 	  TransformChildrenBlock_r = ch_p('[')[self.actions.fDisplay]
-	    >> *(GroupBlock_r       | 
-		 TransformBlock_r   | 
-		 ShapeInline_r      | 
-		 Sensors_r          | 
-		 Shape_r            |
-		 TCBChildren_r      ) 
+	    >> *(GroupBlock_r       
+		 | TransformBlock_r   
+		 | ShapeInline_r     
+		 | Sensors_r          
+		 | Shape_r[self.actions.fStoreShape]           
+		 | TCBChildren_r      ) 
 	    >> ch_p(']');
 	  
 	  TransformChildren_r= str_p("children")[self.actions.fDisplay]
 	    >> ((str_p("IS")  >> str_p("children")) |
 		TransformChildrenBlock_r            );
 	  
-	  TransformLine_r = (TransformToField_r) |
-	    TransformChildren_r | 
-	    TCBChildren_r  ;
+	  TransformLine_r = (TransformToField_r) 
+	    | TransformChildren_r 
+	    | TCBChildren_r  ;
 	  
 	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >> 
 			       (str_p("Transform"))
@@ -635,7 +636,7 @@ namespace dynamicsJRLJapan
 
 	  IFScoordIndex_r = str_p("coordIndex")
 	    >> ch_p('[')
-	    >> *( MFUInt32_r 
+	    >> *( MFUInt32_r[self.actions.fCoordIndex] 
 		  >> ((str_p("-1") >> ch_p(','))
 		      | str_p("-1")
 		      )
@@ -648,7 +649,7 @@ namespace dynamicsJRLJapan
 	    IFSsolidfield_r  |
 	    IFScreaseAngle_r |
 	    IFScoord_r       |
-	    IFScoordIndex_r[self.actions.fCoordIndex] ;
+	    IFScoordIndex_r ;
 
 	  IndexedFaceSet_r = str_p("IndexedFaceSet")[self.actions.fDisplay]
 	    >> ch_p ('{')

@@ -48,8 +48,7 @@ namespace dynamicsJRLJapan {
 
 
   void Tools::GenerateRobotForHppBuilder::GenerateBodies(ostream &os,
-							 string shifttab,
-							 string &JointName)
+							 string shifttab)
   {
     CjrlJoint *RootJoint = m_HDR->rootJoint();
     string lshifttab  = shifttab+"  ";
@@ -80,30 +79,36 @@ namespace dynamicsJRLJapan {
 	os << "createFreeFlyer(std::string(\"RANK_" 
 	   << aric
 	   << "\")," << endl;
+	os << "        fillMat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1));"<< endl;
       }
     else if (aJoint->numberDof()==1)
       {
 	os << "createRotation(std::string(\"RANK_" 
 	   << aJoint->rankInConfiguration()
 	   << "\")," << endl;
-	os << "hppJoint_->bounds(" << aJoint->lowerBound(aric)<< " ," << aJoint->upperBound(aric) << ")" << endl;
+	os << "\tfillMat4(";
+	for(unsigned int i=0;i<4;i++)
+	  for(unsigned int j=0;j<4;j++)
+	    {
+	      os << MAL_S4x4_MATRIX_ACCESS_I_J(anInitMat,i,j);
+	      if ((i!=3) || (j!=3))
+		os << ",  ";
+	    }
+	os << "));" << endl;
+
+	os << "hppJoint_->bounds(0," << aJoint->lowerBound(0)<< " ," << aJoint->upperBound(0) << ")" << endl;
 	os << "hppJoint_->isBounded(0, true);" << endl;
-	os << "hppJoint_->velocityBounds(" 
-	   << aJoint->lowerVelocityBound(aric) << " , " 
-	   << aJoint->upperVelocityBound(aric) << ");" << endl;
+	os << "hppJoint_->velocityBounds(0," 
+	   << aJoint->lowerVelocityBound(0) << " , " 
+	   << aJoint->upperVelocityBound(0) << ");" << endl;
 	CjrlJoint *ParentJoint = aJoint->parentJoint();
 	if (ParentJoint!=0)
 	  {
 	    os << "addChildJoint(std::string(\"RANK_" << ParentJoint->rankInConfiguration() 
-	       << "\"),std::string(\"RANK_" << aric << "));" << endl; 
+	       << "\"),std::string(\"RANK_" << aric << "\"));" << endl; 
 	  }
       }
 
-    os << "\tfillMat4(";
-    for(unsigned int i=0;i<4;i++)
-      for(unsigned int j=0;j<4;j++)
-	os << MAL_S4x4_MATRIX_ACCESS_I_J(anInitMat,i,j) << ",  ";
-    os << "));" << endl;
     
     // Set root joint if needed.
     if (aJoint->numberDof()==6)
@@ -151,24 +156,27 @@ namespace dynamicsJRLJapan {
     // Specify triangles.
     unsigned int ajric = aJoint->rankInConfiguration();
     os << "unsigned int itab" << ajric << "[]={";
-    const std::vector< Geometry::Shape * > & Shapes = m_AccessToData[gindex].getShapes();
-    std::vector< Geometry::Shape *>::iterator  it_Shapes = Shapes.begin();
+    const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbFaces = 0;
-    while(it_Shapes!=m_AccessToData[gindex].getShapes().end())
+    for(unsigned int iShape=0;
+	iShape< Shapes.size();
+	iShape++)
       {
-	
-	std::vector<Geometry::polygonIndex>::iterator it_int =  it_Shapes.getIndexedFaceSet().coordIndex.begin();
-	while(it_int!= Shapes.getIndexedFaceSet().coordIndex.end())
+	const Geometry::IndexedFaceSet & aIFS = Shapes[iShape].getIndexedFaceSet();
+	const std::vector<Geometry::polygonIndex> & polygonIndex =  aIFS.coordIndex;
+	cout << "Number of polygons:" << aIFS.coordIndex.size() << endl;
+	for(unsigned int iPolygon=0;
+	    iPolygon<polygonIndex.size();
+	    iPolygon++)
 	  {
-	    for(unsigned int i;i<(*it_int).size();i++)
+	    const std::vector<int> lIndex = polygonIndex[iPolygon];
+	    for(unsigned int i=0;i<lIndex.size();i++)
 	      {
-		os << it_int[i] << " , " ;
+		os << lIndex[i] << " , " ;
 	      }
 	    os << endl;
-	    it_int++;
 	  }
-	lNbFaces+=  it_Shapes.getIndexedFaceSet().coordIndex.size();
-	it_Shapes++;
+	lNbFaces+=  Shapes[iShape].getIndexedFaceSet().coordIndex.size();
       }
     os << "0 };" << endl;
 
@@ -189,21 +197,23 @@ namespace dynamicsJRLJapan {
 
     // Generate points
     os << "double dtab" << ajric << "[]={";
-    std::vector< Geometry::Shape >::iterator  it_Shapes = m_AccessToData[gindex].getShapes().begin();
+    const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbPoints = 0;
-    while(it_Shapes!=m_AccessToData[gindex].getShapes().end())
+    for(unsigned int iShape=0;
+	iShape< Shapes.size();
+	iShape++)
       {
-	std::vector<vector3d>::iterator it_vec3d =  it_Shapes.getIndexedFaceSet().coord.begin();
-	while(it_vec3d!= it_Shapes.getIndexedFaceSet().coord.end())
+	const Geometry::IndexedFaceSet & aIFS = Shapes[iShape].getIndexedFaceSet();
+	cout << "aIFS.size:" << aIFS.coord.size() << endl;
+	const std::vector<vector3d> & VecOfvec3d =  aIFS.coord;
+	for(unsigned int i=0;i<VecOfvec3d.size();i++)
 	  {
-	    vector3d avec = (*it_vec3d);
+	    vector3d avec = VecOfvec3d[i];
 	      os << avec(0) << " ," 
 		 << avec(1) << " ," 
 		 << avec(2) << " ," << endl;
-	    it_vec3d++;
 	  }
-	lNbPoints+=  it_Shapes.getIndexedFaceSet().coord.size();
-	it_Shapes++;
+	lNbPoints+=  VecOfvec3d.size();
       }
     os << " 0.0};" << endl;
     os << "for (unsigned int i=0;i<" 
@@ -221,35 +231,35 @@ namespace dynamicsJRLJapan {
 							   unsigned int &gindex)
   {
 
-    unsigned int ajric = aJoint->rankInConfiguration();
-
     // Generate material
-    std::vector< Geometry::Shape >::iterator  it_Shapes = m_AccessToData[gindex].getShapes().begin();
+    const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbPoints = 0;
-    while(it_Shapes!=m_AccessToData[gindex].getShapes().end())
+    for(unsigned int iShape=0;
+	iShape< Shapes.size();
+	iShape++)
       {
-	Material & aMaterial = (*it_Shapes).getAppearance();
+	const Geometry::Appearance & anAppearance = Shapes[iShape].getAppearance();
+	const Geometry::Material & aMaterial = anAppearance.getMaterial();
 	os << "material.diffuseColor(CkppColor(" 
 	   << aMaterial.diffuseColor[0] << " , " 
 	   << aMaterial.diffuseColor[1] << " , " 
 	   << aMaterial.diffuseColor[2] << "));" << endl;
-	
+
 	os << "materialVector.push_back(material);" << endl;
 	
-	it_Shapes++;
       }
 
-    it_Shapes = m_AccessToData[gindex].getShapes().begin();
-    unsigned long int lNbPoints = 0,li=0;
-    while(it_Shapes!=m_AccessToData[gindex].getShapes().end())
+    lNbPoints = 0;
+    for(unsigned int iShape=0;
+	iShape< Shapes.size();
+	iShape++)
       {
-	unsigned int lSizeOfIFS = (*it_Shapes).getIndexedFaceSet().coord.size();
+	unsigned int lSizeOfIFS = Shapes[iShape].getIndexedFaceSet().coordIndex.size();
 	os << "hppPolyhedron->setMaterial("<< lNbPoints 
-	   << " , "<< lNbPoints+lSizeOfIFS 
-	   << "materialVector[ << " << li++ << "]);" << endl;
+	   << " , "<< lNbPoints+lSizeOfIFS << " ," 
+	   << "materialVector[ " << iShape << "]);" << endl;
 	
 	lNbPoints+=lSizeOfIFS;
-	it_Shapes++;
       }
     os<< "hppPolyhedron->makeCollisionEntity();" << endl;
   }
@@ -264,28 +274,28 @@ namespace dynamicsJRLJapan {
     CjrlBody *aBody= aJoint->linkedBody();
     if (aBody==0)
       return;
-    os << " hppBody = ChppBody::create(std::string(\"RANK_"
+    os << "hppBody = ChppBody::create(std::string(\"RANK_"
        << aJoint->rankInConfiguration() << "\"));"<< endl;
     os << "hppBody->mass("<< aBody->mass() << ");"<< endl;
-    const matrix3d & aI = aBody->matrix3d();
+    const matrix3d & aI = aBody->inertiaMatrix();
 
-    os << "hppBody->inertiaMatrix(";
+    os << "hppBody->inertiaMatrix(matrix3d(";
     for(unsigned int li=0;li<3;li++)
       for(unsigned int lj=0;lj<3;lj++)
 	{
-	  os << aI(li,lj);
-	  if ((li!=2) || (lj!=3))
+	  os << MAL_S3x3_MATRIX_ACCESS_I_J(aI,li,lj);
+	  if ((li!=2) || (lj!=2))
 	    os << ", ";
 	}
-    os << ");" << endl;
+    os << "));" << endl;
     
-    const vector3d & lcom = aBody->localCenterOfMass();
+    vector3d lcom = aBody->localCenterOfMass();
     for(unsigned int li=0;li<3;li++)
       os << "MAL_S3_VECTOR_ACCESS(hppBodyRelCom," << li << ") = " << lcom(li)<< endl;
     os << "hppBody->localCenterOfMass(hppBodyRelCom);" << endl;
     os << "hppJoint_->setAttachedBody(hppBody);" << endl;
     os << "hppBody->addInnerObject(CkppSolidComponentRef::create(hppPolyhedron)," << endl;
-    os << "        fillMat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1),true);"
+    os << "        fillMat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1),true);"<< endl;
     
     
   }
@@ -302,13 +312,15 @@ namespace dynamicsJRLJapan {
 
     GenerateJoint(aJoint,os,shifttab,gindex);
     // Geometrical part.
-    os << "hppPolyhedron = CkppKCDPolyh::create(std::string(\"";
+    os << "hppPolyhedron = CkppKCDPolyhedron::create(std::string(\"";
+    os << "RANK_" << aJoint->rankInConfiguration();
     os << "\"));"<< endl;
     
     GeneratePoints(aJoint,os, shifttab, gindex);
     GenerateTriangles(aJoint,os, shifttab, gindex);    
     GenerateMaterial(aJoint,os, shifttab, gindex);    
-    
+    GenerateBodyData(aJoint,os, shifttab, gindex);    
+
     gindex++;
     // Call the sons.
     for(unsigned int i=0;i<aJoint->countChildJoints();i++)
