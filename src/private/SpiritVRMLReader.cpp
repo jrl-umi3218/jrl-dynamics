@@ -112,7 +112,7 @@ namespace dynamicsJRLJapan
 		    }
 		  else
 		    {
-		      ODEBUG3( "Open :" << GeomFileName );
+		      ODEBUG( "Open :" << GeomFileName );
 		      multi_pass_iterator_t
 			lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
 			lin_end(make_multi_pass(istreambuf_iterator<char_t>()));

@@ -838,7 +838,7 @@ namespace dynamicsJRLJapan
 		 << "File to be included : " << s);
 	  
 	  string sp2 = s;
-	  ODEBUG3( " " << sp2);
+	  ODEBUG( " " << sp2);
 	  m_actions.m_DataForParsing.m_BodyGeometry->addURL(sp2);
 	}
 	
@@ -986,16 +986,16 @@ namespace dynamicsJRLJapan
 	{
 	  file_position fp_cur;
 	  fp_cur = begin.get_position();
-	  ODEBUG3("Display - Current file: " << fp_cur.file );
-	  ODEBUG3( "Line   : " << fp_cur.line  
+	  ODEBUG("Display - Current file: " << fp_cur.file );
+	  ODEBUG( "Line   : " << fp_cur.line  
 		  << " Column : " << fp_cur.column );
 
 	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;
 	  if (lindex!=-1)
 	    {
-	      ODEBUG3(" Store inside :"<< lindex );
+	      ODEBUG(" Store inside :"<< lindex );
 	      m_actions.m_DataForParsing.m_ListOfURLs[lindex]->addShape(m_actions.m_DataForParsing.m_Shape);
-	      ODEBUG3(m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial());
+	      ODEBUG(m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial());
 	      m_actions.m_DataForParsing.m_Shape.reset();
 	    }
 	}

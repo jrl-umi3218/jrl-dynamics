@@ -34,7 +34,8 @@ void ExportToHPPBuilder(CjrlHumanoidDynamicRobot *aHDR,
 
 
 void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
-		      std::string FileOfJointValues)
+		      std::string FileOfJointValues,
+		      int Verbosity)
 {
   unsigned int NbOfDofs = aHDR->numberDof();
 
@@ -60,10 +61,11 @@ void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
       aif.close();
     }
   
-  for(unsigned int i=0;i<NbOfDofs;i++)
-    {
-      cout << aCurrentConf[i] << endl;
-    }
+  if (Verbosity>2)
+    for(unsigned int i=0;i<NbOfDofs;i++)
+      {
+	cout << aCurrentConf[i] << endl;
+      }
     
   aHDR->currentConfiguration(aCurrentConf);
   MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
@@ -132,7 +134,7 @@ int main(int argc, char *argv[])
 					 aVectorOfURLs,
 					 true);
 
-  RobotSetPosition(aHDR,aFileJointValue);
+  RobotSetPosition(aHDR,aFileJointValue,0);
   
   ExportToHPPBuilder(aHDR,aVectorOfURLs,aPath, RobotFileName);
 

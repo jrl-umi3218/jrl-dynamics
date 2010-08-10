@@ -93,6 +93,8 @@ namespace dynamicsJRLJapan
 			    unsigned int &gindex);
 
       std::vector<BodyGeometricalData> m_AccessToData;
+
+      unsigned int m_Verbosity;
     };
   };
 };

@@ -22,6 +22,7 @@ namespace dynamicsJRLJapan {
 
   Tools::GenerateRobotForHppBuilder::GenerateRobotForHppBuilder()
   {
+    m_Verbosity=0;
   }
 
   Tools::GenerateRobotForHppBuilder::~GenerateRobotForHppBuilder()
@@ -164,7 +165,8 @@ namespace dynamicsJRLJapan {
       {
 	const Geometry::IndexedFaceSet & aIFS = Shapes[iShape].getIndexedFaceSet();
 	const std::vector<Geometry::polygonIndex> & polygonIndex =  aIFS.coordIndex;
-	cout << "Number of polygons:" << aIFS.coordIndex.size() << endl;
+	if (m_Verbosity>2)
+	  cout << "Number of polygons:" << aIFS.coordIndex.size() << endl;
 	for(unsigned int iPolygon=0;
 	    iPolygon<polygonIndex.size();
 	    iPolygon++)
@@ -204,7 +206,8 @@ namespace dynamicsJRLJapan {
 	iShape++)
       {
 	const Geometry::IndexedFaceSet & aIFS = Shapes[iShape].getIndexedFaceSet();
-	cout << "aIFS.size:" << aIFS.coord.size() << endl;
+	if (m_Verbosity>2)
+	  cout << "aIFS.size:" << aIFS.coord.size() << endl;
 	const std::vector<vector3d> & VecOfvec3d =  aIFS.coord;
 	for(unsigned int i=0;i<VecOfvec3d.size();i++)
 	  {
