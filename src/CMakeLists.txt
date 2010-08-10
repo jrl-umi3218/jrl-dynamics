@@ -64,6 +64,7 @@ SET(libdyn_headers
 ../include/${PROJECT_NAME}/robotDynamicsImpl.h
 ../include/${PROJECT_NAME}/dynamicRobot.h
 ../include/${PROJECT_NAME}/humanoidDynamicRobot.h
+../include/${PROJECT_NAME}/GeometricData.h
 )
 
 # Create name of the library.
