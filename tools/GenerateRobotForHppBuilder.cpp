@@ -96,7 +96,7 @@ namespace dynamicsJRLJapan {
 	    }
 	os << "));" << endl;
 
-	os << "hppJoint_->bounds(0," << aJoint->lowerBound(0)<< " ," << aJoint->upperBound(0) << ")" << endl;
+	os << "hppJoint_->bounds(0," << aJoint->lowerBound(0)<< " ," << aJoint->upperBound(0) << ");" << endl;
 	os << "hppJoint_->isBounded(0, true);" << endl;
 	os << "hppJoint_->velocityBounds(0," 
 	   << aJoint->lowerVelocityBound(0) << " , " 
@@ -182,7 +182,7 @@ namespace dynamicsJRLJapan {
 
     os << "for (unsigned int i=0;i<" 
        << lNbFaces
-       << ";i++)" << endl;
+       << ";i++) {" << endl;
     os << "\t hppPolyhedron->CkcdPolyhedron::addTriangle(itab" << ajric 
        << "[3*i],itab" << ajric << "[3*i+1],itab" << ajric << "[3*i+2],rank);" 
        <<endl << "}" << endl;
@@ -218,7 +218,7 @@ namespace dynamicsJRLJapan {
     os << " 0.0};" << endl;
     os << "for (unsigned int i=0;i<" 
        << lNbPoints
-       << ";i++)" << endl;
+       << ";i++) {" << endl;
     os << "\t hppPolyhedron->CkcdPolyhedron::addPoint(dtab" << ajric 
        << "[3*i],dtab" << ajric << "[3*i+1],dtab" << ajric << "[3*i+2],rank);" 
        <<endl << "}" << endl;
@@ -240,10 +240,25 @@ namespace dynamicsJRLJapan {
       {
 	const Geometry::Appearance & anAppearance = Shapes[iShape].getAppearance();
 	const Geometry::Material & aMaterial = anAppearance.getMaterial();
+	double maxdiffuseColor = aMaterial.diffuseColor[0];
+	if (aMaterial.diffuseColor[0] < aMaterial.diffuseColor[1])
+	  {
+	    if (aMaterial.diffuseColor[1] < aMaterial.diffuseColor[2])
+	      maxdiffuseColor = aMaterial.diffuseColor[2];
+	    else
+	      maxdiffuseColor = aMaterial.diffuseColor[1];
+	  }
+	else
+	  {
+	    if (aMaterial.diffuseColor[0] < aMaterial.diffuseColor[2])
+	       maxdiffuseColor = aMaterial.diffuseColor[2];
+	  }
+	      
 	os << "material.diffuseColor(CkppColor(" 
 	   << aMaterial.diffuseColor[0] << " , " 
 	   << aMaterial.diffuseColor[1] << " , " 
-	   << aMaterial.diffuseColor[2] << "));" << endl;
+	   << aMaterial.diffuseColor[2] << " , "
+	   << maxdiffuseColor << "));" << endl;
 
 	os << "materialVector.push_back(material);" << endl;
 	
@@ -291,7 +306,7 @@ namespace dynamicsJRLJapan {
     
     vector3d lcom = aBody->localCenterOfMass();
     for(unsigned int li=0;li<3;li++)
-      os << "MAL_S3_VECTOR_ACCESS(hppBodyRelCom," << li << ") = " << lcom(li)<< endl;
+      os << "MAL_S3_VECTOR_ACCESS(hppBodyRelCom," << li << ") = " << lcom(li)<< ";"<< endl;
     os << "hppBody->localCenterOfMass(hppBodyRelCom);" << endl;
     os << "hppJoint_->setAttachedBody(hppBody);" << endl;
     os << "hppBody->addInnerObject(CkppSolidComponentRef::create(hppPolyhedron)," << endl;
