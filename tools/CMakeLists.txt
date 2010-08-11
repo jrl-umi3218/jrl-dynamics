@@ -90,7 +90,7 @@ SET_TARGET_PROPERTIES(CreateHPPBuilder
 SET(${PROJECT_NAME}_TOOLS
   ReadOpenHRPFileAndExport
   CreateVRMLPoseFile
-  # CreateHPPBuilder
+  CreateHPPBuilder
   CreateMapleModel
   ReadPosFile
 )

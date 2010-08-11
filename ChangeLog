@@ -12,9 +12,7 @@ Changes from 1.18.0 to 1.19.0:
 * Mon Aug 9 07:24:28 2010 +0900 stasse Handles properly list of BodyGeometricalData
 * Fri Aug 6 21:04:29 2010 +0900 Olivier Stasse Improving grammar.
 * Fri Aug 6 12:38:12 2010 +0900 stasse Add Geometrical Data.
-* Thu Aug 5 08:48:09 2010 +0900 stasse Merge branch 'master' of git+ssh://jrl005.a01.aist.go.jp/home/stasse/devel-src/dynamicsJRLJapan/pkgsrc
 * Thu Aug 5 08:47:15 2010 +0900 Olivier Stasse Fix GeometricData.
-* Thu Aug 5 00:11:32 2010 +0900 stasse Merge branch 'master' of git+ssh://git.laas.fr/git/jrl/dynamicsJRLJapan
 * Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical data.
 * Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical parts.
 * Wed Aug 4 19:38:40 2010 +0900 stasse First test for Inline.

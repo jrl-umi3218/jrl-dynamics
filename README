@@ -1,5 +1,13 @@
 See INSTALL for installation instruction.
 
+== Changes from 1.18.0 to 1.19.0 
+New geometrical data can be parsed and related to the body.
+Added a CreateHPPBuilder in tools directory.
+Better support for VRML Grammar.
+This extension might be removed in the future to
+be set in a different package.
+
+== Introduction
 The main goal of the recent modifications is a strict compliance
 to abstractDynamics.
 Therefore any code relying on direct access to dynamicsJRLJapan's old
