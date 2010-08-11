@@ -1,0 +1,42 @@
+Changes from 1.18.0 to 1.19.0:
+* Wed Aug 11 08:07:01 2010 +0900 Olivier Stasse Remove debug messages.
+* Tue Aug 10 21:02:20 2010 +0900 Olivier Stasse Fix bug for generating a compilable robot for new robotbuilder.
+* Tue Aug 10 20:11:22 2010 +0900 Olivier Stasse Install GeometricData.h in include directory.
+* Tue Aug 10 19:43:08 2010 +0900 Olivier Stasse Add generation of HPP elements for building a robot directly in C++
+* Tue Aug 10 06:49:40 2010 +0900 Olivier Stasse Files for the robotbuilder generator.
+* Tue Aug 10 06:49:40 2010 +0900 Olivier Stasse Insert a robot builder generator.
+* Mon Aug 9 20:12:00 2010 +0900 Francois Keith Correct the installation command
+* Mon Aug 9 19:37:41 2010 +0900 Francois Keith Remove a useless using namespace boost::spirit::classic
+* Mon Aug 9 19:18:14 2010 +0900 Francois Keith Correct the compilation order
+* Mon Aug 9 16:50:44 2010 +0900 Olivier Stasse Allows reading of geometrical information.
+* Mon Aug 9 07:24:28 2010 +0900 stasse Handles properly list of BodyGeometricalData
+* Fri Aug 6 21:04:29 2010 +0900 Olivier Stasse Improving grammar.
+* Fri Aug 6 12:38:12 2010 +0900 stasse Add Geometrical Data.
+* Thu Aug 5 08:48:09 2010 +0900 stasse Merge branch 'master' of git+ssh://jrl005.a01.aist.go.jp/home/stasse/devel-src/dynamicsJRLJapan/pkgsrc
+* Thu Aug 5 08:47:15 2010 +0900 Olivier Stasse Fix GeometricData.
+* Thu Aug 5 00:11:32 2010 +0900 stasse Merge branch 'master' of git+ssh://git.laas.fr/git/jrl/dynamicsJRLJapan
+* Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical data.
+* Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical parts.
+* Wed Aug 4 19:38:40 2010 +0900 stasse First test for Inline.
+* Wed Aug 4 19:38:39 2010 +0900 stasse Beautification of grammar rules
+* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Win32: Remove a too verbose warning
+* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Change the order of inclusion of headers to be compatible with boost 1.39
+* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Use directly 'grammar' instead of its full name.
+* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Remove useless copy constructors taking a ref in param.
+* Tue Aug 3 21:32:07 2010 +0900 Francois Keith Win32: Remove a too verbose warning
+* Tue Aug 3 21:29:37 2010 +0900 Francois Keith Change the order of inclusion of headers to be compatible with boost 1.39
+* Tue Aug 3 21:21:23 2010 +0900 Francois Keith Use directly 'grammar' instead of its full name.
+* Tue Aug 3 21:18:49 2010 +0900 Francois Keith Remove useless copy constructors taking a ref in param.
+* Tue Aug 3 19:33:07 2010 +0900 Olivier Stasse For handling errors during parsing.
+* Tue Aug 3 19:33:07 2010 +0900 Olivier Stasse Implements new version of VRML parser to move towards openvrml.
+* Tue Aug 3 19:33:06 2010 +0900 stasse Provides new contructors for copy of all Joints flavors.
+* Tue Aug 3 19:33:06 2010 +0900 Olivier Stasse Implements a broken version.
+* Tue Aug 3 19:33:06 2010 +0900 stasse New parser for VRML files.
+* Mon Jul 26 22:35:46 2010 +0000 Olivier Stasse Same than before but for the user's CMakeLists.txt.
+* Mon Jul 26 22:34:40 2010 +0000 Olivier Stasse Change name of TestCopy[..]AbstractInterface into a shorter name.
+* Mon Jul 26 22:33:26 2010 +0000 Olivier Stasse Install everything in /usr/share/openrobots
+* Mon Jul 26 22:30:41 2010 +0000 Olivier Stasse Set SHORT_NAMES to yes.
+* Mon Jul 26 05:15:36 2010 +0000 Olivier Stasse Fix the CMakeLists.txt for users.
+* Mon Jul 26 05:15:36 2010 +0000 Olivier Stasse Rename examples.CMakeList file during install process.
+* Mon Jul 26 05:15:35 2010 +0000 Olivier Stasse Fix wrong install macro for installing documentation.
+* Tue Jul 20 18:16:59 2010 +0900 stasse Bump 1.18.0.99
