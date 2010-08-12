@@ -159,6 +159,7 @@ namespace dynamicsJRLJapan {
     os << "unsigned int itab" << ajric << "[]={";
     const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbFaces = 0;
+    unsigned long int lCorrectionFaces =0;
     for(unsigned int iShape=0;
 	iShape< Shapes.size();
 	iShape++)
@@ -172,6 +173,10 @@ namespace dynamicsJRLJapan {
 	    iPolygon++)
 	  {
 	    const std::vector<int> lIndex = polygonIndex[iPolygon];
+
+	    if (lIndex.size()==0)
+	      lCorrectionFaces++;
+
 	    for(unsigned int i=0;i<lIndex.size();i++)
 	      {
 		os << lIndex[i] << " , " ;
@@ -183,7 +188,7 @@ namespace dynamicsJRLJapan {
     os << "0 };" << endl;
 
     os << "for (unsigned int i=0;i<" 
-       << lNbFaces
+       << lNbFaces-lCorrectionFaces
        << ";i++) {" << endl;
     os << "\t hppPolyhedron->CkcdPolyhedron::addTriangle(itab" << ajric 
        << "[3*i],itab" << ajric << "[3*i+1],itab" << ajric << "[3*i+2],rank);" 
@@ -201,6 +206,9 @@ namespace dynamicsJRLJapan {
     os << "double dtab" << ajric << "[]={";
     const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbPoints = 0;
+    unsigned long int lNbPolyhedron = 0;
+    if (m_Verbosity>2)
+      cout << "New polyhedron" << endl;
     for(unsigned int iShape=0;
 	iShape< Shapes.size();
 	iShape++)
@@ -214,9 +222,17 @@ namespace dynamicsJRLJapan {
 	    vector3d avec = VecOfvec3d[i];
 	      os << avec(0) << " ," 
 		 << avec(1) << " ," 
-		 << avec(2) << " ," << endl;
+		 << avec(2) << " ,";
+	      if (i==VecOfvec3d.size()-1)
+		os << " /* End of polygon " 
+		   << lNbPolyhedron++ << " " 
+		   << lNbPoints << " " 
+		   << VecOfvec3d.size() << " " 
+		   << " */" ;
+	      os << endl;
 	  }
 	lNbPoints+=  VecOfvec3d.size();
+       
       }
     os << " 0.0};" << endl;
     os << "for (unsigned int i=0;i<" 
@@ -274,7 +290,7 @@ namespace dynamicsJRLJapan {
       {
 	unsigned int lSizeOfIFS = Shapes[iShape].getIndexedFaceSet().coordIndex.size();
 	os << "hppPolyhedron->setMaterial("<< lNbPoints 
-	   << " , "<< lNbPoints+lSizeOfIFS << " ," 
+	   << " , "<< lNbPoints+lSizeOfIFS-1 << " ," 
 	   << "materialVector[ " << iShape << "]);" << endl;
 	
 	lNbPoints+=lSizeOfIFS;
