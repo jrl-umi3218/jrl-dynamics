@@ -668,6 +668,13 @@ namespace dynamicsJRLJapan
 					      *lCurrentBody,
 					      aDataForParsing.CurrentLink);
 	  //	aDataForParsing.JointMemoryAllocationForNewDepth=false;
+	  aDataForParsing.m_BodyGeometry->setBodyName(lCurrentBody->getName());
+	  aDataForParsing.m_BodyGeometry->
+	    setRelatedJointName(m_actions.
+				m_DataForParsing.
+				CurrentLink.
+				aJoint->getName());
+
 	  aDataForParsing.m_ListOfURLs.push_back(aDataForParsing.m_BodyGeometry);
 	  aDataForParsing.m_BodyGeometry = new BodyGeometricalData ();
 	  lCurrentBody->setInitialized(true);

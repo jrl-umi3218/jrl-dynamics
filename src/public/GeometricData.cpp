@@ -225,7 +225,41 @@ namespace dynamicsJRLJapan
     m_URLs = lURLs;
     m_Shapes = r.getShapes();
     m_RotationForDisplay = r.getRotationForDisplay();
+    m_BodyName = r.getBodyName();
+    m_RelatedJointName = r.getRelatedJointName();
     return *this;
+
   }
+
+  void BodyGeometricalData::setBodyName(const std::string &aBodyName)
+  {
+    m_BodyName = aBodyName;
+  }
+  
+  std::string & BodyGeometricalData::getBodyName()
+  {
+    return m_BodyName;
+  }
+
+  const std::string & BodyGeometricalData::getBodyName()const
+  {
+    return m_BodyName;
+  }
+
+  void BodyGeometricalData::setRelatedJointName(const std::string &aRelatedJointName)
+  {
+    m_RelatedJointName = aRelatedJointName;
+  }
+  
+  std::string & BodyGeometricalData::getRelatedJointName()
+  {
+    return m_RelatedJointName;
+  }
+
+  const std::string & BodyGeometricalData::getRelatedJointName()const
+  {
+    return m_RelatedJointName;
+  }
+
 
 };

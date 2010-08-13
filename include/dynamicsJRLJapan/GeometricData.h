@@ -145,8 +145,11 @@ namespace dynamicsJRLJapan
      matrix3d m_RotationForDisplay;
      std::vector < std::string > m_URLs;
      std::vector < Geometry::Shape > m_Shapes;
+     std::string m_BodyName;
+     std::string m_RelatedJointName;
 
   public:
+
     BodyGeometricalData();
     ~BodyGeometricalData();
 
@@ -161,6 +164,14 @@ namespace dynamicsJRLJapan
     void addShape(Geometry::Shape aShape);
     
     BodyGeometricalData & operator=(const BodyGeometricalData & );
+
+    void setBodyName(const std::string &);
+    const std::string & getBodyName() const;
+    std::string & getBodyName();
+
+    void setRelatedJointName(const std::string &);
+    const std::string & getRelatedJointName() const;
+    std::string & getRelatedJointName();
    };
 
 };
