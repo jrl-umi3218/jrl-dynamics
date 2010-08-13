@@ -16,6 +16,7 @@
 #include <ostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 
@@ -92,8 +93,20 @@ namespace dynamicsJRLJapan
 			    std::string shifttab,
 			    unsigned int &gindex);
 
-      std::vector<BodyGeometricalData> m_AccessToData;
+      void GenerateRobotFoot(CjrlFoot *aFoot,
+			     std::ostream &os);
+      
+      void GenerateRobotHand(CjrlHand *aHand,
+			     std::ostream &os);
+      
+      void GenerateSemanticMapping(std::ostream &os);
 
+      void GenerateRobotEndEffectors(std::ostream &os);
+
+      void GenerateRobotSpecificities(std::ostream &os);
+
+      std::vector<BodyGeometricalData> m_AccessToData;
+      std::map<CjrlJoint *,std::string> m_Joint2Name;
       unsigned int m_Verbosity;
     };
   };

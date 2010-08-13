@@ -44,6 +44,8 @@ namespace dynamicsJRLJapan {
 
     string shifttab="";
     GenerateBodies(aof,shifttab);
+    GenerateRobotSpecificities(aof);
+
     aof.close();
   }
 
@@ -68,24 +70,27 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForHppBuilder::GenerateJoint(CjrlJoint *aJoint, 
 							ostream &os,
-							string shifttab, unsigned int &gindex)
+							string shifttab, 
+							unsigned int &gindex)
   {
 
     string JointName;
-    unsigned int aric = aJoint->rankInConfiguration();
-    JointName = "RANK_" + aric;
+    JointName = m_AccessToData[gindex].getRelatedJointName();
+
+    m_Joint2Name[aJoint] = JointName;
+
     const matrix4d anInitMat = aJoint->initialPosition();
     if (aJoint->numberDof()==6)
       {
-	os << "createFreeFlyer(std::string(\"RANK_" 
-	   << aric
+	os << "createFreeFlyer(std::string(\"" 
+	   << JointName
 	   << "\")," << endl;
 	os << "        fillMat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1));"<< endl;
       }
     else if (aJoint->numberDof()==1)
       {
-	os << "createRotation(std::string(\"RANK_" 
-	   << aJoint->rankInConfiguration()
+	os << "createRotation(std::string(\"" 
+	   << JointName
 	   << "\")," << endl;
 	os << "\tfillMat4(";
 	for(unsigned int i=0;i<4;i++)
@@ -105,8 +110,9 @@ namespace dynamicsJRLJapan {
 	CjrlJoint *ParentJoint = aJoint->parentJoint();
 	if (ParentJoint!=0)
 	  {
-	    os << "addChildJoint(std::string(\"RANK_" << ParentJoint->rankInConfiguration() 
-	       << "\"),std::string(\"RANK_" << aric << "\"));" << endl; 
+	    os << "addChildJoint(std::string(\"" 
+	       << m_Joint2Name[ParentJoint]
+	       << "\"),std::string(\"" << JointName << "\"));" << endl; 
 	  }
       }
 
@@ -114,8 +120,8 @@ namespace dynamicsJRLJapan {
     // Set root joint if needed.
     if (aJoint->numberDof()==6)
       {
-	os << "setRootJoint(std::string(\"RANK_"
-	   << aJoint->rankInConfiguration()
+	os << "setRootJoint(std::string(\""
+	   << JointName
 	   << "\"));" << endl;
       }
     
@@ -308,8 +314,9 @@ namespace dynamicsJRLJapan {
     CjrlBody *aBody= aJoint->linkedBody();
     if (aBody==0)
       return;
-    os << "hppBody = ChppBody::create(std::string(\"RANK_"
-       << aJoint->rankInConfiguration() << "\"));"<< endl;
+    os << "hppBody = ChppBody::create(std::string(\""
+       << m_AccessToData[gindex].getBodyName()
+       << "\"));"<< endl;
     os << "hppBody->mass("<< aBody->mass() << ");"<< endl;
     const matrix3d & aI = aBody->inertiaMatrix();
 
@@ -333,7 +340,145 @@ namespace dynamicsJRLJapan {
     
     
   }
-  
+
+#define OSDATA \
+os << "  data(0)=" << data(0) \
+   << ";data(1)=" << data(1)  \
+   << ";data(2)=" << data(2)  \
+   << ";" << endl;
+
+  void Tools::GenerateRobotForHppBuilder::GenerateRobotFoot(CjrlFoot *aFoot,
+							    ostream &os)
+  {
+    const CjrlJoint * anAnkle = aFoot->associatedAnkle();
+    os << "{" << endl;
+    os << "  const CjrlJoint *lAnkle = jointMap_[std::string(\""
+       << m_Joint2Name[(CjrlJoint *)anAnkle]<< "\")]->jrlJoint();" << endl;
+    os << "  lFoot= createFoot(lAnkle);" << endl;
+
+    // Set sole size.
+    double outLength,outWidth;
+    aFoot->getSoleSize(outLength,outWidth);    
+    os << "  double outLength="<< outLength <<";" << endl;
+    os << "  double outWidth=" << outWidth  <<";" << endl;
+    os << "  lFoot->setSoleSize(outLength,outWidth);"<< endl;
+    os << "  vector3d data;" << endl;
+    vector3d data;
+
+    // Set ankle position in local frame.
+    aFoot->getAnklePositionInLocalFrame(data);
+    OSDATA;
+    os << "  lFoot->setAnklePositionInLocalFrame(data);" <<endl;
+    
+    // Sole center in local frame.
+    aFoot->getSoleCenterInLocalFrame(data);
+    OSDATA;
+    os << "  lFoot->setSoleCenterInLocalFrame(data);" <<endl;
+
+    // Projection center in local frame in sole.
+    aFoot->getProjectionCenterLocalFrameInSole(data);
+    OSDATA;
+    os << "  lFoot->setProjectionCenterLocalFrameInSole(data);" <<endl;
+    os << "}"<<endl;
+  }
+
+  void Tools::GenerateRobotForHppBuilder::GenerateRobotHand(CjrlHand *aHand,
+							    ostream &os)
+  {
+    const CjrlJoint * aWrist = aHand->associatedWrist();
+    os << "{" << endl;
+    os << "  const CjrlJoint *lWrist = jointMap_[std::string(\""
+       << m_Joint2Name[(CjrlJoint *)aWrist]<< "\")]->jrlJoint();" << endl;
+    os << "  lHand= createHand(lWrist);" << endl;
+
+    vector3d data;
+    os << "  vector3d data;" << endl;
+    aHand->getCenter(data); OSDATA;
+    os << "  lHand->setCenter(data);" <<endl;
+    aHand->getThumbAxis(data); OSDATA;
+    os << "  lHand->setThumbAxis(data);" <<endl;
+    aHand->getForeFingerAxis(data); OSDATA;
+    os << "  lHand->setForeFingerAxis(data);" <<endl;
+    aHand->getPalmNormal(data); OSDATA;
+    os << "  lHand->setPalmNormal(data);" <<endl;
+     
+    os << "}"<< endl;
+
+  }
+  void Tools::GenerateRobotForHppBuilder::GenerateRobotEndEffectors(ostream &os)
+  {
+    // Feet
+    os << "/* Create Feet */" << endl;
+    os << "CjrlFoot *lFoot=0;" <<endl;
+
+    CjrlFoot * aFoot = m_HDR->rightFoot();
+    GenerateRobotFoot(aFoot,os);
+    os << "robot_->rightFoot(lFoot);" << endl;
+
+    aFoot = m_HDR->leftFoot();
+    GenerateRobotFoot(aFoot,os);
+    os << "robot_->leftFoot(lFoot);" << endl;
+
+    // Hands
+    os << "/* Create Hands */" << endl;
+    os << "CjrlHand *lHand=0;" << endl;
+    CjrlHand * aHand = m_HDR->rightHand();
+    GenerateRobotHand(aHand,os);
+    os << "robot_->rightHand(lHand);" << endl;
+
+    aHand = m_HDR->leftHand();
+    GenerateRobotHand(aHand,os);
+    os << "robot_->leftHand(lHand);" << endl;
+      
+  }
+
+#define OSJOINTMAP \
+    os << "  lJoint = jointMap_[std::string(\"" \
+       << m_Joint2Name[lJoint] \
+       << "\")]->jrlJoint();"  \
+       << endl; \
+
+  void Tools::GenerateRobotForHppBuilder::GenerateSemanticMapping(ostream &os)
+  {
+    os << "/* Semantic mapping */" << endl;
+    os << "{" << endl; 
+    os << "  CjrlJoint *lJoint=0;"<<endl;
+    CjrlJoint *lJoint=0;
+
+    lJoint = m_HDR->chest();
+    OSJOINTMAP;
+    os << "  robot_->chest(lJoint);" << endl;
+
+    lJoint = m_HDR->leftWrist();
+    OSJOINTMAP;
+    os << "  robot_->leftWrist(lJoint);" << endl;
+    
+    lJoint = m_HDR->rightWrist();
+    OSJOINTMAP;
+    os << "  robot_->rightWrist(lJoint);" << endl;
+    
+    lJoint = m_HDR->leftAnkle();
+    OSJOINTMAP;
+    os << "  robot_->leftAnkle(lJoint);" << endl;
+
+    lJoint = m_HDR->rightAnkle();
+    OSJOINTMAP;
+    os << "  robot_->rightAnkle(lJoint);" << endl;
+
+    lJoint = m_HDR->gazeJoint();
+    OSJOINTMAP;
+    os << "  robot_->gazeJoint(lJoint);" << endl;
+
+    os << "}" << endl;
+
+  }
+
+  void Tools::GenerateRobotForHppBuilder::GenerateRobotSpecificities(ostream &os)
+  {
+    GenerateSemanticMapping(os);
+    GenerateRobotEndEffectors(os);
+  }
+
   void Tools::GenerateRobotForHppBuilder::GenerateBody(CjrlJoint *aJoint, 
 						       ostream &os,
 						       string shifttab,
@@ -347,7 +492,7 @@ namespace dynamicsJRLJapan {
     GenerateJoint(aJoint,os,shifttab,gindex);
     // Geometrical part.
     os << "hppPolyhedron = CkppKCDPolyhedron::create(std::string(\"";
-    os << "RANK_" << aJoint->rankInConfiguration();
+    os << m_Joint2Name[aJoint];
     os << "\"));"<< endl;
     
     GeneratePoints(aJoint,os, shifttab, gindex);
