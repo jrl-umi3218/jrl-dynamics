@@ -189,7 +189,8 @@ int main(int argc, char *argv[])
 
   string RefLogFile;
   string ActualLogFile;
-  if (argc!=5)
+  cout << "argc: " << argc << endl;
+  if (argc!=7)
     {
       const char *envrobotpath="ROBOTPATH";
       char *robotpath = 0;
@@ -219,7 +220,9 @@ int main(int argc, char *argv[])
 	  aMapFromCjrlJointToRank += "/../etc/";
 	  aMapFromCjrlJointToRank += robotname;
 	  aMapFromCjrlJointToRank += "JointRank.xml";
-	  
+
+	  RefLogFile = argv[5];
+	  ActualLogFile = argv[6];
 	}
 
       if (argc==3)
@@ -234,6 +237,8 @@ int main(int argc, char *argv[])
       aName=argv[2];
       aSpecificitiesFileName = argv[3];
       aMapFromCjrlJointToRank = argv[4];
+      RefLogFile = argv[5];
+      ActualLogFile = argv[6];
     }
   
   dynamicsJRLJapan::ObjectFactory dynFactory;
@@ -248,6 +253,9 @@ int main(int argc, char *argv[])
   cout << "Robot's model file:" << aPath << aName << endl;
   cout << "Specificities file:" << aSpecificitiesFileName << endl;
   cout << "Map from joint to rank:" << aMapFromCjrlJointToRank << endl;
+  cout << "RegLogFile: "<< RefLogFile << endl;
+  cout << "ActualLogFile: "<< ActualLogFile << endl;
+
   string RobotFileName = aPath + aName;
   parseOpenHRPVRMLFile(*aHDR,RobotFileName,
 		       aMapFromCjrlJointToRank,aSpecificitiesFileName);
@@ -263,7 +271,7 @@ int main(int argc, char *argv[])
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
   
-  for(int i=0;i<(NbOfDofs-6 < 41 ? NbOfDofs-6 : 40) ;i++)
+  for(int i=0;i<(NbOfDofs-6 < 42 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = 0.0;
   
   aHDR->currentConfiguration(aCurrentConf);
@@ -308,7 +316,12 @@ int main(int argc, char *argv[])
   ofstream RebuildWaist;
   RebuildWaist.open("RebuildWaist.dat",ofstream::out);
   RebuildWaist.close();
-
+  
+  {
+    ofstream RebuildTorques;
+    RebuildTorques.open("RebuildTorques.dat",ofstream::out);
+    RebuildTorques.close();
+  }
   // Set properties for the first model.
   {
     string inProperty[4]={"TimeStep","ComputeAcceleration",
@@ -331,7 +344,7 @@ int main(int argc, char *argv[])
   ofstream ASD("ActualStateDescription.dat");
   if (ASD.is_open())
     {
-      for(unsigned int i=0;i<126;i++)
+      for(unsigned int i=0;i<130;i++)
 	{
 	  string tmp;
 	  ActualStateFile>> tmp;
@@ -343,7 +356,7 @@ int main(int argc, char *argv[])
   ofstream RSD("ReferenceStateDescription.dat");
   if (RSD.is_open())
     {
-      for(unsigned int i=0;i<95;i++)
+      for(unsigned int i=0;i<99;i++)
 	{
 	  string tmp;
 	  RefStateFile>> tmp;
@@ -367,16 +380,16 @@ int main(int argc, char *argv[])
   
       double RotationFreeFlyer[9];
 
-      for(unsigned int i=0;i<131;i++)
+      for(unsigned int i=0;i<140;i++)
 	{
 	  ActualStateFile >> ActualData[i];
 
-	  if (i<40)
+	  if (i<42)
 	    aCurrentConf[i+6] = ActualData[i];
-	  if (i==82)
+	  if (i==87)
 	    NormalForces[1]=ActualData[i];
 
-	  if (i==88)
+	  if (i==93)
 	    NormalForces[0]=ActualData[i];
 	}
 
@@ -452,7 +465,19 @@ int main(int argc, char *argv[])
       //92
       RebuildZMP.close();
 
-      
+      {
+	const matrixNxP & Torques = aHDR->currentTorques();
+	ofstream RebuildTorques;
+	RebuildTorques.open("RebuildTorques.dat",ofstream::app);
+	for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
+	  {
+	    RebuildTorques << Torques(i,0) << " " 
+			   << ActualData[41-6+i] << " " ;
+	  }
+	RebuildTorques << endl;
+	RebuildTorques.close();
+      }
+
       NbIt++;
     }
   

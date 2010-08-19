@@ -109,6 +109,14 @@ SET_TARGET_PROPERTIES(ComputeRealZMP
 )
 ADD_DEPENDENCIES (ComputeRealZMP ${PROJECT_NAME})
 
+ADD_EXECUTABLE(	ComputeTorqueOnTrajectory ComputeTorqueOnTrajectory.cpp)
+SET_TARGET_PROPERTIES(ComputeTorqueOnTrajectory
+	              PROPERTIES
+	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+)
+ADD_DEPENDENCIES (ComputeTorqueOnTrajectory ${PROJECT_NAME})
+
 ADD_EXECUTABLE(	TestFreeFlyer TestFreeFlyer.cpp CommonTools.cpp)
 SET_TARGET_PROPERTIES( TestFreeFlyer
   PROPERTIES
