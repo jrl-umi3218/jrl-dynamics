@@ -86,7 +86,7 @@
        <JointsID>  </JointsID>
   </Head>
   <Chest>
-       <JointNb> 0 </JointNb>
-       <JointsID>  </JointsID>
+       <JointNb> 1 </JointNb>
+       <JointsID> 28 </JointsID>
   </Chest>
 </Humanoid>
