@@ -161,6 +161,7 @@ SET(${PROJECT_NAME}_EXAMPLES_DATA
   sample.wrl
   sampleSpecificities.xml
   sampleLinkJointRank.xml
+  sampleInitConfig.dat
   )
 INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES_DATA}
   DESTINATION share/examples/${PROJECT_NAME}/data
