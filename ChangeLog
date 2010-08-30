@@ -38,3 +38,10 @@ Changes from 1.18.0 to 1.19.0:
 * Mon Jul 26 05:15:36 2010 +0000 Olivier Stasse Rename examples.CMakeList file during install process.
 * Mon Jul 26 05:15:35 2010 +0000 Olivier Stasse Fix wrong install macro for installing documentation.
 * Tue Jul 20 18:16:59 2010 +0900 stasse Bump 1.18.0.99
+* Mon Aug 30 23:10:58 2010 +0900 stasse Release 1.19.1
+* Fri Aug 27 19:29:53 2010 +0900 Olivier Stasse Add initial pose to sample robot.
+* Thu Aug 26 15:57:05 2010 +0900 Olivier Stasse Add CHEST specification.
+* Thu Aug 19 20:18:05 2010 +0900 Olivier Stasse Add torques computation along trajectories.
+* Fri Aug 13 13:59:13 2010 +0900 stasse Add names for bodies and links, as well as specificities.
+* Fri Aug 13 13:58:17 2010 +0900 stasse Read names for body and joints and externalize them.
+* Thu Aug 12 19:18:25 2010 +0900 stasse Fix a pb when the parser send polygon with size 0 for robot hpp builder.
