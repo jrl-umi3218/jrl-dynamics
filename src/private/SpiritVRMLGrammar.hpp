@@ -204,18 +204,22 @@ namespace dynamicsJRLJapan
 	    | Sensors_r            
 	    | TCBChildrenBlock_r ;
 	  
-	  TransformChildrenBlock_r = ch_p('[')[self.actions.fDisplay]
-	    >> *(GroupBlock_r       
+	  TransformChildrenBlock_r = *(GroupBlock_r       
 		 | TransformBlock_r   
 		 | ShapeInline_r     
 		 | Sensors_r          
 		 | Shape_r[self.actions.fStoreShape]           
 		 | TCBChildren_r      ) 
-	    >> ch_p(']');
+	    ;
 	  
-	  TransformChildren_r= str_p("children")[self.actions.fDisplay]
+	  TransformChildren_r= 
+	    str_p("children")[self.actions.fDisplay]
 	    >> ((str_p("IS")  >> str_p("children")) |
-		TransformChildrenBlock_r            );
+		TransformChildrenBlock_r  |
+		(ch_p('[')[self.actions.fDisplay]
+		>> TransformChildrenBlock_r 
+		 >> ch_p(']'))
+		);
 	  
 	  TransformLine_r = (TransformToField_r) 
 	    | TransformChildren_r 
@@ -547,7 +551,19 @@ namespace dynamicsJRLJapan
 	    >> ch_p('[') 
 	    >> *((real_p)[self.actions.fFillMomentsOfInertia])
 	    >> ch_p(']') ;
-	
+	  // Texture block
+	  imagetexture_r = str_p("ImageTexture") 
+	    >> ch_p('{')
+	    >> str_p("url")
+	    >>  ( ch_p('"')  | (ch_p('[') >> ch_p('"')))
+	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')
+			   |ch_p('/'))])
+	    >> ( ch_p('"')  | (ch_p('"') >> ch_p(']')))
+	    >> ch_p('}');
+
+	  texture_r = str_p("texture")
+	    >> imagetexture_r;
+
 	  // Material block
 	  DiffuseColor_r = str_p("diffuseColor") 
 	    >> real_p[self.actions.fMaterialDiffuseColorR]
@@ -584,7 +600,7 @@ namespace dynamicsJRLJapan
 	  AppearanceBlock_r = (str_p("material"))
 	    >> str_p("Material")
 	    >> ch_p('{') 
-	    >> *(MaterialBlock_r) 
+	    >> *(MaterialBlock_r ) 
 	    >> ch_p('}');
 	  
 	  AppearanceUse_r = str_p("USE")  
@@ -595,7 +611,8 @@ namespace dynamicsJRLJapan
 		  >> str_p("Appearance")) | 
 		 str_p("Appearance") )
 	    >>  ch_p('{') 
-	    >> AppearanceBlock_r[self.actions.fDisplay]
+	    >> AppearanceBlock_r[self.actions.fDisplay] |
+	    texture_r
 	    >> ch_p('}') ;
 
 	  AppearanceDef_r = str_p("DEF") >> AppearanceBlockTitle_r;
@@ -634,6 +651,12 @@ namespace dynamicsJRLJapan
 	  IFScoord_r = str_p("coord")[self.actions.fDisplay] 
 	    >> Coordinate_r[self.actions.fCoordinates];
 
+	  IFSnormalIndex_r = str_p("normalIndex")
+	    >> ch_p('[') >> ch_p(']');
+	  
+	  IFStexCoordIndex_r = str_p("texCoordIndex")
+	    >> ch_p('[') >> ch_p(']');
+ 
 	  IFScoordIndex_r = str_p("coordIndex")
 	    >> ch_p('[')
 	    >> *( MFUInt32_r[self.actions.fCoordIndex] 
@@ -649,7 +672,9 @@ namespace dynamicsJRLJapan
 	    IFSsolidfield_r  |
 	    IFScreaseAngle_r |
 	    IFScoord_r       |
-	    IFScoordIndex_r ;
+	    IFScoordIndex_r  |
+	    IFStexCoordIndex_r |
+	    IFSnormalIndex_r;
 
 	  IndexedFaceSet_r = str_p("IndexedFaceSet")[self.actions.fDisplay]
 	    >> ch_p ('{')
@@ -657,10 +682,17 @@ namespace dynamicsJRLJapan
 	    >> ch_p ('}');
 
 	  // Header
-	  GeometryHeader_r = str_p("geometry")[self.actions.fDisplay]
-	    >>  IndexedFaceSet_r |
+	  GeometrySubHeader_r = IndexedFaceSet_r |
 	    GeometryBox_r  |  
 	    GeometryCylinder_r ;
+
+	  GeometryHeader_r = str_p("geometry")[self.actions.fDisplay]
+	    >>  ( GeometrySubHeader_r |
+		  ( str_p("DEF") >> 
+		    (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fDisplay]
+		    >> GeometrySubHeader_r
+		    )
+		  );
 	
 	  // Shape block
 	  ShapeBlock_r = AppearanceHeader_r | 
@@ -688,12 +720,12 @@ namespace dynamicsJRLJapan
 	  BodyChildrenField_r=  
 	    ShapeInline_r   | 
 	    Sensors_r       | 
-	    Shape_r         | 
+	    Shape_r[self.actions.fStoreShape]         | 
 	    TransformBlock_r;
 	
 	  BodyChildren_r = str_p("children") 
 	    >> (ch_p('[') >> *BodyChildrenField_r >> ch_p(']')) |
-	        Shape_r;
+	        Shape_r[self.actions.fStoreShape];
 	  
 	  // Define the entry rules for body and hint
 	  BodyBlock_r =  (str_p("Segment"))
@@ -802,7 +834,8 @@ namespace dynamicsJRLJapan
 			 Background_r     | 
 			 NavigationInfo_r | 
 			 Viewpoint_r      |
-			 TransformBlock_r );  
+			 TransformBlock_r |
+			 Shape_r[self.actions.fStoreShape]);  
 	
 
 	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
@@ -901,6 +934,7 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( BodyChildren_r);
 	  BOOST_SPIRIT_DEBUG_RULE( BodyBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryHeader_r);
+	  BOOST_SPIRIT_DEBUG_RULE( GeometrySubHeader_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryBox_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryCylinder_r);
 	  BOOST_SPIRIT_DEBUG_RULE( Shape_r);
@@ -937,6 +971,8 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE(IFSsolidfield_r);
 	  BOOST_SPIRIT_DEBUG_RULE(IFScreaseAngle_r);
 	  BOOST_SPIRIT_DEBUG_RULE(IFScoord_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFSnormalIndex_r);
+	  BOOST_SPIRIT_DEBUG_RULE(IFStexCoordIndex_r);
 	}
 	
 	// Tree of the robot.
@@ -986,11 +1022,15 @@ namespace dynamicsJRLJapan
 	// IndexedFaceSet
 	rule<ScannerT> IndexedFaceSet_r, IndexedFaceBlock_r,
 	  IFSccwfield_r, IFSconvexfield_r, IFSsolidfield_r, 
-	  IFScreaseAngle_r, IFScoord_r, IFScoordIndex_r;
+	  IFScreaseAngle_r, IFScoord_r, IFScoordIndex_r,
+	  IFSnormalIndex_r, IFStexCoordIndex_r;
 
-	rule<ScannerT> GeometryHeader_r, GeometryBox_r, GeometryCylinder_r;
+	rule<ScannerT> GeometryHeader_r, GeometrySubHeader_r,
+	  GeometryBox_r, GeometryCylinder_r;
 
 	rule<ScannerT> Transparency_r,AmbientIntensity_r;
+
+	rule<ScannerT> imagetexture_r, texture_r;
 
 	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r, 
 	  AppearanceUse_r, AppearanceDef_r, AppearanceBlockTitle_r, MaterialBlock_r,
