@@ -223,6 +223,31 @@ namespace dynamicsJRLJapan
 		  << "Parsed : " << x );
 	} 
       } fDisplay;
+      
+      // Generic action for display 
+      struct fDisplay2_t {
+
+	void operator()(const char &c) const
+	{
+	  ODEBUG3("Display " << c  );
+	}
+
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin, 
+			const IteratorT &end) const 
+	{
+	  std::string x(begin,end);
+	  file_position fp_cur;
+	  
+	  // Store the current file position
+	  fp_cur = begin.get_position();
+	  ODEBUG3("Display - Current file: " << fp_cur.file );
+	  ODEBUG3( "Line   : " << fp_cur.line  
+		  << " Column : " << fp_cur.column 
+		  << endl
+		  << "Parsed : " << x );
+	} 
+      } fDisplay2;
 
       // Action for a vector of 3 floats.
       struct fSFVec3f_i_t {
@@ -1001,6 +1026,10 @@ namespace dynamicsJRLJapan
 	  if (lindex!=-1)
 	    {
 	      ODEBUG(" Store inside :"<< lindex );
+	      ODEBUG("coordIndex.size()=" <<
+		      m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.size());
+	      ODEBUG("coord.size()=" <<
+		      m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord.size());
 	      m_actions.m_DataForParsing.m_ListOfURLs[lindex]->addShape(m_actions.m_DataForParsing.m_Shape);
 	      ODEBUG(m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial());
 	      m_actions.m_DataForParsing.m_Shape.reset();
