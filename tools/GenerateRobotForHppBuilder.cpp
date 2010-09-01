@@ -295,11 +295,11 @@ namespace dynamicsJRLJapan {
 	iShape++)
       {
 	unsigned int lSizeOfIFS = Shapes[iShape].getIndexedFaceSet().coordIndex.size();
-	os << "hppPolyhedron->setMaterial("<< lNbPoints 
-	   << " , "<< lNbPoints+lSizeOfIFS-1 << " ," 
+	os << "hppPolyhedron->setMaterial("<< lNbPoints
+	   << " , "<< lNbPoints+lSizeOfIFS-2 << " ," 
 	   << "materialVector[ " << iShape << "]);" << endl;
 	
-	lNbPoints+=lSizeOfIFS;
+	lNbPoints+=lSizeOfIFS-1;
       }
     os<< "hppPolyhedron->makeCollisionEntity();" << endl;
   }
