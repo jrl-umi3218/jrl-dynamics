@@ -105,7 +105,7 @@ namespace dynamicsJRLJapan {
 	os << "hppJoint_->bounds(0," << aJoint->lowerBound(0)<< " ," << aJoint->upperBound(0) << ");" << endl;
 	os << "hppJoint_->isBounded(0, true);" << endl;
 	os << "hppJoint_->velocityBounds(0," 
-	   << aJoint->lowerVelocityBound(0) << " , " 
+	   << aJoint->lowerVelocityBound(0) << ", " 
 	   << aJoint->upperVelocityBound(0) << ");" << endl;
 	CjrlJoint *ParentJoint = aJoint->parentJoint();
 	if (ParentJoint!=0)
@@ -166,6 +166,7 @@ namespace dynamicsJRLJapan {
     const std::vector< Geometry::Shape  > & Shapes = m_AccessToData[gindex].getShapes();
     unsigned long int lNbFaces = 0;
     unsigned long int lCorrectionFaces =0;
+    unsigned long int lShiftPoints=0;
     for(unsigned int iShape=0;
 	iShape< Shapes.size();
 	iShape++)
@@ -182,14 +183,19 @@ namespace dynamicsJRLJapan {
 
 	    if (lIndex.size()==0)
 	      lCorrectionFaces++;
-
-	    for(unsigned int i=0;i<lIndex.size();i++)
+	    else
 	      {
-		os << lIndex[i] << " , " ;
+		for(unsigned int i=0;i<lIndex.size();i++)
+		  {
+		    os << lIndex[i]+lShiftPoints << "," ;
+		  }
+		os << endl;
 	      }
-	    os << endl;
 	  }
-	lNbFaces+=  Shapes[iShape].getIndexedFaceSet().coordIndex.size();
+	//lNbFaces+=  Shapes[iShape].getIndexedFaceSet().coordIndex.size();
+	lNbFaces+= polygonIndex.size();
+	//lShiftPoints += 
+	lShiftPoints+= aIFS.coord.size();
       }
     os << "0 };" << endl;
 
@@ -226,9 +232,9 @@ namespace dynamicsJRLJapan {
 	for(unsigned int i=0;i<VecOfvec3d.size();i++)
 	  {
 	    vector3d avec = VecOfvec3d[i];
-	      os << avec(0) << " ," 
-		 << avec(1) << " ," 
-		 << avec(2) << " ,";
+	      os << avec(0) << "," 
+		 << avec(1) << "," 
+		 << avec(2) << ",";
 	      if (i==VecOfvec3d.size()-1)
 		os << " /* End of polygon " 
 		   << lNbPolyhedron++ << " " 
@@ -280,10 +286,10 @@ namespace dynamicsJRLJapan {
 	  }
 	      
 	os << "material.diffuseColor(CkppColor(" 
-	   << aMaterial.diffuseColor[0] << " , " 
-	   << aMaterial.diffuseColor[1] << " , " 
-	   << aMaterial.diffuseColor[2] << " , "
-	   << maxdiffuseColor << "));" << endl;
+	   << aMaterial.diffuseColor[0] << ", " 
+	   << aMaterial.diffuseColor[1] << ", " 
+	   << aMaterial.diffuseColor[2] << ", "
+	   << 0.5 << "));" << endl;
 
 	os << "materialVector.push_back(material);" << endl;
 	
@@ -296,7 +302,7 @@ namespace dynamicsJRLJapan {
       {
 	unsigned int lSizeOfIFS = Shapes[iShape].getIndexedFaceSet().coordIndex.size();
 	os << "hppPolyhedron->setMaterial("<< lNbPoints
-	   << " , "<< lNbPoints+lSizeOfIFS-2 << " ," 
+	   << ", "<< lNbPoints+lSizeOfIFS-2 << "," 
 	   << "materialVector[ " << iShape << "]);" << endl;
 	
 	lNbPoints+=lSizeOfIFS-1;
@@ -335,8 +341,26 @@ namespace dynamicsJRLJapan {
       os << "MAL_S3_VECTOR_ACCESS(hppBodyRelCom," << li << ") = " << lcom(li)<< ";"<< endl;
     os << "hppBody->localCenterOfMass(hppBodyRelCom);" << endl;
     os << "hppJoint_->setAttachedBody(hppBody);" << endl;
-    os << "hppBody->addInnerObject(CkppSolidComponentRef::create(hppPolyhedron)," << endl;
-    os << "        fillMat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1),true);"<< endl;
+    os << "hppBody->addInnerObject(CkppSolidComponentRef::create(hppPolyhedron),fillMat4(";
+    matrix4d initpos= aJoint->initialPosition();
+    for(unsigned int li=0;li<4;li++)
+      for(unsigned int lj=0;lj<4;lj++)
+	{
+	  // Assume that the local reference of object points are at the
+	  // identity regarding the rotation of the joint.
+	  if (lj==3)
+	    os << MAL_S4x4_MATRIX_ACCESS_I_J(initpos,li,lj);
+	  else 
+	    {
+	      if (li==lj)
+		os << "1.0";
+	      else
+		os << "0.0";
+	    }
+	  if ((li!=3) || (lj!=3))
+	    os << ",";
+	}
+    os << "),true);"<< endl;
     
     
   }
@@ -492,7 +516,7 @@ os << "  data(0)=" << data(0) \
     GenerateJoint(aJoint,os,shifttab,gindex);
     // Geometrical part.
     os << "hppPolyhedron = CkppKCDPolyhedron::create(std::string(\"";
-    os << m_Joint2Name[aJoint];
+    os << m_AccessToData[gindex].getBodyName();
     os << "\"));"<< endl;
     
     GeneratePoints(aJoint,os, shifttab, gindex);
