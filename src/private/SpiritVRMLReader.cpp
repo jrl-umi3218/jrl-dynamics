@@ -79,7 +79,18 @@ namespace dynamicsJRLJapan
       
       iterator_t first(in_begin, in_end, aFileName), last;
       
-      parse(first,last,aSpiritOpenHRP,aSkipGrammar);
+      if (!parse(first,last,aSpiritOpenHRP,aSkipGrammar).full)
+	{
+	  file_position fp_cur;
+	  
+	  // Store the current file position
+	  fp_cur = last.get_position();
+	  ODEBUG3("Display - Current file: " << fp_cur.file );
+	  ODEBUG3( "Line   : " << fp_cur.line  
+		  << " Column : " << fp_cur.column 
+		  << endl);
+
+	}
       aif.close();
 
       if (ReadGeometry)
@@ -112,7 +123,7 @@ namespace dynamicsJRLJapan
 		    }
 		  else
 		    {
-		      ODEBUG( "Open :" << GeomFileName );
+		      ODEBUG3( "Open :" << GeomFileName );
 		      multi_pass_iterator_t
 			lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
 			lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
@@ -120,7 +131,18 @@ namespace dynamicsJRLJapan
 		      iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
 		      *aSpiritOpenHRP.actions.m_DataForParsing.m_LOUIndex = 
 			iIndexBDG;
-		      parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar);
+		      if (!parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar).full)
+			{
+			  file_position fp_cur;
+			  
+			  // Store the current file position
+			  fp_cur = lfirst.get_position();
+			  ODEBUG3("Display - Current file: " << fp_cur.file );
+			  ODEBUG3( "Line   : " << fp_cur.line  
+				   << " Column : " << fp_cur.column 
+				   << endl);
+			}
+
 		    }
 		  aif.close();
 		}
