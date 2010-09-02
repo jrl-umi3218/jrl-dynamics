@@ -138,7 +138,7 @@ namespace dynamicsJRLJapan
 	    >> ch_p(']');
 
 	  // Coordinate rules
-	  Coordinate_r = str_p("Coordinate")[self.actions.fDisplay]
+	  Coordinate_r = str_p("Coordinate")[self.actions.fDisplay2]
 	    >> ch_p('{') 
 	    >> str_p("point")
 	    >> str_p('[')
@@ -555,10 +555,11 @@ namespace dynamicsJRLJapan
 	  imagetexture_r = str_p("ImageTexture") 
 	    >> ch_p('{')
 	    >> str_p("url")
-	    >>  ( ch_p('"')  | (ch_p('[') >> ch_p('"')))
+	    >>  ch_p('[') >> ch_p('"')
 	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')
-			   |ch_p('/'))])
-	    >> ( ch_p('"')  | (ch_p('"') >> ch_p(']')))
+			   |ch_p('/'))])[self.actions.fDisplay2]
+	    >> ch_p('"') 
+	    >> ch_p(']')
 	    >> ch_p('}');
 
 	  texture_r = str_p("texture")
@@ -611,8 +612,8 @@ namespace dynamicsJRLJapan
 		  >> str_p("Appearance")) | 
 		 str_p("Appearance") )
 	    >>  ch_p('{') 
-	    >> AppearanceBlock_r[self.actions.fDisplay] |
-	    texture_r
+	    >> *(AppearanceBlock_r[self.actions.fDisplay] |
+		 texture_r)
 	    >> ch_p('}') ;
 
 	  AppearanceDef_r = str_p("DEF") >> AppearanceBlockTitle_r;
@@ -638,6 +639,16 @@ namespace dynamicsJRLJapan
 	    >> str_p("height") >> real_p 
 	    >> ch_p('}');
 	  
+	  // Normal node
+	  normal_vector_node_r = str_p("vector")
+	    >> ch_p('[')
+	    >> MFVec3f_r[self.actions.fNormalNode]
+	    >> ch_p(']');
+
+	  normal_node_r = str_p ("Normal")[self.actions.fDisplay2]
+	    >> ch_p('{') 
+	    >> normal_vector_node_r
+	    >> ch_p('}');
 	  // IndexedFaceSet
 
 	  IFSccwfield_r = str_p("ccw") 
@@ -651,13 +662,16 @@ namespace dynamicsJRLJapan
 	  IFScoord_r = str_p("coord")[self.actions.fDisplay] 
 	    >> Coordinate_r[self.actions.fCoordinates];
 
+	  IFSnormal_r = str_p("normal")
+	    >> normal_node_r;
+
 	  IFSnormalIndex_r = str_p("normalIndex")
 	    >> ch_p('[') >> ch_p(']');
 	  
 	  IFStexCoordIndex_r = str_p("texCoordIndex")
 	    >> ch_p('[') >> ch_p(']');
  
-	  IFScoordIndex_r = str_p("coordIndex")
+	  IFScoordIndex_r = str_p("coordIndex")[self.actions.fDisplay2]
 	    >> ch_p('[')
 	    >> *( MFUInt32_r[self.actions.fCoordIndex] 
 		  >> ((str_p("-1") >> ch_p(','))
@@ -674,7 +688,8 @@ namespace dynamicsJRLJapan
 	    IFScoord_r       |
 	    IFScoordIndex_r  |
 	    IFStexCoordIndex_r |
-	    IFSnormalIndex_r;
+	    IFSnormalIndex_r | 
+	    IFSnormal_r;
 
 	  IndexedFaceSet_r = str_p("IndexedFaceSet")[self.actions.fDisplay]
 	    >> ch_p ('{')
@@ -695,7 +710,7 @@ namespace dynamicsJRLJapan
 		  );
 	
 	  // Shape block
-	  ShapeBlock_r = AppearanceHeader_r | 
+	  ShapeBlock_r = AppearanceHeader_r[self.actions.fDisplay2] | 
 	    GeometryHeader_r;
 	  
 	  Shape_r = str_p("Shape")[self.actions.fDisplay]
@@ -807,11 +822,17 @@ namespace dynamicsJRLJapan
 	      (NIavatarSize_r))>> ch_p('}');
   
 	  // Background 
-	  skyColor_r = str_p("skyColor") >> real_p >> real_p >> real_p;
-
-	  Background_r = str_p("Background") 
+	  skyColor_r = str_p("skyColor") >> 
+	    (SFVec3f_r | 
+	     ( ch_p('[') >> 
+	       SFVec3f_r[self.actions.fDisplay2] >>
+	       ch_p(']')
+	       )
+	     );
+	     
+	  Background_r = str_p("Background")
 	    >> ch_p('{') 
-	    >> *( (skyColor_r) )
+	    >> *( skyColor_r[self.actions.fDisplay2] )
 	    >> ch_p('}');
 
 	  // Viewpoint
@@ -831,7 +852,7 @@ namespace dynamicsJRLJapan
 	  
 	  EntryPoint = *(Proto_r          | 
 			 Humanoid_r       | 
-			 Background_r     | 
+			 Background_r[self.actions.fDisplay2]      | 
 			 NavigationInfo_r | 
 			 Viewpoint_r      |
 			 TransformBlock_r |
@@ -1023,7 +1044,9 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> IndexedFaceSet_r, IndexedFaceBlock_r,
 	  IFSccwfield_r, IFSconvexfield_r, IFSsolidfield_r, 
 	  IFScreaseAngle_r, IFScoord_r, IFScoordIndex_r,
-	  IFSnormalIndex_r, IFStexCoordIndex_r;
+	  IFSnormalIndex_r, IFSnormal_r,IFStexCoordIndex_r;
+
+	rule<ScannerT> normal_node_r, normal_vector_node_r;
 
 	rule<ScannerT> GeometryHeader_r, GeometrySubHeader_r,
 	  GeometryBox_r, GeometryCylinder_r;
