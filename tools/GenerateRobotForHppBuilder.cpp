@@ -271,25 +271,12 @@ namespace dynamicsJRLJapan {
       {
 	const Geometry::Appearance & anAppearance = Shapes[iShape].getAppearance();
 	const Geometry::Material & aMaterial = anAppearance.getMaterial();
-	double maxdiffuseColor = aMaterial.diffuseColor[0];
-	if (aMaterial.diffuseColor[0] < aMaterial.diffuseColor[1])
-	  {
-	    if (aMaterial.diffuseColor[1] < aMaterial.diffuseColor[2])
-	      maxdiffuseColor = aMaterial.diffuseColor[2];
-	    else
-	      maxdiffuseColor = aMaterial.diffuseColor[1];
-	  }
-	else
-	  {
-	    if (aMaterial.diffuseColor[0] < aMaterial.diffuseColor[2])
-	       maxdiffuseColor = aMaterial.diffuseColor[2];
-	  }
 	      
 	os << "material.diffuseColor(CkppColor(" 
 	   << aMaterial.diffuseColor[0] << ", " 
 	   << aMaterial.diffuseColor[1] << ", " 
 	   << aMaterial.diffuseColor[2] << ", "
-	   << 0.5 << "));" << endl;
+	   << aMaterial.transparency << "));" << endl;
 
 	os << "materialVector.push_back(material);" << endl;
 	
