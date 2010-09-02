@@ -24,7 +24,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
-  SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src  ${LIBINCLUSION_KW}${PROJECT_NAME}${LIB_EXT} ${${PROJECT_NAME}_src_LDFLAGS}")
+  SET(${PROJECT_NAME}_test_LDFLAGS " ")
 ENDIF(WIN32)
 
 MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
@@ -48,6 +48,8 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleLinkJointRank.xml
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
 )
+
+target_link_libraries(TestHumanoidDynamicRobot ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestHumanoidDynamicRobot ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestHumanoidDynamicRobotDebugLayale CommonTools.cpp TestHumanoidDynamicRobotDebugLayale.cpp)
@@ -69,7 +71,7 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/CMakeLists.txt
 
 )
-
+target_link_libraries(TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestAbstractInterface 
@@ -81,6 +83,7 @@ SET_TARGET_PROPERTIES( TestAbstractInterface
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
                       LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(TestAbstractInterface ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestAbstractInterface ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestTwoLinksModel
@@ -91,6 +94,7 @@ SET_TARGET_PROPERTIES( TestTwoLinksModel
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
                       LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(TestTwoLinksModel ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestTwoLinksModel ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	Test2Models Test2Models.cpp)
@@ -99,6 +103,7 @@ SET_TARGET_PROPERTIES(Test2Models
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(Test2Models ${PROJECT_NAME})
 ADD_DEPENDENCIES (Test2Models ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	ComputeRealZMP ComputeRealZMP.cpp)
@@ -107,6 +112,7 @@ SET_TARGET_PROPERTIES(ComputeRealZMP
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(ComputeRealZMP ${PROJECT_NAME})
 ADD_DEPENDENCIES (ComputeRealZMP ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	ComputeTorqueOnTrajectory ComputeTorqueOnTrajectory.cpp)
@@ -115,6 +121,7 @@ SET_TARGET_PROPERTIES(ComputeTorqueOnTrajectory
 	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
 		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(ComputeTorqueOnTrajectory ${PROJECT_NAME})
 ADD_DEPENDENCIES (ComputeTorqueOnTrajectory ${PROJECT_NAME})
 
 ADD_EXECUTABLE(	TestFreeFlyer TestFreeFlyer.cpp CommonTools.cpp)
@@ -123,6 +130,7 @@ SET_TARGET_PROPERTIES( TestFreeFlyer
   COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
   LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 )
+target_link_libraries(TestFreeFlyer ${PROJECT_NAME})
 ADD_DEPENDENCIES(TestFreeFlyer ${PROJECT_NAME})
 
 CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/output.ascii.cmake
