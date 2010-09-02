@@ -195,6 +195,7 @@ namespace dynamicsJRLJapan
 	fIndexedFaceSetsolid(*this,4),
 	fCoordinates(*this),
 	fCoordIndex(*this),
+	fNormalNode(*this),
 	fStoreShape(*this),
 	m_Verbose(0)
       { }
@@ -985,10 +986,19 @@ namespace dynamicsJRLJapan
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord =
 	    m_actions.m_DataForParsing.m_vectorgvec3d;
 	  m_actions.m_DataForParsing.m_vectorgvec3d.clear();
+
+	  file_position fp_cur;
+	  fp_cur = begin.get_position();
+
+	  ODEBUG("Display - Current file: " << fp_cur.file );
+	  ODEBUG( "Line   : " << fp_cur.line  
+		  << " Column : " << fp_cur.column );
+
 	}
       private:
 	Actions & m_actions;
       } fCoordinates;
+
 
       struct fCoordIndex_t {
 
@@ -1007,6 +1017,21 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
       } fCoordIndex;
 
+      struct fNormalNode_t {
+	explicit fNormalNode_t(Actions &actions):
+	  m_actions(actions) {};
+	  
+	template <typename IteratorT>
+	void operator()(const IteratorT &begin, 
+			const IteratorT &end) const 
+	{
+	  m_actions.m_DataForParsing.m_vectorgvec3d.clear();
+	}
+      private:
+	Actions & m_actions;
+
+      } fNormalNode;
+
       struct fStoreShape_t {
 
 	explicit fStoreShape_t(Actions &actions):
@@ -1016,11 +1041,6 @@ namespace dynamicsJRLJapan
 	void operator()(const IteratorT &begin, 
 			const IteratorT &end) const 
 	{
-	  file_position fp_cur;
-	  fp_cur = begin.get_position();
-	  ODEBUG("Display - Current file: " << fp_cur.file );
-	  ODEBUG( "Line   : " << fp_cur.line  
-		  << " Column : " << fp_cur.column );
 
 	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;
 	  if (lindex!=-1)
