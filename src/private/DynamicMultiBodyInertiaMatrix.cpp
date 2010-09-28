@@ -1,25 +1,29 @@
-/* @doc Computation of the dynamic aspect for a robot.
-   This class will load the description of a robot from a VRML file
-   following the OpenHRP syntax. Using ForwardVelocity it is then
-   possible specifying the angular velocity and the angular value 
-   to get the absolute position, and absolute velocity of each 
-   body separetly. Heavy rewriting from the original source
-   of Adrien and Jean-Remy. 
- 
-   This implantation is an updated based on a mixture between 
-   the code provided by Jean-Remy and Adrien.
- 
-   Copyright (c) 2005-2006, 
-   @author Olivier Stasse, Ramzi Sellouati, Jean-Remy Chardonnet, Adrien Escande, Abderrahmane Kheddar
-   Copyright (c) 2007-2009
-   @author Olivier Stasse, Oussama Kannoun, Fumio Kanehiro.
-   JRL-Japan, CNRS/AIST
- 
-   All rights reserved.
-
-   Please refers to file License.txt for details on the license.
-
-*/
+/*
+ * Copyright 2009, 2010, 
+ *
+ * Florent Lamiraux
+ * Olivier Stasse
+ *
+ * JRL/LAAS, CNRS/AIST
+ *
+ * This file is part of dynamicsJRLJapan.
+ * dynamicsJRLJapan is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * dynamicsJRLJapan is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with dynamicsJRLJapan.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Research carried out within the scope of the Associated
+ *  International Laboratory: Joint Japanese-French Robotics
+ *  Laboratory (JRL)
+ *
+ */
 
 /*! System includes */
 #include <iostream>

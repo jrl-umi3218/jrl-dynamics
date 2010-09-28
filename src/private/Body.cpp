@@ -1,26 +1,36 @@
+/*
+ * Copyright 2005, 2006, 2007, 2008, 2009, 2010, 
+ *
+ * Adrien Escande
+ * Abderrahmane Kheddar
+ * Florent Lamiraux
+ * Olivier Stasse
+ * Ramzi Sellouati
+ *
+ * JRL/LAAS, CNRS/AIST
+ *
+ * This file is part of dynamicsJRLJapan.
+ * dynamicsJRLJapan is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * dynamicsJRLJapan is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with dynamicsJRLJapan.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Research carried out within the scope of the Associated
+ *  International Laboratory: Joint Japanese-French Robotics
+ *  Laboratory (JRL)
+ *
+ */
+
 /* @doc Fundamental object used to compute :
    - Center Of Mass,
    - Zero Momentum Point.
-   
-   OS: Updated the names of the contributors, the documentation
-   and added a sample file for WalkPlugin
-   OS (21/12/2006): removed any reference to non-homogeneous matrix
-   library.
-
-
-   Copyright (c) 2005-2006, 
-   @author : 
-   Adrien Escande, 
-   Abderrahmane Kheddar,  
-   Olivier Stasse, 
-   Ramzi Sellouati
-   
-   JRL-Japan, CNRS/AIST
-
-   All rights reserved.
-   
-   Please refers to file License.txt for details on the license.
-
 */
 
 #include "Body.h"

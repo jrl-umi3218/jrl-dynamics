@@ -1,8 +1,23 @@
-# Olivier Stasse, Francois Keith, JRL, CNRS/AIST
-# Creation: 21/01/2010
-# History:
+# Copyright 2010, 
 #
-# Copyright CNRS/AIST
+# Francois Keith
+# Olivier Stasse
+#
+# JRL/LAAS, CNRS/AIST
+#
+# This file is part of dynamicsJRLJapan.
+# dynamicsJRLJapan is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# dynamicsJRLJapan is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Lesser Public License for more details.
+# You should have received a copy of the GNU Lesser General Public License
+# along with dynamicsJRLJapan.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 # For tools, we include the same files as the src
 SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_CXXFLAGS}")
