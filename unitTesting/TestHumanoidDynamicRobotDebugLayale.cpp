@@ -104,10 +104,10 @@ int main(int argc, char *argv[])
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
+  aCurrentVel[3]=1.0;
+  aCurrentVel[2]=100.0;
   aCurrentVel[6]=1.0;
-  aCurrentVel[7]=1.0;
-  aCurrentVel[8]=1.0;
-  aCurrentVel[9]=1.0;
+  aCurrentVel[8]=0.0;
 
   MAL_S3_VECTOR(ZMPval,double);
 
@@ -116,8 +116,6 @@ int main(int argc, char *argv[])
   //MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
-  aCurrentAcc[7]=2.0;
-  aCurrentAcc[10]=2.0;
   aHDR->currentAcceleration(aCurrentAcc);
 
   //  aHDR->setComputeZMP(true);
@@ -284,11 +282,6 @@ int main(int argc, char *argv[])
   DisplayTorques(aHDR,empty, tcout);
   
   // Test torques.
-
-
-  
-  
-  //double dynamicDrift [] = { 0,0,0,0,0,0, 0.00106856, -3.65827, -3.24512, 3.39716, -0.0415928, -0.0752126, -2.19959e-016, 3.65805, -3.2449, 3.38531, -0.0423655, 0.0753855, 1.11009e-016, 4.43083, -2.0292e-020, -0.12657, 1.03213, -2.57379, -0.499568, -1.39763, -0.00344316, -0.302932, -0.00679369, 1.07342, 2.5637, 0.489739, -1.35744, -2.65727e-005, -0.262741, 0.00685521 };
   tcout << "Test Torques:" << endl;
   const matrixNxP& Torques = aHDR->currentTorques();
   for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
