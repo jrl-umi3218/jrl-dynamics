@@ -138,7 +138,7 @@ namespace dynamicsJRLJapan
 	    >> ch_p(']');
 
 	  // Coordinate rules
-	  Coordinate_r = str_p("Coordinate")[self.actions.fDisplay2]
+	  Coordinate_r = str_p("Coordinate")[self.actions.fDisplay]
 	    >> ch_p('{') 
 	    >> str_p("point")
 	    >> str_p('[')
@@ -557,7 +557,7 @@ namespace dynamicsJRLJapan
 	    >> str_p("url")
 	    >>  ch_p('[') >> ch_p('"')
 	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')
-			   |ch_p('/'))])[self.actions.fDisplay2]
+			   |ch_p('/'))])[self.actions.fDisplay]
 	    >> ch_p('"') 
 	    >> ch_p(']')
 	    >> ch_p('}');
@@ -645,7 +645,7 @@ namespace dynamicsJRLJapan
 	    >> MFVec3f_r[self.actions.fNormalNode]
 	    >> ch_p(']');
 
-	  normal_node_r = str_p ("Normal")[self.actions.fDisplay2]
+	  normal_node_r = str_p ("Normal")[self.actions.fDisplay]
 	    >> ch_p('{') 
 	    >> normal_vector_node_r
 	    >> ch_p('}');
@@ -671,7 +671,7 @@ namespace dynamicsJRLJapan
 	  IFStexCoordIndex_r = str_p("texCoordIndex")
 	    >> ch_p('[') >> ch_p(']');
  
-	  IFScoordIndex_r = str_p("coordIndex")[self.actions.fDisplay2]
+	  IFScoordIndex_r = str_p("coordIndex")[self.actions.fDisplay]
 	    >> ch_p('[')
 	    >> *( MFUInt32_r[self.actions.fCoordIndex] 
 		  >> ((str_p("-1") >> ch_p(','))
@@ -710,7 +710,7 @@ namespace dynamicsJRLJapan
 		  );
 	
 	  // Shape block
-	  ShapeBlock_r = AppearanceHeader_r[self.actions.fDisplay2] | 
+	  ShapeBlock_r = AppearanceHeader_r[self.actions.fDisplay] | 
 	    GeometryHeader_r;
 	  
 	  Shape_r = str_p("Shape")[self.actions.fDisplay]
@@ -825,14 +825,14 @@ namespace dynamicsJRLJapan
 	  skyColor_r = str_p("skyColor") >> 
 	    (SFVec3f_r | 
 	     ( ch_p('[') >> 
-	       SFVec3f_r[self.actions.fDisplay2] >>
+	       SFVec3f_r[self.actions.fDisplay] >>
 	       ch_p(']')
 	       )
 	     );
 	     
 	  Background_r = str_p("Background")
 	    >> ch_p('{') 
-	    >> *( skyColor_r[self.actions.fDisplay2] )
+	    >> *( skyColor_r[self.actions.fDisplay] )
 	    >> ch_p('}');
 
 	  // Viewpoint
@@ -852,7 +852,7 @@ namespace dynamicsJRLJapan
 	  
 	  EntryPoint = *(Proto_r          | 
 			 Humanoid_r       | 
-			 Background_r[self.actions.fDisplay2]      | 
+			 Background_r[self.actions.fDisplay]      | 
 			 NavigationInfo_r | 
 			 Viewpoint_r      |
 			 TransformBlock_r |

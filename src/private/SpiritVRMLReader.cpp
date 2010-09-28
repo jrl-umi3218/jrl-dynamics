@@ -85,8 +85,8 @@ namespace dynamicsJRLJapan
 	  
 	  // Store the current file position
 	  fp_cur = last.get_position();
-	  ODEBUG3("Display - Current file: " << fp_cur.file );
-	  ODEBUG3( "Line   : " << fp_cur.line  
+	  ODEBUG("Display - Current file: " << fp_cur.file );
+	  ODEBUG( "Line   : " << fp_cur.line  
 		  << " Column : " << fp_cur.column 
 		  << endl);
 
@@ -137,8 +137,8 @@ namespace dynamicsJRLJapan
 			  
 			  // Store the current file position
 			  fp_cur = lfirst.get_position();
-			  ODEBUG3("Display - Current file: " << fp_cur.file );
-			  ODEBUG3( "Line   : " << fp_cur.line  
+			  ODEBUG("Display - Current file: " << fp_cur.file );
+			  ODEBUG( "Line   : " << fp_cur.line  
 				   << " Column : " << fp_cur.column 
 				   << endl);
 			}
