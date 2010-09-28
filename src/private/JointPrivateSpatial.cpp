@@ -131,7 +131,7 @@ bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
   ah = m_sI * m_sv;
   Spatial::Force af2;
   af2 = m_sv^ah;
-  af = af + af2;
+  m_sf = af + af2;
   return true;
 }
 
