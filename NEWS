@@ -1,0 +1,11 @@
+                                                                -*- outline -*-
+
+New in XX, XXXX-YY-ZZ:
+* FIXME.
+
+New in 1.19.0, 2010-08-11:
+* New geometrical data can be parsed and related to the body.
+* Added a CreateHPPBuilder in tools directory.
+* Better support for VRML Grammar.
+* This extension might be removed in the future
+  to be set in a different package.
