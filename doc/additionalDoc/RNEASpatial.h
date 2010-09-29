@@ -58,7 +58,7 @@
 	    <li>\f$ {\bf \tau}_i = \Phi_i^T {\bf f}_i \f$ </li>
             <li> \f$ \text{if } p(i)\neq 0 \text{ then } \f$
                <ol>
-	         <li> \f${\bf f}_p(i) = {\bf f}_{p(i)} + {^i}{\bf X}_{p(i)}^T} \f$ </li>
+	         <li> \f${\bf f}_p(i) = {\bf f}_{p(i)} + {^i}{\bf X}_{p(i)}^T} \f$</li>
 	       </ol>
 	    </li>
 	    <li> \f$ \text{end} \f$</li>
