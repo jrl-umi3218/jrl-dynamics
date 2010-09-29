@@ -1,15 +1,15 @@
-Source: jrl-dynamic
+Source: jrl-dynamics
 Priority: extra
 Maintainer: Olivier Stasse <olivier.stasse@aist.go.jp>
 Build-Depends: debhelper (>= 7.0.50~), cmake (>=2.6),
 	       abstract-robot-dynamics (>=1.16.0)
 Standards-Version: 3.8.4
-Vcs-Git: git://github.com/jrl-umi3218/jrl-dynamic.git
-Vcs-Browser: http://github.com/jrl-umi3218/jrl-dynamic
+Vcs-Git: git://github.com/jrl-umi3218/jrl-dynamics.git
+Vcs-Browser: http://github.com/jrl-umi3218/jrl-dynamics
 Section: libs
-Homepage: http://github.com/jrl-umi3218/jrl-dynamic
+Homepage: http://github.com/jrl-umi3218/jrl-dynamics
 
-Package: libjrl-dynamic-dev
+Package: libjrl-dynamics-dev
 Section: libdevel
 Architecture: any
 Depends: libabstract-robot-dynamics-dev ${misc:Depends}
@@ -21,12 +21,12 @@ Description: Dynamics JRL Japan
  .
  This package contains development files (headers and pkg-config file).
 
-Package: libjrl-dynamic-doc
+Package: libjrl-dynamics-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: libabstract-robot-dynamics-doc
-Description: Documentation for the jrl-dynamic C++ interface
+Description: Documentation for the jrl-dynamics C++ interface
  This package is an implementation of the abstract interface
  defines by the package abstract robot dynamics. It implements
  the Recursive Newton-Euler Algorithm (RNEA) for controlling robots.
