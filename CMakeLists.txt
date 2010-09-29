@@ -224,7 +224,7 @@ CACHE INTERNAL "tarball basename"
 )
 set(CPACK_PACKAGE_NAME "dynamicsjrljapan")
 set(CPACK_SOURCE_GENERATOR "TGZ")
-set(CPACK_GENERATOR DEB)
+set(CPACK_GENERATOR "DEB;TGZ")
 
 # The following components are regex's to match anywhere (unless anchored)
 # in absolute path + filename to find files or directories to be excluded
