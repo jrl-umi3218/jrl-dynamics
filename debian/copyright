@@ -1,0 +1,24 @@
+This work was packaged for Debian by:
+
+    Olivier Stasse <olivier.stasse@aist.go.jp> on Wed, 29 Sep 2010 07:43:37 +0900
+
+It was downloaded from http://github.com/jrl-umi3218/jrl-dynamics
+
+Upstream Author(s):
+
+    Olivier Stasse <olivier.stasse@gmail.com>
+
+Copyright:
+
+    Copyright (C) 2010 Olivier Stasse, JRL, CNRS/AIST
+
+License:
+
+    See `/usr/share/common-licenses/LGPL-3'.
+
+The Debian packaging is:
+
+    Copyright (C) 2010 Olivier Stasse <olivier.stasse@aist.go.jp>
+    and is licensed under the GPL version 3,
+    see "/usr/share/common-licenses/GPL-3".
+
