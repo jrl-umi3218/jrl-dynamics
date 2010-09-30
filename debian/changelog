@@ -1,3 +1,9 @@
+jrl-dynamics (1.19.1.99-2) lucid; urgency=low
+
+  * Fix version number in control file.
+
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Thu, 30 Sep 2010 16:30:00 +0200
+
 jrl-dynamics (1.19.1.99-1) lucid; urgency=low
 
   * Fix version number.
