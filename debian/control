@@ -15,7 +15,7 @@ Vcs-Browser: http://github.com/jrl-umi3218/jrl-dynamics
 Section: libs
 Homepage: http://github.com/jrl-umi3218/jrl-dynamics
 
-Package: libjrl-dynamics1.19.1
+Package: libjrl-dynamics1.19.1.99
 Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -30,7 +30,7 @@ Description: JRL dynamics computation
 Package: libjrl-dynamics-dev
 Section: libdevel
 Architecture: any
-Depends: libabstract-robot-dynamics-dev (>= 1.16.0.99), libboost-dev (>= 1.33.1), libjrl-mal-dev (>= 1.9.0.99), libjrl-dynamics1.19.1 (= ${binary:Version}), ${misc:Depends}
+Depends: libabstract-robot-dynamics-dev (>= 1.16.0.99), libboost-dev (>= 1.33.1), libjrl-mal-dev (>= 1.9.0.99), libjrl-dynamics1.19.1.99 (= ${binary:Version}), ${misc:Depends}
 Description: JRL dynamics computation
  This package is an implementation of the abstract interface
  defines by the package abstract robot dynamics. It implements
