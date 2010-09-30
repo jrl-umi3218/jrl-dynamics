@@ -1,6 +1,6 @@
 Source: jrl-dynamics
 Priority: extra
-Maintainer: Olivier Stasse <olivier.stasse@aist.go.jp>
+Maintainer: Thomas Moulard <thomas.moulard@gmail.com>
 Build-Depends: debhelper (>= 7.0.50~), cmake (>=2.6),
 	       libabstract-robot-dynamics-dev (>=1.16.0)
 Standards-Version: 3.8.4
