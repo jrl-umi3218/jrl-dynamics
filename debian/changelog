@@ -1,3 +1,9 @@
+jrl-dynamics (1.19.1-6) lucid; urgency=low
+
+  * Fix install file filename.
+
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Thu, 30 Sep 2010 16:18:00 +0200
+
 jrl-dynamics (1.19.1-5) lucid; urgency=low
 
   * Add missing build requirements.
