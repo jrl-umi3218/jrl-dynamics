@@ -9,11 +9,23 @@ Vcs-Browser: http://github.com/jrl-umi3218/jrl-dynamics
 Section: libs
 Homepage: http://github.com/jrl-umi3218/jrl-dynamics
 
+Package: libjrl-dynamics1.19.1
+Section: libdevel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: JRL dynamics computation
+ This package is an implementation of the abstract interface
+ defines by the package abstract robot dynamics. It implements
+ the Recursive Newton-Euler Algorithm (RNEA) for controlling robots.
+ This current implementation is limited to robot with rotation only.
+ .
+ This package contains versioned shared libraries.
+
 Package: libjrl-dynamics-dev
 Section: libdevel
 Architecture: any
-Depends: libabstract-robot-dynamics-dev ${misc:Depends}
-Description: Dynamics JRL Japan
+Depends: libabstract-robot-dynamics-dev, libjrl-dynamics1.19.1 (= ${binary:Version}), ${misc:Depends}
+Description: JRL dynamics computation
  This package is an implementation of the abstract interface
  defines by the package abstract robot dynamics. It implements
  the Recursive Newton-Euler Algorithm (RNEA) for controlling robots.
@@ -33,4 +45,3 @@ Description: Documentation for the jrl-dynamics C++ interface
  This current implementation is limited to robot with rotation only.
  .
  This package contains the Doxygen documentation.
-

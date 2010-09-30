@@ -1,5 +1,5 @@
 jrl-dynamics (1.19.1-1) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release.
 
  -- Olivier Stasse <olivier.stasse@aist.go.jp>  Wed, 29 Sep 2010 07:43:37 +0900
