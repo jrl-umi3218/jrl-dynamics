@@ -1,4 +1,4 @@
-jrl-dynamics (1.19.1-1) unstable; urgency=low
+jrl-dynamics (1.19.1-1) lucid; urgency=low
 
   * Initial release.
   * Package realized by Olivier Stasse.
