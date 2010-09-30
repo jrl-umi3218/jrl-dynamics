@@ -5,7 +5,6 @@ Build-Depends: debhelper (>= 7.0.50~), cmake (>=2.6),
 	       doxygen (>= 1.6.3),
 	       pkg-config (>= 0.22),
 	       libboost-dev (>= 1.33.1),
-	       libabstract-robot-dynamics-dev (>=1.16.0),
 	       libjrl-mal-dev (>= 1.9.0.99),
 	       libabstract-robot-dynamics-dev (>= 1.16.0.99)
 Standards-Version: 3.8.4
@@ -29,7 +28,7 @@ Description: JRL dynamics computation
 Package: libjrl-dynamics-dev
 Section: libdevel
 Architecture: any
-Depends: libabstract-robot-dynamics-dev, libjrl-dynamics1.19.1 (= ${binary:Version}), ${misc:Depends}
+Depends: libabstract-robot-dynamics-dev (>= 1.16.0.99), libboost-dev (>= 1.33.1), libjrl-mal-dev (>= 1.9.0.99), libjrl-dynamics1.19.1 (= ${binary:Version}), ${misc:Depends}
 Description: JRL dynamics computation
  This package is an implementation of the abstract interface
  defines by the package abstract robot dynamics. It implements
