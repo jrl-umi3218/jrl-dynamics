@@ -56,6 +56,15 @@ namespace dynamicsJRLJapan
   const static int JOINT_LLIMIT = 6;
   const static int JOINT_ULIMIT = 7;
 
+  /// Function to read a character str from fichier
+  void fscanfc(FILE *fichier, char *str);
+
+  /// Function to read a double from fichier
+  void fscanfd(FILE *fichier, double *d);
+
+  /// Function to read an integer from fichier
+  void fscanfi(FILE *fichier, int *d);
+  
   /// Function to look for an object.
   char look_for(FILE* fichier, const char *str);
   

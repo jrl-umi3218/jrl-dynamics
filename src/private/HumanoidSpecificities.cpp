@@ -74,27 +74,27 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		  ODEBUG("Found Feet Side: " << Side[i]);
 		  if (look_for(fp,"SizeX"))
 		    {
-		      fscanf(fp,"%lf",&m_FootDepth[i]);
+		      fscanfd(fp,&m_FootDepth[i]);
 		      ODEBUG("Found SizeX: " << m_FootDepth[i]);
 		    }
 		  
 		  if (look_for(fp,"SizeY"))
 		    {
-		      fscanf(fp,"%lf",&m_FootWidth[i]);
+		      fscanfd(fp,&m_FootWidth[i]);
 		      ODEBUG("Found SizeY: " << m_FootWidth[i]);
 		    }
 		  
 		  if (look_for(fp,"SizeZ"))
 		    {
-		      fscanf(fp,"%lf",&m_FootHeight[i]);
+		      fscanfd(fp,&m_FootHeight[i]);
 		      ODEBUG("Found SizeZ: " << m_FootHeight[i]);
 		    }
 		  
 		  if (look_for(fp,"AnklePosition"))
 		    {
-		      fscanf(fp,"%lf", &m_AnklePosition[i][0]);
-		      fscanf(fp,"%lf", &m_AnklePosition[i][1]);
-		      fscanf(fp,"%lf", &m_AnklePosition[i][2]);
+		      fscanfd(fp, &m_AnklePosition[i][0]);
+		      fscanfd(fp, &m_AnklePosition[i][1]);
+		      fscanfd(fp, &m_AnklePosition[i][2]);
 		      ODEBUG("AnklePos: " 
 			      << m_AnklePosition[i][0] << " "
 			      << m_AnklePosition[i][1] << " " 
@@ -102,7 +102,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		    }
 		  if (look_for(fp,"JointNb"))
 		    {
-		      fscanf(fp,"%d", &m_FeetJointNb[i]);
+		      fscanfi(fp, &m_FeetJointNb[i]);
 		      ODEBUG("JointNb: " << m_FeetJointNb[i]);
 		    }
 		  if (look_for(fp,"JointsID"))
@@ -110,7 +110,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      int aJoint;
 		      for(int j=0;j<m_FeetJointNb[i];j++)
 			{
-			  fscanf(fp,"%d",&aJoint);
+			  fscanfi(fp,&aJoint);
 			  m_FeetJoints[i].insert( m_FeetJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
@@ -136,15 +136,15 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		  ODEBUG(Side[i]);
 		  if (look_for(fp,"WaistToHip"))
 		    {
-		      fscanf(fp,"%lf",&m_WaistToHip[i][0]);
-		      fscanf(fp,"%lf",&m_WaistToHip[i][1]);
-		      fscanf(fp,"%lf",&m_WaistToHip[i][2]);
+		      fscanfd(fp,&m_WaistToHip[i][0]);
+		      fscanfd(fp,&m_WaistToHip[i][1]);
+		      fscanfd(fp,&m_WaistToHip[i][2]);
 		    }
 		}
 	    }	  
 	  if (look_for(fp,"JointNb"))
 	    {
-	      fscanf(fp,"%d", &m_WaistJointNb);
+	      fscanfi(fp, &m_WaistJointNb);
 	      ODEBUG("JointNb: " << m_WaistJointNb);
 	    }
 	  if (look_for(fp,"JointsID"))
@@ -152,7 +152,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	      int aJoint;
 	      for(int j=0;j<m_WaistJointNb;j++)
 		{
-		  fscanf(fp,"%d",&aJoint);
+		  fscanfi(fp,&aJoint);
 		  m_WaistJoints.insert( m_WaistJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
@@ -175,27 +175,27 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 
 		  if (look_for(fp,"HipLength"))
 		    {
-		      fscanf(fp,"%lf",&m_HipLength[i][0]);
-		      fscanf(fp,"%lf",&m_HipLength[i][1]);
-		      fscanf(fp,"%lf",&m_HipLength[i][2]);
+		      fscanfd(fp,&m_HipLength[i][0]);
+		      fscanfd(fp,&m_HipLength[i][1]);
+		      fscanfd(fp,&m_HipLength[i][2]);
 		      ODEBUG("Found FemurLength: " << m_HipLength[i]);
 		    }
 
 		  if (look_for(fp,"FemurLength"))
 		    {
-		      fscanf(fp,"%lf",&m_FemurLength[i]);
+		      fscanfd(fp,&m_FemurLength[i]);
 		      ODEBUG("Found FemurLength: " << m_FemurLength[i]);
 		    }
 		  
 		  if (look_for(fp,"TibiaLength"))
 		    {
-		      fscanf(fp,"%lf",&m_TibiaLength[i]);
+		      fscanfd(fp,&m_TibiaLength[i]);
 		      ODEBUG("Found TibiaLength: " << m_TibiaLength[i]);
 		    }
 		
 		  if (look_for(fp,"JointNb"))
 		    {
-		      fscanf(fp,"%d", &m_LegsJointNb[i]);
+		      fscanfi(fp, &m_LegsJointNb[i]);
 		      ODEBUG("JointNb: " << m_LegsJointNb[i]);
 		    }
 		  if (look_for(fp,"JointsID"))
@@ -203,7 +203,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      int aJoint;
 		      for(int j=0;j<m_LegsJointNb[i];j++)
 			{
-			  fscanf(fp,"%d",&aJoint);
+			  fscanfi(fp,&aJoint);
 			  m_LegsJoints[i].insert( m_LegsJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
@@ -226,35 +226,35 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		{
 		  if (look_for(fp,"Center"))
 		    {
-		      fscanf(fp,"%lf",&m_Hands.Center[i][0]);
-		      fscanf(fp,"%lf",&m_Hands.Center[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.Center[i][2]);
+		      fscanfd(fp,&m_Hands.Center[i][0]);
+		      fscanfd(fp,&m_Hands.Center[i][1]);
+		      fscanfd(fp,&m_Hands.Center[i][2]);
 		      ODEBUG("Found Hands Center: " << m_Hands.Center[i]);
 		    }
 		  
 		  if (look_for(fp,"okayAxis"))
 		    {
-		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][0]);
-		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.okayAxis[i][2]);
+		      fscanfd(fp,&m_Hands.okayAxis[i][0]);
+		      fscanfd(fp,&m_Hands.okayAxis[i][1]);
+		      fscanfd(fp,&m_Hands.okayAxis[i][2]);
 
 		      ODEBUG("Found m_Hands.okayAxis: " << m_Hands.okayAxis[i]);
 		    }
 		
 		  if (look_for(fp,"showingAxis"))
 		    {
-		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][0]);
-		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.showingAxis[i][2]);
+		      fscanfd(fp,&m_Hands.showingAxis[i][0]);
+		      fscanfd(fp,&m_Hands.showingAxis[i][1]);
+		      fscanfd(fp,&m_Hands.showingAxis[i][2]);
 
 		      ODEBUG("Found m_Hands.showingAxis: " << m_Hands.showingAxis[i]);
 		    }
 		  if (look_for(fp,"palmAxis"))
 		    {
 
-		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][0]);
-		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][1]);
-		      fscanf(fp,"%lf",&m_Hands.palmAxis[i][2]);
+		      fscanfd(fp,&m_Hands.palmAxis[i][0]);
+		      fscanfd(fp,&m_Hands.palmAxis[i][1]);
+		      fscanfd(fp,&m_Hands.palmAxis[i][2]);
 
 		      ODEBUG("JointNb: " << m_Hands.palmAxis[i]);
 		    }
@@ -273,7 +273,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 
 		  if (look_for(fp,"JointNb"))
 		    {
-		      fscanf(fp,"%d", &m_WristsJointNb[i]);
+		      fscanfi(fp, &m_WristsJointNb[i]);
 		      ODEBUG("JointNb: " << m_ArmsJointNb[i]);
 		    }
 
@@ -282,7 +282,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      int aJoint;
 		      for(int j=0;j<m_WristsJointNb[i];j++)
 			{
-			  fscanf(fp,"%d",&aJoint);
+			  fscanfi(fp,&aJoint);
 			  m_WristsJoints[i].insert( m_WristsJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
@@ -306,19 +306,19 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		{
 		  if (look_for(fp,"UpperArmLength"))
 		    {
-		      fscanf(fp,"%lf",&m_UpperArmLength[i]);
+		      fscanfd(fp,&m_UpperArmLength[i]);
 		      ODEBUG("Found UpperArmLength: " << m_UpperArmLength[i]);
 		    }
 		  
 		  if (look_for(fp,"ForeArmLength"))
 		    {
-		      fscanf(fp,"%lf",&m_ForeArmLength[i]);
+		      fscanfd(fp,&m_ForeArmLength[i]);
 		      ODEBUG("Found ForeArmLength: " << m_ForeArmLength[i]);
 		    }
 		
 		  if (look_for(fp,"JointNb"))
 		    {
-		      fscanf(fp,"%d", &m_ArmsJointNb[i]);
+		      fscanfi(fp, &m_ArmsJointNb[i]);
 		      ODEBUG("JointNb: " << m_ArmsJointNb[i]);
 		    }
 		  if (look_for(fp,"JointsID"))
@@ -326,7 +326,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      int aJoint;
 		      for(int j=0;j<m_ArmsJointNb[i];j++)
 			{
-			  fscanf(fp,"%d",&aJoint);
+			  fscanfi(fp,&aJoint);
 			  m_ArmsJoints[i].insert( m_ArmsJoints[i].end(),aJoint);
 			}
 		      ODEBUG("Joints :");
@@ -347,7 +347,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	  
 	  if (look_for(fp,"JointNb"))
 	    {
-	      fscanf(fp,"%d", &m_HeadJointNb);
+	      fscanfi(fp, &m_HeadJointNb);
 	      ODEBUG("JointNb: " << m_HeadJointNb);
 	    }
 	  if (look_for(fp,"JointsID"))
@@ -355,7 +355,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	      int aJoint;
 	      for(int j=0;j<m_HeadJointNb;j++)
 		{
-		  fscanf(fp,"%d",&aJoint);
+		  fscanfi(fp,&aJoint);
 		  m_HeadJoints.insert( m_HeadJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
@@ -373,7 +373,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	  
 	  if (look_for(fp,"JointNb"))
 	    {
-	      fscanf(fp,"%d", &m_ChestJointNb);
+	      fscanfi(fp, &m_ChestJointNb);
 	      ODEBUG("JointNb: " << m_ChestJointNb);
 	    }
 	  if (look_for(fp,"JointsID"))
@@ -381,7 +381,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 	      int aJoint;
 	      for(int j=0;j<m_ChestJointNb;j++)
 		{
-		  fscanf(fp,"%d",&aJoint);
+		  fscanfi(fp,&aJoint);
 		  m_ChestJoints.insert( m_ChestJoints.end(),aJoint);
 		}
 	      ODEBUG("Joints :");
