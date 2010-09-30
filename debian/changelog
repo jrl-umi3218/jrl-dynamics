@@ -1,3 +1,9 @@
+jrl-dynamics (1.19.1-5) lucid; urgency=low
+
+  * Add missing build requirements.
+
+ -- Thomas Moulard <thomas.moulard@gmail.com>  Thu, 30 Sep 2010 13:33:00 +0200
+
 jrl-dynamics (1.19.1-4) lucid; urgency=low
 
   * Add missing build requirements.
