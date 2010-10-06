@@ -662,7 +662,7 @@ namespace dynamicsJRLJapan
 	@{ */
       /*! \brief Returns the transformation of the joint 
 	following a Plucker transformation according to table 1.5 of the HoR */
-      virtual Spatial::PluckerTransform xjcalc(const vectorN &qi);
+      virtual Spatial::PluckerTransform xjcalc();
     
       /*! \brief Returns the position of the joint in the link reference frame
 	following a Plucker transformation according to table 1.5 of the HoR */
@@ -675,23 +675,48 @@ namespace dynamicsJRLJapan
       /*! \brief Returns the free modes of the  joint. 
 	Currently this will return an empty matrix.
       */
-      const virtual matrixNxP & pcalc(vectorN &qi);
+      const virtual matrixNxP & pcalc();
 
       /*! \brief Returns the derivative of the free modes of the  joint. 
 	Currently this will return an empty matrix.
       */
-      const virtual matrixNxP & pdcalc(vectorN &qi);
+      const virtual matrixNxP & pdcalc();
 
       /*! \brief Returns the spatial velocity. */
       const Spatial::Velocity & sv();
 
       /*! \brief Returns the spatial accelaration. */
       const Spatial::Acceleration & sa();
-      
-    
-      /*! @} */
-      
 
+	  // Functions added by L.S to be conform to Featherstone's code RNEA using spatial vectors
+
+	  /*Rotation matrix for a body (precisely here the FF) giving its euler angles by L.S */
+	  void eulerXYZ(MAL_VECTOR(,double) & qi_ang, matrix3d & localRot);
+
+	  /*Rotation matrix for a revolute joint giving the angle of rotation of its signle DOF by L.S */
+	  void rotx(const vectorN & qi_ang, matrix3d & localRot);
+
+	  /*the 3d skew matrix by L.S */
+	  const MAL_S3x3_MATRIX(,double) & skew(MAL_S3_VECTOR(,double) & qi_pos);
+
+	  /*the 6d spatial skew matrix by L.S */
+	  Spatial::PluckerTransform & spatialskew(MAL_S3_VECTOR(,double) & qi);
+
+	  /*External force vector including only gravity terms by L.S */
+	  MAL_VECTOR(,double) & ComputeExtForce();
+    
+	  /*vectors and matrices for the computation of world position, rotation and CoM by L.S */
+	  vectorN mPA_parent,mPA_j,mPA_i;
+	  MAL_S3x3_MATRIX(,double) mRA_parent,mRA_j,mRA_i,RS_i;
+	  vector3d mp_i,p_i,qipos,qiang,lc_i,lcW_i;
+
+	  /*Computation of the spatial matrix XL: local transformation matrix from body i frame to joint i frame by L.S*/
+	  Spatial::PluckerTransform & computeXL(const vectorN & qi);
+	  /*Computation of the spatial matrix XPi: Spatial transformation matrix from the mother body frame to the current one by L.S*/
+	  Spatial::PluckerTransform & computeXPi();
+	  /*Computation of the spatial matrix X0ij: local transformation matrix from the world frame to the mother body frame by L.S*/
+	  Spatial::PluckerTransform & computeX0(const vectorN & qi);
+	  
   private:
 
       /*! \brief Position of the joint in the link
@@ -735,6 +760,37 @@ namespace dynamicsJRLJapan
 
       /*! \brief Store Zeta the momentum */
       vectorN m_Zeta;
+
+	  /*gravity constant by L.S*/
+	  //const double gravity_cst;
+	  MAL_S3x3_MATRIX(,double) sk;
+
+	  /* The spatial transformation matrix from the joint frame to the current body frame by L.S */
+	  Spatial::PluckerTransform Xl_i;
+
+	  /* The spatial transformation matrix from the mother body frame to the joint frame by L.S */
+	  Spatial::PluckerTransform Xj_i;
+
+	  /* The spatial transformation matrix from the world reference frame to the mother body frame by L.S*/
+	  Spatial::PluckerTransform X0i_j;
+
+	  /* The spatial external force due to gravity by L.S*/
+	  Spatial::Force f_ext;
+
+	  /*Compute the parent joint's transformation, and the absolute joint's transformation if this is not a free flyer joint.*/
+	  bool SupdateTransformation(const vectorN& inRobotConfigVector);
+
+	  /*Update the spatial body velocity according to the given vector of DoF values*/
+	  bool SupdateVelocity(const vectorN& inRobotConfigVector,
+				  const vectorN& inRobotSpeedVector);
+
+	  /*Update the spatial body acceleration according to the given vector of DoF values and the spatial body force*/
+	  bool SupdateAcceleration(const vectorN& inRobotConfigVector,
+				      const vectorN& inRobotSpeedVector,
+				      const vectorN& inRobotAccelerationVector);
+
+	  /*Update the torque vector of the associated body and spatial parent body force according to the previously computed body*/
+	  void SupdateTorqueAndForce();
 
   };
 

@@ -196,7 +196,6 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 };
 
 
-
 void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 {
   // Update the orientation of the joint.

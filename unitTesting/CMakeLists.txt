@@ -69,6 +69,17 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
 
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 
+
+ADD_EXECUTABLE(	TestSot CommonTools.cpp TestSot.cpp)
+ADD_DEPENDENCIES (TestSot ${PROJECT_NAME})
+SET_TARGET_PROPERTIES(TestSot
+					  PROPERTIES
+					  COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+				      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+				      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl
+					)
+
+
 ADD_EXECUTABLE(	TestCopyJointTreeThroughAbstractInterface 
   CommonTools.cpp 
   HumanoidCopy.cpp
