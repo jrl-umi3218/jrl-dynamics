@@ -719,10 +719,10 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	sh = currentBody->sIa*currentBody->sv;
 	//sf1 -= ssvt*sh;
 	sf1 = currentBody->sv^sh;
-	Spatial::PluckerTransform tmp = currentBody->sX0i;
+	Spatial::PluckerTransform invX0i; 
 	//----------> To add this function after fixing the pb. with inverse compilation
-	//Spatial::inverse(tmp);
-	Spatial::PluckerTransform invX0i = tmp;
+	invX0i.inverse(currentBody->sX0i);
+
 	sf2 = f_ext*lmass;
 	//----------> To develop the transpose of a spatial matrix
 	//sf2 = Spatial::transpose(invX0i)*sf2;
