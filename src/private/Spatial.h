@@ -5,7 +5,7 @@
 */
 #ifndef _SPATIAL_ALGEBRA_H_
 #define _SPATIAL_ALGEBRA_H_
-
+#include "dynamicsJRLJapan/dll.h"
 #include "MatrixAbstractLayer/MatrixAbstractLayer.h"
 #include "robotDynamics/jrlBody.h"
 
@@ -22,7 +22,7 @@ namespace dynamicsJRLJapan
     class Force;
     class PluckerTransform;
 
-    class Velocity
+    class DYN_JRL_JAPAN_EXPORT Velocity
     {
     public:
       Velocity();
@@ -35,8 +35,8 @@ namespace dynamicsJRLJapan
       vectorN  operator^(vectorN &a);
       Force operator^(Momentum &a);
 
-      friend Velocity operator*(double ad, Velocity &a);
-      friend Velocity operator+(vectorN & ,Velocity &);
+      friend DYN_JRL_JAPAN_EXPORT Velocity operator*(double ad, Velocity &a);
+      friend DYN_JRL_JAPAN_EXPORT Velocity operator+(vectorN & ,Velocity &);
       
       vector3d v0()
       { return m_v0;}
@@ -52,10 +52,16 @@ namespace dynamicsJRLJapan
       vector3d m_v0,m_w;
     };
     
-    Velocity operator*(double ad, Velocity &a);
-    Velocity operator+(vectorN &, Velocity &);
+    inline Velocity operator*(double ad, Velocity &a)
+	{
+		Velocity c;
+		c = a * ad;
+		return c;
+	}
 
-    class Acceleration
+    DYN_JRL_JAPAN_EXPORT Velocity operator+(vectorN &, Velocity &);
+
+    class DYN_JRL_JAPAN_EXPORT Acceleration
     {
     public:
       Acceleration();
@@ -65,7 +71,7 @@ namespace dynamicsJRLJapan
       Acceleration operator+(vectorN &a);
       Acceleration* operator=(vectorN &a);
 
-      friend Acceleration operator+(vectorN & ,Acceleration &);
+      friend DYN_JRL_JAPAN_EXPORT Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
       { return m_dv0;}
       void dv0(const vector3d &lv0)
@@ -80,8 +86,9 @@ namespace dynamicsJRLJapan
       vector3d m_dv0, m_dw;
     };
 
-    Acceleration operator+(vectorN &, Acceleration &);
-    class cAcceleration
+    DYN_JRL_JAPAN_EXPORT Acceleration operator+(vectorN &, Acceleration &);
+
+    class DYN_JRL_JAPAN_EXPORT cAcceleration
     {
     public:
       cAcceleration();
@@ -98,7 +105,7 @@ namespace dynamicsJRLJapan
       vector3d m_dv0,m_dw;
     };
 
-    class Force
+    class DYN_JRL_JAPAN_EXPORT Force
     {
     public:
       Force();
@@ -121,7 +128,7 @@ namespace dynamicsJRLJapan
       vector3d m_f, m_n0;
     };
     
-    class Motion
+    class DYN_JRL_JAPAN_EXPORT Motion
     {
     public:
       Motion();
@@ -138,7 +145,7 @@ namespace dynamicsJRLJapan
       vector3d m_p, m_theta;
     };
 
-    class Momentum
+    class DYN_JRL_JAPAN_EXPORT Momentum
     {
     public:
       Momentum();
@@ -157,7 +164,7 @@ namespace dynamicsJRLJapan
       vector3d m_v, m_w;
     };
 
-    class Inertia
+    class DYN_JRL_JAPAN_EXPORT Inertia
     {
     public:
       Inertia();
@@ -184,7 +191,7 @@ namespace dynamicsJRLJapan
       double m_m;
     };
 
-    class PluckerTransform
+    class DYN_JRL_JAPAN_EXPORT PluckerTransform
     {
     public:
       PluckerTransform();

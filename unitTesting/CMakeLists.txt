@@ -25,6 +25,7 @@ ENDIF(UNIX)
 
 IF(WIN32)
   SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src  ${LIBINCLUSION_KW}${PROJECT_NAME}${LIB_EXT} ${${PROJECT_NAME}_src_LDFLAGS}")
+  #MESSAGE(FATAL_ERROR ${${PROJECT_NAME}_test_LDFLAGS})
 ENDIF(WIN32)
 
 MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
@@ -32,6 +33,7 @@ MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl")
 
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/private)
 
 # JRL_DYNAMICS_ADD_TEST(TEST)
 # ---------------------------
@@ -42,7 +44,7 @@ MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl")
 #
 # TEST : test name
 #
-FUNCTION(JRL_DYNAMICS_ADD_TEST TEST)
+MACRO(JRL_DYNAMICS_ADD_TEST TEST)
 	ADD_EXECUTABLE(${TEST} ${TEST}.cpp)
 	SET_TARGET_PROPERTIES(${TEST}
 		PROPERTIES
@@ -50,7 +52,8 @@ FUNCTION(JRL_DYNAMICS_ADD_TEST TEST)
 		LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 	)
 	ADD_TEST(${TEST} ${TEST})
-ENDFUNCTION(JRL_DYNAMICS_ADD_TEST TEST)
+	#MESSAGE(FATAL_ERROR ${${PROJECT_NAME}_test_CXXFLAGS})
+ENDMACRO(JRL_DYNAMICS_ADD_TEST TEST)
 
 ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp )
 SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
@@ -154,13 +157,13 @@ ADD_TEST(TestCopyJointTreeThroughAbstractInterface TestCopyJointTreeThroughAbstr
 
 ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
 
+ JRL_DYNAMICS_ADD_TEST(TestSpatial_doubleByv)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vCrossm)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusv)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusvector)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vectorPlusv)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vMoinsv)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vBydouble)
-# JRL_DYNAMICS_ADD_TEST(TestSpatial_doubleByv)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vCrossvector)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_vEgalvector)
 # JRL_DYNAMICS_ADD_TEST(TestSpatial_dvPlusdv)
