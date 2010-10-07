@@ -716,6 +716,21 @@ namespace dynamicsJRLJapan
 	  Spatial::PluckerTransform & computeXPi();
 	  /*Computation of the spatial matrix X0ij: local transformation matrix from the world frame to the mother body frame by L.S*/
 	  Spatial::PluckerTransform & computeX0(const vectorN & qi);
+
+	  /*Compute the parent joint's transformation, and the absolute joint's transformation if this is not a free flyer joint.*/
+	  bool SupdateTransformation(const vectorN& inRobotConfigVector);
+
+	  /*Update the spatial body velocity according to the given vector of DoF values*/
+	  bool SupdateVelocity(const vectorN& inRobotConfigVector,
+				  const vectorN& inRobotSpeedVector);
+
+	  /*Update the spatial body acceleration according to the given vector of DoF values and the spatial body force*/
+	  bool SupdateAcceleration(const vectorN& inRobotConfigVector,
+				      const vectorN& inRobotSpeedVector,
+				      const vectorN& inRobotAccelerationVector);
+
+	  /*Update the torque vector of the associated body and spatial parent body force according to the previously computed body*/
+	  void SupdateTorqueAndForce();
 	  
   private:
 
@@ -776,21 +791,6 @@ namespace dynamicsJRLJapan
 
 	  /* The spatial external force due to gravity by L.S*/
 	  Spatial::Force f_ext;
-
-	  /*Compute the parent joint's transformation, and the absolute joint's transformation if this is not a free flyer joint.*/
-	  bool SupdateTransformation(const vectorN& inRobotConfigVector);
-
-	  /*Update the spatial body velocity according to the given vector of DoF values*/
-	  bool SupdateVelocity(const vectorN& inRobotConfigVector,
-				  const vectorN& inRobotSpeedVector);
-
-	  /*Update the spatial body acceleration according to the given vector of DoF values and the spatial body force*/
-	  bool SupdateAcceleration(const vectorN& inRobotConfigVector,
-				      const vectorN& inRobotSpeedVector,
-				      const vectorN& inRobotAccelerationVector);
-
-	  /*Update the torque vector of the associated body and spatial parent body force according to the previously computed body*/
-	  void SupdateTorqueAndForce();
 
   };
 

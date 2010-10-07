@@ -30,7 +30,8 @@ using namespace dynamicsJRLJapan;
 void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
   JointPrivate * currentJoint = CurrentBody.getJointPrivate();
-  currentJoint->updateTorqueAndForce();
+  //currentJoint->updateTorqueAndForce();
+  currentJoint->SupdateTorqueAndForce();
   // Update the vector related to the computed quantities.
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
     {
