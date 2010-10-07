@@ -96,7 +96,7 @@ const Spatial::PluckerTransform & JointPrivate::X0()
 
 /*! Spatial notations specifications */
 /*modified by L.S*/
-Spatial::PluckerTransform JointPrivate::xjcalc()
+Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 
 {	   
   matrix3d lR;
@@ -442,6 +442,68 @@ void JointPrivate::initXL()
   m_iXpi = m_XL;
 }
 
+/* Update functions by O.S */
+/* Rigid transformation */
+bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
+{
+  Spatial::PluckerTransform Xj = xjcalc(inRobotConfigVector);
+  m_iXpi = Xj * m_XL;
+  
+  if (m_FatherJoint!=0)
+    {
+      Spatial::PluckerTransform piX0 = m_FatherJoint->X0();
+      m_X0 = m_iXpi * piX0;
+    }
+  return true;
+}
+
+/* Velocity update */
+bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
+				  const vectorN& inRobotSpeedVector)
+{
+  vectorN localSpeed;
+  MAL_VECTOR_RESIZE(localSpeed,numberDof());
+  for(unsigned int i=0;i<numberDof();i++)
+    localSpeed(i) = inRobotSpeedVector(rankInConfiguration()+i);
+
+  Spatial::Velocity psv = m_FatherJoint->sv();
+  
+  m_sv = (m_iXpi * psv);
+  vectorN a = MAL_RET_A_by_B(m_phi,localSpeed);
+  m_sv = m_sv + a;
+
+  m_Zeta = MAL_RET_A_by_B(m_dotphi,localSpeed);
+  m_Zeta = m_Zeta + (m_sv^a);
+  return true;
+}
+
+bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
+				      const vectorN& inRobotSpeedVector,
+				      const vectorN& inRobotAccelerationVector)
+{
+  vectorN localAcc;
+  MAL_VECTOR_RESIZE(localAcc,numberDof());
+  for(unsigned int i=0;i<numberDof();i++)
+    localAcc(i) = inRobotSpeedVector(rankInConfiguration()+i);
+
+  vectorN a2 = MAL_RET_A_by_B(m_phi,localAcc);
+
+  // Udpate acceleration.
+  Spatial::Acceleration psa= m_FatherJoint->sa();
+  m_sa = m_iXpi * psa;
+  m_sa = m_sa + a2 + m_Zeta;
+
+  // Update force.
+  Spatial::Force af;
+  af = m_sI * m_sa;
+  Spatial::Momentum ah;
+  ah = m_sI * m_sv;
+  Spatial::Force af2;
+  af2 = m_sv^ah;
+  af = af + af2;
+  return true;
+}
+
 /* Updates methods using Spatial notations */
 
 /* Rigid transformation */
@@ -557,7 +619,7 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 	*/
 	matrix3d Rtmp2;
 	Rtmp2 = MAL_S3x3_RET_A_by_B(body->R_static,body->localR);
-	X0i_j=Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(Rtmp),body->b);
+	X0i_j=Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(Rtmp2),body->b);
 
   if (parentbody!=0)
     {
