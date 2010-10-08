@@ -124,6 +124,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       // Update the acceleration of the body.
       if (m_ComputeAcceleration)
 	// currentJoint->updateAcceleration(m_Configuration,m_Velocity,m_Acceleration);
+	// FXME assert(m_computeCoM);
 	  currentJoint->SupdateAcceleration(m_Configuration,
 					 m_Velocity,
 					 m_Acceleration);
