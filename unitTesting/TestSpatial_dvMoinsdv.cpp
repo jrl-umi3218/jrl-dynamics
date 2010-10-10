@@ -45,6 +45,7 @@ void run_test()
 	JRL_DYNAMICS_ASSERT(dvang(0) == 1);
 	JRL_DYNAMICS_ASSERT(dvang(1) == 1);
 	JRL_DYNAMICS_ASSERT(dvang(2) == -1);
+	std::cout << "Test dvMoinsdv has succeeded." << std::endl;
 }
 
 GENERATE_TEST()

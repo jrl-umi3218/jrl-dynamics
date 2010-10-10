@@ -108,6 +108,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
 bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
 					  const vectorN &inRobotSpeedVector)
 {
+//	std::cout << "in Rotation update vel" << std::endl;
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   DynamicBodyPrivate* currentMotherBody = 0;
   vector3d NE_tmp, NE_tmp2; 
@@ -237,4 +238,20 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
     MAL_S3_VECTOR_FILL(currentBody->ldv,0);
 
   return true;
+}
+
+const matrixNxP & JointRotationPrivate::pcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_phi,6,1);
+	m_phi(2,0)=1;
+    return m_phi;
+
+}
+
+const matrixNxP & JointRotationPrivate::pdcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_dotphi,6,1);
+	MAL_MATRIX_FILL(m_dotphi,0);
+
+  return m_dotphi;
 }

@@ -54,3 +54,19 @@ bool JointAnchorPrivate::updateAcceleration(const vectorN &inRobotConfigVector,
 {
   return true;
 }
+
+const matrixNxP & JointAnchorPrivate::pcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_phi,6,1);
+	MAL_MATRIX_FILL(m_phi,0);
+    return m_phi;
+
+}
+
+const matrixNxP & JointAnchorPrivate::pdcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_dotphi,6,1);
+	MAL_MATRIX_FILL(m_dotphi,0);
+
+  return m_dotphi;
+}

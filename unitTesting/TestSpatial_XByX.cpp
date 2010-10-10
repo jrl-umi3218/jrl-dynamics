@@ -15,6 +15,7 @@ using namespace dynamicsJRLJapan;
 */
 void run_test()
 {
+	double Error_Tolerated = 0.0000001;
 	vector3d p1,p2;
 	p1(0)= 0.5;    
 	p1(1)= 1;    
@@ -65,24 +66,35 @@ void run_test()
 	std::cout << "R = " << R << std::endl;
 	std::cout << "p = " << p << std::endl;
 
-	JRL_DYNAMICS_ASSERT(R(0,0) == 0.15);
-	JRL_DYNAMICS_ASSERT(R(1,0) == -0.02);
-	JRL_DYNAMICS_ASSERT(R(2,0) == 0.3025);
+	std::cout << "Rerr0 = " << (R(0,0) - 0.15) << std::endl;
+	std::cout << "Rerr1 = " << (R(1,0) + 0.02) << std::endl;
+	std::cout << "Rerr2 = " << (R(2,0) - 0.3025) << std::endl;
+	std::cout << "Rerr3 = " << (R(0,1) + 0.475) << std::endl;
+	std::cout << "Rerr4 = " << (R(1,1) - 0.035) << std::endl;
+	std::cout << "Rerr5 = " << (R(2,1) + 0.115) << std::endl;
+	std::cout << "Rerr3 = " << (R(0,2) - 0.8) << std::endl;
+	std::cout << "Rerr4 = " << (R(1,2) + 0.032) << std::endl;
+	std::cout << "Rerr5 = " << (R(2,2) - 0.2) << std::endl;
 
-	JRL_DYNAMICS_ASSERT(R(0,1) == -0.475);
-	JRL_DYNAMICS_ASSERT(R(1,1) == 0.035);
-	JRL_DYNAMICS_ASSERT(R(2,1) == -0.115);
+	JRL_DYNAMICS_ASSERT(R(0,0) - 0.15 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(1,0) + 0.02 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(2,0) - 0.3025 <= Error_Tolerated);
 
-	JRL_DYNAMICS_ASSERT(R(0,2) == 0.8);
-	JRL_DYNAMICS_ASSERT(R(1,2) == -0.032);
-	JRL_DYNAMICS_ASSERT(R(2,2) == 0.2);
+	JRL_DYNAMICS_ASSERT(R(0,1) + 0.475 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(1,1) - 0.035 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(2,1) + 0.115 <= Error_Tolerated);
 
-	/*2.0250
-    3.7750
-    6.0000*/
-	JRL_DYNAMICS_ASSERT(p(0) == 2.025);
-	JRL_DYNAMICS_ASSERT(p(1) == 3.775);
-	JRL_DYNAMICS_ASSERT(p(2) == 6);
+	JRL_DYNAMICS_ASSERT(R(0,2) - 0.8 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(1,2) + 0.032 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(R(2,2) - 0.2 <= Error_Tolerated);
+
+	std::cout << "perr0 = " << (p(0) - 2.025) << std::endl;
+	std::cout << "perr1 = " << (p(1) - 3.775) << std::endl;
+	std::cout << "perr2 = " << (p(2) - 6) << std::endl;
+
+	JRL_DYNAMICS_ASSERT(p(0) - 2.025 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(p(1) - 3.775 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(p(2) - 6 <= Error_Tolerated);
 	std::cout << "Test XByX has succeeded." << std::endl;
 }
 

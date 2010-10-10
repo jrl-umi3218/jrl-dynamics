@@ -34,6 +34,7 @@ void run_test()
 	JRL_DYNAMICS_ASSERT(dvang(0) == 7);
 	JRL_DYNAMICS_ASSERT(dvang(1) == 9);
 	JRL_DYNAMICS_ASSERT(dvang(2) == 11);
+	std::cout << "Test dvEgalvector has succeeded." << std::endl;
 }
 
 GENERATE_TEST()
