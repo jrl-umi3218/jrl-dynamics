@@ -79,7 +79,8 @@ bool JointTranslationPrivate::updateAcceleration(const vectorN & inRobotConfigVe
 const matrixNxP & JointTranslationPrivate::pcalc(const vectorN & qi)
 {
 	MAL_MATRIX_RESIZE(m_phi,6,1);
-	m_phi(2,0)=1;
+	MAL_MATRIX_FILL(m_phi,0);
+	m_phi(3,0)=1;
 	return m_phi;
 }
 

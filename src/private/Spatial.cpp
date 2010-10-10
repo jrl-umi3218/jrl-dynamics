@@ -359,20 +359,33 @@ Force Velocity::operator^(Momentum &a)
   vector3d dn0,df;
   vector3d aw  = a.w();
   vector3d av0 = a.v();
-
-  std::cout << "aw = " << aw << std::endl;
-  std::cout << "av0 = " << av0 << std::endl;
+/*
+  //std::cout << "aw = " << aw << std::endl;
+  //std::cout << "av0 = " << av0 << std::endl;
   // w x m
   dn0(0) =               -m_w(2)*aw(1) + m_w(1)*aw(2);
   dn0(1) = m_w(2)* aw(0)                -m_w(0)*aw(2);
   dn0(2) =-m_w(1)* aw(0) +m_w(0)*aw(1);
-  std::cout << "dn0 = " << dn0 << std::endl;
+  //std::cout << "dn0 = " << dn0 << std::endl;
 
   // v0 x m + w x m0
   df(0) =               -m_v0(2)*aw(1)+ m_v0(1)*aw(2)                 -m_w(2)*av0(1) + m_w(1)*av0(2);
   df(1) = m_v0(2)* aw(0)               -m_v0(0)*aw(2)+m_w(2)* av0(0)                 - m_w(0)*av0(2);
   df(2) =-m_v0(1)* aw(0)+m_v0(0)*aw(1)               -m_w(1)* av0(0)  +m_w(0)*av0(1) ;
   
+  */
+
+  //----------> Formulation Rectification by L.S cf eq.(2.16) in Springer Handbook Of Robotics
+  // -S(w)'*m0
+  df(0) = -m_w(2)*av0(1) + m_w(1)*av0(2);
+  df(1) = m_w(2)*av0(0) - m_w(0)*av0(2);
+  df(2) = -m_w(1)*av0(0) + m_w(0)*av0(1);
+
+  //-S(w)'*m -S(v0)'*m0
+  dn0(0) = -m_w(2)*aw(1) + m_w(1)*aw(2) -m_v0(2)*av0(1) + m_v0(1)*av0(2);
+  dn0(1) = m_w(2)*aw(0) - m_w(0)*aw(2) + m_v0(2)*av0(0) - m_v0(0)*av0(2);
+  dn0(2) = -m_w(1)*aw(0) + m_w(0)*aw(1) -m_v0(1)*av0(0) + m_v0(0)*av0(1);
+
   Spatial::Force c(df,dn0);
   
   return c;

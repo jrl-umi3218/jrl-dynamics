@@ -226,6 +226,24 @@ void JointPrivate::rotx(const vectorN & qi_ang, matrix3d & localRot)
 
 }
 
+/*Computation of the skew symmetric matrix of a 3d vector by L.S*/
+const MAL_S3x3_MATRIX(,double) & JointPrivate::skew(MAL_S3_VECTOR(,double) & qi_pos)
+{
+	sk(0,0)=0;
+	sk(1,0)=qi_pos(2);
+	sk(2,0)=-qi_pos(1);
+
+	sk(0,1)=-qi_pos(2);
+	sk(1,1)=0;
+	sk(2,1)=qi_pos(0);
+
+	sk(0,2)=qi_pos(1);
+	sk(1,2)=-qi_pos(0);
+	sk(2,2)=0;
+
+	return sk;
+}
+
 /*Computation of the external force due to gravity by L.S*/
 /*MAL_VECTOR(,double) & JointPrivate::ComputeExtForce()
 {
@@ -346,6 +364,10 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 	Xl_i = Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(currentBody->R_static),currentBody->b);
 
     currentBody->sXpii=Xj_i*Xl_i;
+	matrix3d Rpii; 
+	Rpii=currentBody->sXpii.R();
+	vector3d Tpii;
+	Tpii=currentBody->sXpii.p();
 
 	matrix3d Rtmp2;
 	Rtmp2 = MAL_S3x3_RET_A_by_B(currentBody->R_static,currentBody->localR);
@@ -358,6 +380,27 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
     }
 	else
 		currentBody->sX0i=X0i_j;
+
+	matrix3d R0i; 
+	R0i=currentBody->sX0i.R();
+	vector3d T0i;
+	T0i=currentBody->sX0i.p();
+
+	/*std::cout << "currentBody = " << currentBody << std::endl;
+	std::cout << "nbDofs_i = " << m_nbDofs << std::endl;
+	std::cout << "q_i = " << currentBody->sq << std::endl;	
+    std::cout << "mp_i = " << currentBody->b << std::endl;
+	std::cout << "Rot_i = " << currentBody->localR << std::endl;
+	std::cout << "RS_i = " << currentBody->R_static << std::endl;
+	std::cout << "R0i_j = " << Rtmp2 << std::endl;
+
+	std::cout << "type_i = " << m_type << std::endl;
+	std::cout << "Rpii = " << Rpii << std::endl;
+	std::cout << "Tpii = " << Tpii << std::endl;
+	std::cout << "R0i = " << R0i << std::endl;
+	std::cout << "T0i = " << T0i << std::endl;
+	std::cout << "------------------------------------ \n \n " << std::endl;*/
+
 	return true;
 }
 
@@ -403,6 +446,17 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
 	m_Zeta = MAL_RET_A_by_B(m_dotphi,currentBody->sdq); 
 	m_Zeta = m_Zeta + b;
 
+	vector3d vl,va;
+	vl=currentBody->sv.v0();
+	va=currentBody->sv.w();
+	/*std::cout << "dq_i = " << currentBody->sdq << std::endl;
+	std::cout << "phi_i = " << m_phi << std::endl;
+	std::cout << "dotphi_i = " << m_dotphi << std::endl;
+	std::cout << "type_i = " << m_type << std::endl;
+	std::cout << "vl_i = " << vl << std::endl;
+	std::cout << "va_i = " << va << std::endl;
+	std::cout << "ksi_i = " << m_Zeta << std::endl;
+	std::cout << "------------------------------------ \n \n " << std::endl;*/
 	return true;
 }
 
@@ -447,6 +501,9 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	MAL_S3x3_MATRIX(,double) lI = currentBody->getInertie();
 	double lmass = currentBody->getMass();
 	MAL_S3_VECTOR(,double) lc = currentBody->localCenterOfMass();
+	MAL_S3x3_MATRIX(,double) Sc = skew(lc);
+	MAL_S3x3_MATRIX(,double) ScSct = MAL_S3x3_RET_A_by_B(Sc,MAL_S3x3_RET_TRANSPOSE(Sc));
+	lI = lI + ScSct*lmass;
 	MAL_S3_VECTOR(,double) lh=lc*lmass;
 	currentBody->sIa = Spatial::Inertia(lI,lh,lmass);
 
@@ -482,8 +539,8 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	vector3d lfext,wfext;
 	MAL_S3_VECTOR_FILL(lfext,0);
 	MAL_S3_VECTOR_FILL(wfext,0);
-	lfext = currentBody->w_c^g;
-	wfext = g;
+	wfext = currentBody->w_c^g;
+	lfext = g;
 
 	f_ext = Spatial::Force(lfext,wfext);
 
@@ -498,12 +555,41 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	//----------> To develop the transpose of a spatial matrix
 	//sf2 = f_ext*lmass;
 	//sf2 = Spatial::transpose(invX0i)*sf2;
-
+	vector3d fh,nh;
+	fh=sh.v();
+	nh=sh.w();
+	vector3d f,n;
+	f=sf.f();
+	n=sf.n0();
 	//----------> force = X.f developed such that XF.f = (X)^{-T}.f or in this case X=currentBody->sX0i 
 	sftmp=f_ext*lmass;
 	sf2 = currentBody->sX0i*sftmp;
 	sf = sf + sf1;
 	currentBody->sf = sf - sf2;
+
+	/*std::cout << "ddq_i = " << currentBody->sddq << std::endl;
+	std::cout << "type_i = " << m_type << std::endl;
+	std::cout << "R_i = " << currentBody->R << std::endl;
+	std::cout << "lc_i = " << lc << std::endl;
+	std::cout << "lcw_i = " << currentBody->w_c << std::endl;
+	std::cout << "I_i = " << currentBody->getInertie() << std::endl;
+	std::cout << "Ibar_i = " << lI << std::endl;*/
+
+	vector3d al,aa,f1,n1,f2,n2;
+	al=currentBody->sa.dv0();
+	aa=currentBody->sa.dw();
+	f=currentBody->sf.f();
+	n=currentBody->sf.n0();
+	
+	f1=sf1.f();
+	n1=sf1.n0();
+	f2=sf2.f();
+	n2=sf2.n0();
+
+	std::cout << "type_i = " << m_type << std::endl;
+	std::cout << "f_i = " << f << std::endl;
+	std::cout << "n_i = " << n << std::endl;
+	std::cout << "------------------------------------ \n \n " << std::endl;
 	return true;
 }
 
@@ -521,15 +607,26 @@ void JointPrivate::SupdateTorqueAndForce()
 	vector3d fi,ni;
 	fi=currentBody->sf.f();
 	ni=currentBody->sf.n0();
-	MAL_VECTOR_RESIZE(currentBody->stau,MAL_MATRIX_NB_ROWS(m_phi));
-	for (unsigned int i=0;i<MAL_MATRIX_NB_ROWS(m_phi);i++)
+	MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
+	/*for (unsigned int i=0;i<MAL_MATRIX_NB_COLS(m_phi);i++)
 	{
 		for (unsigned int j=0;j<3;j++)
 		{	
 			currentBody->stau[i]=m_phi(i,j)*fi(j)+m_phi(i,j+3)*ni(j);
 
 		}
+	}*/
+	if (m_type == -1)
+	for (unsigned int i=0;i<3;i++)
+	{
+		currentBody->stau[i]=fi(i);
+		currentBody->stau[i+3]=ni(i);
 	}
+	else
+		currentBody->stau[0]=ni(0);
+
+	std::cout << "type_i = " << m_type << std::endl;
+	std::cout << "tau_i = " << currentBody->stau << std::endl;
 
 	currentBody->m_Torque = currentBody->sf.n0();
     currentBody->m_Force = currentBody->sf.f();

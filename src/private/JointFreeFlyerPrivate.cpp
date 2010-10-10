@@ -93,8 +93,7 @@ bool JointFreeflyerPrivate::updateAcceleration(const vectorN & inRobotConfigVect
 const matrixNxP & JointFreeflyerPrivate::pcalc(const vectorN & qi)
 {
 	MAL_MATRIX_RESIZE(m_phi,6,6);
-	for(unsigned int i=0;i<6;i++)
-		m_phi(i,i)=1;
+	MAL_MATRIX_SET_IDENTITY(m_phi);
    return m_phi;
 
 }
