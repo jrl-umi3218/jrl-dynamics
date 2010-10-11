@@ -139,6 +139,34 @@ int main(int argc, char *argv[])
   std::cout << "TorqueDrift = " << Torques << std::endl;
   std::cout << "ForceDrift = " << Forces << std::endl;
 
+  matrixNxP InertiaMatrix;
+  aHDR->computeInertiaMatrix();
+  InertiaMatrix = aHDR->inertiaMatrix();
+
+  aCurrentAcc[6] = 1.0;
+  aHDR->currentAcceleration(aCurrentAcc);
+
+  // Initialize the backward dynamics (2de order, should be processed 3 times before).
+	for( int i=0;i<3;++i )
+		aHDR->computeForwardKinematics();
+
+  aHDR->computeForwardKinematics();
+
+  const matrixNxP& Torques1 = aHDR->currentTorques();
+  const matrixNxP& Forces1 = aHDR->currentForces();
+
+  std::cout << "InertiaMatrix("
+       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
+	   << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< std::endl;
+  DisplayMatrix(InertiaMatrix,std::cout);
+
+  for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
+    {
+      double torquefrominertia = 9.81 * InertiaMatrix(i,2);
+	  std::cout << filterprecision(Torques1(i,0)) << " \t \t" << filterprecision(torquefrominertia) << " \t "  
+		  << filterprecision(torquefrominertia)+Torques(i,0) << std::endl;
+    }
+
   delete aHDR;
   return -1;
 }
