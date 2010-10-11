@@ -625,23 +625,23 @@ void JointPrivate::SupdateTorqueAndForce()
 	fi=currentBody->sf.f();
 	ni=currentBody->sf.n0();
 	MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
-	/*for (unsigned int i=0;i<MAL_MATRIX_NB_COLS(m_phi);i++)
-	{
-		for (unsigned int j=0;j<3;j++)
-		{	
-			currentBody->stau[i]=m_phi(i,j)*fi(j)+m_phi(i,j+3)*ni(j);
 
+	if (m_nbDofs == 6)
+	{
+		for (unsigned int i=0;i<3;i++)
+		{
+			//for (unsigned int j=0;j<3;j++)
+			//{
+				currentBody->stau[i]=fi(i); //m_phi(i,j)*fi(i)+m_phi(i,j+3)*ni(i);
+				currentBody->stau[i+3]=ni(i); //m_phi(i+3,j)*fi(i)+m_phi(i+3,j+3)*ni(i);
+			//}
 		}
-	}*/
-	if (m_type == -1)
-	for (unsigned int i=0;i<3;i++)
-	{
-		currentBody->stau[i]=fi(i);
-		currentBody->stau[i+3]=ni(i);
 	}
-	else
-		currentBody->stau[0]=ni(0);
-
+	else if (m_nbDofs == 1)
+	{
+		//for (unsigned int j=0;j<3;j++)
+			currentBody->stau[0]=ni(0); //m_phi(0,j)*fi(j)+ m_phi(0,j+3)*ni(j);
+	}
 	std::cout << "type_i = " << m_type << std::endl;
 	std::cout << "tau_i = " << currentBody->stau << std::endl;
 
