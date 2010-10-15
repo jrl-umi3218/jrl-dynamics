@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" href="$a00017.html" title="Anchor joint." alt="" coords="236,5,447,35"/>
+<area shape="rect" href="$a00018.html" title="Free flyer joint." alt="" coords="232,59,451,88"/>
+<area shape="rect" href="$a00020.html" title="Rotation joint." alt="" coords="232,112,451,141"/>
+<area shape="rect" href="$a00021.html" title="Translation joint." alt="" coords="225,165,457,195"/>
+</map>
