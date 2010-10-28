@@ -164,6 +164,7 @@ void JointPrivate::resizeJacobianJointWrtConfig(int lNbDofs)
 
 }
 
+
 void JointPrivate::computeJacobianJointWrtConfig()
 {
   DynamicBodyPrivate * FinalBody = (DynamicBodyPrivate *)m_Body;
@@ -188,9 +189,18 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
       unsigned int lcol = aJoint->stateVectorPosition();
       ODEBUG("JointPrivate: " << aJoint->getName() << " " << lcol);
       dp = inPointWorldFrame - aBody->p;
-      
+	  /*
+	  if (i==0)
+	  {
+		  std::cout << "JointPrivate: " << aJoint->getName() << " " << lcol << std::endl;
+		  std::cout << "leg_jj_pos = " << inPointWorldFrame << std::endl;
+		  std::cout << "waist_jj_pos = " << aBody->p << std::endl;
+		  std::cout << "dp = " << dp << std::endl;
+	  }
+	  */
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aBody->w_a,dp);
-      
+	 // std::cout << "JointPrivate: " << aJoint->getName() << std::endl;
+	 // std::cout << "joint world axis : " << aBody->w_a << std::endl;
       switch (aJoint->type())
         {
 	  

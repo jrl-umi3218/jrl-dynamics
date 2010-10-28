@@ -15,6 +15,9 @@
 #include <fstream>
 #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
 #include "CommonTools.h"
+#include <../src/private/JointPrivate.h>
+#include <../src/private/DynamicBodyPrivate.h>
+#include <../src/private/DynMultiBodyPrivate.h>
 
 using namespace std;
 using namespace dynamicsJRLJapan;
@@ -84,10 +87,11 @@ int main(int argc, char *argv[])
   //aCurrentConf[1]= 1;
   //aCurrentConf[4]= 2;
   //aCurrentConf[5]= 3;
+
   
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-  //aCurrentConf[lindex++] = 0.0; 
-  aCurrentConf[0]= -3.99736e-16;
+  aCurrentConf[lindex++] = 0.0; 
+  /*aCurrentConf[0]= -3.99736e-16;
   aCurrentConf[1]=  0.250525;
   aCurrentConf[2]=   -0.490775;
   aCurrentConf[3]= 1.02102;    
@@ -116,7 +120,7 @@ int main(int argc, char *argv[])
   aCurrentConf[26]= -0.952454;
   aCurrentConf[27]= -0.000751609;
   aCurrentConf[28]= -0.0157137;
-  aCurrentConf[29]= 0.100424;
+  aCurrentConf[29]= 0.100424;*/
                          
   tcout << "NbOfDofs:" << NbOfDofs << std::endl; 
   tcout << "Current Configuration :" << aCurrentConf << std::endl;
@@ -126,6 +130,9 @@ int main(int argc, char *argv[])
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
+  //aCurrentVel[2] = 100.0;
+  //aCurrentVel[3] = 1.0;
+  //aCurrentVel[6] = 1.0;
   //  aCurrentVel[0]=1.0;
   //aCurrentVel[6]=1.0;
   //aCurrentVel[7]=2.0;
@@ -141,7 +148,7 @@ int main(int argc, char *argv[])
   //MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
-  aCurrentAcc[0] = -1.66477;          
+  /*aCurrentAcc[0] = -1.66477;          
   aCurrentAcc[1] = -0.314195;
   aCurrentAcc[2] = 3.09524; 
   aCurrentAcc[3] = 18.0223;
@@ -176,7 +183,7 @@ int main(int argc, char *argv[])
   aCurrentAcc[32] = 0; 
   aCurrentAcc[33] = 0.135294;
   aCurrentAcc[34] = 0.0071321;
-  aCurrentAcc[35] = 0.99078;
+  aCurrentAcc[35] = 0.99078;*/
 
  // aCurrentAcc[1]=1.0;
  // aCurrentAcc[9]=1.0;
@@ -250,8 +257,34 @@ int main(int argc, char *argv[])
   MAL_MATRIX(,double) aJ;
   aJ = aJoint->jacobianJointWrtConfig();  
   DisplayMatrix(aJ,tcout);
+
+  /*DynMultiBodyPrivate* FinalBody = (DynMultiBodyPrivate*)(aJoint->linkedBody());
+  matrixNxP TestJacobian;
+  MAL_MATRIX_RESIZE(TestJacobian, 6, NbOfDofs);
+  vector3d CoM = FinalBody->localCenterOfMass(); 
+  FinalBody->getJacobian(*FinalBody->rootJoint(),*aJoint,CoM,TestJacobian);
+  std::cout << "TestJacobian = " << TestJacobian << std::endl;*/
+
+  // Get the Jacobian of the left ankle.
+  CjrlJoint  * aJointl = aHDR->leftAnkle();
+  aJointl->computeJacobianJointWrtConfig();
+
+  tcout << "Jacobian of the left ankle." << endl;
+  MAL_MATRIX(,double) aJl;
+  aJl = aJointl->jacobianJointWrtConfig();  
+  DisplayMatrix(aJl,tcout);
+
+  // Get the Jacobian of the right ankle.
+  CjrlJoint  * aJointwr = aHDR->rightWrist();
+  aJointwr->computeJacobianJointWrtConfig();
+
+  tcout << "Jacobian of the right wrist." << endl;
+  MAL_MATRIX(,double) aJwr;
+  aJwr = aJointwr->jacobianJointWrtConfig();  
+  DisplayMatrix(aJwr,tcout);
  
   // Get the articular Jacobian from the right ankle to the right wrist.
+
   vector3d origin; origin(0) = 0.0; origin(1) = 0.0; origin(2) = 0.0;
   aHDR->getJacobian(*aHDR->rightAnkle(),
 		    *aHDR->rightWrist(),
@@ -351,7 +384,6 @@ int main(int argc, char *argv[])
 	  << ActuatedJoints[i]->rankInConfiguration() << endl;
 
   tcout << "Humanoid mass:" << aHDR->mass() << endl;
-
   DisplayForces(aHDR,empty,tcout);
   DisplayTorques(aHDR,empty, tcout);
   

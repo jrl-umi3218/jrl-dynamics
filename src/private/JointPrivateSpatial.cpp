@@ -131,8 +131,8 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 				{
 					qlin(i)=currentBody->sq[i];
 					qang(i)=currentBody->sq[i+3];
-					//currentBody->b = currentBody->b + qlin;
 					currentBody->b[i]=qlin(i);
+					//currentBody->b[i] += qlin(i);
 				}
 			eulerXYZ(qang, currentBody->localR);
 		}
@@ -359,7 +359,7 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 	DynamicBodyPrivate* currentMotherBody = 0;
 	if (parentJoint()!=0)
 		currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-  
+
 	Xj_i = xjcalc(inRobotConfigVector);
 	Xl_i = Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(currentBody->R_static),currentBody->b);
 
@@ -381,12 +381,42 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 	else
 		currentBody->sX0i=X0i_j;
 
+		// Update position and orientation and used for computation of worldComPosition
+	matrix3d Rtmp;
+	if (currentMotherBody!=0)
+    {
+		// For orientation of the body.
+		MAL_S3x3_C_eq_A_by_B(Rtmp ,currentMotherBody->R , currentBody->R_static);
+		// For its position.
+		currentBody->p = currentMotherBody->p + MAL_S3x3_RET_A_by_B(currentMotherBody->R,currentBody->b);
+		//update the translation/rotation axis of joint
+		MAL_S3x3_C_eq_A_by_B(currentBody->w_a,Rtmp, currentBody->a);
+    }
+	else
+    {
+		// For orientation of the body.
+		Rtmp = currentBody->R_static;
+		// For its position.
+		currentBody->p = currentBody->b;
+  }
+
+	// Put it in a homogeneous form.
+	MAL_S3x3_C_eq_A_by_B(currentBody->R , Rtmp, currentBody->localR);
+
+	for( unsigned int i=0;i<3;i++)
+		for(unsigned int j=0;j<3;j++)
+		MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,j) = currentBody->R(i,j);
+	
+	for( unsigned int i=0;i<3;i++)
+    MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) = currentBody->p(i);
+
+	/*
 	matrix3d R0i; 
 	R0i=currentBody->sX0i.R();
 	vector3d T0i;
 	T0i=currentBody->sX0i.p();
 
-	/*std::cout << "currentBody = " << currentBody << std::endl;
+	std::cout << "currentBody = " << currentBody << std::endl;
 	std::cout << "nbDofs_i = " << m_nbDofs << std::endl;
 	std::cout << "q_i = " << currentBody->sq << std::endl;	
     std::cout << "mp_i = " << currentBody->b << std::endl;
@@ -464,7 +494,6 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 				      const vectorN& inRobotSpeedVector,
 				      const vectorN& inRobotAccelerationVector)
 {
-
 	DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
 	DynamicBodyPrivate* currentMotherBody = 0;
   
@@ -509,30 +538,10 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 
 	// MAL_VECTOR(,double) f_ext = ComputeExtForce();
 
-	// Update position and orientation and used for computation of worldComPosition
-	matrix3d Rtmp;
-	if (currentMotherBody!=0)
-    {
-		// For orientation of the body.
-		MAL_S3x3_C_eq_A_by_B(Rtmp ,currentMotherBody->R , currentBody->R_static);
-		// For its position.
-		currentBody->p = currentMotherBody->p + MAL_S3x3_RET_A_by_B(currentMotherBody->R,currentBody->b);
-    }
-	else
-    {
-		// For orientation of the body.
-		Rtmp = currentBody->R_static;
-		// For its position.
-		currentBody->p = currentBody->b;
-    }
-
-	// Put it in a homogeneous form.
-	MAL_S3x3_C_eq_A_by_B(currentBody->R , Rtmp, currentBody->localR);
-
 	//update world com position
 	MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,lc);
 	currentBody->w_c  = m_wlc + currentBody->p;
-	const double gravity_cst = -9.81;
+	const double gravity_cst = -9.81;//0;
 	vector3d g;
 	MAL_S3_VECTOR_FILL(g,0);
 	g(2) = gravity_cst;
@@ -549,8 +558,8 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	Spatial::Momentum sh;
 	sh = currentBody->sIa*currentBody->sv;
 	sf1 = currentBody->sv^sh;
-	Spatial::PluckerTransform invX0i; 
-	invX0i.inverse(currentBody->sX0i);
+	//Spatial::PluckerTransform invX0i; 
+	//invX0i.inverse(currentBody->sX0i);
 
 	//----------> To develop the transpose of a spatial matrix
 	//sf2 = f_ext*lmass;
@@ -586,10 +595,10 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	f2=sf2.f();
 	n2=sf2.n0();
 
-	std::cout << "type_i = " << m_type << std::endl;
+	/*std::cout << "type_i = " << m_type << std::endl;
 	std::cout << "f_i = " << f << std::endl;
 	std::cout << "n_i = " << n << std::endl;
-	std::cout << "------------------------------------ \n \n " << std::endl;
+	std::cout << "------------------------------------ \n \n " << std::endl;*/
 	return true;
 }
 
@@ -608,28 +617,68 @@ void JointPrivate::SupdateTorqueAndForce()
 	fi=currentBody->sf.f();
 	ni=currentBody->sf.n0();
 	MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
+	MAL_VECTOR_DIM(t, double, 6);
+	for (unsigned int j=0;j<3;j++)
+	{
+		t(j)=fi(j);
+		t(j+3)=ni(j);
+	}
 
 	if (m_nbDofs == 6)
 	{
+		/*
 		for (unsigned int i=0;i<3;i++)
 		{
-			//for (unsigned int j=0;j<3;j++)
-			//{
-				currentBody->stau[i]=fi(i); //m_phi(i,j)*fi(i)+m_phi(i,j+3)*ni(i);
-				currentBody->stau[i+3]=ni(i); //m_phi(i+3,j)*fi(i)+m_phi(i+3,j+3)*ni(i);
-			//}
+			for (unsigned int j=0;j<3;j++)
+			{
+				currentBody->stau[i]+=m_phi(i,j)*fi(j)+m_phi(i,j+3)*ni(j); 
+				currentBody->stau[i+3]+=m_phi(i+3,j)*fi(j)+m_phi(i+3,j+3)*ni(j);
+			}
+			//currentBody->stau[i]=fi(i);
+			//currentBody->stau[i+3]=ni(i); 
 		}
+		*/
+
+		for (unsigned int i=0;i<3;i++)
+		{
+    		currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
+			currentBody->m_Torque[i] = currentBody->stau[i+3];
+			currentBody->m_Force[i] = currentBody->stau[i];
+		}
+		
+		/*
+		std::cout << "phi_waist = " << m_phi << std::endl;
+		std::cout << "tau_waist = " << currentBody->stau << std::endl;
+		std::cout << "f_waist = " << fi << std::endl;
+		std::cout << "n_waist = " << ni << std::endl;
+		std::cout << "t_waist = " << t << std::endl;
+		*/
 	}
 	else if (m_nbDofs == 1)
 	{
-		//for (unsigned int j=0;j<3;j++)
-			currentBody->stau[0]=ni(0); //m_phi(0,j)*fi(j)+ m_phi(0,j+3)*ni(j);
+		/*
+		for (unsigned int j=0;j<3;j++)
+		{currentBody->stau[0]+=m_phi(j,0)*fi(j)+ m_phi(j+3,0)*ni(j)};
+		//currentBody->stau[0]=ni(0);
+		*/
+		currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
+		currentBody->m_Torque = currentBody->sf.n0();
+        currentBody->m_Force = currentBody->sf.f();
+		/*
+		std::cout << "phi_i = " << m_phi << std::endl;
+		std::cout << "tau_i = " << currentBody->stau << std::endl;
+		std::cout << "f_i = " << fi << std::endl;
+		std::cout << "n_i = " << ni << std::endl;
+		std::cout << "t_i = " << t << std::endl;
+		std::cout << "ni_0 = " << ni(0) << std::endl;
+		*/
 	}
-	std::cout << "type_i = " << m_type << std::endl;
-	std::cout << "tau_i = " << currentBody->stau << std::endl;
 
-	currentBody->m_Torque = currentBody->sf.n0();
-    currentBody->m_Force = currentBody->sf.f();
+	//currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
+	//std::cout << "tau_i" << currentBody->stau << std::endl;
+
+	//currentBody->m_Torque = currentBody->sf.n0();
+    //currentBody->m_Force = currentBody->sf.f();
 
 	if (currentMotherBody!=0)
     {

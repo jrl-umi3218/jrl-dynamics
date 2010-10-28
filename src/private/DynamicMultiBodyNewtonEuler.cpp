@@ -101,12 +101,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       // Position and orientation in reference frame
      // currentJoint->updateTransformation(m_Configuration);
 	  currentJoint->SupdateTransformation(m_Configuration);
-	  
       if (m_ComputeVelocity)
 	// currentJoint->updateVelocity(m_Configuration,m_Velocity);
 	  currentJoint->SupdateVelocity(m_Configuration,
 				     m_Velocity);
       // Computes also the center of mass in the reference frame.
+	  // if (m_ComputeCoM==1) no need to computeCoM since this is done in SupdateAcceleration
       if (m_ComputeCoM)
         {
 	  currentJoint->updateWorldCoMPosition();

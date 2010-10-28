@@ -49,7 +49,6 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 		  m_Forces(i,k)=aDB->m_Force[k];
 		  m_Torques(i,k) = aDB->m_Torque[k];
                 }
-
             }
         }
 
@@ -62,4 +61,28 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
             }
         }
     }
+
+ // MAL_VECTOR_RESIZE(m_JointTorques,m_StateVectorToJoint.size());
+ // MAL_VECTOR_FILL(m_JointTorques,0);
+  for (unsigned int j=0;j<m_JointVector.size();j++)
+  {
+	  JointPrivate * aJoint = (JointPrivate *)m_JointVector[j];
+	  //std::cout << "Joint " <<((JointPrivate *)m_JointVector[j])->getName() << std::endl;
+	  DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) aJoint->linkedBody();
+	  unsigned int index = m_JointVector[j]->rankInConfiguration();
+
+	  //std::cout << "index = " << index << std::endl;
+	  //std::cout << "nbDofs = " << aJoint->numberDof() << std::endl;
+	  //std::cout << "torque size = " << aDB->stau.size() << std::endl;
+	  for (unsigned int n=0;n<aJoint->numberDof();n++)
+	  {
+	       //std::cout << "n = " << n << std::endl;
+		  // std::cout << "index+n = " << index+n << std::endl;
+		   m_JointTorques[index+n] = aDB->stau[n];
+		//  std::cout << "JointTorques = " << m_JointTorques << std::endl;
+	   }
+	//  std::cout << "taun = " << aDB->stau << std::endl;
+	//  std::cout << "tau0 = " << aDB->stau[0] << std::endl;
+	}
+ ////std::cout << "JointTorques = " << m_JointTorques << std::endl;
 }

@@ -227,6 +227,9 @@ namespace dynamicsJRLJapan
 
     /*! Member to store the number of Dofs. */
     unsigned int m_NbDofs;
+
+	/*The vector of final joint torques by L.S*/
+	vectorN m_JointTorques;
     
     /** @} */
 
@@ -718,6 +721,13 @@ namespace dynamicsJRLJapan
     */
     virtual const matrixNxP& currentTorques() const;
     
+
+	 /**
+       \brief Get the current joint torques of the robot.
+       
+       \return the torque vector \f${\bf \tau }\f$.
+    */
+	virtual const vectorN & currentJointTorques() const;
 
     
     /**
