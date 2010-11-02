@@ -313,6 +313,16 @@ namespace jrlDelegate {
       return m_DR->currentTorques();
     }
 
+	 /**
+       \brief Get the current joint torques of the robot.
+       
+       \return the torque vector \f${\bf \tau }\f$.
+    */
+	virtual const vectorN& currentJointTorques() const 
+	{
+		assert(m_DR !=0);
+		return m_DR->currentJointTorques();
+	}
 
     /**
        @}

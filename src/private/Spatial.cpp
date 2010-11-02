@@ -525,6 +525,7 @@ PluckerTransform* PluckerTransform::operator=( const PluckerTransform &a)
 //between motion pluckertransform X and force pluckertransform XF; with XF = X^{-T}
 //Note that the operator* working as f_res = XT*f, takes X as input (XT=X) but the computation inside the operator is done for the case of XF^{-1}.f; XF^{-1}=X^{T} so this is truly expressing a Transpose
 //and that the operator* working as v_res = XT*v, takes X as input (XT=X)  but the computation inside the operator is done for the case of X^{-1}.v; X^{-1}=X.inverse so this is not expressing a Transpose
+//cf. Table 2.1 in Springer Handbook of Robotics
 
 PluckerTransform::PluckerTransform(PluckerTransformTranspose &X):
   m_R(X.m_R),m_p(X.m_p) {}

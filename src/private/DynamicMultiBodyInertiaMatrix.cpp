@@ -61,29 +61,10 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
       const JointPrivate * aJoint=(const JointPrivate *)aBody->joint();
 
       rank = aJoint->rankInConfiguration();
-	 /* 
-	  std::cout << "rank = " << rank << std::endl; 
-	  std::cout << "number of bodies = " << m_listOfBodies.size() << std::endl;
-	  std::cout << "number of Dof = " << numberDof() << std::endl;
-	  */
       matrixNxP pJacobian;
       MAL_MATRIX_RESIZE(pJacobian, 6, numberDof());
       vector3d aCoM = aBody->localCenterOfMass();
       getJacobian(*rootJoint(),*aJoint,aCoM,pJacobian);
-	  
-	  /*
-	  if (i==7)
-	  {
-		  aJoint->computeJacobianJointWrtConfig();
-		  MAL_MATRIX(,double) aJ;
-		  aJ = aJoint->jacobianJointWrtConfig();
-		  std::cout << "Joint: " << aJoint->getName() << std::endl;
-		  std::cout << "Jacobian_world = " << aJ << std::endl;
-		  std::cout << "Jacobian_private = " << pJacobian << std::endl;
-	  }
-	  */
-
-	  //std::cout << "joint: " << i << std::endl;
 	  
       matrixNxP pLinearJacobian;
       MAL_MATRIX_RESIZE(pLinearJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));

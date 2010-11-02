@@ -33,64 +33,6 @@
 
 using namespace dynamicsJRLJapan;
 
-
-/*JointPrivateSpatial::JointPrivateSpatial(int ltype)
-:JointPrivate()
-{
-	m_type = ltype;
-	switch (m_type)
-	{
-	case FREE_JOINT:
-		{	
-			m_nbDofs = 6;
-			// Initialize spatial quantities //
-			MAL_MATRIX_RESIZE(m_phi,6,6);
-			MAL_MATRIX_FILL(m_phi,0);
-			MAL_MATRIX_RESIZE(m_dotphi,6,6);
-			MAL_MATRIX_FILL(m_dotphi,0);
-			for(unsigned int i=0;i<6;i++)
-				m_phi(i,i)=1;
-		}
-	break;
-
-	case REVOLUTE_JOINT:
-		{
-			m_nbDofs = 1;
-			// Initialize spatial quantities 
-			MAL_MATRIX_RESIZE(m_phi,6,1);
-			MAL_MATRIX_FILL(m_phi,0);
-			MAL_MATRIX_RESIZE(m_dotphi,6,1);
-			MAL_MATRIX_FILL(m_dotphi,0);
-			m_phi(0,0)=1;
-		}
-	break;
-
-	case PRISMATIC_JOINT:
-		{
-			m_nbDofs = 1;
-			// Initialize spatial quantities //
-			MAL_MATRIX_RESIZE(m_phi,6,1);
-			MAL_MATRIX_FILL(m_phi,0);
-			MAL_MATRIX_RESIZE(m_dotphi,6,1);
-			MAL_MATRIX_FILL(m_dotphi,0);
-			m_phi(0,0)=1;
-		}
-	break;
-
-	case default:
-		{
-			m_nbDofs = 0;
-			// Initialize spatial quantities //
-			MAL_MATRIX_RESIZE(m_phi,6,1);
-			MAL_MATRIX_FILL(m_phi,0);
-			MAL_MATRIX_RESIZE(m_dotphi,6,1);
-			MAL_MATRIX_FILL(m_dotphi,0);
-		}
-  }
-  CreateLimitsArray();
-}
-*/
-
 const Spatial::Velocity & JointPrivate::sv()
 {
   return m_sv;
@@ -160,42 +102,6 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 	return Spatial::PluckerTransform(Rt,t);
 
 }
-		
-
-/*const matrixNxP & JointPrivate::pcalc(const vectorN & qi)
-{
-   if (m_nbDofs == 1)
-   {
-		MAL_MATRIX_RESIZE(m_phi,6,1);
-		m_phi(2,0)=1;
-   }
-   else if (m_nbDofs == 6)
-   {
-	   MAL_MATRIX_RESIZE(m_phi,6,6)
-	   for(unsigned int i=0;i<6;i++)
-		   m_phi(i,i)=1;
-   }
-   return m_phi;
-
-}
-
-const matrixNxP & JointPrivate::pdcalc(const vectorN & qi)
-{
-	if (m_nbDofs == 1)
-	{
-		MAL_MATRIX_RESIZE(m_dotphi,6,1);
-		MAL_MATRIX_FIll(m_dotphi,0);
-	}
-   else if (m_nbDofs == 6)
-   {
-	   for(unsigned int i=0;i<6;i++)
-	   {	
-		   MAL_MATRIX_RESIZE(m_dotphi,6,6);
-			MAL_MATRIX_FIll(m_dotphi,0);
-	   }
-   }
-  return m_dotphi;
-}*/
  
 /*Computation of the rotation matrix based on euler angles and notation by L.S*/
 void JointPrivate::eulerXYZ(MAL_VECTOR(,double) & qi_ang, matrix3d & localRot)
@@ -366,7 +272,7 @@ bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
   return true;
 }
 
-/* Updates methods using Spatial notations */
+/* Updates methods using Spatial notations by L.S*/
 
 /* Rigid transformation */
 bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
@@ -427,26 +333,6 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 	for( unsigned int i=0;i<3;i++)
     MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) = currentBody->p(i);
 
-	/*
-	matrix3d R0i; 
-	R0i=currentBody->sX0i.R();
-	vector3d T0i;
-	T0i=currentBody->sX0i.p();
-
-	std::cout << "currentBody = " << currentBody << std::endl;
-	std::cout << "nbDofs_i = " << m_nbDofs << std::endl;
-	std::cout << "q_i = " << currentBody->sq << std::endl;	
-    std::cout << "mp_i = " << currentBody->b << std::endl;
-	std::cout << "Rot_i = " << currentBody->localR << std::endl;
-	std::cout << "RS_i = " << currentBody->R_static << std::endl;
-	std::cout << "R0i_j = " << Rtmp2 << std::endl;
-
-	std::cout << "type_i = " << m_type << std::endl;
-	std::cout << "Rpii = " << Rpii << std::endl;
-	std::cout << "Tpii = " << Tpii << std::endl;
-	std::cout << "R0i = " << R0i << std::endl;
-	std::cout << "T0i = " << T0i << std::endl;
-	std::cout << "------------------------------------ \n \n " << std::endl;*/
 
 	return true;
 }
@@ -496,14 +382,7 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
 	vector3d vl,va;
 	vl=currentBody->sv.v0();
 	va=currentBody->sv.w();
-	/*std::cout << "dq_i = " << currentBody->sdq << std::endl;
-	std::cout << "phi_i = " << m_phi << std::endl;
-	std::cout << "dotphi_i = " << m_dotphi << std::endl;
-	std::cout << "type_i = " << m_type << std::endl;
-	std::cout << "vl_i = " << vl << std::endl;
-	std::cout << "va_i = " << va << std::endl;
-	std::cout << "ksi_i = " << m_Zeta << std::endl;
-	std::cout << "------------------------------------ \n \n " << std::endl;*/
+
 	return true;
 }
 
@@ -519,16 +398,12 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 
 	MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
 	for(unsigned int i=0;i<m_nbDofs;i++)
-	  /*wrong old expression*/
-//    localAcc(i) = inRobotSpeedVector(rankInConfiguration()+i);
-	 /*new expression to be verified by L.S */
+
 	{
 		currentBody->sddq[i] = inRobotAccelerationVector(rankInConfiguration()+i);
 	}
 
 	 // Udpate acceleration.
-
-	//vectorN a2 = MAL_RET_A_by_B(m_phi,localAcc);
 	vectorN a2 = MAL_RET_A_by_B(m_phi,currentBody->sddq);
 	a2 = a2 + m_Zeta;
 
@@ -575,47 +450,19 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	Spatial::Momentum sh;
 	sh = currentBody->sIa*currentBody->sv;
 	sf1 = currentBody->sv^sh;
-	//Spatial::PluckerTransform invX0i; 
-	//invX0i.inverse(currentBody->sX0i);
 
-	//----------> To develop the transpose of a spatial matrix
-	//sf2 = f_ext*lmass;
-	//sf2 = Spatial::transpose(invX0i)*sf2;
 	vector3d fh,nh;
 	fh=sh.v();
 	nh=sh.w();
 	vector3d f,n;
 	f=sf.f();
 	n=sf.n0();
-	//----------> force = X.f developed such that XF.f = (X)^{-T}.f or in this case X=currentBody->sX0i 
+	//----------> force = X.f developed such that XF.f = (X)^{-T}.f or in this case X=currentBody->sX0i cf. Springer Handbook of Robotics Table 2.1
 	sftmp=f_ext*lmass;
 	sf2 = currentBody->sX0i*sftmp;
 	sf = sf + sf1;
 	currentBody->sf = sf - sf2;
 
-	/*std::cout << "ddq_i = " << currentBody->sddq << std::endl;
-	std::cout << "type_i = " << m_type << std::endl;
-	std::cout << "R_i = " << currentBody->R << std::endl;
-	std::cout << "lc_i = " << lc << std::endl;
-	std::cout << "lcw_i = " << currentBody->w_c << std::endl;
-	std::cout << "I_i = " << currentBody->getInertie() << std::endl;
-	std::cout << "Ibar_i = " << lI << std::endl;*/
-
-	vector3d al,aa,f1,n1,f2,n2;
-	al=currentBody->sa.dv0();
-	aa=currentBody->sa.dw();
-	f=currentBody->sf.f();
-	n=currentBody->sf.n0();
-	
-	f1=sf1.f();
-	n1=sf1.n0();
-	f2=sf2.f();
-	n2=sf2.n0();
-
-	/*std::cout << "type_i = " << m_type << std::endl;
-	std::cout << "f_i = " << f << std::endl;
-	std::cout << "n_i = " << n << std::endl;
-	std::cout << "------------------------------------ \n \n " << std::endl;*/
 	return true;
 }
 
@@ -628,8 +475,6 @@ void JointPrivate::SupdateTorqueAndForce()
   
 	if (parentJoint()!=0)
     currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-	//----------> To develop the operator* that multiplies a matrixNxP by a Spatial::Velocity and gives as output a vectorN
-	//pcalc();
 	vector3d fi,ni;
 	fi=currentBody->sf.f();
 	ni=currentBody->sf.n0();
@@ -641,68 +486,15 @@ void JointPrivate::SupdateTorqueAndForce()
 		t(j+3)=ni(j);
 	}
 
-	if (m_nbDofs == 6)
-	{
-		/*
-		for (unsigned int i=0;i<3;i++)
-		{
-			for (unsigned int j=0;j<3;j++)
-			{
-				currentBody->stau[i]+=m_phi(i,j)*fi(j)+m_phi(i,j+3)*ni(j); 
-				currentBody->stau[i+3]+=m_phi(i+3,j)*fi(j)+m_phi(i+3,j+3)*ni(j);
-			}
-			//currentBody->stau[i]=fi(i);
-			//currentBody->stau[i+3]=ni(i); 
-		}
-		*/
+	currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
 
-		for (unsigned int i=0;i<3;i++)
-		{
-    		currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
-			currentBody->m_Torque[i] = currentBody->stau[i+3];
-			currentBody->m_Force[i] = currentBody->stau[i];
-		}
-		
-		/*
-		std::cout << "phi_waist = " << m_phi << std::endl;
-		std::cout << "tau_waist = " << currentBody->stau << std::endl;
-		std::cout << "f_waist = " << fi << std::endl;
-		std::cout << "n_waist = " << ni << std::endl;
-		std::cout << "t_waist = " << t << std::endl;
-		*/
-	}
-	else if (m_nbDofs == 1)
-	{
-		/*
-		for (unsigned int j=0;j<3;j++)
-		{currentBody->stau[0]+=m_phi(j,0)*fi(j)+ m_phi(j+3,0)*ni(j)};
-		//currentBody->stau[0]=ni(0);
-		*/
-		currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
-		currentBody->m_Torque = currentBody->sf.n0();
-        currentBody->m_Force = currentBody->sf.f();
-		/*
-		std::cout << "phi_i = " << m_phi << std::endl;
-		std::cout << "tau_i = " << currentBody->stau << std::endl;
-		std::cout << "f_i = " << fi << std::endl;
-		std::cout << "n_i = " << ni << std::endl;
-		std::cout << "t_i = " << t << std::endl;
-		std::cout << "ni_0 = " << ni(0) << std::endl;
-		*/
-	}
-
-	//currentBody->stau = MAL_RET_A_by_B(MAL_RET_TRANSPOSE(m_phi),t);
-	//std::cout << "tau_i" << currentBody->stau << std::endl;
-
-	//currentBody->m_Torque = currentBody->sf.n0();
-    //currentBody->m_Force = currentBody->sf.f();
+	currentBody->m_Torque = currentBody->sf.n0();
+    currentBody->m_Force = currentBody->sf.f();
 
 	if (currentMotherBody!=0)
     {
 	  Spatial::Force sft; 
-	  //----------> To develop the transpose of a spatial matrix
-	  //sft = Spatial::transpose(currentBody->sXpii)*currentBody->sf;
-	  //----------> force = XF^{-1}.f developed such that XF^{-1}.f = (X)^{T}.f or in this case X=currentBody->sXpii 
+	  //----------> force = XF^{-1}.f developed such that XF^{-1}.f = (X)^{T}.f or in this case X=currentBody->sXpii cf. Springer Handbook of Robotics Table 2.1
 	  XpiiT = Spatial::PluckerTransformTranspose(currentBody->sXpii);
 	  sft = XpiiT*currentBody->sf;
       currentMotherBody->sf = currentMotherBody->sf + sft;
