@@ -727,7 +727,7 @@ namespace dynamicsJRLJapan
        
        \return the torque vector \f${\bf \tau }\f$.
     */
-	virtual const vectorN & currentJointTorques() const;
+    virtual const vectorN& currentJointTorques() const;
 
     
     /**

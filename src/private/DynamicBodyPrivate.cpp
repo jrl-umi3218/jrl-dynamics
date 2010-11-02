@@ -52,7 +52,7 @@ DynamicBodyPrivate::DynamicBodyPrivate():Body()
   MAL_VECTOR_RESIZE(sq,0);
   MAL_VECTOR_RESIZE(sdq,0);
   MAL_VECTOR_RESIZE(sddq,0);
-  MAL_VECTOR_RESIZE(stau,0);
+  MAL_VECTOR_RESIZE(stau,1);
 
   MAL_VECTOR_FILL(sq,0);
   MAL_VECTOR_FILL(sdq,0);
