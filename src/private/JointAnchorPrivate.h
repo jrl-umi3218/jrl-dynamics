@@ -31,7 +31,7 @@
 
 #include <vector>
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "robotDynamics/jrlJoint.h"
 #include <JointPrivate.h>
 

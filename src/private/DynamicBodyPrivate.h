@@ -39,7 +39,7 @@
 
 #include "Body.h"
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "robotDynamics/jrlBody.h"
 
 

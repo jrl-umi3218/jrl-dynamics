@@ -31,7 +31,7 @@
 
  #include <string>
  #include <iostream>
- #include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+ #include <jrl/dynamics/dynamicsfactory.hh>
 
  namespace dynamicsJRLJapan
  {

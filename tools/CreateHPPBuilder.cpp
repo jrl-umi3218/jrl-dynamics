@@ -30,7 +30,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 #include "GenerateRobotForHppBuilder.h"
 
 using namespace std;

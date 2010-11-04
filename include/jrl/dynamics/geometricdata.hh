@@ -38,7 +38,7 @@
 #include <string>
 #include <ostream>
 
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include <jrl/mal/matrixabstractlayer.hh>
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 

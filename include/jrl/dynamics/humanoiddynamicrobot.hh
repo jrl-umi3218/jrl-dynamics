@@ -32,10 +32,10 @@
 
 #include <cassert>
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
-#include "dynamicsJRLJapan/deprecated.h"
-#include "dynamicsJRLJapan/dynamicRobot.h"
+//#include "dynamicsJRLJapan/deprecated.h"
+#include "jrl/dynamics/dynamicrobot.hh"
 
 namespace jrlDelegate {
 

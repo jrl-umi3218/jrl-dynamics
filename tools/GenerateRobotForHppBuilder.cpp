@@ -397,11 +397,6 @@ os << "  data(0)=" << data(0) \
     OSDATA;
     os << "  lFoot->setAnklePositionInLocalFrame(data);" <<endl;
     
-    // Sole center in local frame.
-    aFoot->getSoleCenterInLocalFrame(data);
-    OSDATA;
-    os << "  lFoot->setSoleCenterInLocalFrame(data);" <<endl;
-
     // Projection center in local frame in sole.
     aFoot->getProjectionCenterLocalFrameInSole(data);
     OSDATA;

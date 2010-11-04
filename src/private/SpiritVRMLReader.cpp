@@ -43,7 +43,7 @@
 #include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/spirit/include/classic_functor_parser.hpp>
 
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
 //#include "DynamicMultiBodyCopy.h"
 

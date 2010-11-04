@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 #include "MultiBody.h"
-#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
+#include "jrl/dynamics/dynamicsfactory.hh"
 
 namespace dynamicsJRLJapan
 {

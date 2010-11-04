@@ -34,9 +34,9 @@
 
 #include <string>
 #include <iostream>
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
-#include <dynamicsJRLJapan/humanoidDynamicRobot.h>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include "jrl/mal/matrixabstractlayer.hh"
+#include <jrl/dynamics/humanoiddynamicrobot.hh>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
 namespace dynamicsJRLJapan
 {

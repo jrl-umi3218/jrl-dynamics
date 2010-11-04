@@ -32,7 +32,7 @@
 #include "Debug.h"
 
 #include "DynMultiBodyPrivate.h"
-#include "dynamicsJRLJapan/Hand.h"
+#include "jrl/dynamics/hand.hh"
 #include "HumDynMultiBodyPrivate.h"
 #include "HumanoidSpecificities.h"
 

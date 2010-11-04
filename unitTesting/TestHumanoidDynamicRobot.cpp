@@ -32,7 +32,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 #include "CommonTools.h"
 
 using namespace std;
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 
   aJoint = aHDR->waist();
   tcout << "****************************" << endl;
-#if 1
+#if 0
   aHDR->computeJacobianCenterOfMass();
   DisplayMatrix(aHDR->jacobianCenterOfMass(),tcout);
 #else

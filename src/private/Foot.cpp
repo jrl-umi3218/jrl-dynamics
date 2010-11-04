@@ -26,7 +26,7 @@
 
 /* @doc Object used to handle a foot 
 */
-#include "dynamicsJRLJapan/Foot.h"
+#include "jrl/dynamics/foot.hh"
 
 using namespace dynamicsJRLJapan;
 

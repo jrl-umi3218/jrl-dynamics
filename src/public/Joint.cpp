@@ -27,8 +27,8 @@
  *
  */
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include "dynamicsJRLJapan/Joint.h"
+#include "jrl/mal/matrixabstractlayer.hh"
+#include "jrl/dynamics/joint.hh"
 #include "../private/JointPrivate.h"
 #include "../private/JointAnchorPrivate.h"
 #include "../private/JointFreeFlyerPrivate.h"

@@ -29,7 +29,7 @@
 #ifndef _SPATIAL_ALGEBRA_H_
 #define _SPATIAL_ALGEBRA_H_
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "robotDynamics/jrlBody.h"
 
 namespace dynamicsJRLJapan

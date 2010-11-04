@@ -24,7 +24,7 @@
  *  Laboratory (JRL)
  *
  */
-#include <dynamicsJRLJapan/GeometricData.h>
+#include <jrl/dynamics/geometricdata.hh>
 
 
 namespace dynamicsJRLJapan

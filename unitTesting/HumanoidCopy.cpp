@@ -98,9 +98,6 @@ void HumanoidCopy::CopyFoot(CjrlFoot *InitFoot,
   InitFoot->getAnklePositionInLocalFrame(data);
   NewFoot->setAnklePositionInLocalFrame(data);
 
-  InitFoot->getSoleCenterInLocalFrame(data);
-  NewFoot->setSoleCenterInLocalFrame(data);
-
   InitFoot->getProjectionCenterLocalFrameInSole(data);
   NewFoot->setProjectionCenterLocalFrameInSole(data);
   

@@ -31,14 +31,14 @@
 #ifndef _DYNAMIC_MULTI_BODY_H_
 #define _DYNAMIC_MULTI_BODY_H_
 #include <vector>
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "JointPrivate.h"
 #include "MultiBody.h"
 #include "DynamicBodyPrivate.h"
 
 #include <robotDynamics/jrlDynamicRobot.h>
 
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
 using namespace::std;
 namespace dynamicsJRLJapan
@@ -880,15 +880,6 @@ namespace dynamicsJRLJapan
 	\name Jacobian fonctions
     */
     
-    /**
-       \brief Compute the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-    */
-     void computeJacobianCenterOfMass() ;
-    
-    /**
-       \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-    */
-     const matrixNxP & jacobianCenterOfMass() const ;
 
     /**
        \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.

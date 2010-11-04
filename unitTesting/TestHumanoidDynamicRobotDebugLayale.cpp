@@ -29,7 +29,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 #include "CommonTools.h"
 
 using namespace std;
@@ -229,8 +229,10 @@ int main(int argc, char *argv[])
 
   aJoint = aHDR->waist();
   tcout << "****************************" << endl;
-  aHDR->computeJacobianCenterOfMass();
-  DisplayMatrix(aHDR->jacobianCenterOfMass(),tcout);
+  matrixNxP JCM;
+  MAL_MATRIX_RESIZE(JCM,3,MAL_MATRIX_NB_COLS(aJ));
+  aHDR->getJacobianCenterOfMass(*aHDR->rootJoint(),JCM);
+  DisplayMatrix(JCM,tcout);
   tcout << "****************************" << endl;
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
 

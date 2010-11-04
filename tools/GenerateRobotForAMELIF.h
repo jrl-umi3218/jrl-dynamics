@@ -35,7 +35,7 @@
 #include <fstream>
 #include <vector>
 
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
 
 namespace dynamicsJRLJapan

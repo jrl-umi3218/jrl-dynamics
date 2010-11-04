@@ -597,7 +597,7 @@ namespace dynamicsJRLJapan {
     vector3d AnklePositionInLocalFrame;
     aFoot->getAnklePositionInLocalFrame(AnklePositionInLocalFrame);
     vector3d SoleCenterInLocalFrame;
-    aFoot->getSoleCenterInLocalFrame(SoleCenterInLocalFrame);
+    aFoot->getProjectionCenterLocalFrameInSole(SoleCenterInLocalFrame);
 
     vector3d SoleCenterInAnkleFrame;
     SoleCenterInAnkleFrame = SoleCenterInLocalFrame - AnklePositionInLocalFrame;
