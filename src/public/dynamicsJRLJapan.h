@@ -27,12 +27,12 @@
 #define jrlCIRdynamicsJRLJapan_H
 
 #include "fileReader.h"
-#include "dynamicsJRLJapan/Joint.h"
+#include "jrl/dynamics/joint.hh"
 #include "Body.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "jrl/dynamics/dynamicbody.hh"
 #include "MultiBody.h"
-#include "dynamicsJRLJapan/dynamicRobot.h"
-#include "dynamicsJRLJapan/humanoidDynamicRobot.h"
+#include "jrl/dynamics/dynamicrobot.hh"
+#include "jrl/dynamics/humanoiddynamicrobot.hh"
 
 
 #endif

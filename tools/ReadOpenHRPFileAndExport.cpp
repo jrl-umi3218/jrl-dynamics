@@ -31,7 +31,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 #include "GenerateRobotForAMELIF.h"
 
 using namespace std;

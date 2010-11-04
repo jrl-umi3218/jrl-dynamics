@@ -25,7 +25,7 @@
  *
  */
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "dynamicsJRLJapan/dynamicRobot.h"
 
 // using namespace dynamicsJRLJapan;

@@ -35,8 +35,8 @@
 #include "Debug.h"
 
 /*! Local library includes. */
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "jrl/mal/matrixabstractlayer.hh"
+#include "jrl/dynamics/dynamicbody.hh"
 #include "DynMultiBodyPrivate.h"
 #include "robotDynamics/jrlBody.h"
 
@@ -44,59 +44,6 @@
 
 using namespace dynamicsJRLJapan;
 
-// Compute the Jacobian matrix of the center of Mass. 
-// Interaction with the environement not taken into account.
-void DynMultiBodyPrivate::computeJacobianCenterOfMass()
-{
-  m_JacobianOfTheCoM.clear();
-
-  std::vector<CjrlJoint*> routeJoints;
-  CjrlBody* body;
-  CjrlJoint* joint;
-
-  double weight;
-  unsigned int rank,i,k,l;
-
-  const vector3d & comPos =  positionCenterOfMass();
-  const matrix4d & rootM = rootJoint()->currentTransformation();
-
-  for (i=0; i < m_JointVector.size(); i++)
-    {
-      joint = m_JointVector[i];
-      if (joint == rootJoint())
-	continue;
-
-      body = joint->linkedBody();
-      const vector3d& localCOM = body->localCenterOfMass();
-      weight = body->mass()/mass();
-      joint->getJacobianPointWrtConfig( localCOM, m_attCalcJointJacobian );
-      routeJoints = joint->jointsFromRootToThis();
-      for (k= 1; k< routeJoints.size(); k++)
-        {
-	  rank = routeJoints[k]->rankInConfiguration();
-	  for (l=0; l<3;l++)
-	    m_JacobianOfTheCoM(l,rank) += weight * m_attCalcJointJacobian(l,rank);
-        }
-    }
-
-  for (k= 0; k<3;k++)
-    m_JacobianOfTheCoM(k,k) = 1.0;
-
-  m_JacobianOfTheCoM(1,3) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,2,3) - comPos[2];
-  m_JacobianOfTheCoM(2,3) = comPos[1] - MAL_S4x4_MATRIX_ACCESS_I_J(rootM,1,3);
-
-  m_JacobianOfTheCoM(0,4) = -m_JacobianOfTheCoM(1,3);
-  m_JacobianOfTheCoM(2,4) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,0,3) - comPos[0];
-
-  m_JacobianOfTheCoM(0,5) = MAL_S4x4_MATRIX_ACCESS_I_J(rootM,1,3) - comPos[1];
-  m_JacobianOfTheCoM(1,5) = -m_JacobianOfTheCoM(2,4);
-}
-
-const MAL_MATRIX(,double) &DynMultiBodyPrivate::jacobianCenterOfMass() const
-{
-  return m_JacobianOfTheCoM;
-
-}
 
 MAL_MATRIX(,double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 {

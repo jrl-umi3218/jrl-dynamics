@@ -31,7 +31,7 @@
 #define _DYNAMIC_JRL_JAPAN_HUMANOID_COPY_H_
 
 #include <map>
-#include <dynamicsJRLJapan/dynamicsJRLJapanFactory.h>
+#include <jrl/dynamics/dynamicsfactory.hh>
 
 namespace dynamicsJRLJapan
 {

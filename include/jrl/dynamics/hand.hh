@@ -26,11 +26,11 @@
 #ifndef HAND_H
 #define HAND_H
 
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include "jrl/mal/matrixabstractlayer.hh"
 
 #include <robotDynamics/jrlHand.h>
-#include "dynamicsJRLJapan/deprecated.h"
-#include "dynamicsJRLJapan/dll.h"
+//#include "dynamicsJRLJapan/deprecated.h"
+#include "jrl/dynamics/dll.hh"
 
 namespace dynamicsJRLJapan
 {

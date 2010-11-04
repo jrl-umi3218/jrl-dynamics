@@ -28,7 +28,7 @@
  */
 #include <string>
 #include <cstdio>
-#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
+#include "jrl/dynamics/dynamicsfactory.hh"
 
 using namespace std;
 

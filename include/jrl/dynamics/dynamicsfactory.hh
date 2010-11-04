@@ -56,11 +56,11 @@
 #endif
 
 #include <vector>
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include <jrl/mal/matrixabstractlayer.hh>
 #include "robotDynamics/jrlHumanoidDynamicRobot.h"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 
-#include "GeometricData.h"
+#include "geometricdata.hh"
 
 namespace dynamicsJRLJapan
 {

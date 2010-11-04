@@ -23,10 +23,10 @@
 
 #ifndef _DYN_JRL_JAPAN_FOOT_H_
 #define _DYN_JRL_JAPAN_FOOT_H_
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include "jrl/mal/matrixabstractlayer.hh"
 
 #include "robotDynamics/jrlFoot.h"
-#include "dynamicsJRLJapan/dll.h"
+#include "jrl/dynamics/dll.hh"
 
 namespace dynamicsJRLJapan
 {

@@ -27,7 +27,7 @@
  */
 /* @doc Object used to handle hand
 */
-#include "dynamicsJRLJapan/Hand.h"
+#include "jrl/dynamics/hand.hh"
 
 using namespace dynamicsJRLJapan;
 

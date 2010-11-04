@@ -39,7 +39,7 @@
 #include <iostream>
 #include <string>
 //#include "linalg.h"
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "robotDynamics/jrlBody.h"
 #include "JointPrivate.h"
 

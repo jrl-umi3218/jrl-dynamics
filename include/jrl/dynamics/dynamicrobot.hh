@@ -31,7 +31,7 @@
 #define JRL_DYNAMIC_ROBOT_NA_H_
 
 #include <cassert>
-#include <dynamicsJRLJapan/dll.h>
+#include <jrl/dynamics/dll.hh>
 #include <robotDynamics/jrlJoint.h>
 #include <robotDynamics/jrlDynamicRobot.h>
 #include <robotDynamics/jrlRobotDynamicsObjectConstructor.h>
@@ -426,20 +426,6 @@ namespace jrlDelegate {
     /**
        @}
     */
-
-    /**
-       \name Jacobian fonctions
-    */
-
-    /**
-       \brief Compute the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-    */
-    DYN_JRL_JAPAN_EXPORT JRLDEPRECATED(virtual void computeJacobianCenterOfMass();)
-
-    /**
-       \brief Get the Jacobian matrix of the center of mass wrt \f${\bf q}\f$.
-    */
-    DYN_JRL_JAPAN_EXPORT JRLDEPRECATED(virtual const matrixNxP& jacobianCenterOfMass() const;) 
 
     /**
        @}

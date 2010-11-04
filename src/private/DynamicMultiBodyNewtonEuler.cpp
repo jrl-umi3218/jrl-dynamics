@@ -36,8 +36,8 @@
 #include "Debug.h"
 
 /*! Local library includes. */
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "jrl/mal/matrixabstractlayer.hh"
+#include "jrl/dynamics/dynamicbody.hh"
 #include "DynMultiBodyPrivate.h"
 #include "robotDynamics/jrlBody.h"
 

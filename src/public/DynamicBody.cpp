@@ -26,8 +26,8 @@
  *
  */
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
-#include "dynamicsJRLJapan/DynamicBody.h"
+#include "jrl/mal/matrixabstractlayer.hh"
+#include "jrl/dynamics/dynamicbody.hh"
 #include "../private/DynamicBodyPrivate.h"
 
 using namespace dynamicsJRLJapan;

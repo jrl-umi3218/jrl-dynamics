@@ -46,7 +46,6 @@ SET(libdyn_src
 SET(libdyn_src ${libdyn_src}
   public/Joint.cpp
   public/DynamicBody.cpp
-  public/deprecated.cpp
   public/dynamicsJRLJapanFactory.cpp
   public/GeometricData.cpp
 )
@@ -54,17 +53,16 @@ SET(libdyn_src ${libdyn_src}
 # Create list of headers files
 #-----------------------------
 SET(libdyn_headers 
-../include/${PROJECT_NAME}/deprecated.h
-../include/${PROJECT_NAME}/dll.h
-../include/${PROJECT_NAME}/dynamicsJRLJapanFactory.h
-../include/${PROJECT_NAME}/DynamicBody.h
-../include/${PROJECT_NAME}/Foot.h
-../include/${PROJECT_NAME}/Hand.h
-../include/${PROJECT_NAME}/Joint.h 
-../include/${PROJECT_NAME}/robotDynamicsImpl.h
-../include/${PROJECT_NAME}/dynamicRobot.h
-../include/${PROJECT_NAME}/humanoidDynamicRobot.h
-../include/${PROJECT_NAME}/GeometricData.h
+../include/jrl/dynamics/dll.hh
+../include/jrl/dynamics/dynamicsfactory.hh
+../include/jrl/dynamics/dynamicbody.hh
+../include/jrl/dynamics/foot.hh
+../include/jrl/dynamics/hand.hh
+../include/jrl/dynamics/joint.hh 
+../include/jrl/dynamics/robotdynamicsimpl.hh
+../include/jrl/dynamics/dynamicrobot.hh
+../include/jrl/dynamics/humanoiddynamicrobot.hh
+../include/jrl/dynamics/geometricdata.hh
 )
 
 # Create name of the library.

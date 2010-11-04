@@ -27,14 +27,14 @@
  *
  */
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "dynamicsJRLJapan.h"
-#include "dynamicsJRLJapan/dynamicsJRLJapanFactory.h"
+#include "jrl/dynamics/dynamicsfactory.hh"
 #include "robotDynamics/jrlRobotDynamicsObjectConstructor.h"
 #include "../private/HumDynMultiBodyPrivate.h"
-#include "dynamicsJRLJapan/humanoidDynamicRobot.h"
-#include "dynamicsJRLJapan/Hand.h"
-#include "dynamicsJRLJapan/Foot.h"
+#include "jrl/dynamics/humanoiddynamicrobot.hh"
+#include "jrl/dynamics/hand.hh"
+#include "jrl/dynamics/foot.hh"
 #include "../private/JointFreeFlyerPrivate.h"
 #include "../private/JointRotationPrivate.h"
 #include "../private/JointTranslationPrivate.h"

@@ -33,9 +33,9 @@
 
 #include <vector>
 
-#include "dynamicsJRLJapan/Foot.h"
+#include "jrl/dynamics/foot.hh"
 
-#include "MatrixAbstractLayer/MatrixAbstractLayer.h"
+#include "jrl/mal/matrixabstractlayer.hh"
 #include "DynMultiBodyPrivate.h"
 
 #include <robotDynamics/jrlHumanoidDynamicRobot.h>

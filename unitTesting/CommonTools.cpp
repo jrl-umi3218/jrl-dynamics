@@ -235,13 +235,13 @@ namespace dynamicsJRLJapan {
 	  << AnklePositionInLocalFrame(1) << " , "
 	  << AnklePositionInLocalFrame(2) << ")" << std::endl;
 
-    aFoot->getSoleCenterInLocalFrame(SoleCenterInLocalFrame);
+    aFoot->getProjectionCenterLocalFrameInSole(SoleCenterInLocalFrame);
     tcout << shifttab << "SoleCenterInLocalFrame=("
 	  << SoleCenterInLocalFrame(0) << " , "
 	  << SoleCenterInLocalFrame(1) << " , "
 	  << SoleCenterInLocalFrame(2) << " ) " << std::endl;
 
-    aFoot->getSoleCenterInLocalFrame(ProjectionCenterLocalFrameInSole);
+    aFoot->getProjectionCenterLocalFrameInSole(ProjectionCenterLocalFrameInSole);
     tcout << shifttab << "ProjectCenterLocalFrameInSole=("
 	  << ProjectionCenterLocalFrameInSole(0) << " , " 
 	  << ProjectionCenterLocalFrameInSole(1) << " , " 
