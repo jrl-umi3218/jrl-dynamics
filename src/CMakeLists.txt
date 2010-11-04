@@ -104,7 +104,7 @@ SET(${PROJECT_NAME}_HEADERS ${libdyn_headers})
 # Installation 
 # -------------
 INSTALL(FILES ${${PROJECT_NAME}_HEADERS}
-	DESTINATION include/${PROJECT_NAME}
+	DESTINATION include/jrl/dynamics
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE)
 
 IF(UNIX)
