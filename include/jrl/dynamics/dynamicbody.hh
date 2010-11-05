@@ -31,7 +31,7 @@
 #define DYNAMICSJRLJAPAN_DYNAMICBODY_H
 
 #include "boost/shared_ptr.hpp"
-#include "abstract-robot-dynamics/jrlbody.hh"
+#include "abstract-robot-dynamics/body.hh"
 #include "jrl/dynamics/dll.hh"
 
 /*
