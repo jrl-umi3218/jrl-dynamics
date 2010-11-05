@@ -200,11 +200,6 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   AnklePositionInLocalFrame(2) = AnklePosition[2];
   theLeftFoot->setAnklePositionInLocalFrame(AnklePositionInLocalFrame);
   
-  vector3d vzero;
-  vzero(0) =  vzero(1) =  vzero(2) = 0.0;
-  theLeftFoot->setSoleCenterInLocalFrame(vzero);
-  theLeftFoot->setProjectionCenterLocalFrameInSole(vzero);
-  
   double lFootWidth,lFootHeight,lFootDepth;
   m_HS->GetFootSize(1,lFootDepth, lFootWidth, lFootHeight);
   theLeftFoot->setSoleSize(lFootDepth,lFootWidth);
@@ -232,10 +227,6 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   AnklePositionInLocalFrame(2) = AnklePosition[2];
   theRightFoot->setAnklePositionInLocalFrame(AnklePositionInLocalFrame);
 
-  vzero(0) =  vzero(1) =  vzero(2) = 0.0;
-  theRightFoot->setSoleCenterInLocalFrame(vzero);
-  theRightFoot->setProjectionCenterLocalFrameInSole(vzero);
-  
   m_HS->GetFootSize(-1,lFootDepth, lFootWidth, lFootHeight);
   theRightFoot->setSoleSize(lFootDepth,lFootWidth);
   

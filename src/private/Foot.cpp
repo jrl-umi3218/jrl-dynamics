@@ -74,23 +74,3 @@ void Foot::setAnklePositionInLocalFrame(const vector3d& inCoordinates)
 {
   m_AnklePositionInFootFrame = inCoordinates;
 }
-
-void Foot::getSoleCenterInLocalFrame(vector3d & outCoordinates) const
-{
-  outCoordinates = m_CenterInFootFrame;
-}
-
-void Foot::setSoleCenterInLocalFrame(const vector3d &inCoordinates)
-{
-  m_CenterInFootFrame = inCoordinates;
-}
-
-void Foot::getProjectionCenterLocalFrameInSole(vector3d& outCoordinates) const
-{
-  outCoordinates = m_ProjectionCenterInSoleFrame;
-}
-
-void Foot::setProjectionCenterLocalFrameInSole(const vector3d& inCoordinates)
-{
-  m_ProjectionCenterInSoleFrame = inCoordinates;
-}

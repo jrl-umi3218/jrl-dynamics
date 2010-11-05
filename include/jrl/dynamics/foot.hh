@@ -86,39 +86,6 @@ namespace dynamicsJRLJapan
     */
     virtual void setAnklePositionInLocalFrame(const vector3d& inCoordinates);
     
-    /**
-       \brief Get position of the sole center in foot local frame of the foot
-
-       \retval outCoordinates coordinates of the center C of the sole (see Figure) 
-    */
-    virtual void getSoleCenterInLocalFrame(vector3d& outCoordinates) const;
-
-    /**
-       \brief Set position of the sole center in foot local frame of the foot
-
-       \param inCoordinates coordinates of the center C of the sole 
-       (see Figure) 
-    */
-    virtual void setSoleCenterInLocalFrame(const vector3d& inCoordinates);
-
-    /**
-       \brief Get position of the projection of center of local frame in sole plane
-
-       \retval outCoordinates coordinates of the projection H of the center of the local frame in the sole plane (see Figure) 
-    */
-    virtual void 
-      getProjectionCenterLocalFrameInSole(vector3d& outCoordinates) const;
-
-
-    /**
-       \brief Set position of projection of center of local frame in sole plane
-
-       \param inCoordinates coordinates of the projection H of the center 
-       of the local frame in the sole plane (see Figure) 
-    */
-    virtual void 
-      setProjectionCenterLocalFrameInSole(const vector3d& inCoordinates);
-
   private:
     /*! Store the ankle joint. */
     const CjrlJoint * m_Ankle;
@@ -132,8 +99,6 @@ namespace dynamicsJRLJapan
     /*! Store center position in foot frame. */
     vector3d m_CenterInFootFrame;
 
-    /*! Store projection of center in sole frame. */
-    vector3d m_ProjectionCenterInSoleFrame;
   };
    
 };

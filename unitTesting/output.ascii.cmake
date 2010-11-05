@@ -937,14 +937,10 @@ Rank of the right foot
 11
 SoleLength: 0.25 SoleWidth: 0.14
 AnklePositionInLocalFrame=(0 , 0 , 0.1)
-SoleCenterInLocalFrame=(0 , 0 , 0 ) 
-ProjectCenterLocalFrameInSole=(0 , 0 , 0 ) 
 Rank of the left foot 
 24
 SoleLength: 0.25 SoleWidth: 0.14
 AnklePositionInLocalFrame=(0 , 0 , 0.1)
-SoleCenterInLocalFrame=(0 , 0 , 0 ) 
-ProjectCenterLocalFrameInSole=(0 , 0 , 0 ) 
 Current transformation of left Ankle.
 1 0 0 0 
 0 1 0 0.09 
