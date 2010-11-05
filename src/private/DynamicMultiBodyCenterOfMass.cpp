@@ -38,7 +38,7 @@
 #include "jrl/mal/matrixabstractlayer.hh"
 #include "jrl/dynamics/dynamicbody.hh"
 #include "DynMultiBodyPrivate.h"
-#include "robotDynamics/jrlBody.h"
+#include "abstract-robot-dynamics/jrlBody.h"
 
 #include "fileReader.h"
 

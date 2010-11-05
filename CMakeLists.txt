@@ -57,7 +57,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 # name of the project
-SET(PROJECT_NAME dynamicsJRLJapan)
+SET(PROJECT_NAME jrl-dynamics)
 SET(PROJECT_CONTACT olivier.stasse@aist.go.jp)
 SET(PROJECT_DESCRIPTION "Implementation of Newton Euler algorithm")
 project(${PROJECT_NAME})
@@ -73,13 +73,13 @@ INCLUDE(FindPkgConfig)
 SET(MAL_REQUIRED_VERSION 1.8.3)
 SET(ABSTROBOTDYNAMICS_REQUIRED_VERSION 1.16)
 
-pkg_check_modules(MALJRL REQUIRED MatrixAbstractLayer>=${MAL_REQUIRED_VERSION})
+pkg_check_modules(MALJRL REQUIRED jrl-mal>=${MAL_REQUIRED_VERSION})
 
-pkg_check_modules(ROBOTDYNAMICS REQUIRED abstractRobotDynamics>=${ABSTROBOTDYNAMICS_REQUIRED_VERSION})
+pkg_check_modules(ROBOTDYNAMICS REQUIRED abstract-robot-dynamics>=${ABSTROBOTDYNAMICS_REQUIRED_VERSION})
 EXEC_PROGRAM(${PKG_CONFIG_EXECUTABLE} ARGS  --variable=docdir abstractRobotDynamics
   OUTPUT_VARIABLE _abstractRobotDynamics_DOCDIR)
 
-SET(PROJECT_REQUIREMENTS "MatrixAbstractLayer >= ${MAL_REQUIRED_VERSION}, abstractRobotDynamics >= ${ABSTROBOTDYNAMICS_REQUIRED_VERSION}")
+SET(PROJECT_REQUIREMENTS "jrl-mal >= ${MAL_REQUIRED_VERSION}, abstract-robot-dynamics >= ${ABSTROBOTDYNAMICS_REQUIRED_VERSION}")
 
 MESSAGE(STATUS "${MALJRL_CFLAGS}")
 MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")
@@ -212,17 +212,17 @@ ADD_CUSTOM_TARGET(uninstall
 #---------------
 # Package target
 #---------------
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "dynamicsJRLJapan - Provides an implementation of the Recursive Newton-Euler Algorithm (RNEA).")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "jrl-dynamics - Provides an implementation of the Recursive Newton-Euler Algorithm (RNEA).")
 set(CPACK_PACKAGE_VENDOR "JRL CNRS/AIST")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
 set(CPACK_PACKAGE_CONTACT "Olivier Stasse (olivier.stasse@aist.go.jp)")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "matrixabstractlayer (>=1.8.3), abstractrobotdynamics (>=1.16)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "jrl-mal (>=1.8.3), abstractrobotdynamics (>=1.16)")
 set(
 CPACK_SOURCE_PACKAGE_FILE_NAME
-"dynamicsjrljapan-src-${PROJECT_VERSION}"
+"jrl-dynamics-src-${PROJECT_VERSION}"
 CACHE INTERNAL "tarball basename"
 )
-set(CPACK_PACKAGE_NAME "dynamicsjrljapan")
+set(CPACK_PACKAGE_NAME "jrl-dynamics")
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_GENERATOR "DEB;TGZ")
 

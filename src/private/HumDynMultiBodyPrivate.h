@@ -38,7 +38,7 @@
 #include "jrl/mal/matrixabstractlayer.hh"
 #include "DynMultiBodyPrivate.h"
 
-#include <robotDynamics/jrlHumanoidDynamicRobot.h>
+#include <abstract-robot-dynamics/jrlHumanoidDynamicRobot.h>
 namespace dynamicsJRLJapan
 {
   class HumanoidSpecificities;
