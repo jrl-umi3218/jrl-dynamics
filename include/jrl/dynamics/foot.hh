@@ -25,7 +25,7 @@
 #define _DYN_JRL_JAPAN_FOOT_H_
 #include "jrl/mal/matrixabstractlayer.hh"
 
-#include "robotDynamics/jrlFoot.h"
+#include "abstract-robot-dynamics/jrlFoot.h"
 #include "jrl/dynamics/dll.hh"
 
 namespace dynamicsJRLJapan

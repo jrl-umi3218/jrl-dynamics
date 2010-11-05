@@ -40,7 +40,7 @@
 #include <string>
 //#include "linalg.h"
 #include "jrl/mal/matrixabstractlayer.hh"
-#include "robotDynamics/jrlBody.h"
+#include "abstract-robot-dynamics/jrlBody.h"
 #include "JointPrivate.h"
 
 using namespace::std;

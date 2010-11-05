@@ -36,7 +36,7 @@
 #include "MultiBody.h"
 #include "DynamicBodyPrivate.h"
 
-#include <robotDynamics/jrlDynamicRobot.h>
+#include <abstract-robot-dynamics/jrlDynamicRobot.h>
 
 #include <jrl/dynamics/dynamicsfactory.hh>
 

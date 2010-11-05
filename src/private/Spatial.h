@@ -30,7 +30,7 @@
 #define _SPATIAL_ALGEBRA_H_
 
 #include "jrl/mal/matrixabstractlayer.hh"
-#include "robotDynamics/jrlBody.h"
+#include "abstract-robot-dynamics/jrlBody.h"
 
 namespace dynamicsJRLJapan
 {

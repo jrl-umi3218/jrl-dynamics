@@ -28,7 +28,7 @@
 #define DYNAMICSJRLJAPAN_JOINT_H
 
 #include "boost/shared_ptr.hpp"
-#include "robotDynamics/jrlJoint.h"
+#include "abstract-robot-dynamics/jrlJoint.h"
 #include "jrl/dynamics/dll.hh"
 
 /*
