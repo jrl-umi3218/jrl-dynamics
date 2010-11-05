@@ -96,11 +96,7 @@ void HumanoidCopy::CopyFoot(CjrlFoot *InitFoot,
   
   vector3d data;
   InitFoot->getAnklePositionInLocalFrame(data);
-  NewFoot->setAnklePositionInLocalFrame(data);
-
-  InitFoot->getProjectionCenterLocalFrameInSole(data);
-  NewFoot->setProjectionCenterLocalFrameInSole(data);
-  
+  NewFoot->setAnklePositionInLocalFrame(data);  
 }
 
 void HumanoidCopy::CopyHand(CjrlHand *InitHand,

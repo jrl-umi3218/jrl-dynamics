@@ -234,19 +234,6 @@ namespace dynamicsJRLJapan {
 	  << AnklePositionInLocalFrame(0) << " , "
 	  << AnklePositionInLocalFrame(1) << " , "
 	  << AnklePositionInLocalFrame(2) << ")" << std::endl;
-
-    aFoot->getProjectionCenterLocalFrameInSole(SoleCenterInLocalFrame);
-    tcout << shifttab << "SoleCenterInLocalFrame=("
-	  << SoleCenterInLocalFrame(0) << " , "
-	  << SoleCenterInLocalFrame(1) << " , "
-	  << SoleCenterInLocalFrame(2) << " ) " << std::endl;
-
-    aFoot->getProjectionCenterLocalFrameInSole(ProjectionCenterLocalFrameInSole);
-    tcout << shifttab << "ProjectCenterLocalFrameInSole=("
-	  << ProjectionCenterLocalFrameInSole(0) << " , " 
-	  << ProjectionCenterLocalFrameInSole(1) << " , " 
-	  << ProjectionCenterLocalFrameInSole(2) << " ) " << std::endl;
-
   }
 
   void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
