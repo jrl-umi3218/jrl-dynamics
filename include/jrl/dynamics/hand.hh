@@ -28,7 +28,7 @@
 
 #include "jrl/mal/matrixabstractlayer.hh"
 
-#include <abstract-robot-dynamics/jrlHand.h>
+#include <abstract-robot-dynamics/jrlhand.hh>
 //#include "dynamicsJRLJapan/deprecated.h"
 #include "jrl/dynamics/dll.hh"
 

@@ -32,9 +32,9 @@
 
 #include <cassert>
 #include <jrl/dynamics/dll.hh>
-#include <abstract-robot-dynamics/jrlJoint.h>
-#include <abstract-robot-dynamics/jrlDynamicRobot.h>
-#include <abstract-robot-dynamics/jrlRobotDynamicsObjectConstructor.h>
+#include <abstract-robot-dynamics/jrljoint.hh>
+#include <abstract-robot-dynamics/jrldynamicrobot.hh>
+#include <abstract-robot-dynamics/jrlrobotdynamicsobjectconstructor.hh>
 
 namespace jrlDelegate {
 
