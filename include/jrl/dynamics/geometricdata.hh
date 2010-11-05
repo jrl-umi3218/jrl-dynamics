@@ -39,8 +39,8 @@
 #include <ostream>
 
 #include <jrl/mal/matrixabstractlayer.hh>
-#include "abstract-robot-dynamics/jrlHumanoidDynamicRobot.h"
-#include "abstract-robot-dynamics/jrlRobotDynamicsObjectConstructor.h"
+#include "abstract-robot-dynamics/jrlhumanoiddynamicrobot.hh"
+#include "abstract-robot-dynamics/jrlrobotdynamicsobjectconstructor.hh"
 
 namespace dynamicsJRLJapan
 {

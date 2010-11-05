@@ -26,10 +26,10 @@ ADD_CUSTOM_TARGET(doc ALL
                   DEPENDS ${${PROJECT_NAME}_SOURCE_DIR}/doc/html/index.html)
 
 INSTALL(DIRECTORY ${${PROJECT_NAME}_BINARY_DIR}/doc/html
-        DESTINATION share/doc/${PROJECT_NAME}/)
+        DESTINATION share/doc/jrl/dynamics/)
 INSTALL(DIRECTORY ${${PROJECT_NAME}_SOURCE_DIR}/doc/pictures
-        DESTINATION share/doc/${PROJECT_NAME}/html/)
+        DESTINATION share/doc/jrl/dynamics/html/)
 # doxytag
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.doxytag
-  DESTINATION share/doc/${PROJECT_NAME}/html)
+  DESTINATION share/doc/jrl/dynamics/html)
 
