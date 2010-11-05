@@ -30,7 +30,7 @@
 #include "jrl/mal/matrixabstractlayer.hh"
 #include "dynamicsJRLJapan.h"
 #include "jrl/dynamics/dynamicsfactory.hh"
-#include "abstract-robot-dynamics/jrlrobotdynamicsobjectconstructor.hh"
+#include "abstract-robot-dynamics/robot-dynamics-object-constructor.hh"
 #include "../private/HumDynMultiBodyPrivate.h"
 #include "jrl/dynamics/humanoiddynamicrobot.hh"
 #include "jrl/dynamics/hand.hh"

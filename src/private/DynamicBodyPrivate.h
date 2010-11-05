@@ -40,7 +40,7 @@
 #include "Body.h"
 
 #include "jrl/mal/matrixabstractlayer.hh"
-#include "abstract-robot-dynamics/jrlbody.hh"
+#include "abstract-robot-dynamics/body.hh"
 
 
 namespace dynamicsJRLJapan

@@ -34,7 +34,7 @@
 
 #include "JointPrivate.h"
 #include "jrl/mal/matrixabstractlayer.hh"
-#include "abstract-robot-dynamics/jrljoint.hh"
+#include "abstract-robot-dynamics/joint.hh"
 
 using namespace std;
 

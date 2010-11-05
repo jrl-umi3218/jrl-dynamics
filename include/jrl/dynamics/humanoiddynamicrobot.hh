@@ -31,7 +31,7 @@
 #define JRL_HUMANOID_DYNAMIC_ROBOT_NA_H_
 
 #include <cassert>
-#include <abstract-robot-dynamics/jrlhumanoiddynamicrobot.hh>
+#include <abstract-robot-dynamics/humanoid-dynamic-robot.hh>
 #include <jrl/dynamics/dynamicsfactory.hh>
 
 //#include "dynamicsJRLJapan/deprecated.h"
