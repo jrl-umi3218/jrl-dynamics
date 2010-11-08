@@ -7,13 +7,13 @@
 # Please refers to file License.txt for details on the license.
 
 
-# Create the library "dynamicsJRLJapan" 
+# Create the library "dynamicsJRLJapan"
 
 # Create list of source files
 # ---------------------------
 SET(libdyn_src
-  private/Body.cpp 
-  private/DynamicBodyPrivate.cpp 
+  private/Body.cpp
+  private/DynamicBodyPrivate.cpp
   private/DynamicMultiBodyActuated.cpp
   private/DynamicMultiBodyAngularMomentum.cpp
   private/DynamicMultiBodyArticularJacobian.cpp
@@ -24,23 +24,23 @@ SET(libdyn_src
   private/DynamicMultiBodyNewtonEulerBackwardDynamics.cpp
   private/DynamicMultiBodyProperties.cpp
   private/DynamicMultiBodyTree.cpp
-  private/DynMultiBodyPrivate.cpp 
+  private/DynMultiBodyPrivate.cpp
   private/Foot.cpp
-  private/fileReader.cpp 
-  private/Hand.cpp 
-  private/HumanoidSpecificities.cpp  
-  private/HumDynMultiBodyPrivate.cpp 
-  private/JointAnchorPrivate.cpp 
-  private/JointFreeFlyerPrivate.cpp 
-  private/JointPrivate.cpp 
-  private/JointPrivateInterface.cpp 
-  private/JointPrivateNormalization.cpp 
+  private/fileReader.cpp
+  private/Hand.cpp
+  private/HumanoidSpecificities.cpp
+  private/HumDynMultiBodyPrivate.cpp
+  private/JointAnchorPrivate.cpp
+  private/JointFreeFlyerPrivate.cpp
+  private/JointPrivate.cpp
+  private/JointPrivateInterface.cpp
+  private/JointPrivateNormalization.cpp
   private/JointPrivateSpatial.cpp
-  private/JointRotationPrivate.cpp 
-  private/JointTranslationPrivate.cpp 
-  private/MultiBody.cpp 
+  private/JointRotationPrivate.cpp
+  private/JointTranslationPrivate.cpp
+  private/MultiBody.cpp
   private/Spatial.cpp
-  private/SpiritVRMLReader.cpp 
+  private/SpiritVRMLReader.cpp
 )
 
 SET(libdyn_src ${libdyn_src}
@@ -52,13 +52,13 @@ SET(libdyn_src ${libdyn_src}
 
 # Create list of headers files
 #-----------------------------
-SET(libdyn_headers 
+SET(libdyn_headers
 ../include/jrl/dynamics/dll.hh
 ../include/jrl/dynamics/dynamicsfactory.hh
 ../include/jrl/dynamics/dynamicbody.hh
 ../include/jrl/dynamics/foot.hh
 ../include/jrl/dynamics/hand.hh
-../include/jrl/dynamics/joint.hh 
+../include/jrl/dynamics/joint.hh
 ../include/jrl/dynamics/robotdynamicsimpl.hh
 ../include/jrl/dynamics/dynamicrobot.hh
 ../include/jrl/dynamics/humanoiddynamicrobot.hh
@@ -78,7 +78,7 @@ ADD_LIBRARY(${PROJECT_NAME_LIB}
 # Specify soname, version and rpath
 # ---------------------------------
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
-      		      PROPERTIES 
+      		      PROPERTIES
 		      VERSION ${PROJECT_VERSION}
 		      SOVERSION ${PROJECT_VERSION}
 		      INSTALL_RPATH lib
@@ -93,7 +93,7 @@ OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
 # Specify compiling options
 # -------------------------
 SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
-      		      PROPERTIES 
+      		      PROPERTIES
 	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include -I${PROJECT_BINARY_DIR}/src/private -I${PROJECT_SOURCE_DIR}/src/private ${${PROJECT_NAME}_CXXFLAGS}"
 		      LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
 	             )
@@ -101,29 +101,24 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
 # Specify header files
 SET(${PROJECT_NAME}_HEADERS ${libdyn_headers})
 
-# Installation 
+# Installation
 # -------------
 INSTALL(FILES ${${PROJECT_NAME}_HEADERS}
-	DESTINATION include/jrl/dynamics
-        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE)
+  DESTINATION include/jrl/dynamics/
+  PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE)
 
 IF(UNIX)
-
-INSTALL(FILES 
-        ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so.${PROJECT_VERSION}
-        ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so
-	DESTINATION lib/
-        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
-
+  INSTALL(FILES
+    ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so.${PROJECT_VERSION}
+    ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so
+    DESTINATION lib)
 ENDIF(UNIX)
 
-
-
 IF(WIN32)
-	INSTALL(TARGETS ${PROJECT_NAME}
-			DESTINATION lib
-			PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
-	)
+  INSTALL(TARGETS ${PROJECT_NAME}
+    DESTINATION lib
+    PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
+    )
 ENDIF(WIN32)
 
 # Add local test
@@ -133,14 +128,6 @@ SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_
 
 IF(UNIX)
   SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
-  SET(${PROJECT_NAME}_test_LDFLAGS "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
-
+  SET(${PROJECT_NAME}_test_LDFLAGS
+    "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
 ENDIF(UNIX)
-
-#ADD_EXECUTABLE(	TestHumanoidParser private/TestHumanoidParser.cpp)
-#SET_TARGET_PROPERTIES(TestHumanoidParser
-#	              PROPERTIES
-#	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-#		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-#)
-
