@@ -119,5 +119,5 @@ namespace dynamicsJRLJapan
 			     std::vector<BodyGeometricalData> &GeometricalDataonBodies,
 			     bool ReadGeometricalInformation=false);
 
-};
+} // end of namespace dynamicsJRLJapan.
 #endif
