@@ -1,10 +1,10 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun
  * Francois Keith
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -41,10 +41,10 @@
 using namespace std;
 
 namespace dynamicsJRLJapan
-{  
+{
     class DynamicBodyPrivate;
-    
-    /*! \brief This class computes quantities such as position, velocity, acceleration, 
+
+    /*! \brief This class computes quantities such as position, velocity, acceleration,
       force and torques specific to revolute joints and its associated body.
      */
     class JointRotationPrivate : public JointPrivate
@@ -57,7 +57,7 @@ namespace dynamicsJRLJapan
 
       /*! \brief Constructor for copy.*/
       JointRotationPrivate(const JointRotationPrivate &a);
-      
+
       /*! \brief Constructor when the initial position is known.
        Do not do any normalization. */
       JointRotationPrivate(const matrix4d &inInitialPosition);
@@ -76,9 +76,9 @@ namespace dynamicsJRLJapan
       bool updateAcceleration(const vectorN& inRobotConfigVector,
 			      const vectorN& inRobotSpeedVector,
 			      const vectorN& inRobotAccelerationVector);
-            
+
       /*! \brief Here the number of DOFs is one. */
-      virtual unsigned int numberDof() 
+      virtual unsigned int numberDof()
       { return 1;};
 
     };

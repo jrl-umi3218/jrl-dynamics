@@ -1,11 +1,11 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun
  * Francois Keith
  * Florent Lamiraux
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -235,7 +235,7 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 
 ostream & operator<<(ostream & os, const JointPrivate &r)
 {
-  os << "Type: "; 
+  os << "Type: ";
   if (r.type()==JointPrivate::FREE_JOINT)
     os << "FREE_JOINT" ;
   else if (r.type()==JointPrivate::PRISMATIC_JOINT)
@@ -393,9 +393,9 @@ void JointPrivate::updateMomentum()
   // Computes angular momentum matrix L
   // Lk = xc x Pk + R * I * Rt * w
   MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
-  
+
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w_c,currentBody->P);
-  
+
   MAL_S3x3_C_eq_A_by_B(NE_tmp2,NE_Rt , currentBody->w);
   MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
   MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
@@ -409,16 +409,16 @@ void JointPrivate::updateAccelerationCoM()
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   vector3d lc = currentBody->localCenterOfMass();
   vector3d NE_tmp2,NE_tmp3;
-  
+
   // *******************  Acceleration for the center of mass of body  i ************************
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
-  
+
   // NE_tmp2 = dw_I x r_{i,i+1}
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
-  
+
   currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
-  
+
   ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
   ODEBUG(" lc = " << lc);
   ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
@@ -428,7 +428,7 @@ void JointPrivate::updateAccelerationCoM()
   ODEBUG(" b: " << currentBody->b);
   ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);
   ODEBUG(" ldv_c: " << currentBody->ldv_c);
-}	  
+}
 
 
 
@@ -440,7 +440,7 @@ void JointPrivate::updateTorqueAndForce()
 
   MAL_S3x3_MATRIX(,double) currentBodyRt;
   currentBodyRt = MAL_S3x3_RET_TRANSPOSE(CurrentBody->R);
-  
+
   /*//MAL_S3x3_MATRIX(,double) currentBodyinitialRt;
   matrix4d initialTransform  = CurrentBody->joint()->initialPosition();
   for(unsigned int li=0;li<3;li++)
@@ -466,7 +466,7 @@ void JointPrivate::updateTorqueAndForce()
     sndterm, thirdterm, fifthterm,tmp;
   // Do not fourth term because it is the angular acceleration.
 
-  /* Force - Constant part: 2nd and 3rd term of eq.(7.146) 
+  /* Force - Constant part: 2nd and 3rd term of eq.(7.146)
      m_i a_{c,i} - m_i g_i
    */
   ODEBUG(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
@@ -476,7 +476,7 @@ void JointPrivate::updateTorqueAndForce()
   /* Get the local center of mass */
   vector3d lc = CurrentBody->localCenterOfMass();
 
-  /* Torque - 5th term : w_i x (I_i w_i)*/  
+  /* Torque - 5th term : w_i x (I_i w_i)*/
   MAL_S3x3_MATRIX(,double) lI = CurrentBody->getInertie();
   tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody->lw);
   //  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody->w);
@@ -484,7 +484,7 @@ void JointPrivate::updateTorqueAndForce()
 
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody->lw,tmp);
 
-  /* Torque - 4th term and 5th term 
+  /* Torque - 4th term and 5th term
   Torque_i = I_i * alpha_i +  w_i x I_i w_i) */
   MAL_S3x3_C_eq_A_by_B(tmp,lI,CurrentBody->ldw);
   CurrentBody->m_Torque =  tmp + fifthterm ;
@@ -501,7 +501,7 @@ void JointPrivate::updateTorqueAndForce()
   curtri = currentTransformation();
 
   matrix4d invcurtri;
-  MAL_S4x4_INVERSE(curtri,invcurtri,double);      
+  MAL_S4x4_INVERSE(curtri,invcurtri,double);
 
   for(unsigned int IndexChild = 0;
       IndexChild< m_Children.size();IndexChild++)
@@ -510,43 +510,43 @@ void JointPrivate::updateTorqueAndForce()
       if (ChildJoint!=0)
 	{
 	  DynamicBodyPrivate *ChildBody = ChildJoint->linkedDBody();
-	  
+
 	  //cout << "Child Bodies : " << Child->getName() << endl;
 	  aRt = MAL_S3x3_RET_A_by_B(ChildBody->R_static,ChildBody->Riip1);
-	  
+
 	  // /* Force computation. */
 	  // R_i_{i+1} f_{i+1}
 	  tmp= MAL_S3x3_RET_A_by_B(aRt, ChildBody->m_Force);
 	  CurrentBody->m_Force += tmp;
-	  
+
 	  /* Torque computation. */
 	  /* 1st term : R^i_{i+1} t_{i+1} */
 	  firstterm = MAL_S3x3_RET_A_by_B(aRt, ChildBody->m_Torque);
-	  
+
 	  /* 3rd term : (R_i_{i+1} f_{i+1}) x rip1,ci */
 	  matrix4d curtrip1= ChildBody->joint()->currentTransformation();
 	  matrix4d ip1Mi;
 	  MAL_S4x4_C_eq_A_by_B(ip1Mi, invcurtri, curtrip1);
-	  
-	  /* rip1,ci = (riip1)^(-1)rici 
+
+	  /* rip1,ci = (riip1)^(-1)rici
 	     Note: rip1,c1 is expressed in the frame of link i.
 	  */
-	  vector3d res3d; 
-	  
-	  MAL_S3_VECTOR_ACCESS(res3d,0) = 
+	  vector3d res3d;
+
+	  MAL_S3_VECTOR_ACCESS(res3d,0) =
 	    MAL_S3_VECTOR_ACCESS(lc,0)-
-	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3); 
-	  MAL_S3_VECTOR_ACCESS(res3d,1) = 
-	    MAL_S3_VECTOR_ACCESS(lc,1) - 
+	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,0,3);
+	  MAL_S3_VECTOR_ACCESS(res3d,1) =
+	    MAL_S3_VECTOR_ACCESS(lc,1) -
 	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,1,3) ;
-	  MAL_S3_VECTOR_ACCESS(res3d,2) = 
+	  MAL_S3_VECTOR_ACCESS(res3d,2) =
 	    MAL_S3_VECTOR_ACCESS(lc,2)-
 	    MAL_S4x4_MATRIX_ACCESS_I_J(ip1Mi,2,3);
 	  MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp, res3d);
-	  
+
 	  CurrentBody->m_Torque += firstterm + thirdterm;
 	}
-      else 
+      else
 	{
 	  cout << "Strange " << getName() << " has a NIL child at " << IndexChild << endl;
 	}

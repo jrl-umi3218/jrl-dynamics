@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse
@@ -45,29 +45,29 @@
   Exception almsg; \
   throw almsg; }
 
-#ifdef RESETDEBUG5 
+#ifdef RESETDEBUG5
 #undef RESETDEBUG5
-#endif 
+#endif
 
 #ifdef ODEBUG5
 #undef ODEBUG5
-#endif 
+#endif
 
 #ifdef ODEBUG2
 #undef ODEBUG2
-#endif 
+#endif
 
 #ifdef ODEBUG3
 #undef ODEBUG3
-#endif 
+#endif
 
 #ifdef ODEBUG4
 #undef ODEBUG4
-#endif 
+#endif
 
 #ifdef ODEBUG
 #undef ODEBUG
-#endif 
+#endif
 
 #define RESETDEBUG5(y) { ofstream DebugFile;	\
     DebugFile.open(y,ofstream::out);		\

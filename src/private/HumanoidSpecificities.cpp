@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse
@@ -53,13 +53,13 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 {
   FILE *fp;
   fp = fopen((char *)aFileName.c_str(),"r");
-  
+
   if (fp==0)
     {
       cerr << "Unable to read " << aFileName << endl;
       return -1;
     }
- 
+
   char Side[2][80] = {"Right","Left"};
   if (look_for(fp,"Humanoid"))
     {
@@ -77,27 +77,27 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_FootDepth[i]);
 		      ODEBUG("Found SizeX: " << m_FootDepth[i]);
 		    }
-		  
+
 		  if (look_for(fp,"SizeY"))
 		    {
 		      fscanfd(fp,&m_FootWidth[i]);
 		      ODEBUG("Found SizeY: " << m_FootWidth[i]);
 		    }
-		  
+
 		  if (look_for(fp,"SizeZ"))
 		    {
 		      fscanfd(fp,&m_FootHeight[i]);
 		      ODEBUG("Found SizeZ: " << m_FootHeight[i]);
 		    }
-		  
+
 		  if (look_for(fp,"AnklePosition"))
 		    {
 		      fscanfd(fp, &m_AnklePosition[i][0]);
 		      fscanfd(fp, &m_AnklePosition[i][1]);
 		      fscanfd(fp, &m_AnklePosition[i][2]);
-		      ODEBUG("AnklePos: " 
+		      ODEBUG("AnklePos: "
 			      << m_AnklePosition[i][0] << " "
-			      << m_AnklePosition[i][1] << " " 
+			      << m_AnklePosition[i][1] << " "
 			      << m_AnklePosition[i][2]);
 		    }
 		  if (look_for(fp,"JointNb"))
@@ -118,9 +118,9 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 			{
 			  ODEBUG(m_FeetJoints[i][j]);
 			}
-		      
+
 		    }
-		  
+
 		}
 	    }
 	}
@@ -141,7 +141,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_WaistToHip[i][2]);
 		    }
 		}
-	    }	  
+	    }
 	  if (look_for(fp,"JointNb"))
 	    {
 	      fscanfi(fp, &m_WaistJointNb);
@@ -160,7 +160,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		{
 		  ODEBUG(m_WaistJoints[j]);
 		}
-	      
+
 	    }
 
 	}
@@ -186,13 +186,13 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_FemurLength[i]);
 		      ODEBUG("Found FemurLength: " << m_FemurLength[i]);
 		    }
-		  
+
 		  if (look_for(fp,"TibiaLength"))
 		    {
 		      fscanfd(fp,&m_TibiaLength[i]);
 		      ODEBUG("Found TibiaLength: " << m_TibiaLength[i]);
 		    }
-		
+
 		  if (look_for(fp,"JointNb"))
 		    {
 		      fscanfi(fp, &m_LegsJointNb[i]);
@@ -211,7 +211,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 			{
 			  ODEBUG(m_LegsJoints[i][j]);
 			}
-		      
+
 		    }
 		}
 
@@ -231,7 +231,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_Hands.Center[i][2]);
 		      ODEBUG("Found Hands Center: " << m_Hands.Center[i]);
 		    }
-		  
+
 		  if (look_for(fp,"okayAxis"))
 		    {
 		      fscanfd(fp,&m_Hands.okayAxis[i][0]);
@@ -240,7 +240,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 
 		      ODEBUG("Found m_Hands.okayAxis: " << m_Hands.okayAxis[i]);
 		    }
-		
+
 		  if (look_for(fp,"showingAxis"))
 		    {
 		      fscanfd(fp,&m_Hands.showingAxis[i][0]);
@@ -260,7 +260,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		    }
 		}
 	    }
-	  
+
 	}
 
       if (look_for(fp,"Wrists"))
@@ -290,7 +290,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 			{
 			  ODEBUG(m_WristsJoints[i][j]);
 			}
-		      
+
 		    }
 
 		}
@@ -309,13 +309,13 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_UpperArmLength[i]);
 		      ODEBUG("Found UpperArmLength: " << m_UpperArmLength[i]);
 		    }
-		  
+
 		  if (look_for(fp,"ForeArmLength"))
 		    {
 		      fscanfd(fp,&m_ForeArmLength[i]);
 		      ODEBUG("Found ForeArmLength: " << m_ForeArmLength[i]);
 		    }
-		
+
 		  if (look_for(fp,"JointNb"))
 		    {
 		      fscanfi(fp, &m_ArmsJointNb[i]);
@@ -334,7 +334,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 			{
 			  ODEBUG(m_ArmsJoints[i][j]);
 			}
-		      
+
 		    }
 		}
 	    }
@@ -344,7 +344,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
       // Look for the head information.
       if (look_for(fp,"Head"))
 	{
-	  
+
 	  if (look_for(fp,"JointNb"))
 	    {
 	      fscanfi(fp, &m_HeadJointNb);
@@ -363,14 +363,14 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		{
 		  ODEBUG(m_HeadJoints[j]);
 		}
-	      
+
 	    }
 	}
 
       // Look for the head information.
       if (look_for(fp,"Chest"))
 	{
-	  
+
 	  if (look_for(fp,"JointNb"))
 	    {
 	      fscanfi(fp, &m_ChestJointNb);
@@ -389,7 +389,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		{
 		  ODEBUG(m_ChestJoints[j]);
 		}
-	      
+
 	    }
 	}
     }
@@ -405,13 +405,13 @@ void HumanoidSpecificities::Display()
 
   for(int i=0;i<2;i++)
     {
-      cout << "Size of the " << Side[i] << 
+      cout << "Size of the " << Side[i] <<
 	" foot:" << endl;
-      
+
       cout << "Width: " <<m_FootWidth[i] << " Height: " << m_FootHeight[i] << endl;
 
       cout << "Ankle position of foot " << Side[i]  << endl;
-      
+
       for(int j=0;j<3;j++)
 	cout << m_AnklePosition[i][j] << " ";
       cout << endl;
@@ -442,8 +442,8 @@ void HumanoidSpecificities::Display()
 	cout << m_ArmsJoints[i][j] << " ";
       cout << endl;
 
-      cout << "Size of the foot " << Side[i] 
-	   << " Width: " << m_FootWidth[i] 
+      cout << "Size of the foot " << Side[i]
+	   << " Width: " << m_FootWidth[i]
 	   << " Height: " << m_FootHeight[i] << endl;
 
       cout << "Position of the hip according to the waist  " << Side[i] << " " ;
@@ -452,8 +452,8 @@ void HumanoidSpecificities::Display()
       cout << endl;
 
     }
-      
-  
+
+
 }
 
 int HumanoidSpecificities::GetFootSize(int WhichFoot, double &Depth,
@@ -475,7 +475,7 @@ int HumanoidSpecificities::GetFootSize(int WhichFoot, double &Depth,
       Width = m_FootWidth[1];
       Height = m_FootHeight[1];
     }
-  else 
+  else
     return -1;
 
   return 0;
@@ -502,14 +502,14 @@ double HumanoidSpecificities::GetUpperArmLength(int WhichSide)
     return m_UpperArmLength[0];
   return m_UpperArmLength[1];
 }
-  
+
 double HumanoidSpecificities::GetForeArmLength(int WhichSide)
 {
   if (WhichSide==-1)
     return m_ForeArmLength[0];
   return m_ForeArmLength[1];
 }
-  
+
 void HumanoidSpecificities::GetAnklePosition(int WhichSide,double AnklePosition[3])
 {
   int r=1;
@@ -554,14 +554,14 @@ const std::vector<int> & HumanoidSpecificities::GetArmJoints(int WhichSide)
   int r=1;
   if (WhichSide==-1)
     r=0;
-  
+
   return m_ArmsJoints[r];
 }
 
 const std::vector<int> &HumanoidSpecificities::GetWrists(int WhichSide)
 {
   int r=1;
-  
+
   if (WhichSide==-1)
     r=0;
 
@@ -582,7 +582,7 @@ const std::vector<int> & HumanoidSpecificities::GetLegJoints(int WhichSide)
   int r=1;
   if (WhichSide==-1)
     r=0;
-  
+
   return m_LegsJoints[r];
 }
 
@@ -600,7 +600,7 @@ const std::vector<int> & HumanoidSpecificities::GetFootJoints(int WhichSide)
   int r=1;
   if (WhichSide==-1)
     r=0;
-  
+
   return m_FeetJoints[r];
 }
 
@@ -626,7 +626,7 @@ const std::vector<int> & HumanoidSpecificities::GetChestJoints()
 
 int HumanoidSpecificities::InitUpperBodyJoints()
 {
-  m_UpperBodyJointNb = m_HeadJointNb + m_ChestJointNb + 
+  m_UpperBodyJointNb = m_HeadJointNb + m_ChestJointNb +
     m_ArmsJointNb[0] + m_ArmsJointNb[1];
   int lindex =0;
 
@@ -634,16 +634,16 @@ int HumanoidSpecificities::InitUpperBodyJoints()
 
   for(int i=0;i<m_HeadJointNb;i++)
     m_UpperBodyJoints[lindex++] = m_HeadJoints[i];
-  
+
   for(int i=0;i<m_ChestJointNb;i++)
     m_UpperBodyJoints[lindex++] = m_ChestJoints[i];
-  
+
   for(int i=0;i<m_ArmsJointNb[0];i++)
     m_UpperBodyJoints[lindex++] = m_ArmsJoints[0][i];
-  
+
   for(int i=0;i<m_ArmsJointNb[1];i++)
     m_UpperBodyJoints[lindex++] = m_ArmsJoints[1][i];
-  
+
   return 0;
 }
 

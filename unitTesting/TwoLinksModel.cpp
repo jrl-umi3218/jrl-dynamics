@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith
  * Olivier Stasse,
@@ -41,7 +41,7 @@ using namespace std;
 namespace dynamicsJRLJapan
 {
   CTwoLinksModel::CTwoLinksModel(CjrlRobotDynamicsObjectFactory *anObjectFactory,
-				 TwoLinksModelParameters &aSetOfParameters) 
+				 TwoLinksModelParameters &aSetOfParameters)
   : dynamicRobot(anObjectFactory)
   {
     m_g = -9.81;
@@ -54,7 +54,7 @@ namespace dynamicsJRLJapan
     m_k[0] = 1; m_k[1] = 0.0; m_k[2] = 0.0;
 
     m_SetOfParameters = aSetOfParameters;
-    
+
     matrix4d pose;
     MAL_S4x4_MATRIX_SET_IDENTITY(pose);
 
@@ -75,13 +75,13 @@ namespace dynamicsJRLJapan
     lc(1) = 0.0;
     lc(2) = m_SetOfParameters.lc[0];
     l1->localCenterOfMass(lc);
-    
+
     // Relate joint1 and link1
     j1->setLinkedBody(*l1);
 
     // Create Joint 2
     MAL_S4x4_MATRIX_ACCESS_I_J(pose,2,3)= m_SetOfParameters.l[0];
-   
+
     CjrlJoint* j2=0;
     j2 = anObjectFactory->createJointRotation(pose);
     j1->addChildJoint(*j2);
@@ -95,7 +95,7 @@ namespace dynamicsJRLJapan
     lc(1) = 0.0;
     lc(2) = m_SetOfParameters.lc[1];
     l2->localCenterOfMass(lc);
-    
+
     // Relate link 2 and joint 2
     j2->setLinkedBody(*l2);
 
@@ -120,15 +120,15 @@ namespace dynamicsJRLJapan
     vectorN lcurrentVelocity = currentVelocity();
     vectorN lcurrentAcceleration = currentAcceleration();
 
-    
+
     // Compute linear acceleration of the center of mass for link 1.
     /*! Equation 7.165 */
-    vector3d firstterm,secondterm,tmp,tmp2,tmp3; 
+    vector3d firstterm,secondterm,tmp,tmp2,tmp3;
     tmp = m_k * lcurrentAcceleration[0];
     tmp2 = m_i * m_SetOfParameters.lc[0];
     ODEBUG("lc : " << tmp2);
     MAL_S3_VECTOR_CROSS_PRODUCT(firstterm,tmp,tmp2);
-    
+
     tmp = m_k * lcurrentVelocity[0];
     MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,tmp,tmp2);
     MAL_S3_VECTOR_CROSS_PRODUCT(secondterm,tmp,tmp3);
@@ -136,17 +136,17 @@ namespace dynamicsJRLJapan
     ODEBUG("ldw1 = "<< m_k*lcurrentAcceleration[0]);
     ODEBUG("lw x (lw x lc): " << secondterm );
     ac1 = firstterm + secondterm;
-    
+
     // Computes g1.
     matrix3d Rf1f0t;
     MAL_S3x3_MATRIX_SET_IDENTITY(Rf1f0t);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,1,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,1,1) =
       cos(lcurrentConfiguration[0]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,1,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,1,2) =
       sin(lcurrentConfiguration[0]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,1) =
       -sin(lcurrentConfiguration[0]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf1f0t,2,2) =
       cos(lcurrentConfiguration[0]);
     ODEBUG("Rf1f0t1: " << Rf1f0t );
     tmp = m_i *  -m_g;
@@ -154,16 +154,16 @@ namespace dynamicsJRLJapan
     MAL_S3x3_C_eq_A_by_B(g1,Rf1f0t,tmp);
     ODEBUG("g1: " << g1);
     // Compute linear acceleration of the end of link 1.
-    // see remark for eq. 7167 
+    // see remark for eq. 7167
     tmp = m_k * lcurrentAcceleration[0];
     tmp2 = m_i * m_SetOfParameters.l[0];
     MAL_S3_VECTOR_CROSS_PRODUCT(firstterm,tmp,tmp2);
-    
+
     tmp = m_k * lcurrentVelocity[0];
     MAL_S3_VECTOR_CROSS_PRODUCT(tmp3,tmp,tmp2);
     MAL_S3_VECTOR_CROSS_PRODUCT(secondterm,tmp,tmp3);
     ae1 = firstterm + secondterm;
-    
+
   }
 
   void CTwoLinksModel::ForwardRecursionLink2(vector3d &ae1,
@@ -177,45 +177,45 @@ namespace dynamicsJRLJapan
 
     matrix3d Rf2f1t;
     MAL_S3x3_MATRIX_SET_IDENTITY(Rf2f1t);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,1,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,1,1) =
       cos(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,1,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,1,2) =
       sin(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,2,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,2,1) =
       -sin(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,2,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1t,2,2) =
       cos(lcurrentConfiguration[1]);
-    
+
     // Linear acceleration of the center of mass for link 2 (local frame).
     vector3d firstterm, sndterm, thirdterm;
     vector3d tmp,tmp2,tmp3;
     MAL_S3x3_C_eq_A_by_B(firstterm ,Rf2f1t,ae1);
-   
+
     double addacceleration = (lcurrentAcceleration[0] + lcurrentAcceleration[1]);
     tmp = m_i * m_SetOfParameters.lc[1];
     MAL_S3_VECTOR_CROSS_PRODUCT(tmp2,m_k,tmp);
     sndterm = tmp2 * addacceleration;
-   
-    double addvelocity = (lcurrentVelocity[0] + lcurrentVelocity[1]);    
+
+    double addvelocity = (lcurrentVelocity[0] + lcurrentVelocity[1]);
     tmp3 = tmp2 * addvelocity;
     tmp = m_k * addvelocity;
     MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,tmp,tmp3);
     ODEBUG("ac2 first term : " << firstterm);
     ac2 = firstterm + sndterm + thirdterm;
 
-    // Gravity for link 2 
+    // Gravity for link 2
     matrix3d Rf2f0t;
     MAL_S3x3_MATRIX_SET_IDENTITY(Rf2f0t);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,1,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,1,1) =
       cos(lcurrentConfiguration[0]+
 	  lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,1,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,1,2) =
       sin(lcurrentConfiguration[0]+
 	  lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,2,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,2,1) =
       -sin(lcurrentConfiguration[0]+
 	   lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,2,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f0t,2,2) =
       cos(lcurrentConfiguration[0]+
 	  lcurrentConfiguration[1]);
     ODEBUG("Rf2f0t1: " << Rf2f0t );
@@ -240,7 +240,7 @@ namespace dynamicsJRLJapan
     vectorN lcurrentConfiguration = currentConfiguration();
     vectorN lcurrentVelocity = currentVelocity();
     vectorN lcurrentAcceleration = currentAcceleration();
-    
+
     // Force. (7.172)
     f2 = ( ac2 +g2);
     f2 = f2 * m_SetOfParameters.m[1];
@@ -259,7 +259,7 @@ namespace dynamicsJRLJapan
     tmp = m_i * m_SetOfParameters.lc[1];
     MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,f2,tmp);
     ODEBUG("third term:" << thirdterm );
-	
+
     t2 = firstterm + secondterm - thirdterm;
 
     ODEBUG("Result t2:" << t2 );
@@ -279,17 +279,17 @@ namespace dynamicsJRLJapan
     vectorN lcurrentVelocity = currentVelocity();
     vectorN lcurrentAcceleration = currentAcceleration();
 
-    
+
     // Force. (7.175)
     matrix3d Rf2f1;
     MAL_S3x3_MATRIX_SET_IDENTITY(Rf2f1);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,1,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,1,1) =
       cos(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,1,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,1,2) =
       -sin(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,2,1) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,2,1) =
       sin(lcurrentConfiguration[1]);
-    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,2,2) = 
+    MAL_S3x3_MATRIX_ACCESS_I_J(Rf2f1,2,2) =
       cos(lcurrentConfiguration[1]);
 
     ODEBUG("Rf2f1t:" << Rf2f1 );
@@ -308,21 +308,21 @@ namespace dynamicsJRLJapan
     // Compute first term  R^2_1 tau2
     MAL_S3x3_C_eq_A_by_B(firstterm,Rf2f1,t2);
 
-    // Compute second term  f_1 x lc1 i 
+    // Compute second term  f_1 x lc1 i
     tmp = m_i * m_SetOfParameters.lc[0];
     MAL_S3_VECTOR_CROSS_PRODUCT(sndterm,f1,tmp);
 
-    // Compute third term  (R^2_1 f_2) x (l1 -lc1) i 
+    // Compute third term  (R^2_1 f_2) x (l1 -lc1) i
     tmp = m_i * (m_SetOfParameters.l[0] - m_SetOfParameters.lc[0]);
     MAL_S3_VECTOR_CROSS_PRODUCT(thirdterm,f2inf1,tmp);
-    
+
     // Compute fourth term I1 ldw1
     MAL_S3x3_C_eq_A_by_B(fourthterm,m_SetOfParameters.I[0],ldw1);
-									
+
     // Compute fifth term w1 x (I1 w1)
     MAL_S3x3_C_eq_A_by_B(tmp,m_SetOfParameters.I[0],lw1);
     MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,lw1,tmp);
-    
+
     t1 = firstterm - sndterm - thirdterm + fourthterm + fifthterm;
   }
 
@@ -338,45 +338,45 @@ namespace dynamicsJRLJapan
     vector3d rf1c1,rf2c2,rf2c1,rf3c2;
     // Vector from frame i to frame j (local frame)
     vector3d rf1f2,rf2f3;
-    
+
     vectorN lcurrentConfiguration = currentConfiguration();
     vectorN lcurrentVelocity = currentVelocity();
     vectorN lcurrentAcceleration = currentAcceleration();
-    
+
     // Compute angular velocity and acceleration. (7.162) p.279
     lw[0] = m_k * lcurrentVelocity[0];
     ldw[0] = m_k * lcurrentAcceleration[0];
     lw[1] = m_k * (lcurrentVelocity[0] + lcurrentVelocity[1]);
     ldw[1] = m_k * (lcurrentAcceleration[0] + lcurrentAcceleration[1]);
-    
-    // Compute vectors. 7.163 & 7.164
-    rf1c1 = m_i * m_SetOfParameters.lc[0]; 
-    rf2c1 = m_i * (m_SetOfParameters.l[0]-m_SetOfParameters.lc[0]);
-    rf1f2 = m_i * m_SetOfParameters.l[0]; 
 
-    rf2c2 = m_i * m_SetOfParameters.lc[1]; 
+    // Compute vectors. 7.163 & 7.164
+    rf1c1 = m_i * m_SetOfParameters.lc[0];
+    rf2c1 = m_i * (m_SetOfParameters.l[0]-m_SetOfParameters.lc[0]);
+    rf1f2 = m_i * m_SetOfParameters.l[0];
+
+    rf2c2 = m_i * m_SetOfParameters.lc[1];
     rf3c2 = m_i * (m_SetOfParameters.l[1]-m_SetOfParameters.lc[1]);
-    rf2f3 = m_i * m_SetOfParameters.l[1]; 
+    rf2f3 = m_i * m_SetOfParameters.l[1];
 
 
     // Forward Recursion Link 1.
     vector3d ac1,g1,ae1;
     ForwardRecursionLink1(ac1,g1,ae1);
-    
-    // Forward recursion Link 2 
+
+    // Forward recursion Link 2
     vector3d ac2,g2;
     ForwardRecursionLink2(ae1,ac2,g2);
 
-    // Backward recursion Link 2 
+    // Backward recursion Link 2
     BackwardRecursionLink2(ac2,g2, lw[1], ldw[1], Forces[1],Torques[1]);
 
-    // Backward recursion Link 1 
+    // Backward recursion Link 1
     BackwardRecursionLink1(ac1,g1,Forces[1],Torques[1],
 			   lw[0],ldw[0],
 			   Forces[0],Torques[0]);
 
-    
-    
+
+
   }
 
   bool CTwoLinksModel::TestInstance(vectorN &aCurrentConf,
@@ -388,51 +388,51 @@ namespace dynamicsJRLJapan
     currentVelocity(aCurrentVelocity);
     currentAcceleration(aCurrentAcceleration);
     computeForwardKinematics();
-    
+
     matrixNxP GenericTorques, GenericForces;
     GenericTorques = currentTorques();
     GenericForces = currentForces();
-    
+
     ODEBUG("From generic algorithm : " );
     ODEBUG("Forces  : " << GenericForces );
     ODEBUG("Torques :" << GenericTorques );
-    
+
     vector3d AnalyticalForces[2], AnalyticalTorques[2];
-    
+
     computeAnalyticalBackwardDynamics(AnalyticalForces,
 				      AnalyticalTorques);
-    
+
     ODEBUG("From analytical model : " );
-    ODEBUG("Forces  : " 
+    ODEBUG("Forces  : "
 	    << AnalyticalForces[0] << endl
 	    << AnalyticalForces[1]);
-    ODEBUG("Torques  : " 
+    ODEBUG("Torques  : "
 	    << AnalyticalTorques[0] << endl
 	    << AnalyticalTorques[1]);
     for(unsigned int i=0;i<2;i++)
       for(unsigned int j=0;j<3;j++)
 	{
-	  if (fabs(AnalyticalForces[i](j) - 
+	  if (fabs(AnalyticalForces[i](j) -
 		   GenericForces(i,j)) > 1e-8)
 	    {
-	      cout << testname << " Pb in link " << i << " Force component "<< j 
-		   << " Generic: " << GenericForces(i,j) 
+	      cout << testname << " Pb in link " << i << " Force component "<< j
+		   << " Generic: " << GenericForces(i,j)
 		   << " Analytical " << AnalyticalForces[i](j) << endl;
 	      return false;
 	    }
-	  
-	  if (fabs(AnalyticalTorques[i](j) - 
+
+	  if (fabs(AnalyticalTorques[i](j) -
 		   GenericTorques(i,j)) > 1e-8)
 	    {
-	      cout << testname << " Pb in link " << i << " Torque component "<< j 
-		   << " Generic: " << GenericTorques(i,j) 
+	      cout << testname << " Pb in link " << i << " Torque component "<< j
+		   << " Generic: " << GenericTorques(i,j)
 		   << " Analytical " << AnalyticalTorques[i](j) << endl;
 	      return false;
 	    }
       }
-    
-    
+
+
     return true;
   }
-  
+
 };

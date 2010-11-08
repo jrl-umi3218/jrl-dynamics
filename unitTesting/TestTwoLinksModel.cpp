@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
  *
@@ -43,11 +43,11 @@ int main(int argc, char *argv[])
   // Fix length of links.
   aSetOfPlanarElbowParameters.l[0] = 1.0;
   aSetOfPlanarElbowParameters.l[1] = 1.0;
-  
+
   // Fix position of center of masses.
   aSetOfPlanarElbowParameters.lc[0] = 0.5;
   aSetOfPlanarElbowParameters.lc[1] = 0.5;
-  
+
   // Fix masses.
   aSetOfPlanarElbowParameters.m[0] = 1.0;
   aSetOfPlanarElbowParameters.m[1] = 1.0;
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
 
   // Test 2. We impose a velocity on the first link.
@@ -102,10 +102,10 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
-  
-  
+
+
   // Test 3. We change the configuration of the first link.
   aCurrentConf[0] = M_PI/4.0;
   testname = "Test 3";
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
 
   // Test 4. We change the configuration of the second link.
@@ -125,9 +125,9 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
- 
+
   // Test 5. We change the velocity of the second link.
   aCurrentVelocity[1] = 1.0;
   testname = "Test 5";
@@ -136,9 +136,9 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
-   
+
 
   // Test 6. We change the acceleration of the second link.
   aCurrentAcceleration[1] = 1.0;
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
 
   // Test 7. We change the acceleration of the first link.
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 				    aCurrentAcceleration,
 				    testname))
     return -1;
-  else 
+  else
     cout << testname << " ok." << endl;
-  
+
 }

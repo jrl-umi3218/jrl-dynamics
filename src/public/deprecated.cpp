@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *

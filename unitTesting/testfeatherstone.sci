@@ -2,7 +2,7 @@
 // as described by Featherstone in p.52 of the
 // Handbook of Robotics.
 //
-// Copyright 2010, 
+// Copyright 2010,
 //
 // Olivier Stasse,
 //
@@ -28,7 +28,7 @@
 
 mode(0)
 
-// Create rotation 
+// Create rotation
 function [rotM] = rotx(x)
 rotM=[ [ 1 0 0 ]; ...
        [ 0 cos(x) -sin(x)]; ...
@@ -71,7 +71,7 @@ mRA = zeros(6*3,3);
 nextstep ="Forward recursion"
 
 // Loop for forward recursion
-for i=1:6, 
+for i=1:6,
   s1 =(i-1)*3+1;
   s2 = i*3;
   [lRi,lRA, lwi,ldwi,ldvi] = ...
@@ -89,7 +89,7 @@ end
 
 nextstep ="Backward recursion"
 // Loop for backward recursion
-for i=6:-1:1, 
+for i=6:-1:1,
 
   [f(:,i),t(:,i)] = backwardit( i,m(i), ...
 	       	    I([(i-1)*3+1:i*3],:), ...

@@ -1,10 +1,10 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith,
  * Florent Lamiraux,
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -48,7 +48,7 @@ namespace dynamicsJRLJapan
     CjrlHumanoidDynamicRobot * aHDR = new HumDynMultiBodyPrivate();
     return aHDR;
   }
-  
+
   CjrlDynamicRobot * ObjectFactory::createDynamicRobot()
   {
     CjrlDynamicRobot * aDR = new DynMultiBodyPrivate();
@@ -111,7 +111,7 @@ namespace dynamicsJRLJapan
 				MapJointToRankFileName,
 				SpecificitiesFileName,
 				lVectorOfURLs);
-    
+
   }
   int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 			   std::string &OpenHRPVRMLFile,
@@ -120,7 +120,7 @@ namespace dynamicsJRLJapan
 			   std::vector<BodyGeometricalData> &VectorOfURLs,
 			   bool ReadGeometricalInformation)
   {
-    dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR = 
+    dynamicsJRLJapan::HumDynMultiBodyPrivate *aHDR =
       dynamic_cast<HumDynMultiBodyPrivate *>(&ajrlHumanoidDynamicRobot);
 
     // TO DO : Not be limited to dynamicsJRLJapan implementation.
@@ -136,13 +136,13 @@ namespace dynamicsJRLJapan
       }
     else
       {
-	jrlDelegate::humanoidDynamicRobot *a3HDR = 
+	jrlDelegate::humanoidDynamicRobot *a3HDR =
 	  dynamic_cast<jrlDelegate::humanoidDynamicRobot *>(&ajrlHumanoidDynamicRobot);
 	if (a3HDR!=0)
 	  {
-	    dynamicsJRLJapan::HumDynMultiBodyPrivate *a4HDR = 
+	    dynamicsJRLJapan::HumDynMultiBodyPrivate *a4HDR =
 	      dynamic_cast<HumDynMultiBodyPrivate *>(a3HDR->m_HDR);
-	    
+
 	    if (a4HDR!=0)
 	      {
 		a4HDR->parserVRML(OpenHRPVRMLFile,
@@ -152,10 +152,10 @@ namespace dynamicsJRLJapan
 		a4HDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
 		return 0;
 	      }
-	    
+
 	  }
       }
-    
+
     return -1;
   }
 };

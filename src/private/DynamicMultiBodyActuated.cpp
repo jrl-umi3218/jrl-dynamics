@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse
@@ -53,7 +53,7 @@ void DynMultiBodyPrivate::setActuatedJoints(std::vector<CjrlJoint *>& lActuatedJ
       for(unsigned int i=0;i<m_ActuatedJoints.size();i++)
 	if (m_ActuatedJoints[i] != lActuatedJoints[i])
 	  Same=false;
-      
+
     }
 
   if (Same)
@@ -81,7 +81,7 @@ int DynMultiBodyPrivate::BuildLinkBetweenActuatedVectorAndJoints()
   ODEBUG(" Wenth through here.");
   if (m_ActuatedIDToConfiguration.size()==0)
     return BuildLinkFromActuatedJoints();
- 
+
   return BuildLinkFromActuatedIDs();
 }
 
@@ -89,7 +89,7 @@ int DynMultiBodyPrivate::BuildLinkFromActuatedJoints()
 {
   ODEBUG(" Went through here.");
   m_ActuatedIDToConfiguration.resize(m_ActuatedJoints.size());
-  
+
   for(unsigned int IndexInActuatedVector=0;
       IndexInActuatedVector<m_ActuatedJoints.size();
       IndexInActuatedVector++)
@@ -109,7 +109,7 @@ int DynMultiBodyPrivate::BuildLinkFromActuatedJoints()
 	}
       else
 	{
-	  cerr << "Unable to find actuated joint: "<< m_ActuatedJoints[IndexInActuatedVector] << 
+	  cerr << "Unable to find actuated joint: "<< m_ActuatedJoints[IndexInActuatedVector] <<
 	    " in the vector of joints." << endl;
 	  return -1;
 	}
@@ -122,7 +122,7 @@ int DynMultiBodyPrivate::BuildLinkFromActuatedIDs()
 {
   ODEBUG("Went through here.");
   m_ActuatedJoints.resize(m_ActuatedIDToConfiguration.size());
-  
+
   for(unsigned int IndexInActuatedIDs=0;
       IndexInActuatedIDs<m_ActuatedIDToConfiguration.size();
       IndexInActuatedIDs++)
@@ -139,12 +139,12 @@ int DynMultiBodyPrivate::BuildLinkFromActuatedIDs()
       if (FoundActuatedJoint)
 	{
 	  m_ActuatedJoints[IndexInActuatedIDs] = m_JointVector[IndexInJointVector];
-	  ODEBUG(" " << ((JointPrivate *)m_JointVector[IndexInJointVector])->getName() << " actuated:" 
+	  ODEBUG(" " << ((JointPrivate *)m_JointVector[IndexInJointVector])->getName() << " actuated:"
 		  << IndexInActuatedIDs);
 	}
       else
 	{
-	  cerr << "Unable to find actuated joint: "<< m_ActuatedJoints[IndexInJointVector] << 
+	  cerr << "Unable to find actuated joint: "<< m_ActuatedJoints[IndexInJointVector] <<
 	    " in the vector of joints." << endl;
 	  return -1;
 	}

@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -24,7 +24,7 @@
  *  Laboratory (JRL)
  *
  */
-/* @doc \file Object to copy two humanoid robots 
+/* @doc \file Object to copy two humanoid robots
    through the abstract interface. */
 
 #ifndef _DYNAMIC_JRL_JAPAN_HUMANOID_COPY_H_
@@ -43,7 +43,7 @@ namespace dynamicsJRLJapan
 
     /*! \brief Default Destructor */
     ~HumanoidCopy();
-    
+
     /*! \brief Perform copy between two humanoid robots. */
     void PerformCopyFromJointsTree(CjrlHumanoidDynamicRobot* InitialHDR,
 				   CjrlHumanoidDynamicRobot* NewHDR);
@@ -79,7 +79,7 @@ namespace dynamicsJRLJapan
     dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
 
   };
-  
+
 };
 #endif
 

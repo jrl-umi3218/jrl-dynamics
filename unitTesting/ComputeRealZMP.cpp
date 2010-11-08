@@ -1,9 +1,9 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -42,25 +42,25 @@ void ExtractRefWaist(ifstream &RefStateFile,
 {
   if (!RefStateFile.eof())
     {
-      
+
       // Read the position and the orientation of the waist.
       for(unsigned int i=0;i<100;i++)
 	{
 	  RefStateFile >> RefData[i];
 	  if ((i>=89) && (i<98))
 	    RotationFreeFlyer[i-89] = RefData[i];
-	  
+
 	  const double & nx = RotationFreeFlyer[2*3+2];
 	  const double & ny = RotationFreeFlyer[2*3+1];
-	  
+
 	  WaistFromRef[3] = atan2(ny,nx);
 	  WaistFromRef[4] = atan2(-RotationFreeFlyer[2*3+0],
 				  sqrt(ny*ny+nx*nx));
 	  WaistFromRef[5] = atan2(RotationFreeFlyer[1*3+0],
 				  RotationFreeFlyer[0*3+0]);
-	  
+
 	}
-      
+
       WaistFromRef[0] = RefData[86];
       WaistFromRef[1] = RefData[87];
       WaistFromRef[2] = RefData[88];
@@ -82,7 +82,7 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 
   matrix4d CurrentSupportFootPosInWorld,
     CurrentWaistPosInSupportFoot, CurrentAbsWaistPos;
-  
+
   matrix4d TrLF2 = LeftFoot2->currentTransformation();
   matrix4d TrRF2 = RightFoot2->currentTransformation();
   matrix4d CurrentWaistInWorld2 = Waist2->currentTransformation();
@@ -137,7 +137,7 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
   else
     {
       matrix4d tmp;
-      
+
       if ((CurrentSupportFoot==1) && (PreviousSupportFoot==-1))
 	{
 	  MAL_S4x4_INVERSE(TrRF2,tmp,double);
@@ -155,7 +155,7 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 
 	  cout << "Choice 5" <<endl;
 	}
-      
+
       if ((CurrentSupportFoot==-1) && (PreviousSupportFoot==1))
 	{
 	  MAL_S4x4_INVERSE(TrLF2,tmp,double);
@@ -166,7 +166,7 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 						  CurrentSupportFootPosInWorld);
 	  cout << "Choice 6" <<endl;
 	}
-      
+
     }
   cout << "AbsSupportFootPos : " << AbsSupportFootPos << endl;
   MAL_S4x4_C_eq_A_by_B(CurrentAbsWaistPos,AbsSupportFootPos,CurrentWaistPosInSupportFoot);
@@ -175,7 +175,7 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
   {
     const double & nx = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,2);
     const double & ny = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,1);
-    
+
     WaistFromActual[3] = atan2(ny,nx);
     WaistFromActual[4] = atan2(-MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,0),
 			       sqrt(ny*ny+nx*nx));
@@ -186,14 +186,14 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
     WaistFromActual[2] = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,3);
   }
 
-  
+
   PreviousSupportFoot = CurrentSupportFoot;
-  
+
 }
 
 void SaveWaistPositions(double *WaistRef,
 			double *WaistActual)
-{  
+{
   ofstream RebuildWaist;
   RebuildWaist.open("RebuildWaist.dat",ofstream::app);
   for(unsigned int i=0;i<6;i++)
@@ -201,11 +201,11 @@ void SaveWaistPositions(double *WaistRef,
 
   for(unsigned int i=0;i<6;i++)
     RebuildWaist  << WaistActual[i] << " ";
-    
+
   RebuildWaist << endl;
 
   RebuildWaist.close();
-      
+
 }
 
 int main(int argc, char *argv[])
@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
 	  cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
 	  cerr << " ReferenceLogFile ActualLogFile" << endl;
 	  exit(-1);
-	}	
+	}
       else
 	{
 	  aPath=robotpath;
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 	  aMapFromCjrlJointToRank += "/../etc/";
 	  aMapFromCjrlJointToRank += robotname;
 	  aMapFromCjrlJointToRank += "JointRank.xml";
-	  
+
 	}
 
       if (argc==3)
@@ -255,21 +255,21 @@ int main(int argc, char *argv[])
 	  RefLogFile = argv[1];
 	  ActualLogFile = argv[2];
 	}
-    }	
-  else 
+    }
+  else
     {
       aPath=argv[1];
       aName=argv[2];
       aSpecificitiesFileName = argv[3];
       aMapFromCjrlJointToRank = argv[4];
     }
-  
+
   dynamicsJRLJapan::ObjectFactory dynFactory;
   CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createHumanoidDynamicRobot();
   CjrlHumanoidDynamicRobot * aHDR2 = dynFactory.createHumanoidDynamicRobot();
 
   if (aHDR==0)
-    { 
+    {
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
   }
@@ -290,10 +290,10 @@ int main(int argc, char *argv[])
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
-  
+
   for(int i=0;i<(NbOfDofs-6 < 41 ? NbOfDofs-6 : 40) ;i++)
     aCurrentConf[lindex++] = 0.0;
-  
+
   aHDR->currentConfiguration(aCurrentConf);
 
   aHDR2->currentConfiguration(aCurrentConf);
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
   ActualStateFile.open((char *)ActualLogFile.c_str(),ifstream::in);
   if (!ActualStateFile.is_open())
     {
-      cerr << "Unable to open actual state file: " << 
+      cerr << "Unable to open actual state file: " <<
 	ActualLogFile << endl;
       exit(-1);
     }
@@ -320,11 +320,11 @@ int main(int argc, char *argv[])
   RefStateFile.open((char *)RefLogFile.c_str(),ifstream::in);
   if (!RefStateFile.is_open())
     {
-      cerr << "Unable to open reference state file: " << 
+      cerr << "Unable to open reference state file: " <<
 	RefLogFile << endl;
       exit(-1);
     }
-  
+
   ofstream RebuildZMP;
   RebuildZMP.open("RebuildZMP.dat",ofstream::out);
   RebuildZMP.close();
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
       double NormalForces[2]={0.0,0.0};
       double ActualData[131];
       double RefData[100];
-  
+
       double RotationFreeFlyer[9];
 
       for(unsigned int i=0;i<131;i++)
@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
 			 NbIt,
 			 WaistFromActual,
 			 PreviousSupportFoot);
-			 
+
       SaveWaistPositions(WaistFromRef, WaistFromActual);
 
       if (1)
@@ -441,51 +441,51 @@ int main(int argc, char *argv[])
 	   for(unsigned int i=0;i<6;i++)
 	     aCurrentConf[i] = WaistFromRef[i];
 	}
-      
+
       aHDR->currentConfiguration(aCurrentConf);
       aHDR->computeForwardKinematics();
 
       vector3d ZMPval;
       ZMPval = aHDR->zeroMomentumPoint();
-     
+
       matrix4d TrLF = LeftFoot->currentTransformation();
       matrix4d TrRF = RightFoot->currentTransformation();
       matrix4d TrLF2 = LeftFoot2->currentTransformation();
       matrix4d TrRF2 = RightFoot2->currentTransformation();
 
       double lnorm  = NormalForces[0] + NormalForces[1];
-      
+
       RebuildZMP.open("RebuildZMP.dat",ofstream::app);
-      RebuildZMP << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) * NormalForces[0] + 
+      RebuildZMP << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) * NormalForces[0] +
 		     MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) * NormalForces[1])/ lnorm  << " "
-		 << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) * NormalForces[0] + 
-		     MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) * NormalForces[1])/ lnorm  << " " 
-		 << ZMPval(0) << " " << ZMPval(1) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,2,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) << " " 
+		 << (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) * NormalForces[0] +
+		     MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) * NormalForces[1])/ lnorm  << " "
+		 << ZMPval(0) << " " << ZMPval(1) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,2,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) << " "
 		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,2,3) << " "
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,0,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,1,3) << " " 
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,0,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,1,3) << " "
 		 << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,2,3) << " "
-		 << PreviousSupportFoot << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,0,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,1,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,0,3) << " " 
-		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,1,3) << " " 
+		 << PreviousSupportFoot << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,0,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,1,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,0,3) << " "
+		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,1,3) << " "
 		 << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3) << endl;
       //92
       RebuildZMP.close();
 
-      
+
       NbIt++;
     }
-  
+
   ActualStateFile.close();
-  
+
   delete aHDR;
-  
+
 }

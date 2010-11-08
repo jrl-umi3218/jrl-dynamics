@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kannoun
  * Florent Lamiraux
@@ -36,7 +36,7 @@ Hand::Hand()
   attAssociatedWrist = 0;
 }
 
-void Hand::setAssociatedWrist(const CjrlJoint * inWristJoint) 
+void Hand::setAssociatedWrist(const CjrlJoint * inWristJoint)
 {
   attAssociatedWrist=inWristJoint;
 }

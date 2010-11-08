@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -29,47 +29,47 @@
 namespace dynamicsJRLJapan
 {
   namespace HumanoidSpecificitiesData {
-    
-    
+
+
     namespace fusion = boost::fusion;
     namespace phoenix = boost::phoenix;
     namespace qi = boost::spirit::qi;
     namespace ascii = boost::spirit::ascii;
-    
+
 
     int ReadXMLData5(std::string &aFileName,
 		     HandNode &ast)
     {
       std::ifstream in((char *)aFileName.c_str(), std::ios_base::in);
-      
+
       if (!in)
 	{
 	  std::cerr << "Error: Could not open input file: "
 		    << aFileName << std::endl;
 	  return 1;
 	}
-      
+
       std::string storage; // We will read the contents here.
       in.unsetf(std::ios::skipws); // No white space skipping!
       std::copy(
 		std::istream_iterator<char>(in),
 		std::istream_iterator<char>(),
 		std::back_inserter(storage));
-      
-      
-      struct HandNode_parser<std::string::const_iterator> 
+
+
+      struct HandNode_parser<std::string::const_iterator>
 	hsxml; // Our grammar
 
-      
+
       using boost::spirit::ascii::space;
       std::string::const_iterator iter = storage.begin();
       std::string::const_iterator end = storage.end();
-      
+
       // this will print something like: boost::fusion::vector2<int, double>
       display_attribute_of_parser(hsxml);
-      
+
       bool r = phrase_parse(iter, end, hsxml, space, ast);
-      
+
       if (r && iter == end)
 	{
 	  std::cout << "-------------------------\n";
@@ -94,35 +94,35 @@ namespace dynamicsJRLJapan
 		     HumanoidNode &ast)
     {
       std::ifstream in((char *)aFileName.c_str(), std::ios_base::in);
-      
+
       if (!in)
 	{
 	  std::cerr << "Error: Could not open input file: "
 		    << aFileName << std::endl;
 	  return 1;
 	}
-      
+
       std::string storage; // We will read the contents here.
       in.unsetf(std::ios::skipws); // No white space skipping!
       std::copy(
 		std::istream_iterator<char>(in),
 		std::istream_iterator<char>(),
 		std::back_inserter(storage));
-      
-      
-      struct HumanoidNode_parser<std::string::const_iterator> 
+
+
+      struct HumanoidNode_parser<std::string::const_iterator>
 	hsxml; // Our grammar
 
-      
+
       using boost::spirit::ascii::space;
       std::string::const_iterator iter = storage.begin();
       std::string::const_iterator end = storage.end();
-      
+
       // this will print something like: boost::fusion::vector2<int, double>
       display_attribute_of_parser(hsxml);
-      
+
       bool r = phrase_parse(iter, end, hsxml, space, ast);
-      
+
       if (r && iter == end)
 	{
 	  std::cout << "-------------------------\n";
@@ -146,35 +146,35 @@ namespace dynamicsJRLJapan
 		     HumanoidNode &ast)
     {
       std::ifstream in((char *)aFileName.c_str(), std::ios_base::in);
-      
+
       if (!in)
 	{
 	  std::cerr << "Error: Could not open input file: "
 		    << aFileName << std::endl;
 	  return 1;
 	}
-      
+
       std::string storage; // We will read the contents here.
       in.unsetf(std::ios::skipws); // No white space skipping!
       std::copy(
 		std::istream_iterator<char>(in),
 		std::istream_iterator<char>(),
 		std::back_inserter(storage));
-      
-      
-      struct IHumanoidNode_parser<std::string::const_iterator> 
+
+
+      struct IHumanoidNode_parser<std::string::const_iterator>
 	asc; // Our grammar
 
-      
+
       using boost::spirit::ascii::space;
       std::string::const_iterator iter = storage.begin();
       std::string::const_iterator end = storage.end();
-      
+
       // this will print something like: boost::fusion::vector2<int, double>
       display_attribute_of_parser(asc);
-      
+
       bool r = phrase_parse(iter, end, asc, space, ast);
-      
+
       if (r && iter == end)
 	{
 	  std::cout << "-------------------------\n";
@@ -194,7 +194,7 @@ namespace dynamicsJRLJapan
 	}
     }
 
-  };  
+  };
 };
 
 int main()

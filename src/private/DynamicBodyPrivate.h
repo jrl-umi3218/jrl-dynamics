@@ -1,5 +1,5 @@
 /*
- * Copyright 2005, 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2005, 2006, 2007, 2008, 2009, 2010,
  *
  * Jean-Remy Chardonnet
  * Abderrahmane Kheddar
@@ -28,8 +28,8 @@
  *
  */
 
-/* Computation of the dynamical aspect for the body 
-   of a model. 
+/* Computation of the dynamical aspect for the body
+   of a model.
 */
 
 #ifndef DYNAMICBODYPRIVATE_H
@@ -46,21 +46,21 @@
 namespace dynamicsJRLJapan
 {
 
-  /*! Fundamental class to store the dynamical information for one body. 
+  /*! Fundamental class to store the dynamical information for one body.
     @ingroup forwardynamics
   */
   class DynamicBodyPrivate : public Body
   {
-    
+
   public:
-    
+
     /*! Force vector applied to the body. */
     vector3d m_Force;
     /*! Torque vector applied to the body.  */
     vector3d m_Torque;
 
     matrix3d Riip1,Riip1t;
-    
+
     /*! This relationship does make sense only if we are considering the
       relationship between this body and its mother in a given oriented
       graph.
@@ -68,18 +68,18 @@ namespace dynamicsJRLJapan
       u = torque
       uu, dd = intermediate variables */
     double q, dq, ddq, u, uu, dd, gr, Ir;
-    
+
     /*! Information coded as matrices:
-      
+
     - \a R = current body's orientation,
     - \a R_static = static body's orientation (related to its mother).
     */
     matrix3d  R,R_static;
-    
+
 
     /*! Here are the physical parameters
       (as defined in Kajita's book page 46 figure 2.20)
-      / addition with M.W. Spong Book. 
+      / addition with M.W. Spong Book.
       - \a a  = rotation vector,
       - \a b  = translation vector,
       - \a w_c = center of mass in reference frame,
@@ -100,8 +100,8 @@ namespace dynamicsJRLJapan
       - \a w_a = axis for revolute joint in the global reference frame.
     */
     vector3d a, b, w_c, p,
-      v0,  dv,  
-      w, lw,  
+      v0,  dv,
+      w, lw,
       dw, ldw,
       w_a, ldv,
       ldv_c;
@@ -116,14 +116,14 @@ namespace dynamicsJRLJapan
 
     int sister;
     int child;
-    
+
     /*! Default Constructor. */
     DynamicBodyPrivate();
 
     /*! Default Destructor. */
     virtual ~DynamicBodyPrivate();
 
-    /*! \name Assignment operator 
+    /*! \name Assignment operator
       @{
      */
     /*! From a dynamical body. */
@@ -131,8 +131,8 @@ namespace dynamicsJRLJapan
     /*! From a body */
     DynamicBodyPrivate & operator=(const Body & r);
     /*! @} */
-    
-    
+
+
 
   };
 

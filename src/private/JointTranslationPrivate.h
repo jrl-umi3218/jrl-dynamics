@@ -1,9 +1,9 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -41,27 +41,27 @@
 using namespace std;
 
 namespace dynamicsJRLJapan
-{  
+{
     class DynamicBodyPrivate;
     class JointTranslationPrivate : public JointPrivate
     {
     public:
-      /*! \brief Translation joint with no know position 
+      /*! \brief Translation joint with no know position
 	Does trigger a normalization */
       JointTranslationPrivate();
 
-      /*! \brief Translation joint with no know position 
+      /*! \brief Translation joint with no know position
 	Does trigger a normalization */
       JointTranslationPrivate(const JointTranslationPrivate &a);
 
-      /*! \brief Translation joint with know position 
+      /*! \brief Translation joint with know position
        Does not trigger any normalization*/
       JointTranslationPrivate(const matrix4d &inInitialPosition);
       virtual ~JointTranslationPrivate();
 
-      /*! 
-	\brief Compute position and orientation for state vector 
-	given inDofVector. 
+      /*!
+	\brief Compute position and orientation for state vector
+	given inDofVector.
 	\param inDofVector: The current configuration of the robot.
 	\return false is the number of dofs is not sufficient. */
       bool updateTransformation(const vectorN & inDofVector);
@@ -74,9 +74,9 @@ namespace dynamicsJRLJapan
       bool updateAcceleration(const vectorN & inRobotConfigVector,
 			      const vectorN & inRobotSpeedVector,
 			      const vectorN & inRobotAccelerationVector);
-      
+
       /*! \brief Here the number of DOFs is 6. */
-      unsigned int numberDof() const 
+      unsigned int numberDof() const
       { return 1;};
 
     };

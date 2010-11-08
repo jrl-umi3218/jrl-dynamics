@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse
@@ -24,7 +24,7 @@
  *  Laboratory (JRL)
  *
  */
-/*! This object is an abstract layer on the specificities of 
+/*! This object is an abstract layer on the specificities of
    a robot humanoid
 */
 #ifndef _JRLCIRDYNAMICS_HUMANOID_SPECIFICITIES_JRL_JAPAN_H_
@@ -34,8 +34,8 @@
 
 namespace dynamicsJRLJapan
 {
-    
-  typedef struct 
+
+  typedef struct
   {
     vector3d Center[2];
     vector3d okayAxis[2];
@@ -43,7 +43,7 @@ namespace dynamicsJRLJapan
     vector3d palmAxis[2];
   } HandsData;
 
-  /*@! This Object here implements the constants 
+  /*@! This Object here implements the constants
     and the specificities of HRP-2.
     */
   class HumanoidSpecificities
@@ -55,17 +55,17 @@ namespace dynamicsJRLJapan
 
     // Destructor
     ~HumanoidSpecificities();
-    
+
     // Returns the width of the foot given in parameter:
     // @param WhichFoot : -1 Right foot 1 Left foot.
     // @paran Depth: depth of the foot (X)
-    // @param Width: width of the foot (Y), 
+    // @param Width: width of the foot (Y),
     // @param Height: height of the foot (Z),
-    // @param 
+    // @param
     // @return -1 if an error occured,
     //  0 otherwise.
     int GetFootSize(int WhichFoot, double &Depth, double &Width,double &Height);
-    
+
     // Returns the width of the foot given in parameter:
     // @param aFileName : Name of the file where the humanoid parameters are stored.
     int ReadXML(string & aFileName);
@@ -87,11 +87,11 @@ namespace dynamicsJRLJapan
     double GetUpperArmLength(int WhichSide);
 
     // Returns the length of the Fore arm
-    // @param WhichSide: -1 Right 1 Left.    
+    // @param WhichSide: -1 Right 1 Left.
     double GetForeArmLength(int WhichSide);
 
     // Returns the ankle position
-    // @param WhichSide: -1 Right 1 Left.    
+    // @param WhichSide: -1 Right 1 Left.
     // @return AnklePosition: (X,Y,Z)
     void GetAnklePosition(int WhichSide, double AnklePosition[3]);
 
@@ -99,17 +99,17 @@ namespace dynamicsJRLJapan
     // @param WhichSide: -1 Right 1 Left.
     // @ return WaistToHip translation.
     void GetWaistToHip(int WhichSide, double WaistToHip[3]);
-    
+
     // Returns the Hip's length, for instance in HRP-2 the Y-axis
     // for the hip is translated regarding the X and Z axis.
     // @param WhichSide: -1 Right 1 Left.
     // @ return Hip lenght.
     void GetHipLength(int WhichSide,double HipLength[3]);
 
-    /*! \name Joints related methods 
+    /*! \name Joints related methods
       @{
      */
-    
+
     // Returns the number of joints for the arms */
     int GetArmJointNb(int WhichSide);
 
@@ -127,20 +127,20 @@ namespace dynamicsJRLJapan
 
     // Returns the joints for one foot */
     const std::vector<int> & GetFootJoints(int WhichSide);
-    
-    
+
+
     // Returns the number of joints for the head */
     int GetHeadJointNb();
 
     // Returns the joints for the head*/
     const std::vector<int> & GetHeadJoints();
-    
+
    // Returns the number of joints for the Chest */
     int GetChestJointNb();
 
     // Returns the joints for the Chest*/
     const std::vector<int> & GetChestJoints();
- 
+
     // Returns the number of joints for the Upper Body.
     int GetUpperBodyJointNb();
 
@@ -166,7 +166,7 @@ namespace dynamicsJRLJapan
 
     /*! Init the upper body joints. */
     int InitUpperBodyJoints();
-    
+
     /*! \brief  Store foot's height, width and depth. */
     double m_FootHeight[2]; // (Z)
     double m_FootWidth[2]; // (Y)
@@ -180,10 +180,10 @@ namespace dynamicsJRLJapan
 
     /*! \brief Store position of the ankles in the feet. */
     double m_AnklePosition[2][3];
-    
+
     /*! \brief Tibia's length */
     double m_TibiaLength[2];
-    
+
     /*! \brief Femur's length */
     double m_FemurLength[2];
 
@@ -228,7 +228,7 @@ namespace dynamicsJRLJapan
 
     /*! \brief Number of upper body joints.
       The algorithm is quite simple:
-      m_HeadJointNb + m_ChestJointNb + m_ArmJointNb[0] 
+      m_HeadJointNb + m_ChestJointNb + m_ArmJointNb[0]
       + m_ArmJointNb[1]
      */
     int m_UpperBodyJointNb;
@@ -240,13 +240,13 @@ namespace dynamicsJRLJapan
 
     /*! \brief Number of waist joint. */
     int m_WaistJointNb;
-    
+
     /*! \brief List of waist joints. */
     std::vector<int> m_WaistJoints;
 
     /*! \brief Number of waist joint. */
     int m_WristsJointNb[2];
-    
+
     /*! \brief List of waist joints. */
     std::vector<int> m_WristsJoints[2];
 

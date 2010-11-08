@@ -1,5 +1,5 @@
 /*
- * Copyright 2005, 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2005, 2006, 2007, 2008, 2009, 2010,
  *
  * Adrien Escande
  * Abderrahmane Kheddar
@@ -57,7 +57,7 @@ Body::Body(void)
   m_Initialized = false;
 }
 
-Body::Body(double lmass) 
+Body::Body(double lmass)
 {
   m_AttachedJoint =0;
   this->m_mass		= lmass;
@@ -65,23 +65,23 @@ Body::Body(double lmass)
   m_Initialized = false;
 }
 
-Body::Body(double lmass, 
-	   MAL_S3_VECTOR(positionCoM,double)) 
+Body::Body(double lmass,
+	   MAL_S3_VECTOR(positionCoM,double))
 {
   m_AttachedJoint =0;
   this->m_mass		= lmass;
-  m_Explored =0 ;  
+  m_Explored =0 ;
   m_Initialized = false;
   this->posCoM	= positionCoM;
 }
-Body::Body(double lmass, 
-	   MAL_S3_VECTOR(positionCoM,double), 
-	   MAL_S3x3_MATRIX(matriceInertie,double)) 
+Body::Body(double lmass,
+	   MAL_S3_VECTOR(positionCoM,double),
+	   MAL_S3x3_MATRIX(matriceInertie,double))
 {
   m_AttachedJoint =0;
   this->posCoM	= positionCoM;
   this->m_mass		= lmass;
-  m_Explored =0 ;  
+  m_Explored =0 ;
   m_Initialized = false;
   this->inertie	= matriceInertie;
 }
@@ -185,7 +185,7 @@ void Body::Display(ostream &os)
 {
   os << "Name  :" << Name << endl;
   os << "Mass :" << m_mass << endl;
-  os << "Center of Mass    : " << posCoM[0] << " " 
+  os << "Center of Mass    : " << posCoM[0] << " "
        << posCoM[1] << " " <<posCoM[2]<<endl;
   os << "Inertia Matrix : " << endl;
   for(int i=0;i<3;i++)
@@ -219,7 +219,7 @@ const MAL_S3x3_MATRIX(,double) & Body::inertiaMatrix() const
 }
 
 
-void Body::inertiaMatrix(const MAL_S3x3_MATRIX(,double) &inInertiaMatrix) 
+void Body::inertiaMatrix(const MAL_S3x3_MATRIX(,double) &inInertiaMatrix)
 {
   inertie = inInertiaMatrix;
 }
@@ -248,7 +248,7 @@ ostream & operator<<(ostream & os, const Body & r)
 
   vector3d posCoM = r.localCenterOfMass();
 
-  os << "Center of Mass    : " << posCoM[0] << " " 
+  os << "Center of Mass    : " << posCoM[0] << " "
        << posCoM[1] << " " <<posCoM[2]<<endl;
   matrix3d inertie = r.inertiaMatrix();
   os << "Inertia Matrix : " << endl;

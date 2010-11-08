@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -35,7 +35,7 @@
 
  namespace dynamicsJRLJapan
  {
-   /*! \name Display related functions. 
+   /*! \name Display related functions.
       @{
     */
 
@@ -49,17 +49,17 @@
    void dvd3d(vector3d &av3d, std::ostream &os);
 
    /*! \brief Display a 3x3 matrix in os with a shift. */
-   void dm3d(const matrix3d &todisplay, 
+   void dm3d(const matrix3d &todisplay,
 	     std::ostream &os,
 	     std::string shifttab);
 
    /*! \brief Display a 4x4 matrix in os with a shift. */
-   void dm4d(const matrix4d &todisplay, 
+   void dm4d(const matrix4d &todisplay,
 	     std::ostream &os,
 	     std::string shifttab);
 
    /*! \brief Display a 4x4 matrix in os as a vector. */
-   void dm4dv(const matrix4d &todisplay, 
+   void dm4dv(const matrix4d &todisplay,
 	     std::ostream &os);
 
    /*! @} */
@@ -88,13 +88,13 @@
 			std::ostream &tcout);
 
    /*! \brief Display forces */
-   void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
-		      std::string &shifttab, 
+   void DisplayForces(CjrlHumanoidDynamicRobot *aHDR,
+		      std::string &shifttab,
 		      std::ostream &tcout);
 
    /*! \brief Display torques */
-   void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
-		       std::string &shifttab, 
+   void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR,
+		       std::string &shifttab,
 		       std::ostream &tcout);
 
    /*! \brief Display linear velocity */
@@ -121,7 +121,7 @@
 		       std::ostream &tcout);
 
   /*! \brief Display all the joints of a kinematic subtree */
-  void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
+  void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
 				std::ostream &tcout,
 				unsigned int verbosedisplay=0,
 				unsigned int ldepth=0);

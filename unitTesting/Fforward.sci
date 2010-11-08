@@ -8,7 +8,7 @@
 // mw : angular velocities (local reference frame).
 // mdv : linear velocities (local reference frame).
 // mdw : angular velocities (local reference frame).
-// mR : rotation of the joint in their parent reference frame 
+// mR : rotation of the joint in their parent reference frame
 //      this include the static rotation and the joint rotation.
 // mRA : rotation of the joint in the World/Absolute reference frame.
 // mRS : static rotation of the joint in their parent reference frame
@@ -21,7 +21,7 @@
 // ldw: angular acceleration in local reference frame.
 // ldv: linear acceleration in local reference frame.
 //
-// Copyright 2010, 
+// Copyright 2010,
 //
 // Olivier Stasse,
 //

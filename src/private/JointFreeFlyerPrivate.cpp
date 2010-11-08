@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith
  * Olivier Stasse
@@ -62,7 +62,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inI
 
   axis(laxis);
   m_dof6D.resize(6,false);
-   
+
 }
 
 JointFreeflyerPrivate::~JointFreeflyerPrivate()
@@ -71,10 +71,10 @@ JointFreeflyerPrivate::~JointFreeflyerPrivate()
 
 bool JointFreeflyerPrivate::updateTransformation(const vectorN & inDofVector)
 {
-  
+
   for (unsigned int i=0; i<6; i++)
     m_dof6D(i) = inDofVector(rankInConfiguration() + i);
-  
+
   UpdatePoseFrom6DOFsVector(m_dof6D);
   return true;
 }
@@ -83,14 +83,14 @@ bool JointFreeflyerPrivate::updateVelocity(const vectorN & inRobotConfigVector,
 					   const vectorN & inRobotSpeedVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  
+
   for(unsigned int i=0;i<3;i++)
     {
       currentBody->v0[i] = inRobotSpeedVector(rankInConfiguration()+i);
 
-      currentBody->w[i] = 
+      currentBody->w[i] =
 	currentBody->lw[i] = inRobotSpeedVector(rankInConfiguration()+i+3);
-            
+
     }
   return true;
 }
@@ -100,12 +100,12 @@ bool JointFreeflyerPrivate::updateAcceleration(const vectorN & inRobotConfigVect
 					       const vectorN & inRobotAccelerationVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  
+
   for(unsigned int i=0;i<3;i++)
     {
-      currentBody->dv[i] = 
+      currentBody->dv[i] =
 	currentBody->ldv[i] = inRobotAccelerationVector(rankInConfiguration()+i);
-      currentBody->dw[i] = 
+      currentBody->dw[i] =
 	currentBody->ldw[i] = inRobotAccelerationVector(rankInConfiguration()+i+3);
     }
   return true;

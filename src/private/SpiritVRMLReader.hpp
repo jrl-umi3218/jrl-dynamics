@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -84,7 +84,7 @@ using namespace phoenix;
 #define SVRBIND(x) &x
 #define SVRBIND2(x,y) bind(&SpiritOpenHRP::x)y
 
-namespace dynamicsJRLJapan 
+namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
@@ -100,7 +100,7 @@ namespace dynamicsJRLJapan
 
       // Joint memory allocation done for new depth.
       //bool JointMemoryAllocationForNewDepth;
-      
+
       // Current Link.
       internalLink CurrentLink;
 
@@ -134,10 +134,10 @@ namespace dynamicsJRLJapan
       {
 	CurrentLink.aJoint = 0;
       }
-      
+
       // String for the url.
       BodyGeometricalData m_BodyGeometry;
-      
+
       // Generic vector3d.
       vector3d m_Genericvec3d;
 
@@ -154,14 +154,14 @@ namespace dynamicsJRLJapan
 	{
 	  skip_r = space_p | comment_p("#",eol_p);
 	};
-	
+
 	rule<ScannerT> skip_r;
 	rule<ScannerT> const& start() const {return skip_r;}
       };
     };
 
 
-  
+
     /*! \brief Object to read a VRML file in the OpenHRP format. */
     struct SpiritOpenHRP : public grammar<SpiritOpenHRP>
     {
@@ -170,45 +170,45 @@ namespace dynamicsJRLJapan
       {
 	string s(str,end);
 	if (m_Verbose>1)
-	  std::cout<< "fskyColor: "<< s<< endl;  
+	  std::cout<< "fskyColor: "<< s<< endl;
       }
-    
+
       void fViewpointPos(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
-	  std::cout<< "fViewpointPos: "<< s<< endl;  
+	  std::cout<< "fViewpointPos: "<< s<< endl;
       }
-    
+
       void fViewpointOri(char const *str, char const *end) const
-      { 
+      {
 	string s(str,end);
 	if (m_Verbose>1)
-	  std::cout<< "fViewpointOri: "<< s<< endl;  
+	  std::cout<< "fViewpointOri: "<< s<< endl;
       }
-    
+
       void fNI_Type(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "fNIType: "<< s<< endl;
-      
+
       }
-    
+
       void fNI_Headlight(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "fHeadlight: "<< s<< endl;
-      
+
       }
-    
+
       void fNI_AvatarSize(double s) const
       {
 	if (m_Verbose>1)
 	  std::cout<< "fAvataSize: "<< s<< endl;
       }
-    
+
       void fSFInt32(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -236,7 +236,7 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<< "fTCBChildren: " << s<< endl;
       }
-       
+
       void fDisplay(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -283,28 +283,28 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<<"fTransformToField: "<< s<< endl;
       }
-    
+
       void fISFromNameToField(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<<"ISFromNameToField: "<< s<< endl;
       }
-    
+
       void fProtoSndBlock(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<<"ProtoSndBlock: "<< s<< endl;
       }
-    
+
       void fProtoBlock(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<<"ProtoBlock: "<< s<< endl;
       }
-    
+
       void fNameToField(char const* str, char const* end) const
       {
 	string s(str,end);
@@ -317,28 +317,28 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout<<"IS NameToField:" << s<< endl;
       }
-    
-      void fIgnoreComment(char const *str, char const *end) const 
+
+      void fIgnoreComment(char const *str, char const *end) const
       {
 	string s(str,end);
 	//  std::cout << "IgnoreComment :" << s << endl;
       }
-    
+
       void fProtoLineName(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout << "fProtoLineName :" << s << endl;
       }
-    
+
       void ProtoType(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout << "ProtoType :" << s << endl;
       }
-    
-    
+
+
       void GiveDataDefault(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -352,7 +352,7 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout << "HumanoidBody :" << s << endl;
       }
-    
+
       void fAssignHumanoidName(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -398,23 +398,23 @@ namespace dynamicsJRLJapan
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "Block of the body children: |" << s<<"|" << endl;
-	
+
       }
       void fBodySubBlock(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "Sub Block of the body : |" << s<<"|" << endl;
-	
+
       }
-      
+
       void fProtoName(char const *str, char const *end) const
       {
 	string s(str,end);
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the proto: |" << s<<"|" << endl;
       }
-    
+
       void fAddBody() const
       {
 	if (m_Verbose>1)
@@ -431,7 +431,7 @@ namespace dynamicsJRLJapan
 	if (m_DataForParsing->Depth!=0)
 	  {
 	    lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
-	    
+
 	  }
 	m_MultiBody->addBody(*lCurrentBody);
 	m_MultiBody->addLink(*m_DataForParsing->CurrentBody[lDepth-1],
@@ -451,14 +451,14 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->aName=s;
 	if (m_Verbose>1)
 	  std::cout<< "Reading aName (part of the JointChildrenBlock): |" << s<<"|" << endl;
-	
+
       }
-    
+
       void fDEFName(char const *str, char const *end) const
       {
 	string s(str,end);
 	m_DataForParsing->aName=s;
-	
+
 	if (m_Verbose>1)
 	  std::cout<< "Reading the name of the DEF block: |" << s<<"|" << endl;
       }
@@ -466,7 +466,7 @@ namespace dynamicsJRLJapan
       void fJointBlockName() const
       {
 	if (m_Verbose>1)
-	  std::cout<< "Reading the `name of the JointPrivate BlockName: |" 
+	  std::cout<< "Reading the `name of the JointPrivate BlockName: |"
 		   << m_DataForParsing->aName<<"| p: " << m_DataForParsing->CurrentLink.aJoint << endl;
       }
 
@@ -487,49 +487,49 @@ namespace dynamicsJRLJapan
 		     <<m_DataForParsing->CurrentBody[m_DataForParsing->Depth] << endl;
 	  }
       }
-    
+
       void fSFVec3f_0(double x) const
       {
 	m_DataForParsing->m_Genericvec3d(0) = x;
 	if (m_Verbose>1)
 	  std::cout<< "SFVec3f_0" << x<<"|" << endl;
       }
-    
+
       void fSFVec3f_1(double x) const
       {
 	m_DataForParsing->m_Genericvec3d(1) = x;
 	if (m_Verbose>1)
 	  std::cout<< "SFVec3f_1" << x<<"|" << endl;
-      
+
       }
-    
+
       void fSFVec3f_2(double x) const
       {
 	m_DataForParsing->m_Genericvec3d(2) = x;
 	if (m_Verbose>1)
 	  std::cout<< "SFVec3f_2" << x<<"|" << endl;
       }
-    
+
       void fPushGenericvec3d() const
       {
 	m_DataForParsing->m_vectorgvec3d.push_back(m_DataForParsing->m_Genericvec3d);
       }
-      
+
       void fJointTranslationX(double x) const
       {
 	m_DataForParsing->JointTranslation(0) = x;
       }
-    
+
       void fJointTranslationY(double y) const
       {
 	m_DataForParsing->JointTranslation(1) = y;
       }
-    
+
       void fJointTranslationZ(double z) const
       {
 	m_DataForParsing->JointTranslation(2) = z;
 
-	// IMPORTANT POLICY: all the free joint have their static 
+	// IMPORTANT POLICY: all the free joint have their static
 	// translation set to zero.
 	if (m_DataForParsing->CurrentLink.aJoint->type()!=JointPrivate::FREE_JOINT)
 	  m_DataForParsing->CurrentLink.aJoint->setStaticTranslation(m_DataForParsing->JointTranslation);
@@ -539,12 +539,12 @@ namespace dynamicsJRLJapan
 	    lnull(0) = lnull(1) = lnull(2) = 0.0;
 	    m_DataForParsing->CurrentLink.aJoint->setStaticTranslation(lnull);
 	  }
-	  
+
 	if (m_Verbose>1)
 	  cout << "JointPrivate" << m_DataForParsing->CurrentLink.aJoint->getName()
 	       << ":" << m_DataForParsing->JointTranslation << endl;
       }
-      
+
       void fTransformInstanceRotationX(double x) const
       {
 	if (m_Verbose>1)
@@ -573,17 +573,17 @@ namespace dynamicsJRLJapan
       {
 	m_DataForParsing->RotationAxis(0) = x;
       }
-    
+
       void fJointRotationY(double y) const
       {
 	m_DataForParsing->RotationAxis(1) = y;
       }
-    
+
       void fJointRotationZ(double z) const
       {
 	m_DataForParsing->RotationAxis(2) = z;
       }
-      
+
       void fJointRotationAngle(double lQ) const
       {
 	double lQuantity = lQ;
@@ -600,33 +600,33 @@ namespace dynamicsJRLJapan
 	    matrix3d pR = m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth-1];
 	    MAL_S3x3_C_eq_A_by_B(displayR,pR,R);
 	  }
-	else 
+	else
 	  {
-	    MAL_S3x3_MATRIX_SET_IDENTITY(displayR); 
+	    MAL_S3x3_MATRIX_SET_IDENTITY(displayR);
 	  }
 
 	m_DataForParsing->StackOfRotationMatrixDisplay[m_DataForParsing->Depth] = displayR;
         if (m_Verbose>1)
-	  cout << "StackOfRotationMatrixDisplay[" 
-	       << m_DataForParsing->Depth << " ] = " 
+	  cout << "StackOfRotationMatrixDisplay["
+	       << m_DataForParsing->Depth << " ] = "
 	       << displayR  << endl;
-	
-	// Then set the static rotation at the level joint 
-	// and 
+
+	// Then set the static rotation at the level joint
+	// and
 	m_DataForParsing->CurrentLink.aJoint->setStaticRotation(R);
 	m_DataForParsing->m_BodyGeometry.setRotationForDisplay(displayR);
 	if (lQ!=0.0)
 	  {
 	    if (m_Verbose>1){
-	      std::cerr << m_DataForParsing->aName 
+	      std::cerr << m_DataForParsing->aName
 			<< " JointRotation:" << R << endl;
-	      std::cerr << "Axis: "<< m_DataForParsing->RotationAxis 
+	      std::cerr << "Axis: "<< m_DataForParsing->RotationAxis
 			<< " angle: " << lQuantity<<endl;
 	      std::cerr << "displayR: " << displayR << endl;
 	    }
 	  }
       }
-      
+
       void fBodyMass(double mass) const
       {
 	m_DataForParsing->mass = mass;
@@ -637,7 +637,7 @@ namespace dynamicsJRLJapan
 	m_DataForParsing->cm[0] = x;
 	if (m_Verbose>1)
 	  std::cout << "fBodyCenterOfMassX :" << x << endl;
-	
+
       }
 
       void fBodyCenterOfMassY(double y) const
@@ -669,19 +669,19 @@ namespace dynamicsJRLJapan
       {
 	MAL_S3_VECTOR(lnull,double);
 	lnull[0]=0.0;lnull[1]=0.0;lnull[2]=0.0;
-  
+
 	string s(str,end);
 	if (m_Verbose>1)
 	  cout << "jointType: " << s << endl;
-	
+
 
 	if (s=="free")
 	  {
-	    
+
 	    m_DataForParsing->CurrentLink.aJoint = new JointFreeflyerPrivate();
 	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
-	    
+
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::FREE_JOINT);
 	  }
 	else if (s=="rotate")
@@ -690,7 +690,7 @@ namespace dynamicsJRLJapan
 	    m_DataForParsing->CurrentLink.aJoint = new JointRotationPrivate();
 	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
-	    
+
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	  }
 	else if (s=="slide")
@@ -698,11 +698,11 @@ namespace dynamicsJRLJapan
 	    m_DataForParsing->CurrentLink.aJoint = new JointTranslationPrivate();
 	    m_DataForParsing->CurrentLink.aJoint->setIDinActuated(-1);
 	    m_DataForParsing->CurrentLink.aJoint->setName(m_DataForParsing->aName);
-	    
+
 	    m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::PRISMATIC_JOINT);
-	    
+
 	  }
-	  
+
       }
 
       void fJointID(int aJointID)  const
@@ -722,15 +722,15 @@ namespace dynamicsJRLJapan
 
       void fJointYAxis(char const end)  const
       {
-	
+
 	MAL_S3_VECTOR(lyaxis,double);
 	lyaxis[0]=0.0;lyaxis[1]=1.0;lyaxis[2]=0.0;
 	m_DataForParsing->CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	m_DataForParsing->CurrentLink.aJoint->axis(lyaxis);
 
       }
-      
-      void fJointZAxis(char const end) const 
+
+      void fJointZAxis(char const end) const
       {
 	MAL_S3_VECTOR(lzaxis,double);
 	lzaxis[0]=0.0;lzaxis[1]=0.0;lzaxis[2]=1.0;
@@ -763,14 +763,14 @@ namespace dynamicsJRLJapan
       }
 
 
-      void fJointUVLimit(double r) const 
+      void fJointUVLimit(double r) const
       {
 	m_DataForParsing->CurrentLink.aJoint->upperVelocityBound(0,r);
 	if (m_Verbose>1)
 	  std::cout << "fJointUVLimit: "  << r << endl;
       }
 
-      void fJointEquivalentInertia(double r) const 
+      void fJointEquivalentInertia(double r) const
       {
 	m_DataForParsing->CurrentLink.aJoint->equivalentInertia(r);
 	if (m_Verbose>1)
@@ -959,7 +959,7 @@ namespace dynamicsJRLJapan
 	    m_DataForParsing->index_mi=0;
 	  }
       }
- 
+
       void fSensorBlockName(char const *str, char const *end) const
       {
 	string s(str,end);
@@ -1020,7 +1020,7 @@ namespace dynamicsJRLJapan
 	if (m_Verbose>1)
 	  std::cout << "VSID :" << aVSID << endl;
       }
-      
+
       void fIncreaseDepth() const
       {
 	int lDepth = m_DataForParsing->Depth;
@@ -1034,7 +1034,7 @@ namespace dynamicsJRLJapan
 		// If it is virtual then do a basic initialization.
 		Body * lCurrentBody = m_DataForParsing->CurrentBody[lDepth];
 		lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
-		
+
 		char Buffer[1024];
 		memset(Buffer,0,1024);
 		sprintf(Buffer,"VIRTUAL_%d", m_DataForParsing->NbOfBodies);
@@ -1044,7 +1044,7 @@ namespace dynamicsJRLJapan
 		m_MultiBody->addLink(*m_DataForParsing->CurrentBody[lDepth-1],
 				     *lCurrentBody,
 				     m_DataForParsing->CurrentLink);
-		
+
 		lCurrentBody->setLabelMother(m_DataForParsing->CurrentBody[lDepth-1]->getLabel());
 		lCurrentBody->setInitialized(true);
 	      }
@@ -1065,7 +1065,7 @@ namespace dynamicsJRLJapan
       void fDecreaseDepth() const
       {
 	m_DataForParsing->Depth--;
-	
+
 	if (m_Verbose>1)
 	  std::cout << "Decreased depth "<< m_DataForParsing->Depth << endl;
       }
@@ -1077,154 +1077,154 @@ namespace dynamicsJRLJapan
       {
 	m_Verbose = 5;
       }
-          
+
       template <typename ScannerT>
       struct definition
       {
 
 	// bool ParseVRMLFile(char const *str)
-      
+
 	definition(SpiritOpenHRP const &self)
 	{
-      
+
 	  // Basic types
 	  SFBool_r = str_p("TRUE") | str_p("FALSE");
 
-	  SFVec3f_r = real_p[SVRBIND2(fSFVec3f_0,(self,arg1))] >> 
-	    real_p[SVRBIND2(fSFVec3f_1,(self,arg1))] >> 
+	  SFVec3f_r = real_p[SVRBIND2(fSFVec3f_0,(self,arg1))] >>
+	    real_p[SVRBIND2(fSFVec3f_1,(self,arg1))] >>
 	    real_p[SVRBIND2(fSFVec3f_2,(self,arg1))];
-	  MFVec3f_r = *((SFVec3f_r)[SVRBIND2(fPushGenericvec3d,(self))] 
+	  MFVec3f_r = *((SFVec3f_r)[SVRBIND2(fPushGenericvec3d,(self))]
 			| ch_p(','));
 	  MFInt32_r = *(int_p | ch_p(','));
-	
+
 	  // Coordinate rules
 	  Coordinate_r = str_p("Coordinate")
-	    >> ch_p('{') 
+	    >> ch_p('{')
 	    >> str_p("point")
 	    >> str_p('[')
-	    >> MFVec3f_r 
+	    >> MFVec3f_r
 	    >> str_p(']')
 	    >> ch_p('}');
-	  
-	  // Fields to link a name and field 
+
+	  // Fields to link a name and field
 	  scaleMultiple_r = str_p("scale")>> !str_p("Orientation");
 	  NameToField_r = str_p("center") | str_p("children") |
 	    str_p("rotation") | scaleMultiple_r |
 	    str_p("translation") | str_p("bboxCenter") | str_p("bboxSize") |
 	    str_p("addChildren") | str_p("removeChildren") | str_p("viewpoints") | str_p("humanoidBody") |
 	    str_p("transmitter") | str_p("receiver");
-      
-	  TransformToField_r = (NameToField_r)[SVRBIND2(fNameToField,(self,arg1,arg2))] 
-	    >> *(blank_p) 
-	    >> (str_p("IS"))[SVRBIND2(fISFromNameToField,(self,arg1,arg2))] 
+
+	  TransformToField_r = (NameToField_r)[SVRBIND2(fNameToField,(self,arg1,arg2))]
+	    >> *(blank_p)
+	    >> (str_p("IS"))[SVRBIND2(fISFromNameToField,(self,arg1,arg2))]
 	    >> (NameToField_r)[SVRBIND2(fNameToField2,(self,arg1,arg2))];
 
 	  TransformInstanceRotation_r = str_p("rotation") >>
-	    (real_p)[SVRBIND2(fTransformInstanceRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fTransformInstanceRotationY,(self,arg1))] >> 
+	    (real_p)[SVRBIND2(fTransformInstanceRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fTransformInstanceRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fTransformInstanceRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fTransformInstanceRotationAngle,(self,arg1))];
 
 	  TransformInstanceTranslation_r = (str_p("translation"))[SVRBIND2(fDisplay,(self,arg1,arg2))] >>
 	    real_p>> real_p>> real_p;
-	
+
 	  // Fields for group
-	  GroupBlock_r = str_p("Group") 
-	    >> ch_p('{') 
-	    >> *(TransformToField_r) 
+	  GroupBlock_r = str_p("Group")
+	    >> ch_p('{')
+	    >> *(TransformToField_r)
 	    >> ch_p('}');
 
 	  Route_r = str_p("ROUTE")[SVRBIND2(fRoute,(self,arg1,arg2))]
 	    >> lexeme_d[+(alnum_p|'.'|'_')][SVRBIND2(fRoute,(self,arg1,arg2))]
 	    >> str_p("TO")[SVRBIND2(fRoute,(self,arg1,arg2))]
 	    >> lexeme_d[+(alnum_p|'.'|'_')][SVRBIND2(fRoute,(self,arg1,arg2))];
-      
+
 	  // Fields of Transform block.
-	  TCBChildrenBlock_r = ch_p('[') 
+	  TCBChildrenBlock_r = ch_p('[')
 	    >> *(GroupBlock_r|TransformBlock_r | ShapeInline_r | Sensors_r | Shape_r )
 	    >> ch_p(']');
 	  TCBChildren_r = (str_p("children"))
 	    [SVRBIND2(fTCBChildren,(self,arg1,arg2))]
 	    >> Shape_r | GroupBlock_r| ShapeInline_r | TransformBlock_r |Sensors_r | TCBChildrenBlock_r ;
-      
-	  TransformChildrenBlock_r = ch_p('[') 
-	    >> *(GroupBlock_r | TCBChildren_r) 
+
+	  TransformChildrenBlock_r = ch_p('[')
+	    >> *(GroupBlock_r | TCBChildren_r)
 	    >> ch_p(']');
-      
+
 	  TransformChildren_r= str_p("children")[SVRBIND2(fTransformChildren,(self,arg1,arg2))]
 	    >> ((str_p("IS")  >> str_p("children")) |
 		TransformChildrenBlock_r);
-	  
+
 	  TransformLine_r = (TransformToField_r)[SVRBIND2(fTransformToField,(self,arg1,arg2))]|
 	    TransformChildren_r | TCBChildren_r  ;
-      
-	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >> 
+
+	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >>
 			       (str_p("Transform"))[SVRBIND2(fTransformBlockDef,(self,arg1,arg2))] )
 			      |(str_p("Transform"))[SVRBIND2(fTransformBlock,(self,arg1,arg2))])
-	    >> ch_p('{') 
-	    >> *(TransformLine_r | TransformInstanceRotation_r | TransformInstanceTranslation_r) 
+	    >> ch_p('{')
+	    >> *(TransformLine_r | TransformInstanceRotation_r | TransformInstanceTranslation_r)
 	    >> ch_p('}');
-		  
-	  // Fields of Proto []block.
-      
-	  SFVec3f_r= str_p("SFVec3f") 
-	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] 
-	    >> real_p >> real_p >> real_p; 
-      
-	  MF_brackets_r= ch_p('[') >> ch_p(']');
-	  MFNode_r= str_p("MFNode") 
-	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] 
-	    >> !MF_brackets_r; 
 
-      
-	  SFNode_r= str_p("SFNode") 
-	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] 
-	    >> !((ch_p('[') >> ch_p(']')) | str_p("NULL")); 
-      
-	  MFFloat_r= str_p("MFFloat") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] 
-				      >>  ch_p('[') >> *(real_p) >> ch_p(']'); 
-      
-	  SFRotation_r= str_p("SFRotation") 
-	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] 
-	    >> real_p >> real_p >> real_p >> real_p; 
+	  // Fields of Proto []block.
+
+	  SFVec3f_r= str_p("SFVec3f")
+	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))]
+	    >> real_p >> real_p >> real_p;
+
+	  MF_brackets_r= ch_p('[') >> ch_p(']');
+	  MFNode_r= str_p("MFNode")
+	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))]
+	    >> !MF_brackets_r;
+
+
+	  SFNode_r= str_p("SFNode")
+	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))]
+	    >> !((ch_p('[') >> ch_p(']')) | str_p("NULL"));
+
+	  MFFloat_r= str_p("MFFloat") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))]
+				      >>  ch_p('[') >> *(real_p) >> ch_p(']');
+
+	  SFRotation_r= str_p("SFRotation")
+	    >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))]
+	    >> real_p >> real_p >> real_p >> real_p;
 
 	  SFString_r = str_p("SFString") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] >> ch_p('"') >>
 	    *(alnum_p|ch_p('.')) >> ch_p('"');
 
-	  MFString_r= str_p("MFString") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] >> !MF_brackets_r; 
+	  MFString_r= str_p("MFString") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] >> !MF_brackets_r;
 
 	  SFFloat_r = str_p("SFFloat") >> (+alpha_p)[SVRBIND2(fProtoLineName,(self,arg1,arg2))] >> *(real_p);
-  
-	  SFInt32_r = str_p("SFInt32") >> (+alpha_p)[SVRBIND2(fSFInt32,(self,arg1,arg2))] >> *(int_p);; 
+
+	  SFInt32_r = str_p("SFInt32") >> (+alpha_p)[SVRBIND2(fSFInt32,(self,arg1,arg2))] >> *(int_p);;
 	  ProtoLineTitle_r = str_p("exposedField") | str_p("field") | str_p("eventIn") ;
 
-	  ProtoLine_r=  ProtoLineTitle_r >> (SFVec3f_r | SFInt32_r | 
-					     SFNode_r | MFNode_r | MFFloat_r | 
+	  ProtoLine_r=  ProtoLineTitle_r >> (SFVec3f_r | SFInt32_r |
+					     SFNode_r | MFNode_r | MFFloat_r |
 					     SFRotation_r | SFString_r | MFString_r | SFFloat_r);
 
 	  ProtoBlock_r = ch_p('[') >> *(ProtoLine_r) >> ch_p(']');
 
 	  ProtoSndBlock_r = ch_p('{') >> *(TransformBlock_r| GroupBlock_r|Route_r )>> ch_p('}');
- 
-	  Proto_r= str_p("PROTO") >> (+alpha_p)[SVRBIND2(fProtoName,(self,arg1,arg2))] 
-				  >> (ProtoBlock_r)[SVRBIND2(fProtoBlock,(self,arg1, arg2))] 
+
+	  Proto_r= str_p("PROTO") >> (+alpha_p)[SVRBIND2(fProtoName,(self,arg1,arg2))]
+				  >> (ProtoBlock_r)[SVRBIND2(fProtoBlock,(self,arg1, arg2))]
 				  >> (ProtoSndBlock_r)[SVRBIND2(fProtoSndBlock,(self,arg1,arg2))];
-	
+
 	  // Part of the joints.
 
 	  // Read the translation of the joint.
-	  JointTranslation_r = str_p("translation") >> 
-	    (real_p)[SVRBIND2(fJointTranslationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fJointTranslationY,(self,arg1))] >> 
+	  JointTranslation_r = str_p("translation") >>
+	    (real_p)[SVRBIND2(fJointTranslationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fJointTranslationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fJointTranslationZ,(self,arg1))];
 
 	  // Read the rotation of the joint.
-	  JointRotation_r = str_p("rotation") >> 
-	    (real_p)[SVRBIND2(fJointRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fJointRotationY,(self,arg1))] >> 
+	  JointRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fJointRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fJointRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fJointRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fJointRotationAngle,(self,arg1))];
-    
+
 	  // Type of the joint.
 	  JointType_r = str_p("jointType") >> ch_p('"')
 					   >> (+alpha_p)[SVRBIND2(fJointType,(self,arg1,arg2))]
@@ -1234,9 +1234,9 @@ namespace dynamicsJRLJapan
 	  JointID_r = str_p("jointId") >> (int_p)[SVRBIND2(fJointID,(self,arg1))];
 
 	  // Specify the axis along which the rotation take place for this joint.
-	  JointAxis_r = str_p("jointAxis") >> ch_p('"') 
-					   >> ( (ch_p('X'))[SVRBIND2(fJointXAxis,(self,arg1))] | 
-						(ch_p('Y'))[SVRBIND2(fJointYAxis,(self,arg1))] | 
+	  JointAxis_r = str_p("jointAxis") >> ch_p('"')
+					   >> ( (ch_p('X'))[SVRBIND2(fJointXAxis,(self,arg1))] |
+						(ch_p('Y'))[SVRBIND2(fJointYAxis,(self,arg1))] |
 						(ch_p('Z'))[SVRBIND2(fJointZAxis,(self,arg1))] )
 					   >> ch_p('"');
 	  // Not used
@@ -1244,29 +1244,29 @@ namespace dynamicsJRLJapan
 				  >> ch_p(']'); // not used.
 
 	  // Lower Position Limit for the joint.
-	  Jointllimit_r = str_p("llimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointLLimit,(self,arg1))] 
-					  >> ch_p(']'); 
+	  Jointllimit_r = str_p("llimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointLLimit,(self,arg1))]
+					  >> ch_p(']');
 
 	  // Upper Position Limit for the joint.
-	  Jointulimit_r = str_p("ulimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointULimit,(self,arg1))] 
-					  >> ch_p(']'); 
- 
-	  // Lower Speed Limit for the joint 
-	  Jointlvlimit_r = str_p("lvlimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointLVLimit,(self,arg1))] 
-					    >> ch_p(']'); 
+	  Jointulimit_r = str_p("ulimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointULimit,(self,arg1))]
+					  >> ch_p(']');
+
+	  // Lower Speed Limit for the joint
+	  Jointlvlimit_r = str_p("lvlimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointLVLimit,(self,arg1))]
+					    >> ch_p(']');
 
 	  // Upper Speed Limit for the joint.
-	  Jointuvlimit_r = str_p("uvlimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointUVLimit,(self,arg1))] 
-					    >> ch_p(']'); 
+	  Jointuvlimit_r = str_p("uvlimit") >> ch_p('[') >> (real_p)[SVRBIND2(fJointUVLimit,(self,arg1))]
+					    >> ch_p(']');
 
 	  // Upper Speed Limit for the joint.
 	  Jointequivalentinertia_r = str_p("equivalentInertia") >> (real_p)[SVRBIND2(fJointEquivalentInertia,(self,arg1))] ;
-					    
- 
-	  JointField_r = JointType_r | 
-	    JointTranslation_r | 
-	    JointAxis_r | 
-	    JointRotation_r | 
+
+
+	  JointField_r = JointType_r |
+	    JointTranslation_r |
+	    JointAxis_r |
+	    JointRotation_r |
 	    JointID_r |
 	    Jointdh_r |
 	    Jointllimit_r |
@@ -1274,17 +1274,17 @@ namespace dynamicsJRLJapan
 	    Jointlvlimit_r |
 	    Jointuvlimit_r |
             Jointequivalentinertia_r ;
-	
+
 	  // Parts of the force sensor
-	  FSTranslation_r = str_p("translation") >> 
-	    (real_p)[SVRBIND2(fFSTranslationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fFSTranslationY,(self,arg1))] >> 
+	  FSTranslation_r = str_p("translation") >>
+	    (real_p)[SVRBIND2(fFSTranslationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fFSTranslationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fFSTranslationZ,(self,arg1))];
 
 	  // Read the rotation of the force sensor.
-	  FSRotation_r = str_p("rotation") >> 
-	    (real_p)[SVRBIND2(fFSRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fFSRotationY,(self,arg1))] >> 
+	  FSRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fFSRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fFSRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fFSRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fFSAngle,(self,arg1))];
 	  FSID_r = str_p("sensorId") >> (int_p)[SVRBIND2(fFSID,(self,arg1))];
@@ -1292,56 +1292,56 @@ namespace dynamicsJRLJapan
 	  ForceSensor_r = str_p("ForceSensor") >> ch_p('{') >> ForceSensorBlock_r >> ch_p('}');
 
 	  // Parts of the Gyroscope sensor
-	  GyroTranslation_r = str_p("translation") >> 
-	    (real_p)[SVRBIND2(fGyroTranslationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fGyroTranslationY,(self,arg1))] >> 
+	  GyroTranslation_r = str_p("translation") >>
+	    (real_p)[SVRBIND2(fGyroTranslationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fGyroTranslationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fGyroTranslationZ,(self,arg1))];
 
 	  // Read the rotation of the Gyroscope sensor.
-	  GyroRotation_r = str_p("rotation") >> 
-	    (real_p)[SVRBIND2(fGyroRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fGyroRotationY,(self,arg1))] >> 
+	  GyroRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fGyroRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fGyroRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fGyroRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fGyroAngle,(self,arg1))];
 	  GyroID_r = str_p("sensorId") >> (int_p)[SVRBIND2(fGyroID,(self,arg1))];
 	  GyrometerSensorBlock_r = *(GyroTranslation_r | GyroRotation_r | GyroID_r);
 	  GyrometerSensor_r =  str_p("Gyro") >> ch_p('{') >> GyrometerSensorBlock_r >> ch_p('}');
-  
+
 
 	  // Parts of the Acceleration sensor
-	  ASTranslation_r = str_p("translation") >> 
-	    (real_p)[SVRBIND2(fASTranslationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fASTranslationY,(self,arg1))] >> 
+	  ASTranslation_r = str_p("translation") >>
+	    (real_p)[SVRBIND2(fASTranslationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fASTranslationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fASTranslationZ,(self,arg1))];
 
 	  // Read the rotation of the Acceleration sensor.
-	  ASRotation_r = str_p("rotation") >> 
-	    (real_p)[SVRBIND2(fASRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fASRotationY,(self,arg1))] >> 
+	  ASRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fASRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fASRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fASRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fASAngle,(self,arg1))];
 	  ASID_r = str_p("sensorId") >> (int_p)[SVRBIND2(fASID,(self,arg1))];
 	  AccelerationSensorBlock_r = *(ASTranslation_r | ASRotation_r | ASID_r);
-	  AccelerationSensor_r =  str_p("AccelerationSensor") >> ch_p('{') 
+	  AccelerationSensor_r =  str_p("AccelerationSensor") >> ch_p('{')
 							      >> AccelerationSensorBlock_r >> ch_p('}');
-  
+
 	  // Read the vision sensor.
-  
-	  // Translation 
-	  VSTranslation_r = str_p("translation") >> 
-	    (real_p)[SVRBIND2(fVSTranslationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fVSTranslationY,(self,arg1))] >> 
+
+	  // Translation
+	  VSTranslation_r = str_p("translation") >>
+	    (real_p)[SVRBIND2(fVSTranslationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fVSTranslationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fVSTranslationZ,(self,arg1))];
 
 	  // Read the rotation of the Acceleration sensor.
-	  VSRotation_r = str_p("rotation") >> 
-	    (real_p)[SVRBIND2(fVSRotationX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fVSRotationY,(self,arg1))] >> 
+	  VSRotation_r = str_p("rotation") >>
+	    (real_p)[SVRBIND2(fVSRotationX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fVSRotationY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fVSRotationZ,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fVSAngle,(self,arg1))];
 
 	  VSID_r = str_p("sensorId") >> (int_p)[SVRBIND2(fVSID,(self,arg1))];
-  
+
 	  VSFrontClipDistance_r = str_p("frontClipDistance") >> real_p;
 	  VSBackClipDistance_r = str_p("backClipDistance") >> real_p;
 	  VSwidth_r = str_p("width") >> int_p;
@@ -1352,10 +1352,10 @@ namespace dynamicsJRLJapan
 
 	  VisionSensorBlock_r = *(VSTranslation_r | VSRotation_r | VSID_r |
 				  VSFrontClipDistance_r | VSBackClipDistance_r  |
-				  VSwidth_r | VSheight_r | VStype_r | VSName_r | 
+				  VSwidth_r | VSheight_r | VStype_r | VSName_r |
 				  VSFieldOfView_r  );
 	  VisionSensor_r = str_p("VisionSensor") >> ch_p('{') >> VisionSensorBlock_r >> ch_p('}');
-  
+
 	  CSAngle_r = (lexeme_d[+alnum_p])[SVRBIND2(fCSAngle,(self,arg1,arg2))]
 	    >> str_p("IS") >> (lexeme_d[+alnum_p])[SVRBIND2(fCSAngle,(self,arg1,arg2))];
 	  CylinderSensorBlock_r = *(CSAngle_r);
@@ -1375,18 +1375,18 @@ namespace dynamicsJRLJapan
 				    >> ListSensors_r ;
 
 	  // Parts of the body
-	  CenterOfMass_r = str_p("centerOfMass") >> 
-	    (real_p)[SVRBIND2(fBodyCenterOfMassX,(self,arg1))] >> 
-	    (real_p)[SVRBIND2(fBodyCenterOfMassY,(self,arg1))] >> 
+	  CenterOfMass_r = str_p("centerOfMass") >>
+	    (real_p)[SVRBIND2(fBodyCenterOfMassX,(self,arg1))] >>
+	    (real_p)[SVRBIND2(fBodyCenterOfMassY,(self,arg1))] >>
 	    (real_p)[SVRBIND2(fBodyCenterOfMassZ,(self,arg1))];
 
 	  Mass_r = str_p("mass") >> (real_p)[SVRBIND2(fBodyMass,(self,arg1))];
-	  MomentsOfInertia_r = str_p("momentsOfInertia") >> ch_p('[') 
+	  MomentsOfInertia_r = str_p("momentsOfInertia") >> ch_p('[')
 							 >> *((real_p)[SVRBIND2(fFillmomentsOfInertia,(self,arg1))])
 							 >> ch_p(']') ;
-	
+
 	  // Material block
-	  DiffuseColor_r = str_p("diffuseColor") >> 
+	  DiffuseColor_r = str_p("diffuseColor") >>
 	    real_p >> real_p >> real_p ;
 	  SpecularColor_r = str_p("specularColor") >>
 	    real_p >> real_p >> real_p;
@@ -1395,8 +1395,8 @@ namespace dynamicsJRLJapan
 	  Shininess_r = str_p("shininess") >> real_p;
 	  Transparency_r = str_p("transparency") >> real_p;
 	  AmbientIntensity_r = str_p("ambientIntensity") >> real_p;
-	
-	  MaterialBlock_r = *( DiffuseColor_r  | 
+
+	  MaterialBlock_r = *( DiffuseColor_r  |
 			       SpecularColor_r |
 			       EmissiveColor_r |
 			       Shininess_r     |
@@ -1404,37 +1404,37 @@ namespace dynamicsJRLJapan
 			       AmbientIntensity_r );
 
 	  // Appearance block
-	  AppearanceBlock_r = (str_p("material"))[SVRBIND2(fDisplay,(self,arg1,arg2))] 
+	  AppearanceBlock_r = (str_p("material"))[SVRBIND2(fDisplay,(self,arg1,arg2))]
 	    >> str_p("Material")
 	    >> ch_p('{') >> *(MaterialBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]) >> ch_p('}');
-	  
+
 	  AppearanceUse_r = str_p("USE")  >>  lexeme_d[+(alnum_p|'_')][SVRBIND2(fShapeBlock,(self,arg1,arg2))];
-	  AppearanceDef_r = str_p("DEF")  
-	    >> ( (lexeme_d[+(alnum_p|'_')][SVRBIND2(fDisplay,(self,arg1,arg2))] 
+	  AppearanceDef_r = str_p("DEF")
+	    >> ( (lexeme_d[+(alnum_p|'_')][SVRBIND2(fDisplay,(self,arg1,arg2))]
 		  >> str_p("Appearance")) | str_p("Appearance") )
-	    >>  ch_p('{') 
+	    >>  ch_p('{')
 	    >> AppearanceBlock_r[SVRBIND2(fDisplay,(self,arg1,arg2))]
 	    >> ch_p('}') ;
 
 	  AppearanceHeader_r = str_p("appearance")[SVRBIND2(fDisplay,(self,arg1,arg2))] >>
 	    (AppearanceDef_r[SVRBIND2(fDisplay,(self,arg1,arg2))] | AppearanceUse_r[SVRBIND2(fDisplay,(self,arg1,arg2))]);
-	  
+
 	  // Geometry block
 
-	  // 
+	  //
 	  // Box
-	  GeometryBox_r = str_p("Box")[SVRBIND2(fDisplay,(self,arg1,arg2))] 
-	    >>  ch_p('{') 
-	    >>  str_p("size") >> real_p >> real_p >>real_p 
+	  GeometryBox_r = str_p("Box")[SVRBIND2(fDisplay,(self,arg1,arg2))]
+	    >>  ch_p('{')
+	    >>  str_p("size") >> real_p >> real_p >>real_p
 	    >> ch_p('}');
-	  
+
 	  // Cylinder
-	  GeometryCylinder_r = str_p("Cylinder")[SVRBIND2(fDisplay,(self,arg1,arg2))] 
-	    >> ch_p('{') 
-	    >> str_p("radius") >> real_p 
-	    >> str_p("height") >> real_p 
+	  GeometryCylinder_r = str_p("Cylinder")[SVRBIND2(fDisplay,(self,arg1,arg2))]
+	    >> ch_p('{')
+	    >> str_p("radius") >> real_p
+	    >> str_p("height") >> real_p
 	    >> ch_p('}');
-	  
+
 	  // IndexedFaceSet
 
 	  IFSccwfield_r = str_p("ccw") >> SFBool_r;
@@ -1445,81 +1445,81 @@ namespace dynamicsJRLJapan
 
 	  IFScoordIndex_r = str_p("coordIndex")
 	    >> ch_p('[')
-	    >> *( MFInt32_r 
+	    >> *( MFInt32_r
 		  >> ((str_p("-1") >> ch_p(','))
 		      | str_p("-1")
 		      )
-		  ) 
+		  )
 	    >> ch_p(']');
-	
+
 	  IndexedFaceSet_r = str_p("IndexedFaceSet")
 	    >> ch_p ('{')
 	    >> IFSccwfield_r |
 	    IFSconvexfield_r |
 	    IFSsolidfield_r  |
 	    IFScreaseAngle_r |
-	    IFScoord_r 
+	    IFScoord_r
 	    >> ch_p ('{');
 	  // Header
-	  GeometryHeader_r = str_p("geometry")[SVRBIND2(fDisplay,(self,arg1,arg2))] 
-	    >>  GeometryBox_r |  
+	  GeometryHeader_r = str_p("geometry")[SVRBIND2(fDisplay,(self,arg1,arg2))]
+	    >>  GeometryBox_r |
 	    GeometryCylinder_r;
-	  
-	
+
+
 	  // Shape block
-	  ShapeBlock_r = AppearanceHeader_r | 
+	  ShapeBlock_r = AppearanceHeader_r |
 	    GeometryHeader_r[SVRBIND2(fDisplay,(self,arg1,arg2))];
-	  
+
 	  Shape_r = (str_p("Shape"))[SVRBIND2(fDisplay,(self,arg1,arg2))]
-	    >> ch_p('{') 
-	    >> *ShapeBlock_r 
+	    >> ch_p('{')
+	    >> *ShapeBlock_r
 	    >> ch_p('}');
 
 	  BodySubBlock_r =CenterOfMass_r | Mass_r | MomentsOfInertia_r ;
-	  ShapeInlineUrl_r = str_p("url") 
-	    >> ch_p('"') 
-	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[SVRBIND2(fBodyInlineUrl,(self,arg1,arg2))] 
+	  ShapeInlineUrl_r = str_p("url")
+	    >> ch_p('"')
+	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[SVRBIND2(fBodyInlineUrl,(self,arg1,arg2))]
 	    >> ch_p('"');
 
-	  ShapeBlockInline_r = ch_p('{') >> 
+	  ShapeBlockInline_r = ch_p('{') >>
 	    *(ShapeInlineUrl_r)>> ch_p('}');
-  
+
 	  ShapeInline_r = (str_p("Inline") >> ShapeBlockInline_r );
 
 	  BodyChildrenField_r=  ShapeInline_r | Sensors_r | Shape_r | TransformBlock_r;
-	
-	  BodyChildren_r = str_p("children") >> (ch_p('[') 
+
+	  BodyChildren_r = str_p("children") >> (ch_p('[')
 						 >> *BodyChildrenField_r
 						 >> ch_p(']')) |
 	        Shape_r;
-	  
+
 	  // Define the entry rules for body and hint
 	  BodyBlock_r =  (str_p("Segment"))[SVRBIND2(fBodySubBlockName,(self))]
 	    >> ch_p('{')
 	    >> *((BodySubBlock_r)[SVRBIND2(fBodySubBlock,(self,arg1,arg2))] |
 		 (BodyChildren_r)[SVRBIND2(fBodyChildren,(self,arg1,arg2))] )
 	    >> ch_p('}');
-	  
+
 	  JointChildrenDEFBlocks_r = str_p("DEF") >> (lexeme_d[+(alnum_p|ch_p('_'))])
 	    [SVRBIND2(fJCDEFBlocks,(self,arg1,arg2))] |
-	    ( (BodyBlock_r)[SVRBIND2(fAddBody,(self))]| 
+	    ( (BodyBlock_r)[SVRBIND2(fAddBody,(self))]|
 	      JointBlock_r |
 	      ListSensors_r);
 
 	  JointChildren_r = str_p("children") >> (ch_p('['))
-					      >> *( JointChildrenDEFBlocks_r ) 
+					      >> *( JointChildrenDEFBlocks_r )
 					      >> ch_p(']');
 
-	  JointBlock_r = (str_p("Joint"))[SVRBIND2(fJointBlockName,(self))] 
-	    >> ch_p('{')[SVRBIND2(fIncreaseDepth,(self))]  
-	    >> *(JointField_r | JointChildren_r ) 
+	  JointBlock_r = (str_p("Joint"))[SVRBIND2(fJointBlockName,(self))]
+	    >> ch_p('{')[SVRBIND2(fIncreaseDepth,(self))]
+	    >> *(JointField_r | JointChildren_r )
 	    >> ch_p('}')[SVRBIND2(fDecreaseDepth,(self))];
 
-	  DEFBlock_r = str_p("DEF") 
-	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[SVRBIND2(fDEFName,(self,arg1,arg2))] 
+	  DEFBlock_r = str_p("DEF")
+	    >> (lexeme_d[+(alnum_p|ch_p('_'))])[SVRBIND2(fDEFName,(self,arg1,arg2))]
 	    >> JointBlock_r;
 
-	  HumanoidVersion_r = str_p("version") >> ch_p('"') 
+	  HumanoidVersion_r = str_p("version") >> ch_p('"')
 					       >> (lexeme_d[+(alnum_p|'.')])
 	    [SVRBIND2(fHumanoidversion,(self,arg1,arg2))]
 					       >> ch_p('"');
@@ -1529,23 +1529,23 @@ namespace dynamicsJRLJapan
 	  HumanoidInfoLine_r = ch_p('"')
 	    >> *((lexeme_d[+(alnum_p|':'|'.'|',')])[SVRBIND2(fHumanoidinfoline,(self,arg1,arg2))])
 	    >> ch_p('"');
-	    
-				
 
-	  HumanoidInfo_r = (str_p("info"))[SVRBIND2(fHumanoidinfo,(self,arg1,arg2))] 
+
+
+	  HumanoidInfo_r = (str_p("info"))[SVRBIND2(fHumanoidinfo,(self,arg1,arg2))]
 	    >> ch_p('[') >> *(HumanoidInfoLine_r) >> ch_p(']');
-	  
+
 	  // Define the entry rules for huanoid.
-	  HumanoidBlock_r =  *(str_p("humanoidBody") 
+	  HumanoidBlock_r =  *(str_p("humanoidBody")
 			       >> ch_p('[') >> *DEFBlock_r >> ch_p(']') |
 			       HumanoidName_r | HumanoidVersion_r |
 			       HumanoidInfo_r );
-  
+
 	  HumanoidTrail_r = str_p("Humanoid")
 	    >> ch_p('{') >> HumanoidBlock_r >> ch_p('}');
 
-	  Humanoid_r = (str_p("DEF"))[SVRBIND2(fProtoName,(self,arg1,arg2))] 
-	    >> (lexeme_d[+alnum_p])[SVRBIND2(fAssignHumanoidName,(self,arg1,arg2))] 
+	  Humanoid_r = (str_p("DEF"))[SVRBIND2(fProtoName,(self,arg1,arg2))]
+	    >> (lexeme_d[+alnum_p])[SVRBIND2(fAssignHumanoidName,(self,arg1,arg2))]
 	    >> HumanoidTrail_r;
 
 	  // Navigation Info
@@ -1556,14 +1556,14 @@ namespace dynamicsJRLJapan
 				   >> ch_p(',')
 				   >> ch_p('"') >> str_p("ANY")  >> ch_p('"')
 				   >> ch_p(']');
-	  NavigationInfo_r = str_p("NavigationInfo") >> ch_p('{') >> 
-	    *((NIType_r)[SVRBIND2(fNI_Type,(self,arg1,arg2))] | 
-	      (NIHeadlight_r)[SVRBIND2(fNI_Headlight,(self,arg1,arg2))] | 
+	  NavigationInfo_r = str_p("NavigationInfo") >> ch_p('{') >>
+	    *((NIType_r)[SVRBIND2(fNI_Type,(self,arg1,arg2))] |
+	      (NIHeadlight_r)[SVRBIND2(fNI_Headlight,(self,arg1,arg2))] |
 	      (NIavatarSize_r))>> ch_p('}');
-  
-	  // Background 
+
+	  // Background
 	  skyColor_r = str_p("skyColor") >> real_p >> real_p >> real_p;
-	  Background_r = str_p("Background") 
+	  Background_r = str_p("Background")
 	    >> ch_p('{') >> *( (skyColor_r)[SVRBIND2(fskyColor,(self,arg1,arg2))] )
 	    >> ch_p('}');
 
@@ -1574,13 +1574,13 @@ namespace dynamicsJRLJapan
 							     (ViewpointPos_r)[SVRBIND2(fViewpointPos,(self,arg1,arg2))]|
 							     (ViewpointOri_r)[SVRBIND2(fViewpointOri,(self,arg1,arg2))]
 							     ) >> ch_p('}');
-	
-	  EntryPoint = *(Proto_r| 
-			 Humanoid_r| 
-			 Background_r | 
-			 NavigationInfo_r | 
-			 Viewpoint_r );  
-	
+
+	  EntryPoint = *(Proto_r|
+			 Humanoid_r|
+			 Background_r |
+			 NavigationInfo_r |
+			 Viewpoint_r );
+
 
 	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
 	  BOOST_SPIRIT_DEBUG_RULE(NameToField_r);
@@ -1605,71 +1605,71 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE(MFString_r);
 	  BOOST_SPIRIT_DEBUG_RULE(SFFloat_r);
 	  BOOST_SPIRIT_DEBUG_RULE(SFInt32_r);
-	  
+
 	  BOOST_SPIRIT_DEBUG_RULE(ProtoLineTitle_r);
 	  BOOST_SPIRIT_DEBUG_RULE(ProtoLine_r);
 	  BOOST_SPIRIT_DEBUG_RULE(ProtoBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(ProtoSndBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Proto_r);
 
-	  BOOST_SPIRIT_DEBUG_RULE(JointTranslation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(JointRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(JointRotation_r);
 	  BOOST_SPIRIT_DEBUG_RULE(JointType_r);
-	  BOOST_SPIRIT_DEBUG_RULE(JointID_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(JointAxis_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(Jointdh_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(JointID_r);
+	  BOOST_SPIRIT_DEBUG_RULE(JointAxis_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Jointdh_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Jointllimit_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Jointulimit_r);
-	  BOOST_SPIRIT_DEBUG_RULE(Jointlvlimit_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(Jointuvlimit_r); 
-          BOOST_SPIRIT_DEBUG_RULE(Jointequivalentinertia_r); 
-          BOOST_SPIRIT_DEBUG_RULE(JointField_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(DEFBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(Jointlvlimit_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Jointuvlimit_r);
+          BOOST_SPIRIT_DEBUG_RULE(Jointequivalentinertia_r);
+          BOOST_SPIRIT_DEBUG_RULE(JointField_r);
+	  BOOST_SPIRIT_DEBUG_RULE(DEFBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(JointBlock_r);
-	  
-	  BOOST_SPIRIT_DEBUG_RULE(FSTranslation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(FSRotation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(FSID_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(ForceSensorBlock_r); 
+
+	  BOOST_SPIRIT_DEBUG_RULE(FSTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(FSRotation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(FSID_r);
+	  BOOST_SPIRIT_DEBUG_RULE(ForceSensorBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(ForceSensor_r);
-	  
+
 	  BOOST_SPIRIT_DEBUG_RULE(BodyChildren_r);
 	  BOOST_SPIRIT_DEBUG_RULE(BodyBlock_r);
 
-	  BOOST_SPIRIT_DEBUG_RULE(GyroRotation_r);  
-	  BOOST_SPIRIT_DEBUG_RULE(GyroTranslation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(GyroID_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(GyrometerSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(GyroRotation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(GyroTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(GyroID_r);
+	  BOOST_SPIRIT_DEBUG_RULE(GyrometerSensorBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(GyrometerSensor_r);
 
-	  BOOST_SPIRIT_DEBUG_RULE(ASTranslation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(ASRotation_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ASTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(ASRotation_r);
 	  BOOST_SPIRIT_DEBUG_RULE(ASID_r);
-	  BOOST_SPIRIT_DEBUG_RULE(AccelerationSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(AccelerationSensorBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(AccelerationSensor_r);
 
-	  BOOST_SPIRIT_DEBUG_RULE(VSTranslation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(VSRotation_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(VSID_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(VSFrontClipDistance_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSTranslation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSRotation_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSID_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSFrontClipDistance_r);
 	  BOOST_SPIRIT_DEBUG_RULE(VSBackClipDistance_r);
-	  BOOST_SPIRIT_DEBUG_RULE(VSwidth_r);  
-	  BOOST_SPIRIT_DEBUG_RULE(VSheight_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(VStype_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(VSFieldOfView_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VSwidth_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSheight_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VStype_r);
+	  BOOST_SPIRIT_DEBUG_RULE(VSFieldOfView_r);
 	  BOOST_SPIRIT_DEBUG_RULE(VSName_r);
-	  BOOST_SPIRIT_DEBUG_RULE(VisionSensorBlock_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(VisionSensorBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(VisionSensor_r);
-	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensorBlock_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensor_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensorBlock_r);
+	  BOOST_SPIRIT_DEBUG_RULE(CylinderSensor_r);
 	  BOOST_SPIRIT_DEBUG_RULE(CSAngle_r);
 
-	  BOOST_SPIRIT_DEBUG_RULE(ListSensors_r); 
-	  BOOST_SPIRIT_DEBUG_RULE( Sensors_r); 
-	  BOOST_SPIRIT_DEBUG_RULE( CenterOfMass_r); 
-	  BOOST_SPIRIT_DEBUG_RULE(Mass_r); 
+	  BOOST_SPIRIT_DEBUG_RULE(ListSensors_r);
+	  BOOST_SPIRIT_DEBUG_RULE( Sensors_r);
+	  BOOST_SPIRIT_DEBUG_RULE( CenterOfMass_r);
+	  BOOST_SPIRIT_DEBUG_RULE(Mass_r);
 	  BOOST_SPIRIT_DEBUG_RULE( MomentsOfInertia_r);
-	  
+
 	  BOOST_SPIRIT_DEBUG_RULE(BodySubBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE( ShapeInlineUrl_r);
 	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlockInline_r);
@@ -1706,40 +1706,40 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( ViewpointPos_r);
 	  BOOST_SPIRIT_DEBUG_RULE( Viewpoint_r);
 	  BOOST_SPIRIT_DEBUG_RULE( EntryPoint);
-	  
+
 	}
-	
+
 	// Tree of the robot.
 	rule<ScannerT> scaleMultiple_r, NameToField_r, TransformToField_r,
 	  TransformInstanceRotation_r, TransformInstanceTranslation_r,
 	  GroupBlock_r, Route_r,
 	  TransformBlock_r, TCBChildren_r, TCBChildrenBlock_r, TransformChildrenBlock_r,
-	  TransformChildren_r, 
+	  TransformChildren_r,
 	  TransformLine_r, SFVec3f_r, MF_brackets_r, MFNode_r, SFNode_r, MFFloat_r,
 	  SFRotation_r, SFString_r, MFString_r, SFFloat_r, SFInt32_r,
 	  ProtoLineTitle_r, ProtoLine_r, ProtoBlock_r, ProtoSndBlock_r, Proto_r;
 
 	rule<ScannerT> JointTranslation_r, JointRotation_r, JointType_r,
-	  JointID_r, JointAxis_r, Jointdh_r, 
+	  JointID_r, JointAxis_r, Jointdh_r,
 	  Jointllimit_r, Jointulimit_r,
-	  Jointlvlimit_r, Jointuvlimit_r, 
-          Jointequivalentinertia_r, 
+	  Jointlvlimit_r, Jointuvlimit_r,
+          Jointequivalentinertia_r,
           JointField_r, DEFBlock_r, JointBlock_r;
 
 	rule<ScannerT> SFBool_r,MFVec3f_r,MFInt32_r;
 
 	rule<ScannerT> Coordinate_r;
 
-	rule<ScannerT> FSTranslation_r, FSRotation_r, FSID_r, 
+	rule<ScannerT> FSTranslation_r, FSRotation_r, FSID_r,
 	  ForceSensorBlock_r, ForceSensor_r;
 
-	rule<ScannerT> GyroRotation_r,  GyroTranslation_r, GyroID_r, 
+	rule<ScannerT> GyroRotation_r,  GyroTranslation_r, GyroID_r,
 	  GyrometerSensorBlock_r, GyrometerSensor_r;
 
 	rule<ScannerT> ASTranslation_r, ASRotation_r, ASID_r,
 	  AccelerationSensorBlock_r, AccelerationSensor_r;
 
-	rule<ScannerT> VSTranslation_r, VSRotation_r, VSID_r, 
+	rule<ScannerT> VSTranslation_r, VSRotation_r, VSID_r,
 	  VSFrontClipDistance_r, VSBackClipDistance_r,
 	  VSwidth_r,  VSheight_r, VStype_r, VSFieldOfView_r, VSName_r,
 	  VisionSensorBlock_r, VisionSensor_r,
@@ -1759,27 +1759,27 @@ namespace dynamicsJRLJapan
 
 	rule<ScannerT> Transparency_r,AmbientIntensity_r;
 
-	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r, 
+	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r,
 	  AppearanceUse_r, AppearanceDef_r, MaterialBlock_r,
 	  DiffuseColor_r, SpecularColor_r, EmissiveColor_r, Shininess_r;
 
-	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r, 
+	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r,
 	  HumanoidBlock_r, HumanoidTrail_r, Humanoid_r,
 	  HumanoidVersion_r, HumanoidName_r, HumanoidInfo_r,HumanoidInfoLine_r;
-      
+
 	rule<ScannerT> NIavatarSize_r, NIHeadlight_r, NIType_r, NavigationInfo_r;
 
-	rule<ScannerT> skyColor_r, Background_r, ViewpointOri_r, 
+	rule<ScannerT> skyColor_r, Background_r, ViewpointOri_r,
 	  ViewpointPos_r, Viewpoint_r, EntryPoint;
 
 	rule<ScannerT> const& start() const {return EntryPoint;}
-	
+
       };
 
 
       void Init(MultiBody *aMB,
 		struct s_DataForParsing *aDFP,
-		vector<BodyGeometricalData> *aListOfURLs) 
+		vector<BodyGeometricalData> *aListOfURLs)
       {
 	m_MultiBody=aMB;
 	m_DataForParsing=aDFP;
@@ -1815,7 +1815,7 @@ namespace dynamicsJRLJapan
 
       int getVerbose()
       {return m_Verbose;}
-      
+
       void setVerbose(int lVerbose)
       {m_Verbose = lVerbose;}
 

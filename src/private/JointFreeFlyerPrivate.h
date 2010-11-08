@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith
  * Olivier Stasse
@@ -39,27 +39,27 @@
 using namespace std;
 
 namespace dynamicsJRLJapan
-{  
+{
     class DynamicBodyPrivate;
     class JointFreeflyerPrivate : public JointPrivate
     {
     public:
-      /*! \brief Constructor when the initial position is not known 
+      /*! \brief Constructor when the initial position is not known
 	This call for a renormalization of the object. */
       JointFreeflyerPrivate();
-      
+
       /*! \brief Constructor by copy. */
       JointFreeflyerPrivate(const JointFreeflyerPrivate &a);
 
-      /*! \brief Constructor when the initial position is known 
+      /*! \brief Constructor when the initial position is known
 	Do not renormalize the object.
        */
       JointFreeflyerPrivate(const matrix4d &inInitialPosition);
       virtual ~JointFreeflyerPrivate();
 
-      /*! 
-	\brief Compute position and orientation for state vector 
-	given inDofVector. 
+      /*!
+	\brief Compute position and orientation for state vector
+	given inDofVector.
 	\param inDofVector: The current configuration of the robot.
 	\return false is the number of dofs is not sufficient. */
       bool updateTransformation(const vectorN & inDofVector);
@@ -68,7 +68,7 @@ namespace dynamicsJRLJapan
       /*! \brief Computes speed in joint and global reference frame. */
       bool updateVelocity(const vectorN& inRobotConfigVector,
 			  const vectorN& inRobotSpeedVector);
-      
+
       /*! \bri Computes acceleration in joint and global reference frame. */
       bool updateAcceleration(const vectorN & inRobotConfigVector,
 			      const vectorN & inRobotSpeedVector,
@@ -76,14 +76,14 @@ namespace dynamicsJRLJapan
 
 
       /*! \brief Here the number of DOFs is 6. */
-      unsigned int numberDof() const 
+      unsigned int numberDof() const
       { return 6;};
 
 
     private:
       /*! Store variables */
       vectorN m_dof6D;
-      
+
     };
 
 };

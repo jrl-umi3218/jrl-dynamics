@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Abderrahmane Kheddar
  *
@@ -28,7 +28,7 @@
    OS: Small modification to read other parameters such as
    joint name, id, and make it a bit more model versatile.
 
-   Copyright (c) 2005-2006, 
+   Copyright (c) 2005-2006,
 
 */
 #ifndef _DYN_JRLJAPAN_FILE_READER_H_
@@ -46,7 +46,7 @@ namespace dynamicsJRLJapan
   const static int CHILDREN=2;
   const static int JOINT=3;
   const static int DEF=4;
-  
+
   const static int AXE_X = 0;
   const static int AXE_Y = 1;
   const static int AXE_Z = 2;
@@ -64,19 +64,19 @@ namespace dynamicsJRLJapan
 
   /// Function to read an integer from fichier
   void fscanfi(FILE *fichier, int *d);
-  
+
   /// Function to look for an object.
   char look_for(FILE* fichier, const char *str);
-  
+
   /// Give back the word currently at the position of the file fichier in str.
   bool immediatlyAppears(FILE* fichier, const char *str) ;
 
   /// Look for the next keyword inside fich.
   int nextKeyWord(FILE* fich);
-  
+
   /// Look for the next Joint keyword inside fich.
   int nextJointKeyWord(FILE* fichier);
-  
+
   /// Returns the type of the next joint inside the file.
   int typeOfJoint(FILE* fichier);
 };

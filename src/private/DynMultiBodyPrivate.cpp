@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kanoun
  * Florent Lamiraux
@@ -322,7 +322,7 @@ const std::vector<CjrlJoint *> DynMultiBodyPrivate::jointVectorCst() const
   return m_JointVector;
 }
 
-std::vector<CjrlJoint*> DynMultiBodyPrivate::jointsBetween(const CjrlJoint& inStartJoint, 
+std::vector<CjrlJoint*> DynMultiBodyPrivate::jointsBetween(const CjrlJoint& inStartJoint,
 							const CjrlJoint& inEndJoint) const
 {
   std::vector<CjrlJoint*> outJoints;
@@ -340,11 +340,11 @@ std::vector<CjrlJoint*> DynMultiBodyPrivate::jointsBetween(const CjrlJoint& inSt
       if ((robotRoot2StartJoint[i]==robotRoot2EndJoint[i]))
 	lastCommonJointRank++;
     }
-  
+
   for(i = robotRoot2StartJoint.size()-1; i>lastCommonJointRank; i--)
     outJoints.push_back(robotRoot2StartJoint[i]);
   if(lastCommonJointRank==0)
-      outJoints.push_back(robotRoot2EndJoint[0]);  
+      outJoints.push_back(robotRoot2EndJoint[0]);
   for(i=lastCommonJointRank+1; i< robotRoot2EndJoint.size(); i++)
     outJoints.push_back(robotRoot2EndJoint[i]);
 
@@ -501,11 +501,11 @@ unsigned int DynMultiBodyPrivate::numberDof() const
 */
 
 /**
-   \brief Set the current configuration of the robot.  
-   
-   
+   \brief Set the current configuration of the robot.
+
+
    \param inConfig the configuration vector \f${\bf q}\f$.
-   
+
    \return true if success, false if failure (the dimension of the
    input vector does not fit the number of degrees of freedom of the
    robot).
@@ -570,7 +570,7 @@ bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR(,double)& inConf
 
 /**
    \brief Get the current configuration of the robot.
-   
+
    \return the configuration vector \f${\bf q}\f$.
 */
 const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentConfiguration() const
@@ -579,10 +579,10 @@ const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentConfiguration() const
 }
 
 /**
-   \brief Set the current velocity of the robot.  
-   
+   \brief Set the current velocity of the robot.
+
    \param inVelocity the velocity vector \f${\bf \dot{q}}\f$.
-   
+
    \return true if success, false if failure (the dimension of the
    input vector does not fit the number of degrees of freedom of the
    robot).
@@ -631,8 +631,8 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 	      m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq = inVelocity[lindex];
 	      // Update dq.
 	      /* ODEBUG(" Id (Vs) :" << lindex
-		 << " Id (JV) : " << i 
-		 << " Id (VRML): " << lIDinActuated 
+		 << " Id (JV) : " << i
+		 << " Id (VRML): " << lIDinActuated
 		 << " Id (Body): " << ConvertIDInActuatedToBodyID[lIDinActuated]
 		 << " dq: " << m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq ); */
             }
@@ -650,7 +650,7 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 
 /**
    \brief Get the current velocity of the robot.
-   
+
    \return the velocity vector \f${\bf \dot{q}}\f$.
 */
 const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentVelocity() const
@@ -659,10 +659,10 @@ const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentVelocity() const
 
 }
 /**
-   \brief Set the current acceleration of the robot.  
-   
+   \brief Set the current acceleration of the robot.
+
    \param inAcceleration the acceleration vector \f${\bf \ddot{q}}\f$.
-   
+
    \return true if success, false if failure (the dimension of the
    input vector does not fit the number of degrees of freedom of the
    robot).
@@ -711,8 +711,8 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
 	      m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->ddq = inAcceleration[lindex];
 	      // Update dq.
 	      /* ODEBUG(" Id (Vs) :" << lindex
-		 << " Id (JV) : " << i 
-		 << " Id (VRML): " << lIDinActuated 
+		 << " Id (JV) : " << i
+		 << " Id (VRML): " << lIDinActuated
 		 << " Id (Body): " << ConvertIDInActuatedToBodyID[lIDinActuated]
 		 << " dq: " << m_listOfBodies[ConvertIDInActuatedToBodyID[lIDinActuated]]->dq ); */
             }
@@ -729,7 +729,7 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
 
 /**
    \brief Get the current acceleration of the robot.
-   
+
    \return the acceleration vector \f${\bf \ddot{q}}\f$.
 */
 const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentAcceleration() const

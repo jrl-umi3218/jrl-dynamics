@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Francois Keith
  * Florent Lamiraux
@@ -26,19 +26,19 @@
  */
 
 /*! \file dynamicsJRLJapanFactory.h Object factory for dynamicsJRLJapan.
-   
-  
+
+
   Solely provides an implementation of AbstractRobotDynamics.
-  Please look at the documentation of AbstrctRobotDynamics 
+  Please look at the documentation of AbstrctRobotDynamics
   for more information.
 
   Copyright (c) 2009
   @author Olivier Stasse
-  
+
   JRL-Japan, CNRS/AIST
-  
+
   All rights reserved.
-  
+
   Please see License.txt for more informations on the license related to this software.
 */
 
@@ -46,11 +46,11 @@
 #define _DYNAMICS_JRL_JAPAN_FACTORY_H_
 
 #if defined (WIN32)
-#  ifdef dynamicsJRLJapan_EXPORTS 
+#  ifdef dynamicsJRLJapan_EXPORTS
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllexport)
-#  else  
+#  else
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllimport)
-#  endif 
+#  endif
 #else
 #  define DYN_JRL_JAPAN_EXPORT
 #endif
@@ -70,17 +70,17 @@ namespace dynamicsJRLJapan
   {
   public:
     CjrlHumanoidDynamicRobot * createHumanoidDynamicRobot();
-    
+
     CjrlDynamicRobot * createDynamicRobot();
-    
+
     CjrlJoint * createJointFreeflyer(const matrix4d& inInitialPosition);
-    
+
     CjrlJoint * createJointRotation(const matrix4d& inInitialPosition);
-    
+
     CjrlJoint * createJointTranslation(const matrix4d& inInitialPosition);
-    
+
     CjrlJoint * createJointAnchor(const matrix4d& inInitialPosition);
-    
+
     CjrlBody * createBody();
 
     CjrlHand* createHand(const CjrlJoint* inWrist);
@@ -89,10 +89,10 @@ namespace dynamicsJRLJapan
   };
 
 
-  
+
   /*! Populate a CjrlHumanoidDynamicRobot instance
     from a OpenHRP vrml file and a file of specificities
-    to add semantic information. 
+    to add semantic information.
     Right now this will fail it is not a dynamicsJRLJapan instanciated
     object.
     \param OpenHRPVRMLFile Filename which containes the humanoid description
@@ -105,19 +105,19 @@ namespace dynamicsJRLJapan
     \retval ajrlHumanoidDynamicRobot The robot built by parsing the file.
     \return Negative value if failed, 0 otherwise.
   */
-  DYN_JRL_JAPAN_EXPORT 
+  DYN_JRL_JAPAN_EXPORT
     int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 			     std::string &OpenHRPVRMLFile,
 			     std::string &MapJointToRankFileName,
 			     std::string &FileOfSpecificities);
 
-  DYN_JRL_JAPAN_EXPORT 
+  DYN_JRL_JAPAN_EXPORT
     int parseOpenHRPVRMLFile(CjrlHumanoidDynamicRobot &ajrlHumanoidDynamicRobot,
 			     std::string &OpenHRPVRMLFile,
 			     std::string &MapJointToRankFileName,
 			     std::string &FileOfSpecificities,
 			     std::vector<BodyGeometricalData> &GeometricalDataonBodies,
 			     bool ReadGeometricalInformation=false);
-  
+
 };
 #endif

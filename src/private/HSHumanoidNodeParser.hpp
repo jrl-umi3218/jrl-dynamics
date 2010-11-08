@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Olivier Stasse
  *
@@ -116,24 +116,24 @@ namespace dhs=dynamicsJRLJapan::HumanoidSpecificitiesData;
 
 namespace dynamicsJRLJapan {
   namespace HumanoidSpecificitiesData {
-    
+
     namespace fusion = boost::fusion;
     namespace phoenix = boost::phoenix;
     namespace qi = boost::spirit::qi;
     namespace ascii = boost::spirit::ascii;
-    
+
     template <typename Expr, typename Iterator = boost::spirit::unused_type>
     struct attribute_of_parser
     {
       typedef typename boost::spirit::result_of::compile<
         boost::spirit::qi::domain, Expr
 	>::type parser_expression_type;
-      
+
       typedef typename boost::spirit::traits::attribute_of<
         parser_expression_type, boost::spirit::unused_type, Iterator
 	>::type type;
     };
-    
+
     template <typename T>
     void display_attribute_of_parser(T const&)
     {
@@ -143,9 +143,9 @@ namespace dynamicsJRLJapan {
 
 
     // Serial chain parser.
-    
+
     template <typename Iterator>
-    struct SerialChain_parser : 
+    struct SerialChain_parser :
       qi::grammar<Iterator, SerialChain(), ascii::space_type>
     {
       SerialChain_parser() : SerialChain_parser::base_type(start)
@@ -154,15 +154,15 @@ namespace dynamicsJRLJapan {
         using qi::int_;
         using qi::lit;
         using ascii::char_;
-	
-	start%= '<' >>  lit("JointNb") >>  '>' 
+
+	start%= '<' >>  lit("JointNb") >>  '>'
 		    >>  uint_ // Implicit rule to fill in nbOfJoints.
-		    >>  "</" >>  lit("JointNb") >>  '>' 
-		    >> '<' >>  lit("JointsID") >>  '>' 
+		    >>  "</" >>  lit("JointNb") >>  '>'
+		    >> '<' >>  lit("JointsID") >>  '>'
 		    >> *int_ // Implicit rule to fill in JointsID.
 		    >>  "</" >>  lit("JointsID") >>  '>' ;;
       }
-      
+
       qi::rule<Iterator, SerialChain(), ascii::space_type> start;
       qi::rule<Iterator, unsigned int , ascii::space_type> jointnb_tag;
       qi::rule<Iterator, std::vector<unsigned int>, ascii::space_type> jointid_tag;
@@ -173,7 +173,7 @@ namespace dynamicsJRLJapan {
     // Foot parser.
 
     template <typename Iterator>
-    struct FootNode_parser : 
+    struct FootNode_parser :
       qi::grammar<Iterator, FootNode(), ascii::space_type>
     {
       FootNode_parser() : FootNode_parser::base_type(start)
@@ -183,18 +183,18 @@ namespace dynamicsJRLJapan {
         using qi::uint_;
         using ascii::char_;
 
-	start %= '<' >>  lit("SizeX") >>  '>' 
-		     >> double_  
-		     >>  lit("</") >>  lit("SizeX") >>  '>' 
-		     >> '<' >>  lit("SizeY") >>  '>' 
-		     >> double_  
+	start %= '<' >>  lit("SizeX") >>  '>'
+		     >> double_
+		     >>  lit("</") >>  lit("SizeX") >>  '>'
+		     >> '<' >>  lit("SizeY") >>  '>'
+		     >> double_
 		     >>  lit("</") >>  lit("SizeY") >>  '>'
-		     >> '<' >>  lit("SizeZ") >>  '>' 
-		     >> double_  
+		     >> '<' >>  lit("SizeZ") >>  '>'
+		     >> double_
 		     >>  lit("</") >>  lit("SizeZ") >>  '>'
-		     >> '<' >>  lit("AnklePosition") >>  '>' 
+		     >> '<' >>  lit("AnklePosition") >>  '>'
 		     >> *double_
-		     >> lit("</") >>  lit("AnklePosition") >>  '>' 
+		     >> lit("</") >>  lit("AnklePosition") >>  '>'
 		     >> serialchain_parser;
 
       }
@@ -206,7 +206,7 @@ namespace dynamicsJRLJapan {
 
     // Leg Node Parser
     template <typename Iterator>
-    struct LegNode_parser : 
+    struct LegNode_parser :
       qi::grammar<Iterator, LegNode(), ascii::space_type>
     {
       LegNode_parser() : LegNode_parser::base_type(start)
@@ -215,13 +215,13 @@ namespace dynamicsJRLJapan {
 	using qi::lit;
 
 
-	start %= '<' >>  lit("HipLength") >>  '>' 
+	start %= '<' >>  lit("HipLength") >>  '>'
 		     >> *double_  // Implicit rule to fill HipLength.
-		     >>  lit("</") >>  lit("HipLength") >>  '>' 
-		     >> '<' >>  lit("FemurLength") >>  '>' 
-		     >> double_ >> lit("</") >>  lit("FemurLength") >>  '>' 
+		     >>  lit("</") >>  lit("HipLength") >>  '>'
+		     >> '<' >>  lit("FemurLength") >>  '>'
+		     >> double_ >> lit("</") >>  lit("FemurLength") >>  '>'
 		     >>  '<' >>  lit("TibiaLength") >>  '>'
-		     >>  double_ >> lit("</") >>  lit("TibiaLength") >>  '>' 
+		     >>  double_ >> lit("</") >>  lit("TibiaLength") >>  '>'
 		     >> serialchain_parser;
       }
 
@@ -232,7 +232,7 @@ namespace dynamicsJRLJapan {
     // Hand Node parser.
 
     template <typename Iterator>
-    struct HandNode_parser : 
+    struct HandNode_parser :
       qi::grammar<Iterator, HandNode(), ascii::space_type>
     {
       HandNode_parser() : HandNode_parser::base_type(start)
@@ -241,19 +241,19 @@ namespace dynamicsJRLJapan {
 	using qi::lit;
 
 
-	start %= '<' >> lit("Center") >>  '>' 
+	start %= '<' >> lit("Center") >>  '>'
 		     >> *double_ // Implicit rule to fill center.
 		     >> lit("</") >>  lit("Center") >>  '>'
-		     >> '<' >>  lit("okayAxis") >>  '>' 
+		     >> '<' >>  lit("okayAxis") >>  '>'
 		     >> *double_ // Implicit rule to fill okay.
 		     >> lit("</") >>  lit("okayAxis") >>  '>'
-		     >> '<' >>  lit("showingAxis") >>  '>' 
+		     >> '<' >>  lit("showingAxis") >>  '>'
 		     >> *double_ // Implicit rule to fill showing.
 		     >> lit("</") >>  lit("showingAxis") >>  '>'
-		     >> '<' >>  lit("palmAxis") >>  '>' 
+		     >> '<' >>  lit("palmAxis") >>  '>'
 		     >> *double_ // Implicit rule to fill palm.
 		     >> lit("</") >>  lit("palmAxis") >>  '>' ;
-	
+
       }
 
       qi::rule<Iterator, HandNode(), ascii::space_type> start;
@@ -261,7 +261,7 @@ namespace dynamicsJRLJapan {
 
     // Arm Node Parser
     template <typename Iterator>
-    struct ArmNode_parser : 
+    struct ArmNode_parser :
       qi::grammar<Iterator, ArmNode(), ascii::space_type>
     {
       ArmNode_parser() : ArmNode_parser::base_type(start)
@@ -269,14 +269,14 @@ namespace dynamicsJRLJapan {
         using qi::double_;
 	using qi::lit;
 
-	start %= '<' >> lit("UpperArmLength") >>  '>' 
+	start %= '<' >> lit("UpperArmLength") >>  '>'
 		     >> double_ // Implicit rule to fill upper arm length.
-		     >> lit("</") >>  lit("UpperArmLength") >>  '>' 
-		     >> '<' >> lit("ForeArmLength") >>  '>' 
+		     >> lit("</") >>  lit("UpperArmLength") >>  '>'
+		     >> '<' >> lit("ForeArmLength") >>  '>'
 		     >> double_ // Implicit rule to fill fore Arm length.
-		     >> lit("</") >>  lit("ForeArmLength") >>  '>' 
+		     >> lit("</") >>  lit("ForeArmLength") >>  '>'
 		     >> serialchain_parser;
-	  
+
       }
 
       qi::rule<Iterator, ArmNode(), ascii::space_type> start;
@@ -286,7 +286,7 @@ namespace dynamicsJRLJapan {
     // Waist Node parser
 
     template <typename Iterator>
-    struct WaistNode_parser : 
+    struct WaistNode_parser :
       qi::grammar<Iterator, WaistNode(), ascii::space_type>
     {
       WaistNode_parser() : WaistNode_parser::base_type(start)
@@ -297,21 +297,21 @@ namespace dynamicsJRLJapan {
         using qi::lexeme;
         using ascii::char_;
 
-	start %= '<' >>  lit("Waist") >>  '>' 
+	start %= '<' >>  lit("Waist") >>  '>'
 
-		     >> '<' >>  lit("Right") >>  '>' 
-		     >> '<' >>  lit("WaistToHip") >>  '>'  
+		     >> '<' >>  lit("Right") >>  '>'
+		     >> '<' >>  lit("WaistToHip") >>  '>'
 		     >> *double_ // Implicit rule to fill in position
 		     >>  lit("</") >>  lit("WaistToHip") >>  '>'
-		     >> lit("</") >>  lit("Right") >>  '>' 
+		     >> lit("</") >>  lit("Right") >>  '>'
 
-		     >> '<' >>  lit("Left") >>  '>'  
-		     >> '<' >>  lit("WaistToHip") >>  '>'  
+		     >> '<' >>  lit("Left") >>  '>'
+		     >> '<' >>  lit("WaistToHip") >>  '>'
 		     >> *double_ // Implicit rule to fill in position
 		     >>  lit("</") >>  lit("WaistToHip") >>  '>'
-		     >> lit("</") >>  lit("Left") >>  '>' 
+		     >> lit("</") >>  lit("Left") >>  '>'
 
-		     >> serialchain_parser 
+		     >> serialchain_parser
 		     >> lit("</") >>  lit("Waist") >>  '>' ;
       }
 
@@ -321,7 +321,7 @@ namespace dynamicsJRLJapan {
 
     // Arm Node Parser
     template <typename Iterator>
-    struct HeadNode_parser : 
+    struct HeadNode_parser :
       qi::grammar<Iterator, SerialChain(), ascii::space_type>
     {
       HeadNode_parser() : HeadNode_parser::base_type(start)
@@ -329,10 +329,10 @@ namespace dynamicsJRLJapan {
         using qi::double_;
 	using qi::lit;
 
-	start %=  '<' >>  lit("Head") >>  '>'   
+	start %=  '<' >>  lit("Head") >>  '>'
 		      >> serialchain_parser
 		      >> "</" >>  lit("Head") >>  '>';
-	  
+
       }
 
       qi::rule<Iterator, SerialChain(), ascii::space_type> start;
@@ -342,7 +342,7 @@ namespace dynamicsJRLJapan {
     // Humanoid parser.
 
     template <typename Iterator>
-    struct HumanoidNode_parser : 
+    struct HumanoidNode_parser :
       qi::grammar<Iterator, HumanoidNode(), ascii::space_type>
     {
      HumanoidNode_parser() : HumanoidNode_parser::base_type(start)
@@ -352,84 +352,84 @@ namespace dynamicsJRLJapan {
 	using qi::lexeme;
 	using qi::char_;
         using qi::uint_;
-	
+
 	quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-	starthn_tag %= '<' >> lit("Humanoid") 
+	starthn_tag %= '<' >> lit("Humanoid")
 			   >> lit("name")
-			   >> '=' 
+			   >> '='
 			   >> quoted_string >> '>';
 
-	rfeet_parser %= '<' >> lit("Right") >>  '>'  
-			    >> aFootNode_parser 
+	rfeet_parser %= '<' >> lit("Right") >>  '>'
+			    >> aFootNode_parser
 			    >> "</" >>  lit("Right") >>  '>' ;
-	lfeet_parser %= '<' >> lit("Left") >>  '>'  
-			    >> aFootNode_parser 
+	lfeet_parser %= '<' >> lit("Left") >>  '>'
+			    >> aFootNode_parser
 			    >> "</" >>  lit("Left") >>  '>';
 
-	rleg_parser %= '<' >>  lit("Right") >>  '>'  
-			   >> aLegNode_parser 
+	rleg_parser %= '<' >>  lit("Right") >>  '>'
+			   >> aLegNode_parser
 			   >>  "</" >>  lit("Right") >>  '>';
 
-	lleg_parser %= '<' >>  lit("Left") >>  '>'  
-			   >> aLegNode_parser 
+	lleg_parser %= '<' >>  lit("Left") >>  '>'
+			   >> aLegNode_parser
 			   >> "</" >>  lit("Left") >>  '>';
 
-	rhand_parser %= '<' >>  lit("Right") >>  '>'  
-			    >> aHandNode_parser 
+	rhand_parser %= '<' >>  lit("Right") >>  '>'
+			    >> aHandNode_parser
 			    >> "</" >>  lit("Right") >>  '>' ;
 
-	lhand_parser %= '<' >>  lit("Left") >>  '>'  
+	lhand_parser %= '<' >>  lit("Left") >>  '>'
 			    >> aHandNode_parser
 			    >> "</" >>  lit("Left") >>  '>' ;
 
-	rarm_parser %= '<' >>  lit("Right") >>  '>'  
-			   >> aArmNode_parser 
+	rarm_parser %= '<' >>  lit("Right") >>  '>'
+			   >> aArmNode_parser
 			   >> "</" >>  lit("Right") >>  '>' ;
 
-	larm_parser %= '<' >>  lit("Left") >>  '>'  
-			   >> aArmNode_parser 
+	larm_parser %= '<' >>  lit("Left") >>  '>'
+			   >> aArmNode_parser
 			   >> "</" >>  lit("Left") >>  '>';
 	chest_parser %=  '<' >>  lit("Chest") >>  '>'
 
-			      >> serialchain_parser  
+			      >> serialchain_parser
 			      >> "</" >>  lit("Chest") >>  '>' ;
 
-	start %= starthn_tag 
-	  >>  '<' >>  lit("Feet") >>  '>'  
-	  >> rfeet_parser 
-	  >> lfeet_parser 
-	  >> "</" >>  lit("Feet") >>  '>' 
-	  >> aWaist_parser 
-	  >> '<' >>  lit("Legs") >>  '>'  
+	start %= starthn_tag
+	  >>  '<' >>  lit("Feet") >>  '>'
+	  >> rfeet_parser
+	  >> lfeet_parser
+	  >> "</" >>  lit("Feet") >>  '>'
+	  >> aWaist_parser
+	  >> '<' >>  lit("Legs") >>  '>'
 	  >> rleg_parser
 	  >> lleg_parser
-	  >> "</" >>  lit("Legs") >>  '>'  
+	  >> "</" >>  lit("Legs") >>  '>'
 
-	  >> '<' >>  lit("Hands") >>  '>' 
-	  >> '<' >>  lit("Right") >>  '>'  
-	  >> aHandNode_parser 
-	  >> "</" >>  lit("Right") >>  '>' 
-	  >> '<' >>  lit("Left") >>  '>'  
-	  >> aHandNode_parser 
-	  >> "</" >>  lit("Left") >>  '>'   
-	  >> "</" >>  lit("Hands") >>  '>' 
+	  >> '<' >>  lit("Hands") >>  '>'
+	  >> '<' >>  lit("Right") >>  '>'
+	  >> aHandNode_parser
+	  >> "</" >>  lit("Right") >>  '>'
+	  >> '<' >>  lit("Left") >>  '>'
+	  >> aHandNode_parser
+	  >> "</" >>  lit("Left") >>  '>'
+	  >> "</" >>  lit("Hands") >>  '>'
 
-	  >> '<' >>  lit("Wrists") >>  '>' 
-	  >> '<' >>  lit("Right") >>  '>'  
-	  >> aHandNode_parser 
-	  >> "</" >>  lit("Right") >>  '>' 
-	  >> '<' >>  lit("Left") >>  '>'  
-	  >> aHandNode_parser 
-	  >> "</" >>  lit("Left") >>  '>'   
-	  >> "</" >>  lit("Wrists") >>  '>' 
+	  >> '<' >>  lit("Wrists") >>  '>'
+	  >> '<' >>  lit("Right") >>  '>'
+	  >> aHandNode_parser
+	  >> "</" >>  lit("Right") >>  '>'
+	  >> '<' >>  lit("Left") >>  '>'
+	  >> aHandNode_parser
+	  >> "</" >>  lit("Left") >>  '>'
+	  >> "</" >>  lit("Wrists") >>  '>'
 
-	  >> '<' >>  lit("Arms") >>  '>'  
-	  >> rarm_parser 
+	  >> '<' >>  lit("Arms") >>  '>'
+	  >> rarm_parser
 	  >> larm_parser
-	  >> "</" >>  lit("Humanoid") >>  '>' ; 
+	  >> "</" >>  lit("Humanoid") >>  '>' ;
 
-	  
+
       }
 
       SerialChain_parser<Iterator> serialchain_parser;
@@ -437,8 +437,8 @@ namespace dynamicsJRLJapan {
       LegNode_parser<Iterator> aLegNode_parser;
       HandNode_parser<Iterator> aHandNode_parser;
       ArmNode_parser<Iterator> aArmNode_parser;
-      WaistNode_parser<Iterator> aWaist_parser; 
-      HeadNode_parser<Iterator> aHeadNode_parser; 
+      WaistNode_parser<Iterator> aWaist_parser;
+      HeadNode_parser<Iterator> aHeadNode_parser;
 
       qi::rule<Iterator, HumanoidNode(), ascii::space_type> start;
       qi::rule<Iterator, FootNode(), ascii::space_type> rfeet_parser,lfeet_parser;
@@ -447,16 +447,16 @@ namespace dynamicsJRLJapan {
       qi::rule<Iterator, ArmNode(), ascii::space_type> larm_parser,rarm_parser;
       // qi::rule<Iterator, SerialChain(), ascii::space_type> head_parser;
       qi::rule<Iterator, SerialChain(), ascii::space_type> chest_parser;
-      
+
       qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
       qi::rule<Iterator, std::string(), ascii::space_type> starthn_tag;
-      
+
     };
 
     // Intermediat Humanoid parser.
 
     template <typename Iterator>
-    struct IHumanoidNode_parser : 
+    struct IHumanoidNode_parser :
       qi::grammar<Iterator, HumanoidNode(), ascii::space_type>
     {
      IHumanoidNode_parser() : IHumanoidNode_parser::base_type(start)
@@ -466,47 +466,47 @@ namespace dynamicsJRLJapan {
 	using qi::lexeme;
 	using qi::char_;
         using qi::uint_;
-	
+
 	quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
 
 
-	rfeet_parser %= '<' >> lit("Right") >>  '>'  
-			    >> aFootNode_parser 
+	rfeet_parser %= '<' >> lit("Right") >>  '>'
+			    >> aFootNode_parser
 			    >> "</" >>  lit("Right") >>  '>' ;
-	lfeet_parser %= '<' >> lit("Left") >>  '>'  
-			    >> aFootNode_parser 
+	lfeet_parser %= '<' >> lit("Left") >>  '>'
+			    >> aFootNode_parser
 			    >> "</" >>  lit("Left") >>  '>';
-	rleg_parser %= '<' >>  lit("Right") >>  '>'  
-			   >> aLegNode_parser 
+	rleg_parser %= '<' >>  lit("Right") >>  '>'
+			   >> aLegNode_parser
 			   >>  "</" >>  lit("Right") >>  '>';
 
-	lleg_parser %= '<' >>  lit("Left") >>  '>'  
-			   >> aLegNode_parser 
+	lleg_parser %= '<' >>  lit("Left") >>  '>'
+			   >> aLegNode_parser
 			   >> "</" >>  lit("Left") >>  '>';
 
-	rhand_parser %= '<' >>  lit("Right") >>  '>'  
-			    >> aHandNode_parser 
+	rhand_parser %= '<' >>  lit("Right") >>  '>'
+			    >> aHandNode_parser
 			    >> "</" >>  lit("Right") >>  '>' ;
 
-	lhand_parser %=  '<' >>  lit("Left") >>  '>' 
-			     >> aHandNode_parser 
+	lhand_parser %=  '<' >>  lit("Left") >>  '>'
+			     >> aHandNode_parser
 			     >> "</" >>  lit("Left") >>  '>' ;
 
 
-	start %= '<' >> lit("Humanoid") 
+	start %= '<' >> lit("Humanoid")
 		     >> lit("name")
-		     >> '=' 
+		     >> '='
 		     >> quoted_string >> '>'
-		     >> '<' >>  lit("Feet") >>  '>'  
-		     >> rfeet_parser 
-		     >> lfeet_parser 
-		     >> "</" >>  lit("Feet") >>  '>' 
+		     >> '<' >>  lit("Feet") >>  '>'
+		     >> rfeet_parser
+		     >> lfeet_parser
+		     >> "</" >>  lit("Feet") >>  '>'
 		     >> aWaist_parser
-		     >> '<' >>  lit("Legs") >>  '>'  
+		     >> '<' >>  lit("Legs") >>  '>'
 		     >> rleg_parser
 		     >> lleg_parser
-		     >> "</" >>  lit("Legs") >>  '>'  
-		     >> '<' >>  lit("Hands") >>  '>' 
+		     >> "</" >>  lit("Legs") >>  '>'
+		     >> '<' >>  lit("Hands") >>  '>'
 		     >> rhand_parser
 		     >> lhand_parser
 		     >> "</" >>  lit("Hands") >>  '>' ;
@@ -518,8 +518,8 @@ namespace dynamicsJRLJapan {
       LegNode_parser<Iterator> aLegNode_parser;
       HandNode_parser<Iterator> aHandNode_parser;
       ArmNode_parser<Iterator> aArmNode_parser;
-      WaistNode_parser<Iterator> aWaist_parser; 
-      HeadNode_parser<Iterator> aHeadNode_parser; 
+      WaistNode_parser<Iterator> aWaist_parser;
+      HeadNode_parser<Iterator> aHeadNode_parser;
 
       qi::rule<Iterator, HumanoidNode(), ascii::space_type> start;
       qi::rule<Iterator, FootNode(), ascii::space_type> rfeet_parser,lfeet_parser;
@@ -528,10 +528,10 @@ namespace dynamicsJRLJapan {
       qi::rule<Iterator, ArmNode(), ascii::space_type> larm_parser,rarm_parser;
       // qi::rule<Iterator, SerialChain(), ascii::space_type> head_parser;
       qi::rule<Iterator, SerialChain(), ascii::space_type> chest_parser;
-      
+
       qi::rule<Iterator, std::string(), ascii::space_type> quoted_string;
       qi::rule<Iterator, std::string(), ascii::space_type> starthn_tag;
-      
+
     };
 
 

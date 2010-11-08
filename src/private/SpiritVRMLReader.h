@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -34,10 +34,10 @@
 
 namespace dynamicsJRLJapan
 {
-  namespace VRMLReader 
+  namespace VRMLReader
   {
-    int ParseVRMLFile(MultiBody *aMB, 
-		      std::string FileName, 
+    int ParseVRMLFile(MultiBody *aMB,
+		      std::string FileName,
 		      std::vector<BodyGeometricalData> & VectorOfURLs,
 		      bool ReadGeometry=false);
   };

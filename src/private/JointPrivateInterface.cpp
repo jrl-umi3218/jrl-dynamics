@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -25,7 +25,7 @@
  *
  */
 
-/* \file This part implements the generic JRL interface 
+/* \file This part implements the generic JRL interface
 */
 
 #include "Debug.h"
@@ -192,9 +192,9 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
 						  matrixNxP& outJ) const
 {
   vector3d dp,lv;
-  
+
   ODEBUG("Size of the jacobian :" << m_FromRootToThis.size()-1);
-  
+
   for(unsigned int i=0;i<m_FromRootToThis.size();i++)
     {
       MAL_VECTOR_DIM(LinearAndAngularVelocity,double,6);
@@ -202,16 +202,16 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
       DynamicBodyPrivate * aBody= static_cast<DynamicBodyPrivate *>
 	(m_FromRootToThis[i]->linkedBody());
       JointPrivate * aJoint = static_cast<JointPrivate *>(m_FromRootToThis[i]);
-      
+
       unsigned int lcol = aJoint->stateVectorPosition();
       ODEBUG("JointPrivate: " << aJoint->getName() << " " << lcol);
       dp = inPointWorldFrame - aBody->p;
-      
+
       MAL_S3_VECTOR_CROSS_PRODUCT(lv,aBody->w_a,dp);
-      
+
       switch (aJoint->type())
         {
-	  
+
         case JointPrivate::REVOLUTE_JOINT:
 	  for(int j=0;j<3;j++)
             {
@@ -268,7 +268,7 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
 /**
    \brief Get the jacobian of the point specified in local frame by inPointJointFrame.
    The output matrix outjacobian is automatically resized if necessary
- 
+
 */
 void JointPrivate::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
 {
@@ -300,13 +300,13 @@ void JointPrivate::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
   m_dynBody = (DynamicBodyPrivate*)m_Body;
-  
+
 }
 
 void JointPrivate::setLinkedDBody(DynamicBodyPrivate * inBody)
 {
   m_dynBody = inBody;
-  m_Body = m_dynBody;  
+  m_Body = m_dynBody;
 }
 
 void JointPrivate::SetFatherJoint(JointPrivate *aFather)
@@ -325,7 +325,7 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
     }
 }
 
-const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition() 
+const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
 {
   return m_globalPoseAtConstructionNormalized;
 }

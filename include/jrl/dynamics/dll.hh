@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009, 2010, 
+ * Copyright 2008, 2009, 2010,
  *
  * Francois Keith
  * Florent Lamiraux
@@ -28,11 +28,11 @@
 #define DYNAMICSJRLJAPAN_DLL_H
 
 #if defined (WIN32)
-#  ifdef dynamicsJRLJapan_EXPORTS 
+#  ifdef dynamicsJRLJapan_EXPORTS
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllexport)
-#  else  
+#  else
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllimport)
-#  endif 
+#  endif
 #else
 #  define DYN_JRL_JAPAN_EXPORT
 #endif

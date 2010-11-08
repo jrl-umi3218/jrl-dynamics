@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kanoun
  * Florent Lamiraux
@@ -219,7 +219,7 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
         unsigned int outOffset,
         bool includeFreeFlyer )
 {
-    
+
     unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
     unsigned int lengthJacobian = MAL_MATRIX_NB_COLS ( outjacobian );
     unsigned int reqJacobianLength = valNumberDof+outOffset;
@@ -242,8 +242,8 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
         }
 
     }
-    
-    
+
+
   //determine participating joints
     std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
     JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
@@ -381,7 +381,7 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
         }
 
     }
-    
+
 
   //determine participating joints
     std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
@@ -461,7 +461,7 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
         for (ii=0;ii<3;ii++)
             for (jj=outOffset;jj<outOffset+3;jj++)
                 outjacobian(ii,jj) = 0.0;
-        
+
         unsigned k = outOffset+3;
         outjacobian(0,k) = 1.0; outjacobian(1,k) = 0.0; outjacobian(2,k) = 0.0; k++;
         outjacobian(0,k) = 0.0; outjacobian(1,k) = 1.0; outjacobian(2,k) = 0.0; k++;

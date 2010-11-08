@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -52,7 +52,7 @@ using namespace boost::spirit::classic::utility;
 
 using namespace phoenix;
 
-namespace dynamicsJRLJapan 
+namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
@@ -64,18 +64,18 @@ namespace dynamicsJRLJapan
 	"\nLine:\t" << lc.line <<
 	"\nCol:\t" << lc.column << endl;
     }
-    
+
     struct error_report_parser {
       char const* eol_msg;
       char const* msg;
-      
+
       error_report_parser(char const* eol_msg_, char const* msg_):
         eol_msg(eol_msg_),
         msg    (msg_)
       {}
-      
+
       typedef struct boost::spirit::classic::nil_t result_t;
-      
+
       template <typename ScannerT>
       int
       operator()(ScannerT const& scan, result_t& /*result*/) const
@@ -91,13 +91,13 @@ namespace dynamicsJRLJapan
 	    cerr << fpos << msg << endl;
 	  }
         }
-	
+
         return -1; // Fail.
       }
-      
+
     };
     typedef functor_parser<error_report_parser> error_report_p;
-    
+
     error_report_p
     error_badnumber_or_eol =
 		    error_report_parser("Expecting a number, but found the end of the file\n",
@@ -105,11 +105,11 @@ namespace dynamicsJRLJapan
 
     error_report_p error_real =
 		    error_report_parser(0,"Expecting a real, but found something else\n");
-    
+
     error_report_p error_badnumber =
 		    error_report_parser(0,"Expecting a number, but found something else\n");
-    
-    error_report_p error_comma = 
+
+    error_report_p error_comma =
 		    error_report_parser(0,"Expecting a comma, but found something else\n");
   };
 };

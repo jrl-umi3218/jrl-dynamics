@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Florent Lamiraux
  * Olivier Stasse
@@ -44,7 +44,7 @@
 using namespace dynamicsJRLJapan;
 /*! Implements the angular Momentum methods of DynMultiBodyPrivate */
 
-void DynMultiBodyPrivate::angularMomentumWrtCoM(vector3d & angularmomentum) 
+void DynMultiBodyPrivate::angularMomentumWrtCoM(vector3d & angularmomentum)
 {
   angularMomentumWrtToPt(positionCoMPondere, angularmomentum);
 }
@@ -132,7 +132,7 @@ void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &apoint, vector3d & an
 
     }
   while(currentNode!=labelTheRoot);
-  
+
   angularmomentum = lL;
 }
 
@@ -166,7 +166,7 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetL(int JointID)
 
 void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobian)
 {
-  if ((MAL_MATRIX_NB_ROWS(outjacobian) != 3) || 
+  if ((MAL_MATRIX_NB_ROWS(outjacobian) != 3) ||
       (MAL_MATRIX_NB_COLS(outjacobian) != numberDof()))
     MAL_MATRIX_RESIZE(outjacobian,3,numberDof());
 
@@ -175,7 +175,7 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
   unsigned int rank;
   JointPrivate* aJoint;
   DynamicBodyPrivate* aBody;
-    
+
   for(unsigned int i=0;i<m_ConfigurationToJoints.size();i++)
     {
       if (m_ConfigurationToJoints[i] == rootJoint())
@@ -184,9 +184,9 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
       aJoint = m_ConfigurationToJoints[i];
       aBody=  aJoint->linkedDBody();
       rank = aJoint->rankInConfiguration();
-      
+
       matrixNxP pJacobian;
-      vector3d av(0,0,0); // Dummy 
+      vector3d av(0,0,0); // Dummy
       MAL_MATRIX_RESIZE(pJacobian,6, numberDof());
       getJacobian(*rootJoint(),*aJoint,av,pJacobian,true);
 
@@ -197,7 +197,7 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
 				MAL_MATRIX_NB_COLS(pJacobian));
       ODEBUG("pLinearJacobian:" <<endl <<pLinearJacobian);
 
-      matrixNxP pAngularJacobian; 
+      matrixNxP pAngularJacobian;
       MAL_MATRIX_RESIZE(pAngularJacobian,3,MAL_MATRIX_NB_COLS(pJacobian));
       MAL_MATRIX_C_eq_EXTRACT_A(pAngularJacobian,pJacobian,double,3,0,3,
 				MAL_MATRIX_NB_COLS(pJacobian));
@@ -217,19 +217,19 @@ void DynMultiBodyPrivate::getJacobianAngularMomentumWrtCoM(matrixNxP &outjacobia
       matrixNxP leftoperand;
       MAL_C_eq_A_by_B(leftoperand,xkmxg_cp,pLinearJacobian);
       outjacobian = outjacobian + leftoperand;
-      
+
       matrixNxP rightoperand;
       matrix3d tmp2_3d;
       matrixNxP tmp2;
       MAL_MATRIX_RESIZE(tmp2,3,3);
-      MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->R,aBody->getInertie()); 
+      MAL_S3x3_C_eq_A_by_B(tmp2_3d,aBody->R,aBody->getInertie());
       for(unsigned int i=0;i<3;++i)
 	for(unsigned int j=0;j<3;++j)
 	  tmp2(i,j) = tmp2_3d(i,j);
 
       MAL_C_eq_A_by_B(rightoperand,tmp2,pAngularJacobian);
-      
+
       outjacobian = outjacobian + rightoperand;
     }
-  
+
 }

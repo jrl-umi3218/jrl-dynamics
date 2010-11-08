@@ -1,5 +1,5 @@
 <Humanoid name="sample">
-  <Feet>	
+  <Feet>
     <Right>
 	<SizeX> 0.25 </SizeX>
 	<SizeY> 0.14 </SizeY>
@@ -16,7 +16,7 @@
         <JointNb> 2 </JointNb>
         <JointsID> 17 18 </JointsID>
     </Left>
-  </Feet>	
+  </Feet>
   <Waist>
     <Right>
       <WaistToHip>0.0 -0.09 0.0</WaistToHip>
@@ -35,14 +35,14 @@
         <JointNb> 4 </JointNb>
         <JointsID> 0 1 2 3</JointsID>
     </Right>
-    <Left> 
-        <HipLength>0.0 0.035 0.0</HipLength> 
+    <Left>
+        <HipLength>0.0 0.035 0.0</HipLength>
         <FemurLength>0.3535</FemurLength>
         <TibiaLength> 0.3 </TibiaLegnth>
         <JointNb> 4 </JointNb>
         <JointsID> 13 14 15 16 </JointsID>
     </Left>
-  </Legs>  
+  </Legs>
   <Hands>
     <Right>
       <Center>0.0 0.0 -0.17</Center>
@@ -81,7 +81,7 @@
         <JointsID> 19 20 21 22 23 24 25 </JointsID>
     </Left>
   </Arms>
-  <Head> 
+  <Head>
        <JointNb> 0 </JointNb>
        <JointsID>  </JointsID>
   </Head>

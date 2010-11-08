@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -61,12 +61,12 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
   // to the nature of the joint.
   matrix3d lR;
   vector3d lp;
-  
+
   MAL_S3x3_MATRIX_SET_IDENTITY(lR);
-  
+
   for(unsigned int i=0;i<3;i++)
     MAL_S3_VECTOR_ACCESS(lp,i) = 0.0;
-  
+
   return  Spatial::PluckerTransform(lR,lp);
 }
 
@@ -77,13 +77,13 @@ void JointPrivate::initXL()
   vector3d lp;
   for(unsigned int i=0;i<3;i++)
     for(unsigned int j=0;j<3;j++)
-      MAL_S3x3_MATRIX_ACCESS_I_J(lR,i,j) = 
+      MAL_S3x3_MATRIX_ACCESS_I_J(lR,i,j) =
 	MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,j);
-  
+
   for(unsigned int i=0;i<3;i++)
-    MAL_S3_VECTOR_ACCESS(lp,i) = 
+    MAL_S3_VECTOR_ACCESS(lp,i) =
       MAL_S4x4_MATRIX_ACCESS_I_J(m_poseInParentFrame,i,3);
- 
+
   m_XL = Spatial::PluckerTransform(lR,lp);
   // Assuming at first an identity matrix for Xj(i).
   m_iXpi = m_XL;
@@ -96,7 +96,7 @@ bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
 {
   Spatial::PluckerTransform Xj = xjcalc(inRobotConfigVector);
   m_iXpi = Xj * m_XL;
-  
+
   if (m_FatherJoint!=0)
     {
       Spatial::PluckerTransform piX0 = m_FatherJoint->X0();
@@ -115,7 +115,7 @@ bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
     localSpeed(i) = inRobotSpeedVector(rankInConfiguration()+i);
 
   Spatial::Velocity psv = m_FatherJoint->sv();
-  
+
   m_sv = (m_iXpi * psv);
   vectorN a = MAL_RET_A_by_B(m_phi,localSpeed);
   m_sv = m_sv + a;

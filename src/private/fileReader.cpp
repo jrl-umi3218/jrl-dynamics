@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Abderrahmane Kheddar
  *
@@ -24,10 +24,10 @@
  *
  */
 
-/* @doc Object used to parse small config 
-   @author : 
+/* @doc Object used to parse small config
+   @author :
    Abderrahmane Kheddar
-   
+
 */
 
 #ifndef WIN32
@@ -47,7 +47,7 @@ namespace dynamicsJRLJapan
   {
     errno=0;
     int n = fscanf(fichier, "%c", c);
-    
+
     if ((n!=1) && (errno!=0))
       LTHROW("fscanf unable to read a character" );
   }
@@ -56,7 +56,7 @@ namespace dynamicsJRLJapan
   {
     errno=0;
     int n = fscanf(fichier, "%lf", c);
-    
+
     if ((n!=1) && (errno!=0))
       LTHROW("fscanf unable to read a double");
   }
@@ -65,7 +65,7 @@ namespace dynamicsJRLJapan
   {
     errno=0;
     int n = fscanf(fichier, "%d", c);
-    
+
     if ((n!=1) && (errno!=0))
       LTHROW("fscanf unable to read a double");
   }
@@ -79,14 +79,14 @@ namespace dynamicsJRLJapan
 
     do
       {
-      
+
 	fscanfc(fichier, &c);
 
 	if (Cont && c=='\n')
 	  Cont=false;
 	else if (c=='#')
 	  Cont=true;
-      
+
 	if (!Cont)
 	  {
 	    if (c == str[i] && i < (int)(strlen(str)))
@@ -101,11 +101,11 @@ namespace dynamicsJRLJapan
 	  }
       }
     while (!feof(fichier));
-    
+
     return 0;
   }
 
-  bool immediatlyAppears(FILE* fichier, const char *str) 
+  bool immediatlyAppears(FILE* fichier, const char *str)
   {
     bool b = true;
     char c;
@@ -133,7 +133,7 @@ namespace dynamicsJRLJapan
 	fread(Buffer,strlen(str),1,fichier);
 	cout << "Refused by immediatlyAppears" << Buffer << " ";
 	fsetpos(fichier,&afpos_t);
-	    
+
       }
 
     return b;
@@ -142,7 +142,7 @@ namespace dynamicsJRLJapan
   int nextKeyWord(FILE* fich)
   {
     char c;
-	
+
     while (!feof(fich))
       {
 	fscanfc(fich, &c);
@@ -179,7 +179,7 @@ namespace dynamicsJRLJapan
   {
     char c;
     do {
-         
+
       fscanfc(fichier, &c);
       switch (c) {
       case 'j' :

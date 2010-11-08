@@ -1,14 +1,14 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Adrien Escande,
  * Oussama Kanoun
  * Francois Keith
- * Abderrahmane Kheddar,  
+ * Abderrahmane Kheddar,
  * Florent Lamiraux
  * Olivier Stasse,
  * Ramzi Sellouati
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -57,8 +57,8 @@ using namespace std;
 
 namespace dynamicsJRLJapan
 {
-    
-    
+
+
   /** @ingroup forwardynamics
        Internallink structure:
       Define a link between two bodys:
@@ -67,7 +67,7 @@ namespace dynamicsJRLJapan
       - Fixed joint (0 DoF) (type = FIX_JOINT)
       - Prismatic joint (1 DoF) (type = PRISMATIC_JOINT)
       - Revolute joint (1 DoF) (type = REVOLUTE_JOINT)
-      
+
       The sequence for the transformation is
       - translation (translationStatique
       - rotation (angleRotationStatique)
@@ -81,12 +81,12 @@ namespace dynamicsJRLJapan
   };
 
   /** @ingroup forwardynamics
-      
+
   Binding structure:
   - \a corps is the body to which this structure belongs. This should be equal
-  to one of the field \a indexCorps1 or \a indexCorps of the internalLink's instance indicated 
+  to one of the field \a indexCorps1 or \a indexCorps of the internalLink's instance indicated
   by the field \a liaison.
-  - \a liaison is the corresponding link.   
+  - \a liaison is the corresponding link.
 
   The equality operator is used with the find function of \<algorithm\>.
   */
@@ -98,21 +98,21 @@ namespace dynamicsJRLJapan
   bool operator==(const matching a1, const matching a2);
 
   /** @ingroup forwardynamics
-       
-      This class implements a non-oriented graph for which the nodes are 
+
+      This class implements a non-oriented graph for which the nodes are
       bodies (Body) and the edges are joints (internalLink).
-      
+
       The description is:
       There is a list of nodes (listeBodies) and a list of edges (listeInternalLinks).
       The edges starting from an i-th node of listeBodies are stored in vector
-      links[i], and store an instance of matching for which the body 
+      links[i], and store an instance of matching for which the body
       Body is the second node of the edge.
 
   */
   class MultiBody
   {
   protected:
-    
+
     /*!  Robot's mass. */
     double m_mass;
     /*!  CoM of the robot */
@@ -130,7 +130,7 @@ namespace dynamicsJRLJapan
     MultiBody(void);
     /*!  Destructor */
     virtual ~MultiBody(void);
-    
+
     /*!  Adds a body. */
     void addBody(Body &b);
 
@@ -158,7 +158,7 @@ namespace dynamicsJRLJapan
     /*!  Remove body by label. */
     void removeBodyLabel(int label);
 
-    /*!  Returns the CoM position. */ 
+    /*!  Returns the CoM position. */
     vector3d getPositionCoM(void);
 
 
@@ -185,7 +185,7 @@ namespace dynamicsJRLJapan
   // Create a matrix from an axis and a rotation around
   // this axis.
   void AxisAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
-  
+
 };
 
 #endif

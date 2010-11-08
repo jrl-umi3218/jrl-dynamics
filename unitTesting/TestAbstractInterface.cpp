@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -61,14 +61,14 @@ int main(int argc, char *argv[])
       aName=argv[2];
       JointToRank = argv[4];
       aSpecificitiesFileName = argv[3];
-    }	
+    }
 
   int VerboseMode = 0;
   // Read the first humanoid.
   CjrlHumanoidDynamicRobot * aHDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
   string RobotFileName = aPath+aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,JointToRank, aSpecificitiesFileName);
-  
+
   // The second humanoid is constructed through the abstract interface
   //
   CjrlHumanoidDynamicRobot* a2HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
@@ -78,13 +78,13 @@ int main(int argc, char *argv[])
   CjrlHumanoidDynamicRobot* a3HDR = robotDynamicsObjectConstructor.createHumanoidDynamicRobot();
 
   // Test the new humanoid structure.
-  double dInitPos[40] = { 
+  double dInitPos[40] = {
     0.0, 0.0, -26.0, 50.0, -24.0, 0.0, 0.0, 0.0, -26.0, 50.0, -24.0, 0.0,  // legs
 
     0.0, 0.0, 0.0, 0.0, // chest and head
 
     15.0, -10.0, 0.0, -30.0, 0.0, 0.0, 10.0, // right arm
-    15.0,  10.0, 0.0, -30.0, 0.0, 0.0, 10.0, // left arm 
+    15.0,  10.0, 0.0, -30.0, 0.0, 0.0, 10.0, // left arm
 
     -20.0, 20.0, -20.0, 20.0, -20.0, // right hand
     -10.0, 10.0, -10.0, 10.0, -10.0  // left hand
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
   int NbOfDofs = aHDR->numberDof();
 
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
-  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
+  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
-  
+
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
     {
       if (InitialPosition==POSITION_STILL)
@@ -124,12 +124,12 @@ int main(int argc, char *argv[])
       else if (InitialPosition==POSITION_HALF_SITTING)
 	aCurrentConf[lindex++] = dInitPos[i]*M_PI/180.0;
     }
-  
+
   aHDR->currentConfiguration(aCurrentConf);
   aHDR->currentVelocity(aCurrentVel);
   aHDR->currentAcceleration(aCurrentAcc);
   aHDR->computeForwardKinematics();
-  
+
   HumanoidCopy aHumanoidCopier;
   aHumanoidCopier.PerformCopyFromJointsTree(aHDR, a2HDR);
 
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
   a3HDR->currentVelocity(aCurrentVel);
   a3HDR->currentAcceleration(aCurrentAcc);
   a3HDR->computeForwardKinematics();
-  
+
   // Initial Humanoid
   ofstream initialhumanoid;
   initialhumanoid.open("initialhumanoid.output");
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
       initialhumanoid.close();
     }
 
-  // Copied Humanoid 
+  // Copied Humanoid
   ofstream copiedhumanoid;
   copiedhumanoid.open("copiedhumanoid.output");
   if (copiedhumanoid.is_open())
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
   delete aHDR;
   delete a2HDR;
   delete a3HDR;
-  
+
   string iho("copiedhumanoid.output");
   string cho("copied2ndhumanoid.output");
   string rho("reportcopy.output");

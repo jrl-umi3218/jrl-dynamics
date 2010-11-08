@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -49,7 +49,7 @@ namespace dynamicsJRLJapan
     {
     public:
       Velocity();
-      Velocity(vector3d lv0,vector3d lw);       
+      Velocity(vector3d lv0,vector3d lw);
       Velocity operator+(Velocity &a);
       Velocity operator+(vectorN &a);
       Velocity operator-(Velocity &a);
@@ -59,7 +59,7 @@ namespace dynamicsJRLJapan
 
       friend Velocity operator*(double ad, Velocity &a);
       friend Velocity operator+(vectorN & ,Velocity &);
-      
+
       vector3d v0()
       { return m_v0;}
       void v0(const vector3d &lv0)
@@ -73,7 +73,7 @@ namespace dynamicsJRLJapan
     private:
       vector3d m_v0,m_w;
     };
-    
+
     Velocity operator*(double ad, Velocity &a);
     Velocity operator+(vectorN &, Velocity &);
 
@@ -85,7 +85,7 @@ namespace dynamicsJRLJapan
       Acceleration operator+(Acceleration &a);
       Acceleration operator-(Acceleration &a);
       Acceleration operator+(vectorN &a);
-      
+
       friend Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
       { return m_dv0;}
@@ -115,7 +115,7 @@ namespace dynamicsJRLJapan
       vector3d dw()
       { return m_dw;};
 
-    private:  
+    private:
       vector3d m_dv0,m_dw;
     };
 
@@ -126,7 +126,7 @@ namespace dynamicsJRLJapan
       Force(vector3d lf, vector3d ln0);
       Force operator+(Force &a);
       Force operator-(Force &a);
-      
+
       vector3d f()
       {return m_f;};
       vector3d n0()
@@ -135,12 +135,12 @@ namespace dynamicsJRLJapan
       {m_f = lf;}
       void n0(vector3d &ln0)
       {m_n0 = ln0;}
-	
-    private:  
+
+    private:
 
       vector3d m_f, m_n0;
     };
-    
+
     class Motion
     {
     public:
@@ -154,7 +154,7 @@ namespace dynamicsJRLJapan
       vector3d theta()
       { return m_theta; }
 
-    private:  
+    private:
       vector3d m_p, m_theta;
     };
 
@@ -185,7 +185,7 @@ namespace dynamicsJRLJapan
       void addInertia(Inertia &c,
 		      Inertia &a,
 		      Inertia &b) const;
-	
+
       Inertia operator+(Inertia &a);
       Momentum operator*(Velocity &);
       Force operator*(Acceleration &);
@@ -229,5 +229,5 @@ namespace dynamicsJRLJapan
   };
 };
 
-    
+
 #endif /* _SPATIAL_ALGEBRA_H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Francois Keith
  * Florent Lamiraux
@@ -69,7 +69,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int currentNode = labelTheRoot;
   DynamicBodyPrivate *currentBody=0;
 
-  currentBody = m_listOfBodies[currentNode];      
+  currentBody = m_listOfBodies[currentNode];
   JointPrivate * currentJoint = currentBody->getJointPrivate();
 
   currentBody->p = PosForRoot;
@@ -101,12 +101,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   do
     {
 
-      currentBody = m_listOfBodies[currentNode];      
+      currentBody = m_listOfBodies[currentNode];
       currentJoint = currentBody->getJointPrivate();
 
       // Position and orientation in reference frame
       currentJoint->updateTransformation(m_Configuration);
-	  
+
       if (m_ComputeVelocity)
 	currentJoint->updateVelocity(m_Configuration,
 				     m_Velocity);
@@ -116,15 +116,15 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  currentJoint->updateWorldCoMPosition();
 	  positionCoMPondere +=  currentBody->w_c * currentBody->getMass();
         }
-      
-      // Update the momentum 
+
+      // Update the momentum
       if (m_ComputeMomentum)
         {
 	  currentJoint->updateMomentum();
 	  m_P += currentBody->P;
 	  m_L+= currentBody->L;
         }
-      
+
       // Update the acceleration of the body.
       if (m_ComputeAcceleration)
 	currentJoint->updateAcceleration(m_Configuration,
@@ -249,10 +249,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
 /**
    \brief Compute forward kinematics.
-   
+
    Update the position, velocity and accelerations of each
    wrt \f${\bf {q}}\f$, \f${\bf \dot{q}}\f$, \f${\bf \ddot{q}}\f$.
-   
+
 */
 bool DynMultiBodyPrivate::computeForwardKinematics()
 {

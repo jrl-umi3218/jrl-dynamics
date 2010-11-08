@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kanoun
  * Francois Keith
@@ -124,7 +124,7 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
       aos << m_TimeStep;
       outValue=aos.str();
     }
-  else 
+  else
   {
 	  std::cout << " Unknown getProperty '" << inProperty << "'" << std::endl;
   }
@@ -252,7 +252,7 @@ bool DynMultiBodyPrivate::setProperty(std::string &inProperty,const std::string 
   {
 	  ResetIterationNumber();
   }
-  else 
+  else
   {
 	  std::cout << " Unknown setProperty '" << inProperty << "'" << std::endl;
   }

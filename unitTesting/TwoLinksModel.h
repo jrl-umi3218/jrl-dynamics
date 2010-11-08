@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Francois Keith
  * Olivier Stasse,
@@ -42,7 +42,7 @@ namespace dynamicsJRLJapan
 {
   /*! \brief Parameters of the Planar elbow robot.
    */
-  typedef struct 
+  typedef struct
   {
     /*! \brief Length of the links. */
     double l[2];
@@ -60,28 +60,28 @@ namespace dynamicsJRLJapan
   class CTwoLinksModel: public virtual jrlDelegate::dynamicRobot
     {
     public:
-      /** Constructor 
+      /** Constructor
 	  \param anObjectFactory: Classical factory object for robot construction.
 	  \param l1: Length of first link.
 	  \param l2: Length of second link. */
       CTwoLinksModel(CjrlRobotDynamicsObjectFactory *anObjectFactory,
 		     TwoLinksModelParameters &aSetOfParameters);
-      
+
       /*! Compute analytical BackwardDynamics. */
       void computeAnalyticalBackwardDynamics(vector3d Forces[2],
 					     vector3d Torques[2]);
-      
-      /*! Test if the instance is identical between generic and 
+
+      /*! Test if the instance is identical between generic and
 	analytical computation. Return true is this is the case.*/
       bool TestInstance(vectorN &aCurrentConf,
 			vectorN &aCurrentVelocity,
 			vectorN &aCurrentAcceleration,
 			std::string &testname);
-      
+
     private:
       /* Parameters of the two links model. */
       TwoLinksModelParameters m_SetOfParameters;
-      
+
       /*! \brief Forward recursion link 1. */
       void ForwardRecursionLink1(vector3d &ac1,
 				 vector3d &g1,
@@ -91,7 +91,7 @@ namespace dynamicsJRLJapan
       void ForwardRecursionLink2(vector3d &ae1,
 				 vector3d &ac2,
 				 vector3d &g2);
-      
+
 
       /*! \brief Backward recursion link 2. */
       void BackwardRecursionLink2(vector3d &ac2,
@@ -100,7 +100,7 @@ namespace dynamicsJRLJapan
 				  vector3d &ldw2,
 				  vector3d &f2,
 				  vector3d &t2);
-		
+
       /*! \brief Backward recursion link 1. */
       void BackwardRecursionLink1(vector3d &ac1,
 				  vector3d &g1,
@@ -110,7 +110,7 @@ namespace dynamicsJRLJapan
 				  vector3d &ldw1,
 				  vector3d &f1,
 				  vector3d &t1);
-      
+
       double m_g;
 
       /*! Orthonormal basis */

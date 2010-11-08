@@ -1,10 +1,10 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun
  * Francois Keith
  * Olivier Stasse
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -74,11 +74,11 @@ JointRotationPrivate::~JointRotationPrivate()
 bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
 {
   DynamicBodyPrivate* body = (DynamicBodyPrivate*)(linkedBody());
-  
+
   DynamicBodyPrivate* parentbody = 0;
   if (parentJoint()!=0)
     parentbody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-  
+
   // Read body variables in the state vector
   body->q = inDofVector(rankInConfiguration());
   quantity( body->q);
@@ -86,7 +86,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
   // Compute Rodrigues representation of the motion.
   matrix3d localR;
   RodriguesRotation(body->a, body->q, localR);
-  
+
   // Update position and orientation
   matrix3d Rtmp;
   if (parentbody!=0)
@@ -98,7 +98,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
 
       //update the translation/rotation axis of joint
       MAL_S3x3_C_eq_A_by_B(body->w_a,Rtmp, body->a);
-  
+
     }
   else
     {
@@ -110,7 +110,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
 
   // Put it in a homogeneous form.
   MAL_S3x3_C_eq_A_by_B(body->R , Rtmp, localR);
-  
+
   // Store intermediate information for further computation
   body->Riip1 = localR;
   body->Riip1t = MAL_S3x3_RET_TRANSPOSE(localR);
@@ -118,7 +118,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
   for( unsigned int i=0;i<3;i++)
     for(unsigned int j=0;j<3;j++)
       MAL_S4x4_MATRIX_ACCESS_I_J(body->m_transformation,i,j) = body->R(i,j);
-  
+
   for( unsigned int i=0;i<3;i++)
     MAL_S4x4_MATRIX_ACCESS_I_J(body->m_transformation,i,3) = body->p(i);
 
@@ -132,51 +132,51 @@ bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   DynamicBodyPrivate* currentMotherBody = 0;
-  vector3d NE_tmp, NE_tmp2; 
+  vector3d NE_tmp, NE_tmp2;
   if (parentJoint()!=0)
     currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
   currentBody->dq = inRobotSpeedVector(rankInConfiguration());
-  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);    
+  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
   // Computes the angular velocity
-  
+
   // In the global frame.
   ODEBUG("dq: "<< currentBody->dq );
   NE_tmp = currentBody->w_a * currentBody->dq;
   //	  NE_tmp = MAL_S3x3_RET_A_by_B(currentBody->R,NE_tmp);
   if (currentMotherBody!=0)
     currentBody->w  = currentMotherBody->w  + NE_tmp;
-  else 
+  else
     currentBody->w  = NE_tmp;
 
   ODEBUG("w: " << currentBody->w );
   // In the local frame.
   NE_tmp = currentBody->a * currentBody->dq;
-  
+
   if (currentMotherBody!=0)
     {
       MAL_S3x3_C_eq_A_by_B(NE_tmp2,RstaticT,currentMotherBody->lw);
     }
-  else 
+  else
     MAL_S3_VECTOR_FILL(NE_tmp2,0.0);
 
   NE_tmp2 = MAL_S3x3_RET_A_by_B(currentBody->Riip1t,NE_tmp2);
-  
+
   currentBody->lw  = NE_tmp2  + NE_tmp;
-  
+
   // Computes the linear velocity.
   if (currentMotherBody!=0)
     {
       MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R,
 			   currentBody->b);
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,
-				  currentMotherBody->w , 
+				  currentMotherBody->w ,
 				  NE_tmp);
       currentBody->v0 = currentMotherBody->v0 + NE_tmp2;
     }
-  else 
+  else
     MAL_S3_VECTOR_FILL(currentBody->v0,0.0);
-  
+
 
   return true;
 }
@@ -185,9 +185,9 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
 					      const vectorN &inRobotSpeedVector,
 					      const vectorN &inRobotAccelerationVector)
 {
- 
+
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);    
+  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
   DynamicBodyPrivate* currentMotherBody = 0;
   vector3d NE_tmp, NE_tmp2, NE_tmp3, NE_RotByMotherdv;
   if (parentJoint()!=0)
@@ -206,7 +206,7 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
   currentBody->dw = NE_tmp2 + NE_tmp3;
   if (currentMotherBody!=0)
     currentBody->dw += currentMotherBody->dw;
-  
+
   // In local reference frame.
   if (currentMotherBody!=0)
     {
@@ -215,13 +215,13 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
     }
   else
     MAL_S3_VECTOR_FILL(currentBody->ldw,0.0);
-  
+
   NE_tmp = currentBody->a * currentBody->ddq;
   NE_tmp2 = currentBody->a * currentBody->dq;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
   currentBody->ldw= currentBody->ldw + NE_tmp + NE_tmp3;
   ODEBUG(" " <<currentBody->getName() << " currentBody->ldw:" << currentBody->ldw);
-  
+
   // ******************* Computes the linear acceleration for joint i. ********************
   // In global reference frame
   if (currentMotherBody!=0)
@@ -229,33 +229,33 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector
       MAL_S3x3_C_eq_A_by_B(NE_tmp, currentMotherBody->R , currentBody->b);
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->w,NE_tmp);
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->w,NE_tmp2);
-      
+
       // NE_tmp2 = dw_I x r_{i,i+1}
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->dw,NE_tmp);
-      
+
       currentBody->dv = NE_tmp2 + NE_tmp3 + currentMotherBody->dv;
     }
-  else 
+  else
     MAL_S3_VECTOR_FILL(currentBody->dv,0.0);
 
   // In local reference frame.
   // NE_tmp3 = w_i x (w_i x r_{i,i+1})
   if (currentMotherBody!=0)
     {
-      
+
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->lw,currentBody->b);
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentMotherBody->lw,NE_tmp2);
-      
+
       // NE_tmp2 = dw_I x r_{i,i+1}
       MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentMotherBody->ldw,currentBody->b);
-      
+
       NE_tmp = NE_tmp2 + NE_tmp3 + currentMotherBody->ldv;
-      
+
       MAL_S3x3_C_eq_A_by_B(NE_RotByMotherdv,RstaticT,NE_tmp);
       currentBody->ldv = MAL_S3x3_RET_A_by_B(currentBody->Riip1t,NE_RotByMotherdv);
       ODEBUG(" " << currentBody->getName() << " Mother->ldv:" <<currentMotherBody->ldv);
     }
-  else 
+  else
     MAL_S3_VECTOR_FILL(currentBody->ldv,0);
 
   return true;

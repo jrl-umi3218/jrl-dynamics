@@ -1,8 +1,8 @@
 # Olivier Stasse
 # JRL/CNRS Copyright
-# Gnuplot file to display analysis of 
+# Gnuplot file to display analysis of
 # walkGenJRL computation.
-# 
+#
 plot "RebuildZMP-Actual.dat" u 5 w l t "LF-A-X", \
   "RebuildZMP-Actual.dat" u 8 w l t "RF-A-X", \
   "RebuildZMP-Actual.dat" u 1 w l t "ZMP-A-X", \
@@ -10,5 +10,5 @@ plot "RebuildZMP-Actual.dat" u 5 w l t "LF-A-X", \
   "jl_pgrightfootref.dat"  u ($0-33720):5 w l t "RF-Ref-X", \
   "RebuildZMP-Ref.dat" u 5 w l t "LF-R-X", \
   "RebuildZMP-Ref.dat" u 8 w l t "RF-R-X", \
-  "RebuildZMP-Ref.dat" u 1 w l t "ZMP-R-X" 
+  "RebuildZMP-Ref.dat" u 1 w l t "ZMP-R-X"
 

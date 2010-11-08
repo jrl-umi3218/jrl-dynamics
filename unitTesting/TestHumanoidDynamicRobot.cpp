@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Luis Degaldo
- * Francois Keith 
+ * Francois Keith
  * Florent Lamiraux
  * Layale Saab
  * Olivier Stasse,
@@ -45,7 +45,7 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot,
   std::vector<CjrlJoint *> aVec = aDynamicRobot->jointVector();
   int r = aVec.size();
   tcout << "Number of joints :" << r << endl;
-  
+
 }
 
 int main(int argc, char *argv[])
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
       aSpecificitiesFileName = "sampleSpecificities.xml";
       aMapFromJointToRank = "sampleLinkJointRank.xml";
     }
-  else 
+  else
     {
       aSpecificitiesFileName = argv[3];
       aPath=argv[1];
@@ -72,20 +72,20 @@ int main(int argc, char *argv[])
       aMapFromJointToRank=argv[4];
     }
   dynamicsJRLJapan::ObjectFactory aRobotDynamicsObjectConstructor;
-  
+
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createHumanoidDynamicRobot();
-  
+
 
   if (aHDR==0)
-    { 
+    {
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
     }
   string RobotFileName = aPath+aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,aMapFromJointToRank,aSpecificitiesFileName);
-  
+
   // Display tree of the joints.
-  CjrlJoint* rootJoint = aHDR->rootJoint();  
+  CjrlJoint* rootJoint = aHDR->rootJoint();
 
   int NbOfDofs = aHDR->numberDof();
   tcout << "NbOfDofs :" << NbOfDofs << std::endl;
@@ -104,11 +104,11 @@ int main(int argc, char *argv[])
     aCurrentConf[lindex++] = 0.0;
   aHDR->currentConfiguration(aCurrentConf);
 
-  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs); 
+  MAL_VECTOR_DIM(aCurrentVel,double,NbOfDofs);
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
-  
+
   MAL_S3_VECTOR(ZMPval,double);
 
   aHDR->currentVelocity(aCurrentVel);
@@ -117,28 +117,28 @@ int main(int argc, char *argv[])
   aHDR->setProperty(inProperty,aValue);
   aHDR->computeForwardKinematics();
   ZMPval = aHDR->zeroMomentumPoint();
-  tcout << "First value of ZMP : " 
-	<< filterprecision(ZMPval(0)) << " " 
-	<< filterprecision(ZMPval(1)) << " " 
+  tcout << "First value of ZMP : "
+	<< filterprecision(ZMPval(0)) << " "
+	<< filterprecision(ZMPval(1)) << " "
 	<< filterprecision(ZMPval(2)) << endl;
   MAL_S3_VECTOR(poscom,double);
   poscom = aHDR->positionCenterOfMass();
-  tcout << "Should be equal to the CoM: " 
+  tcout << "Should be equal to the CoM: "
 	<< filterprecision(poscom(0)) << " "
-	<< filterprecision(poscom(1)) << " "  
+	<< filterprecision(poscom(1)) << " "
 	<< filterprecision(poscom(2)) << endl;
 
 
   matrixNxP InertiaMatrix;
   aHDR->computeInertiaMatrix();
   InertiaMatrix = aHDR->inertiaMatrix();
- 
+
   tcout << "InertiaMatrix("
-       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< "," 
+       << MAL_MATRIX_NB_ROWS(InertiaMatrix)<< ","
        << MAL_MATRIX_NB_COLS(InertiaMatrix)<< ")"<< endl;
-    
+
   DisplayMatrix(InertiaMatrix,tcout);
-  
+
   ofstream aof;
   aof.open("InertiaMatrix.dat");
   for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(InertiaMatrix);i++)
@@ -152,14 +152,14 @@ int main(int argc, char *argv[])
   aof.close();
 
   std::vector<CjrlJoint *> aVec = aHDR->jointVector();
-  
+
   // Get the Jacobian of the right ankle.
   CjrlJoint  * aJoint = aHDR->rightAnkle();
   aJoint->computeJacobianJointWrtConfig();
 
   tcout << "Jacobian of the right ankle." << endl;
   MAL_MATRIX(,double) aJ;
-  aJ = aJoint->jacobianJointWrtConfig();  
+  aJ = aJoint->jacobianJointWrtConfig();
   DisplayMatrix(aJ,tcout);
 
   // Get the articular Jacobian from the right ankle to the right wrist.
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 		    aJ);
   tcout << "Jacobian from the right ankle to the right wrist. " << endl;
   DisplayMatrix(aJ,tcout);
-  
+
   MAL_MATRIX_RESIZE(aJ,3, MAL_MATRIX_NB_COLS(aJ));
   // Get the linear part of the articular Jacobian from the right ankle to the right wrist.
   aHDR->getPositionJacobian(*aHDR->rightAnkle(),
@@ -179,20 +179,20 @@ int main(int argc, char *argv[])
 			    aJ);
   tcout << "Jacobian from the right ankle to the right wrist. " << endl;
   DisplayMatrix(aJ,tcout);
-  
+
   // Get the angular part of the articular Jacobian from the right ankle to the right wrist.
   aHDR->getOrientationJacobian(*aHDR->rightAnkle(),
 			       *aHDR->rightWrist(),
 			       aJ);
-  
+
   tcout << "Jacobian from the right ankle to the right wrist. " << endl;
   DisplayMatrix(aJ,tcout);
-  
-  
+
+
   tcout << "****************************" << endl;
   rootJoint->computeJacobianJointWrtConfig();
-  aJ = rootJoint->jacobianJointWrtConfig();  
-    
+  aJ = rootJoint->jacobianJointWrtConfig();
+
   tcout << "Rank of Root: " << rootJoint->rankInConfiguration() << endl;
 
   //  DisplayMatrix(aJ);
@@ -262,38 +262,38 @@ int main(int argc, char *argv[])
       aHDR->currentAcceleration(aCurrentAcc);
       aHDR->computeForwardKinematics();
       ZMPval = aHDR->zeroMomentumPoint();
-      tcout << i << "-th value of ZMP : " 	
-	    << filterprecision(ZMPval(0)) << " " 
-	    << filterprecision(ZMPval(1)) << " " 
+      tcout << i << "-th value of ZMP : "
+	    << filterprecision(ZMPval(0)) << " "
+	    << filterprecision(ZMPval(1)) << " "
 	    << filterprecision(ZMPval(2)) << endl;
       poscom = aHDR->positionCenterOfMass();
-      tcout << "Should be equal to the CoM: "  
+      tcout << "Should be equal to the CoM: "
 	    << filterprecision(poscom(0)) << " "
-	    << filterprecision(poscom(1)) << " "  
+	    << filterprecision(poscom(1)) << " "
 	    << filterprecision(poscom(2)) << endl;
     }
 
 
   // Check the information on actuated joints.
   std::vector<CjrlJoint *> ActuatedJoints = aHDR->getActuatedJoints();
-  
+
   tcout << "Size of actuated Joints:" << ActuatedJoints.size() << endl;
   for(unsigned int i=0;i<ActuatedJoints.size();i++)
-    tcout << "Rank of actuated joints ("<<i<< ") in configuration :" 
+    tcout << "Rank of actuated joints ("<<i<< ") in configuration :"
 	  << ActuatedJoints[i]->rankInConfiguration() << endl;
 
   tcout << "Humanoid mass:" << aHDR->mass() << endl;
 
   DisplayForces(aHDR,empty,tcout);
   DisplayTorques(aHDR,empty, tcout);
-  
+
   // Test torques.
   tcout << "Test Torques:" << endl;
   const matrixNxP& Torques = aHDR->currentTorques();
   for(unsigned int i=6;i<MAL_MATRIX_NB_ROWS(Torques);i++)
     {
       double torquefrominertia = 9.81 * InertiaMatrix(i,2);
-      tcout << filterprecision(Torques(i,0)) << " " 
+      tcout << filterprecision(Torques(i,0)) << " "
 	    << filterprecision(torquefrominertia) << endl;
     }
 

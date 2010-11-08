@@ -1,10 +1,10 @@
 /*
- * Copyright 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2006, 2007, 2008, 2009, 2010,
  *
  * Fumio Kanehiro,
  * Florent Lamiraux,
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -46,7 +46,7 @@ Joint::Joint()
 Joint::Joint(const Joint& inJoint)
 {
   JointPrivate* obj=0;
-  
+
   JointFreeflyerPrivate *aFFP = dynamic_cast<JointFreeflyerPrivate *>(inJoint.m_privateObj.get());
   if (aFFP!=0)
     obj = new JointFreeflyerPrivate(*aFFP);
@@ -57,7 +57,7 @@ Joint::Joint(const Joint& inJoint)
 	obj = new JointRotationPrivate(*aRP);
       else
 	{
-	  
+
 	  JointTranslationPrivate *aTP = dynamic_cast<JointTranslationPrivate *>(inJoint.m_privateObj.get());
 	  if (aTP!=0)
 	    obj = new JointTranslationPrivate(*aTP);
@@ -230,7 +230,7 @@ void Joint::computeJacobianJointWrtConfig()
   DERIVPRIVATE->computeJacobianJointWrtConfig();
 }
 
-void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, 
+void Joint::getJacobianPointWrtConfig(const vector3d& inPointJointFrame,
 				      matrixNxP& outjacobian) const
 {
   DERIVPRIVATE->getJacobianPointWrtConfig(inPointJointFrame, outjacobian);

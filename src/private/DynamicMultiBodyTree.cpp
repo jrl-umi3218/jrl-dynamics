@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Francois Keith
  * Florent Lamiraux
@@ -329,7 +329,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 
 	if (lCurrentBody) {
 	  lCurrentBody->localCenterOfMass(jrlBody->localCenterOfMass());
-	} 
+	}
 	else if (DynamicBody* dBody = dynamic_cast<DynamicBody*>(jrlBody)) {
 	  lCurrentBody = dynamic_cast<DynamicBodyPrivate*>(dBody->m_privateObj.get());
 	} else {

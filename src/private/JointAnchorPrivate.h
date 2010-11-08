@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse
  *
@@ -38,18 +38,18 @@
 using namespace std;
 
 namespace dynamicsJRLJapan
-{  
+{
     class DynamicBodyPrivate;
     class JointAnchorPrivate : public JointPrivate
     {
     public:
-      
+
       JointAnchorPrivate(const matrix4d &inInitialPosition);
       virtual ~JointAnchorPrivate();
-      
-      /*! 
-	\brief Compute position and orientation for state vector 
-	given inDofVector. 
+
+      /*!
+	\brief Compute position and orientation for state vector
+	given inDofVector.
 	\param inDofVector: The current configuration of the robot.
 	\return false is the number of dofs is not sufficient. */
       bool updateTransformation(const vectorN & inDofVector);
@@ -63,9 +63,9 @@ namespace dynamicsJRLJapan
 			      const vectorN& inRobotSpeedVector,
 			      const vectorN& inRobotAccelerationVector);
 
-      
+
       /*! \brief Here the number of DOFs is 0. */
-      unsigned int numberDof() const 
+      unsigned int numberDof() const
       { return 0;};
 
     };

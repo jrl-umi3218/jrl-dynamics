@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Paul Evrard
  * Florent Lamiraux
@@ -76,9 +76,9 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::velocityCenterOfMass()
 };
 
 
-bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint, 
-						 matrixNxP& outjacobian, 
-						 unsigned int outOffset, 
+bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint,
+						 matrixNxP& outjacobian,
+						 unsigned int outOffset,
 						 bool includeFreeFlyer )
 {
   unsigned int valNumberDof = ( includeFreeFlyer==true ) ?numberDof() :numberDof()-6;
@@ -237,7 +237,7 @@ void DynMultiBodyPrivate::getJacobianLinearMomentumWrtCoM(matrixNxP &outjacobian
 */
 /*
   \brief Compute the dynamics of the center of mass.
-  
+
   Compute the linear and  angular momentum and their time derivatives, at the center of mass.
 */
 bool DynMultiBodyPrivate::computeCenterOfMassDynamics()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Olivier Stasse
  *
@@ -53,7 +53,7 @@
 
 namespace dynamicsJRLJapan {
   namespace HumanoidSpecificitiesData {
-    
+
     namespace fusion = boost::fusion;
     namespace phoenix = boost::phoenix;
     namespace qi = boost::spirit::qi;
@@ -62,7 +62,7 @@ namespace dynamicsJRLJapan {
     // Foot parser.
 
     template <typename Iterator>
-    struct ArmNode_parser : 
+    struct ArmNode_parser :
       qi::grammar<Iterator, ArmNode(), ascii::space_type>
     {
       ArmNode_parser() : ArmNode_parser::base_type(start)
@@ -70,18 +70,18 @@ namespace dynamicsJRLJapan {
         using qi::double_;
 	using qi::lit;
 
-	UpperArmLength_parser %= '<' >>  lit("UpperArmLength") >>  '>' 
+	UpperArmLength_parser %= '<' >>  lit("UpperArmLength") >>  '>'
 				     >>  double_ // Implicit rule to fill upper arm length.
 				     >>  lit("</") >>  lit("UpperArmLength") >>  '>' ;
-	  
-	ForeArmLength_parser %= '<' >> lit("ForeArmLength") >>  '>' 
+
+	ForeArmLength_parser %= '<' >> lit("ForeArmLength") >>  '>'
 				    >> double_ // Implicit rule to fill fore Arm length.
 				    >> lit("</") >>  lit("ForeArmLength") >>  '>' ;
 
-	start %= UpperArmLength_parser >> 
-	  ForeArmLength_parser >> 
+	start %= UpperArmLength_parser >>
+	  ForeArmLength_parser >>
 	  serialchain_parser;
-	  
+
       }
 
       qi::rule<Iterator, ArmNode(), ascii::space_type> start;

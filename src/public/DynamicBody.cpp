@@ -1,9 +1,9 @@
 /*
- * Copyright 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2006, 2007, 2008, 2009, 2010,
  *
  * Florent Lamiraux,
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *

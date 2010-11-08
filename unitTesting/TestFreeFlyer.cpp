@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -43,7 +43,7 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot,
   std::vector<CjrlJoint *> aVec = aDynamicRobot->jointVector();
   int r = aVec.size();
   tcout << "Number of joints :" << r << endl;
-  
+
 }
 
 int main(int argc, char *argv[])
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
       aSpecificitiesFileName = "sampleSpecificities.xml";
       aMapFromJointToRank = "sampleLinkJointRank.xml";
     }
-  else 
+  else
     {
       aSpecificitiesFileName = argv[3];
       aPath=argv[1];
@@ -69,20 +69,20 @@ int main(int argc, char *argv[])
       aMapFromJointToRank=argv[4];
     }
   dynamicsJRLJapan::ObjectFactory aRobotDynamicsObjectConstructor;
-  
+
   CjrlHumanoidDynamicRobot * aHDR = aRobotDynamicsObjectConstructor.createHumanoidDynamicRobot();
-  
+
 
   if (aHDR==0)
-    { 
+    {
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
     }
   string RobotFileName = aPath+aName;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,aMapFromJointToRank,aSpecificitiesFileName);
-  
+
   // Display tree of the joints.
-  CjrlJoint* rootJoint = aHDR->rootJoint();  
+  CjrlJoint* rootJoint = aHDR->rootJoint();
 
   int NbOfDofs = aHDR->numberDof();
   if (NbOfDofs==0)
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
   for(int i=0;i<NbOfDofs;i++)
     {
       aCurrentConf[i] = 0.0;
-      aCurrentAcc[i] = 0.0; 
+      aCurrentAcc[i] = 0.0;
       aCurrentVel[i] = 0.0;
     }
   aCurrentConf[9] = 1.0;
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
   DisplayForces(aHDR,empty,tcout);
   DisplayTorques(aHDR,empty, tcout);
-    
+
   tcout.close();
 
 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
   for(int i=0;i<NbOfDofs;i++)
     {
       aCurrentConf[i] = 0.0;
-      aCurrentAcc[i] = 0.0; 
+      aCurrentAcc[i] = 0.0;
       aCurrentVel[i] = 0.0;
     }
   aCurrentConf[9] = 1.0;
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
   RecursiveDisplayOfJoints(rootJoint,tcout,10);
   DisplayForces(aHDR,empty,tcout);
   DisplayTorques(aHDR,empty, tcout);
-    
+
   tcout.close();
 
 

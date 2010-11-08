@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -39,7 +39,7 @@ namespace dynamicsJRLJapan {
     return adb;
   }
 
-  void dv3d(vector3d &av3d, ostream &os) 
+  void dv3d(vector3d &av3d, ostream &os)
   {
     for(unsigned int i=0;i<3;i++)
       os << filterprecision(av3d(i)) << " ";
@@ -97,7 +97,7 @@ namespace dynamicsJRLJapan {
 	for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
 	  {
 	    if (aJ(i,j)==0.0)
-	      os << "0 "; 
+	      os << "0 ";
 	    else
 	      os << filterprecision(aJ(i,j)) << " ";
 	  }
@@ -108,13 +108,13 @@ namespace dynamicsJRLJapan {
 
   void DisplayMatrix(const MAL_MATRIX(,double) &aJ, ostream &os)
   {
-    
+
     for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)
       {
 	for(unsigned int j=0;j<MAL_MATRIX_NB_COLS(aJ);j++)
 	  {
 	    if (aJ(i,j)==0.0)
-	      os << "0 "; 
+	      os << "0 ";
 	    else
 	      {
 		double adb;
@@ -127,8 +127,8 @@ namespace dynamicsJRLJapan {
 
   }
 
-  void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR, 
-		      string &shifttab, 
+  void DisplayTorques(CjrlHumanoidDynamicRobot *aHDR,
+		      string &shifttab,
 		      ostream &tcout)
   {
     if (aHDR!=0)
@@ -140,8 +140,8 @@ namespace dynamicsJRLJapan {
       }
   }
 
-  void DisplayForces(CjrlHumanoidDynamicRobot *aHDR, 
-		     string &shifttab, 
+  void DisplayForces(CjrlHumanoidDynamicRobot *aHDR,
+		     string &shifttab,
 		     ostream &tcout)
   {
     if (aHDR!=0)
@@ -153,8 +153,8 @@ namespace dynamicsJRLJapan {
       }
   }
 
-  void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR, 
-		       string &shifttab, 
+  void DisplayActuated(CjrlHumanoidDynamicRobot *aHDR,
+		       string &shifttab,
 		       ostream &tcout)
   {
     if (aHDR!=0)
@@ -171,7 +171,7 @@ namespace dynamicsJRLJapan {
 
   void DisplayBody(CjrlBody *aBody, string &shifttab,ostream &tcout)
   {
-  
+
     tcout << shifttab << "Related body informations" << endl;
     vector3d alcm = aBody->localCenterOfMass();
     tcout << shifttab << "Local center of Mass : ";
@@ -180,41 +180,41 @@ namespace dynamicsJRLJapan {
     tcout << shifttab << "Inertia Matrix: " ;
     dm3d(aim,tcout,shifttab);
     tcout << shifttab << "mass: " << aBody->mass() << endl;
-      
+
   }
-  
+
   void DisplayHand(CjrlHand *ajrlHand,string &shifttab,ostream &tcout)
   {
     vector3d outCenter,outThumbAxis, outForeFinger,
       outPalmNormal;
     ajrlHand->getCenter(outCenter);
-    tcout << shifttab << "Center:" 
-	  << outCenter(0) << " " 
+    tcout << shifttab << "Center:"
+	  << outCenter(0) << " "
 	  << outCenter(1) << " "
 	  << outCenter(2) << endl;
-  
+
     ajrlHand->getThumbAxis(outThumbAxis);
-    tcout << shifttab << "Center:" 
-	  << outThumbAxis(0) << " " 
+    tcout << shifttab << "Center:"
+	  << outThumbAxis(0) << " "
 	  << outThumbAxis(1) << " "
 	  << outThumbAxis(2) << endl;
-  
+
     ajrlHand->getForeFingerAxis(outForeFinger);
-    tcout << shifttab << "Center:" 
-	  << outForeFinger(0) << " " 
-	  << outForeFinger(1) << " "
-	  << outForeFinger(2) << endl;
-  
-    ajrlHand->getPalmNormal(outPalmNormal);
-    tcout << shifttab << "Center:" 
-	  << outForeFinger(0) << " " 
+    tcout << shifttab << "Center:"
+	  << outForeFinger(0) << " "
 	  << outForeFinger(1) << " "
 	  << outForeFinger(2) << endl;
 
-    
+    ajrlHand->getPalmNormal(outPalmNormal);
+    tcout << shifttab << "Center:"
+	  << outForeFinger(0) << " "
+	  << outForeFinger(1) << " "
+	  << outForeFinger(2) << endl;
+
+
     RecursiveDisplayOfJoints((CjrlJoint *)ajrlHand->associatedWrist(),
 			     tcout, 2, 0);
-				 
+
   }
 
   void DisplayFoot(CjrlFoot *aFoot,string &shifttab,ostream &tcout)
@@ -225,10 +225,10 @@ namespace dynamicsJRLJapan {
 
     double SoleLength, SoleWidth;
     aFoot->getSoleSize(SoleLength,SoleWidth);
-  
-    tcout << shifttab << "SoleLength: " << SoleLength << " " 
+
+    tcout << shifttab << "SoleLength: " << SoleLength << " "
 	  << "SoleWidth: " << SoleWidth << std::endl;
-  
+
     aFoot->getAnklePositionInLocalFrame(AnklePositionInLocalFrame);
     tcout << shifttab << "AnklePositionInLocalFrame=("
 	  << AnklePositionInLocalFrame(0) << " , "
@@ -236,7 +236,7 @@ namespace dynamicsJRLJapan {
 	  << AnklePositionInLocalFrame(2) << ")" << std::endl;
   }
 
-  void RecursiveDisplayOfJoints(CjrlJoint *aJoint, 
+  void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
 				ostream &tcout,
 				unsigned int verbosedisplay,
 				unsigned int ldepth)
@@ -248,21 +248,21 @@ namespace dynamicsJRLJapan {
     string shifttab="";
     for(unsigned int i=0;i<ldepth;i++)
       shifttab+=" ";
-  
-    tcout << shifttab << "Rank : " 
+
+    tcout << shifttab << "Rank : "
 	  << aJoint->rankInConfiguration() << endl;
-    tcout << shifttab << "Number of child  :" 
+    tcout << shifttab << "Number of child  :"
 	  << aJoint->countChildJoints() << endl;
-    tcout << shifttab << "Nb of degree of freedom " 
+    tcout << shifttab << "Nb of degree of freedom "
 	  <<  aJoint->numberDof() << endl;
-  
+
 
     if (verbosedisplay>1)
       {
 	tcout << shifttab << "Initial Position " ;
 	matrix4d iP = aJoint->initialPosition();
 	dm4d(iP,tcout,shifttab);
-      
+
 	tcout << shifttab << "CurrentTransformation ";
 	matrix4d cT = aJoint->currentTransformation();
 	dm4d(cT,tcout,shifttab);
@@ -270,16 +270,16 @@ namespace dynamicsJRLJapan {
 	if (verbosedisplay>2)
 	  {
 	    // Limits
-	    tcout << shifttab << "llimit: " 
-		  << aJoint->lowerBound(0)*180/M_PI << " " 
-		  << shifttab << "ulimit: " 
+	    tcout << shifttab << "llimit: "
+		  << aJoint->lowerBound(0)*180/M_PI << " "
+		  << shifttab << "ulimit: "
 		  << aJoint->upperBound(0)*180/M_PI << " " << endl;
-	    
-	    tcout << shifttab << "lvlimit: " 
-		  << aJoint->lowerVelocityBound(0)*180/M_PI << " " 
-		  << shifttab << "uvlimit: " 
+
+	    tcout << shifttab << "lvlimit: "
+		  << aJoint->lowerVelocityBound(0)*180/M_PI << " "
+		  << shifttab << "uvlimit: "
 		  << aJoint->upperVelocityBound(0)*180/M_PI << " " << endl;
-	    
+
 	    // Path from the root to this joint.
 	    std::vector<CjrlJoint*> JointsFromRootToHere = aJoint->jointsFromRootToThis();
 	    tcout << shifttab << "Nb of nodes: " << JointsFromRootToHere.size() << endl
@@ -287,11 +287,11 @@ namespace dynamicsJRLJapan {
 	    for(unsigned int i=0;i<JointsFromRootToHere.size();i++)
 	      tcout << JointsFromRootToHere[i]->rankInConfiguration() << " ";
 	    tcout << endl;
-	    
+
 	    if (verbosedisplay>3)
 	      {
 		// Current state of the joint.
-		
+
 		// Rigid velocity:
 		CjrlRigidVelocity aRV = aJoint->jointVelocity();
 		tcout << shifttab << "Linear Velocity ";
@@ -300,7 +300,7 @@ namespace dynamicsJRLJapan {
 		tcout << shifttab << "Angular Velocity ";
 		av3d = aRV.rotationVelocity();
 		dv3d(av3d,tcout);
-		
+
 		// Rigit Acceleration.
 		CjrlRigidAcceleration aRA = aJoint->jointAcceleration();
 		tcout << shifttab << "Linear Acceleration ";
@@ -309,23 +309,23 @@ namespace dynamicsJRLJapan {
 		tcout << shifttab << "Angular Acceleration ";
 		av3d = aRA.rotationAcceleration();
 		dv3d(av3d,tcout);
-		
+
 		CjrlBody * aBody = aJoint->linkedBody();
 		DisplayBody(aBody,shifttab,tcout);
 	      }
 	  }
       }
-    
+
     if (NbChildren!=0)
       {
 	tcout << shifttab << "***********************************************" << endl;
 	tcout << shifttab << " Display Now information related to children :" << endl;
-      
+
 	for(int i=0;i<NbChildren;i++)
 	  {
 	    // Returns a const so we have to force the casting/
 	    RecursiveDisplayOfJoints(aJoint->childJoint(i),
-				     tcout,verbosedisplay,ldepth+1); 
+				     tcout,verbosedisplay,ldepth+1);
 	  }
       }
   }
@@ -335,7 +335,7 @@ namespace dynamicsJRLJapan {
     std::vector<CjrlJoint *> aVec = aHDR->jointVector();
     for(unsigned int i=0;i<aVec.size();i++)
       {
-	CjrlRigidVelocity aRA =aVec[i]->jointVelocity(); 
+	CjrlRigidVelocity aRA =aVec[i]->jointVelocity();
 	vector3d av3d = aRA.linearVelocity();
 	dv3d(av3d,tcout);
       }
@@ -347,7 +347,7 @@ namespace dynamicsJRLJapan {
     std::vector<CjrlJoint *> aVec = aHDR->jointVector();
     for(unsigned int i=0;i<aVec.size();i++)
       {
-	CjrlRigidVelocity aRA =aVec[i]->jointVelocity(); 
+	CjrlRigidVelocity aRA =aVec[i]->jointVelocity();
 	vector3d av3d = aRA.rotationVelocity();
 	dv3d(av3d,tcout);
       }
@@ -359,7 +359,7 @@ namespace dynamicsJRLJapan {
     std::vector<CjrlJoint *> aVec = aHDR->jointVector();
     for(unsigned int i=0;i<aVec.size();i++)
       {
-	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration(); 
+	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration();
 	vector3d av3d = aRA.linearAcceleration();
 	dv3d(av3d,tcout);
       }
@@ -371,13 +371,13 @@ namespace dynamicsJRLJapan {
     std::vector<CjrlJoint *> aVec = aHDR->jointVector();
     for(unsigned int i=0;i<aVec.size();i++)
       {
-	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration(); 
+	CjrlRigidAcceleration aRA =aVec[i]->jointAcceleration();
 	vector3d av3d = aRA.rotationAcceleration();
 	dv3d(av3d,tcout);
       }
   }
-  
-  
+
+
   void DisplayEndEffectors(CjrlHumanoidDynamicRobot *aHDR,
 			   ostream &tcout)
   {
@@ -387,18 +387,18 @@ namespace dynamicsJRLJapan {
     CjrlHand *rightHand = aHDR->rightHand();
     string empty("");
     DisplayHand(rightHand,empty,tcout);
-    
+
     tcout << "Rank of the left hand "<< endl;
     tcout << aHDR->leftWrist()->rankInConfiguration() << endl;
     CjrlHand *leftHand = aHDR->leftHand();
     DisplayHand(leftHand,empty,tcout);
-    
+
     // Test rank of the feet.
     tcout << "Rank of the right foot "<< endl;
     tcout << aHDR->rightFoot()->associatedAnkle()->rankInConfiguration() << endl;
     CjrlFoot *rightFoot = aHDR->rightFoot();
     DisplayFoot(rightFoot,empty,tcout);
-    
+
     tcout << "Rank of the left foot "<< endl;
     tcout << aHDR->leftFoot()->associatedAnkle()->rankInConfiguration() << endl;
     CjrlFoot *leftFoot = aHDR->leftFoot();
@@ -411,18 +411,18 @@ namespace dynamicsJRLJapan {
     os << "NbOfDofs :" << aHDR->numberDof() << std::endl;
     RecursiveDisplayOfJoints(aHDR->rootJoint(),
 			     os,10);
-    
+
     DisplayEndEffectors(aHDR,os);
     std::string empty("");
     DisplayActuated(aHDR,empty,os);
 
-    os << "total mass " << aHDR->mass() 
+    os << "total mass " << aHDR->mass()
        << " COM: " << aHDR->positionCenterOfMass() << endl;
   }
 
   bool CompareTwoFiles(char *RefFileName, char *OurFileName, char *ReportFile)
   {
-    std::ifstream reffile(RefFileName,ifstream::in), 
+    std::ifstream reffile(RefFileName,ifstream::in),
       ourfile(OurFileName,ifstream::in);
     std::ofstream  reportfile(ReportFile,ofstream::out);
     unsigned int NbLine=0;
@@ -443,10 +443,10 @@ namespace dynamicsJRLJapan {
 	// manner.
 	if (reffile.gcount()!=ourfile.gcount())
 	  {
-	    reportfile << "Error reading at line " << NbLine 
-		       << endl << "ref (count): " << reffile.gcount() 
-		       << endl << "our (count): " << reffile.gcount() 
-		       << endl << "ref: " << refline 
+	    reportfile << "Error reading at line " << NbLine
+		       << endl << "ref (count): " << reffile.gcount()
+		       << endl << "our (count): " << reffile.gcount()
+		       << endl << "ref: " << refline
 		       << endl << "our: " << ourline <<endl;
 
 	    readingok=false;
@@ -477,10 +477,10 @@ namespace dynamicsJRLJapan {
 
     if (ourfile.is_open())
       ourfile.close();
-    
+
     if (reportfile.is_open())
       reportfile.close();
-    
+
     return readingok;
   }
 };

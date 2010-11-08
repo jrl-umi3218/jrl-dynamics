@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse
  *
@@ -52,7 +52,7 @@
 
 namespace dynamicsJRLJapan {
   namespace HumanoidSpecificitiesData {
-    
+
     namespace fusion = boost::fusion;
     namespace phoenix = boost::phoenix;
     namespace qi = boost::spirit::qi;
@@ -75,11 +75,11 @@ namespace dynamicsJRLJapan {
 		std::istream_iterator<char>(in),
 		std::istream_iterator<char>(),
 		std::back_inserter(storage));
-      
-      struct HumanoidNode_parser<std::string::const_iterator> 
+
+      struct HumanoidNode_parser<std::string::const_iterator>
 	hsxml; // Our grammar
       HumanoidNode ast; // Our tree
-      
+
       using boost::spirit::ascii::space;
       std::string::const_iterator iter = storage.begin();
       std::string::const_iterator end = storage.end();
@@ -88,7 +88,7 @@ namespace dynamicsJRLJapan {
       display_attribute_of_parser(hsxml);
 
       bool r = phrase_parse(iter, end, hsxml, space, ast);
-      
+
       if (r && iter == end)
 	{
 	  std::cout << "-------------------------\n";

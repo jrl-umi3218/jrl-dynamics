@@ -1,5 +1,5 @@
 /*
- * Copyright 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2006, 2007, 2008, 2009, 2010,
  *
  * Oussama Kanoun
  * Fumio Kanehiro
@@ -41,7 +41,7 @@ namespace dynamicsJRLJapan {
 
   /** \ingroup userclasses
       \brief This class represents a robot joint.
-      
+
       Implements abstract interface CjrlJoint.
   */
   class DYN_JRL_JAPAN_EXPORT Joint : public virtual CjrlJoint
@@ -111,7 +111,7 @@ namespace dynamicsJRLJapan {
     */
 
     /**
-       \brief Get the initial position of the joint. 
+       \brief Get the initial position of the joint.
 
        The initial position of the joint is the position of the local frame of
        the joint.
@@ -127,11 +127,11 @@ namespace dynamicsJRLJapan {
 
     /**
        \brief Get the current transformation of the joint.
-       
+
        The current transformation of the joint is the transformation
        moving the joint from the position in initial configuration to
-       the current position. 
-       
+       the current position.
+
        The current transformation is determined by the configuration \f${\bf q}\f$ of the robot.
     */
     virtual const matrix4d &currentTransformation() const;
@@ -140,7 +140,7 @@ namespace dynamicsJRLJapan {
        \brief Get the velocity \f$({\bf v}, {\bf \omega})\f$ of the joint.
 
        The velocity is determined by the configuration of the robot and its time derivative: \f$({\bf q},{\bf \dot{q}})\f$.
-       
+
        \return the linear velocity \f${\bf v}\f$ of the origin of the joint frame
        and the angular velocity \f${\bf \omega}\f$ of the joint frame.
     */
@@ -240,16 +240,16 @@ namespace dynamicsJRLJapan {
        Kinematical constraints from interaction with the environment are not taken into account for this computation.
 
        The corresponding computation can be done by the robot for each of its joints or by the joint.
-       
-       \return a matrix \f$J \in {\bf R}^{6\times n_{dof}}\f$ defined by 
+
+       \return a matrix \f$J \in {\bf R}^{6\times n_{dof}}\f$ defined by
        \f[
        J = \left(\begin{array}{llll}
        {\bf v_1} & {\bf v_2} & \cdots & {\bf v_{n_{dof}}} \\
        {\bf \omega_1} & {\bf \omega_2} & \cdots & {\bf \omega_{n_{dof}}}
        \end{array}\right)
        \f]
-       where \f${\bf v_i}\f$ and \f${\bf \omega_i}\f$ are respectively the linear and angular velocities of the joint 
-       implied by the variation of degree of freedom \f$q_i\f$. The velocity of the joint returned by 
+       where \f${\bf v_i}\f$ and \f${\bf \omega_i}\f$ are respectively the linear and angular velocities of the joint
+       implied by the variation of degree of freedom \f$q_i\f$. The velocity of the joint returned by
        CjrlJoint::jointVelocity can thus be obtained through the following formula:
        \f[
        \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}}
@@ -297,7 +297,7 @@ namespace dynamicsJRLJapan {
   /**
      \brief Free flyer joint
   */
-  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public Joint 
+  class DYN_JRL_JAPAN_EXPORT JointFreeflyer : public Joint
   {
   public:
     JointFreeflyer(const matrix4d& inInitialPosition);
@@ -306,7 +306,7 @@ namespace dynamicsJRLJapan {
   /**
      \brief Rotation joint
   */
-  class DYN_JRL_JAPAN_EXPORT JointRotation : public Joint 
+  class DYN_JRL_JAPAN_EXPORT JointRotation : public Joint
   {
   public:
     JointRotation(const matrix4d& inInitialPosition);
@@ -315,7 +315,7 @@ namespace dynamicsJRLJapan {
   /**
      \brief Translation joint
   */
-  class DYN_JRL_JAPAN_EXPORT JointTranslation : public Joint 
+  class DYN_JRL_JAPAN_EXPORT JointTranslation : public Joint
   {
   public:
     JointTranslation(const matrix4d& inInitialPosition);
@@ -324,7 +324,7 @@ namespace dynamicsJRLJapan {
   /**
      \brief Anchor joint
   */
-  class DYN_JRL_JAPAN_EXPORT JointAnchor : public Joint 
+  class DYN_JRL_JAPAN_EXPORT JointAnchor : public Joint
   {
   public:
     JointAnchor(const matrix4d& inInitialPosition);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007, 2008, 2009, 2010, 
+ * Copyright 2007, 2008, 2009, 2010,
  *
  * Fumio Kanehiro
  * Florent Lamiraux

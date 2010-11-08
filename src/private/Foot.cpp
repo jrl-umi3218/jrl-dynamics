@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Florent Lamiraux
  *
@@ -24,7 +24,7 @@
  *
  */
 
-/* @doc Object used to handle a foot 
+/* @doc Object used to handle a foot
 */
 #include "jrl/dynamics/foot.hh"
 
@@ -36,7 +36,7 @@ Foot::Foot()
 
 Foot::Foot(const Foot &inFoot)
 {
-  
+
 }
 
 Foot::~Foot()

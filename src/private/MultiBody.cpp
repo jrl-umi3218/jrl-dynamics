@@ -1,14 +1,14 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Adrien Escande,
  * Oussama Kanoun
  * Francois Keith
- * Abderrahmane Kheddar,  
+ * Abderrahmane Kheddar,
  * Florent Lamiraux
  * Olivier Stasse,
  * Ramzi Sellouati
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -40,8 +40,8 @@
    OS (21/12/2006): removed any reference to non-homogeneous matrix
    library.
    OS (10/01/2007): Put the abstract layer for small matrix library.
-   
-   
+
+
    JRL-Japan, CNRS/AIST
 
    Please refers to file License.txt for details on the license.
@@ -59,8 +59,8 @@
 using namespace dynamicsJRLJapan;
 
 // surcharge operateur
-bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::matching a1, 
-				  const dynamicsJRLJapan::matching a2) 
+bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::matching a1,
+				  const dynamicsJRLJapan::matching a2)
 {
   return (a1.body==a2.body);
 }
@@ -69,7 +69,7 @@ bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::matching a1,
 
 // Caution: This operator is specific to OpenGL matrices: it transposes the
 // matrix before multiplication.
-MAL_S3_VECTOR(,double) operator * (double* m, MAL_S3_VECTOR(,double) v) 
+MAL_S3_VECTOR(,double) operator * (double* m, MAL_S3_VECTOR(,double) v)
 {
   MAL_S3_VECTOR(,double) result;
 
@@ -84,13 +84,13 @@ void Matrix2AxisAngle(float R[16],double Axis[3], double & Angle)
 {
   double q[4];
   double sum_x, sum_y, sum_z, sum_w, sum_max, S;
-  
+
   sum_w = 1 + R[0] + R[5] + R[10];
   sum_x = 1 + R[0] - R[5] - R[10];
   sum_y = 1 + R[5] - R[0] - R[10];
   sum_z = 1 + R[10] - R[0] - R[5];
   sum_max = max(max(sum_w,sum_x), max(sum_y, sum_z));
-  
+
   if (sum_max == sum_w)
     {
       S = sqrt(sum_w)*2;
@@ -106,15 +106,15 @@ void Matrix2AxisAngle(float R[16],double Axis[3], double & Angle)
       q[1] = (R[4] + R[1] ) / S;
       q[2] = (R[2] + R[8] ) / S;
       q[3] = (R[9] - R[6] ) / S;
-    } 
-  else if (sum_max == sum_y) 
-    { 
+    }
+  else if (sum_max == sum_y)
+    {
       S  = sqrt(sum_y) * 2;
       q[0] = (R[4] + R[1] ) / S;
       q[1] = 0.25 * S;
       q[2] = (R[9] + R[6] ) / S;
       q[3] = (R[2] - R[8] ) / S;
-    } 
+    }
   else
     {
       S  = sqrt(sum_z) * 2;
@@ -122,7 +122,7 @@ void Matrix2AxisAngle(float R[16],double Axis[3], double & Angle)
       q[1] = (R[9] + R[6] ) / S;
       q[2] = 0.25 * S;
       q[3] = (R[4] - R[1] ) / S;
-    } 
+    }
 
   // Conversion from quaternions to axis and angles
   double sum;
@@ -144,7 +144,7 @@ void Matrix2AxisAngle(float R[16],double Axis[3], double & Angle)
   cos_a = q[3];
   Angle = acos( cos_a ) * 2;
   sin_a = sqrt( 1.0 - cos_a * cos_a );
-  if ( fabs( sin_a ) < 0.0005 ) 
+  if ( fabs( sin_a ) < 0.0005 )
     sin_a = 1;
 
   Axis[0] = -q[0] / sin_a;
@@ -205,10 +205,10 @@ void MultiBody::addLink(Body &corps1, Body &corps2, internalLink & l)
 
   // create relation between  corps2, liaison
   matching a2 = {index2, listInternalLinks.size()-1};
-  links[index1].push_back(a2);	
+  links[index1].push_back(a2);
   // create relation between  corps1, liaison
   matching a1 = {index1, listInternalLinks.size()-1};
-  links[index2].push_back(a1);	
+  links[index2].push_back(a1);
 }
 
 void MultiBody::deleteLinkBetween(Body &corps1, Body &corps2)
@@ -237,10 +237,10 @@ void MultiBody::deleteLinkBetween(Body &corps1, Body &corps2)
   listInternalLinks[index].indexCorps1 = -1;
   listInternalLinks[index].indexCorps2 = -1;
   listInternalLinks[index].label = -1;
-  links[c1].erase(it);		
+  links[c1].erase(it);
   // search the iteratory of the link among links of body c2.
   it = find(links[c2].begin(), links[c2].end(), a2);
-  links[c2].erase(it);		
+  links[c2].erase(it);
 }
 
 void MultiBody::removeLink(int index)
@@ -326,7 +326,7 @@ void MultiBody::displayBodies()
     cout << "corps "<< i << " : \n";
     listBodies[i]->Display(cout);
     for (unsigned int j=0; j<links[i].size(); j++) {
-      cout << "    lie a corps " << links[i][j].body << " par liaison " 
+      cout << "    lie a corps " << links[i][j].body << " par liaison "
 	   << links[i][j].link << " (label " << listInternalLinks[links[i][j].link].label <<")\n";
     }
     cout << "\n";
@@ -337,12 +337,12 @@ void MultiBody::displayBodies()
 void MultiBody::displayLinks(void) {
   for (unsigned int i=0; i<listInternalLinks.size(); i++) {
     cout << "Name: "<< listInternalLinks[i].aJoint->getName()
-	 << " JointID in VRML " 
+	 << " JointID in VRML "
 	 << listInternalLinks[i].aJoint->getIDinActuated() << " " ;
     cout << "Link type:  " << listInternalLinks[i].aJoint->type()
-	 << "  label "<< listInternalLinks[i].label 
-	 << "  bouding body " 
-	 << listInternalLinks[i].indexCorps1 
+	 << "  label "<< listInternalLinks[i].label
+	 << "  bouding body "
+	 << listInternalLinks[i].indexCorps1
 	 << " to body  " << listInternalLinks[i].indexCorps2 << "\n";
     cout << "translationStatique : " << endl;
     MAL_S3_VECTOR(,double) aStaticTranslation;
@@ -398,14 +398,14 @@ int MultiBody::NbOfJoints() const
 }
 
 
-MultiBody & MultiBody::operator=(const MultiBody &rhs) 
+MultiBody & MultiBody::operator=(const MultiBody &rhs)
 {
 
   listInternalLinks.clear();
   links.clear();
   listBodies.clear();
   std::map<DynamicBodyPrivate *,DynamicBodyPrivate *> MapBodiesFromOriginalToNew;
-  std::map<JointPrivate *, JointPrivate *> 
+  std::map<JointPrivate *, JointPrivate *>
     MapJointsFromOriginalToNew;
 
   internalLink CurrentLink ;
@@ -425,7 +425,7 @@ MultiBody & MultiBody::operator=(const MultiBody &rhs)
 	  exit(-1);
 	}
     }
-  
+
   for(unsigned int i=0;
       i<rhs.listInternalLinks.size();
       i++)
@@ -447,23 +447,23 @@ MultiBody & MultiBody::operator=(const MultiBody &rhs)
 	  CurrentLink.aJoint = new JointTranslationPrivate(*aJTP);
 	}
       ODEBUG("=================================");
-      ODEBUG("Original Joint " << endl 
+      ODEBUG("Original Joint " << endl
 	     << *rhs.listInternalLinks[i].aJoint );
       ODEBUG( "Copied Joint "<< endl
 	      << *CurrentLink.aJoint );
       ODEBUG("=================================");
       addLink(*listBodies[rhs.listInternalLinks[i].indexCorps1],
 	      *listBodies[rhs.listInternalLinks[i].indexCorps2],
-	      CurrentLink); 
+	      CurrentLink);
 
       MapJointsFromOriginalToNew[rhs.listInternalLinks[i].aJoint] = CurrentLink.aJoint;
-            
+
     }
-  
+
   ODEBUG("Now bound objects together.");
   for(unsigned int i=0;
       i<rhs.listInternalLinks.size();
-      i++)  
+      i++)
   {
     // Now bound objects together.
     DynamicBodyPrivate * OriginalBody = rhs.listInternalLinks[i].aJoint->linkedDBody();
@@ -486,7 +486,7 @@ MultiBody & MultiBody::operator=(const MultiBody &rhs)
     ODEBUG("Found father in new tree.");
     CurrentLink.aJoint->SetFatherJoint(FatherJointInNewTree);
     ODEBUG(" Set FatherJoint.");
-    
+
   }
 
   m_mass = rhs.m_mass;

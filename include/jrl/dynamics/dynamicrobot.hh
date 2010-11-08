@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kanoun
  * Francois Keith
@@ -50,7 +50,7 @@ namespace jrlDelegate {
   protected:
     void setDynamicRobot (CjrlDynamicRobot *inDynamicRobot)
     { m_DR = inDynamicRobot;}
-  
+
   public:
     /**
        \name Initialization
@@ -70,7 +70,7 @@ namespace jrlDelegate {
       {
 	m_DR = 0;
       }
-  
+
     /**
        \brief Initialize data-structure necessary to dynamic computations
        This function should be called after building the tree of joints.
@@ -84,12 +84,12 @@ namespace jrlDelegate {
     /**
        \brief Destructor
     */
-    virtual ~dynamicRobot() 
+    virtual ~dynamicRobot()
       {
 	assert(m_DR != 0);
 	delete m_DR;
       };
-  
+
     /**
        @}
     */
@@ -123,24 +123,24 @@ namespace jrlDelegate {
     virtual std::vector< CjrlJoint* > jointVector()
       {
 	assert(m_DR != 0);
-      
+
 	return m_DR->jointVector();
 
       }
-  
+
     /**
-       \brief Get the chain of joints between two joints 
+       \brief Get the chain of joints between two joints
        \param inStartJoint First joint.
        \param inEndJoint Second joint.
     */
-    virtual std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint, 
+    virtual std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint,
 						  const CjrlJoint& inEndJoint) const
       {
 	assert(m_DR != 0);
 	return m_DR->jointsBetween(inStartJoint,inEndJoint);
-    
+
       }
-  
+
     /**
        \brief Get the upper bound for ith dof.
     */
@@ -166,7 +166,7 @@ namespace jrlDelegate {
        \brief Compute the upper bound for ith dof using other configuration values if possible.
     */
     virtual double upperBoundDof(unsigned int inRankInConfiguration,
-				 const vectorN& inConfig) 
+				 const vectorN& inConfig)
     {
       assert(m_DR != 0);
       return m_DR->upperBoundDof(inRankInConfiguration,inConfig);
@@ -193,17 +193,17 @@ namespace jrlDelegate {
 
     /**
        \brief Set the joint ordering in the configuration vector
-     
+
        \param inJointVector Vector of the robot joints
 
-       Specifies the order of the joints in the configuration vector. 
+       Specifies the order of the joints in the configuration vector.
        The vector should contain all the joints of the current robot.
     */
     virtual void setJointOrderInConfig(std::vector<CjrlJoint*> inJointVector)
     {
       assert(m_DR != 0);
       return m_DR->setJointOrderInConfig(inJointVector);
-	  
+
     }
 
     /**
@@ -215,10 +215,10 @@ namespace jrlDelegate {
     */
 
     /**
-       \brief Set the current configuration of the robot.  
+       \brief Set the current configuration of the robot.
 
        \param inConfig the configuration vector \f${\bf q}\f$.
-       
+
        \return true if success, false if failure (the dimension of the
        input vector does not fit the number of degrees of freedom of the
        robot).
@@ -241,7 +241,7 @@ namespace jrlDelegate {
     }
 
     /**
-       \brief Set the current velocity of the robot.  
+       \brief Set the current velocity of the robot.
 
        \param inVelocity the velocity vector \f${\bf \dot{q}}\f$.
 
@@ -253,7 +253,7 @@ namespace jrlDelegate {
     {
       assert(m_DR != 0);
       return m_DR->currentVelocity(inVelocity);
-    
+
     }
 
     /**
@@ -265,10 +265,10 @@ namespace jrlDelegate {
     {
       assert(m_DR != 0);
       return m_DR->currentVelocity();
-	
+
     }
     /**
-       \brief Set the current acceleration of the robot.  
+       \brief Set the current acceleration of the robot.
 
        \param inAcceleration the acceleration vector \f${\bf \ddot{q}}\f$.
 
@@ -287,7 +287,7 @@ namespace jrlDelegate {
 
        \return the acceleration vector \f${\bf \ddot{q}}\f$.
     */
-    virtual const vectorN& currentAcceleration() const 
+    virtual const vectorN& currentAcceleration() const
     {
       assert(m_DR != 0);
       return m_DR->currentAcceleration();
@@ -310,7 +310,7 @@ namespace jrlDelegate {
 
        \return the torque vector \f${\bf \tau }\f$.
     */
-    virtual const matrixNxP& currentTorques() const 
+    virtual const matrixNxP& currentTorques() const
     {
       assert(m_DR != 0);
       return m_DR->currentTorques();
@@ -338,14 +338,14 @@ namespace jrlDelegate {
       assert(m_DR != 0);
       return m_DR->computeForwardKinematics();
     }
-  
+
 
     /**
        \brief Compute the dynamics of the center of mass.
 
        Compute the linear and  angular momentum and their time derivatives, at the center of mass.
     */
-    virtual bool computeCenterOfMassDynamics() 
+    virtual bool computeCenterOfMassDynamics()
     {
       assert(m_DR != 0);
       return m_DR->computeCenterOfMassDynamics();
@@ -354,7 +354,7 @@ namespace jrlDelegate {
     /**
        \brief Get the position of the center of mass.
     */
-    virtual const vector3d& positionCenterOfMass() const 
+    virtual const vector3d& positionCenterOfMass() const
     {
       assert(m_DR != 0);
       return m_DR->positionCenterOfMass();
@@ -439,7 +439,7 @@ namespace jrlDelegate {
     /**
        \brief Whether the specified property in implemented.
     */
-    virtual bool isSupported(const std::string &inProperty) 
+    virtual bool isSupported(const std::string &inProperty)
     {
       assert(m_DR != 0);
       return m_DR->isSupported(inProperty);
@@ -453,8 +453,8 @@ namespace jrlDelegate {
 
        \note The returned string needs to be cast into the right type (double, int,...).
     */
-    virtual bool getProperty(const std::string &inProperty, 
-			     std::string& outValue) 
+    virtual bool getProperty(const std::string &inProperty,
+			     std::string& outValue)
     {
       assert(m_DR != 0);
       return m_DR->getProperty(inProperty,
@@ -467,47 +467,47 @@ namespace jrlDelegate {
        \param inProperty name of the property.
        \param inValue value of the property.
 
-       \note The value string is obtained by writing the 
+       \note The value string is obtained by writing the
        corresponding value in a string (operator<<).
     */
-    virtual bool setProperty(std::string &inProperty, 
-			     const std::string& inValue) 
+    virtual bool setProperty(std::string &inProperty,
+			     const std::string& inValue)
     {
       assert(m_DR != 0);
       return m_DR->setProperty(inProperty,
 			       inValue);
 
-    } 
+    }
 
     /**
        @}
     */
-  
-  
+
+
     /**
        \brief Compute and get position and orientation jacobian
-       
-       \param inStartJoint First joint in the chain of joints influencing 
+
+       \param inStartJoint First joint in the chain of joints influencing
        the jacobian.
        \param inEndJoint Joint where the control frame is located.
-       \param inFrameLocalPosition Position of the control frame in inEndJoint 
+       \param inFrameLocalPosition Position of the control frame in inEndJoint
        local frame.
        \retval outjacobian computed jacobian matrix.
        \param offset is the rank of first non zero outjacobian column.
-       \param inIncludeStartFreeFlyer Option to include the contribution of a 
+       \param inIncludeStartFreeFlyer Option to include the contribution of a
        fictive freeflyer superposed with inStartJoint
-       
-       \return false if matrix has inadequate size. Number of columns 
-       in matrix outJacobian must be at least numberDof() if 
-       inIncludeStartFreeFlyer = true. 
+
+       \return false if matrix has inadequate size. Number of columns
+       in matrix outJacobian must be at least numberDof() if
+       inIncludeStartFreeFlyer = true.
        It must be at least numberDof()-6 otherwise.
     */
-    virtual bool getJacobian(const CjrlJoint& inStartJoint, 
-			     const CjrlJoint& inEndJoint, 
-			     const vector3d& inFrameLocalPosition, 
-			     matrixNxP& outjacobian, 
-			     unsigned int offset = 0, 
-			     bool inIncludeStartFreeFlyer = true) 
+    virtual bool getJacobian(const CjrlJoint& inStartJoint,
+			     const CjrlJoint& inEndJoint,
+			     const vector3d& inFrameLocalPosition,
+			     matrixNxP& outjacobian,
+			     unsigned int offset = 0,
+			     bool inIncludeStartFreeFlyer = true)
     {
       assert(m_DR != 0);
       return m_DR->getJacobian(inStartJoint,
@@ -517,12 +517,12 @@ namespace jrlDelegate {
 			       offset,
 			       inIncludeStartFreeFlyer);
     }
-  
-    virtual bool getPositionJacobian(const CjrlJoint& inStartJoint, 
-				     const CjrlJoint& inEndJoint, 
-				     const vector3d& inFrameLocalPosition, 
-				     matrixNxP& outjacobian, 
-				     unsigned int offset = 0, 
+
+    virtual bool getPositionJacobian(const CjrlJoint& inStartJoint,
+				     const CjrlJoint& inEndJoint,
+				     const vector3d& inFrameLocalPosition,
+				     matrixNxP& outjacobian,
+				     unsigned int offset = 0,
 				     bool inIncludeStartFreeFlyer = true)
     {
       assert(m_DR != 0);
@@ -533,25 +533,25 @@ namespace jrlDelegate {
 				       offset,
 				       inIncludeStartFreeFlyer);
     }
-  
-    virtual bool getOrientationJacobian(const CjrlJoint& inStartJoint, 
-					const CjrlJoint& inEndJoint, 
-					matrixNxP& outjacobian, 
-					unsigned int offset = 0, 
-					bool inIncludeStartFreeFlyer = true) 
+
+    virtual bool getOrientationJacobian(const CjrlJoint& inStartJoint,
+					const CjrlJoint& inEndJoint,
+					matrixNxP& outjacobian,
+					unsigned int offset = 0,
+					bool inIncludeStartFreeFlyer = true)
     {
       assert(m_DR != 0);
-      return m_DR->getOrientationJacobian(inStartJoint, 
-					  inEndJoint, 
-					  outjacobian, 
-					  offset, 
+      return m_DR->getOrientationJacobian(inStartJoint,
+					  inEndJoint,
+					  outjacobian,
+					  offset,
 					  inIncludeStartFreeFlyer);
     }
 
 
-    virtual bool getJacobianCenterOfMass(const CjrlJoint& inStartJoint, 
-					 matrixNxP& outjacobian, 
-					 unsigned int offset = 0, 
+    virtual bool getJacobianCenterOfMass(const CjrlJoint& inStartJoint,
+					 matrixNxP& outjacobian,
+					 unsigned int offset = 0,
 					 bool inIncludeStartFreeFlyer = true)
     {
       assert(m_DR != 0);
@@ -561,16 +561,16 @@ namespace jrlDelegate {
 					   inIncludeStartFreeFlyer);
     }
 
-    /*! \name Inertia matrix related methods 
+    /*! \name Inertia matrix related methods
       @{ */
     /*! \brief Compute the inertia matrix of the robot according wrt \f${\bf q}\f$.
      */
-    virtual void computeInertiaMatrix() 
+    virtual void computeInertiaMatrix()
     {
       assert(m_DR != 0);
       return m_DR->computeInertiaMatrix();
     }
-    
+
     /*! \brief Get the inertia matrix of the robot according wrt \f${\bf q}\f$.
      */
     virtual const matrixNxP& inertiaMatrix() const
@@ -580,21 +580,21 @@ namespace jrlDelegate {
     }
     /*! @} */
 
-    /*! \name Actuated joints related methods.  
+    /*! \name Actuated joints related methods.
       @{
     */
 
-    /** 
-	\brief Returns the list of actuated joints. 
+    /**
+	\brief Returns the list of actuated joints.
     */
-    virtual const std::vector<CjrlJoint*>& getActuatedJoints() const 
+    virtual const std::vector<CjrlJoint*>& getActuatedJoints() const
     {
       assert(m_DR != 0);
       return m_DR->getActuatedJoints();
     }
 
     /**
-       \brief Specifies the list of actuated joints. 
+       \brief Specifies the list of actuated joints.
     */
     virtual void setActuatedJoints(std::vector<CjrlJoint*>& lActuatedJoints)
     {
@@ -602,34 +602,34 @@ namespace jrlDelegate {
       return m_DR->setActuatedJoints(lActuatedJoints);
     }
 
-    /*! 
-      @} 
+    /*!
+      @}
     */
 
 
-    /*! \brief Compute Speciliazed InverseKinematics between two joints. 
-    
+    /*! \brief Compute Speciliazed InverseKinematics between two joints.
+
       Specialized means that this method can be re implemented to be
       extremly efficient and used the particularity of your robot.
       For instance in some case, it is possible to use an exact inverse
       kinematics to compute a set of articular value.
-    
+
       This method does not intend to replace an architecture computing
       inverse kinematics through the Jacobian.
 
       jointRootPosition and jointEndPosition have to be expressed in the same
-      frame. 
+      frame.
 
       \param[in] jointRoot: The root of the joint chain for which the specialized
       inverse kinematics should be computed.
 
-      \param[in] jointEnd: The end of the joint chain for which the specialized 
+      \param[in] jointEnd: The end of the joint chain for which the specialized
       inverse kinematics should be computed.
 
-      \param[in] jointRootPosition: The desired position of the root. 
-    
+      \param[in] jointRootPosition: The desired position of the root.
+
       \param[in] jointEndPosition: The end position of the root.
-    
+
       \param[out] q: Result i.e. the articular values.
     */
     virtual bool getSpecializedInverseKinematics(const CjrlJoint & jointRoot,
@@ -637,7 +637,7 @@ namespace jrlDelegate {
 						 const matrix4d & jointRootPosition,
 						 const matrix4d & jointEndPosition,
 						 vectorN &q)
-    { 
+    {
       assert(m_DR != 0);
       return m_DR->getSpecializedInverseKinematics(jointRoot,
 						   jointEnd,
@@ -645,8 +645,8 @@ namespace jrlDelegate {
 						   jointEndPosition,
 						   q);
     }
-  
-  
+
+
   };
 
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2006, 2007, 2008, 2009, 2010,
  *
  * Oussama Kanoun
  * Fumio Kanehiro
@@ -83,7 +83,7 @@ namespace dynamicsJRLJapan {
        \brief Set inertia matrix.
     */
     virtual void inertiaMatrix(const matrix3d& inInertiaMatrix);
-    
+
     /**
     \brief Get mass.
      */
@@ -98,7 +98,7 @@ namespace dynamicsJRLJapan {
        \brief Get const pointer to the joint the body is attached to.
     */
     virtual const CjrlJoint* joint() const;
-    
+
   };
 };
 

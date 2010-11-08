@@ -18,7 +18,7 @@
 // lf : forces.
 // lt : torques.
 //
-// Copyright 2010, 
+// Copyright 2010,
 //
 // Olivier Stasse,
 //
@@ -50,7 +50,7 @@ ac = ldv + skew(ldw)*llc + skew(lw)*skew(lw)*llc
 // Compute part of the force related to the body itself
 lf = (ac - lRA([(i-1)*3+1:i*3],:)'*[0.0; 0.0; -9.81;]) *lm;
 
-// Compute part of the torque related to the body itself 
+// Compute part of the torque related to the body itself
 lt = lI * ldw + skew(lw) * lI * lw + skew(llc) * lf;
 
 if i < size(f,'c') then

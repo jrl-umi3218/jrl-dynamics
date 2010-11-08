@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2010, 
+ * Copyright 2009, 2010,
  *
  * Oussama Kanoun
  * Francois Keith
@@ -44,12 +44,12 @@ namespace jrlDelegate {
      This template takes a class implementing the methods of the template
      CjrlRobotDynamicsObjectConstructor.
   */
-  class humanoidDynamicRobot : public CjrlHumanoidDynamicRobot, 
+  class humanoidDynamicRobot : public CjrlHumanoidDynamicRobot,
     public virtual dynamicRobot
     {
     private:
       CjrlHumanoidDynamicRobot *m_HDR;
-      
+
     public:
 
       humanoidDynamicRobot(CjrlRobotDynamicsObjectFactory * inObjectFactory)
@@ -80,7 +80,7 @@ namespace jrlDelegate {
       /**
 	 \name Joints specific to humanoid robots
       */
-  
+
       /**
 	 \brief Set the pointer to the waist.
       */
@@ -103,7 +103,7 @@ namespace jrlDelegate {
 
       /**
 	 \brief Set the pointer to the chest.
-     
+
 	 \note for some humanoid robots, the waist and the chest are the same joints.
       */
       virtual void chest(CjrlJoint* inChest)
@@ -114,7 +114,7 @@ namespace jrlDelegate {
 
       /**
 	 \brief Get a pointer to the chest.
-     
+
 	 \note for some humanoid robots, the waist and the chest are the same joints.
       */
       virtual CjrlJoint* chest()
@@ -135,7 +135,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left wrist.
       */
-      virtual CjrlJoint* leftWrist() 
+      virtual CjrlJoint* leftWrist()
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftWrist();
@@ -149,7 +149,7 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	m_HDR->rightWrist(inRightWrist);
       }
-  
+
       /**
 	 \brief Get a pointer to the right wrist.
       */
@@ -176,7 +176,7 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	return m_HDR->rightHand();
       }
-  
+
       /**
 	 \brief Set the pointer to the left hand
       */
@@ -185,7 +185,7 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	m_HDR->leftHand(inLeftHand);
       }
-  
+
       /**
 	 \brief Get a pointer to the left hand
       */
@@ -195,10 +195,10 @@ namespace jrlDelegate {
 	return m_HDR->leftHand();
 
       }
-  
+
       /**
-	 \brief Get the hand clench value. 
-	 This is a scalar value ranging between 0 and 1 which 
+	 \brief Get the hand clench value.
+	 This is a scalar value ranging between 0 and 1 which
 	 describes the hand clench (0 for open and 1 for closed hand)
       */
       virtual double getHandClench(CjrlHand* inHand)
@@ -206,10 +206,10 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	return m_HDR->getHandClench(inHand);
       }
-  
+
       /**
-	 \brief Set the hand clench value. This is a scalar value 
-	 ranging between 0 and 1 which describes the hand clench 
+	 \brief Set the hand clench value. This is a scalar value
+	 ranging between 0 and 1 which describes the hand clench
 	 (0 for open and 1 for closed hand)
 	 \return false if parameter 2 is out of range
       */
@@ -218,7 +218,7 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	return m_HDR->setHandClench(inHand,inClenchingValue);
       }
-  
+
       /**
 	 \brief Set the pointer to the left ankle joint.
       */
@@ -231,7 +231,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left ankle.
       */
-      virtual CjrlJoint* leftAnkle() 
+      virtual CjrlJoint* leftAnkle()
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftAnkle();
@@ -245,7 +245,7 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	m_HDR->rightAnkle(inRightAnkle);
       }
-  
+
       /**
 	 \brief Get a pointer to the right ankle.
       */
@@ -263,14 +263,14 @@ namespace jrlDelegate {
 	assert(m_HDR != 0);
 	return m_HDR->leftFoot(inLeftFoot);
       }
-  
+
       /**
 	 \brief Get a pointer to the left foot.
       */
       virtual CjrlFoot* leftFoot()
       {
 	assert(m_HDR != 0);
-	return m_HDR->leftFoot();    
+	return m_HDR->leftFoot();
       }
 
       /**
@@ -279,7 +279,7 @@ namespace jrlDelegate {
       virtual void rightFoot(CjrlFoot* inRightFoot)
       {
 	assert(m_HDR != 0);
-	return m_HDR->rightFoot(inRightFoot);    
+	return m_HDR->rightFoot(inRightFoot);
       }
 
       /**
@@ -293,7 +293,7 @@ namespace jrlDelegate {
 
       /**
 	 \brief Set gaze joint
-        
+
 	 \note  For most humanoid robots, the gaze joint is the head.
       */
       virtual void gazeJoint(CjrlJoint* inGazeJoint)
@@ -371,7 +371,7 @@ namespace jrlDelegate {
       /**
 	 @}
       */
-    
+
     };
 
 };

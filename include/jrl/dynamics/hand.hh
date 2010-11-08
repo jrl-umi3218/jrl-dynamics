@@ -1,5 +1,5 @@
 /* @doc Object used to handle hand
- * Copyright 2005, 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2005, 2006, 2007, 2008, 2009, 2010,
  *
  * Oussama Kanoun
  * Francois Keith
@@ -36,13 +36,13 @@ namespace dynamicsJRLJapan
 {
     /** \ingroup userclasses
     \brief This class represents a hand.
-        A hand has a central point referenced in the wrist joint frame, 
+        A hand has a central point referenced in the wrist joint frame,
 	three axis and a scalar value ranging between 0 and 1 to describe the grasping degree (0 for open and 1 for closed hand)
     */
     class DYN_JRL_JAPAN_EXPORT Hand: public CjrlHand
     {
     public:
-    
+
         /**
         \brief Constructor
         */
@@ -50,7 +50,7 @@ namespace dynamicsJRLJapan
 
 	/*!\brief Destructor */
 	virtual ~Hand();
-    
+
         /**
             \brief Get the wrist joint to which the hand is attached
         */
@@ -60,7 +60,7 @@ namespace dynamicsJRLJapan
             \brief Get the wrist joint to which the hand is attached
         */
         virtual void setAssociatedWrist(const CjrlJoint * inWrist );
-    
+
 	/**
 	   \brief Get the center of the hand
 
@@ -95,16 +95,16 @@ namespace dynamicsJRLJapan
 	/**
 	   \brief Get forefinger axis
 
-	   \retval outForeFingerAxis axis of the forefinger in wrist frame 
-	   in open position 
+	   \retval outForeFingerAxis axis of the forefinger in wrist frame
+	   in open position
 	*/
 	void getForeFingerAxis(vector3d& outForeFingerAxis) const;
 
 	/**
 	   \brief Set forefinger axis
 
-	   \param inForeFingerAxis axis of the forefinger in wrist frame 
-	   in open position 
+	   \param inForeFingerAxis axis of the forefinger in wrist frame
+	   in open position
 	*/
 	void setForeFingerAxis(const vector3d& inForeFingerAxis);
 
@@ -123,15 +123,15 @@ namespace dynamicsJRLJapan
 	void setPalmNormal(const vector3d& inPalmNormal);
 
     private:
-    
+
         const CjrlJoint* attAssociatedWrist;
-    
+
         vector3d attOkayAxis;
-    
+
         vector3d attShowingAxis;
-    
+
         vector3d attPalmAxis;
-    
+
         vector3d attCenter;
     };
 

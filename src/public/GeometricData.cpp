@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -44,25 +44,25 @@ namespace dynamicsJRLJapan
       emissiveColor[2] = 0.0;
       shininess = 0.2;
       specularColor[0] =
-	specularColor[1] = 
+	specularColor[1] =
 	specularColor[2] = 0.0;
       transparency=0.0;
     }
-    
+
     std::ostream & operator<<(std::ostream &os, const Material &a)
     {
       os << "ambientIntensity:"  << a.ambientIntensity << std::endl;
-      os << "diffuseColor:" 
-	 << a.diffuseColor[0] << " " 
+      os << "diffuseColor:"
+	 << a.diffuseColor[0] << " "
 	 << a.diffuseColor[1] << " "
 	 << a.diffuseColor[2] << std::endl;
-      os << "emissiveColor:" 
-	 << a.emissiveColor[0] << " " 
+      os << "emissiveColor:"
+	 << a.emissiveColor[0] << " "
 	 << a.emissiveColor[1] << " "
 	 << a.emissiveColor[2] << std::endl;
       os << "shininess:" << a.shininess<< std::endl;
-      os << "specularColor:" 
-	 << a.specularColor[0] << " " 
+      os << "specularColor:"
+	 << a.specularColor[0] << " "
 	 << a.specularColor[1] << " "
 	 << a.specularColor[2] << std::endl;
       os << "transparency:" << a.transparency << std::endl;
@@ -99,13 +99,13 @@ namespace dynamicsJRLJapan
     {
       m_Material = aMaterial;
     }
-    
+
     const Material & Appearance::getMaterial() const
     {
       return m_Material;
     }
 
-    Material & Appearance::getMaterial() 
+    Material & Appearance::getMaterial()
     {
       return m_Material;
     }
@@ -114,22 +114,22 @@ namespace dynamicsJRLJapan
     {
       m_Texture = aTexture;
     }
-    
-    const Texture & Appearance::getTexture() const 
+
+    const Texture & Appearance::getTexture() const
     {
       return m_Texture;
     }
 
-    Texture & Appearance::getTexture() 
+    Texture & Appearance::getTexture()
     {
       return m_Texture;
     }
-    
+
     void Appearance::setTextureTransform(TextureTransform &aTextureTransform)
     {
       m_TextureTransform = aTextureTransform;
     }
-    
+
     const TextureTransform & Appearance::getTextureTransform() const
     {
       return m_TextureTransform;
@@ -146,7 +146,7 @@ namespace dynamicsJRLJapan
 
     Shape::~Shape()
     {}
-    
+
     void Shape::setAppearance(Appearance &anAppearance)
     {
       m_Appearance = anAppearance;
@@ -157,7 +157,7 @@ namespace dynamicsJRLJapan
       return m_Appearance;
     }
 
-    Appearance & Shape::getAppearance() 
+    Appearance & Shape::getAppearance()
     {
       return m_Appearance;
     }
@@ -177,7 +177,7 @@ namespace dynamicsJRLJapan
     {
       return m_IndexedFaceSet;
     }
-    
+
     void Shape::reset()
     {
       m_IndexedFaceSet.reset();
@@ -232,7 +232,7 @@ namespace dynamicsJRLJapan
   {
     return m_Shapes;
   }
-  
+
   BodyGeometricalData & BodyGeometricalData::operator=(const BodyGeometricalData & r)
   {
     const std::vector<std::string> &lURLs = r.getURLs();
@@ -249,7 +249,7 @@ namespace dynamicsJRLJapan
   {
     m_BodyName = aBodyName;
   }
-  
+
   std::string & BodyGeometricalData::getBodyName()
   {
     return m_BodyName;
@@ -264,7 +264,7 @@ namespace dynamicsJRLJapan
   {
     m_RelatedJointName = aRelatedJointName;
   }
-  
+
   std::string & BodyGeometricalData::getRelatedJointName()
   {
     return m_RelatedJointName;

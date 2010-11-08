@@ -1,9 +1,9 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun
  * Francois Keith
- * Florent Lamiraux 
+ * Florent Lamiraux
  * Olivier Stasse
  *
  * JRL/LAAS, CNRS/AIST
@@ -64,14 +64,14 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
   if (m_HS!=0)
     {
       m_HS->ReadXML(aFileNameForHumanoidSpecificities);
-	
+
       double AnklePosition[3];
       // Take the right ankle position (should be equivalent)
       m_HS->GetAnklePosition(-1,AnklePosition);
       m_AnkleSoilDistance = AnklePosition[2];
       ODEBUG("AnkleSoilDistance =" << m_AnkleSoilDistance);
 
-      // Lenght of the hip (necessary for 
+      // Lenght of the hip (necessary for
       double HipLength[3];
       // Takes the left one.
       m_HS->GetHipLength(1,HipLength);
@@ -85,22 +85,22 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
 
       MAL_S3_VECTOR(StaticToTheLeftHip,double);
       MAL_S3_VECTOR(StaticToTheRightHip,double);
-      
+
       // Displacement between the hip and the waist.
       double WaistToHip[3];
       m_HS->GetWaistToHip(1,WaistToHip);
       m_StaticToTheLeftHip(0) = WaistToHip[0];
       m_StaticToTheLeftHip(1) = WaistToHip[1];
-      m_StaticToTheLeftHip(2) = WaistToHip[2]; 
+      m_StaticToTheLeftHip(2) = WaistToHip[2];
 
       m_TranslationToTheLeftHip = m_StaticToTheLeftHip;
-      
+
       m_HS->GetWaistToHip(-1,WaistToHip);
       m_StaticToTheRightHip(0) = WaistToHip[0];
       m_StaticToTheRightHip(1) = WaistToHip[1];
       m_StaticToTheRightHip(2) = WaistToHip[2];
-      m_TranslationToTheRightHip = m_StaticToTheRightHip;      
-      
+      m_TranslationToTheRightHip = m_StaticToTheRightHip;
+
 
       // If the Dynamic Multibody object is already loaded
       // create the link between the joints and the effector semantic.
@@ -132,7 +132,7 @@ HumDynMultiBodyPrivate::~HumDynMultiBodyPrivate()
 {
   if (m_HS!=0)
     delete m_HS;
-  
+
   delete m_rightHand;
   delete m_leftHand;
   delete m_RightFoot;
@@ -145,7 +145,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
     return;
 
   // Link the correct joints.
-  
+
   // Get the left hand.
   std::vector<int> JointForOneLimb = m_HS->GetArmJoints(1);
   int ListeJointsSize = JointForOneLimb.size();
@@ -159,7 +159,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 	m_LeftWristJoint = GetJointFromActuatedID(JointsForWrist[0]);
 	ODEBUG("JointsForWrist[0]: " << JointsForWrist[0]);
       }
-    else 
+    else
       LTHROW("No left wrist");
   }
 
@@ -176,8 +176,8 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 	m_RightWristJoint = GetJointFromActuatedID(JointsForWrist[0]);
 	ODEBUG("JointsForWrist[0]: " << JointsForWrist[0]);
       }
-  } 
-  
+  }
+
   // Get the left foot.
   JointForOneLimb.clear();
   JointForOneLimb = m_HS->GetFootJoints(1);
@@ -199,7 +199,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   AnklePositionInLocalFrame(1) = AnklePosition[1];
   AnklePositionInLocalFrame(2) = AnklePosition[2];
   theLeftFoot->setAnklePositionInLocalFrame(AnklePositionInLocalFrame);
-  
+
   double lFootWidth,lFootHeight,lFootDepth;
   m_HS->GetFootSize(1,lFootDepth, lFootWidth, lFootHeight);
   theLeftFoot->setSoleSize(lFootDepth,lFootWidth);
@@ -229,7 +229,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 
   m_HS->GetFootSize(-1,lFootDepth, lFootWidth, lFootHeight);
   theRightFoot->setSoleSize(lFootDepth,lFootWidth);
-  
+
   rightFoot(theRightFoot);
   rightAnkle(theRightAnkle);
 
@@ -248,7 +248,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
   if (JointsForWaist.size()==1)
     m_WaistJoint = GetJointFromActuatedID(JointsForWaist[0]);
 
-  
+
   // Get the chest joint of the humanoid.
   std::vector<int> JointsForChest = m_HS->GetChestJoints();
   unsigned NbChestJoints = JointsForChest.size();
@@ -257,19 +257,19 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 
   // Take care of the hands information.
   HandsData HumHands = m_HS->GetHandsData();
-  
+
   Hand* hand=new Hand();
   hand->setAssociatedWrist(rightWrist());
-  hand->setCenter(HumHands.Center[0]); 
-  hand->setThumbAxis(HumHands.okayAxis[0]); 
+  hand->setCenter(HumHands.Center[0]);
+  hand->setThumbAxis(HumHands.okayAxis[0]);
   hand->setForeFingerAxis(HumHands.showingAxis[0]);
   hand->setPalmNormal(HumHands.palmAxis[0]);
   rightHand(hand);
-  
+
   hand=new Hand();
   hand->setAssociatedWrist(leftWrist());
-  hand->setCenter(HumHands.Center[1]); 
-  hand->setThumbAxis(HumHands.okayAxis[1]); 
+  hand->setCenter(HumHands.Center[1]);
+  hand->setThumbAxis(HumHands.okayAxis[1]);
   hand->setForeFingerAxis(HumHands.showingAxis[1]);
   hand->setPalmNormal(HumHands.palmAxis[1]);
   leftHand(hand);
@@ -302,7 +302,7 @@ bool HumDynMultiBodyPrivate::computeForwardKinematics()
 }
 
 
-bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint, 
+bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
 							  MAL_MATRIX(,double) & outJacobian)
 {
   cerr<< " The method HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint " <<endl
@@ -334,22 +334,22 @@ bool HumDynMultiBodyPrivate::setHandClench(CjrlHand* inHand, double inClenchingV
 }
 
 void HumDynMultiBodyPrivate::leftWrist(CjrlJoint *inLeftWrist)
-{ 
+{
   m_LeftWristJoint = inLeftWrist;
 }
 
 CjrlJoint *HumDynMultiBodyPrivate::leftWrist()
-{ 
+{
   return m_LeftWristJoint;
 }
 
 void HumDynMultiBodyPrivate::rightWrist(CjrlJoint *inRightWrist)
-{ 
+{
   m_RightWristJoint = inRightWrist;
 }
 
 CjrlJoint *HumDynMultiBodyPrivate::rightWrist()
-{ 
+{
   return m_RightWristJoint;
 }
 
@@ -370,47 +370,47 @@ void HumDynMultiBodyPrivate::leftHand(CjrlHand* inLeftHand)
 }
 
 CjrlHand * HumDynMultiBodyPrivate::leftHand()
-{ 
+{
   return m_leftHand;
 }
 
 void HumDynMultiBodyPrivate::leftAnkle(CjrlJoint *inLeftAnkle)
-{ 
+{
   m_LeftAnkleJoint = inLeftAnkle;
 }
 
 CjrlJoint *HumDynMultiBodyPrivate::leftAnkle()
-{ 
+{
   return m_LeftAnkleJoint;
 }
 
 void HumDynMultiBodyPrivate::rightAnkle(CjrlJoint *inRightAnkle)
-{ 
+{
   m_RightAnkleJoint = inRightAnkle;
 }
 
 CjrlJoint *HumDynMultiBodyPrivate::rightAnkle()
-{ 
+{
   return m_RightAnkleJoint;
 }
 
 void HumDynMultiBodyPrivate::leftFoot(CjrlFoot *inLeftFoot)
-{ 
+{
   m_LeftFoot = inLeftFoot;
 }
 
-CjrlFoot * HumDynMultiBodyPrivate::leftFoot() 
-{ 
+CjrlFoot * HumDynMultiBodyPrivate::leftFoot()
+{
   return m_LeftFoot;
 }
 
 void HumDynMultiBodyPrivate::rightFoot(CjrlFoot *inRightFoot)
-{ 
+{
   m_RightFoot = inRightFoot;
 }
 
-CjrlFoot * HumDynMultiBodyPrivate::rightFoot() 
-{ 
+CjrlFoot * HumDynMultiBodyPrivate::rightFoot()
+{
   return m_RightFoot;
 }
 

@@ -41,7 +41,7 @@ SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
 )
 
 ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl 
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleSpecificities.xml
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
@@ -61,7 +61,7 @@ SET_TARGET_PROPERTIES(TestHumanoidDynamicRobotDebugLayale
 )
 
 ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl 
+  COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sample.wrl
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
   COMMAND ${CMAKE_COMMAND} -E copy ${${PROJECT_NAME}_SOURCE_DIR}/unitTesting/sampleSpecificities.xml
   ${${PROJECT_NAME}_BINARY_DIR}/unitTesting
@@ -74,8 +74,8 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
 target_link_libraries(TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
 
-ADD_EXECUTABLE(	TestAbstractInterface 
-  CommonTools.cpp 
+ADD_EXECUTABLE(	TestAbstractInterface
+  CommonTools.cpp
   HumanoidCopy.cpp
   TestAbstractInterface.cpp)
 SET_TARGET_PROPERTIES( TestAbstractInterface
@@ -142,8 +142,8 @@ ADD_TEST(TestAbstractInterface TestAbstractInterface)
 
 ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
 
-SET(${PROJECT_NAME}_EXAMPLES 
-  CommonTools.cpp 
+SET(${PROJECT_NAME}_EXAMPLES
+  CommonTools.cpp
   CommonTools.h
   TestHumanoidDynamicRobot.cpp
   TestAbstractInterface.cpp
@@ -174,4 +174,4 @@ SET(${PROJECT_NAME}_EXAMPLES_DATA
 INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES_DATA}
   DESTINATION share/examples/jrl/dynamics/data
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
-  
+

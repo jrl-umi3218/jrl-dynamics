@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -47,12 +47,12 @@
 
 //#include "DynamicMultiBodyCopy.h"
 
-namespace dynamicsJRLJapan 
+namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
-    
-    int ParseVRMLFile(MultiBody *aMB, 
+
+    int ParseVRMLFile(MultiBody *aMB,
 		      std::string aFileName,
 		      vector<BodyGeometricalData> &aListOfURLs,
 		      bool ReadGeometry)
@@ -65,7 +65,7 @@ namespace dynamicsJRLJapan
 
       SkipGrammar aSkipGrammar;
       SpiritOpenHRP< Actions > aSpiritOpenHRP;
-      
+
       aif.open(aFileName.c_str(),ifstream::in|ifstream::binary);
       if (!aif.is_open())
 	{
@@ -78,29 +78,29 @@ namespace dynamicsJRLJapan
 		cout << "Succeeded in opening " << aFileName <<endl;
 		} */
       }
-    
+
       aif.open(aFileName.c_str(),ifstream::in|ifstream::binary);
 
       typedef multi_pass<istreambuf_iterator<char> > multi_pass_iterator_t;
       typedef istream::char_type char_t;
-      
+
       multi_pass_iterator_t
         in_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
         in_end(make_multi_pass(istreambuf_iterator<char_t>()));
-      
+
       typedef position_iterator<multi_pass_iterator_t> iterator_t;
-      
+
       iterator_t first(in_begin, in_end, aFileName), last;
-      
+
       if (!parse(first,last,aSpiritOpenHRP,aSkipGrammar).full)
 	{
 	  file_position fp_cur;
-	  
+
 	  // Store the current file position
 	  fp_cur = last.get_position();
 	  ODEBUG("Display - Current file: " << fp_cur.file );
-	  ODEBUG( "Line   : " << fp_cur.line  
-		  << " Column : " << fp_cur.column 
+	  ODEBUG( "Line   : " << fp_cur.line
+		  << " Column : " << fp_cur.column
 		  << endl);
 
 	}
@@ -108,15 +108,15 @@ namespace dynamicsJRLJapan
 
       if (ReadGeometry)
 	{
-	  // Iterate over the included files if there is some. 
+	  // Iterate over the included files if there is some.
 	  vector<BodyGeometricalData*> aLOU = aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs;
-	  
+
 	  string Path;
 	  unsigned int npos = aFileName.find_last_of('/');
 	  Path = aFileName.substr(0,npos+1);
-	  
-	  ODEBUG( "Path: " << Path 
-		  << " Size of m_ListOfURLs: " 
+
+	  ODEBUG( "Path: " << Path
+		  << " Size of m_ListOfURLs: "
 		  << aSpiritOpenHRP.actions.m_DataForParsing.m_ListOfURLs.size());
 
 	  for(unsigned int iIndexBDG=0;
@@ -140,19 +140,19 @@ namespace dynamicsJRLJapan
 		      multi_pass_iterator_t
 			lin_begin(make_multi_pass(istreambuf_iterator<char_t>(aif))),
 			lin_end(make_multi_pass(istreambuf_iterator<char_t>()));
-		  
+
 		      iterator_t lfirst(lin_begin, lin_end, URLs[j]), llast;
-		      *aSpiritOpenHRP.actions.m_DataForParsing.m_LOUIndex = 
+		      *aSpiritOpenHRP.actions.m_DataForParsing.m_LOUIndex =
 			iIndexBDG;
 		      if (!parse(lfirst,llast,aSpiritOpenHRP,aSkipGrammar).full)
 			{
 			  file_position fp_cur;
-			  
+
 			  // Store the current file position
 			  fp_cur = lfirst.get_position();
 			  ODEBUG("Display - Current file: " << fp_cur.file );
-			  ODEBUG( "Line   : " << fp_cur.line  
-				   << " Column : " << fp_cur.column 
+			  ODEBUG( "Line   : " << fp_cur.line
+				   << " Column : " << fp_cur.column
 				   << endl);
 			}
 
@@ -160,7 +160,7 @@ namespace dynamicsJRLJapan
 		  aif.close();
 		}
 	    }
-	  
+
 	  // Copy the list of URLS.
 	  aListOfURLs.resize(aLOU.size());
 	  vector<BodyGeometricalData *>::iterator it_BGD = aLOU.begin();
@@ -171,12 +171,12 @@ namespace dynamicsJRLJapan
 	      i++;
 	      it_BGD++;
 	    }
-	};      
+	};
 
       // Copy multibody structure.
       *aMB = aSpiritOpenHRP.actions.m_DataForParsing.m_MultiBody;
 
-      
+
       return 1;
     };
   };

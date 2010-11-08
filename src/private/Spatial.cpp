@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
  *
@@ -27,7 +27,7 @@
 /* \file Spatial vector algebra
    Copyright (c) 2010
    Olivier Stasse
-   
+
 */
 
 #include "Spatial.h"
@@ -85,7 +85,7 @@ Velocity operator+(vectorN &a, Velocity &b)
       c.v0(cv0);
       for(unsigned int i=0;i<3;i++)
 	cw(i) = bw(i) + a(i+3);
-      
+
       c.w(cw);
     }
   return c;
@@ -99,7 +99,7 @@ Acceleration::Acceleration()
 
 Acceleration::Acceleration(vector3d ldv0,
 			   vector3d ldw)
-  : m_dv0(ldv0), m_dw(ldw) 
+  : m_dv0(ldv0), m_dw(ldw)
 {
 }
 
@@ -107,7 +107,7 @@ Acceleration Acceleration::operator+(Acceleration &a)
 {
   return Acceleration(m_dv0 + a.m_dv0, m_dw + a.m_dw);
 }
-    
+
 Acceleration Acceleration::operator-(Acceleration &a)
 {
   return Acceleration(m_dv0 - a.m_dv0, m_dw - a.m_dw);
@@ -132,7 +132,7 @@ cAcceleration::cAcceleration()
   MAL_S3_VECTOR_FILL(m_dv0,0.0);
   MAL_S3_VECTOR_FILL(m_dw,0.0);
 }
-    
+
 cAcceleration::cAcceleration(vector3d ldv0,
 			     vector3d ldw)
   : m_dv0(ldv0),m_dw(ldw)
@@ -143,7 +143,7 @@ cAcceleration cAcceleration::operator+(cAcceleration &a)
 {
   return cAcceleration(m_dv0 + a.m_dv0, m_dw + a.m_dw);
 }
-    
+
 cAcceleration cAcceleration::operator-(cAcceleration &a)
 {
   return cAcceleration(m_dv0 - a.m_dv0, m_dw - a.m_dw);
@@ -154,9 +154,9 @@ Force::Force()
   MAL_S3_VECTOR_FILL(m_f,0.0);
   MAL_S3_VECTOR_FILL(m_n0,0.0);
 }
-    
+
 Force::Force(vector3d lf, vector3d ln0)
-  : m_f(lf), m_n0(ln0) 
+  : m_f(lf), m_n0(ln0)
 {}
 
 Force Force::operator+(Force &a)
@@ -175,8 +175,8 @@ Motion::Motion()
 }
 
 Motion::Motion(vector3d lp,
-	       vector3d ltheta): 
-  m_p(lp), m_theta(ltheta) 
+	       vector3d ltheta):
+  m_p(lp), m_theta(ltheta)
 {}
 
 Motion Motion::operator+(Motion &a)
@@ -210,7 +210,7 @@ void Inertia::addInertia(Inertia &c,
   c.m_h = a.m_h + b.m_h;
   c.m_I = a.m_I + b.m_I;
 }
-  
+
 Inertia Inertia::operator+( Inertia &a)
 {
   Inertia c;
@@ -235,16 +235,16 @@ Momentum Inertia::operator*(Velocity &v)
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.v0());
   vector3d lw = NE_tmp2 + NE_tmp;
   c.w(lw);
-      
+
   // Linear acceleration
   NE_tmp = v.v0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.w());
   vector3d lv = NE_tmp2 + NE_tmp;
   c.v(lv);
-      
+
   return c;
 }
-  
+
 
 Force Inertia::operator*(Acceleration &a)
 {
@@ -255,16 +255,16 @@ Force Inertia::operator*(Acceleration &a)
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dv0());
   vector3d ln0 = NE_tmp2 + NE_tmp;
   c.n0(ln0);
-      
+
   // Linear acceleration
   NE_tmp = a.dv0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dw());
   vector3d lf = NE_tmp2 + NE_tmp;
   c.f(lf);
-      
+
   return c;
 }
-  
+
 Velocity Velocity::operator*(double ad)
 {
   Velocity c;
@@ -306,12 +306,12 @@ Force Velocity::operator^(Momentum &a)
   df(0) =               -m_v0(2)*aw(1)+ m_v0(1)*aw(2)                 -m_w(2)*av0(1) + m_w(1)*av0(2);
   df(1) = m_v0(2)* aw(0)               -m_v0(0)*aw(2)+m_w(2)* av0(0)                 - m_w(0)*av0(2);
   df(2) =-m_v0(1)* aw(0)+m_v0(0)*aw(1)               -m_w(1)* av0(0)  +m_w(0)*av0(1) ;
-  
+
   Spatial::Force c(df,dn0);
-  
+
   return c;
-} 
- 
+}
+
 Velocity operator*(double ad, Velocity &a)
 {
   Velocity c;
@@ -328,17 +328,17 @@ Momentum operator*(Inertia & sI, Velocity &v)
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.v0());
   vector3d hm = NE_tmp2 + NE_tmp;
   c.w(hm);
-      
+
   // Linear velocity
   NE_tmp = v.v0() * sI.m();
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.w());
   vector3d lv = NE_tmp2 + NE_tmp;
   c.v(lv);
-      
+
   return c;
 }
 
-  
+
 /*! Plucker Transform */
 PluckerTransform::PluckerTransform()
 {};
@@ -346,7 +346,7 @@ PluckerTransform::PluckerTransform()
 PluckerTransform::PluckerTransform(matrix3d lR,
 				   vector3d lp):
   m_R(lR), m_p(lp) {}
-  
+
 PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
 {
   PluckerTransform c;
@@ -359,7 +359,7 @@ PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
   return c;
 }
 
-  
+
 Force  PluckerTransform::operator*( Force &f)
 {
   Force c;
@@ -367,10 +367,10 @@ Force  PluckerTransform::operator*( Force &f)
   vector3d NE_tmp,NE_tmp2,NE_tmp3;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,f.f());
   NE_tmp2=f.n0()-NE_tmp;
-    
+
   MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp2);
   c.n0(NE_tmp);
-    
+
   // Computes the linear velocity
   NE_tmp3 = f.f();
   MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp3);
@@ -393,9 +393,9 @@ Velocity PluckerTransform::operator*( Velocity &v)
   vector3d NE_tmp,NE_tmp2;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.w());
   NE_tmp2=v.v0()-NE_tmp;
-    
+
   c.w(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
-    
+
   // Computes the linear velocity
   c.v0(MAL_S3x3_RET_A_by_B(m_R,v.w()));
   return c;
@@ -408,9 +408,9 @@ Acceleration PluckerTransform::operator*( Acceleration &v)
   vector3d NE_tmp,NE_tmp2;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.dw());
   NE_tmp2=v.dv0()-NE_tmp;
-    
+
   c.dw(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
-    
+
   // Computes the linear velocity
   c.dv0(MAL_S3x3_RET_A_by_B(m_R,v.dw()));
   return c;

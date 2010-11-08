@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Oussama Kanoun
- * Florent Lamiraux 
+ * Florent Lamiraux
  * Olivier Stasse
  *
  * JRL/LAAS, CNRS/AIST
@@ -52,7 +52,7 @@ namespace dynamicsJRLJapan
   };
 
   /** \brief This class implements the functionnalities specific to a dynamic model for a humanoid.
-      
+
   This includes a direct access to the joints reprensenting the hands, the foot, and the gaze.
   This specific class is the specialization of the generic class CjrlHumanoidDynamicRobot.
 
@@ -61,19 +61,19 @@ namespace dynamicsJRLJapan
   public DynMultiBodyPrivate
     {
     private:
-      
+
       /** \brief Store the Left Wrist Joint */
       CjrlJoint * m_LeftWristJoint;
-      
+
       /** \brief Store the Right Wrist Joint */
       CjrlJoint * m_RightWristJoint;
-      
+
       /** \brief Store the Left Foot */
       CjrlFoot * m_LeftFoot;
-      
+
       /** \brief Store the Right Foot */
       CjrlFoot *m_RightFoot;
-      
+
       /** \brief Store the Left Ankle Joint */
       CjrlJoint* m_LeftAnkleJoint;
 
@@ -82,10 +82,10 @@ namespace dynamicsJRLJapan
 
       /** \brief Store the Left hand */
       CjrlHand * m_leftHand;
-      
+
       /** \brief Store the Right hand */
       CjrlHand * m_rightHand;
-      
+
       /** \brief Store the Gaze Joint */
       CjrlJoint * m_GazeJoint;
 
@@ -102,9 +102,9 @@ namespace dynamicsJRLJapan
 
       /** \brief Set the point through which the line is going. */
       vector3d m_LinePoint;
-      
+
       /** @} */
-      
+
       /*! Object to store the specificities to an instance of a humanoid robot. */
       HumanoidSpecificities *m_HS;
 
@@ -115,10 +115,10 @@ namespace dynamicsJRLJapan
       vector3d m_Dt;
 
       /*! \name Parameters related to the distance
-	between the CoM and the hip. 
+	between the CoM and the hip.
 	@{
       */
-      
+
       /*! Static translation from the CoM to the left
        hip. */
       vector3d m_StaticToTheLeftHip,
@@ -134,13 +134,13 @@ namespace dynamicsJRLJapan
 
     public:
 
-      /** \name Constructors and destructors 
+      /** \name Constructors and destructors
 	  @{
       */
       /*! Constructor */
-      
-      /*! Default constructor: assume that a file name HumanoidSpecificities.xml 
-	 is present in the current directory, and creates a Dynamic Multi Body 
+
+      /*! Default constructor: assume that a file name HumanoidSpecificities.xml
+	 is present in the current directory, and creates a Dynamic Multi Body
 	 object instead of a more generic multibody.
 	 Good for use by default.
       */
@@ -149,12 +149,12 @@ namespace dynamicsJRLJapan
       /*! Advanced constructor: */
       HumDynMultiBodyPrivate(const DynMultiBodyPrivate& inDynamicMultiBody,
 			       string aFileNameForHumanoidSpecificities);
-      
+
       /*! Destructor */
       virtual ~HumDynMultiBodyPrivate();
 
       /** @} */
-      
+
       /*! This method creates the link between the Humanoid Specificities
 	 object and the Dynamic MultiBody fields. */
       void LinkBetweenJointsAndEndEffectorSemantic();
@@ -168,11 +168,11 @@ namespace dynamicsJRLJapan
 
 
       /** \name jrlHumanoidDynamicRobot Interface */
-      
+
       /**
 	 \name Joints specific to humanoid robots
       */
-      
+
       /**
 	\brief Set the pointer to the Waist joint
       */
@@ -188,55 +188,55 @@ namespace dynamicsJRLJapan
       */
       void leftWrist(CjrlJoint *inLeftWrist);
 
-      
-      /** 
+
+      /**
       \brief Get a pointer to the left Wrist.
       */
       CjrlJoint *leftWrist();
-      
+
       /**
       \brief Set the pointer to the right Wrist joint.
       */
       void rightWrist(CjrlJoint *inRightWrist);
-      
-      /** 
+
+      /**
       \brief Get a pointer to the right Wrist.
       */
       CjrlJoint *rightWrist();
-      
-      
+
+
       /**
         \brief Set the pointer to the right hand
       */
       virtual void rightHand(CjrlHand* inRightHand);
-  
+
       /**
         \brief Get a pointer to the right hand
       */
       virtual CjrlHand* rightHand();
-  
+
       /**
         \brief Set the pointer to the left hand
       */
       virtual void leftHand(CjrlHand* inLeftHand);
-  
+
       /**
         \brief Get a pointer to the left hand
       */
       virtual CjrlHand* leftHand();
-      
+
       /**
-	 \brief Get the hand clench value. This is a scalar value ranging between 0 
+	 \brief Get the hand clench value. This is a scalar value ranging between 0
 	 and 1 which describes the hand clench (0 for open and 1 for closed hand)
       */
       virtual double getHandClench(CjrlHand* inHand);
-      
+
       /**
-	 \brief Set the hand clench value. This is a scalar value ranging 
+	 \brief Set the hand clench value. This is a scalar value ranging
 	 between 0 and 1 which describes the hand clench (0 for open and 1 for closed hand).
       */
       virtual bool  setHandClench(CjrlHand* inHand, double inClenchingValue);
-      
+
       /**
 	 \brief Set the pointer to the left ankle joint.
       */
@@ -261,39 +261,39 @@ namespace dynamicsJRLJapan
 	 \brief Set the pointer to the left foot joint.
       */
       void leftFoot(CjrlFoot *inLeftFoot);
-      
-      /** 
+
+      /**
 	  \brief Get a pointer to the left foot.
       */
       CjrlFoot *leftFoot();
-      
+
       /**
 	 \brief Set the pointer to the right foot joint.
       */
       void rightFoot(CjrlFoot *inRightFoot);
-      
-      /** 
+
+      /**
 	  \brief Get a pointer to the right foot.
       */
       CjrlFoot *rightFoot();
-      
-      /** 
+
+      /**
 	  \brief Set gaze joint
-	  
+
 	  \note  For most humanoid robots, the gaze joint is the head.
       */
       inline void gazeJoint(CjrlJoint *inGazeJoint)
 	{ m_GazeJoint = (JointPrivate *)inGazeJoint; }
-      
+
       /**
 	 \brief Get gaze joint
       */
       CjrlJoint *gazeJoint()
 	{ return m_GazeJoint; }
-      
+
       /**
 	 \brief Set the gaze in the local frame of the gaze joint.
-	 
+
 	 \note The gaze is defined as a straight line linked to the gaze joint.
 	 @param inVector: A 3D vector which define the direction of the gaze.
 	 @param inPoint: A 3D point by which the line of direction \a inVector
@@ -305,12 +305,12 @@ namespace dynamicsJRLJapan
       */
       inline void gaze( const vector3d& inVector, const vector3d & inPoint)
 	{ m_LineVector = inVector; m_LinePoint = inPoint;};
-	
+
       /**
       \brief Get a point on the gaze straight line
       */
       const vector3d & gazeOrigin() const {return m_LinePoint;}
-  
+
       /**
 	 \brief Get the direction of gaze
       */
@@ -330,7 +330,7 @@ namespace dynamicsJRLJapan
       /** \name Methods related to fixed joints.
 	  @{
       */
-      
+
       /**
 	 \@}
       */
@@ -338,13 +338,13 @@ namespace dynamicsJRLJapan
       /**
 	 \name Zero momentum point
       */
-      
+
       /**
 	 \brief Compute the coordinates of the Zero Momentum Point.
       */
       const vector3d & zeroMomentumPoint() const;
-      
-      /** 
+
+      /**
 	  \brief Trigger the computation of the Zero Momentum Point.
       */
       void ComputingZeroMomentumPoint();
@@ -352,16 +352,16 @@ namespace dynamicsJRLJapan
       /**
 	 @}
       */
-      
-      /** 
+
+      /**
       @}
       */
 
-      /** 
+      /**
 	  \name Forward kinematics and dynamics
       */
-  
-      
+
+
       /**
 	 \brief Compute forward kinematics.
 
@@ -377,19 +377,19 @@ namespace dynamicsJRLJapan
 	 @}
       */
 
-      /** 
+      /**
 	  \name Jacobian fonctions
       */
 
       /**
 	 \brief Get the jacobian of a joint wrt to internal configuration variables assuming a joint is fixed.
-	 
+
 	 Fixed joint is first fixed joint in vector.
-	 \return true if there is at least one fixed joint, false otherwise.  
+	 \return true if there is at least one fixed joint, false otherwise.
       */
-      bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint, 
+      bool jacobianJointWrtFixedJoint(CjrlJoint *inJoint,
 				      matrixNxP & outJacobian);
-      
+
       /**
 	 @}
       */

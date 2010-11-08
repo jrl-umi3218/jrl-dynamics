@@ -1,5 +1,5 @@
 /*
- * Copyright 2005, 2006, 2007, 2008, 2009, 2010, 
+ * Copyright 2005, 2006, 2007, 2008, 2009, 2010,
  *
  * Jean-Remy Chardonnet
  * Abderrahmane Kheddar
@@ -28,7 +28,7 @@
  *
  */
 
-/* Computation of the dynamical aspect for the body 
+/* Computation of the dynamical aspect for the body
    of a model.
 
 */
@@ -57,7 +57,7 @@ DynamicBodyPrivate::DynamicBodyPrivate():Body()
   v0[0] = v0[1] = v0[2] = 0;
   dv[0] = dv[1] = dv[2] = 0;
   w[0] = w[1] = w[2] = 0;
-  dw[0] = dw[1] = dw[2] = 0;  
+  dw[0] = dw[1] = dw[2] = 0;
 }
 
 DynamicBodyPrivate::~DynamicBodyPrivate()
@@ -85,10 +85,10 @@ DynamicBodyPrivate & DynamicBodyPrivate::operator=(const DynamicBodyPrivate & r)
   dv = r.dv;
   w = r.w;
   dw = r.dw;
-    
+
   sister = r.sister;
   child = r.child;
-  
+
   P = r.P;
   L = r.L;
 

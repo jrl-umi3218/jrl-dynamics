@@ -1,8 +1,8 @@
 /*
- * Copyright 2010, 
+ * Copyright 2010,
  *
  * Olivier Stasse,
- * 
+ *
  *
  * JRL/LAAS, CNRS/AIST
  *
@@ -48,7 +48,7 @@
 
 using namespace std;
 
-namespace dynamicsJRLJapan 
+namespace dynamicsJRLJapan
 {
   namespace VRMLReader
   {
@@ -73,7 +73,7 @@ namespace dynamicsJRLJapan
 
       // Joint memory allocation done for new depth.
       //bool JointMemoryAllocationForNewDepth;
-      
+
       // Current Link.
       internalLink CurrentLink;
 
@@ -112,7 +112,7 @@ namespace dynamicsJRLJapan
 	m_BodyGeometry =0;
 	m_LOUIndex = new int;
       }
-      
+
       // Destructor.
       ~DataForParsing_t()
       {
@@ -123,11 +123,11 @@ namespace dynamicsJRLJapan
 
 	delete m_LOUIndex;
       }
-      
-      
+
+
       // String for the url.
       BodyGeometricalData * m_BodyGeometry;
-      
+
       // Generic vector3d.
       vector3d m_Genericvec3d;
 
@@ -144,7 +144,7 @@ namespace dynamicsJRLJapan
       struct Proto_t cProto;
 
       MultiBody m_MultiBody;
-      
+
       vector<BodyGeometricalData * > m_ListOfURLs;
 
       int * m_LOUIndex;
@@ -200,7 +200,7 @@ namespace dynamicsJRLJapan
 	fMaterialShininess(*this,7),
 	fMaterialSpecularColorR(*this,8),
 	fMaterialSpecularColorG(*this,9),
-	fMaterialSpecularColorB(*this,10),	
+	fMaterialSpecularColorB(*this,10),
 	fMaterialTransparency(*this,11),
 	fIndexedFaceSetccw(*this,0),
 	fIndexedFaceSetcolorPerVertex(*this,1),
@@ -213,8 +213,8 @@ namespace dynamicsJRLJapan
 	fStoreShape(*this),
 	m_Verbose(0)
       { }
-      
-      // Generic action for display 
+
+      // Generic action for display
       struct fDisplay_t {
 
 	void operator()(const char &c) const
@@ -223,23 +223,23 @@ namespace dynamicsJRLJapan
 	}
 
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  std::string x(begin,end);
 	  file_position fp_cur;
-	  
+
 	  // Store the current file position
 	  fp_cur = begin.get_position();
 	  ODEBUG("Display - Current file: " << fp_cur.file );
-	  ODEBUG( "Line   : " << fp_cur.line  
-		  << " Column : " << fp_cur.column 
+	  ODEBUG( "Line   : " << fp_cur.line
+		  << " Column : " << fp_cur.column
 		  << endl
 		  << "Parsed : " << x );
-	} 
+	}
       } fDisplay;
-      
-      // Generic action for display 
+
+      // Generic action for display
       struct fDisplay2_t {
 
 	void operator()(const char &c) const
@@ -248,31 +248,31 @@ namespace dynamicsJRLJapan
 	}
 
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  std::string x(begin,end);
 	  file_position fp_cur;
-	  
+
 	  // Store the current file position
 	  fp_cur = begin.get_position();
 	  ODEBUG3("Display - Current file: " << fp_cur.file );
-	  ODEBUG3( "Line   : " << fp_cur.line  
-		  << " Column : " << fp_cur.column 
+	  ODEBUG3( "Line   : " << fp_cur.line
+		  << " Column : " << fp_cur.column
 		  << endl
 		  << "Parsed : " << x );
-	} 
+	}
       } fDisplay2;
 
       // Action for a vector of 3 floats.
       struct fSFVec3f_i_t {
 
-	explicit fSFVec3f_i_t(Actions &actions, 
-			      unsigned int anIndex): 
+	explicit fSFVec3f_i_t(Actions &actions,
+			      unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	  
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  m_actions.m_DataForParsing.m_Genericvec3d(m_index) = x;
 	  if (m_actions.m_Verbose>1)
@@ -287,15 +287,15 @@ namespace dynamicsJRLJapan
       // Build an array of vectors
       struct fPushGenericvec3d_t {
 
-	explicit fPushGenericvec3d_t(Actions &actions): 
+	explicit fPushGenericvec3d_t(Actions &actions):
 	  m_actions(actions) {};
-	
+
 	template <typename IteratorT>
-	void operator()(IteratorT, IteratorT) const 
+	void operator()(IteratorT, IteratorT) const
 	{
-	  ODEBUG("Pushing :" 
-		 << m_actions.m_DataForParsing.m_Genericvec3d(0) << " " 
-		 << m_actions.m_DataForParsing.m_Genericvec3d(1) << " " 
+	  ODEBUG("Pushing :"
+		 << m_actions.m_DataForParsing.m_Genericvec3d(0) << " "
+		 << m_actions.m_DataForParsing.m_Genericvec3d(1) << " "
 		 << m_actions.m_DataForParsing.m_Genericvec3d(2) );
 	  m_actions.m_DataForParsing.
 	    m_vectorgvec3d.push_back(m_actions.m_DataForParsing.
@@ -308,30 +308,30 @@ namespace dynamicsJRLJapan
       // Build an array of int
       struct fPushGenericvecint32_t {
 
-	explicit fPushGenericvecint32_t(Actions &actions): 
+	explicit fPushGenericvecint32_t(Actions &actions):
 	  m_actions(actions) {};
-	
-	void operator()(int x) const 
+
+	void operator()(int x) const
 	{
 
 	  ODEBUG("Pushing :" << x );
 	  m_actions.m_DataForParsing.
-	    m_vectorgint32.push_back(x);	  
+	    m_vectorgint32.push_back(x);
 	}
 
       private:
 	Actions & m_actions;
       } fPushGenericvecint32;
-      
+
       // Action for a translation.
       struct fJointTranslation_i_t {
 
-	explicit fJointTranslation_i_t(Actions &actions, 
-				       unsigned int anIndex): 
+	explicit fJointTranslation_i_t(Actions &actions,
+				       unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	  
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  m_actions.m_DataForParsing.JointTranslation(m_index) = x;
 	  if (m_actions.m_Verbose>1)
@@ -340,7 +340,7 @@ namespace dynamicsJRLJapan
 
 	  if (m_index==2)
 	    {
-	      // IMPORTANT POLICY: all the free joint have their static 
+	      // IMPORTANT POLICY: all the free joint have their static
 	      // translation set to zero.
 	      if (m_actions.m_DataForParsing.CurrentLink.aJoint->type()!=JointPrivate::FREE_JOINT)
 		m_actions.m_DataForParsing.CurrentLink.aJoint->
@@ -351,12 +351,12 @@ namespace dynamicsJRLJapan
 		  lnull(0) = lnull(1) = lnull(2) = 0.0;
 		  m_actions.m_DataForParsing.CurrentLink.aJoint->setStaticTranslation(lnull);
 		}
-	      
+
 	      if (m_actions.m_Verbose>1)
 		{
-		  cout << "JointPrivate" 
+		  cout << "JointPrivate"
 		       << m_actions.m_DataForParsing.CurrentLink.aJoint->getName()
-		       << ":" 
+		       << ":"
 		       << m_actions.m_DataForParsing.JointTranslation << endl;
 		}
 	    }
@@ -369,12 +369,12 @@ namespace dynamicsJRLJapan
       // Action for a Joint Rotation
       struct fJointRotation_i_t {
 
-	explicit fJointRotation_i_t(Actions &actions, 
-				    unsigned int anIndex): 
+	explicit fJointRotation_i_t(Actions &actions,
+				    unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	  
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  if (m_index<3)
 	    m_actions.m_DataForParsing.RotationAxis(m_index) = x;
@@ -384,10 +384,10 @@ namespace dynamicsJRLJapan
 	      matrix3d R;
 	      matrix3d displayR;
 	      // Conversion from rotation axis to rotation matrix.
-	      AxisAngle2Matrix(m_actions.m_DataForParsing.RotationAxis, 
+	      AxisAngle2Matrix(m_actions.m_DataForParsing.RotationAxis,
 			       lQuantity, R);
-	      
-	      
+
+
 	      // From the current branch of rotation computes
 	      // the rotation at the global level for display.
 	      if (m_actions.m_DataForParsing.Depth!=0)
@@ -396,19 +396,19 @@ namespace dynamicsJRLJapan
 		    StackOfRotationMatrixDisplay[m_actions.m_DataForParsing.Depth-1];
 		  MAL_S3x3_C_eq_A_by_B(displayR,pR,R);
 		}
-	      else 
+	      else
 		{
-		  MAL_S3x3_MATRIX_SET_IDENTITY(displayR); 
+		  MAL_S3x3_MATRIX_SET_IDENTITY(displayR);
 		}
-	      
+
 	      m_actions.m_DataForParsing.StackOfRotationMatrixDisplay[m_actions.m_DataForParsing.Depth] = displayR;
 	      if (m_actions.m_Verbose>1)
-		cout << "StackOfRotationMatrixDisplay[" 
-		     << m_actions.m_DataForParsing.Depth << " ] = " 
+		cout << "StackOfRotationMatrixDisplay["
+		     << m_actions.m_DataForParsing.Depth << " ] = "
 		     << displayR  << endl;
-	      
-	      // Then set the static rotation at the level joint 
-	      // and 
+
+	      // Then set the static rotation at the level joint
+	      // and
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setStaticRotation(R);
 	      if (m_actions.m_DataForParsing.m_BodyGeometry!=0)
 		{
@@ -422,14 +422,14 @@ namespace dynamicsJRLJapan
 	      if (lQuantity!=0.0)
 		{
 		  if (m_actions.m_Verbose>1){
-		    std::cerr << m_actions.m_DataForParsing.aName 
+		    std::cerr << m_actions.m_DataForParsing.aName
 			      << " JointRotation:" << R << endl;
-		    std::cerr << "Axis: "<< m_actions.m_DataForParsing.RotationAxis 
+		    std::cerr << "Axis: "<< m_actions.m_DataForParsing.RotationAxis
 			      << " angle: " << lQuantity<<endl;
 		    std::cerr << "displayR: " << displayR << endl;
 		  }
 		}
-	    }	    
+	    }
 	}
 
       private:
@@ -440,10 +440,10 @@ namespace dynamicsJRLJapan
       // Store the mass of a body
       struct fBodyMass_t {
 
-	explicit fBodyMass_t(Actions &actions): 
+	explicit fBodyMass_t(Actions &actions):
 	  m_actions(actions) {};
-	
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  m_actions.m_DataForParsing.mass = x ;
 	}
@@ -454,12 +454,12 @@ namespace dynamicsJRLJapan
       // Action to store the center of mass of the robot.
       struct fBodyCenterOfMass_t {
 
-	explicit fBodyCenterOfMass_t(Actions &actions, 
-				     unsigned int anIndex): 
+	explicit fBodyCenterOfMass_t(Actions &actions,
+				     unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	  
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  m_actions.m_DataForParsing.cm[m_index] = x;
 	  if (m_actions.m_Verbose>1)
@@ -473,13 +473,13 @@ namespace dynamicsJRLJapan
       // Action to store the name of the proto.
       struct fProtoName_t {
 
-	explicit fProtoName_t(Actions &actions): 
+	explicit fProtoName_t(Actions &actions):
 	  m_actions(actions)
 	{};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT & begin, 
-			const IteratorT & end) const 
+	void operator()(const IteratorT & begin,
+			const IteratorT & end) const
 	{
 
 	  string x(begin, end);
@@ -490,16 +490,16 @@ namespace dynamicsJRLJapan
       private:
 	Actions & m_actions;
       } fProtoName;
-      
+
       struct fProtoExposedField_t {
 
-	explicit fProtoExposedField_t(Actions &actions): 
+	explicit fProtoExposedField_t(Actions &actions):
 	  m_actions(actions)
 	{};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT & begin, 
-			const IteratorT & end) const 
+	void operator()(const IteratorT & begin,
+			const IteratorT & end) const
 	{
 
 	  string x(begin, end);
@@ -513,13 +513,13 @@ namespace dynamicsJRLJapan
       // Extract the name of a definition.
       struct fDEFName_t {
 
-	explicit fDEFName_t(Actions &actions): 
+	explicit fDEFName_t(Actions &actions):
 	  m_actions(actions)
 	{};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT & begin, 
-			const IteratorT & end) const 
+	void operator()(const IteratorT & begin,
+			const IteratorT & end) const
 	{
 
 	  string x(begin, end);
@@ -530,32 +530,32 @@ namespace dynamicsJRLJapan
       private:
 	Actions & m_actions;
       } fDEFName;
-	    
-      // In case of Joint type.      
+
+      // In case of Joint type.
       struct fJointType_t {
 
-	explicit fJointType_t(Actions &actions): 
+	explicit fJointType_t(Actions &actions):
 	  m_actions(actions) {};
-	
+
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  MAL_S3_VECTOR(lnull,double);
 	  lnull[0]=0.0;lnull[1]=0.0;lnull[2]=0.0;
-	  
+
 	  string s(begin,end);
 	  if (m_actions.m_Verbose>1)
 	    cout << "jointType: " << s << endl;
-	  
-	  
+
+
 	  if (s=="free")
 	    {
-	      
+
 	      m_actions.m_DataForParsing.CurrentLink.aJoint = new JointFreeflyerPrivate();
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setIDinActuated(-1);
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setName(m_actions.m_DataForParsing.aName);
-	      
+
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->type(JointPrivate::FREE_JOINT);
 	    }
 	  else if (s=="rotate")
@@ -564,7 +564,7 @@ namespace dynamicsJRLJapan
 	      m_actions.m_DataForParsing.CurrentLink.aJoint = new JointRotationPrivate();
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setIDinActuated(-1);
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setName(m_actions.m_DataForParsing.aName);
-	      
+
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	    }
 	  else if (s=="slide")
@@ -572,9 +572,9 @@ namespace dynamicsJRLJapan
 	      m_actions.m_DataForParsing.CurrentLink.aJoint = new JointTranslationPrivate();
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setIDinActuated(-1);
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->setName(m_actions.m_DataForParsing.aName);
-	      
+
 	      m_actions.m_DataForParsing.CurrentLink.aJoint->type(JointPrivate::PRISMATIC_JOINT);
-	      
+
 	    }
 	}
       private:
@@ -584,10 +584,10 @@ namespace dynamicsJRLJapan
       // Action for a Joint ID.
       struct fJointID_t {
 
-	explicit fJointID_t(Actions &actions): 
+	explicit fJointID_t(Actions &actions):
 	  m_actions(actions){};
-	  
-	void operator()(const int aJointID) const 
+
+	void operator()(const int aJointID) const
 	{
 	  m_actions.m_DataForParsing.CurrentLink.aJoint->setIDinActuated(aJointID);
 	  if (m_actions.m_Verbose>1)
@@ -601,16 +601,16 @@ namespace dynamicsJRLJapan
       struct fJointAxis_t {
 
 	explicit fJointAxis_t(Actions &actions,
-			      unsigned int Index): 
+			      unsigned int Index):
 	  m_actions(actions),
 	  m_Index(Index){};
-	  
-	void operator()(const int aJointID) const 
+
+	void operator()(const int aJointID) const
 	{
 	  MAL_S3_VECTOR(laxis,double);
 	  laxis[0] = laxis[1] = laxis[2] = 0.0;
 	  laxis[m_Index] = 1.0;
-	  
+
 	  m_actions.m_DataForParsing.CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
 	  m_actions.m_DataForParsing.CurrentLink.aJoint->axis(laxis);
 
@@ -627,12 +627,12 @@ namespace dynamicsJRLJapan
 
 	explicit fJointLimits_t(Actions &actions,
 				unsigned int PV,
-				unsigned int LU): 
+				unsigned int LU):
 	  m_actions(actions),
 	  m_PV(PV),
 	  m_LU(LU){};
-	  
-	void operator()(const double aLimit) const 
+
+	void operator()(const double aLimit) const
 	{
 	  if (m_PV==0)
 	    {
@@ -660,10 +660,10 @@ namespace dynamicsJRLJapan
       // Action for equivalent inertia.
       struct fEquivalentInertia_t {
 
-	explicit fEquivalentInertia_t(Actions &actions): 
+	explicit fEquivalentInertia_t(Actions &actions):
 	  m_actions(actions){};
-	  
-	void operator()(const double x) const 
+
+	void operator()(const double x) const
 	{
 	  double lx = x;
 	  m_actions.m_DataForParsing.CurrentLink.aJoint->equivalentInertia(lx);
@@ -677,19 +677,19 @@ namespace dynamicsJRLJapan
       // Update the data in a body and a new body.
       struct fUpdateAndAddBody_t {
 
-	explicit fUpdateAndAddBody_t(Actions &actions): 
+	explicit fUpdateAndAddBody_t(Actions &actions):
 	  m_actions(actions){};
 
 	template <typename IteratorT>
-	void operator()(IteratorT &, 
-			IteratorT &) const 
+	void operator()(IteratorT &,
+			IteratorT &) const
 	{
 	  if (m_actions.m_Verbose>1)
 	    {
 	      std::cout << "Starting Body." << std::endl;
 	    }
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
-	  
+
 	  int lDepth = aDataForParsing.Depth;
 	  ODEBUG("depth: "<< lDepth);
 	  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
@@ -701,7 +701,7 @@ namespace dynamicsJRLJapan
 	  if (aDataForParsing.Depth!=0)
 	    {
 	      lCurrentBody->setLabelMother(aDataForParsing.CurrentBody[lDepth-1]->getLabel());
-	      
+
 	    }
 	  aDataForParsing.m_MultiBody.addBody(*lCurrentBody);
 	  aDataForParsing.m_MultiBody.addLink(*aDataForParsing.CurrentBody[lDepth-1],
@@ -724,7 +724,7 @@ namespace dynamicsJRLJapan
 	      std::cout << "Adding Body." << std::endl;
 	    }
 	}
-	
+
       private:
 	Actions & m_actions;
 
@@ -732,10 +732,10 @@ namespace dynamicsJRLJapan
 
       struct fFillMomentsOfInertia_t {
 
-	explicit fFillMomentsOfInertia_t(Actions &actions): 
+	explicit fFillMomentsOfInertia_t(Actions &actions):
 	  m_actions(actions){};
-	
-	void operator()(const double z) const 
+
+	void operator()(const double z) const
 	{
 	  DataForParsing_t &aDataForParsing = m_actions.m_DataForParsing;
 	  aDataForParsing.mi[aDataForParsing.index_mi++]=z;
@@ -753,16 +753,16 @@ namespace dynamicsJRLJapan
 	      aDataForParsing.index_mi=0;
 	    }
 	}
-	
+
       private:
 	Actions & m_actions;
-	
+
       } fFillMomentsOfInertia;
 
       // Increase depth when parsing the robot tree.
       struct fIncreaseDepth_t {
 
-	explicit fIncreaseDepth_t(Actions &actions): 
+	explicit fIncreaseDepth_t(Actions &actions):
 	  m_actions(actions){};
 
 	void LocalAction() const
@@ -773,14 +773,14 @@ namespace dynamicsJRLJapan
 	  // After the initial body.
 	  if (lDepth>0)
 	    {
-	      
+
 	      // Check wether or not the current body is virtual or not.
 	      if (!aDataForParsing.CurrentBody[lDepth]->getInitialized())
 		{
 		  // If it is virtual then do a basic initialization.
 		  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
 		  lCurrentBody->setLabelMother(aDataForParsing.CurrentBody[lDepth-1]->getLabel());
-		  
+
 		  char Buffer[1024];
 		  memset(Buffer,0,1024);
 		  sprintf(Buffer,"VIRTUAL_%d", aDataForParsing.NbOfBodies);
@@ -790,7 +790,7 @@ namespace dynamicsJRLJapan
 		  aDataForParsing.m_MultiBody.addLink(*aDataForParsing.CurrentBody[lDepth-1],
 						      *lCurrentBody,
 						      aDataForParsing.CurrentLink);
-		  
+
 		  lCurrentBody->setLabelMother(aDataForParsing.CurrentBody[lDepth-1]->getLabel());
 		  lCurrentBody->setInitialized(true);
 		}
@@ -799,23 +799,23 @@ namespace dynamicsJRLJapan
 	    {
 	      m_actions.Init();
 	    }
-	  
+
 	  // Increase Depth.
 	  aDataForParsing.Depth++;
-	  
+
 	  // Creates a default body.
 	  aDataForParsing.CurrentBody[aDataForParsing.Depth] = new Body() ;
-	  
+
 	  MAL_S3x3_MATRIX_SET_IDENTITY(aDataForParsing.StackOfRotationMatrixDisplay[aDataForParsing.Depth]);
-	  
+
 	  if (m_actions.m_Verbose>1)
 	    std::cout << "Increased depth "<< aDataForParsing.Depth << endl;
 
-	} 
+	}
 
 	template <typename IteratorT>
-	void operator()(IteratorT , 
-			IteratorT ) const 
+	void operator()(IteratorT ,
+			IteratorT ) const
 	{
 	  LocalAction();
 	}
@@ -833,13 +833,13 @@ namespace dynamicsJRLJapan
       // Increase depth when parsing the robot tree.
       struct fDecreaseDepth_t {
 
-	explicit fDecreaseDepth_t(Actions &actions): 
+	explicit fDecreaseDepth_t(Actions &actions):
 	  m_actions(actions){};
 
 	void LocalAction() const
 	{
 	  m_actions.m_DataForParsing.Depth--;
-	  
+
 	  if (m_actions.m_Verbose>1)
 	    std::cout << "Decreased depth "<< m_actions.m_DataForParsing.Depth << endl;
 	}
@@ -850,7 +850,7 @@ namespace dynamicsJRLJapan
 	{
 	  LocalAction();
 	}
-	
+
 	void operator()(const char &) const
 	{
 	  LocalAction();
@@ -858,14 +858,14 @@ namespace dynamicsJRLJapan
 
       private:
 	Actions & m_actions;
-	
+
       } fDecreaseDepth;
 
 
       // Add URL information
       struct fAddURL_t {
 
-	explicit fAddURL_t(Actions &actions): 
+	explicit fAddURL_t(Actions &actions):
 	  m_actions(actions){};
 
 
@@ -875,23 +875,23 @@ namespace dynamicsJRLJapan
 	{
 	  string s(begin,end);
 	  file_position fp_cur;
-	  
+
 	  // Store the current file position
 	  fp_cur = begin.get_position();
 	  ODEBUG( "Current file: " << fp_cur.file );
-	  ODEBUG("Line   : " << fp_cur.line  
-		 << " Column : " << fp_cur.column 
+	  ODEBUG("Line   : " << fp_cur.line
+		 << " Column : " << fp_cur.column
 		 << endl
 		 << "File to be included : " << s);
-	  
+
 	  string sp2 = s;
 	  ODEBUG( " " << sp2);
 	  m_actions.m_DataForParsing.m_BodyGeometry->addURL(sp2);
 	}
-	
+
       private:
 	Actions & m_actions;
-	
+
       } fAddURL;
 
 
@@ -901,12 +901,12 @@ namespace dynamicsJRLJapan
 			     unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	
+
 	void operator()(double x) const
 	{
 	  ODEBUG("fMaterial ("<<m_index << ")=" << x);
- 
-	  Geometry::Material & aMaterial = 
+
+	  Geometry::Material & aMaterial =
 	    m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial();
 
 	  if (m_index==0)
@@ -935,37 +935,37 @@ namespace dynamicsJRLJapan
 	    aMaterial.transparency = x;
 
 	}
-	
+
       private:
 	Actions &m_actions;
 	unsigned int m_index;
-      } fMaterialAmbientIntensity, 
+      } fMaterialAmbientIntensity,
 	fMaterialDiffuseColorR,
-	fMaterialDiffuseColorG, 
-	fMaterialDiffuseColorB,       
+	fMaterialDiffuseColorG,
+	fMaterialDiffuseColorB,
 	fMaterialEmissiveColorR,
-	fMaterialEmissiveColorG, 
+	fMaterialEmissiveColorG,
 	fMaterialEmissiveColorB,
         fMaterialShininess,
 	fMaterialSpecularColorR,
-	fMaterialSpecularColorG, 
+	fMaterialSpecularColorG,
 	fMaterialSpecularColorB,
 	fMaterialTransparency;
-      
+
 
       struct fIndexedFaceSet_t {
 	explicit fIndexedFaceSet_t(Actions &actions,
 				   unsigned int anIndex):
 	  m_actions(actions),
 	  m_index(anIndex){};
-	
+
 	void operator()(bool x) const
 	{
 	  ODEBUG( "fIndexedFaceSet ("<<m_index << ")=" << x);
- 
+
 	  Geometry::IndexedFaceSet &aIndexedFaceSet = m_actions.
 	    m_DataForParsing.m_Shape.getIndexedFaceSet();
-	  
+
 	  if (m_index==0)
 	    { aIndexedFaceSet.ccw = x; }
 	  else if (m_index==1)
@@ -977,11 +977,11 @@ namespace dynamicsJRLJapan
           else if (m_index==4)
 	    { aIndexedFaceSet.solid=x;}
 	}
-	
+
       private:
 	Actions &m_actions;
 	unsigned int m_index;
-	
+
       } fIndexedFaceSetccw,
         fIndexedFaceSetcolorPerVertex,
         fIndexedFaceSetconvex,
@@ -992,10 +992,10 @@ namespace dynamicsJRLJapan
 
 	explicit fCoordinates_t(Actions &actions):
 	  m_actions(actions) {};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord =
 	    m_actions.m_DataForParsing.m_vectorgvec3d;
@@ -1005,7 +1005,7 @@ namespace dynamicsJRLJapan
 	  fp_cur = begin.get_position();
 
 	  ODEBUG("Display - Current file: " << fp_cur.file );
-	  ODEBUG( "Line   : " << fp_cur.line  
+	  ODEBUG( "Line   : " << fp_cur.line
 		  << " Column : " << fp_cur.column );
 
 	}
@@ -1018,10 +1018,10 @@ namespace dynamicsJRLJapan
 
 	explicit fCoordIndex_t(Actions &actions):
 	  m_actions(actions) {};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.
 	    push_back(m_actions.m_DataForParsing.m_vectorgint32);
@@ -1034,10 +1034,10 @@ namespace dynamicsJRLJapan
       struct fNormalNode_t {
 	explicit fNormalNode_t(Actions &actions):
 	  m_actions(actions) {};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 	  m_actions.m_DataForParsing.m_vectorgvec3d.clear();
 	}
@@ -1050,10 +1050,10 @@ namespace dynamicsJRLJapan
 
 	explicit fStoreShape_t(Actions &actions):
 	  m_actions(actions) {};
-	  
+
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin, 
-			const IteratorT &end) const 
+	void operator()(const IteratorT &begin,
+			const IteratorT &end) const
 	{
 
 	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;
@@ -1073,7 +1073,7 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
       } fStoreShape;
 
-      
+
       // Fields of Actions:
       struct DataForParsing_t m_DataForParsing;
 
@@ -1112,6 +1112,6 @@ namespace dynamicsJRLJapan
       }
 
     };
-    
+
   };
 };
