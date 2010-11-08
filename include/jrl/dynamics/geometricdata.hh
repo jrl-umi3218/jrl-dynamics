@@ -183,6 +183,6 @@ namespace dynamicsJRLJapan
     std::string & getRelatedJointName();
    };
 
-};
+} // end of namespace dynamicsJRLJapan.
 
 #endif /*! _DYNAMICS_JRL_GEOMETRIC_DATA_H_ */
