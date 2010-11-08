@@ -57,19 +57,16 @@ namespace jrlDelegate {
        @{
     */
     dynamicRobot(CjrlRobotDynamicsObjectFactory *inObjectFactory)
-      {
-	m_DR = inObjectFactory->createDynamicRobot();
-      }
+      : m_DR (inObjectFactory->createDynamicRobot())
+      {}
 
     dynamicRobot(dynamicRobot *inDRNA)
-      {
-	m_DR = inDRNA;
-      }
+      : m_DR (inDRNA)
+      {}
 
     dynamicRobot()
-      {
-	m_DR = 0;
-      }
+      : m_DR ()
+      {}
 
     /**
        \brief Initialize data-structure necessary to dynamic computations
