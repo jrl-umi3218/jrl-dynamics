@@ -649,6 +649,6 @@ namespace jrlDelegate {
 
   };
 
-};
+} // end of namespace dynamicsJRLJapan.
 
 #endif /* JRL_DYNAMIC_ROBOT_NA_H_ */

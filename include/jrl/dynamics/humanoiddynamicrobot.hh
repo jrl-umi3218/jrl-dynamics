@@ -53,20 +53,20 @@ namespace jrlDelegate {
     public:
 
       humanoidDynamicRobot(CjrlRobotDynamicsObjectFactory * inObjectFactory)
+	: m_HDR (inObjectFactory->createHumanoidDynamicRobot())
 	{
-	  m_HDR = inObjectFactory->createHumanoidDynamicRobot();
 	  setDynamicRobot(m_HDR);
 	}
 
       humanoidDynamicRobot(humanoidDynamicRobot *inHDRNA )
+	: m_HDR (inHDRNA)
 	{
-	  m_HDR = inHDRNA;
 	  setDynamicRobot(m_HDR);
 	}
 
       humanoidDynamicRobot()
+	: m_HDR ()
 	{
-	  m_HDR=0;
 	  setDynamicRobot(m_HDR);
 	}
       /**
@@ -374,6 +374,6 @@ namespace jrlDelegate {
 
     };
 
-};
+} // end of namespace jrlDelegate.
 
 #endif
