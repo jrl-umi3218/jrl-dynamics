@@ -29,106 +29,24 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-enable_language(CXX)
-
-ENABLE_TESTING()
-
-# Debug mode for cmake.
-SET(CMAKE_VERBOSE_MAKEFILE ON)
-
-# Set version
-set(CPACK_PACKAGE_VERSION_MAJOR 1)
-set(CPACK_PACKAGE_VERSION_MINOR 19)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
-
-SET(PROJECT_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.99)
-
-IF(WIN32)
-  SET(LIBDIR_KW "/LIBPATH:")
-  SET(LIBINCLUSION_KW "")
-  SET(LIB_EXT ".lib")
-ENDIF(WIN32)
-
-IF(UNIX)
-  SET(LIBDIR_KW "-L")
-  SET(LIBDIR_RP "-Wl,-R")
-  SET(LIBINCLUSION_KW "-l")
-  SET(LIB_EXT "")
-ENDIF(UNIX)
+INCLUDE(cmake/base.cmake)
 
 # name of the project
 SET(PROJECT_NAME jrl-dynamics)
+SET(PROJECT_VERSION 1.19.1.99)
 SET(PROJECT_CONTACT olivier.stasse@aist.go.jp)
 SET(PROJECT_DESCRIPTION "Implementation of Newton Euler algorithm")
-project(${PROJECT_NAME})
+SET(PROJECT_URL "git@github.com:jrl-umi3218/jrl-dynamics.git")
 
-# Impose shared libraries
-#------------------------
-OPTION(BUILD_SHARED_LIBS "Build dynamicsJRLJapan with shared libraries." ON)
+SET(CXX_DISABLE_WERROR True)
+SET(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Check for required packages
-# ---------------------------
-INCLUDE(FindPkgConfig)
+SETUP_PROJECT()
 
-SET(MAL_REQUIRED_VERSION 1.8.3)
-SET(ABSTROBOTDYNAMICS_REQUIRED_VERSION 1.16)
 
-pkg_check_modules(MALJRL REQUIRED jrl-mal>=${MAL_REQUIRED_VERSION})
-
-pkg_check_modules(ROBOTDYNAMICS REQUIRED abstract-robot-dynamics>=${ABSTROBOTDYNAMICS_REQUIRED_VERSION})
-EXEC_PROGRAM(${PKG_CONFIG_EXECUTABLE} ARGS  --variable=docdir abstractRobotDynamics
-  OUTPUT_VARIABLE _abstractRobotDynamics_DOCDIR)
-
-SET(PROJECT_REQUIREMENTS "jrl-mal >= ${MAL_REQUIRED_VERSION}, abstract-robot-dynamics >= ${ABSTROBOTDYNAMICS_REQUIRED_VERSION}")
-
-MESSAGE(STATUS "${MALJRL_CFLAGS}")
-MESSAGE(STATUS "${ROBOTDYNAMICS_CFLAGS}")
-
-IF(UNIX)
-SET(${PROJECT_NAME}_CXXFLAGS "-Wall ${${PROJECT_NAME}_CXXFLAGS}")
-ENDIF(UNIX)
-IF(WIN32)
-SET(WIN32_CXXFLAGS "-D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE /wd4250 /wd4251 /wd4275 /wd4996")
-SET(WIN32_CXXFLAGS "${WIN32_CXXFLAGS} /wd4355") # 'this' : used in base member initializer list
-SET(${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS} ${WIN32_CXXFLAGS}")
-ENDIF(WIN32)
-
-SET(${PROJECT_NAME}_export_CXXFLAGS "")
-SET(${PROJECT_NAME}_export_LDFLAGS "")
-
-FOREACH(option_cxxflags ${ROBOTDYNAMICS_CFLAGS})
-  SET(${PROJECT_NAME}_CXXFLAGS " ${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
-  SET(${PROJECT_NAME}_export_CXXFLAGS " ${${PROJECT_NAME}_export_CXXFLAGS} ${option_cxxflags}")
-ENDFOREACH(option_cxxflags)
-
-FOREACH(option_cxxflags ${MALJRL_CFLAGS})
-  SET(${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS} ${option_cxxflags}")
-  SET(${PROJECT_NAME}_export_CXXFLAGS " ${${PROJECT_NAME}_export_CXXFLAGS} ${option_cxxflags}")
-ENDFOREACH(option_cxxflags)
-
-FOREACH(option_ldflags ${ROBOTDYNAMICS_LDFLAGS})
-  SET(${PROJECT_NAME}_LDFLAGS "${option_ldflags} ${${PROJECT_NAME}_LDFLAGS}")
-ENDFOREACH(option_ldflags)
-
-FOREACH(option_ldflags ${MALJRL_LDFLAGS})
-  SET(${PROJECT_NAME}_LDFLAGS "${option_ldflags} ${${PROJECT_NAME}_LDFLAGS}")
-ENDFOREACH(option_ldflags)
-
-SET(${PROJECT_NAME}_src_LDFLAGS ${${PROJECT_NAME}_LDFLAGS})
-
-SET(${PROJECT_NAME}_LDFLAGS "${LIBDIR_KW}${CMAKE_PREFIX_INSTALL}/lib  ${${PROJECT_NAME}_LDFLAGS}")
-
-IF(UNIX)
-  SET(${PROJECT_NAME}_LDFLAGS "${${PROJECT_NAME}_LDFLAGS} ${LIBINCLUSION_KW}${PROJECT_NAME}${LIB_EXT}")
-ENDIF(UNIX)
-
-IF(WIN32)
-  SET(${PROJECT_NAME}_LDFLAGS "${${PROJECT_NAME}_LDFLAGS} ${LIBINCLUSION_KW}${PROJECT_NAME}${LIB_EXT}")
-ENDIF(WIN32)
-
-# Check if glut is present or not.
-# -------------------------------
-INCLUDE(FindGLUT)			  
+# Dependencies
+ADD_REQUIRED_DEPENDENCY("jrl-mal >= 1.9.0")
+ADD_REQUIRED_DEPENDENCY("abstract-robot-dynamics >= 1.16")
 
 INCLUDE(CheckFunctionExists)
 CHECK_FUNCTION_EXISTS("getline" HAVE_GETLINE)
@@ -142,8 +60,8 @@ ELSE(HAVE_GETLINE_PTR)
 ENDIF(HAVE_GETLINE_PTR)
 
 CONFIGURE_FILE(
-	${${PROJECT_NAME}_SOURCE_DIR}/src/private/dynamicsGetLine.h.cmake
-	${${PROJECT_NAME}_BINARY_DIR}/src/private/dynamicsGetLine.h
+	${CMAKE_SOURCE_DIR}/src/private/dynamicsGetLine.h.cmake
+	${CMAKE_BINARY_DIR}/src/private/dynamicsGetLine.h
 )
 
 # Optimisation flags when building with RELEASE
@@ -169,73 +87,6 @@ add_subdirectory(src)
 add_subdirectory(unitTesting)
 add_subdirectory(tools)
 
-# Prepare the documentation
-# -------------------------
-OPTION(GENERATE_DOC "Generate html documentation" 1)
-IF (GENERATE_DOC)
-  INCLUDE(FindDoxygen)
-  IF(DOXYGEN_FOUND)
-    MESSAGE(STATUS "Doxygen found")
-	ADD_SUBDIRECTORY(doc)
-  ENDIF(DOXYGEN_FOUND)
-ENDIF (GENERATE_DOC)
+SETUP_PROJECT_FINALIZE()
 
-# Prepare description file for pkg-config.
-#-----------------------------------------
-
-SET(install_pkg_prefix "\${prefix}")
-SET(install_pkg_exec_prefix "\${exec_prefix}")
-SET(install_pkg_libdir "\${libdir}")
-SET(install_pkg_include_dir "\${includedir}")
-SET(install_pkg_datarootdir "\${datarootdir}")
-
-# Install the file in the appropriate place.
-SET(install_libdir_pkgconfig lib/pkgconfig)
-
-CONFIGURE_FILE(${${PROJECT_NAME}_SOURCE_DIR}/${PROJECT_NAME}.pc.cmake
-		 ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}.pc )
-
-INSTALL(FILES ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}.pc
-	DESTINATION ${install_libdir_pkgconfig}	
-        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
-)
-
-# Uninstall target
-CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  IMMEDIATE @ONLY)
-
-ADD_CUSTOM_TARGET(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
-#---------------
-# Package target
-#---------------
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "jrl-dynamics - Provides an implementation of the Recursive Newton-Euler Algorithm (RNEA).")
-set(CPACK_PACKAGE_VENDOR "JRL CNRS/AIST")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-set(CPACK_PACKAGE_CONTACT "Olivier Stasse (olivier.stasse@aist.go.jp)")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "jrl-mal (>=1.8.3), abstractrobotdynamics (>=1.16)")
-set(
-CPACK_SOURCE_PACKAGE_FILE_NAME
-"jrl-dynamics-src-${PROJECT_VERSION}"
-CACHE INTERNAL "tarball basename"
-)
-set(CPACK_PACKAGE_NAME "jrl-dynamics")
-set(CPACK_SOURCE_GENERATOR "TGZ")
-set(CPACK_GENERATOR "DEB;TGZ")
-
-# The following components are regex's to match anywhere (unless anchored)
-# in absolute path + filename to find files or directories to be excluded
-# from source tarball.
-set(CPACK_SOURCE_IGNORE_FILES
-"~$"
-"^${PROJECT_SOURCE_DIR}/build/"
-"^${PROJECT_SOURCE_DIR}/.git/"
-)
-
-set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/openrobots")
-#message("CPACK_SOURCE_IGNORE_FILES = ${CPACK_SOURCE_IGNORE_FILES}")
-include(CPack)
 

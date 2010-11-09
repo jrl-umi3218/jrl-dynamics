@@ -19,27 +19,16 @@
 # along with dynamicsJRLJapan.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# Import jrl-mal flags.
+INCLUDE_DIRECTORIES(${JRL_MAL_INCLUDEDIR})
+
+# Import abstract-robot-dynamics flags.
+INCLUDE_DIRECTORIES(${ABSTRACT_ROBOT_DYNAMICS_INCLUDEDIR})
+
 # For tools, we include the same files as the src
-SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_CXXFLAGS}")
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
 
-# For tools, we link with the library corresponding to the src,  which is not installed yet
-IF(UNIX)
-  SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
-  SET(${PROJECT_NAME}_test_LDFLAGS "${${PROJECT_NAME}_src_LDFLAGS}")
-
-  IF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET (${PROJECT_NAME}_test_LDFLAGS " ${${PROJECT_NAME}_test_LDFLAGS} -lgcov")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-  ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-
-ENDIF(UNIX)
-
-IF(WIN32)
-  SET(${PROJECT_NAME}_test_LDFLAGS "${${PROJECT_NAME}_src_LDFLAGS}")
-ENDIF(WIN32)
-
-MESSAGE(STATUS " unitTesting: ${UNITTESTING_CXXFLAGS}")
+#SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_CXXFLAGS}")
 
 # Installing testing files.
 MESSAGE(STATUS "${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl")
@@ -51,8 +40,6 @@ ADD_EXECUTABLE(	ReadOpenHRPFileAndExport
 
 SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 	              PROPERTIES
-		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
 TARGET_LINK_LIBRARIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
@@ -65,8 +52,6 @@ ADD_EXECUTABLE(	CreateVRMLPoseFile
 
 SET_TARGET_PROPERTIES(CreateVRMLPoseFile
 	              PROPERTIES
-		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 		      DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/tools/sample.wrl
 )
 TARGET_LINK_LIBRARIES (CreateVRMLPoseFile ${PROJECT_NAME})
@@ -77,21 +62,11 @@ ADD_EXECUTABLE( CreateMapleModel
   GenerateRobotForMaple.cpp
   CreateMapleModel.cpp)
 
-SET_TARGET_PROPERTIES(CreateMapleModel
-	              PROPERTIES
-		      COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-)
 TARGET_LINK_LIBRARIES (CreateMapleModel ${PROJECT_NAME})
 ADD_DEPENDENCIES (CreateMapleModel ${PROJECT_NAME})
 
 # ReadPosFile 
 ADD_EXECUTABLE(	ReadPosFile ReadPosFile.cpp)
-SET_TARGET_PROPERTIES(ReadPosFile
-	              PROPERTIES
-	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-)
 TARGET_LINK_LIBRARIES (ReadPosFile ${PROJECT_NAME})
 ADD_DEPENDENCIES (ReadPosFile ${PROJECT_NAME})
 
@@ -100,11 +75,6 @@ ADD_EXECUTABLE(CreateHPPBuilder
   GenerateRobotForHppBuilder.cpp
   CreateHPPBuilder.cpp)
 
-SET_TARGET_PROPERTIES(CreateHPPBuilder
-	              PROPERTIES
-	              COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-		      LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-)
 TARGET_LINK_LIBRARIES (CreateHPPBuilder ${PROJECT_NAME})
 ADD_DEPENDENCIES (CreateHPPBuilder ${PROJECT_NAME})
 

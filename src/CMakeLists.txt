@@ -9,9 +9,21 @@
 
 # Create the library "dynamicsJRLJapan"
 
+# Import jrl-mal flags.
+INCLUDE_DIRECTORIES(${JRL_MAL_INCLUDEDIR})
+
+# Import abstract-robot-dynamics flags.
+INCLUDE_DIRECTORIES(${ABSTRACT_ROBOT_DYNAMICS_INCLUDEDIR})
+
+# Make sure to find Debug.h
+INCLUDE_DIRECTORIES(BEFORE ${PROJECT_SOURCE_DIR}/src/private/)
+
+# Make sure to find Debug.h
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR}/src/private/)
+
 # Create list of source files
 # ---------------------------
-SET(libdyn_src
+SET(SOURCES
   private/Body.cpp
   private/DynamicBodyPrivate.cpp
   private/DynamicMultiBodyActuated.cpp
@@ -43,7 +55,7 @@ SET(libdyn_src
   private/SpiritVRMLReader.cpp
 )
 
-SET(libdyn_src ${libdyn_src}
+SET(SOURCES ${SOURCES}
   public/Joint.cpp
   public/DynamicBody.cpp
   public/dynamicsJRLJapanFactory.cpp
@@ -52,7 +64,7 @@ SET(libdyn_src ${libdyn_src}
 
 # Create list of headers files
 #-----------------------------
-SET(libdyn_headers
+SET(jrl-walkgen_HEADERS
 ../include/jrl/dynamics/dll.hh
 ../include/jrl/dynamics/dynamicsfactory.hh
 ../include/jrl/dynamics/dynamicbody.hh
@@ -65,19 +77,16 @@ SET(libdyn_headers
 ../include/jrl/dynamics/geometricdata.hh
 )
 
-# Create name of the library.
-#---------------------------
-SET(PROJECT_NAME_LIB ${PROJECT_NAME})
 
 # Add main target: dynamicsJRLJapan
 # ---------------------------------
-ADD_LIBRARY(${PROJECT_NAME_LIB}
-  ${libdyn_src} ${libdyn_headers}
+ADD_LIBRARY(jrl-dynamics
+  ${SOURCES}
 )
 
 # Specify soname, version and rpath
 # ---------------------------------
-SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
+SET_TARGET_PROPERTIES(jrl-dynamics
       		      PROPERTIES
 		      VERSION ${PROJECT_VERSION}
 		      SOVERSION ${PROJECT_VERSION}
@@ -87,47 +96,16 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
 
 # Impose shared libraries
 #------------------------
-OPTION(BUILD_SHARED_LIBS "Build SOT with shared libraries." ON)
+OPTION(BUILD_SHARED_LIBS "Build jrl-dynamics with shared libraries." ON)
 
-
-# Specify compiling options
-# -------------------------
-SET_TARGET_PROPERTIES(${PROJECT_NAME_LIB}
-      		      PROPERTIES
-	              COMPILE_FLAGS  "-I${PROJECT_SOURCE_DIR}/include -I${PROJECT_BINARY_DIR}/src/private -I${PROJECT_SOURCE_DIR}/src/private ${${PROJECT_NAME}_CXXFLAGS}"
-		      LINK_FLAGS ${${PROJECT_NAME}_src_LDFLAGS}
-	             )
-
-# Specify header files
-SET(${PROJECT_NAME}_HEADERS ${libdyn_headers})
-
-# Installation
-# -------------
-INSTALL(FILES ${${PROJECT_NAME}_HEADERS}
-  DESTINATION include/jrl/dynamics/
-  PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE)
-
-IF(UNIX)
-  INSTALL(FILES
-    ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so.${PROJECT_VERSION}
-    ${${PROJECT_NAME}_BINARY_DIR}/src/lib${PROJECT_NAME}.so
-    DESTINATION lib)
-ENDIF(UNIX)
-
-IF(WIN32)
-  INSTALL(TARGETS ${PROJECT_NAME}
-    DESTINATION lib
-    PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE
-    )
-ENDIF(WIN32)
 
 # Add local test
 
-SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/src/private/ ${${PROJECT_NAME}_CXXFLAGS}")
-SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_test_CXXFLAGS}")
+# SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/src/private/ ${${PROJECT_NAME}_CXXFLAGS}")
+# SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_test_CXXFLAGS}")
 
-IF(UNIX)
-  SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
-  SET(${PROJECT_NAME}_test_LDFLAGS
-    "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
-ENDIF(UNIX)
+#IF(UNIX)
+#  SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
+#  SET(${PROJECT_NAME}_test_LDFLAGS
+#    "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
+#ENDIF(UNIX)
