@@ -45,15 +45,7 @@
 #ifndef _DYNAMICS_JRL_JAPAN_FACTORY_H_
 #define _DYNAMICS_JRL_JAPAN_FACTORY_H_
 
-#if defined (WIN32)
-#  ifdef dynamicsJRLJapan_EXPORTS
-#    define DYN_JRL_JAPAN_EXPORT __declspec(dllexport)
-#  else
-#    define DYN_JRL_JAPAN_EXPORT __declspec(dllimport)
-#  endif
-#else
-#  define DYN_JRL_JAPAN_EXPORT
-#endif
+#include "jrl/dynamics/dll.hh"
 
 #include <vector>
 #include <jrl/mal/matrixabstractlayer.hh>

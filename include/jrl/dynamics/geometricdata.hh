@@ -24,15 +24,7 @@
 #ifndef _DYNAMICS_JRL_JAPAN_GEOMETRIC_DATA_H_
 #define _DYNAMICS_JRL_GEOMETRIC_DATA_H_
 
-#if defined (WIN32)
-#  ifdef dynamicsJRLJapan_EXPORTS
-#    define DYN_JRL_JAPAN_EXPORT __declspec(dllexport)
-#  else
-#    define DYN_JRL_JAPAN_EXPORT __declspec(dllimport)
-#  endif
-#else
-#  define DYN_JRL_JAPAN_EXPORT
-#endif
+#include "jrl/dynamics/dll.hh"
 
 #include <vector>
 #include <string>

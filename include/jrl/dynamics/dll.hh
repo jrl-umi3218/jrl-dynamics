@@ -28,7 +28,7 @@
 #define DYNAMICSJRLJAPAN_DLL_H
 
 #if defined (WIN32)
-#  ifdef dynamicsJRLJapan_EXPORTS
+#  ifdef jrl_dynamics_EXPORTS
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllexport)
 #  else
 #    define DYN_JRL_JAPAN_EXPORT __declspec(dllimport)
