@@ -79,5 +79,5 @@ namespace dynamicsJRLJapan
 
   /// Returns the type of the next joint inside the file.
   int typeOfJoint(FILE* fichier);
-};
+}
 #endif /* _DYN_JRLJAPAN_FILE_READER_H_ */

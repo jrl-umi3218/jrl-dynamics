@@ -51,20 +51,20 @@ JointAnchorPrivate::~JointAnchorPrivate()
 {
 }
 
-bool JointAnchorPrivate::updateTransformation(const vectorN & inDofVector)
+bool JointAnchorPrivate::updateTransformation(const vectorN&)
 {
   return true;
 }
 
-bool JointAnchorPrivate::updateVelocity(const vectorN &inRobotConfigVector,
-					const vectorN &inRobotConfigSpeed)
+bool JointAnchorPrivate::updateVelocity(const vectorN&,
+					const vectorN&)
 {
   return true;
 }
 
-bool JointAnchorPrivate::updateAcceleration(const vectorN &inRobotConfigVector,
-					    const vectorN &inRobotSpeedVector,
-					    const vectorN &inRobotAccelerationVector)
+bool JointAnchorPrivate::updateAcceleration(const vectorN&,
+					    const vectorN&,
+					    const vectorN&)
 {
   return true;
 }

@@ -134,7 +134,5 @@ namespace dynamicsJRLJapan
 
         vector3d attCenter;
     };
-
-
+}
 #endif
-};

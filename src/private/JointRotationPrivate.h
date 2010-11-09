@@ -83,6 +83,6 @@ namespace dynamicsJRLJapan
 
     };
 
-};
+}
 
 #endif /* JOINT_ROTATION_PRIVATE_*/

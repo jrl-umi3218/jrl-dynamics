@@ -85,15 +85,15 @@ bool JointTranslationPrivate::updateTransformation(const vectorN& inDofVector)
   return true;
 }
 
-bool JointTranslationPrivate::updateVelocity(const vectorN & inRobotConfigVector,
-					   const vectorN & inRobotSpeedVector)
+bool JointTranslationPrivate::updateVelocity(const vectorN&,
+					     const vectorN&)
 {
   return true;
 }
 
-bool JointTranslationPrivate::updateAcceleration(const vectorN & inRobotConfigVector,
-						 const vectorN & inRobotSpeedVector,
-						 const vectorN & inRobotAccelerationVector)
+bool JointTranslationPrivate::updateAcceleration(const vectorN&,
+						 const vectorN&,
+						 const vectorN&)
 {
   return true;
 }

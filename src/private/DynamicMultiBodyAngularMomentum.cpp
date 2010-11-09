@@ -143,7 +143,7 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::angularMomentumRobot()
 {
   return m_L;
 
-} ;
+}
 
 /**
    \brief Get the time-derivative of the angular momentum at the center of mass.
@@ -153,7 +153,7 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeAngularMomentum()
 
   return m_dL;
 
-};
+}
 
 MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetL(int JointID)
 {

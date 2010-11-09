@@ -226,8 +226,8 @@ namespace dynamicsJRLJapan
 
     };
 
-  };
-};
+  }
+}
 
 
 #endif /* _SPATIAL_ALGEBRA_H_ */

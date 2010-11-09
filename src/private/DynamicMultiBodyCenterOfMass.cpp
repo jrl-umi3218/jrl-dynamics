@@ -56,7 +56,7 @@ MAL_MATRIX(,double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::accelerationCenterOfMass()
 {
   return m_AccelerationCenterOfMass;
-};
+}
 
 /**
    \brief Get the position of the center of mass.
@@ -73,7 +73,7 @@ const MAL_S3_VECTOR(,double)&  DynMultiBodyPrivate::positionCenterOfMass() const
 const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::velocityCenterOfMass()
 {
   return m_VelocityCenterOfMass;
-};
+}
 
 
 bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoint,
@@ -97,7 +97,8 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
 
   std::vector<int> jointsigns ( numberDof(),1 );
 
-  JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
+  CjrlJoint* StartJoint_ = const_cast<CjrlJoint*> (&inStartJoint);
+  JointPrivate* StartJoint = dynamic_cast<JointPrivate*>(StartJoint_);
   //determine participating joints
   if ( rootJoint() !=&inStartJoint )
     {
@@ -244,7 +245,7 @@ bool DynMultiBodyPrivate::computeCenterOfMassDynamics()
 {
   computeForwardKinematics();
   return true;
-};
+}
 
 
 /**
@@ -253,7 +254,7 @@ bool DynMultiBodyPrivate::computeCenterOfMassDynamics()
 const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::linearMomentumRobot()
 {
   return m_P;
-};
+}
 
 /**
    \brief Get the time-derivative of the linear momentum.
@@ -261,7 +262,7 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::linearMomentumRobot()
 const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeLinearMomentum()
 {
   return m_dP;
-};
+}
 
 MAL_S3_VECTOR(,double) DynMultiBodyPrivate::getPositionCoM(void)
 {

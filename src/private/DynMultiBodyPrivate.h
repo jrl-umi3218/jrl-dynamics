@@ -1054,5 +1054,5 @@ namespace dynamicsJRLJapan
      */
 
   };
-};
+}
 #endif

@@ -763,5 +763,5 @@ namespace dynamicsJRLJapan
   };
 
   ostream & operator<<(ostream & os, const JointPrivate &a);
-};
+}
 #endif /* JOINTPRIVATE_H */

@@ -100,6 +100,6 @@ namespace dynamicsJRLJapan {
     virtual const CjrlJoint* joint() const;
 
   };
-};
+}
 
 #endif /* DYNAMICSJRLJAPAN_DYNAMICBODY_H */

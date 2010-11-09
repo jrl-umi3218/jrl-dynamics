@@ -246,5 +246,5 @@ namespace dynamicsJRLJapan
 
   ostream & operator<<(ostream &os, const Body &r);
 
-};
+}
 #endif /* Body_H_*/

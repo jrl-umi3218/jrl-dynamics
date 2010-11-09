@@ -267,4 +267,4 @@ namespace dynamicsJRLJapan
     }
     return 0;
   }
-};
+}

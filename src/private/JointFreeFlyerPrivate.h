@@ -85,7 +85,6 @@ namespace dynamicsJRLJapan
       vectorN m_dof6D;
 
     };
-
-};
+}
 
 #endif /* JOINT_FREE_FLYER_PRIVATE*/

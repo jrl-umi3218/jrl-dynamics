@@ -136,5 +136,5 @@ namespace dynamicsJRLJapan
 
   };
 
-};
+}
 #endif /* DYNAMICBODYPRIVATE_H */

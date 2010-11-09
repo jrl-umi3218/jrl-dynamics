@@ -231,7 +231,7 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
   MAL_MATRIX_RESIZE(m_phi,6,0);
   MAL_MATRIX_RESIZE(m_dotphi,6,0);
   return *this;
-};
+}
 
 ostream & operator<<(ostream & os, const JointPrivate &r)
 {
@@ -563,4 +563,4 @@ bool JointPrivate::getinGlobalFrame() const
   return m_inGlobalFrame;
 }
 
-};
+}

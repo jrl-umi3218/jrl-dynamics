@@ -101,6 +101,6 @@ namespace dynamicsJRLJapan
 
   };
 
-};
+}
 
 #endif /* _DYN_JRL_JAPAN_FOOT_H_ */

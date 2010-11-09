@@ -40,7 +40,7 @@ namespace dynamicsJRLJapan
 		      std::string FileName,
 		      std::vector<BodyGeometricalData> & VectorOfURLs,
 		      bool ReadGeometry=false);
-  };
-};
+  }
+}
 
 #endif /* _SPIRIT_VRML_READER_H_ */

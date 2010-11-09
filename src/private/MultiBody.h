@@ -186,6 +186,6 @@ namespace dynamicsJRLJapan
   // this axis.
   void AxisAngle2Matrix(const vector3d &AnAxis, double aQuantity, matrix3d &R);
 
-};
+}
 
 #endif

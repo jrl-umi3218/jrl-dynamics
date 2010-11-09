@@ -396,5 +396,5 @@ namespace dynamicsJRLJapan
 
     };
 
-};
+}
 #endif /* HUMDYNMULTIBODYPRIVATE_H */

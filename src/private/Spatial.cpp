@@ -341,7 +341,7 @@ Momentum operator*(Inertia & sI, Velocity &v)
 
 /*! Plucker Transform */
 PluckerTransform::PluckerTransform()
-{};
+{}
 
 PluckerTransform::PluckerTransform(matrix3d lR,
 				   vector3d lp):
@@ -376,7 +376,7 @@ Force  PluckerTransform::operator*( Force &f)
   MAL_S3x3_C_eq_A_by_B(NE_tmp,m_R,NE_tmp3);
   c.f(NE_tmp);
   return c;
-};
+}
 
 void PluckerTransform::inverse( PluckerTransform &a)
 {

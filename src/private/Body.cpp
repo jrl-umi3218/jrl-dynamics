@@ -262,4 +262,4 @@ ostream & operator<<(ostream & os, const Body & r)
   return os;
 }
 
-};
+}

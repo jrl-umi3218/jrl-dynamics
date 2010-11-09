@@ -70,6 +70,6 @@ namespace dynamicsJRLJapan
 
     };
 
-};
+}
 
 #endif /* JOINT_ANCHOR_PRIVATE */
