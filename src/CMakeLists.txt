@@ -53,7 +53,7 @@ SET(SOURCES ${SOURCES}
 
 # Create list of headers files
 #-----------------------------
-SET(jrl-walkgen_HEADERS
+SET(jrl-dynamics_HEADERS
 ../include/jrl/dynamics/dll.hh
 ../include/jrl/dynamics/dynamicsfactory.hh
 ../include/jrl/dynamics/dynamicbody.hh
