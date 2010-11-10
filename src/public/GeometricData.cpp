@@ -183,7 +183,7 @@ namespace dynamicsJRLJapan
       m_IndexedFaceSet.reset();
     }
 
-  };
+  }
 
 
   BodyGeometricalData::BodyGeometricalData():
@@ -276,4 +276,4 @@ namespace dynamicsJRLJapan
   }
 
 
-};
+}

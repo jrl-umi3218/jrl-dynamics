@@ -178,6 +178,6 @@ namespace dynamicsJRLJapan
 
       bool m_NormalizationFlag;
     };
-  };
-};
+  }
+}
 #endif /* _DYNAMIC_JRL_JAPAN_FOR_VRML1_H_ */

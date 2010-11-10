@@ -92,6 +92,6 @@ namespace dynamicsJRLJapan
       std::vector<BodyGeometricalData> m_AccessToData;
 
     };
-  };
-};
+  }
+}
 #endif /* _DYNAMIC_JRL_JAPAN_FOR_VRML2_H_ */

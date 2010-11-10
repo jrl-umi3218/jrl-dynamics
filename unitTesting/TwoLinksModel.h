@@ -117,6 +117,6 @@ namespace dynamicsJRLJapan
       vector3d m_i, m_j, m_k;
 
     };
-};
+}
 
 #endif /* _DYNAMIC_JRL_JAPAN_TWO_LINKS_MODEL_H_ */

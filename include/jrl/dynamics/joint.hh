@@ -330,7 +330,7 @@ namespace dynamicsJRLJapan {
     JointAnchor(const matrix4d& inInitialPosition);
   };
 
-};
+}
 
 
 #endif /* DYNAMICSJRLJAPAN_JOINT_H */

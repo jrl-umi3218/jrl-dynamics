@@ -331,4 +331,4 @@ namespace dynamicsJRLJapan {
 
     aof.close();
   }
-};
+}

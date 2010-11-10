@@ -158,5 +158,5 @@ namespace dynamicsJRLJapan
 
     return -1;
   }
-};
+}
 

@@ -84,5 +84,5 @@ namespace dynamicsJRLJapan
     std::vector<BodyGeometricalData> m_AccessToData;
       
   };
-};
+}
 #endif /* _DYNAMIC_JRL_JAPAN_HARD_CODED_ROBOT_H_ */

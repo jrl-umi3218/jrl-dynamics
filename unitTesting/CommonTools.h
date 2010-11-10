@@ -138,5 +138,5 @@
 		       char *OurFileName,
 		       char *ReportFileName);
   /*! @} */
-};
+}
 #endif

@@ -483,4 +483,4 @@ namespace dynamicsJRLJapan {
 
     return readingok;
   }
-};
+}

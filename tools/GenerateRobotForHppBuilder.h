@@ -126,6 +126,6 @@ namespace dynamicsJRLJapan
       std::map<CjrlJoint *,std::string> m_Joint2Name;
       unsigned int m_Verbosity;
     };
-  };
-};
+  }
+}
 #endif /* _DYNAMIC_JRL_JAPAN_FOR_HPPBUILDER_H_ */

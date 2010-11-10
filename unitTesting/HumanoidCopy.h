@@ -80,6 +80,6 @@ namespace dynamicsJRLJapan
 
   };
 
-};
+}
 #endif
 
