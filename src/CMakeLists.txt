@@ -51,19 +51,20 @@ SET(SOURCES ${SOURCES}
   public/GeometricData.cpp
 )
 
+#--------------------------
 # Create list of headers files
 #-----------------------------
 SET(jrl-dynamics_HEADERS
-../include/jrl/dynamics/dll.hh
-../include/jrl/dynamics/dynamicsfactory.hh
-../include/jrl/dynamics/dynamicbody.hh
-../include/jrl/dynamics/foot.hh
-../include/jrl/dynamics/hand.hh
-../include/jrl/dynamics/joint.hh
-../include/jrl/dynamics/robotdynamicsimpl.hh
-../include/jrl/dynamics/dynamicrobot.hh
-../include/jrl/dynamics/humanoiddynamicrobot.hh
-../include/jrl/dynamics/geometricdata.hh
+include/jrl/dynamics/dll.hh
+include/jrl/dynamics/dynamicsfactory.hh
+include/jrl/dynamics/dynamicbody.hh
+include/jrl/dynamics/foot.hh
+include/jrl/dynamics/hand.hh
+include/jrl/dynamics/joint.hh
+include/jrl/dynamics/robotdynamicsimpl.hh
+include/jrl/dynamics/dynamicrobot.hh
+include/jrl/dynamics/humanoiddynamicrobot.hh
+include/jrl/dynamics/geometricdata.hh
 )
 
 
