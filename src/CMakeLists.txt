@@ -80,7 +80,7 @@ SET(jrl-walkgen_HEADERS
 
 # Add main target: dynamicsJRLJapan
 # ---------------------------------
-ADD_LIBRARY(jrl-dynamics
+ADD_LIBRARY(jrl-dynamics SHARED
   ${SOURCES}
 )
 
