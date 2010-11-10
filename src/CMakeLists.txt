@@ -93,6 +93,8 @@ SET_TARGET_PROPERTIES(jrl-dynamics
 		      INSTALL_RPATH lib
 		      INSTALL_RPATH_USE_LINK_PATH TRUE
 		      )
+PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics abstract-robot-dynamics)
 
 # Impose shared libraries
 #------------------------

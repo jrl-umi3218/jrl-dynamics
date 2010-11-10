@@ -44,6 +44,8 @@ SET_TARGET_PROPERTIES(ReadOpenHRPFileAndExport
 )
 TARGET_LINK_LIBRARIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
 ADD_DEPENDENCIES (ReadOpenHRPFileAndExport ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(ReadOpenHRPFileAndExport jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(ReadOpenHRPFileAndExport abstract-robot-dynamics)
 
 # CreateVRMLPoseFile 
 ADD_EXECUTABLE(	CreateVRMLPoseFile
@@ -56,6 +58,8 @@ SET_TARGET_PROPERTIES(CreateVRMLPoseFile
 )
 TARGET_LINK_LIBRARIES (CreateVRMLPoseFile ${PROJECT_NAME})
 ADD_DEPENDENCIES (CreateVRMLPoseFile ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(CreateVRMLPoseFile jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(CreateVRMLPoseFile abstract-robot-dynamics)
 
 # CreateMapleModel 
 ADD_EXECUTABLE( CreateMapleModel
@@ -64,11 +68,15 @@ ADD_EXECUTABLE( CreateMapleModel
 
 TARGET_LINK_LIBRARIES (CreateMapleModel ${PROJECT_NAME})
 ADD_DEPENDENCIES (CreateMapleModel ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(CreateMapleModel jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(CreateMapleModel abstract-robot-dynamics)
 
 # ReadPosFile 
 ADD_EXECUTABLE(	ReadPosFile ReadPosFile.cpp)
 TARGET_LINK_LIBRARIES (ReadPosFile ${PROJECT_NAME})
 ADD_DEPENDENCIES (ReadPosFile ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(ReadPosFile jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(ReadPosFile abstract-robot-dynamics)
 
 
 ADD_EXECUTABLE(CreateHPPBuilder 
@@ -77,6 +85,8 @@ ADD_EXECUTABLE(CreateHPPBuilder
 
 TARGET_LINK_LIBRARIES (CreateHPPBuilder ${PROJECT_NAME})
 ADD_DEPENDENCIES (CreateHPPBuilder ${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(CreateHPPBuilder jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(CreateHPPBuilder abstract-robot-dynamics)
 
 
 SET(${PROJECT_NAME}_TOOLS

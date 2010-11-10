@@ -33,6 +33,8 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobot POST_BUILD
 
 target_link_libraries(TestHumanoidDynamicRobot jrl-dynamics)
 ADD_DEPENDENCIES (TestHumanoidDynamicRobot jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobot jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobot abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	TestHumanoidDynamicRobotDebugLayale CommonTools.cpp TestHumanoidDynamicRobotDebugLayale.cpp)
 SET_TARGET_PROPERTIES(TestHumanoidDynamicRobotDebugLayale
@@ -52,6 +54,8 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
 )
 target_link_libraries(TestHumanoidDynamicRobotDebugLayale jrl-dynamics)
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobotDebugLayale jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobotDebugLayale abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	TestAbstractInterface
   CommonTools.cpp
@@ -59,28 +63,41 @@ ADD_EXECUTABLE(	TestAbstractInterface
   TestAbstractInterface.cpp)
 target_link_libraries(TestAbstractInterface jrl-dynamics)
 ADD_DEPENDENCIES (TestAbstractInterface jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(TestAbstractInterface jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(TestAbstractInterface abstract-robot-dynamics)
+
 
 ADD_EXECUTABLE(	TestTwoLinksModel
   TwoLinksModel.cpp
   TestTwoLinksModel.cpp )
 target_link_libraries(TestTwoLinksModel jrl-dynamics)
 ADD_DEPENDENCIES (TestTwoLinksModel jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(TestTwoLinksModel jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(TestTwoLinksModel abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	Test2Models Test2Models.cpp)
 target_link_libraries(Test2Models jrl-dynamics)
 ADD_DEPENDENCIES (Test2Models jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(Test2Models jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(Test2Models abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	ComputeRealZMP ComputeRealZMP.cpp)
 target_link_libraries(ComputeRealZMP jrl-dynamics)
 ADD_DEPENDENCIES (ComputeRealZMP jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(ComputeRealZMP jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(ComputeRealZMP abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	ComputeTorqueOnTrajectory ComputeTorqueOnTrajectory.cpp)
 target_link_libraries(ComputeTorqueOnTrajectory jrl-dynamics)
 ADD_DEPENDENCIES (ComputeTorqueOnTrajectory jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(ComputeTorqueOnTrajectory jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(ComputeTorqueOnTrajectory abstract-robot-dynamics)
 
 ADD_EXECUTABLE(	TestFreeFlyer TestFreeFlyer.cpp CommonTools.cpp)
 target_link_libraries(TestFreeFlyer jrl-dynamics)
 ADD_DEPENDENCIES(TestFreeFlyer jrl-dynamics)
+PKG_CONFIG_USE_DEPENDENCY(TestFreeFlyer jrl-mal)
+PKG_CONFIG_USE_DEPENDENCY(TestFreeFlyer abstract-robot-dynamics)
 
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/unitTesting/output.ascii.cmake
 		 ${CMAKE_BINARY_DIR}/unitTesting/output.ascii )
