@@ -80,6 +80,11 @@ IF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     SET (${PROJECT_NAME}_CXXFLAGS "${${PROJECT_NAME}_CXXFLAGS}")
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+
+# Add dependency towards the library in the pkg-config file.
+PKG_CONFIG_APPEND_LIBS("jrl-dynamics")
+
+
 # To deal with the headers.
 #--------------------------
 #add_subdirectory(include)
