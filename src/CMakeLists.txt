@@ -6,19 +6,8 @@
 #
 # Please refers to file License.txt for details on the license.
 
-
-# Create the library "dynamicsJRLJapan"
-
-# Import jrl-mal flags.
-INCLUDE_DIRECTORIES(${JRL_MAL_INCLUDEDIR})
-
-# Import abstract-robot-dynamics flags.
-INCLUDE_DIRECTORIES(${ABSTRACT_ROBOT_DYNAMICS_INCLUDEDIR})
-
-# Make sure to find Debug.h
+# Make sure local headers are found.
 INCLUDE_DIRECTORIES(BEFORE ${PROJECT_SOURCE_DIR}/src/private/)
-
-# Make sure to find Debug.h
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR}/src/private/)
 
 # Create list of source files
@@ -78,36 +67,9 @@ SET(jrl-walkgen_HEADERS
 )
 
 
-# Add main target: dynamicsJRLJapan
-# ---------------------------------
-ADD_LIBRARY(jrl-dynamics SHARED
-  ${SOURCES}
-)
+ADD_LIBRARY(jrl-dynamics SHARED ${SOURCES})
+SET_TARGET_PROPERTIES(jrl-dynamics PROPERTIES SOVERSION ${PROJECT_VERSION})
+INSTALL(TARGETS jrl-dynamics DESTINATION lib)
 
-# Specify soname, version and rpath
-# ---------------------------------
-SET_TARGET_PROPERTIES(jrl-dynamics
-      		      PROPERTIES
-		      VERSION ${PROJECT_VERSION}
-		      SOVERSION ${PROJECT_VERSION}
-		      INSTALL_RPATH lib
-		      INSTALL_RPATH_USE_LINK_PATH TRUE
-		      )
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics jrl-mal)
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics abstract-robot-dynamics)
-
-# Impose shared libraries
-#------------------------
-OPTION(BUILD_SHARED_LIBS "Build jrl-dynamics with shared libraries." ON)
-
-
-# Add local test
-
-# SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/src/private/ ${${PROJECT_NAME}_CXXFLAGS}")
-# SET(${PROJECT_NAME}_test_CXXFLAGS "-I${PROJECT_SOURCE_DIR}/include/ ${${PROJECT_NAME}_test_CXXFLAGS}")
-
-#IF(UNIX)
-#  SET(${PROJECT_NAME}_test_CXXFLAGS "${${PROJECT_NAME}_test_CXXFLAGS} -DUNIX")
-#  SET(${PROJECT_NAME}_test_LDFLAGS
-#    "${LIBDIR_KW}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBDIR_RP}${${PROJECT_NAME}_BINARY_DIR}/src ${LIBINCLUSION_KW}${PROJECT_NAME} ${${PROJECT_NAME}_src_LDFLAGS}")
-#ENDIF(UNIX)
