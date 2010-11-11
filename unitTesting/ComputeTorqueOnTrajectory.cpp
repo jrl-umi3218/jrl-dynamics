@@ -69,8 +69,8 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 			const CjrlJoint *RightFoot2,
 			CjrlJoint *Waist2,
 			matrix4d &AbsSupportFootPos,
-			double * WaistFromRef,
-			double * RotationFreeFlyer,
+			double * ,
+			double * ,
 			int NbIt,
 			double* WaistFromActual,
 			int &PreviousSupportFoot)
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 
   // Read the data file.
   ifstream ActualStateFile;
-  ActualStateFile.open((char *)ActualLogFile.c_str(),ifstream::in);
+  ActualStateFile.open(ActualLogFile.c_str(),ifstream::in);
   if (!ActualStateFile.is_open())
     {
       cerr << "Unable to open actual state file: " <<
@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
     }
 
   ifstream RefStateFile;
-  RefStateFile.open((char *)RefLogFile.c_str(),ifstream::in);
+  RefStateFile.open(RefLogFile.c_str(),ifstream::in);
   if (!RefStateFile.is_open())
     {
       cerr << "Unable to open reference state file: " <<

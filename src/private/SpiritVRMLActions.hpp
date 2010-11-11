@@ -605,7 +605,7 @@ namespace dynamicsJRLJapan
 	  m_actions(actions),
 	  m_Index(Index){};
 
-	void operator()(const int aJointID) const
+	void operator()(const int ) const
 	{
 	  MAL_S3_VECTOR(laxis,double);
 	  laxis[0] = laxis[1] = laxis[2] = 0.0;
@@ -995,7 +995,7 @@ namespace dynamicsJRLJapan
 
 	template <typename IteratorT>
 	void operator()(const IteratorT &begin,
-			const IteratorT &end) const
+			const IteratorT &) const
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord =
 	    m_actions.m_DataForParsing.m_vectorgvec3d;
@@ -1020,8 +1020,8 @@ namespace dynamicsJRLJapan
 	  m_actions(actions) {};
 
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin,
-			const IteratorT &end) const
+	void operator()(const IteratorT &,
+			const IteratorT &) const
 	{
 	  m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.
 	    push_back(m_actions.m_DataForParsing.m_vectorgint32);
@@ -1036,8 +1036,8 @@ namespace dynamicsJRLJapan
 	  m_actions(actions) {};
 
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin,
-			const IteratorT &end) const
+	void operator()(const IteratorT &,
+			const IteratorT &) const
 	{
 	  m_actions.m_DataForParsing.m_vectorgvec3d.clear();
 	}
@@ -1052,8 +1052,8 @@ namespace dynamicsJRLJapan
 	  m_actions(actions) {};
 
 	template <typename IteratorT>
-	void operator()(const IteratorT &begin,
-			const IteratorT &end) const
+	void operator()(const IteratorT &,
+			const IteratorT &) const
 	{
 
 	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;

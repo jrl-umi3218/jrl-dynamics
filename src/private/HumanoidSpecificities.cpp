@@ -52,7 +52,7 @@ HumanoidSpecificities::~HumanoidSpecificities()
 int HumanoidSpecificities::ReadXML(string &aFileName)
 {
   FILE *fp;
-  fp = fopen((char *)aFileName.c_str(),"r");
+  fp = fopen(aFileName.c_str(),"r");
 
   if (fp==0)
     {

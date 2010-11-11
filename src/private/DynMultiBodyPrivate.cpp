@@ -380,7 +380,7 @@ void DynMultiBodyPrivate::ComputeNumberOfJoints()
 void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 {
   FILE *fp;
-  fp = fopen((char *)aFileName.c_str(),"r");
+  fp = fopen(aFileName.c_str(),"r");
 
   if (fp==0)
     {
@@ -406,7 +406,7 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 	      fscanf(fp,"%s",Buffer);
 
 	      strcpy(aNameAndRank.LinkName,Buffer);
-	      fscanf(fp,"%d", &aNameAndRank.RankInConfiguration);
+	      fscanf(fp,"%u", &aNameAndRank.RankInConfiguration);
 
 	      look_for(fp,"</Link>");
 	      m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
@@ -760,13 +760,13 @@ double DynMultiBodyPrivate::lowerBoundDof(unsigned int inRankInConfiguration)
 }
 
 double DynMultiBodyPrivate::upperBoundDof(unsigned int inRankInConfiguration,
-                                       const vectorN& inConfig)
+					  const vectorN& )
 {
   return upperBoundDof(inRankInConfiguration);
 }
 
 double DynMultiBodyPrivate::lowerBoundDof(unsigned int inRankInConfiguration,
-                                       const vectorN& inConfig)
+					  const vectorN& )
 {
   return lowerBoundDof(inRankInConfiguration);
 }

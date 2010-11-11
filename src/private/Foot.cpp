@@ -34,7 +34,7 @@ Foot::Foot()
 {
 }
 
-Foot::Foot(const Foot &inFoot)
+Foot::Foot(const Foot &)
 {
 
 }

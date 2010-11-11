@@ -108,7 +108,7 @@ namespace dynamicsJRLJapan
       template <typename ScannerT>
       struct definition
       {
-	definition(SkipGrammar const &self)
+	definition(SkipGrammar const &)
 	{
 	  skip_r = space_p | comment_p("#",eol_p);
 	};

@@ -79,7 +79,7 @@ bool JointFreeflyerPrivate::updateTransformation(const vectorN & inDofVector)
   return true;
 }
 
-bool JointFreeflyerPrivate::updateVelocity(const vectorN & inRobotConfigVector,
+bool JointFreeflyerPrivate::updateVelocity(const vectorN &,
 					   const vectorN & inRobotSpeedVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
@@ -95,8 +95,8 @@ bool JointFreeflyerPrivate::updateVelocity(const vectorN & inRobotConfigVector,
   return true;
 }
 
-bool JointFreeflyerPrivate::updateAcceleration(const vectorN & inRobotConfigVector,
-					       const vectorN & inRobotSpeedVector,
+bool JointFreeflyerPrivate::updateAcceleration(const vectorN & ,
+					       const vectorN & ,
 					       const vectorN & inRobotAccelerationVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());

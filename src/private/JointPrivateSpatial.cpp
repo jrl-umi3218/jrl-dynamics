@@ -54,7 +54,7 @@ const Spatial::PluckerTransform & JointPrivate::X0()
 
 /*! Spatial notations specifications */
 
-Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
+Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN &)
 {
   // Default value.
   // This method should be re-implemented according
@@ -106,7 +106,7 @@ bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
 }
 
 /* Velocity update */
-bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
+bool JointPrivate::updateVelocity(const vectorN&,
 				  const vectorN& inRobotSpeedVector)
 {
   vectorN localSpeed;
@@ -125,9 +125,9 @@ bool JointPrivate::updateVelocity(const vectorN& inRobotConfigVector,
   return true;
 }
 
-bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
+bool JointPrivate::updateAcceleration(const vectorN& ,
 				      const vectorN& inRobotSpeedVector,
-				      const vectorN& inRobotAccelerationVector)
+				      const vectorN& )
 {
   vectorN localAcc;
   MAL_VECTOR_RESIZE(localAcc,numberDof());
@@ -152,12 +152,12 @@ bool JointPrivate::updateAcceleration(const vectorN& inRobotConfigVector,
   return true;
 }
 
-const matrixNxP & JointPrivate::pcalc(vectorN &qi)
+const matrixNxP & JointPrivate::pcalc(vectorN &)
 {
   return m_phi;
 }
 
-const matrixNxP & JointPrivate::pdcalc(vectorN &qi)
+const matrixNxP & JointPrivate::pdcalc(vectorN &)
 {
   return m_dotphi;
 }

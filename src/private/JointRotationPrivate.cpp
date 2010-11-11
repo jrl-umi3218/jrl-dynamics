@@ -127,7 +127,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
   return 0;
 }
 
-bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
+bool JointRotationPrivate::updateVelocity(const vectorN &,
 					  const vectorN &inRobotSpeedVector)
 {
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
@@ -181,8 +181,8 @@ bool JointRotationPrivate::updateVelocity(const vectorN &inRobotConfigVector,
   return true;
 }
 
-bool JointRotationPrivate::updateAcceleration(const vectorN &inRobotConfigVector,
-					      const vectorN &inRobotSpeedVector,
+bool JointRotationPrivate::updateAcceleration(const vectorN &,
+					      const vectorN &,
 					      const vectorN &inRobotAccelerationVector)
 {
 

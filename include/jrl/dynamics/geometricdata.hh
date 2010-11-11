@@ -47,7 +47,7 @@ namespace dynamicsJRLJapan
       bool colorPerVertex;
       bool convex;
       std::vector<polygonIndex> coordIndex;
-      float creaseAngle;
+      double creaseAngle;
       std::vector<int> normalIndex;
       bool normalPerVertex;
       bool solid;
@@ -60,12 +60,12 @@ namespace dynamicsJRLJapan
 
     struct DYN_JRL_JAPAN_EXPORT Material
     {
-      float ambientIntensity;
-      float diffuseColor[3];
-      float emissiveColor[3];
-      float shininess;
-      float specularColor[3];
-      float transparency;
+      double ambientIntensity;
+      double diffuseColor[3];
+      double emissiveColor[3];
+      double shininess;
+      double specularColor[3];
+      double transparency;
 
       Material();
 
@@ -81,10 +81,10 @@ namespace dynamicsJRLJapan
 
     struct DYN_JRL_JAPAN_EXPORT TextureTransform
     {
-      float center[2];
-      float rotation;
-      float scale[2];
-      float translation[2];
+      double center[2];
+      double rotation;
+      double scale[2];
+      double translation[2];
 
       TextureTransform();
     };

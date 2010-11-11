@@ -97,7 +97,7 @@ int DynMultiBodyPrivate::JointRankFromName(JointPrivate *aJoint)
   ODEBUG("m_LinksBetweenJointNamesAndRank.size():" << m_LinksBetweenJointNamesAndRank.size());
   for(unsigned int i=0;i<m_LinksBetweenJointNamesAndRank.size();i++)
     {
-      if (!strcmp(m_LinksBetweenJointNamesAndRank[i].LinkName,(char *)aJoint->getName().c_str()))
+      if (!strcmp(m_LinksBetweenJointNamesAndRank[i].LinkName,aJoint->getName().c_str()))
 	return m_LinksBetweenJointNamesAndRank[i].RankInConfiguration;
     }
   return -1;

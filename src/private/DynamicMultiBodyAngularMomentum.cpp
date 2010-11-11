@@ -49,7 +49,7 @@ void DynMultiBodyPrivate::angularMomentumWrtCoM(vector3d & angularmomentum)
   angularMomentumWrtToPt(positionCoMPondere, angularmomentum);
 }
 
-void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &apoint, vector3d & angularmomentum)
+void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &, vector3d & angularmomentum)
 {
   /** Intermediate variables. The mantra is :
       "To optimize those variables, in the Compiler we trust"

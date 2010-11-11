@@ -302,8 +302,8 @@ bool HumDynMultiBodyPrivate::computeForwardKinematics()
 }
 
 
-bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
-							  MAL_MATRIX_TYPE(double) & outJacobian)
+bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint*,
+							MAL_MATRIX_TYPE(double) & )
 {
   cerr<< " The method HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint " <<endl
       << " is not implemented yet. " << endl;
@@ -321,13 +321,13 @@ CjrlJoint* HumDynMultiBodyPrivate::waist()
   return m_WaistJoint;
 }
 
-double HumDynMultiBodyPrivate::getHandClench(CjrlHand* inHand)
+double HumDynMultiBodyPrivate::getHandClench(CjrlHand* )
 {
     // default implementation. always returns 0
     return 0;
 }
 
-bool HumDynMultiBodyPrivate::setHandClench(CjrlHand* inHand, double inClenchingValue)
+bool HumDynMultiBodyPrivate::setHandClench(CjrlHand* , double )
 {
     // default implementation. always returns false
     return false;

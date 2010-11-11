@@ -105,7 +105,7 @@ void DynMultiBodyPrivate::SpecifyTheRootLabel(int ID)
     m_listOfBodies[i]->massCoef(m_listOfBodies[i]->mass()/mass());
 }
 
-void DynMultiBodyPrivate::UpdateBodyParametersFromJoint(int BodyID, int JointID, int LiaisonForFatherJoint)
+void DynMultiBodyPrivate::UpdateBodyParametersFromJoint(int BodyID, int JointID, int)
 // cID : corps identifier
 // lD : liaison destination
 {
@@ -300,7 +300,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
 	      CurrentLink.aJoint->setName(name);
             }
 	  strcpy(aNameAndRank.LinkName,
-		 (char *)CurrentLink.aJoint->getName().c_str());
+		 CurrentLink.aJoint->getName().c_str());
 
 	  aNameAndRank.RankInConfiguration = lRank;
 	  m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),
