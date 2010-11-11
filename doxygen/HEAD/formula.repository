@@ -15,30 +15,3 @@
 \form#14:${\bf \omega_i}$
 \form#15:$q_i$
 \form#16:\[ \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}} \]
-\form#17:$ {\bf x} = [{\bf r} \; {\bf q} \; \dot{\bf r} \; \dot{\bf q} \; \ddot{\bf r} \; \ddot{\bf q}]= [{\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0}]$
-\form#18:$x$
-\form#19:$ {\bf x} = [{\bf r} \; {\bf q} \; \dot{\bf r} \; \dot{\bf q} \; \ddot{\bf r} \; \ddot{\bf q}]$
-\form#20:$ {\bf r} \; \dot{\bf r} \; \ddot{\bf r}$
-\form#21:$ {\bf q} \; \dot{\bf q} \; \ddot{\bf q}$
-\form#22:$inputs: {\bf q},\dot{\bf q}, \ddot{\bf q}, \textit{model}, {^0{\bf f}{^e}{_i}}$
-\form#23:$output: \tau, {\bf f} $
-\form#24:$\textit{model data}: N_B, jtype(i), p(i), {\bf X}_L(i), I_i $
-\form#25:${\bf v}_0 = {\bf 0}$
-\form#26:${\bf a}_o = -{\bf a}_g$
-\form#27:$for \; i=1\; to \; N_b \; then$
-\form#28:${\bf X}_J(i) = xjcalc(jtype(i),{\bf q}_i)$
-\form#29:${^i{\bf X}}_{p(i)} = {\bf X}_J(i){\bf X}_L(i)$
-\form#30:$\text{if } p(i)\neq 0 \text{ then }$
-\form#31:${^i{\bf X}_0} = {^i{\bf X}_{p(i)}} {^{p(i)}{\bf X}_0} $
-\form#32:$ \text{end}$
-\form#33:$ {\bf \Phi}_i = pcalc(jtype(i),{\bf q}_i)$
-\form#34:$ {\mathring{\bf \Phi}}c_i = pdcalc(jtype(i),{\bf q}_i)$
-\form#35:$ {\bf v}_i = {^i{\bf X}_{p(i)}}{\bf v}_{p(i)} + \Phi_i\dot{\bf q}_i$
-\form#36:$ {\bf \zeta}_i = {\mathring{\bf \Phi}}c_i \dot{\bf q}_i + {\bf v}_i \times \Phi_i\dot{\bf q}_i $
-\form#37:$ {\bf a}_i = {^i{\bf X}_{p(i)}} {\bf a}_{p(i)} + \Phi_i \ddot{\bf q}_i + {\bf \zeta}_i $
-\form#38:$ {\bf f}_i = {\bf I}_i {\bf a}_i + {\bf v}_i \times {\bf I}_i {\bf v}_i $
-\form#39:$ for \; i=N_b\; to \; 1 \; do $
-\form#40:$ {\bf \tau}_i = \Phi_i^T {\bf f}_i $
-\form#41:$ \text{if } p(i)\neq 0 \text{ then } $
-\form#42:${\bf f}_p(i) = {\bf f}_{p(i)} + {^i}{\bf X}_{p(i)}^T $
-\form#43:$ \text{end} $
