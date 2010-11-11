@@ -41,8 +41,25 @@ SET(PROJECT_URL "git@github.com:jrl-umi3218/jrl-dynamics.git")
 SET(CXX_DISABLE_WERROR True)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
-SETUP_PROJECT()
+# To deal with the headers.
+#--------------------------
+# Create list of headers files
+#-----------------------------
+SET(jrl-dynamics_HEADERS
+include/jrl/dynamics/dll.hh
+include/jrl/dynamics/dynamicsfactory.hh
+include/jrl/dynamics/dynamicbody.hh
+include/jrl/dynamics/foot.hh
+include/jrl/dynamics/hand.hh
+include/jrl/dynamics/joint.hh
+include/jrl/dynamics/robotdynamicsimpl.hh
+include/jrl/dynamics/dynamicrobot.hh
+include/jrl/dynamics/humanoiddynamicrobot.hh
+include/jrl/dynamics/geometricdata.hh
+)
 
+SETUP_PROJECT()
+SETUP_PROJECT_CPACK()
 
 # Dependencies
 ADD_REQUIRED_DEPENDENCY("jrl-mal >= 1.9.0")
@@ -83,24 +100,6 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 # Add dependency towards the library in the pkg-config file.
 PKG_CONFIG_APPEND_LIBS("jrl-dynamics")
-
-
-# To deal with the headers.
-#--------------------------
-# Create list of headers files
-#-----------------------------
-SET(jrl-dynamics_HEADERS
-include/jrl/dynamics/dll.hh
-include/jrl/dynamics/dynamicsfactory.hh
-include/jrl/dynamics/dynamicbody.hh
-include/jrl/dynamics/foot.hh
-include/jrl/dynamics/hand.hh
-include/jrl/dynamics/joint.hh
-include/jrl/dynamics/robotdynamicsimpl.hh
-include/jrl/dynamics/dynamicrobot.hh
-include/jrl/dynamics/humanoiddynamicrobot.hh
-include/jrl/dynamics/geometricdata.hh
-)
 
 #add_subdirectory(include)
 add_subdirectory(src)
