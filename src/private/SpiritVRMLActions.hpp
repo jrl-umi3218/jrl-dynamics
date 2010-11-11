@@ -84,7 +84,7 @@ namespace dynamicsJRLJapan
       vector<matrix3d> StackOfRotationMatrixDisplay;
 
       // CurrentTranslation.
-      MAL_S3_VECTOR(,double) JointTranslation;
+      MAL_S3_VECTOR_TYPE(double) JointTranslation;
 
       // Rotation axis and quantity.
       vector3d RotationAxis;
@@ -347,7 +347,7 @@ namespace dynamicsJRLJapan
 		  setStaticTranslation(m_actions.m_DataForParsing.JointTranslation);
 	      else
 		{
-		  MAL_S3_VECTOR(,double) lnull;
+		  MAL_S3_VECTOR_TYPE(double) lnull;
 		  lnull(0) = lnull(1) = lnull(2) = 0.0;
 		  m_actions.m_DataForParsing.CurrentLink.aJoint->setStaticTranslation(lnull);
 		}

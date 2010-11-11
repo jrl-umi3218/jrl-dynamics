@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
   aJoint->computeJacobianJointWrtConfig();
 
   tcout << "Jacobian of the right ankle." << endl;
-  MAL_MATRIX(,double) aJ;
+  MAL_MATRIX_TYPE(double) aJ;
   aJ = aJoint->jacobianJointWrtConfig();
   DisplayMatrix(aJ,tcout);
 

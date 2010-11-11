@@ -256,12 +256,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 */
 bool DynMultiBodyPrivate::computeForwardKinematics()
 {
-  MAL_S3_VECTOR(,double) lPositionForRoot;
-  MAL_S3x3_MATRIX(,double) lOrientationForRoot;
-  MAL_S3_VECTOR(,double) lLinearVelocityForRoot;
-  MAL_S3_VECTOR(,double) lAngularVelocityForRoot;
-  MAL_S3_VECTOR(,double) lLinearAccelerationForRoot;
-  MAL_S3_VECTOR(,double) lAngularAccelerationForRoot;
+  MAL_S3_VECTOR_TYPE(double) lPositionForRoot;
+  MAL_S3x3_MATRIX_TYPE(double) lOrientationForRoot;
+  MAL_S3_VECTOR_TYPE(double) lLinearVelocityForRoot;
+  MAL_S3_VECTOR_TYPE(double) lAngularVelocityForRoot;
+  MAL_S3_VECTOR_TYPE(double) lLinearAccelerationForRoot;
+  MAL_S3_VECTOR_TYPE(double) lAngularAccelerationForRoot;
 
   for(unsigned int i=0;i<3;i++)
     {

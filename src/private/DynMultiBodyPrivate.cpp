@@ -65,7 +65,7 @@ DynMultiBodyPrivate::DynMultiBodyPrivate()
 
   // Create a default Root tree which
   // is a free joint.
-  MAL_S3_VECTOR(,double) anAxis;
+  MAL_S3_VECTOR_TYPE(double) anAxis;
 
   m_RootOfTheJointsTree = 0;
 
@@ -154,14 +154,14 @@ void DynMultiBodyPrivate::Setdq(int JointID, double dq)
     }
 }
 
-void DynMultiBodyPrivate::Setv(int JointID, MAL_S3_VECTOR(,double) v0)
+void DynMultiBodyPrivate::Setv(int JointID, MAL_S3_VECTOR_TYPE(double) v0)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
     m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->v0 = v0;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getv(int JointID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::Getv(int JointID)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -174,7 +174,7 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getv(int JointID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetvBody(int BodyID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::GetvBody(int BodyID)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -186,7 +186,7 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetvBody(int BodyID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetwBody(int BodyID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::GetwBody(int BodyID)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -198,7 +198,7 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetwBody(int BodyID)
   return dr;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getw(int JointID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::Getw(int JointID)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -211,14 +211,14 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getw(int JointID)
   return dr;
 }
 
-void DynMultiBodyPrivate::Setw(int JointID, MAL_S3_VECTOR(,double) w)
+void DynMultiBodyPrivate::Setw(int JointID, MAL_S3_VECTOR_TYPE(double) w)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
     m_listOfBodies[ConvertIDInActuatedToBodyID[JointID]]->w = w;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getp(int JointID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::Getp(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
@@ -227,7 +227,7 @@ MAL_S3_VECTOR(,double) DynMultiBodyPrivate::Getp(int JointID)
   return empty;
 }
 
-void DynMultiBodyPrivate::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
+void DynMultiBodyPrivate::Setp(int JointID, MAL_S3_VECTOR_TYPE(double) apos)
 {
   if ((JointID>=0) &&
       ((unsigned int)JointID<m_listOfBodies.size()))
@@ -237,8 +237,8 @@ void DynMultiBodyPrivate::Setp(int JointID, MAL_S3_VECTOR(,double) apos)
 
 
 void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
-                                    MAL_S3_VECTOR(,double) dP,
-                                    MAL_S3_VECTOR(,double) dL,
+                                    MAL_S3_VECTOR_TYPE(double) dP,
+                                    MAL_S3_VECTOR_TYPE(double) dL,
                                     double zmpz)
 {
   double g= 9.81;
@@ -266,7 +266,7 @@ string DynMultiBodyPrivate::GetName(int JointID)
 
 
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetP(int JointID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::GetP(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&
@@ -286,7 +286,7 @@ double DynMultiBodyPrivate::Getdq(int JointID) const
 
 
 
-void DynMultiBodyPrivate::SetRBody(int BodyID, MAL_S3x3_MATRIX(,double) R)
+void DynMultiBodyPrivate::SetRBody(int BodyID, MAL_S3x3_MATRIX_TYPE(double) R)
 {
   if ((BodyID>=0) &&
       ((unsigned int)BodyID<m_listOfBodies.size()))
@@ -510,7 +510,7 @@ unsigned int DynMultiBodyPrivate::numberDof() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR(,double)& inConfig)
+bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR_TYPE(double)& inConfig)
 {
   if (MAL_VECTOR_SIZE(inConfig)!=
       MAL_VECTOR_SIZE(m_Configuration))
@@ -573,7 +573,7 @@ bool DynMultiBodyPrivate::currentConfiguration(const MAL_VECTOR(,double)& inConf
 
    \return the configuration vector \f${\bf q}\f$.
 */
-const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentConfiguration() const
+const MAL_VECTOR_TYPE(double)& DynMultiBodyPrivate::currentConfiguration() const
 {
   return m_Configuration;
 }
@@ -587,7 +587,7 @@ const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentConfiguration() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
+bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR_TYPE(double)& inVelocity)
 {
   if (MAL_VECTOR_SIZE(inVelocity)!=
       MAL_VECTOR_SIZE(m_Velocity))
@@ -609,8 +609,8 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
       // Update the pose of the joint when it is a free joint
       if (m_JointVector[i]->numberDof()==6)
         {
-	  MAL_S3_VECTOR(,double) alinearVelocity;
-	  MAL_S3_VECTOR(,double) anAngularVelocity;
+	  MAL_S3_VECTOR_TYPE(double) alinearVelocity;
+	  MAL_S3_VECTOR_TYPE(double) anAngularVelocity;
 	  for(int j=0;j<3;j++)
             {
 	      alinearVelocity(j) = inVelocity[lindex];
@@ -653,7 +653,7 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR(,double)& inVelocity)
 
    \return the velocity vector \f${\bf \dot{q}}\f$.
 */
-const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentVelocity() const
+const MAL_VECTOR_TYPE(double)& DynMultiBodyPrivate::currentVelocity() const
 {
   return m_Velocity;
 
@@ -667,7 +667,7 @@ const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentVelocity() const
    input vector does not fit the number of degrees of freedom of the
    robot).
 */
-bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAcceleration)
+bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR_TYPE(double)& inAcceleration)
 {
   if (MAL_VECTOR_SIZE(inAcceleration)!=
       MAL_VECTOR_SIZE(m_Acceleration))
@@ -689,8 +689,8 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
       // Update the pose of the joint when it is a free joint
       if (m_JointVector[i]->numberDof()==6)
         {
-	  MAL_S3_VECTOR(,double) alinearAcceleration;
-	  MAL_S3_VECTOR(,double) anAngularAcceleration;
+	  MAL_S3_VECTOR_TYPE(double) alinearAcceleration;
+	  MAL_S3_VECTOR_TYPE(double) anAngularAcceleration;
 	  for(int j=0;j<3;j++)
             {
 	      alinearAcceleration(j) = inAcceleration[lindex];
@@ -732,7 +732,7 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR(,double)& inAccel
 
    \return the acceleration vector \f${\bf \ddot{q}}\f$.
 */
-const MAL_VECTOR(,double)& DynMultiBodyPrivate::currentAcceleration() const
+const MAL_VECTOR_TYPE(double)& DynMultiBodyPrivate::currentAcceleration() const
 {
   return m_Acceleration;
 }

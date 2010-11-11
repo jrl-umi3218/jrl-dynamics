@@ -47,7 +47,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const JointFreeflyerPrivate &a)
   m_dof6D.resize(6,false);
 }
 
-JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
 {
   type(JointPrivate::FREE_JOINT);
   m_inGlobalFrame = true;

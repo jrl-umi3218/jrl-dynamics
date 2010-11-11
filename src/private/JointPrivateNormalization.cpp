@@ -45,9 +45,9 @@ void JointPrivate::computeLocalAndGlobalPoseFromGlobalFrame()
   */
 
   /* Get global pose of parent joint */
-  MAL_S4x4_MATRIX(, double) invParentGlobalPose;
+  MAL_S4x4_MATRIX_TYPE( double) invParentGlobalPose;
   MAL_S4x4_INVERSE(m_FatherJoint->m_globalPoseAtConstruction, invParentGlobalPose, double);
-  MAL_S4x4_MATRIX(, double) jointGlobalPose = m_globalPoseAtConstruction;
+  MAL_S4x4_MATRIX_TYPE( double) jointGlobalPose = m_globalPoseAtConstruction;
   /*
     parent     /  global \  -1   global
     R         = | R        |     R
@@ -176,14 +176,14 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
       MAL_S4x4_MATRIX_ACCESS_I_J(m_globalPoseAtConstruction,iRow,3);
   }
 
-  MAL_S4x4_MATRIX(,double) poseInParentFrameUnnormalized;
+  MAL_S4x4_MATRIX_TYPE(double) poseInParentFrameUnnormalized;
   poseInParentFrameUnnormalized = m_poseInParentFrame;
 
   /* Get normalized global pose of parent joint
      to compute relative position in normalized local reference frame.  */
-  MAL_S4x4_MATRIX(, double) invParentGlobalPoseN;
+  MAL_S4x4_MATRIX_TYPE( double) invParentGlobalPoseN;
   MAL_S4x4_INVERSE(m_FatherJoint->m_globalPoseAtConstructionNormalized, invParentGlobalPoseN, double);
-  MAL_S4x4_MATRIX(, double) jointGlobalPoseN = m_globalPoseAtConstructionNormalized;
+  MAL_S4x4_MATRIX_TYPE( double) jointGlobalPoseN = m_globalPoseAtConstructionNormalized;
 
   /*
     parent     /  global \  -1   global
@@ -196,8 +196,8 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
   if (m_Body!=0)
     {
       // Compute transformation for rotation from Unnormalized to Normalized.
-      MAL_S4x4_MATRIX(, double) fromUnnormalizedToNormalized;
-      MAL_S4x4_MATRIX(, double) invglobalPoseAtConstructionNormalized;
+      MAL_S4x4_MATRIX_TYPE( double) fromUnnormalizedToNormalized;
+      MAL_S4x4_MATRIX_TYPE( double) invglobalPoseAtConstructionNormalized;
       MAL_S4x4_INVERSE(m_globalPoseAtConstructionNormalized,
 		       invglobalPoseAtConstructionNormalized,
 		       double);
@@ -207,13 +207,13 @@ void JointPrivate::computeLocalAndGlobalPoseFromLocalFrame()
 			   m_globalPoseAtConstruction);
 
       // Put it in a 3x3 matrix.
-      MAL_S3x3_MATRIX(, double) rotParams;
+      MAL_S3x3_MATRIX_TYPE( double) rotParams;
       for(unsigned int li=0;li<3;li++)
 	for(unsigned int lj=0;lj<3;lj++)
 	  MAL_S3x3_MATRIX_ACCESS_I_J(rotParams, li,lj) =
 	    MAL_S4x4_MATRIX_ACCESS_I_J(fromUnnormalizedToNormalized, li,lj);
 
-      MAL_S3x3_MATRIX(, double) trRotParams;
+      MAL_S3x3_MATRIX_TYPE( double) trRotParams;
       MAL_S3x3_TRANSPOSE_A_in_At(rotParams,trRotParams);
 
       // Transform local parameters.

@@ -31,7 +31,7 @@
 
 using namespace dynamicsJRLJapan;
 
-JointAnchorPrivate::JointAnchorPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointAnchorPrivate::JointAnchorPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
 {
   type(JointPrivate::FIX_JOINT);
   m_inGlobalFrame = true;

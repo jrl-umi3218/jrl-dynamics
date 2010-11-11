@@ -35,8 +35,8 @@
 namespace dynamicsJRLJapan {
 
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
-             float lquantite, MAL_S4x4_MATRIX(,double) & lpose):
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
+             float lquantite, MAL_S4x4_MATRIX_TYPE(double) & lpose):
   m_inGlobalFrame(false),
   m_nbDofs(0),
   m_type(ltype),
@@ -57,8 +57,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
   MAL_MATRIX_RESIZE(m_dotphi,6,0);
 }
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
-             float lquantite, MAL_S3_VECTOR(,double) & translationStatic):
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
+             float lquantite, MAL_S3_VECTOR_TYPE(double) & translationStatic):
   m_inGlobalFrame(false),
   m_nbDofs(0),
   m_type(ltype),
@@ -84,7 +84,7 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
 
 }
 
-JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR(,double) & laxis,
+JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
              float lquantite):
   m_inGlobalFrame(false),
   m_nbDofs(0),
@@ -193,7 +193,7 @@ void JointPrivate::CreateLimitsArray()
     }
 }
 
-const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition() const
+const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::initialPosition() const
 {
   return m_globalPoseAtConstructionNormalized;
 }
@@ -211,7 +211,7 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
   m_FromRootToThis.push_back(this);
   m_inGlobalFrame = r.getinGlobalFrame();
 
-  const  MAL_S4x4_MATRIX(,double) & aGlobalPoseAtConstructionNormalized = r.initialPosition();
+  const  MAL_S4x4_MATRIX_TYPE(double) & aGlobalPoseAtConstructionNormalized = r.initialPosition();
   m_globalPoseAtConstruction = aGlobalPoseAtConstructionNormalized;
   m_globalPoseAtConstructionNormalized  = aGlobalPoseAtConstructionNormalized ;
   m_Body = 0;
@@ -272,7 +272,7 @@ ostream & operator<<(ostream & os, const JointPrivate &r)
   return os;
 }
 
-void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
+void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR_TYPE(double) a6DVector)
 {
   // Update the orientation of the joint.
   // Takes the three euler joints
@@ -290,7 +290,7 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   body->p[1] = a6DVector(1);
   body->p[2] = a6DVector(2);
 
-  MAL_S3x3_MATRIX(,double) D,B,C,A;
+  MAL_S3x3_MATRIX_TYPE(double) D,B,C,A;
   double CosTheta, SinTheta,
     CosPhi, SinPhi,
     CosPsi, SinPsi;
@@ -331,8 +331,8 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   body->m_transformation = m_poseInParentFrame;
 }
 
-void JointPrivate::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR(,double) & aLinearVelocity,
-					    MAL_S3_VECTOR(,double) & anAngularVelocity)
+void JointPrivate::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR_TYPE(double) & aLinearVelocity,
+					    MAL_S3_VECTOR_TYPE(double) & anAngularVelocity)
 {
   m_RigidVelocity.linearVelocity(aLinearVelocity);
   m_RigidVelocity.rotationVelocity(anAngularVelocity);
@@ -436,12 +436,12 @@ void JointPrivate::updateTorqueAndForce()
 {
   DynamicBodyPrivate * CurrentBody = (DynamicBodyPrivate*)(linkedBody());
 
-  MAL_S3x3_MATRIX(,double) aRt;
+  MAL_S3x3_MATRIX_TYPE(double) aRt;
 
-  MAL_S3x3_MATRIX(,double) currentBodyRt;
+  MAL_S3x3_MATRIX_TYPE(double) currentBodyRt;
   currentBodyRt = MAL_S3x3_RET_TRANSPOSE(CurrentBody->R);
 
-  /*//MAL_S3x3_MATRIX(,double) currentBodyinitialRt;
+  /*//MAL_S3x3_MATRIX_TYPE(double) currentBodyinitialRt;
   matrix4d initialTransform  = CurrentBody->joint()->initialPosition();
   for(unsigned int li=0;li<3;li++)
     for(unsigned int lj=0;lj<3;lj++)
@@ -449,7 +449,7 @@ void JointPrivate::updateTorqueAndForce()
 
   // currentBodyRt = MAL_S3x3_RET_A_by_B(currentBodyRt,currentBodyinitialRt);
   */
-  MAL_S3_VECTOR(,double) lg;
+  MAL_S3_VECTOR_TYPE(double) lg;
   lg(0) = 0.0;
   lg(1) = 0.0;
   lg(2) = -9.81;
@@ -462,7 +462,7 @@ void JointPrivate::updateTorqueAndForce()
    *
    *
    */
-  MAL_S3_VECTOR(,double) firstterm,
+  MAL_S3_VECTOR_TYPE(double) firstterm,
     sndterm, thirdterm, fifthterm,tmp;
   // Do not fourth term because it is the angular acceleration.
 
@@ -477,7 +477,7 @@ void JointPrivate::updateTorqueAndForce()
   vector3d lc = CurrentBody->localCenterOfMass();
 
   /* Torque - 5th term : w_i x (I_i w_i)*/
-  MAL_S3x3_MATRIX(,double) lI = CurrentBody->getInertie();
+  MAL_S3x3_MATRIX_TYPE(double) lI = CurrentBody->getInertie();
   tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody->lw);
   //  tmp = MAL_S3x3_RET_A_by_B(lI,CurrentBody->w);
 

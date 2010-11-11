@@ -139,7 +139,7 @@ void DynMultiBodyPrivate::angularMomentumWrtToPt(vector3d &apoint, vector3d & an
 /**
    \brief Get the angular momentum of the robot at the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::angularMomentumRobot()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::angularMomentumRobot()
 {
   return m_L;
 
@@ -148,14 +148,14 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::angularMomentumRobot()
 /**
    \brief Get the time-derivative of the angular momentum at the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeAngularMomentum()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::derivativeAngularMomentum()
 {
 
   return m_dL;
 
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::GetL(int JointID)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::GetL(int JointID)
 {
   MAL_S3_VECTOR(empty,double);
   if ((JointID>=0) &&

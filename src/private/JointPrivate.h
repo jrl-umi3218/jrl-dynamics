@@ -714,7 +714,7 @@ namespace dynamicsJRLJapan
 
       friend ostream & operator<<(ostream & os, const JointPrivate &a);
 
-      const MAL_S4x4_MATRIX(,double) & initialPosition()  const;
+      const MAL_S4x4_MATRIX_TYPE(double) & initialPosition()  const;
 
   private:
 

@@ -66,11 +66,11 @@ void RecursiveDisplayOfJoints(CjrlJoint *aJoint, unsigned int verbosedisplay=0)
       cout << "Nb of degree of freedom " <<
 	aJoint->numberDof() << endl;
 
-      MAL_S4x4_MATRIX(,double) initialpos = aJoint->initialPosition();
+      MAL_S4x4_MATRIX_TYPE(double) initialpos = aJoint->initialPosition();
       cout << "Initial Position ";
       DisplayMatrix4x4(initialpos,cout);
 
-      MAL_S4x4_MATRIX(,double) currentTransformation = aJoint->currentTransformation();
+      MAL_S4x4_MATRIX_TYPE(double) currentTransformation = aJoint->currentTransformation();
       cout << "CurrentTransformation ";
       DisplayMatrix4x4(currentTransformation,cout);
 
@@ -106,7 +106,7 @@ void DisplayDynamicRobotInformation(CjrlDynamicRobot *aDynamicRobot)
   cout << "Number of joints :" << r << endl;
 }
 
-void DisplayMatrix(MAL_MATRIX(,double) &aJ)
+void DisplayMatrix(MAL_MATRIX_TYPE(double) &aJ)
 {
   for(int i=0;i<6;i++)
     {
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
   std::vector<CjrlJoint *> aVec = aHDRSmall->jointVector();
   aVec[22]->computeJacobianJointWrtConfig();
 
-  MAL_MATRIX(,double) aJ = aVec[22]->jacobianJointWrtConfig();
+  MAL_MATRIX_TYPE(double) aJ = aVec[22]->jacobianJointWrtConfig();
 
   DisplayMatrix(aJ);
 

@@ -202,24 +202,24 @@ void Body::Display(ostream &os)
 /* Implementation of the generic JRL interface */
 /***********************************************/
 
-const MAL_S3_VECTOR(,double) & Body::localCenterOfMass() const
+const MAL_S3_VECTOR_TYPE(double) & Body::localCenterOfMass() const
 {
   return posCoM;
 }
 
-void Body::localCenterOfMass(const MAL_S3_VECTOR(,double) &inlocalCenterOfMass)
+void Body::localCenterOfMass(const MAL_S3_VECTOR_TYPE(double) &inlocalCenterOfMass)
 {
   posCoM = inlocalCenterOfMass;
 }
 
 /*! Returns inertia matrix in the local reference frame */
-const MAL_S3x3_MATRIX(,double) & Body::inertiaMatrix() const
+const MAL_S3x3_MATRIX_TYPE(double) & Body::inertiaMatrix() const
 {
   return inertie;
 }
 
 
-void Body::inertiaMatrix(const MAL_S3x3_MATRIX(,double) &inInertiaMatrix)
+void Body::inertiaMatrix(const MAL_S3x3_MATRIX_TYPE(double) &inInertiaMatrix)
 {
   inertie = inInertiaMatrix;
 }

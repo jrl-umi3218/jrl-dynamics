@@ -45,7 +45,7 @@ JointTranslationPrivate::JointTranslationPrivate(const JointTranslationPrivate &
 {
 }
 
-JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
 {
   type(JointPrivate::PRISMATIC_JOINT);
   m_inGlobalFrame = true;

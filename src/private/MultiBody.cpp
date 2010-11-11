@@ -69,9 +69,9 @@ bool dynamicsJRLJapan::operator==(const dynamicsJRLJapan::matching a1,
 
 // Caution: This operator is specific to OpenGL matrices: it transposes the
 // matrix before multiplication.
-MAL_S3_VECTOR(,double) operator * (double* m, MAL_S3_VECTOR(,double) v)
+MAL_S3_VECTOR_TYPE(double) operator * (double* m, MAL_S3_VECTOR_TYPE(double) v)
 {
-  MAL_S3_VECTOR(,double) result;
+  MAL_S3_VECTOR_TYPE(double) result;
 
   result[0] = m[0]*v[0] + m[4]*v[1] +  m[8]*v[2]+ m[12];
   result[1] = m[1]*v[0] + m[5]*v[1] +  m[9]*v[2]+ m[13];
@@ -309,7 +309,7 @@ void MultiBody::removeBodyLabel(int label)
 }
 
 
-MAL_S3_VECTOR(,double) MultiBody::getPositionCoM(void)
+MAL_S3_VECTOR_TYPE(double) MultiBody::getPositionCoM(void)
 {
   return (positionCoMPondere/m_mass);
 }
@@ -345,7 +345,7 @@ void MultiBody::displayLinks(void) {
 	 << listInternalLinks[i].indexCorps1
 	 << " to body  " << listInternalLinks[i].indexCorps2 << "\n";
     cout << "translationStatique : " << endl;
-    MAL_S3_VECTOR(,double) aStaticTranslation;
+    MAL_S3_VECTOR_TYPE(double) aStaticTranslation;
     listInternalLinks[i].aJoint->getStaticTranslation(aStaticTranslation);
     cout << aStaticTranslation << endl;
     if (listInternalLinks[i].aJoint->type() > 0) {

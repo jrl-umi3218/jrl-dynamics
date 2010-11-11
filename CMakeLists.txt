@@ -30,6 +30,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 INCLUDE(cmake/base.cmake)
+INCLUDE(cmake/cpack.cmake)
 
 # name of the project
 SET(PROJECT_NAME jrl-dynamics)

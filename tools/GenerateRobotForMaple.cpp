@@ -369,7 +369,7 @@ namespace dynamicsJRLJapan {
   }
 
   void Tools::GenerateRobotForMaple::UnnormalizedTransformation(CjrlJoint * aJoint,
-								MAL_S4x4_MATRIX(,double) &aTransformation)
+								MAL_S4x4_MATRIX_TYPE(double) &aTransformation)
   {
     aTransformation = aJoint->currentTransformation();
 

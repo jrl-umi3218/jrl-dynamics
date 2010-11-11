@@ -90,7 +90,7 @@ namespace dynamicsJRLJapan {
     os << ")";
   }
 
-  void DisplayMatrix(MAL_MATRIX(,double) &aJ,ostream &os)
+  void DisplayMatrix(MAL_MATRIX_TYPE(double) &aJ,ostream &os)
   {
     for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)
       {
@@ -106,7 +106,7 @@ namespace dynamicsJRLJapan {
 
   }
 
-  void DisplayMatrix(const MAL_MATRIX(,double) &aJ, ostream &os)
+  void DisplayMatrix(const MAL_MATRIX_TYPE(double) &aJ, ostream &os)
   {
 
     for(unsigned int i=0;i<MAL_MATRIX_NB_ROWS(aJ);i++)

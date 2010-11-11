@@ -169,7 +169,7 @@ namespace dynamicsJRLJapan
 
       /*! Extract an unnormalized transformation for the joint aJoint. */
       void UnnormalizedTransformation(CjrlJoint * aJoint,
-				      MAL_S4x4_MATRIX(,double) &aTransformation);
+				      MAL_S4x4_MATRIX_TYPE(double) &aTransformation);
 
       /*! Extract an unnormalized CoM and IG for the body related to joint aJoint. */
       void UnnormalizedComAndInertia(CjrlJoint * aJoint,

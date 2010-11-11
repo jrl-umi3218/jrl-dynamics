@@ -127,10 +127,10 @@
 				unsigned int ldepth=0);
 
   /*! \brief Display a matrix following an imposed format. */
-  void DisplayMatrix(MAL_MATRIX(,double) &aJ,std::ostream &os);
+  void DisplayMatrix(MAL_MATRIX_TYPE(double) &aJ,std::ostream &os);
 
   /*! \brief Display a matrix following an imposed format. */
-  void DisplayMatrix(const MAL_MATRIX(,double) &aJ, std::ostream &os);
+  void DisplayMatrix(const MAL_MATRIX_TYPE(double) &aJ, std::ostream &os);
   /*!  @} */
 
   /*! \brief Compare two files for testing, and report in the third one */

@@ -45,7 +45,7 @@
 using namespace dynamicsJRLJapan;
 
 
-MAL_MATRIX(,double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
+MAL_MATRIX_TYPE(double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 {
   return m_JacobianOfTheCoM;
 }
@@ -53,7 +53,7 @@ MAL_MATRIX(,double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 /**
    \brief Get the acceleration of the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::accelerationCenterOfMass()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::accelerationCenterOfMass()
 {
   return m_AccelerationCenterOfMass;
 }
@@ -61,7 +61,7 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::accelerationCenterOfMass()
 /**
    \brief Get the position of the center of mass.
 */
-const MAL_S3_VECTOR(,double)&  DynMultiBodyPrivate::positionCenterOfMass() const
+const MAL_S3_VECTOR_TYPE(double)&  DynMultiBodyPrivate::positionCenterOfMass() const
 {
   return positionCoMPondere;
 }
@@ -70,7 +70,7 @@ const MAL_S3_VECTOR(,double)&  DynMultiBodyPrivate::positionCenterOfMass() const
 /**
    \brief Get the velocity of the center of mass.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::velocityCenterOfMass()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::velocityCenterOfMass()
 {
   return m_VelocityCenterOfMass;
 }
@@ -251,7 +251,7 @@ bool DynMultiBodyPrivate::computeCenterOfMassDynamics()
 /**
    \brief Get the linear momentum of the robot.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::linearMomentumRobot()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::linearMomentumRobot()
 {
   return m_P;
 }
@@ -259,17 +259,17 @@ const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::linearMomentumRobot()
 /**
    \brief Get the time-derivative of the linear momentum.
 */
-const MAL_S3_VECTOR(,double)& DynMultiBodyPrivate::derivativeLinearMomentum()
+const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::derivativeLinearMomentum()
 {
   return m_dP;
 }
 
-MAL_S3_VECTOR(,double) DynMultiBodyPrivate::getPositionCoM(void)
+MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::getPositionCoM(void)
 {
   return (positionCoMPondere);
 }
 
-void DynMultiBodyPrivate::GetPandL(MAL_S3_VECTOR(,double) &aP, MAL_S3_VECTOR(,double) &aL)
+void DynMultiBodyPrivate::GetPandL(MAL_S3_VECTOR_TYPE(double) &aP, MAL_S3_VECTOR_TYPE(double) &aL)
 {
   aP = m_P;
   aL = m_L;

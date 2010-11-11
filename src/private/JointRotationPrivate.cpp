@@ -46,7 +46,7 @@ JointRotationPrivate::JointRotationPrivate(const JointRotationPrivate &a)
 {
 }
 
-JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX(,double) &inInitialPosition)
+JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
   :JointPrivate()
 {
   m_nbDofs=1;

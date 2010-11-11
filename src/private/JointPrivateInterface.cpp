@@ -83,7 +83,7 @@ std::vector<CjrlJoint*> JointPrivate::jointsFromRootToThis() const
 }
 
 
-const MAL_S4x4_MATRIX(,double) & JointPrivate::currentTransformation() const
+const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::currentTransformation() const
 {
   DynamicBodyPrivate *m_DBody = (DynamicBodyPrivate *) m_Body;
   if (m_DBody==0)
@@ -154,7 +154,7 @@ void JointPrivate::subTreeCoef(double inReplacement)
 
 CjrlRigidAcceleration JointPrivate::jointAcceleration()
 {
-  MAL_S3_VECTOR(,double) a,b;
+  MAL_S3_VECTOR_TYPE(double) a,b;
 
   if (m_Body!=0)
     {
@@ -170,7 +170,7 @@ CjrlRigidAcceleration JointPrivate::jointAcceleration()
 }
 
 
-const MAL_MATRIX(,double) & JointPrivate::jacobianJointWrtConfig() const
+const MAL_MATRIX_TYPE(double) & JointPrivate::jacobianJointWrtConfig() const
 {
   return m_J;
 }
@@ -325,7 +325,7 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
     }
 }
 
-const MAL_S4x4_MATRIX(,double) & JointPrivate::initialPosition()
+const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::initialPosition()
 {
   return m_globalPoseAtConstructionNormalized;
 }

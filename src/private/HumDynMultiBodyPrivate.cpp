@@ -276,7 +276,7 @@ void HumDynMultiBodyPrivate::LinkBetweenJointsAndEndEffectorSemantic()
 
 }
 
-const MAL_S3_VECTOR(,double) & HumDynMultiBodyPrivate::zeroMomentumPoint() const
+const MAL_S3_VECTOR_TYPE(double) & HumDynMultiBodyPrivate::zeroMomentumPoint() const
 {
 
   return m_ZeroMomentumPoint;
@@ -303,7 +303,7 @@ bool HumDynMultiBodyPrivate::computeForwardKinematics()
 
 
 bool HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint(CjrlJoint* inJoint,
-							  MAL_MATRIX(,double) & outJacobian)
+							  MAL_MATRIX_TYPE(double) & outJacobian)
 {
   cerr<< " The method HumDynMultiBodyPrivate::jacobianJointWrtFixedJoint " <<endl
       << " is not implemented yet. " << endl;
