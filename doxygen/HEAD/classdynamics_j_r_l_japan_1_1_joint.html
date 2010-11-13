@@ -331,8 +331,6 @@ Constructor and destructor</h2></td></tr>
 <p>Get the initial position of the joint. </p>
 <p>The initial position of the joint is the position of the local frame of the joint. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html#aac7bc260059f20f9a6fc3d46a7fc45bf">CjrlJoint</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a9dffeae9da925c5ac397a35c2404a1c2"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::jacobianJointWrtConfig" ref="a9dffeae9da925c5ac397a35c2404a1c2" args="() const " -->
@@ -355,7 +353,7 @@ Constructor and destructor</h2></td></tr>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a matrix <img class="formulaInl" alt="$J \in {\bf R}^{6\times n_{dof}}$" src="form_11.png"/> defined by <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ J = \left(\begin{array}{llll} {\bf v_1} &amp; {\bf v_2} &amp; \cdots &amp; {\bf v_{n_{dof}}} \\ {\bf \omega_1} &amp; {\bf \omega_2} &amp; \cdots &amp; {\bf \omega_{n_{dof}}} \end{array}\right) \]" src="form_12.png"/>
 </p>
- where <img class="formulaInl" alt="${\bf v_i}$" src="form_13.png"/> and <img class="formulaInl" alt="${\bf \omega_i}$" src="form_14.png"/> are respectively the linear and angular velocities of the joint implied by the variation of degree of freedom <img class="formulaInl" alt="$q_i$" src="form_15.png"/>. The velocity of the joint returned by <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html#af67981f92d6d7f733d6161c841702694">CjrlJoint::jointVelocity</a> can thus be obtained through the following formula: <p class="formulaDsp">
+ where <img class="formulaInl" alt="${\bf v_i}$" src="form_13.png"/> and <img class="formulaInl" alt="${\bf \omega_i}$" src="form_14.png"/> are respectively the linear and angular velocities of the joint implied by the variation of degree of freedom <img class="formulaInl" alt="$q_i$" src="form_15.png"/>. The velocity of the joint returned by <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html#a882f7e9acb26b8d4da55c9d795996454">CjrlJoint::jointVelocity</a> can thus be obtained through the following formula: <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}} \]" src="form_16.png"/>
 </p>
  </dd></dl>
@@ -380,8 +378,6 @@ Constructor and destructor</h2></td></tr>
 
 <p>Get the acceleration of the joint. </p>
 <p>The acceleratoin is determined by the configuration of the robot and its first and second time derivative: <img class="formulaInl" alt="$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})$" src="form_10.png"/>. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html#a1045770bf901e01a3eb144ada5fffd3c">CjrlJoint</a>.</p>
 
 </div>
 </div>
@@ -423,8 +419,6 @@ Constructor and destructor</h2></td></tr>
 <p>Get the velocity <img class="formulaInl" alt="$({\bf v}, {\bf \omega})$" src="form_6.png"/> of the joint. </p>
 <p>The velocity is determined by the configuration of the robot and its time derivative: <img class="formulaInl" alt="$({\bf q},{\bf \dot{q}})$" src="form_7.png"/>.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the linear velocity <img class="formulaInl" alt="${\bf v}$" src="form_8.png"/> of the origin of the joint frame and the angular velocity <img class="formulaInl" alt="${\bf \omega}$" src="form_9.png"/> of the joint frame. </dd></dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html#af67981f92d6d7f733d6161c841702694">CjrlJoint</a>.</p>
 
 </div>
 </div>
