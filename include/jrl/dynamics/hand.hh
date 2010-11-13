@@ -54,7 +54,7 @@ namespace dynamicsJRLJapan
         /**
             \brief Get the wrist joint to which the hand is attached
         */
-        virtual const CjrlJoint* associatedWrist();
+        virtual const CjrlJoint* associatedWrist() const;
 
         /**
             \brief Get the wrist joint to which the hand is attached

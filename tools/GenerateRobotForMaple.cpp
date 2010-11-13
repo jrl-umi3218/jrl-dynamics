@@ -122,7 +122,7 @@ namespace dynamicsJRLJapan {
 
     ofstream aof;
     string FileName = RobotName + "KinematicData.maple";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
       return;
@@ -145,7 +145,7 @@ namespace dynamicsJRLJapan {
 
     ofstream aof;
     string FileName = RobotName + "DynamicData.maple";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
       return;
@@ -168,7 +168,7 @@ namespace dynamicsJRLJapan {
 
     ofstream aof;
     string FileName = RobotName + "AdditionalData.maple";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
       return;
@@ -741,7 +741,7 @@ namespace dynamicsJRLJapan {
   {
     ofstream aof;
     string FileName = RobotName + ".shmaple";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     aof << "#!/usr/bin/env maple"<< endl << endl;
     aof << "read(\"" << RobotName << "KinematicData.maple\");" << endl;

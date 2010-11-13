@@ -35,7 +35,7 @@ using namespace dynamicsJRLJapan;
 #include "TwoLinksModel.h"
 
 
-int main(int argc, char *argv[])
+int main(int , char **)
 {
   dynamicsJRLJapan::ObjectFactory robotDynamicsObjectConstructor;
   TwoLinksModelParameters aSetOfPlanarElbowParameters;

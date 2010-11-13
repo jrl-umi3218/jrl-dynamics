@@ -217,7 +217,7 @@ namespace dynamicsJRLJapan
       // Generic action for display
       struct fDisplay_t {
 
-	void operator()(const char &c) const
+	void operator()(const char &) const
 	{
 	  ODEBUG("Display " << c  );
 	}
@@ -694,7 +694,7 @@ namespace dynamicsJRLJapan
 	  ODEBUG("depth: "<< lDepth);
 	  Body * lCurrentBody = aDataForParsing.CurrentBody[lDepth];
 	  lCurrentBody->setLabel(aDataForParsing.NbOfBodies++);
-	  lCurrentBody->setName((char *)(aDataForParsing.aName).c_str());
+	  lCurrentBody->setName(aDataForParsing.aName.c_str());
 	  lCurrentBody->setInertie(aDataForParsing.mi);
 	  lCurrentBody->setMass(aDataForParsing.mass);
 	  lCurrentBody->localCenterOfMass(aDataForParsing.cm);

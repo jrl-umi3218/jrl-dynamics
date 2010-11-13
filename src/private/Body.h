@@ -179,6 +179,10 @@ namespace dynamicsJRLJapan
     /*! \brief  Specify the name of the object. */
     void setName(char *);
 
+    /*! \brief  Specify the name of the object. */
+    void setName(const char *);
+    
+
     /** @} */
 
     /*! \name Methods to display informations */
@@ -224,8 +228,8 @@ namespace dynamicsJRLJapan
        \brief Get const pointer to the joint the body is attached to.
     */
     const CjrlJoint* joint() const;
-
-
+    CjrlJoint * joint();
+    
     /**
     \brief Get mass.
      */

@@ -52,7 +52,7 @@ namespace dynamicsJRLJapan
 
     /*! \brief Map between joints from the initial humanoid robot,
       and the joints of the new humanoid robot */
-    std::map<CjrlJoint *,CjrlJoint *> m_JointsMap;
+    std::map<const CjrlJoint *,CjrlJoint *> m_JointsMap;
 
     void CopyAndInstanciateBody(CjrlJoint *initJoint,
 				CjrlJoint *newJoint);

@@ -53,13 +53,12 @@ void DynMultiBodyPrivate::computeInertiaMatrix()
   MAL_MATRIX_FILL(m_InertiaMatrix,0);
 
   unsigned int rank;
-  JointPrivate* aJoint;
   DynamicBodyPrivate* aBody;
 
   for(unsigned int i=1;i<m_listOfBodies.size();i++)
     {
       aBody=  m_listOfBodies[i];
-      aJoint=(JointPrivate *)aBody->joint();
+      const JointPrivate * aJoint=(const JointPrivate *)aBody->joint();
 
       rank = aJoint->rankInConfiguration();
 

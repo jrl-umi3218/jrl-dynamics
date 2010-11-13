@@ -86,9 +86,10 @@ void HumanoidCopy::CopyLocalFieldsOfJoints(CjrlJoint *initJoint, CjrlJoint *newJ
 void HumanoidCopy::CopyFoot(CjrlFoot *InitFoot,
 			    CjrlFoot * &NewFoot)
 {
-
-  const CjrlJoint * anAnkle = m_JointsMap[(CjrlJoint *)InitFoot->associatedAnkle()];
-  NewFoot = robotDynamicsObjectConstructor.createFoot(anAnkle);
+  
+  const CjrlJoint * anAnkleSrc = InitFoot->associatedAnkle();
+  const CjrlJoint * anAnkleDst = m_JointsMap[anAnkleSrc];
+  NewFoot = robotDynamicsObjectConstructor.createFoot(anAnkleDst);
 
   double outLength, outWidth;
   InitFoot->getSoleSize(outLength,outWidth);
@@ -103,7 +104,7 @@ void HumanoidCopy::CopyHand(CjrlHand *InitHand,
 			    CjrlHand *&NewHand)
 {
 
-  const CjrlJoint *aWrist = m_JointsMap[(CjrlJoint *)InitHand->associatedWrist()];
+  const CjrlJoint *aWrist = m_JointsMap[InitHand->associatedWrist()];
   NewHand = robotDynamicsObjectConstructor.createHand(aWrist);
 
   vector3d data;
@@ -182,7 +183,7 @@ void HumanoidCopy::CopyActuatedJoints(CjrlHumanoidDynamicRobot* aHDR,
     {
       NewActuatedJoints[i] = m_JointsMap[InitActuatedJoints[i]];
     }
-  aHDR->setActuatedJoints(NewActuatedJoints);
+  a2HDR->setActuatedJoints(NewActuatedJoints);
 }
 
 

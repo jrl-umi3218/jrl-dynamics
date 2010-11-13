@@ -91,7 +91,7 @@ const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::currentTransformation() const
   return m_DBody->m_transformation;
 }
 
-CjrlRigidVelocity JointPrivate::jointVelocity()
+CjrlRigidVelocity JointPrivate::jointVelocity() const
 {
 
   DynamicBodyPrivate *m_DBody = dynamic_cast<DynamicBodyPrivate *>(m_Body);
@@ -152,7 +152,7 @@ void JointPrivate::subTreeCoef(double inReplacement)
   m_STcoef = inReplacement;
 }
 
-CjrlRigidAcceleration JointPrivate::jointAcceleration()
+CjrlRigidAcceleration JointPrivate::jointAcceleration() const
 {
   MAL_S3_VECTOR_TYPE(double) a,b;
 

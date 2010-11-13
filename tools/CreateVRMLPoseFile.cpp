@@ -38,7 +38,7 @@ using namespace dynamicsJRLJapan;
 void ExportToVRML2(CjrlHumanoidDynamicRobot *aHDR,
 		   std::vector<BodyGeometricalData> &aVectorOfURLs,
 		   std::string &Path,
-		   std::string &RobotFileName)
+		   std::string &)
 {
   dynamicsJRLJapan::Tools::GenerateRobotForVRML2 aGenerateRobotForVRML2;
 
@@ -54,7 +54,7 @@ void RobotSetPosition(CjrlHumanoidDynamicRobot *aHDR,
 {
   unsigned int NbOfDofs = aHDR->numberDof();
 
-  ifstream aif((char *)FileOfJointValues.c_str(),
+  ifstream aif(FileOfJointValues.c_str(),
 		ifstream::in);
 
   MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);

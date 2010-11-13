@@ -36,7 +36,7 @@ namespace dynamicsJRLJapan {
 
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
-             float lquantite, MAL_S4x4_MATRIX_TYPE(double) & lpose):
+			   double lquantite, MAL_S4x4_MATRIX_TYPE(double) & lpose):
   m_inGlobalFrame(false),
   m_nbDofs(0),
   m_type(ltype),
@@ -58,7 +58,7 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
 }
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
-             float lquantite, MAL_S3_VECTOR_TYPE(double) & translationStatic):
+			   double lquantite, MAL_S3_VECTOR_TYPE(double) & translationStatic):
   m_inGlobalFrame(false),
   m_nbDofs(0),
   m_type(ltype),
@@ -85,7 +85,7 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
 }
 
 JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
-             float lquantite):
+			   double lquantite):
   m_inGlobalFrame(false),
   m_nbDofs(0),
   m_type(ltype),

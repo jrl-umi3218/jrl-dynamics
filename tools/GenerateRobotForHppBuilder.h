@@ -123,7 +123,7 @@ namespace dynamicsJRLJapan
       void GenerateRobotSpecificities(std::ostream &os);
 
       std::vector<BodyGeometricalData> m_AccessToData;
-      std::map<CjrlJoint *,std::string> m_Joint2Name;
+      std::map<const CjrlJoint *,std::string> m_Joint2Name;
       unsigned int m_Verbosity;
     };
   }

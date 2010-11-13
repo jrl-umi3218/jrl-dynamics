@@ -129,7 +129,7 @@ namespace dynamicsJRLJapan
     if (aHDR!=0)
       {
 	aHDR->parserVRML(OpenHRPVRMLFile, 
-			 (char *)MapJointToRankFileName.c_str(),
+			 MapJointToRankFileName.c_str(),
 			 VectorOfURLs,
 			 ReadGeometricalInformation);
 	aHDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);
@@ -147,7 +147,7 @@ namespace dynamicsJRLJapan
 	    if (a4HDR!=0)
 	      {
 		a4HDR->parserVRML(OpenHRPVRMLFile,
-				  (char *)(MapJointToRankFileName.c_str()),
+				  MapJointToRankFileName.c_str(),
 				  VectorOfURLs,
 				  ReadGeometricalInformation);
 		a4HDR->SetHumanoidSpecificitiesFile(SpecificitiesFileName);

@@ -69,8 +69,8 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 			const CjrlJoint *RightFoot2,
 			CjrlJoint *Waist2,
 			matrix4d &AbsSupportFootPos,
-			double * WaistFromRef,
-			double * RotationFreeFlyer,
+			double * ,
+			double * ,
 			int NbIt,
 			double* WaistFromActual,
 			int &PreviousSupportFoot)
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
   // Read the data file.
   ifstream PosFile;
-  PosFile.open((char *)PosFileName.c_str(),ifstream::in);
+  PosFile.open(PosFileName.c_str(),ifstream::in);
   if (!PosFile.is_open())
     {
       cerr << "Unable to open position file: " << 

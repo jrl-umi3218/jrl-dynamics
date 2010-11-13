@@ -271,7 +271,7 @@ namespace dynamicsJRLJapan {
     m_HDR = aHDR;
     ofstream aof;
     string FileName = RobotName + "_v1.wrl";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
       return;
@@ -374,7 +374,7 @@ namespace dynamicsJRLJapan {
 							      string FileName)
   {
     string FinalFileName = m_PathToModelFiles+ FileName;
-    std::ifstream geometricFile((char *)FinalFileName.c_str(),ifstream::in);
+    std::ifstream geometricFile(FinalFileName.c_str(),ifstream::in);
     if (!geometricFile.is_open())
       {
 	cerr << "Unable to open " << FinalFileName << endl;

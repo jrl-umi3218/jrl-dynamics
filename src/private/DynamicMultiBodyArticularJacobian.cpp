@@ -75,8 +75,8 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
 
   //determine participating joints
     std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+    const JointPrivate* StartJoint = (const JointPrivate*) &inStartJoint;
+    const JointPrivate* EndJoint =  (const JointPrivate* )&inEndJoint;
     robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
     robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
@@ -246,8 +246,8 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
 
   //determine participating joints
     std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+    const JointPrivate* StartJoint = ( const JointPrivate* ) ( &inStartJoint );
+    const JointPrivate* EndJoint = ( const JointPrivate* ) ( &inEndJoint );
     robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
     robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
@@ -385,8 +385,8 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
 
   //determine participating joints
     std::vector<CjrlJoint *> robotRoot2StartJoint, robotRoot2EndJoint;
-    JointPrivate* StartJoint = ( JointPrivate* ) ( &inStartJoint );
-    JointPrivate* EndJoint = ( JointPrivate* ) ( &inEndJoint );
+    const JointPrivate* StartJoint = dynamic_cast<const JointPrivate* > ( &inStartJoint );
+    const JointPrivate* EndJoint = dynamic_cast<const JointPrivate* > ( &inEndJoint );
     robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
     robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 

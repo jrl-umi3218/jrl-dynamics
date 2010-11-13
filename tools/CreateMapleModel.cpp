@@ -36,9 +36,9 @@ using namespace std;
 using namespace dynamicsJRLJapan;
 
 void ExportToMapple(CjrlHumanoidDynamicRobot *aHDR,
-		   std::vector<BodyGeometricalData> &aVectorOfURLs,
-		   std::string &Path,
-		   std::string &RobotFileName)
+		   std::vector<BodyGeometricalData> &,
+		   std::string &,
+		   std::string &)
 {
   dynamicsJRLJapan::Tools::GenerateRobotForMaple aGenerateRobotForMaple;
 

@@ -73,7 +73,7 @@
 		    std::ostream &tcout);
 
    /*! \brief Display a hand of the robot */
-   void DisplayHand(CjrlHand *ajrlHand,
+   void DisplayHand(const CjrlHand *ajrlHand,
 		    std::string &shifttab,
 		    std::ostream &tcout);
 
@@ -121,7 +121,7 @@
 		       std::ostream &tcout);
 
   /*! \brief Display all the joints of a kinematic subtree */
-  void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
+  void RecursiveDisplayOfJoints(const CjrlJoint *aJoint,
 				std::ostream &tcout,
 				unsigned int verbosedisplay=0,
 				unsigned int ldepth=0);
@@ -134,9 +134,9 @@
   /*!  @} */
 
   /*! \brief Compare two files for testing, and report in the third one */
-  bool CompareTwoFiles(char *RefFileName,
-		       char *OurFileName,
-		       char *ReportFileName);
+  bool CompareTwoFiles(const char *RefFileName,
+		       const char *OurFileName,
+		       const char *ReportFileName);
   /*! @} */
 }
 #endif

@@ -183,7 +183,7 @@ namespace dynamicsJRLJapan {
 
   }
 
-  void DisplayHand(CjrlHand *ajrlHand,string &shifttab,ostream &tcout)
+  void DisplayHand(const CjrlHand *ajrlHand,string &shifttab,ostream &tcout)
   {
     vector3d outCenter,outThumbAxis, outForeFinger,
       outPalmNormal;
@@ -211,8 +211,8 @@ namespace dynamicsJRLJapan {
 	  << outForeFinger(1) << " "
 	  << outForeFinger(2) << endl;
 
-
-    RecursiveDisplayOfJoints((CjrlJoint *)ajrlHand->associatedWrist(),
+    const CjrlJoint * aWrist = ajrlHand->associatedWrist();
+    RecursiveDisplayOfJoints(aWrist,
 			     tcout, 2, 0);
 
   }
@@ -236,7 +236,7 @@ namespace dynamicsJRLJapan {
 	  << AnklePositionInLocalFrame(2) << ")" << std::endl;
   }
 
-  void RecursiveDisplayOfJoints(CjrlJoint *aJoint,
+  void RecursiveDisplayOfJoints(const CjrlJoint *aJoint,
 				ostream &tcout,
 				unsigned int verbosedisplay,
 				unsigned int ldepth)
@@ -420,7 +420,7 @@ namespace dynamicsJRLJapan {
        << " COM: " << aHDR->positionCenterOfMass() << endl;
   }
 
-  bool CompareTwoFiles(char *RefFileName, char *OurFileName, char *ReportFile)
+  bool CompareTwoFiles(const char *RefFileName, const char *OurFileName, const char *ReportFile)
   {
     std::ifstream reffile(RefFileName,ifstream::in),
       ourfile(OurFileName,ifstream::in);

@@ -381,9 +381,10 @@ namespace dynamicsJRLJapan
 	\param option link to rank filename
     */
     virtual void parserVRML(string path,
-			    char *option,
+			    const char *option,
 			    std::vector<BodyGeometricalData> &aListOfURLs,
 			    bool ReadGeometry);
+
 
     /**
        \brief Initialization of the kinematic chain

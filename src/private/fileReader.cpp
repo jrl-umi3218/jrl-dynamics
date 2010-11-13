@@ -130,7 +130,10 @@ namespace dynamicsJRLJapan
     if ((!strcmp(str,"ointId")) && (b==false))
       {
 	char Buffer[124];
-	fread(Buffer,strlen(str),1,fichier);
+	int r=fread(Buffer,strlen(str),1,fichier);
+	if (r<0)
+	  perror("fread");
+	
 	cout << "Refused by immediatlyAppears" << Buffer << " ";
 	fsetpos(fichier,&afpos_t);
 
@@ -237,7 +240,11 @@ namespace dynamicsJRLJapan
 	  {}
 #endif /* WIN32 */
 	  else
-	    fgets(buf, n, fichier);
+	    {
+	      char * lnull=fgets(buf, n, fichier);
+	      if (!lnull)
+		std::cerr << "fgets error in fileReader.cpp" <<endl;
+	    }
 #endif /* HAVE_GETLINE */
 	  if (buf) free(buf);
 	}

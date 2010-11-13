@@ -98,7 +98,7 @@ namespace dynamicsJRLJapan
     vector3d m_axis;
 
     /*! Quantity of the rotation . */
-    float m_quantity;
+    double m_quantity;
 
     /*!
       \brief 4x4 matrix for pose
@@ -177,13 +177,13 @@ namespace dynamicsJRLJapan
 
     /*! \brief Constructor with full initialization. */
     JointPrivate(int ltype, vector3d&  laxis,
-		 float lquantite, matrix4d & apose);
+		 double lquantite, matrix4d & apose);
 
     JointPrivate(int ltype, vector3d& laxis,
-		 float lquantite, vector3d &translationStatic);
+		 double lquantite, vector3d &translationStatic);
 
     JointPrivate(int ltype, vector3d& laxis,
-		 float lquantite);
+		 double lquantite);
 
 
     /*! \brief Constructor by copy. */
@@ -212,7 +212,7 @@ namespace dynamicsJRLJapan
       \f$
       where \f$pose(i) = r_{i}\f$.
     */
-    float pose(unsigned r) ;
+    double pose(unsigned r) ;
 
     /*! Returns the matrix corresponding to the rigid motion */
     inline const matrix4d & pose() const
@@ -245,11 +245,11 @@ namespace dynamicsJRLJapan
     { m_axis = anaxis; };
 
     /*! Quantity of the rotation */
-    inline const float & quantity() const
+    inline const double & quantity() const
     { return m_quantity; }
 
     /*! Set the rotation of the joint */
-    inline void quantity(const float & aquantity)
+    inline void quantity(const double & aquantity)
     { m_quantity = aquantity; }
 
     /*! Returns the type of the joint */
@@ -427,7 +427,7 @@ namespace dynamicsJRLJapan
        \return the linear velocity \f${\bf v}\f$ of the origin of the joint frame
        and the angular velocity \f${\bf \omega}\f$ of the joint frame.
     */
-    CjrlRigidVelocity jointVelocity();
+    CjrlRigidVelocity jointVelocity() const;
 
     /**
        \brief Get the acceleration of the joint.
@@ -435,7 +435,7 @@ namespace dynamicsJRLJapan
        The acceleratoin is determined by the configuration of the robot
        and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
-    CjrlRigidAcceleration jointAcceleration();
+    CjrlRigidAcceleration jointAcceleration() const ;
 
     /**
        \brief Get the number of degrees of freedom of the joint.

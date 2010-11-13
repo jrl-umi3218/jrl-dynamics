@@ -115,7 +115,7 @@ bool DynMultiBodyPrivate::initialize()
 
 
 void DynMultiBodyPrivate::parserVRML(string path,
-				     char *option,
+				     const char *option,
 				     vector<BodyGeometricalData> &aListOfURLs,
 				     bool ReadGeometry)
 {
@@ -394,7 +394,9 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 
       if (look_for(fp,"Nb"))
         {
-	  fscanf(fp,"%d", &m_LinksBetweenJointNamesAndRankNb);
+	  int r = fscanf(fp,"%d", &m_LinksBetweenJointNamesAndRankNb);
+	  if (r<0)
+	    perror("fscanf");
 	  ODEBUG("Links: " << m_LinksBetweenJointNamesAndRankNb);
         }
       for(int j=0;j<m_LinksBetweenJointNamesAndRankNb;j++)
@@ -403,10 +405,14 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
             {
 	      char Buffer[128];
 	      memset(Buffer,0,128);
-	      fscanf(fp,"%s",Buffer);
+	      int r = fscanf(fp,"%s",Buffer);
+	      if (r<0)
+		perror("fscanf");
 
 	      strcpy(aNameAndRank.LinkName,Buffer);
-	      fscanf(fp,"%u", &aNameAndRank.RankInConfiguration);
+	      r= fscanf(fp,"%u", &aNameAndRank.RankInConfiguration);
+	      if (r<0)
+		perror("fscanf");
 
 	      look_for(fp,"</Link>");
 	      m_LinksBetweenJointNamesAndRank.insert(m_LinksBetweenJointNamesAndRank.end(),

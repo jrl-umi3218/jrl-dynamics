@@ -351,7 +351,7 @@ void DynMultiBodyPrivate::InitializeFromJointsTree()
       lCurrentBody->setLabel(NbOfBodies++);
       string lCurrentBodyName=CurrentJoint->getName();
       lCurrentBodyName = "BODY_" + lCurrentBodyName;
-      lCurrentBody->setName((char *)lCurrentBodyName.c_str());
+      lCurrentBody->setName(lCurrentBodyName.c_str());
       lCurrentBody->setLabelMother(vectorOfBodies[Depth-1]->getLabel());
 
 

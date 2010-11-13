@@ -45,7 +45,7 @@ Hand::~Hand()
 {
 }
 
-const CjrlJoint* Hand::associatedWrist()
+const CjrlJoint* Hand::associatedWrist() const
 {
     return attAssociatedWrist;
 }

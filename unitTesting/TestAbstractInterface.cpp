@@ -209,9 +209,9 @@ int main(int argc, char *argv[])
   string iho("copiedhumanoid.output");
   string cho("copied2ndhumanoid.output");
   string rho("reportcopy.output");
-  if (CompareTwoFiles((char *)iho.c_str(),
-		      (char *)cho.c_str(),
-		      (char *)rho.c_str()))
+  if (CompareTwoFiles(iho.c_str(),
+		      cho.c_str(),
+		      rho.c_str()))
     {
       return 0;
     }

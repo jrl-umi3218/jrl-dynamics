@@ -53,7 +53,7 @@ namespace dynamicsJRLJapan {
     m_HDR = aHDR;
     ofstream aof;
     string FileName = RobotName + ".cpp";
-    aof.open((char *)FileName.c_str(),ofstream::out);
+    aof.open(FileName.c_str(),ofstream::out);
 
     if(!aof.is_open())
       return;
@@ -86,7 +86,7 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForHppBuilder::GenerateJoint(CjrlJoint *aJoint, 
 							ostream &os,
-							string shifttab, 
+							string, 
 							unsigned int &gindex)
   {
 
@@ -152,7 +152,7 @@ namespace dynamicsJRLJapan {
 								   string FileName)
   {
     string FinalFileName = m_PathToModelFiles+ FileName;
-    std::ifstream geometricFile((char *)FinalFileName.c_str(),ifstream::in);
+    std::ifstream geometricFile(FinalFileName.c_str(),ifstream::in);
     if (!geometricFile.is_open())
       {
 	cerr << "Unable to open " << FinalFileName << endl;
@@ -172,7 +172,7 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForHppBuilder::GenerateTriangles(CjrlJoint *aJoint, 
 							    ostream &os,
-							    string shifttab,
+							    string ,
 							    unsigned int &gindex)
   {
     
@@ -225,7 +225,7 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForHppBuilder::GeneratePoints(CjrlJoint *aJoint, 
 							 ostream &os,
-							 string shifttab,
+							 string ,
 							 unsigned int &gindex)
   {
     unsigned int ajric = aJoint->rankInConfiguration();
@@ -272,9 +272,9 @@ namespace dynamicsJRLJapan {
   }
 
 
-  void Tools::GenerateRobotForHppBuilder::GenerateMaterial(CjrlJoint *aJoint, 
+  void Tools::GenerateRobotForHppBuilder::GenerateMaterial(CjrlJoint *, 
 							   ostream &os,
-							   string shifttab,
+							   string ,
 							   unsigned int &gindex)
   {
 
@@ -316,7 +316,7 @@ namespace dynamicsJRLJapan {
 
   void Tools::GenerateRobotForHppBuilder::GenerateBodyData(CjrlJoint *aJoint, 
 							   ostream &os,
-							   string shifttab,
+							   string ,
 							   unsigned int &gindex)
   {
 
@@ -380,7 +380,7 @@ os << "  data(0)=" << data(0) \
     const CjrlJoint * anAnkle = aFoot->associatedAnkle();
     os << "{" << endl;
     os << "  const CjrlJoint *lAnkle = jointMap_[std::string(\""
-       << m_Joint2Name[(CjrlJoint *)anAnkle]<< "\")]->jrlJoint();" << endl;
+       << m_Joint2Name[anAnkle]<< "\")]->jrlJoint();" << endl;
     os << "  lFoot= createFoot(lAnkle);" << endl;
 
     // Set sole size.
@@ -405,7 +405,7 @@ os << "  data(0)=" << data(0) \
     const CjrlJoint * aWrist = aHand->associatedWrist();
     os << "{" << endl;
     os << "  const CjrlJoint *lWrist = jointMap_[std::string(\""
-       << m_Joint2Name[(CjrlJoint *)aWrist]<< "\")]->jrlJoint();" << endl;
+       << m_Joint2Name[aWrist]<< "\")]->jrlJoint();" << endl;
     os << "  lHand= createHand(lWrist);" << endl;
 
     vector3d data;

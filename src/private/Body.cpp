@@ -121,6 +121,11 @@ void Body::setName(char *aname)
   Name = aname;
 }
 
+void Body::setName(const char *aname)
+{
+  Name = aname;
+}
+
 Body & Body::operator=( Body const & r)
 {
   label = r.getLabel();
@@ -225,6 +230,11 @@ void Body::inertiaMatrix(const MAL_S3x3_MATRIX_TYPE(double) &inInertiaMatrix)
 }
 
 const CjrlJoint* Body::joint() const
+{
+  return m_AttachedJoint;
+}
+
+ CjrlJoint* Body::joint()
 {
   return m_AttachedJoint;
 }
