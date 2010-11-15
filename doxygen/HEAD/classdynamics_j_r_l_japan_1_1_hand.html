@@ -36,25 +36,11 @@
 <h1>dynamicsJRLJapan::Hand Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="dynamicsJRLJapan::Hand" --><!-- doxytag: inherits="CjrlHand" -->
+<!-- doxytag: class="dynamicsJRLJapan::Hand" -->
 <p>This class represents a hand.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;jrl/dynamics/hand.hh&gt;</code></p>
-<!-- startSectionHeader --><div class="dynheader">
-Inheritance diagram for dynamicsJRLJapan::Hand:<!-- endSectionHeader --></div>
-<!-- startSectionSummary --><!-- endSectionSummary --><!-- startSectionContent --><div class="dyncontent">
-<div class="center"><img src="classdynamics_j_r_l_japan_1_1_hand__inherit__graph.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_hand_inherit__map" alt="Inheritance graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_hand_inherit__map" id="dynamics_j_r_l_japan_1_1_hand_inherit__map">
-<area shape="rect" href="class_cjrl_hand.html" title="CjrlHand" alt="" coords="56,6,131,33"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center><!-- endSectionContent --></div>
-<!-- startSectionHeader --><div class="dynheader">
-Collaboration diagram for dynamicsJRLJapan::Hand:<!-- endSectionHeader --></div>
-<!-- startSectionSummary --><!-- endSectionSummary --><!-- startSectionContent --><div class="dyncontent">
-<div class="center"><img src="classdynamics_j_r_l_japan_1_1_hand__coll__graph.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_hand_coll__map" alt="Collaboration graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_hand_coll__map" id="dynamics_j_r_l_japan_1_1_hand_coll__map">
-<area shape="rect" href="class_cjrl_hand.html" title="CjrlHand" alt="" coords="9,6,84,33"/><area shape="rect" href="class_cjrl_joint.html" title="CjrlJoint" alt="" coords="108,6,175,33"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center><!-- endSectionContent --></div>
 
 <p><a href="classdynamics_j_r_l_japan_1_1_hand-members.html">List of all members.</a></p>
 <table class="memberdecls">
@@ -64,25 +50,25 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aafcde66cfb61d063b33915defda14c7c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a4c4c6fce6146f0a32af54c74af2c7787">~Hand</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a4c4c6fce6146f0a32af54c74af2c7787"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a746cae06a2239d608748274fbb131ab9">associatedWrist</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const CjrlJoint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a746cae06a2239d608748274fbb131ab9">associatedWrist</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the wrist joint to which the hand is attached.  <a href="#a746cae06a2239d608748274fbb131ab9"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a71ee94909194663a8cc86ff3c3d86c11">setAssociatedWrist</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> *inWrist)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a71ee94909194663a8cc86ff3c3d86c11">setAssociatedWrist</a> (const CjrlJoint *inWrist)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the wrist joint to which the hand is attached.  <a href="#a71ee94909194663a8cc86ff3c3d86c11"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#ab53bd9a0f47777ea9ad157314c9873cd">getCenter</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outCenter) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#ab53bd9a0f47777ea9ad157314c9873cd">getCenter</a> (vector3d &amp;outCenter) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the center of the hand.  <a href="#ab53bd9a0f47777ea9ad157314c9873cd"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#ab87607cc113388f9be133221c4843a39">setCenter</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inCenter)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#ab87607cc113388f9be133221c4843a39">setCenter</a> (const vector3d &amp;inCenter)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the center of the hand.  <a href="#ab87607cc113388f9be133221c4843a39"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#acfbf415358245f1ba3a613fef7e6a0e2">getThumbAxis</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outThumbAxis) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#acfbf415358245f1ba3a613fef7e6a0e2">getThumbAxis</a> (vector3d &amp;outThumbAxis) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get thumb axis when had is in open position.  <a href="#acfbf415358245f1ba3a613fef7e6a0e2"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a13b263fade29c0b2759ca78e2c151836">setThumbAxis</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inThumbAxis)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a13b263fade29c0b2759ca78e2c151836">setThumbAxis</a> (const vector3d &amp;inThumbAxis)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set thumb axis in wrist frame when had is in open position.  <a href="#a13b263fade29c0b2759ca78e2c151836"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a77752a101bd6886b1fbeb885073b47b3">getForeFingerAxis</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outForeFingerAxis) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a77752a101bd6886b1fbeb885073b47b3">getForeFingerAxis</a> (vector3d &amp;outForeFingerAxis) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get forefinger axis.  <a href="#a77752a101bd6886b1fbeb885073b47b3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a6004a7b1490b14275b58bdfeb980b176">setForeFingerAxis</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inForeFingerAxis)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a6004a7b1490b14275b58bdfeb980b176">setForeFingerAxis</a> (const vector3d &amp;inForeFingerAxis)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forefinger axis.  <a href="#a6004a7b1490b14275b58bdfeb980b176"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a3f41af3e22dbf384053f6671cd0ab2b3">getPalmNormal</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outPalmNormal) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a3f41af3e22dbf384053f6671cd0ab2b3">getPalmNormal</a> (vector3d &amp;outPalmNormal) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get palm normal.  <a href="#a3f41af3e22dbf384053f6671cd0ab2b3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a797e7e86946963837b6adc8d81853e18">setPalmNormal</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inPalmNormal)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamics_j_r_l_japan_1_1_hand.html#a797e7e86946963837b6adc8d81853e18">setPalmNormal</a> (const vector3d &amp;inPalmNormal)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set palm normal.  <a href="#a797e7e86946963837b6adc8d81853e18"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
@@ -131,7 +117,7 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a>* dynamicsJRLJapan::Hand::associatedWrist </td>
+          <td class="memname">virtual const CjrlJoint* dynamicsJRLJapan::Hand::associatedWrist </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [virtual]</code></td>
@@ -142,8 +128,6 @@ Public Member Functions</h2></td></tr>
 
 <p>Get the wrist joint to which the hand is attached. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a3efba925c25c481a56ba0b3650a3ea71">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ab53bd9a0f47777ea9ad157314c9873cd"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getCenter" ref="ab53bd9a0f47777ea9ad157314c9873cd" args="(vector3d &amp;outCenter) const " -->
@@ -153,9 +137,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::getCenter </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">vector3d &amp;&#160;</td>
           <td class="paramname"> <em>outCenter</em>&#160;)</td>
-          <td> const<code> [virtual]</code></td>
+          <td> const</td>
         </tr>
       </table>
 </div>
@@ -169,8 +153,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a1ec84461770a89466b58ed1c5f17af57">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a77752a101bd6886b1fbeb885073b47b3"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getForeFingerAxis" ref="a77752a101bd6886b1fbeb885073b47b3" args="(vector3d &amp;outForeFingerAxis) const " -->
@@ -180,9 +162,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::getForeFingerAxis </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">vector3d &amp;&#160;</td>
           <td class="paramname"> <em>outForeFingerAxis</em>&#160;)</td>
-          <td> const<code> [virtual]</code></td>
+          <td> const</td>
         </tr>
       </table>
 </div>
@@ -196,8 +178,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#ac2a4c68066a9e8cede8db22dab001805">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a3f41af3e22dbf384053f6671cd0ab2b3"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getPalmNormal" ref="a3f41af3e22dbf384053f6671cd0ab2b3" args="(vector3d &amp;outPalmNormal) const " -->
@@ -207,9 +187,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::getPalmNormal </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">vector3d &amp;&#160;</td>
           <td class="paramname"> <em>outPalmNormal</em>&#160;)</td>
-          <td> const<code> [virtual]</code></td>
+          <td> const</td>
         </tr>
       </table>
 </div>
@@ -223,8 +203,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a05d06971b4650177051e34a30f8ad86d">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="acfbf415358245f1ba3a613fef7e6a0e2"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getThumbAxis" ref="acfbf415358245f1ba3a613fef7e6a0e2" args="(vector3d &amp;outThumbAxis) const " -->
@@ -234,9 +212,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::getThumbAxis </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">vector3d &amp;&#160;</td>
           <td class="paramname"> <em>outThumbAxis</em>&#160;)</td>
-          <td> const<code> [virtual]</code></td>
+          <td> const</td>
         </tr>
       </table>
 </div>
@@ -250,8 +228,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#aeb2aff8b3abb42a34c4c959649881629">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a71ee94909194663a8cc86ff3c3d86c11"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setAssociatedWrist" ref="a71ee94909194663a8cc86ff3c3d86c11" args="(const CjrlJoint *inWrist)" -->
@@ -261,7 +237,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void dynamicsJRLJapan::Hand::setAssociatedWrist </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> *&#160;</td>
+          <td class="paramtype">const CjrlJoint *&#160;</td>
           <td class="paramname"> <em>inWrist</em>&#160;)</td>
           <td><code> [virtual]</code></td>
         </tr>
@@ -270,8 +246,6 @@ Public Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Get the wrist joint to which the hand is attached. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a7eebc27a82d3ac8079e0a4a27979809e">CjrlHand</a>.</p>
 
 </div>
 </div>
@@ -282,9 +256,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::setCenter </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inCenter</em>&#160;)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -298,8 +272,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a858198e4ba0c28fc6d775f82b3918cc3">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a6004a7b1490b14275b58bdfeb980b176"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setForeFingerAxis" ref="a6004a7b1490b14275b58bdfeb980b176" args="(const vector3d &amp;inForeFingerAxis)" -->
@@ -309,9 +281,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::setForeFingerAxis </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inForeFingerAxis</em>&#160;)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -325,8 +297,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#aeb843d6671894b9097dc81c2ce4c85fb">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a797e7e86946963837b6adc8d81853e18"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setPalmNormal" ref="a797e7e86946963837b6adc8d81853e18" args="(const vector3d &amp;inPalmNormal)" -->
@@ -336,9 +306,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::setPalmNormal </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inPalmNormal</em>&#160;)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -352,8 +322,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#a202a7b9daf81e29fcacbafec5cc36f44">CjrlHand</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a13b263fade29c0b2759ca78e2c151836"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setThumbAxis" ref="a13b263fade29c0b2759ca78e2c151836" args="(const vector3d &amp;inThumbAxis)" -->
@@ -363,9 +331,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dynamicsJRLJapan::Hand::setThumbAxis </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inThumbAxis</em>&#160;)</td>
-          <td><code> [virtual]</code></td>
+          <td></td>
         </tr>
       </table>
 </div>
@@ -378,8 +346,6 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_hand.html#aed81c104f6786448bb874b2d8cb66f63">CjrlHand</a>.</p>
 
 </div>
 </div>

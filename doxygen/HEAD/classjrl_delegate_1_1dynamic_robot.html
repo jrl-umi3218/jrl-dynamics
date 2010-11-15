@@ -37,7 +37,7 @@
 <h1>jrlDelegate::dynamicRobot Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="jrlDelegate::dynamicRobot" --><!-- doxytag: inherits="CjrlDynamicRobot" -->
+<!-- doxytag: class="jrlDelegate::dynamicRobot" -->
 <p>Classes to implement a non abstract class for a robot with dynamic properties from an object factory.  
 <a href="#_details">More...</a></p>
 
@@ -47,29 +47,22 @@ Inheritance diagram for jrlDelegate::dynamicRobot:<!-- endSectionHeader --></div
 <!-- startSectionSummary --><!-- endSectionSummary --><!-- startSectionContent --><div class="dyncontent">
 <div class="center"><img src="classjrl_delegate_1_1dynamic_robot__inherit__graph.png" border="0" usemap="#jrl_delegate_1_1dynamic_robot_inherit__map" alt="Inheritance graph"/></div>
 <map name="jrl_delegate_1_1dynamic_robot_inherit__map" id="jrl_delegate_1_1dynamic_robot_inherit__map">
-<area shape="rect" href="classjrl_delegate_1_1humanoid_dynamic_robot.html" title="Template to implement a non abstract class describing a humanoid robot with dynamics." alt="" coords="5,162,259,188"/><area shape="rect" href="class_cjrl_dynamic_robot.html" title="CjrlDynamicRobot" alt="" coords="65,7,199,34"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center><!-- endSectionContent --></div>
-<!-- startSectionHeader --><div class="dynheader">
-Collaboration diagram for jrlDelegate::dynamicRobot:<!-- endSectionHeader --></div>
-<!-- startSectionSummary --><!-- endSectionSummary --><!-- startSectionContent --><div class="dyncontent">
-<div class="center"><img src="classjrl_delegate_1_1dynamic_robot__coll__graph.png" border="0" usemap="#jrl_delegate_1_1dynamic_robot_coll__map" alt="Collaboration graph"/></div>
-<map name="jrl_delegate_1_1dynamic_robot_coll__map" id="jrl_delegate_1_1dynamic_robot_coll__map">
-<area shape="rect" href="class_cjrl_dynamic_robot.html" title="CjrlDynamicRobot" alt="" coords="32,6,165,33"/></map>
+<area shape="rect" href="classjrl_delegate_1_1humanoid_dynamic_robot.html" title="Template to implement a non abstract class describing a humanoid robot with dynamics." alt="" coords="5,84,259,110"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center><!-- endSectionContent --></div>
 
 <p><a href="classjrl_delegate_1_1dynamic_robot-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a6ed5f4e0edde520260a0fe114bf42b8c">getJacobian</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inStartJoint, const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inEndJoint, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inFrameLocalPosition, <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a6ed5f4e0edde520260a0fe114bf42b8c">getJacobian</a> (const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint, const vector3d &amp;inFrameLocalPosition, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and get position and orientation jacobian.  <a href="#a6ed5f4e0edde520260a0fe114bf42b8c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1b1a5b678512f359f423baa47d3becaa">getPositionJacobian</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inStartJoint, const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inEndJoint, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inFrameLocalPosition, <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aedc0f0aef871ef2303f37565658b8cc4">getOrientationJacobian</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inStartJoint, const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inEndJoint, <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a6a382b609fdddaf5101db81bd8fe619e">getJacobianCenterOfMass</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inStartJoint, <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a8178d4cfa16ad061e74bd64f238ec05d">getSpecializedInverseKinematics</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;jointRoot, const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;jointEnd, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayermatrix4x4jrlmath_8hh.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;jointRootPosition, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayermatrix4x4jrlmath_8hh.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;jointEndPosition, <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;q)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1b1a5b678512f359f423baa47d3becaa">getPositionJacobian</a> (const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint, const vector3d &amp;inFrameLocalPosition, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aedc0f0aef871ef2303f37565658b8cc4">getOrientationJacobian</a> (const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a6a382b609fdddaf5101db81bd8fe619e">getJacobianCenterOfMass</a> (const CjrlJoint &amp;inStartJoint, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a8178d4cfa16ad061e74bd64f238ec05d">getSpecializedInverseKinematics</a> (const CjrlJoint &amp;jointRoot, const CjrlJoint &amp;jointEnd, const matrix4d &amp;jointRootPosition, const matrix4d &amp;jointEndPosition, vectorN &amp;q)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute Speciliazed InverseKinematics between two joints.  <a href="#a8178d4cfa16ad061e74bd64f238ec05d"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Initialization</div></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a8a2769e76ef896f47600853fdd0b8dfa">dynamicRobot</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_robot_dynamics_object_factory.html">CjrlRobotDynamicsObjectFactory</a> *inObjectFactory)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a8a2769e76ef896f47600853fdd0b8dfa">dynamicRobot</a> (CjrlRobotDynamicsObjectFactory *inObjectFactory)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a76308bfd5c19c2146740a0fdf95bb387">dynamicRobot</a> (<a class="el" href="classjrl_delegate_1_1dynamic_robot.html">dynamicRobot</a> *inDRNA)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a7f0e1262a445d65a367a119e09a8b6f5">dynamicRobot</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a7b4f7d81d98ceef1c44c67cb65767eaf">initialize</a> ()</td></tr>
@@ -77,61 +70,61 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#abac9f3895244fb7448702ceafbdfbf62">~dynamicRobot</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#abac9f3895244fb7448702ceafbdfbf62"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Kinematic chain</div></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#abc4a607711163870b656403c725442dc">rootJoint</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inJoint)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#abc4a607711163870b656403c725442dc">rootJoint</a> (CjrlJoint &amp;inJoint)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the root joint of the robot.  <a href="#abc4a607711163870b656403c725442dc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aba25255809b6b812f33509b29bcab842">rootJoint</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual CjrlJoint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aba25255809b6b812f33509b29bcab842">rootJoint</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the root joint of the robot.  <a href="#aba25255809b6b812f33509b29bcab842"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ac43fc9c8f7cca9b445f1068f5bfd01cc">jointVector</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; CjrlJoint * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ac43fc9c8f7cca9b445f1068f5bfd01cc">jointVector</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a vector containing all the joints.  <a href="#ac43fc9c8f7cca9b445f1068f5bfd01cc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aa0a8f1b0a571f322d4f712678bdeb204">jointsBetween</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inStartJoint, const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;inEndJoint) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; CjrlJoint * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aa0a8f1b0a571f322d4f712678bdeb204">jointsBetween</a> (const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the chain of joints between two joints.  <a href="#aa0a8f1b0a571f322d4f712678bdeb204"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#aab08d13e866d71bd7f26e5fc262c3c65">upperBoundDof</a> (unsigned int inRankInConfiguration)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the upper bound for ith dof.  <a href="#aab08d13e866d71bd7f26e5fc262c3c65"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a83c868eea6b515f9c9188bf70f5cef35">lowerBoundDof</a> (unsigned int inRankInConfiguration)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the lower bound for ith dof.  <a href="#a83c868eea6b515f9c9188bf70f5cef35"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#acfae0856fad2c867e16d8f7b43207e54">upperBoundDof</a> (unsigned int inRankInConfiguration, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inConfig)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#acfae0856fad2c867e16d8f7b43207e54">upperBoundDof</a> (unsigned int inRankInConfiguration, const vectorN &amp;inConfig)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the upper bound for ith dof using other configuration values if possible.  <a href="#acfae0856fad2c867e16d8f7b43207e54"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1eb6b2cb085133d5c1e0a340529e1ec9">lowerBoundDof</a> (unsigned int inRankInConfiguration, const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inConfig)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1eb6b2cb085133d5c1e0a340529e1ec9">lowerBoundDof</a> (unsigned int inRankInConfiguration, const vectorN &amp;inConfig)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the lower bound for ith dof using other configuration values if possible.  <a href="#a1eb6b2cb085133d5c1e0a340529e1ec9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a7533839121a0a685591e5fc1908640a6">numberDof</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of degrees of freedom of the robot.  <a href="#a7533839121a0a685591e5fc1908640a6"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a2b07e6e0b33225abb23e962e043146aa">setJointOrderInConfig</a> (std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt; inJointVector)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a2b07e6e0b33225abb23e962e043146aa">setJointOrderInConfig</a> (std::vector&lt; CjrlJoint * &gt; inJointVector)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the joint ordering in the configuration vector.  <a href="#a2b07e6e0b33225abb23e962e043146aa"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Configuration, velocity and acceleration</div></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a58b6967700f9d5e3ac9dfe5ba658f237">currentConfiguration</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inConfig)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a58b6967700f9d5e3ac9dfe5ba658f237">currentConfiguration</a> (const vectorN &amp;inConfig)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current configuration of the robot.  <a href="#a58b6967700f9d5e3ac9dfe5ba658f237"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#afaf986dc9bf8568ec9233d0530468853">currentConfiguration</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vectorN &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#afaf986dc9bf8568ec9233d0530468853">currentConfiguration</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current configuration of the robot.  <a href="#afaf986dc9bf8568ec9233d0530468853"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#adc1055c40263399dd8e4886e59bd494e">currentVelocity</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inVelocity)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#adc1055c40263399dd8e4886e59bd494e">currentVelocity</a> (const vectorN &amp;inVelocity)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current velocity of the robot.  <a href="#adc1055c40263399dd8e4886e59bd494e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ada82c81c0d485febd6a6144def5b5005">currentVelocity</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vectorN &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ada82c81c0d485febd6a6144def5b5005">currentVelocity</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current velocity of the robot.  <a href="#ada82c81c0d485febd6a6144def5b5005"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#add3618c793fe1185549d038e5d7d3cc8">currentAcceleration</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inAcceleration)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#add3618c793fe1185549d038e5d7d3cc8">currentAcceleration</a> (const vectorN &amp;inAcceleration)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current acceleration of the robot.  <a href="#add3618c793fe1185549d038e5d7d3cc8"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#acd90b00892fb464ded3135e6cb2f7c8d">currentAcceleration</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vectorN &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#acd90b00892fb464ded3135e6cb2f7c8d">currentAcceleration</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current acceleration of the robot.  <a href="#acd90b00892fb464ded3135e6cb2f7c8d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ae6442e1bf81e1c172b14419690ec92d0">currentForces</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const matrixNxP &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ae6442e1bf81e1c172b14419690ec92d0">currentForces</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current forces of the robot.  <a href="#ae6442e1bf81e1c172b14419690ec92d0"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1340404457846c446b329de38b59bdc5">currentTorques</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const matrixNxP &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a1340404457846c446b329de38b59bdc5">currentTorques</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current torques of the robot.  <a href="#a1340404457846c446b329de38b59bdc5"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Forward kinematics and dynamics</div></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a3c323850ff472778b5c1cc55af1eb6db">computeForwardKinematics</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute forward kinematics.  <a href="#a3c323850ff472778b5c1cc55af1eb6db"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a272a9b49f0470a32cbfb5aaa4eb328c3">computeCenterOfMassDynamics</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the dynamics of the center of mass.  <a href="#a272a9b49f0470a32cbfb5aaa4eb328c3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a18f1077fda1c265528a0039447b6074d">positionCenterOfMass</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a18f1077fda1c265528a0039447b6074d">positionCenterOfMass</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the position of the center of mass.  <a href="#a18f1077fda1c265528a0039447b6074d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af4fcf9f5db544a84f1cf4581828555e4">velocityCenterOfMass</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af4fcf9f5db544a84f1cf4581828555e4">velocityCenterOfMass</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the velocity of the center of mass.  <a href="#af4fcf9f5db544a84f1cf4581828555e4"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a688ee89ba338d4d160e29959d579b856">accelerationCenterOfMass</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a688ee89ba338d4d160e29959d579b856">accelerationCenterOfMass</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the acceleration of the center of mass.  <a href="#a688ee89ba338d4d160e29959d579b856"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af2e0cf529f22c05b911e2083b3bdaa8f">linearMomentumRobot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af2e0cf529f22c05b911e2083b3bdaa8f">linearMomentumRobot</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the linear momentum of the robot.  <a href="#af2e0cf529f22c05b911e2083b3bdaa8f"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#abd3ac249d796d357bb6f805796872bf3">derivativeLinearMomentum</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#abd3ac249d796d357bb6f805796872bf3">derivativeLinearMomentum</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time-derivative of the linear momentum.  <a href="#abd3ac249d796d357bb6f805796872bf3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ad247452545a02273fc0fcb66f28aa4d2">angularMomentumRobot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ad247452545a02273fc0fcb66f28aa4d2">angularMomentumRobot</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the angular momentum of the robot at the center of mass.  <a href="#ad247452545a02273fc0fcb66f28aa4d2"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ab6a3c9153a3381e877b893bfc2bdf025">derivativeAngularMomentum</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const vector3d &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ab6a3c9153a3381e877b893bfc2bdf025">derivativeAngularMomentum</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time-derivative of the angular momentum at the center of mass.  <a href="#ab6a3c9153a3381e877b893bfc2bdf025"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#ab949b4156afc48942ec554f7a05600d6">mass</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the total mass of the robot.  <a href="#ab949b4156afc48942ec554f7a05600d6"></a><br/></td></tr>
@@ -145,17 +138,17 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Inertia matrix related methods</div></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a412b280f12b3c69ef4b459719ac30ea5">computeInertiaMatrix</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inertia matrix of the robot according wrt <img class="formulaInl" alt="${\bf q}$" src="form_0.png"/>.  <a href="#a412b280f12b3c69ef4b459719ac30ea5"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a56a945f0e50fb3ac6d997260baedf389">inertiaMatrix</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const matrixNxP &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a56a945f0e50fb3ac6d997260baedf389">inertiaMatrix</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the inertia matrix of the robot according wrt <img class="formulaInl" alt="${\bf q}$" src="form_0.png"/>.  <a href="#a56a945f0e50fb3ac6d997260baedf389"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Actuated joints related methods.</div></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const std::vector<br class="typebreak"/>
-&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a547fa0a30370432669fd662395128847">getActuatedJoints</a> () const </td></tr>
+&lt; CjrlJoint * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a547fa0a30370432669fd662395128847">getActuatedJoints</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the list of actuated joints.  <a href="#a547fa0a30370432669fd662395128847"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a5c3915c7e68cdc1fb6fc50daecb251e5">setActuatedJoints</a> (std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt; &amp;lActuatedJoints)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a5c3915c7e68cdc1fb6fc50daecb251e5">setActuatedJoints</a> (std::vector&lt; CjrlJoint * &gt; &amp;lActuatedJoints)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the list of actuated joints.  <a href="#a5c3915c7e68cdc1fb6fc50daecb251e5"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af33fcad5da2e8ebc4f18572c92793865">setDynamicRobot</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html">CjrlDynamicRobot</a> *inDynamicRobot)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classjrl_delegate_1_1dynamic_robot.html#af33fcad5da2e8ebc4f18572c92793865">setDynamicRobot</a> (CjrlDynamicRobot *inDynamicRobot)</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Classes to implement a non abstract class for a robot with dynamic properties from an object factory. </p>
@@ -167,7 +160,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">jrlDelegate::dynamicRobot::dynamicRobot </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_robot_dynamics_object_factory.html">CjrlRobotDynamicsObjectFactory</a> *&#160;</td>
+          <td class="paramtype">CjrlRobotDynamicsObjectFactory *&#160;</td>
           <td class="paramname"> <em>inObjectFactory</em>&#160;)</td>
           <td><code> [inline]</code></td>
         </tr>
@@ -234,7 +227,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::accelerationCenterOfMass </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::accelerationCenterOfMass </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -245,10 +238,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the acceleration of the center of mass. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5774e92add06c8a68797168d30bc0818">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5774e92add06c8a68797168d30bc0818">CjrlDynamicRobot::accelerationCenterOfMass()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ad247452545a02273fc0fcb66f28aa4d2"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::angularMomentumRobot" ref="ad247452545a02273fc0fcb66f28aa4d2" args="()" -->
@@ -256,7 +245,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::angularMomentumRobot </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::angularMomentumRobot </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -266,10 +255,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Get the angular momentum of the robot at the center of mass. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#afbf21ba2cbe8149cb0cbb45ba6b768bb">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#afbf21ba2cbe8149cb0cbb45ba6b768bb">CjrlDynamicRobot::angularMomentumRobot()</a>.</p>
 
 </div>
 </div>
@@ -290,10 +275,6 @@ Protected Member Functions</h2></td></tr>
 <p>Compute the dynamics of the center of mass. </p>
 <p>Compute the linear and angular momentum and their time derivatives, at the center of mass. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aeffbcf8f74895fd21b0791ede8aab478">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aeffbcf8f74895fd21b0791ede8aab478">CjrlDynamicRobot::computeCenterOfMassDynamics()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a3c323850ff472778b5c1cc55af1eb6db"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::computeForwardKinematics" ref="a3c323850ff472778b5c1cc55af1eb6db" args="()" -->
@@ -313,10 +294,6 @@ Protected Member Functions</h2></td></tr>
 <p>Compute forward kinematics. </p>
 <p>Update the position, velocity and accelerations of each joint wrt <img class="formulaInl" alt="${\bf {q}}$" src="form_5.png"/>, <img class="formulaInl" alt="${\bf \dot{q}}$" src="form_1.png"/>, <img class="formulaInl" alt="${\bf \ddot{q}}$" src="form_2.png"/>. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aab10b113078581991fd97d4b5b25e156">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aab10b113078581991fd97d4b5b25e156">CjrlDynamicRobot::computeForwardKinematics()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a412b280f12b3c69ef4b459719ac30ea5"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::computeInertiaMatrix" ref="a412b280f12b3c69ef4b459719ac30ea5" args="()" -->
@@ -335,10 +312,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Compute the inertia matrix of the robot according wrt <img class="formulaInl" alt="${\bf q}$" src="form_0.png"/>. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a28a4c1d74ebcd9d9956c523672cde148">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a28a4c1d74ebcd9d9956c523672cde148">CjrlDynamicRobot::computeInertiaMatrix()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="add3618c793fe1185549d038e5d7d3cc8"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentAcceleration" ref="add3618c793fe1185549d038e5d7d3cc8" args="(const vectorN &amp;inAcceleration)" -->
@@ -348,7 +321,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::currentAcceleration </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">const vectorN &amp;&#160;</td>
           <td class="paramname"> <em>inAcceleration</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -365,10 +338,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if success, false if failure (the dimension of the input vector does not fit the number of degrees of freedom of the robot). </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4120f72d9000b6b3a34e207f6e90c5a6">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4120f72d9000b6b3a34e207f6e90c5a6">CjrlDynamicRobot::currentAcceleration()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="acd90b00892fb464ded3135e6cb2f7c8d"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentAcceleration" ref="acd90b00892fb464ded3135e6cb2f7c8d" args="() const " -->
@@ -376,7 +345,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a>&amp; jrlDelegate::dynamicRobot::currentAcceleration </td>
+          <td class="memname">virtual const vectorN&amp; jrlDelegate::dynamicRobot::currentAcceleration </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -388,10 +357,6 @@ Protected Member Functions</h2></td></tr>
 <p>Get the current acceleration of the robot. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the acceleration vector <img class="formulaInl" alt="${\bf \ddot{q}}$" src="form_2.png"/>. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a9ec6155dfd3a6516b8714dffc202cc69">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4120f72d9000b6b3a34e207f6e90c5a6">CjrlDynamicRobot::currentAcceleration()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a58b6967700f9d5e3ac9dfe5ba658f237"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentConfiguration" ref="a58b6967700f9d5e3ac9dfe5ba658f237" args="(const vectorN &amp;inConfig)" -->
@@ -401,7 +366,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::currentConfiguration </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">const vectorN &amp;&#160;</td>
           <td class="paramname"> <em>inConfig</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -418,10 +383,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if success, false if failure (the dimension of the input vector does not fit the number of degrees of freedom of the robot). </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a93ae215b0f85036b5e09513bd209b3d1">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a93ae215b0f85036b5e09513bd209b3d1">CjrlDynamicRobot::currentConfiguration()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="afaf986dc9bf8568ec9233d0530468853"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentConfiguration" ref="afaf986dc9bf8568ec9233d0530468853" args="() const " -->
@@ -429,7 +390,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a>&amp; jrlDelegate::dynamicRobot::currentConfiguration </td>
+          <td class="memname">virtual const vectorN&amp; jrlDelegate::dynamicRobot::currentConfiguration </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -441,10 +402,6 @@ Protected Member Functions</h2></td></tr>
 <p>Get the current configuration of the robot. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the configuration vector <img class="formulaInl" alt="${\bf q}$" src="form_0.png"/>. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a6ab19327be40ee5fed677624f16a2962">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a93ae215b0f85036b5e09513bd209b3d1">CjrlDynamicRobot::currentConfiguration()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ae6442e1bf81e1c172b14419690ec92d0"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentForces" ref="ae6442e1bf81e1c172b14419690ec92d0" args="() const " -->
@@ -452,7 +409,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a>&amp; jrlDelegate::dynamicRobot::currentForces </td>
+          <td class="memname">virtual const matrixNxP&amp; jrlDelegate::dynamicRobot::currentForces </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -464,10 +421,6 @@ Protected Member Functions</h2></td></tr>
 <p>Get the current forces of the robot. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the force vector <img class="formulaInl" alt="${\bf f}$" src="form_3.png"/>. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a7bb436e5ca4fe91ae489886abee05e3a">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a7bb436e5ca4fe91ae489886abee05e3a">CjrlDynamicRobot::currentForces()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a1340404457846c446b329de38b59bdc5"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentTorques" ref="a1340404457846c446b329de38b59bdc5" args="() const " -->
@@ -475,7 +428,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a>&amp; jrlDelegate::dynamicRobot::currentTorques </td>
+          <td class="memname">virtual const matrixNxP&amp; jrlDelegate::dynamicRobot::currentTorques </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -487,10 +440,6 @@ Protected Member Functions</h2></td></tr>
 <p>Get the current torques of the robot. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the torque vector <img class="formulaInl" alt="${\bf \tau }$" src="form_4.png"/>. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ae3fb8cce96515556764cd83d8a7641c1">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ae3fb8cce96515556764cd83d8a7641c1">CjrlDynamicRobot::currentTorques()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ada82c81c0d485febd6a6144def5b5005"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentVelocity" ref="ada82c81c0d485febd6a6144def5b5005" args="() const " -->
@@ -498,7 +447,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a>&amp; jrlDelegate::dynamicRobot::currentVelocity </td>
+          <td class="memname">virtual const vectorN&amp; jrlDelegate::dynamicRobot::currentVelocity </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -510,10 +459,6 @@ Protected Member Functions</h2></td></tr>
 <p>Get the current velocity of the robot. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the velocity vector <img class="formulaInl" alt="${\bf \dot{q}}$" src="form_1.png"/>. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a8baed61137c327c77ab7e7b5c224d5f5">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5a159e2ef0e687e61b3132243146d46f">CjrlDynamicRobot::currentVelocity()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="adc1055c40263399dd8e4886e59bd494e"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::currentVelocity" ref="adc1055c40263399dd8e4886e59bd494e" args="(const vectorN &amp;inVelocity)" -->
@@ -523,7 +468,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::currentVelocity </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">const vectorN &amp;&#160;</td>
           <td class="paramname"> <em>inVelocity</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -540,10 +485,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>true if success, false if failure (the dimension of the input vector does not fit the number of degrees of freedom of the robot). </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5a159e2ef0e687e61b3132243146d46f">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5a159e2ef0e687e61b3132243146d46f">CjrlDynamicRobot::currentVelocity()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ab6a3c9153a3381e877b893bfc2bdf025"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::derivativeAngularMomentum" ref="ab6a3c9153a3381e877b893bfc2bdf025" args="()" -->
@@ -551,7 +492,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::derivativeAngularMomentum </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::derivativeAngularMomentum </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -562,10 +503,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the time-derivative of the angular momentum at the center of mass. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aa93b833cebf3fbd3fee2da7925ea2644">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aa93b833cebf3fbd3fee2da7925ea2644">CjrlDynamicRobot::derivativeAngularMomentum()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="abd3ac249d796d357bb6f805796872bf3"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::derivativeLinearMomentum" ref="abd3ac249d796d357bb6f805796872bf3" args="()" -->
@@ -573,7 +510,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::derivativeLinearMomentum </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::derivativeLinearMomentum </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -584,10 +521,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the time-derivative of the linear momentum. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4bb51702bdcc7540d8aea2a797892b1e">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4bb51702bdcc7540d8aea2a797892b1e">CjrlDynamicRobot::derivativeLinearMomentum()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a547fa0a30370432669fd662395128847"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::getActuatedJoints" ref="a547fa0a30370432669fd662395128847" args="() const " -->
@@ -595,7 +528,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const std::vector&lt;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a>*&gt;&amp; jrlDelegate::dynamicRobot::getActuatedJoints </td>
+          <td class="memname">virtual const std::vector&lt;CjrlJoint*&gt;&amp; jrlDelegate::dynamicRobot::getActuatedJoints </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -606,10 +539,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Returns the list of actuated joints. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a81d4eb13ef14760c4ddc894d6271cb34">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a81d4eb13ef14760c4ddc894d6271cb34">CjrlDynamicRobot::getActuatedJoints()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a6ed5f4e0edde520260a0fe114bf42b8c"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::getJacobian" ref="a6ed5f4e0edde520260a0fe114bf42b8c" args="(const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint, const vector3d &amp;inFrameLocalPosition, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)" -->
@@ -619,25 +548,25 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::getJacobian </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inStartJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inEndJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inFrameLocalPosition</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td>
+          <td class="paramtype">matrixNxP &amp;&#160;</td>
           <td class="paramname"> <em>outjacobian</em>, </td>
         </tr>
         <tr>
@@ -685,10 +614,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>false if matrix has inadequate size. Number of columns in matrix outJacobian must be at least <a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a7533839121a0a685591e5fc1908640a6" title="Get the number of degrees of freedom of the robot.">numberDof()</a> if inIncludeStartFreeFlyer = true. It must be at least <a class="el" href="classjrl_delegate_1_1dynamic_robot.html#a7533839121a0a685591e5fc1908640a6" title="Get the number of degrees of freedom of the robot.">numberDof()</a>-6 otherwise. </dd></dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a7ec857f7fe65d3b1d4985e79c60a8658">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a7ec857f7fe65d3b1d4985e79c60a8658">CjrlDynamicRobot::getJacobian()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a6a382b609fdddaf5101db81bd8fe619e"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::getJacobianCenterOfMass" ref="a6a382b609fdddaf5101db81bd8fe619e" args="(const CjrlJoint &amp;inStartJoint, matrixNxP &amp;outjacobian, unsigned int offset=0, bool inIncludeStartFreeFlyer=true)" -->
@@ -698,13 +623,13 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::getJacobianCenterOfMass </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inStartJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td>
+          <td class="paramtype">matrixNxP &amp;&#160;</td>
           <td class="paramname"> <em>outjacobian</em>, </td>
         </tr>
         <tr>
@@ -727,10 +652,6 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a3e1380f87cc174bcaad4fa63f788e694">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a3e1380f87cc174bcaad4fa63f788e694">CjrlDynamicRobot::getJacobianCenterOfMass()</a>.</p>
 
 </div>
 </div>
@@ -741,19 +662,19 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::getOrientationJacobian </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inStartJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inEndJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td>
+          <td class="paramtype">matrixNxP &amp;&#160;</td>
           <td class="paramname"> <em>outjacobian</em>, </td>
         </tr>
         <tr>
@@ -776,10 +697,6 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a6e1cc756f0525cc0d7d76313c599e1ec">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a6e1cc756f0525cc0d7d76313c599e1ec">CjrlDynamicRobot::getOrientationJacobian()</a>.</p>
 
 </div>
 </div>
@@ -790,25 +707,25 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::getPositionJacobian </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inStartJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inEndJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&#160;</td>
+          <td class="paramtype">const vector3d &amp;&#160;</td>
           <td class="paramname"> <em>inFrameLocalPosition</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a> &amp;&#160;</td>
+          <td class="paramtype">matrixNxP &amp;&#160;</td>
           <td class="paramname"> <em>outjacobian</em>, </td>
         </tr>
         <tr>
@@ -831,10 +748,6 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac9ceedb46a1bf987c3e8be0ccc403b9f">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac9ceedb46a1bf987c3e8be0ccc403b9f">CjrlDynamicRobot::getPositionJacobian()</a>.</p>
 
 </div>
 </div>
@@ -878,8 +791,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>The returned string needs to be cast into the right type (double, int,...). </dd></dl>
 
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a22a8667e1e9a7e5308917335ca27d928">CjrlDynamicRobot::getProperty()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a8178d4cfa16ad061e74bd64f238ec05d"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::getSpecializedInverseKinematics" ref="a8178d4cfa16ad061e74bd64f238ec05d" args="(const CjrlJoint &amp;jointRoot, const CjrlJoint &amp;jointEnd, const matrix4d &amp;jointRootPosition, const matrix4d &amp;jointEndPosition, vectorN &amp;q)" -->
@@ -889,31 +800,31 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool jrlDelegate::dynamicRobot::getSpecializedInverseKinematics </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>jointRoot</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>jointEnd</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayermatrix4x4jrlmath_8hh.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&#160;</td>
+          <td class="paramtype">const matrix4d &amp;&#160;</td>
           <td class="paramname"> <em>jointRootPosition</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayermatrix4x4jrlmath_8hh.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&#160;</td>
+          <td class="paramtype">const matrix4d &amp;&#160;</td>
           <td class="paramname"> <em>jointEndPosition</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">vectorN &amp;&#160;</td>
           <td class="paramname"> <em>q</em>&#160;</td>
         </tr>
         <tr>
@@ -940,10 +851,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aa9fd5bc2d4b8d3e2b198b17bd2940a35">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aa9fd5bc2d4b8d3e2b198b17bd2940a35">CjrlDynamicRobot::getSpecializedInverseKinematics()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a56a945f0e50fb3ac6d997260baedf389"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::inertiaMatrix" ref="a56a945f0e50fb3ac6d997260baedf389" args="() const " -->
@@ -951,7 +858,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#a43dc79955cc6c385ce61d6bf515732c4">matrixNxP</a>&amp; jrlDelegate::dynamicRobot::inertiaMatrix </td>
+          <td class="memname">virtual const matrixNxP&amp; jrlDelegate::dynamicRobot::inertiaMatrix </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -961,10 +868,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Get the inertia matrix of the robot according wrt <img class="formulaInl" alt="${\bf q}$" src="form_0.png"/>. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a05a5d3a9ebc4cc4f9c4934316fd35bc9">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a05a5d3a9ebc4cc4f9c4934316fd35bc9">CjrlDynamicRobot::inertiaMatrix()</a>.</p>
 
 </div>
 </div>
@@ -983,10 +886,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Initialize data-structure necessary to dynamic computations This function should be called after building the tree of joints. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a1074fbf14f08bc4da2c6690815d3e1c9">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a1074fbf14f08bc4da2c6690815d3e1c9">CjrlDynamicRobot::initialize()</a>.</p>
 
 </div>
 </div>
@@ -1007,10 +906,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Whether the specified property in implemented. </p>
 
-<p>Reimplemented from <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a1a607a25e4fc1515a9a156a42cb2efc1">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a1a607a25e4fc1515a9a156a42cb2efc1">CjrlDynamicRobot::isSupported()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="aa0a8f1b0a571f322d4f712678bdeb204"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::jointsBetween" ref="aa0a8f1b0a571f322d4f712678bdeb204" args="(const CjrlJoint &amp;inStartJoint, const CjrlJoint &amp;inEndJoint) const " -->
@@ -1018,15 +913,15 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::vector&lt;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a>*&gt; jrlDelegate::dynamicRobot::jointsBetween </td>
+          <td class="memname">virtual std::vector&lt;CjrlJoint*&gt; jrlDelegate::dynamicRobot::jointsBetween </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inStartJoint</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">const CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inEndJoint</em>&#160;</td>
         </tr>
         <tr>
@@ -1047,10 +942,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a97564f818ce64fb968680f3d50da434a">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a97564f818ce64fb968680f3d50da434a">CjrlDynamicRobot::jointsBetween()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ac43fc9c8f7cca9b445f1068f5bfd01cc"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::jointVector" ref="ac43fc9c8f7cca9b445f1068f5bfd01cc" args="()" -->
@@ -1058,7 +949,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a>* &gt; jrlDelegate::dynamicRobot::jointVector </td>
+          <td class="memname">virtual std::vector&lt; CjrlJoint* &gt; jrlDelegate::dynamicRobot::jointVector </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -1069,10 +960,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get a vector containing all the joints. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ab26aab43e6ed5920e94ec0bab114ba0e">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ab26aab43e6ed5920e94ec0bab114ba0e">CjrlDynamicRobot::jointVector()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="af2e0cf529f22c05b911e2083b3bdaa8f"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::linearMomentumRobot" ref="af2e0cf529f22c05b911e2083b3bdaa8f" args="()" -->
@@ -1080,7 +967,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::linearMomentumRobot </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::linearMomentumRobot </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -1090,10 +977,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Get the linear momentum of the robot. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac9f9f74208cfe99dcf5d8768d7a9c2d5">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac9f9f74208cfe99dcf5d8768d7a9c2d5">CjrlDynamicRobot::linearMomentumRobot()</a>.</p>
 
 </div>
 </div>
@@ -1114,10 +997,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the lower bound for ith dof. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5143d9b716ae60cd3a71ae3deaeacb8e">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5143d9b716ae60cd3a71ae3deaeacb8e">CjrlDynamicRobot::lowerBoundDof()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a1eb6b2cb085133d5c1e0a340529e1ec9"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::lowerBoundDof" ref="a1eb6b2cb085133d5c1e0a340529e1ec9" args="(unsigned int inRankInConfiguration, const vectorN &amp;inConfig)" -->
@@ -1133,7 +1012,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">const vectorN &amp;&#160;</td>
           <td class="paramname"> <em>inConfig</em>&#160;</td>
         </tr>
         <tr>
@@ -1146,10 +1025,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Compute the lower bound for ith dof using other configuration values if possible. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ae965b1dc94e4b974927bc38fb7678dec">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a5143d9b716ae60cd3a71ae3deaeacb8e">CjrlDynamicRobot::lowerBoundDof()</a>.</p>
 
 </div>
 </div>
@@ -1169,10 +1044,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the total mass of the robot. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a31b852743c2b1cf94b4d8eae55a96640">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a31b852743c2b1cf94b4d8eae55a96640">CjrlDynamicRobot::mass()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a7533839121a0a685591e5fc1908640a6"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::numberDof" ref="a7533839121a0a685591e5fc1908640a6" args="() const " -->
@@ -1191,10 +1062,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the number of degrees of freedom of the robot. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac059e9f66773cc4f2c08cbab99072cce">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac059e9f66773cc4f2c08cbab99072cce">CjrlDynamicRobot::numberDof()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a18f1077fda1c265528a0039447b6074d"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::positionCenterOfMass" ref="a18f1077fda1c265528a0039447b6074d" args="() const " -->
@@ -1202,7 +1069,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::positionCenterOfMass </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::positionCenterOfMass </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -1213,10 +1080,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the position of the center of mass. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a868aa196b90c2881a45dd48c9a3d2c8c">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a868aa196b90c2881a45dd48c9a3d2c8c">CjrlDynamicRobot::positionCenterOfMass()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="abc4a607711163870b656403c725442dc"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::rootJoint" ref="abc4a607711163870b656403c725442dc" args="(CjrlJoint &amp;inJoint)" -->
@@ -1226,7 +1089,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void jrlDelegate::dynamicRobot::rootJoint </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> &amp;&#160;</td>
+          <td class="paramtype">CjrlJoint &amp;&#160;</td>
           <td class="paramname"> <em>inJoint</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -1236,10 +1099,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Set the root joint of the robot. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac0a4dbb973e58871e13a2648991ba80c">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac0a4dbb973e58871e13a2648991ba80c">CjrlDynamicRobot::rootJoint()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="aba25255809b6b812f33509b29bcab842"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::rootJoint" ref="aba25255809b6b812f33509b29bcab842" args="() const " -->
@@ -1247,7 +1106,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a>* jrlDelegate::dynamicRobot::rootJoint </td>
+          <td class="memname">virtual CjrlJoint* jrlDelegate::dynamicRobot::rootJoint </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -1258,10 +1117,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the root joint of the robot. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ae3b78be8ed1507eaf06cdfda467da077">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#ac0a4dbb973e58871e13a2648991ba80c">CjrlDynamicRobot::rootJoint()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a5c3915c7e68cdc1fb6fc50daecb251e5"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::setActuatedJoints" ref="a5c3915c7e68cdc1fb6fc50daecb251e5" args="(std::vector&lt; CjrlJoint * &gt; &amp;lActuatedJoints)" -->
@@ -1271,7 +1126,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void jrlDelegate::dynamicRobot::setActuatedJoints </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; CjrlJoint * &gt; &amp;&#160;</td>
           <td class="paramname"> <em>lActuatedJoints</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -1280,10 +1135,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Specifies the list of actuated joints. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a6943a65b876cf7a7cc6b42a89c659c03">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a6943a65b876cf7a7cc6b42a89c659c03">CjrlDynamicRobot::setActuatedJoints()</a>.</p>
 
 </div>
 </div>
@@ -1294,7 +1145,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void jrlDelegate::dynamicRobot::setDynamicRobot </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html">CjrlDynamicRobot</a> *&#160;</td>
+          <td class="paramtype">CjrlDynamicRobot *&#160;</td>
           <td class="paramname"> <em>inDynamicRobot</em>&#160;)</td>
           <td><code> [inline, protected]</code></td>
         </tr>
@@ -1313,7 +1164,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual void jrlDelegate::dynamicRobot::setJointOrderInConfig </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_joint.html">CjrlJoint</a> * &gt;&#160;</td>
+          <td class="paramtype">std::vector&lt; CjrlJoint * &gt;&#160;</td>
           <td class="paramname"> <em>inJointVector</em>&#160;)</td>
           <td><code> [inline, virtual]</code></td>
         </tr>
@@ -1329,10 +1180,6 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 <p>Specifies the order of the joints in the configuration vector. The vector should contain all the joints of the current robot. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4b3216b7b4119a6815c96268eb59cf5e">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a4b3216b7b4119a6815c96268eb59cf5e">CjrlDynamicRobot::setJointOrderInConfig()</a>.</p>
 
 </div>
 </div>
@@ -1371,10 +1218,6 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>The value string is obtained by writing the corresponding value in a string (operator&lt;&lt;). </dd></dl>
 
-<p>Reimplemented from <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aee210295ec3c0f1976a45eb8a5b39b54">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#aee210295ec3c0f1976a45eb8a5b39b54">CjrlDynamicRobot::setProperty()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="acfae0856fad2c867e16d8f7b43207e54"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::upperBoundDof" ref="acfae0856fad2c867e16d8f7b43207e54" args="(unsigned int inRankInConfiguration, const vectorN &amp;inConfig)" -->
@@ -1390,7 +1233,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayerboost_8hh.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;&#160;</td>
+          <td class="paramtype">const vectorN &amp;&#160;</td>
           <td class="paramname"> <em>inConfig</em>&#160;</td>
         </tr>
         <tr>
@@ -1403,10 +1246,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Compute the upper bound for ith dof using other configuration values if possible. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a674c574d496d56ced388a6183f93eee2">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a50825a2cd7cb233ceff8f166740ae9b3">CjrlDynamicRobot::upperBoundDof()</a>.</p>
 
 </div>
 </div>
@@ -1427,10 +1266,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Get the upper bound for ith dof. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a50825a2cd7cb233ceff8f166740ae9b3">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a50825a2cd7cb233ceff8f166740ae9b3">CjrlDynamicRobot::upperBoundDof()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="af4fcf9f5db544a84f1cf4581828555e4"></a><!-- doxytag: member="jrlDelegate::dynamicRobot::velocityCenterOfMass" ref="af4fcf9f5db544a84f1cf4581828555e4" args="()" -->
@@ -1438,7 +1273,7 @@ Protected Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="matrixabstractlayert3d_8hh.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; jrlDelegate::dynamicRobot::velocityCenterOfMass </td>
+          <td class="memname">virtual const vector3d&amp; jrlDelegate::dynamicRobot::velocityCenterOfMass </td>
           <td>(</td>
           <td class="paramname">&#160;)</td>
           <td><code> [inline, virtual]</code></td>
@@ -1448,10 +1283,6 @@ Protected Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Get the velocity of the center of mass. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a357fa411943aedb677ff81a6d75e9269">CjrlDynamicRobot</a>.</p>
-
-<p>References <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="class_cjrl_dynamic_robot.html#a357fa411943aedb677ff81a6d75e9269">CjrlDynamicRobot::velocityCenterOfMass()</a>.</p>
 
 </div>
 </div>

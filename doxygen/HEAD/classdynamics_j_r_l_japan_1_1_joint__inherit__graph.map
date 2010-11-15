@@ -1,7 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_anchor.html" title="Anchor joint." alt="" coords="353,5,569,32"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_freeflyer.html" title="Free flyer joint." alt="" coords="349,56,573,82"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_rotation.html" title="Rotation joint." alt="" coords="351,106,572,133"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_translation.html" title="Translation joint." alt="" coords="343,157,580,184"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$class_cjrl_joint.html" title="CjrlJoint" alt="" coords="7,81,73,108"/>
+<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_anchor.html" title="Anchor joint." alt="" coords="236,5,452,32"/>
+<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_freeflyer.html" title="Free flyer joint." alt="" coords="232,56,456,82"/>
+<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_rotation.html" title="Rotation joint." alt="" coords="233,106,455,133"/>
+<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_translation.html" title="Translation joint." alt="" coords="225,157,463,184"/>
 </map>
