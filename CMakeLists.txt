@@ -60,7 +60,6 @@ include/jrl/dynamics/geometricdata.hh
 )
 
 SETUP_PROJECT()
-SETUP_PROJECT_CPACK()
 
 # Dependencies
 ADD_REQUIRED_DEPENDENCY("jrl-mal >= 1.9.0")
@@ -108,5 +107,4 @@ add_subdirectory(unitTesting)
 add_subdirectory(tools)
 
 SETUP_PROJECT_FINALIZE()
-
-
+SETUP_PROJECT_CPACK()
