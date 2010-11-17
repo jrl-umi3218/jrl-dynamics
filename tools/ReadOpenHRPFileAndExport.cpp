@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,
 					 aMapFromJointToRank,
 					 aSpecificitiesFileName,
-					 aVectorOfURLs);
+					 aVectorOfURLs, true);
 
   aHDR->computeForwardKinematics();
 
