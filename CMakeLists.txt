@@ -34,7 +34,6 @@ INCLUDE(cmake/cpack.cmake)
 
 # name of the project
 SET(PROJECT_NAME jrl-dynamics)
-SET(PROJECT_VERSION 1.19.1.99)
 SET(PROJECT_CONTACT olivier.stasse@aist.go.jp)
 SET(PROJECT_DESCRIPTION "Implementation of Newton Euler algorithm")
 SET(PROJECT_URL "git@github.com:jrl-umi3218/jrl-dynamics.git")
