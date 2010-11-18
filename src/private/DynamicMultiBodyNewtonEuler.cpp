@@ -63,7 +63,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   int currentNode = labelTheRoot;
   DynamicBodyPrivate *currentBody=0;
 
-  currentBody = m_listOfBodies[currentNode];      
+  currentBody = m_listOfBodies[currentNode];
   JointPrivate * currentJoint = currentBody->getJointPrivate();
 
   currentBody->p = PosForRoot;
@@ -92,53 +92,62 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
   currentNode = m_listOfBodies[labelTheRoot]->child;
 
+  /* TODO: this algo can be computed by piece, to reduce the computation
+   * cost if all the results are not necessary. However, some piece (say eg the
+   * velocities) are mandatory to compute some other pieces (eg the acceleration).
+   * Assert should be made to enforce the dependancies between pieces. */
+
   do
     {
-
-      currentBody = m_listOfBodies[currentNode];      
+      //std::cout << "New node in loop: " << currentNode <<  std::endl;
+      currentBody = m_listOfBodies[currentNode];
       currentJoint = currentBody->getJointPrivate();
 
-      // Position and orientation in reference frame
-     // currentJoint->updateTransformation(m_Configuration);
-	  currentJoint->SupdateTransformation(m_Configuration);
+      /* Position and orientation in reference frame. */
+      currentJoint->SupdateTransformation(m_Configuration);
+      // currentJoint->updateTransformation(m_Configuration);
       if (m_ComputeVelocity)
-	// currentJoint->updateVelocity(m_Configuration,m_Velocity);
-	  currentJoint->SupdateVelocity(m_Configuration,
-				     m_Velocity);
-      // Computes also the center of mass in the reference frame.
-	  // if (m_ComputeCoM==1) no need to computeCoM since this is done in SupdateAcceleration
+	{
+	  currentJoint->SupdateVelocity(m_Configuration,m_Velocity);
+	  // currentJoint->updateVelocity(m_Configuration,m_Velocity);
+	}
+
+      /* Computes also the center of mass in the reference frame.
+       * if (m_ComputeCoM==1) no need to computeCoM since this is
+       * done in SupdateAcceleration. */
       if (m_ComputeCoM)
         {
 	  currentJoint->updateWorldCoMPosition();
 	  positionCoMPondere +=  currentBody->w_c * currentBody->getMass();
         }
-      
-      // Update the momentum 
+
+      /* Update the momentum. */
       if (m_ComputeMomentum)
         {
 	  currentJoint->updateMomentum();
 	  m_P += currentBody->P;
 	  m_L+= currentBody->L;
         }
-      
-      // Update the acceleration of the body.
+
+      /* Update the acceleration of the body. */
       if (m_ComputeAcceleration)
-	// currentJoint->updateAcceleration(m_Configuration,m_Velocity,m_Acceleration);
-	// FXME assert(m_computeCoM);
-	  currentJoint->SupdateAcceleration(m_Configuration,
-					 m_Velocity,
-					 m_Acceleration);
+	{
+	  // FXME assert(m_computeCoM);
+	  currentJoint->SupdateAcceleration(m_Configuration,m_Velocity,m_Acceleration);
+	  // currentJoint->updateAcceleration(m_Configuration,m_Velocity,m_Acceleration);
+	}
 
-      // Update the acceleration of the joint's CoM
+      /* Update the acceleration of the joint's CoM. */
       if (m_ComputeAccCoM)
-	  currentJoint->updateAccelerationCoM();
+	currentJoint->updateAccelerationCoM();
 
-      // TO DO if necessary : cross velocity.
+      // TO DO if necessary : cross velocity (whatever it means -- ???).
       int step=0;
       int NextNode=0;
       do
         {
-
+	  //std::cout << "step = " << step << ", current= " << currentNode
+	  //          << ", next= " << NextNode << std::endl;
 	  if (step==0)
             {
 	      NextNode = currentBody->child;
@@ -181,9 +190,34 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
         }
       while (NextNode==-1);
       currentNode = NextNode;
-
+      //std::cout << "Final step = " << step << ", next= " << NextNode << std::endl;
     }
   while(currentNode!=labelTheRoot);
+
+  if (m_ComputeBackwardDynamics)
+    {
+      for (unsigned int j=0;j<m_JointVector.size();j++)
+	{
+	  unsigned int StateRankComputed=false;
+	  unsigned int index = m_JointVector[j]->rankInConfiguration();
+	  JointPrivate * aJoint = (JointPrivate *)m_JointVector[j];
+	  if (aJoint!=0)
+	    {
+	      DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) aJoint->linkedBody();
+	      if (aDB!=0)
+		{
+		  StateRankComputed = true;
+		  for (unsigned int n=0;n<aJoint->numberDof();n++)
+		    m_JointTorques[index+n] = aDB->stau[n];
+		}
+	    }
+	  if (!StateRankComputed)
+	    {
+	      for (unsigned int n=0;n<aJoint->numberDof();n++)
+		m_JointTorques[index+n]=0;
+	    }
+	}
+    }
 
   if (m_ComputeSkewCoM)
     {
@@ -254,6 +288,7 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 */
 bool DynMultiBodyPrivate::computeForwardKinematics()
 {
+  //std::cout << "totot "<< std::endl;
   MAL_S3_VECTOR(,double) lPositionForRoot;
   MAL_S3x3_MATRIX(,double) lOrientationForRoot;
   MAL_S3_VECTOR(,double) lLinearVelocityForRoot;
