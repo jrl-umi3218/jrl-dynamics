@@ -416,7 +416,7 @@ bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 	//update world com position
 	MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,lc);
 	currentBody->w_c  = m_wlc + currentBody->p;
-	const double gravity_cst = -9.81;//0;
+	const double gravity_cst = 0;//-9.81;
 	vector3d g;
 	MAL_S3_VECTOR_FILL(g,0);
 	g(2) = gravity_cst;
