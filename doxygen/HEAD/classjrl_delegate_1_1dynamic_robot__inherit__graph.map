@@ -1,3 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="$classjrl_delegate_1_1humanoid_dynamic_robot.html" title="Template to implement a non abstract class describing a humanoid robot with dynamics." alt="" coords="5,84,259,110"/>
+<area shape="rect" href="$classjrl_delegate_1_1humanoid_dynamic_robot.html" title="Template to implement a non abstract class describing a humanoid robot with dynamics." alt="" coords="5,162,259,188"/>
+<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$class_cjrl_dynamic_robot.html" title="CjrlDynamicRobot" alt="" coords="65,7,199,34"/>
 </map>

@@ -1,7 +1,3 @@
 <map id="G" name="G">
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint.html" title="This class represents a robot joint." alt="" coords="5,81,176,108"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_anchor.html" title="Anchor joint." alt="" coords="236,5,452,32"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_freeflyer.html" title="Free flyer joint." alt="" coords="232,56,456,82"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_rotation.html" title="Rotation joint." alt="" coords="233,106,455,133"/>
-<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_joint_translation.html" title="Translation joint." alt="" coords="225,157,463,184"/>
+<area shape="rect" href="$classdynamics_j_r_l_japan_1_1_geometry_1_1_shape.html" title="dynamicsJRLJapan::Geometry::Shape" alt="" coords="5,5,261,32"/>
 </map>
