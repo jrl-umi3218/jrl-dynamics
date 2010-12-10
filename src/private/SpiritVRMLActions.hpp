@@ -180,6 +180,7 @@ namespace dynamicsJRLJapan
 	fJointXAxis(*this,0),
 	fJointYAxis(*this,1),
 	fJointZAxis(*this,2),
+	fJointAxis3d(*this),
 	fJointLLimit(*this,0,0),
 	fJointULimit(*this,0,1),
 	fJointLVLimit(*this,1,0),
@@ -621,6 +622,35 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
 	unsigned int m_Index;
       } fJointXAxis,fJointYAxis,fJointZAxis;
+
+      // Build an array of vectors
+      struct fJointAxis3d_t {
+
+	explicit fJointAxis3d_t(Actions &actions):
+	  m_actions(actions) {};
+
+	template <typename IteratorT>
+	void operator()(IteratorT, IteratorT) const
+	{
+	  ODEBUG3("JointAxisvec3d :"
+		 << m_actions.m_DataForParsing.m_Genericvec3d(0) << " "
+		 << m_actions.m_DataForParsing.m_Genericvec3d(1) << " "
+		 << m_actions.m_DataForParsing.m_Genericvec3d(2) );
+	  MAL_S3_VECTOR(laxis,double);
+	  laxis[0] = m_actions.m_DataForParsing.
+	    m_Genericvec3d[0];
+	  laxis[1] = m_actions.m_DataForParsing.
+	    m_Genericvec3d[1];
+	  laxis[2] = m_actions.m_DataForParsing.
+	    m_Genericvec3d[2];
+
+	  m_actions.m_DataForParsing.CurrentLink.aJoint->type(JointPrivate::REVOLUTE_JOINT);
+	  m_actions.m_DataForParsing.CurrentLink.aJoint->axis(laxis);
+	  
+	}
+      private:
+	Actions & m_actions;
+      } fJointAxis3d;
 
       // Action for a limit
       struct fJointLimits_t {
