@@ -344,14 +344,19 @@ namespace dynamicsJRLJapan
 	  JointID_r = str_p("jointId")
 	    >> (int_p)[self.actions.fJointID];
 
-	  // Specify the axis along which the rotation take place for this joint.
-	  JointAxis_r = str_p("jointAxis")
-	    >> ch_p('"')
-	    >> ( (ch_p('X'))[self.actions.fJointXAxis] |
-		 (ch_p('Y'))[self.actions.fJointYAxis] |
-		 (ch_p('Z'))[self.actions.fJointZAxis] )
+	  // Specify the axis along which the rotation take place for this joint.	      
+	  // First expression where axis are specified with a letter.
+	  JointAxisOneLetter_r = ch_p('"') 
+	    >> ((ch_p('X'))[self.actions.fJointXAxis] |
+		(ch_p('Y'))[self.actions.fJointYAxis] |
+		(ch_p('Z'))[self.actions.fJointZAxis] )
 	    >> ch_p('"');
 
+	  // This case also handle case where the axis is a vector of 3 reals.
+	  JointAxis_r = str_p("jointAxis")
+	    >> 	( (SFVec3f_r)[self.actions.fJointAxis3d] |
+		  JointAxisOneLetter_r) ;
+	  
 	  // Not used
 	  Jointdh_r = str_p("dh")
 	    >> ch_p('[')
@@ -908,6 +913,7 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE(JointType_r);
 	  BOOST_SPIRIT_DEBUG_RULE(JointID_r);
 	  BOOST_SPIRIT_DEBUG_RULE(JointAxis_r);
+	  BOOST_SPIRIT_DEBUG_RULE(JointAxisOneLetter_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Jointdh_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Jointllimit_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Jointulimit_r);
@@ -1024,7 +1030,7 @@ namespace dynamicsJRLJapan
 	rule<ScannerT>  MFString_r;
 
 	rule<ScannerT> JointTranslation_r, JointRotation_r, JointType_r,
-	  JointID_r, JointAxis_r, Jointdh_r,
+	  JointID_r, JointAxis_r, JointAxisOneLetter_r, Jointdh_r,
 	  Jointllimit_r, Jointulimit_r,
 	  Jointlvlimit_r, Jointuvlimit_r,
           Jointequivalentinertia_r,
