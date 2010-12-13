@@ -34,6 +34,7 @@
 #include <ostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 #include <jrl/dynamics/dynamicsfactory.hh>
 
@@ -82,7 +83,8 @@ namespace dynamicsJRLJapan
 			  std::string &shifttab);
     
     std::vector<BodyGeometricalData> m_AccessToData;
-      
+
+    std::map<const CjrlJoint *,std::string> m_Joint2Name;      
   };
 }
 #endif /* _DYNAMIC_JRL_JAPAN_HARD_CODED_ROBOT_H_ */

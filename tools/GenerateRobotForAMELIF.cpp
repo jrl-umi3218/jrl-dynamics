@@ -167,6 +167,11 @@ namespace dynamicsJRLJapan {
 					     ostream &os,
 					     string shifttab, unsigned int &gindex)
   {
+    string JointName;
+    JointName = m_AccessToData[gindex].getRelatedJointName();
+
+    m_Joint2Name[aJoint] = JointName;
+    
     os.precision(15);
     if (aJoint->rankInConfiguration() == 0)
       {
@@ -194,8 +199,8 @@ namespace dynamicsJRLJapan {
        << "\"> " << endl;
 
     // Label
-    os << shifttab << "  <Label>JOINT_" 
-       << aJoint->rankInConfiguration() 
+    os << shifttab << "  <Label>"
+       << JointName
        << "  </Label>" << endl;
   
     // Static parameters
@@ -238,8 +243,8 @@ namespace dynamicsJRLJapan {
        << "\">" << endl;
 
     // Label
-    os << shifttab << "  <Label>LINK_"  
-       << aJoint->rankInConfiguration()
+    os << shifttab << "  <Label>"
+       << m_AccessToData[gindex].getBodyName()
        << "</Label>" << endl;
 
     // Mass
