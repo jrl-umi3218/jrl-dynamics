@@ -35,7 +35,7 @@
 /*! Parsing related macros */
 //#define BOOST_SPIRIT_DEBUG
 //#define BOOST_SPIRIT_RULE_SCANNERTYPE_LIMIT 2
-#define DEPTH_MAX 50
+#define DEPTH_MAX 40
 
 
 /*!  Framework includes */
@@ -181,9 +181,6 @@ namespace dynamicsJRLJapan
 	    >> (str_p("IS"))
 	    >> (NameToField_r);
 
-	  TransformInstanceScale_r = str_p("scale") >>
-	    (real_p) >> (real_p) >> (real_p);
-
 	  TransformInstanceRotation_r = str_p("rotation") >>
 	    (real_p) >>
 	    (real_p) >>
@@ -240,8 +237,7 @@ namespace dynamicsJRLJapan
 
 	  TransformLine_r = (TransformToField_r)
 	    | TransformChildren_r
-	    | TCBChildren_r  
-	    ;
+	    | TCBChildren_r  ;
 
 	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >>
 			       (str_p("Transform"))
@@ -250,8 +246,7 @@ namespace dynamicsJRLJapan
 	    >> ch_p('{')
 	    >> *(TransformLine_r |
 		 TransformInstanceRotation_r |
-		 TransformInstanceTranslation_r |
-		 TransformInstanceScale_r)
+		 TransformInstanceTranslation_r)
 	    >> ch_p('}');
 
 	  // Fields of Proto []block.
@@ -349,17 +344,14 @@ namespace dynamicsJRLJapan
 	  JointID_r = str_p("jointId")
 	    >> (int_p)[self.actions.fJointID];
 
-	  // Specify the axis along which the rotation take place for this joint.				    
+	  // Specify the axis along which the rotation take place for this joint.
 	  JointAxis_r = str_p("jointAxis")
-	    >> 	(SFVec3f_r)[self.actions.fJointAxis3d] |
-	    ( ch_p('"')
-	      >> ( (ch_p('X'))[self.actions.fJointXAxis] |
-		   (ch_p('Y'))[self.actions.fJointYAxis] |
-		   (ch_p('Z'))[self.actions.fJointZAxis] 
-		   )
-	      >> ch_p('"')
-	      );
-	  
+	    >> ch_p('"')
+	    >> ( (ch_p('X'))[self.actions.fJointXAxis] |
+		 (ch_p('Y'))[self.actions.fJointYAxis] |
+		 (ch_p('Z'))[self.actions.fJointZAxis] )
+	    >> ch_p('"');
+
 	  // Not used
 	  Jointdh_r = str_p("dh")
 	    >> ch_p('[')
@@ -394,16 +386,7 @@ namespace dynamicsJRLJapan
 	  Jointequivalentinertia_r = str_p("equivalentInertia")
 	    >> (real_p)[self.actions.fEquivalentInertia];
 
-	  /// Joint gear ratio
-	  Jointgearratio_r = str_p("gearRatio") >> real_p;
 
-	  /// Joint rotor inertia
-	  JointrotorInertia_r = str_p("rotorInertia") >> real_p;
-	  JointrotorResistor_r = str_p("rotorResistor") >> real_p;
-	  JointtorqueConst_r = str_p("torqueConst") >> real_p;
-	  JointencoderPulse_r = str_p("encoderPulse") >> real_p;
-	  
-	  
 	  JointField_r = JointType_r |
 	    JointTranslation_r       |
 	    JointAxis_r              |
@@ -414,12 +397,7 @@ namespace dynamicsJRLJapan
 	    Jointulimit_r            |
 	    Jointlvlimit_r           |
 	    Jointuvlimit_r           |
-            Jointequivalentinertia_r |
-	    JointrotorInertia_r      |
-	    JointrotorResistor_r     |
-	    JointtorqueConst_r       |
-	    JointencoderPulse_r      |
-	    Jointgearratio_r ;
+            Jointequivalentinertia_r ;
 
 	  // Parts of the force sensor
 	  FSTranslation_r = str_p("translation") >>
@@ -675,11 +653,6 @@ namespace dynamicsJRLJapan
 	    >> str_p("height") >> real_p
 	    >> ch_p('}');
 
-	  GeometrySphere_r = str_p("Sphere")
-	    >> ch_p('{')
-	    >> str_p("radius") >> real_p
-	    >> ch_p('}');
-
 	  // Normal node
 	  normal_vector_node_r = str_p("vector")
 	    >> ch_p('[')
@@ -740,8 +713,7 @@ namespace dynamicsJRLJapan
 	  // Header
 	  GeometrySubHeader_r = IndexedFaceSet_r |
 	    GeometryBox_r  |
-	    GeometryCylinder_r |
-	    GeometrySphere_r;
+	    GeometryCylinder_r ;
 
 	  GeometryHeader_r = str_p("geometry")[self.actions.fDisplay]
 	    >>  ( GeometrySubHeader_r |
@@ -901,17 +873,11 @@ namespace dynamicsJRLJapan
 			 Shape_r[self.actions.fStoreShape]);
 
 
-	  BOOST_SPIRIT_DEBUG_RULE(JointrotorInertia_r);
-	  BOOST_SPIRIT_DEBUG_RULE(JointrotorResistor_r);
-	  BOOST_SPIRIT_DEBUG_RULE(JointtorqueConst_r);
-	  BOOST_SPIRIT_DEBUG_RULE(JointencoderPulse_r);
-	  BOOST_SPIRIT_DEBUG_RULE(Jointgearratio_r);
 	  BOOST_SPIRIT_DEBUG_RULE(scaleMultiple_r);
 	  BOOST_SPIRIT_DEBUG_RULE(NameToField_r);
 	  BOOST_SPIRIT_DEBUG_RULE(TransformToField_r);
 	  BOOST_SPIRIT_DEBUG_RULE(TransformInstanceRotation_r);
 	  BOOST_SPIRIT_DEBUG_RULE(TransformInstanceTranslation_r);
-	  BOOST_SPIRIT_DEBUG_RULE(TransformInstanceScale_r);
 	  BOOST_SPIRIT_DEBUG_RULE(GroupBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(Route_r);
 	  BOOST_SPIRIT_DEBUG_RULE(TransformBlock_r);
@@ -1006,7 +972,6 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( GeometrySubHeader_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryBox_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryCylinder_r);
-	  BOOST_SPIRIT_DEBUG_RULE( GeometrySphere_r);
 	  BOOST_SPIRIT_DEBUG_RULE( Shape_r);
 	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(AppearanceBlock_r);
@@ -1048,7 +1013,6 @@ namespace dynamicsJRLJapan
 	// Tree of the robot.
 	rule<ScannerT> scaleMultiple_r, NameToField_r, TransformToField_r,
 	  TransformInstanceRotation_r, TransformInstanceTranslation_r,
-	  TransformInstanceScale_r,
 	  GroupBlock_r, Route_r,
 	  TransformBlock_r, TCBChildren_r, TCBChildrenBlock_r, TransformChildrenBlock_r,
 	  TransformChildren_r,
@@ -1099,7 +1063,7 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> normal_node_r, normal_vector_node_r;
 
 	rule<ScannerT> GeometryHeader_r, GeometrySubHeader_r,
-	  GeometryBox_r, GeometryCylinder_r, GeometrySphere_r;
+	  GeometryBox_r, GeometryCylinder_r;
 
 	rule<ScannerT> Transparency_r,AmbientIntensity_r;
 
@@ -1108,9 +1072,6 @@ namespace dynamicsJRLJapan
 	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r,
 	  AppearanceUse_r, AppearanceDef_r, AppearanceBlockTitle_r, MaterialBlock_r,
 	  DiffuseColor_r, SpecularColor_r, EmissiveColor_r, Shininess_r;
-
-	rule<ScannerT> JointrotorInertia_r, JointrotorResistor_r,
-	  JointtorqueConst_r, JointencoderPulse_r, Jointgearratio_r;
 
 	rule<ScannerT> JointChildrenDEFBlocks_r, JointChildren_r,
 	  HumanoidBlock_r, HumanoidTrail_r, Humanoid_r,
