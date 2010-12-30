@@ -316,7 +316,7 @@ void HumDynMultiBodyPrivate::waist(CjrlJoint * inWaist)
   m_WaistJoint = inWaist;
 }
 
-CjrlJoint* HumDynMultiBodyPrivate::waist()
+CjrlJoint* HumDynMultiBodyPrivate::waist() const
 {
   return m_WaistJoint;
 }
@@ -338,7 +338,7 @@ void HumDynMultiBodyPrivate::leftWrist(CjrlJoint *inLeftWrist)
   m_LeftWristJoint = inLeftWrist;
 }
 
-CjrlJoint *HumDynMultiBodyPrivate::leftWrist()
+CjrlJoint *HumDynMultiBodyPrivate::leftWrist() const
 {
   return m_LeftWristJoint;
 }
@@ -348,7 +348,7 @@ void HumDynMultiBodyPrivate::rightWrist(CjrlJoint *inRightWrist)
   m_RightWristJoint = inRightWrist;
 }
 
-CjrlJoint *HumDynMultiBodyPrivate::rightWrist()
+CjrlJoint *HumDynMultiBodyPrivate::rightWrist() const
 {
   return m_RightWristJoint;
 }
@@ -358,7 +358,7 @@ void HumDynMultiBodyPrivate::rightHand(CjrlHand* inRightHand)
   m_rightHand = inRightHand;
 }
 
-CjrlHand * HumDynMultiBodyPrivate::rightHand()
+CjrlHand * HumDynMultiBodyPrivate::rightHand() const
 {
   return m_rightHand;
 }
@@ -369,7 +369,7 @@ void HumDynMultiBodyPrivate::leftHand(CjrlHand* inLeftHand)
   m_leftHand = inLeftHand;
 }
 
-CjrlHand * HumDynMultiBodyPrivate::leftHand()
+CjrlHand * HumDynMultiBodyPrivate::leftHand() const
 {
   return m_leftHand;
 }
@@ -379,7 +379,7 @@ void HumDynMultiBodyPrivate::leftAnkle(CjrlJoint *inLeftAnkle)
   m_LeftAnkleJoint = inLeftAnkle;
 }
 
-CjrlJoint *HumDynMultiBodyPrivate::leftAnkle()
+CjrlJoint *HumDynMultiBodyPrivate::leftAnkle() const
 {
   return m_LeftAnkleJoint;
 }
@@ -389,7 +389,7 @@ void HumDynMultiBodyPrivate::rightAnkle(CjrlJoint *inRightAnkle)
   m_RightAnkleJoint = inRightAnkle;
 }
 
-CjrlJoint *HumDynMultiBodyPrivate::rightAnkle()
+CjrlJoint *HumDynMultiBodyPrivate::rightAnkle() const
 {
   return m_RightAnkleJoint;
 }
@@ -399,7 +399,7 @@ void HumDynMultiBodyPrivate::leftFoot(CjrlFoot *inLeftFoot)
   m_LeftFoot = inLeftFoot;
 }
 
-CjrlFoot * HumDynMultiBodyPrivate::leftFoot()
+CjrlFoot * HumDynMultiBodyPrivate::leftFoot() const
 {
   return m_LeftFoot;
 }
@@ -409,7 +409,7 @@ void HumDynMultiBodyPrivate::rightFoot(CjrlFoot *inRightFoot)
   m_RightFoot = inRightFoot;
 }
 
-CjrlFoot * HumDynMultiBodyPrivate::rightFoot()
+CjrlFoot * HumDynMultiBodyPrivate::rightFoot() const
 {
   return m_RightFoot;
 }
@@ -419,7 +419,7 @@ void HumDynMultiBodyPrivate::chest(CjrlJoint *inChest)
   m_ChestJoint = inChest;
 }
 
-CjrlJoint * HumDynMultiBodyPrivate::chest()
+CjrlJoint * HumDynMultiBodyPrivate::chest() const
 {
   return m_ChestJoint;
 }

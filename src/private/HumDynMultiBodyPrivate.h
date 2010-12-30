@@ -181,7 +181,7 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get a pointer to the Waist
       */
-      CjrlJoint* waist();
+      CjrlJoint* waist() const;
 
       /**
       \brief Set the pointer to the left Wrist joint.
@@ -192,7 +192,7 @@ namespace dynamicsJRLJapan
       /**
       \brief Get a pointer to the left Wrist.
       */
-      CjrlJoint *leftWrist();
+      CjrlJoint *leftWrist() const;
 
       /**
       \brief Set the pointer to the right Wrist joint.
@@ -202,7 +202,7 @@ namespace dynamicsJRLJapan
       /**
       \brief Get a pointer to the right Wrist.
       */
-      CjrlJoint *rightWrist();
+      CjrlJoint *rightWrist() const;
 
 
       /**
@@ -213,7 +213,7 @@ namespace dynamicsJRLJapan
       /**
         \brief Get a pointer to the right hand
       */
-      virtual CjrlHand* rightHand();
+      virtual CjrlHand* rightHand() const;
 
       /**
         \brief Set the pointer to the left hand
@@ -223,7 +223,7 @@ namespace dynamicsJRLJapan
       /**
         \brief Get a pointer to the left hand
       */
-      virtual CjrlHand* leftHand();
+      virtual CjrlHand* leftHand() const;
 
       /**
 	 \brief Get the hand clench value. This is a scalar value ranging between 0
@@ -245,7 +245,7 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get a pointer to the left ankle.
       */
-      CjrlJoint* leftAnkle();
+      CjrlJoint* leftAnkle() const;
 
       /**
 	 \brief Set the pointer to the right ankle joint.
@@ -255,7 +255,7 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get a pointer to the right ankle.
       */
-      CjrlJoint* rightAnkle();
+      CjrlJoint* rightAnkle() const;
 
       /**
 	 \brief Set the pointer to the left foot joint.
@@ -265,7 +265,7 @@ namespace dynamicsJRLJapan
       /**
 	  \brief Get a pointer to the left foot.
       */
-      CjrlFoot *leftFoot();
+      CjrlFoot *leftFoot() const;
 
       /**
 	 \brief Set the pointer to the right foot joint.
@@ -275,7 +275,7 @@ namespace dynamicsJRLJapan
       /**
 	  \brief Get a pointer to the right foot.
       */
-      CjrlFoot *rightFoot();
+      CjrlFoot *rightFoot() const;
 
       /**
 	  \brief Set gaze joint
@@ -288,7 +288,7 @@ namespace dynamicsJRLJapan
       /**
 	 \brief Get gaze joint
       */
-      CjrlJoint *gazeJoint()
+      CjrlJoint *gazeJoint() const
 	{ return m_GazeJoint; }
 
       /**
@@ -321,7 +321,7 @@ namespace dynamicsJRLJapan
       void chest(CjrlJoint *);
 
       /*! \brief Returns joint which is the first joint of the chest. */
-      CjrlJoint * chest();
+      CjrlJoint * chest() const;
 
       /**
 	 \@}

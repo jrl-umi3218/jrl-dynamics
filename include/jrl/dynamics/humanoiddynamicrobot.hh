@@ -94,7 +94,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the waist.
       */
-      virtual CjrlJoint* waist()
+      virtual CjrlJoint* waist() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->waist();
@@ -117,7 +117,7 @@ namespace jrlDelegate {
 
 	 \note for some humanoid robots, the waist and the chest are the same joints.
       */
-      virtual CjrlJoint* chest()
+      virtual CjrlJoint* chest() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->chest();
@@ -135,7 +135,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left wrist.
       */
-      virtual CjrlJoint* leftWrist()
+      virtual CjrlJoint* leftWrist() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftWrist();
@@ -153,7 +153,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the right wrist.
       */
-      virtual CjrlJoint* rightWrist()
+      virtual CjrlJoint* rightWrist() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->rightWrist();
@@ -171,7 +171,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the right hand
       */
-      virtual CjrlHand* rightHand()
+      virtual CjrlHand* rightHand() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->rightHand();
@@ -189,7 +189,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left hand
       */
-      virtual CjrlHand* leftHand()
+      virtual CjrlHand* leftHand() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftHand();
@@ -231,7 +231,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left ankle.
       */
-      virtual CjrlJoint* leftAnkle()
+      virtual CjrlJoint* leftAnkle() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftAnkle();
@@ -249,7 +249,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the right ankle.
       */
-      virtual CjrlJoint* rightAnkle()
+      virtual CjrlJoint* rightAnkle() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->rightAnkle();
@@ -267,7 +267,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the left foot.
       */
-      virtual CjrlFoot* leftFoot()
+      virtual CjrlFoot* leftFoot() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->leftFoot();
@@ -285,7 +285,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get a pointer to the right foot.
       */
-      virtual CjrlFoot* rightFoot()
+      virtual CjrlFoot* rightFoot() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->rightFoot();
@@ -305,7 +305,7 @@ namespace jrlDelegate {
       /**
 	 \brief Get gaze joint
       */
-      virtual CjrlJoint* gazeJoint()
+      virtual CjrlJoint* gazeJoint() const
       {
 	assert(m_HDR != 0);
 	return m_HDR->gazeJoint();
