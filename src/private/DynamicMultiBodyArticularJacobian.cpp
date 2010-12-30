@@ -336,7 +336,7 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
                 break;
         }
     }
-    if ( includeFreeFlyer )
+    if ( includeFreeFlyer && rootJoint()->numberDof() > 0)
     {
         tempDP = tempP - StartJoint->linkedDBody()->p;
 

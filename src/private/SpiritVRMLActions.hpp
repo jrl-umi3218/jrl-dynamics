@@ -606,6 +606,8 @@ namespace dynamicsJRLJapan
 	  m_actions(actions),
 	  m_Index(Index){};
 
+	//template <typename IteratorT>
+	//void operator()(IteratorT, IteratorT) const
 	void operator()(const int ) const
 	{
 	  MAL_S3_VECTOR(laxis,double);
