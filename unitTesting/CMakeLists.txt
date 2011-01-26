@@ -16,6 +16,26 @@ INCLUDE_DIRECTORIES(${ABSTRACT_ROBOT_DYNAMICS_INCLUDEDIR})
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
 
+
+# JRL_DYNAMICS_ADD_TEST(TEST)
+# ---------------------------
+#
+# - Declare a new program called ``TEST''.
+# - Compile it and link it against jrl-dynamics.
+# - Add it to the TEST suite.
+#
+# TEST : test name
+#
+FUNCTION(JRL_DYNAMICS_ADD_TEST TEST)
+	ADD_EXECUTABLE(${TEST} ${TEST}.cpp)
+	SET_TARGET_PROPERTIES(${TEST}
+		PROPERTIES
+		COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
+		LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
+	)
+	ADD_TEST(${TEST} ${TEST})
+ENDFUNCTION(JRL_DYNAMICS_ADD_TEST TEST)
+
 ADD_EXECUTABLE(	TestHumanoidDynamicRobot CommonTools.cpp TestHumanoidDynamicRobot.cpp )
 SET_TARGET_PROPERTIES(TestHumanoidDynamicRobot
 	              PROPERTIES
@@ -120,6 +140,21 @@ ADD_TEST(TestHumanoidDynamicRobot TestHumanoidDynamicRobot "output.ascii")
 ADD_TEST(TestAbstractInterface TestAbstractInterface)
 
 ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
+
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vCrossm)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusvector)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vectorPlusv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vMoinsv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vBydouble)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_doubleByv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vCrossvector)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vEgalvector)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_dvPlusdv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_dvPlusvector)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_vectorPlusdv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_dvMoinsdv)
+JRL_DYNAMICS_ADD_TEST(TestSpatial_dvEgalvector)
 
 SET(${PROJECT_NAME}_EXAMPLES
   CommonTools.cpp
