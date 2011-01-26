@@ -683,7 +683,7 @@ namespace dynamicsJRLJapan
 	@{ */
       /*! \brief Returns the transformation of the joint
 	following a Plucker transformation according to table 1.5 of the HoR */
-      virtual Spatial::PluckerTransform xjcalc();
+      virtual Spatial::PluckerTransform xjcalc(const vectorN & qi);
       /*! \brief Returns the position of the joint in the link reference frame
 	following a Plucker transformation according to table 1.5 of the HoR */
       const Spatial::PluckerTransform & XL();
