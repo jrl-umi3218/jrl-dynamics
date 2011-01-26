@@ -35,9 +35,12 @@
 
 #include "Spatial.h"
 
-using namespace dynamicsJRLJapan::Spatial;
+//using namespace dynamicsJRLJapan::Spatial;
 
-
+namespace dynamicsJRLJapan
+{
+  namespace Spatial
+  {
 Velocity::Velocity()
 {
   MAL_S3_VECTOR_FILL(m_v0,0.0);
@@ -74,26 +77,6 @@ Velocity Velocity::operator+(vectorN &a)
   return av;
 }
 
-Velocity operator+(vectorN &a, Velocity &b)
-{
-  Velocity c;
-  if (MAL_VECTOR_SIZE(a)==6)
-    {
-      vector3d bv0 = b.v0();
-      vector3d bw = b.w();
-      vector3d cv0, cw;
-      for(unsigned int i=0;i<3;i++)
-	cv0(i) = bv0(i) + a(i);
-
-      c.v0(cv0);
-      for(unsigned int i=0;i<3;i++)
-	cw(i) = bw(i) + a(i+3);
-
-      c.w(cw);
-    }
-  return c;
-}
-
 //----------> Adding the operator = to associate 2 equivalent quantities by L.S
 Velocity* Velocity::operator=(const vectorN &a)
 {
@@ -107,6 +90,31 @@ Velocity* Velocity::operator=(const vectorN &a)
     }
   return this;
 }
+
+Velocity operator*(double ad, Velocity &a)
+	{
+		Velocity c;
+		c = a * ad;
+		return c;
+	}
+
+Velocity operator+(vectorN &a, Velocity &b)
+	{
+		Velocity c;
+		if (MAL_VECTOR_SIZE(a)==6)
+			{	
+				vector3d bv0 = b.v0();
+				vector3d bw = b.w();
+				vector3d cv0, cw;
+					for(unsigned int i=0;i<3;i++)
+					cv0(i) = bv0(i) + a(i);
+				c.v0(cv0);
+					for(unsigned int i=0;i<3;i++)
+					cw(i) = bw(i) + a(i+3);
+				c.w(cw);
+			}
+		return c;
+	}
 
 Acceleration::Acceleration()
 {
@@ -157,6 +165,25 @@ Acceleration* Acceleration::operator=(vectorN &a)
     }
   return this;
 }
+
+// Adding this function Acceleration = vectorN+Acceleration (defined in header but not developed in source code) by L.S
+Acceleration operator+(vectorN & a, Acceleration & b)
+{
+		Acceleration c;
+		if (MAL_VECTOR_SIZE(a)==6)
+			{	
+				vector3d bdv0 = b.dv0();
+				vector3d bdw = b.dw();
+				vector3d cdv0, cdw;
+					for(unsigned int i=0;i<3;i++)
+					cdv0(i) = bdv0(i) + a(i);
+				c.dv0(cdv0);
+					for(unsigned int i=0;i<3;i++)
+					cdw(i) = bdw(i) + a(i+3);
+				c.dw(cdw);
+			}
+		return c;
+	}
 
 cAcceleration::cAcceleration()
 {
@@ -271,6 +298,12 @@ Momentum::Momentum()
   MAL_S3_VECTOR_FILL(m_w,0.0);
 }
 
+// Adding this constructor Momentum(vector3d , vector3d)(defined in header but not developed in source code) by L.S
+Momentum::Momentum(vector3d m, vector3d w)
+: m_v(m), m_w(w)
+{
+}
+
 ////----------> correct the formula by L.S(substraction in lf linear expression instead of addition)
 Momentum Inertia::operator*(Velocity &v)
 {
@@ -285,7 +318,7 @@ Momentum Inertia::operator*(Velocity &v)
   // Linear acceleration
   NE_tmp = v.v0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.w());
-  vector3d lv = NE_tmp2 - NE_tmp;
+  vector3d lv = NE_tmp - NE_tmp2;
   c.v(lv);
 
   return c;
@@ -305,7 +338,7 @@ Force Inertia::operator*(Acceleration &a)
   // Linear acceleration
   NE_tmp = a.dv0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dw());
-  vector3d lf = NE_tmp2 - NE_tmp;
+  vector3d lf = NE_tmp - NE_tmp2;
   c.f(lf);
 
   return c;
@@ -329,10 +362,11 @@ Velocity Velocity::operator*(double ad)
 
 vectorN Velocity::operator^(vectorN &a)
 {
-  vectorN c;
+  vectorN c(6);
+
   if (MAL_VECTOR_SIZE(a)==6)
     {
-      // c x w
+      // w x m
       c(3) =               -m_w(2)*a(4) + m_w(1)*a(5);
       c(4) = m_w(2)* a(3)                -m_w(0)*a(5);
       c(5) =-m_w(1)* a(3)  +m_w(0)*a(4);
@@ -351,10 +385,13 @@ Force Velocity::operator^(Momentum &a)
   vector3d aw  = a.w();
   vector3d av0 = a.v();
 
-  // c x w
+  std::cout << "aw = " << aw << std::endl;
+  std::cout << "av0 = " << av0 << std::endl;
+  // w x m
   dn0(0) =               -m_w(2)*aw(1) + m_w(1)*aw(2);
   dn0(1) = m_w(2)* aw(0)                -m_w(0)*aw(2);
   dn0(2) =-m_w(1)* aw(0) +m_w(0)*aw(1);
+  std::cout << "dn0 = " << dn0 << std::endl;
 
   // v0 x m + w x m0
   df(0) =               -m_v0(2)*aw(1)+ m_v0(1)*aw(2)                 -m_w(2)*av0(1) + m_w(1)*av0(2);
@@ -366,7 +403,7 @@ Force Velocity::operator^(Momentum &a)
   return c;
 }
 
-DYN_JRL_JAPAN_EXPORT Momentum operator*(Inertia & sI, Velocity &v)
+Momentum operator*(Inertia & sI, Velocity &v)
 {
   Momentum c;
   vector3d NE_tmp,NE_tmp2;
@@ -477,4 +514,7 @@ void PluckerTransform::transpose( PluckerTransform &a)
   vector3d NE_tmp;
   NE_tmp = a.p()* -1.0;
   MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
+}
+
+  }
 }

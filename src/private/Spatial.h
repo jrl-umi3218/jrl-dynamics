@@ -46,7 +46,7 @@ namespace dynamicsJRLJapan
     class Force;
     class PluckerTransform;
 
-    class DYN_JRL_JAPAN_EXPORT Velocity
+    class Velocity
     {
     public:
       Velocity();
@@ -59,8 +59,8 @@ namespace dynamicsJRLJapan
       vectorN  operator^(vectorN &a);
       Force operator^(Momentum &a);
 
-      friend DYN_JRL_JAPAN_EXPORT Velocity operator*(double ad, Velocity &a);
-      friend DYN_JRL_JAPAN_EXPORT Velocity operator+(vectorN & ,Velocity &);
+      friend Velocity operator*(double ad, Velocity &a);
+      friend Velocity operator+(vectorN & ,Velocity &);
 
       vector3d v0()
       { return m_v0;}
@@ -75,6 +75,7 @@ namespace dynamicsJRLJapan
     private:
       vector3d m_v0,m_w;
     };
+<<<<<<< HEAD
 
 
     inline Velocity operator*(double ad, Velocity &a)
@@ -83,10 +84,13 @@ namespace dynamicsJRLJapan
 		c = a * ad;
 		return c;
 	}
+=======
+    
+    Velocity operator*(double ad, Velocity &a);
+    Velocity operator+(vectorN &a, Velocity &b);
+>>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
 
-    DYN_JRL_JAPAN_EXPORT Velocity operator+(vectorN &, Velocity &);
-
-    class DYN_JRL_JAPAN_EXPORT Acceleration
+    class Acceleration
     {
     public:
       Acceleration();
@@ -96,7 +100,7 @@ namespace dynamicsJRLJapan
       Acceleration operator+(vectorN &a);
       Acceleration* operator=(vectorN &a);
 
-      friend DYN_JRL_JAPAN_EXPORT Acceleration operator+(vectorN & ,Acceleration &);
+      friend Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
       { return m_dv0;}
       void dv0(const vector3d &lv0)
@@ -111,9 +115,9 @@ namespace dynamicsJRLJapan
       vector3d m_dv0, m_dw;
     };
 
-    DYN_JRL_JAPAN_EXPORT Acceleration operator+(vectorN &, Acceleration &);
+    Acceleration operator+(vectorN &, Acceleration &);
 
-    class DYN_JRL_JAPAN_EXPORT cAcceleration
+    class cAcceleration
     {
     public:
       cAcceleration();
@@ -130,7 +134,7 @@ namespace dynamicsJRLJapan
       vector3d m_dv0,m_dw;
     };
 
-    class DYN_JRL_JAPAN_EXPORT Force
+    class Force
     {
     public:
       Force();
@@ -153,9 +157,14 @@ namespace dynamicsJRLJapan
 
       vector3d m_f, m_n0;
     };
+<<<<<<< HEAD
 
 
     class DYN_JRL_JAPAN_EXPORT Motion
+=======
+    
+    class Motion
+>>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
     {
     public:
       Motion();
@@ -172,7 +181,7 @@ namespace dynamicsJRLJapan
       vector3d m_p, m_theta;
     };
 
-    class DYN_JRL_JAPAN_EXPORT Momentum
+    class Momentum
     {
     public:
       Momentum();
@@ -191,7 +200,7 @@ namespace dynamicsJRLJapan
       vector3d m_v, m_w;
     };
 
-    class DYN_JRL_JAPAN_EXPORT Inertia
+    class Inertia
     {
     public:
       Inertia();
@@ -218,7 +227,7 @@ namespace dynamicsJRLJapan
       double m_m;
     };
 
-    class DYN_JRL_JAPAN_EXPORT PluckerTransform
+    class PluckerTransform
     {
     public:
       PluckerTransform();
@@ -245,6 +254,9 @@ namespace dynamicsJRLJapan
 
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
 
 #endif /* _SPATIAL_ALGEBRA_H_ */
