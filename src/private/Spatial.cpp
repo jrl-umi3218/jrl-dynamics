@@ -366,14 +366,7 @@ Force Velocity::operator^(Momentum &a)
   return c;
 }
 
-Velocity operator*(double ad, Velocity &a)
-{
-  Velocity c;
-  c = a * ad;
-  return c;
-}
-
-Momentum operator*(Inertia & sI, Velocity &v)
+DYN_JRL_JAPAN_EXPORT Momentum operator*(Inertia & sI, Velocity &v)
 {
   Momentum c;
   vector3d NE_tmp,NE_tmp2;
