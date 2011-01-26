@@ -54,6 +54,7 @@ namespace dynamicsJRLJapan
       Velocity operator+(vectorN &a);
       Velocity operator-(Velocity &a);
       Velocity operator*(double ad);
+	  Velocity* operator=(const vectorN &a);
       vectorN  operator^(vectorN &a);
       Force operator^(Momentum &a);
 
@@ -85,6 +86,7 @@ namespace dynamicsJRLJapan
       Acceleration operator+(Acceleration &a);
       Acceleration operator-(Acceleration &a);
       Acceleration operator+(vectorN &a);
+      Acceleration* operator=(vectorN &a);
 
       friend Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
@@ -126,6 +128,8 @@ namespace dynamicsJRLJapan
       Force(vector3d lf, vector3d ln0);
       Force operator+(Force &a);
       Force operator-(Force &a);
+      Force* operator=(vectorN &a);
+      Force operator*(double ad);
 
       vector3d f()
       {return m_f;};
@@ -214,6 +218,9 @@ namespace dynamicsJRLJapan
       Acceleration operator*(Acceleration &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
+	  void transpose( PluckerTransform &a);
+
+	  PluckerTransform* operator=( const PluckerTransform &a);
 
       matrix3d R()
       {return m_R;}

@@ -30,6 +30,9 @@
 
 */
 
+//FXME: verifier les auto affectations.
+//if (&a == this) return this;
+
 #include "Spatial.h"
 
 using namespace dynamicsJRLJapan::Spatial;
@@ -91,6 +94,20 @@ Velocity operator+(vectorN &a, Velocity &b)
   return c;
 }
 
+//----------> Adding the operator = to associate 2 equivalent quantities by L.S
+Velocity* Velocity::operator=(const vectorN &a)
+{
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      for(unsigned int i=0;i<3;i++)
+	m_v0(i) = a(i);
+
+      for(unsigned int i=0;i<3;i++)
+	m_w(i) = a(i+3);
+    }
+  return this;
+}
+
 Acceleration::Acceleration()
 {
   MAL_S3_VECTOR_FILL(m_dv0,0.0);
@@ -125,6 +142,20 @@ Acceleration Acceleration::operator+(vectorN &a)
 	av.m_dw(i) = m_dw(i) + a(i+3);
     }
   return av;
+}
+
+//----------> Adding the operator = to associate 2 equivalent quantities by L.S
+Acceleration* Acceleration::operator=(vectorN &a)
+{
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      for(unsigned int i=0;i<3;i++)
+	m_dv0(i) = a(i);
+
+      for(unsigned int i=0;i<3;i++)
+	m_dw(i) = a(i+3);
+    }
+  return this;
 }
 
 cAcceleration::cAcceleration()
@@ -166,6 +197,20 @@ Force Force::operator+(Force &a)
 Force Force::operator-(Force &a)
 {
   return Force(m_f - a.m_f, m_n0 - a.m_n0);
+}
+
+//----------> Adding the operator = to associate 2 equivalent quantities by L.S
+Force* Force::operator=(vectorN &a)
+{
+  if (MAL_VECTOR_SIZE(a)==6)
+    {
+      for(unsigned int i=0;i<3;i++)
+		m_f(i) = a(i);
+
+      for(unsigned int i=0;i<3;i++)
+		m_n0(i) = a(i+3);
+    }
+  return this;
 }
 
 Motion::Motion()
@@ -226,6 +271,7 @@ Momentum::Momentum()
   MAL_S3_VECTOR_FILL(m_w,0.0);
 }
 
+////----------> correct the formula by L.S(substraction in lf linear expression instead of addition)
 Momentum Inertia::operator*(Velocity &v)
 {
   Momentum c;
@@ -239,13 +285,13 @@ Momentum Inertia::operator*(Velocity &v)
   // Linear acceleration
   NE_tmp = v.v0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, v.w());
-  vector3d lv = NE_tmp2 + NE_tmp;
+  vector3d lv = NE_tmp2 - NE_tmp;
   c.v(lv);
 
   return c;
 }
 
-
+////----------> correct the formula by L.S(substraction in lf linear expression instead of addition)
 Force Inertia::operator*(Acceleration &a)
 {
   Force c;
@@ -259,9 +305,17 @@ Force Inertia::operator*(Acceleration &a)
   // Linear acceleration
   NE_tmp = a.dv0() * m_m;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, m_h, a.dw());
-  vector3d lf = NE_tmp2 + NE_tmp;
+  vector3d lf = NE_tmp2 - NE_tmp;
   c.f(lf);
 
+  return c;
+}
+
+Force Force::operator*(double ad)
+{
+  Force c;
+  c.m_f = m_f * ad;
+  c.m_n0 = m_n0 * ad;
   return c;
 }
 
@@ -332,7 +386,7 @@ Momentum operator*(Inertia & sI, Velocity &v)
   // Linear velocity
   NE_tmp = v.v0() * sI.m();
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2, sI.h(), v.w());
-  vector3d lv = NE_tmp2 + NE_tmp;
+  vector3d lv = NE_tmp2 - NE_tmp;
   c.v(lv);
 
   return c;
@@ -347,6 +401,7 @@ PluckerTransform::PluckerTransform(matrix3d lR,
 				   vector3d lp):
   m_R(lR), m_p(lp) {}
 
+
 PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
 {
   PluckerTransform c;
@@ -355,7 +410,7 @@ PluckerTransform  PluckerTransform::operator*(PluckerTransform &a)
   // position
   matrix3d aRT;
   MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,aRT);
-  c.m_p = m_p + aRT * a.m_p;
+  c.m_p = a.m_p + aRT * m_p;
   return c;
 }
 
@@ -386,33 +441,47 @@ void PluckerTransform::inverse( PluckerTransform &a)
   MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
 }
 
+//----------> correcting the formulas by L.S (inverting angular and linear expressions)
 Velocity PluckerTransform::operator*( Velocity &v)
 {
   Velocity c;
-  // Computes the angular velocity
+  // Computes the linear velocity
   vector3d NE_tmp,NE_tmp2;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.w());
   NE_tmp2=v.v0()-NE_tmp;
-
-  c.w(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
-
-  // Computes the linear velocity
-  c.v0(MAL_S3x3_RET_A_by_B(m_R,v.w()));
+  c.v0(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
+  // Computes the angular velocity
+  c.w(MAL_S3x3_RET_A_by_B(m_R,v.w()));
   return c;
 }
-
+//----------> correcting the formulas by L.S (inverting angular and linear expressions)
 Acceleration PluckerTransform::operator*( Acceleration &v)
 {
   Acceleration c;
-  // Computes the angular velocity
+  // Computes the linear velocity
   vector3d NE_tmp,NE_tmp2;
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,v.dw());
   NE_tmp2=v.dv0()-NE_tmp;
+  c.dv0(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
 
-  c.dw(MAL_S3x3_RET_A_by_B(m_R,NE_tmp2));
-
-  // Computes the linear velocity
-  c.dv0(MAL_S3x3_RET_A_by_B(m_R,v.dw()));
+  // Computes the angularvelocity
+  c.dw(MAL_S3x3_RET_A_by_B(m_R,v.dw()));
   return c;
 }
 
+//----------> Adding the operator = to associate 2 equivalent quantities by L.S
+PluckerTransform* PluckerTransform::operator=( const PluckerTransform &a)
+{
+	if (&a == this) return this;
+	m_R = a.m_R;
+	m_p = a.m_p;
+}
+
+//----------> To develop the Transpose of a Plucker Transform by L.S 
+void PluckerTransform::transpose( PluckerTransform &a)
+{
+  MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,m_R);
+  vector3d NE_tmp;
+  NE_tmp = a.p()* -1.0;
+  MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
+}

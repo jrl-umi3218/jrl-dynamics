@@ -95,24 +95,46 @@ int main(int argc, char *argv[])
   int lindex=0;
   for(int i=0;i<6;i++)
     aCurrentConf[lindex++] = 0.0;
-  aCurrentConf[2] = 0.705;
+  //aCurrentConf[0]= 1;    
+  //aCurrentConf[2] = 0.705;
+  //aCurrentConf[1]= 1;
+  //aCurrentConf[4]= 2;
+  //aCurrentConf[5]= 3;
+  
   for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-  aCurrentConf[lindex++] = 0.0;
- /* aCurrentConf[8]= -0.4538;
-  aCurrentConf[9]= 0.8727;
-  aCurrentConf[10]= -0.4189;
-  aCurrentConf[14]= -0.4538;
-  aCurrentConf[15]= 0.8727;
-  aCurrentConf[16]= -0.4189;
-  aCurrentConf[22]= 0.2618;
-  aCurrentConf[23]= -0.1745;
-  aCurrentConf[25]= -0.5236;
-  aCurrentConf[28]=  0.1745;
-  aCurrentConf[29]= 0.2618;
-  aCurrentConf[30]= 0.1745;
-  aCurrentConf[32]= -0.5236;
-  aCurrentConf[35]= 0.1745; */
-  tcout << "NbOfDofs:" << NbOfDofs << std::endl;
+  //aCurrentConf[lindex++] = 0.0; 
+  aCurrentConf[0]= -3.99736e-16;
+  aCurrentConf[1]=  0.250525;
+  aCurrentConf[2]=   -0.490775;
+  aCurrentConf[3]= 1.02102;    
+  aCurrentConf[4]= -0.530246;
+  aCurrentConf[5]= -0.250525;
+  aCurrentConf[6]= 0.0557106;       
+  aCurrentConf[7]= 0.41194;
+  aCurrentConf[8]= -0.926154;
+  aCurrentConf[9]= 1.85522;   
+  aCurrentConf[10]= -1.20284;
+  aCurrentConf[11]= -0.386769;
+  aCurrentConf[12]= -0.0162314;    
+  aCurrentConf[13]= 0.00348474;
+  aCurrentConf[14]= -0.00121083;
+  aCurrentConf[15]= 0.000730251;
+  aCurrentConf[16]= 0.101374; 
+  aCurrentConf[17]= -0.360891;
+  aCurrentConf[18]= -0.231191;
+  aCurrentConf[19]= -0.946601;
+  aCurrentConf[20]= -7.69141e-05;
+  aCurrentConf[21]= -0.0144256;
+  aCurrentConf[22]= 0.100271;
+  aCurrentConf[23]= 0.099589;
+  aCurrentConf[24]= 0.109393;
+  aCurrentConf[25]= 0.145344;
+  aCurrentConf[26]= -0.952454;
+  aCurrentConf[27]= -0.000751609;
+  aCurrentConf[28]= -0.0157137;
+  aCurrentConf[29]= 0.100424;
+                         
+  tcout << "NbOfDofs:" << NbOfDofs << std::endl; 
   tcout << "Current Configuration :" << aCurrentConf << std::endl;
   aHDR->currentConfiguration(aCurrentConf);
 
@@ -120,10 +142,13 @@ int main(int argc, char *argv[])
   lindex=0;
   for(int i=0;i<NbOfDofs;i++)
     aCurrentVel[lindex++] = 0.0;
-  aCurrentVel[3]=1.0;
-  aCurrentVel[2]=100.0;
-  aCurrentVel[6]=1.0;
-  aCurrentVel[8]=0.0;
+  //  aCurrentVel[0]=1.0;
+  //aCurrentVel[6]=1.0;
+  //aCurrentVel[7]=2.0;
+  //aCurrentVel[8]=3.0;
+  //aCurrentVel[9]=4.0;
+  //aCurrentVel[10]=5.0;
+  //aCurrentVel[11]=6.0;
 
   MAL_S3_VECTOR(ZMPval,double);
 
@@ -132,12 +157,61 @@ int main(int argc, char *argv[])
   //MAL_VECTOR_FILL(aCurrentVel,0.0);
   MAL_VECTOR_DIM(aCurrentAcc,double,NbOfDofs);
   MAL_VECTOR_FILL(aCurrentAcc,0.0);
+  aCurrentAcc[0] = -1.66477;          
+  aCurrentAcc[1] = -0.314195;
+  aCurrentAcc[2] = 3.09524; 
+  aCurrentAcc[3] = 18.0223;
+  aCurrentAcc[4] = 8.74466;
+  aCurrentAcc[5] = -2.52987;
+  aCurrentAcc[6] = 0.4446;
+  aCurrentAcc[7] = 0.0365203;
+  aCurrentAcc[8] = 2.80994;
+  aCurrentAcc[9] = 1.3171;
+  aCurrentAcc[10] = 0.037342;
+  aCurrentAcc[11] = -0.0073251;
+  aCurrentAcc[12] = -0.207606;
+  aCurrentAcc[13] = 0.0514206;
+  aCurrentAcc[14] = -0.0275567;
+  aCurrentAcc[15] = 0.0869552;
+  aCurrentAcc[16] = 0.186102;
+  aCurrentAcc[17] = -0.0592583;
+  aCurrentAcc[18] = -0.195104;
+  aCurrentAcc[19] = 0.048196;
+  aCurrentAcc[20] = -0.00373422;
+  aCurrentAcc[21] = 0.0361445;
+  aCurrentAcc[22] = -0.00642234;
+  aCurrentAcc[23] = 0.136126;
+  aCurrentAcc[24] = -0.0368792;
+  aCurrentAcc[25] = -0.0538581;
+  aCurrentAcc[26] = 0.0329828;
+  aCurrentAcc[27] = -0.00517412;
+  aCurrentAcc[28] = 0.0274472;
+  aCurrentAcc[29] = 0.00428444;
+  aCurrentAcc[30] = 0; 
+  aCurrentAcc[31] = 0; 
+  aCurrentAcc[32] = 0; 
+  aCurrentAcc[33] = 0.135294;
+  aCurrentAcc[34] = 0.0071321;
+  aCurrentAcc[35] = 0.99078;
+
+ // aCurrentAcc[1]=1.0;
+ // aCurrentAcc[9]=1.0;
+ // aCurrentAcc[12]=1.0;
   aHDR->currentAcceleration(aCurrentAcc);
 
   //  aHDR->setComputeZMP(true);
   // This is mandatory for this implementation of computeForwardKinematics
   // to compute the derivative of the momentum.
   {
+	std::string prop,arg;
+	//prop="ComputeAcceleration";  arg="true"; aHDR->setProperty( prop,arg ); // maybe false in sot -- take care to it
+	//prop="ComputeBackwardDynamics"; arg="true";  aHDR->setProperty( prop,arg );
+	//prop="ComputeZMP";  arg="false"; aHDR->setProperty( prop,arg ); // should be true?  --- no, ok like that
+	//prop="ComputeAccelerationCoM";  arg="true"; aHDR->setProperty( prop,arg ); // should be true ? --- YES
+	prop="ComputeCoM";  arg="true"; aHDR->setProperty( prop,arg );
+	prop="ComputeVelocity";  arg="true"; aHDR->setProperty( prop,arg );
+    prop="ComputeMomentum";  arg="false"; aHDR->setProperty( prop,arg );
+
     string inProperty[5]={"TimeStep","ComputeAcceleration",
 			  "ComputeBackwardDynamics", "ComputeZMP","ComputeAccelerationCoM"};
     string inValue[5]={"0.005","true","true","true","true"};
@@ -267,6 +341,7 @@ int main(int argc, char *argv[])
   tcout << "Current transformation of right Ankle."<< endl;
   dm4d(aHDR->rightAnkle()->currentTransformation(),tcout,empty);
   tcout << endl;
+  
 
   for(int i=0;i<4;i++)
     {
@@ -284,7 +359,6 @@ int main(int argc, char *argv[])
 	    << filterprecision(poscom(1)) << " "
 	    << filterprecision(poscom(2)) << endl;
     }
-
 
   // Check the information on actuated joints.
   std::vector<CjrlJoint *> ActuatedJoints = aHDR->getActuatedJoints();

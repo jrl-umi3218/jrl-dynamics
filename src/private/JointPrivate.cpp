@@ -260,19 +260,7 @@ ostream & operator<<(ostream & os, const JointPrivate &r)
 
   os << "Initial position in global frame:" << r.initialPosition() << endl;
 
-  os << "In global frame :" << r.getinGlobalFrame() << endl;
-
-  os << "Position & Velocity Limits: " << endl;
-  for(unsigned int i=0;i<r.numberDof();i++)
-    {
-      os << i << " [ " << r.lowerBound(i) << " , "  << r.upperBound(i) << "]"
-	 << " [ " << r.lowerVelocityBound(i) << " , "  << r.upperVelocityBound(i) << "]"
-	 << endl;
-    }
-  return os;
-}
-
-void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR_TYPE(double) a6DVector)
+void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 {
   // Update the orientation of the joint.
   // Takes the three euler joints

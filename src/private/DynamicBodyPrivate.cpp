@@ -57,7 +57,17 @@ DynamicBodyPrivate::DynamicBodyPrivate():Body()
   v0[0] = v0[1] = v0[2] = 0;
   dv[0] = dv[1] = dv[2] = 0;
   w[0] = w[1] = w[2] = 0;
-  dw[0] = dw[1] = dw[2] = 0;
+  dw[0] = dw[1] = dw[2] = 0;  
+
+  /*L.S new variables for the spatial notations*/
+
+  MAL_VECTOR_RESIZE(sq,0);
+  MAL_VECTOR_RESIZE(sdq,0);
+  MAL_VECTOR_RESIZE(sddq,0);
+
+  MAL_VECTOR_FILL(sq,0);
+  MAL_VECTOR_FILL(sdq,0);
+  MAL_VECTOR_FILL(sddq,0);
 }
 
 DynamicBodyPrivate::~DynamicBodyPrivate()
@@ -91,6 +101,11 @@ DynamicBodyPrivate & DynamicBodyPrivate::operator=(const DynamicBodyPrivate & r)
 
   P = r.P;
   L = r.L;
+
+  /*L.S new position-velocity-acceleration variables for the spatial notations*/
+  sq = r.sq;
+  sdq = r.sdq;
+  sddq = r.sddq;
 
   return *this;
 }

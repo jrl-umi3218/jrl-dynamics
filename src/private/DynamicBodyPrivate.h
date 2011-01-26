@@ -42,6 +42,7 @@
 #include "jrl/mal/matrixabstractlayer.hh"
 #include "abstract-robot-dynamics/body.hh"
 
+#include "Spatial.h"
 
 namespace dynamicsJRLJapan
 {
@@ -105,6 +106,15 @@ namespace dynamicsJRLJapan
       dw, ldw,
       w_a, ldv,
       ldv_c;
+
+	/*L.S*/
+	vectorN sq, sdq, sddq, stau;
+	matrix3d localR;
+	Spatial::Inertia sIa;
+	Spatial::PluckerTransform sX0i,sXpii;
+	Spatial::Velocity sv;
+	Spatial::Acceleration sa;
+	Spatial::Force sf;
 
     /*! Transformation
       (It is redundant, but required to implement CjrlJoint::currentTransformation)
