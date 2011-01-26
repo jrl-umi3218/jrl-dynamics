@@ -193,11 +193,6 @@ void JointPrivate::CreateLimitsArray()
     }
 }
 
-const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::initialPosition() const
-{
-  return m_globalPoseAtConstructionNormalized;
-}
-
 
 JointPrivate & JointPrivate::operator=(const JointPrivate & r)
 {
@@ -259,6 +254,18 @@ ostream & operator<<(ostream & os, const JointPrivate &r)
   os << "Position in parent frame:" << r.pose() << endl;
 
   os << "Initial position in global frame:" << r.initialPosition() << endl;
+
+  os << "In global frame :" << r.getinGlobalFrame() << endl;
+
+  os << "Position & Velocity Limits: " << endl;
+  for(unsigned int i=0;i<r.numberDof();i++)
+    {
+      os << i << " [ " << r.lowerBound(i) << " , "  << r.upperBound(i) << "]"
+	 << " [ " << r.lowerVelocityBound(i) << " , "  << r.upperVelocityBound(i) << "]"
+	 << endl;
+    }
+  return os;
+}
 
 void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
 {

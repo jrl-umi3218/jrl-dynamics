@@ -356,7 +356,7 @@ namespace dynamicsJRLJapan
 	The initial position of the joint is the position
 	of the local frame of the joint.
     */
-    const matrix4d & initialPosition();
+    const matrix4d & initialPosition() const;
     /**
        \brief Get the current transformation of the joint.
 
@@ -707,6 +707,8 @@ namespace dynamicsJRLJapan
 
       /*! \brief Returns the spatial accelaration. */
       const Spatial::Acceleration & sa();
+
+      friend ostream & operator<<(ostream & os, const JointPrivate &a);
 
 	  // Functions added by L.S to be conform to Featherstone's code RNEA using spatial vectors
 

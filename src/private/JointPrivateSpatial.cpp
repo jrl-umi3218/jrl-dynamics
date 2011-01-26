@@ -642,7 +642,7 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
 
 bool JointPrivate::SupdateAcceleration(const vectorN& inRobotConfigVector,
 				      const vectorN& inRobotSpeedVector,
-				      const vectorN& )
+				      const vectorN& inRobotAccelerationVector)
 {
 	std::cout << "in FF Spatial update Accel" << std::endl;
 

@@ -325,7 +325,7 @@ void JointPrivate::SetFatherJoint(JointPrivate *aFather)
     }
 }
 
-const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::initialPosition()
+const MAL_S4x4_MATRIX_TYPE(double) & JointPrivate::initialPosition() const
 {
   return m_globalPoseAtConstructionNormalized;
 }
