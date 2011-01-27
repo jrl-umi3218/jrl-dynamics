@@ -75,20 +75,9 @@ namespace dynamicsJRLJapan
     private:
       vector3d m_v0,m_w;
     };
-<<<<<<< HEAD
 
-
-    inline Velocity operator*(double ad, Velocity &a)
-	{
-		Velocity c;
-		c = a * ad;
-		return c;
-	}
-=======
-    
     Velocity operator*(double ad, Velocity &a);
     Velocity operator+(vectorN &a, Velocity &b);
->>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
 
     class Acceleration
     {
@@ -157,14 +146,8 @@ namespace dynamicsJRLJapan
 
       vector3d m_f, m_n0;
     };
-<<<<<<< HEAD
 
-
-    class DYN_JRL_JAPAN_EXPORT Motion
-=======
-    
     class Motion
->>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
     {
     public:
       Motion();
@@ -254,9 +237,5 @@ namespace dynamicsJRLJapan
 
   }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 81b95b5... Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
 
 #endif /* _SPATIAL_ALGEBRA_H_ */
