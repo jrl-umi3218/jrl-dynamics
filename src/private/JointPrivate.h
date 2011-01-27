@@ -75,6 +75,16 @@ namespace dynamicsJRLJapan
     /*! Nb of dofs for this joint. */
     unsigned int m_nbDofs;
 
+	 /*! \brief Store the constraints on motion 
+	also known as \f$[\phi \f$] or called the modes
+      */
+      matrixNxP m_phi;
+    
+      /*! \brief Store the derivative of the constraints on motion
+	also known as \f$[\phi \f$]
+      */
+      matrixNxP m_dotphi;
+
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
@@ -440,8 +450,10 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the number of degrees of freedom of the joint.
     */
-    virtual unsigned int numberDof() const
-    { return m_nbDofs;};
+    virtual unsigned int numberDof() const = 0
+	 { return m_nbDofs;};
+	//virtual unsigned int numberDof() = 0;
+   
 
     /**
        \brief Returns the rank of the JointPrivate in the state vector.
@@ -695,12 +707,12 @@ namespace dynamicsJRLJapan
       /*! \brief Returns the free modes of the  joint.
 	Currently this will return an empty matrix.
       */
-      const virtual matrixNxP & pcalc();
+      const virtual matrixNxP & pcalc(const vectorN & qi) = 0;
 
       /*! \brief Returns the derivative of the free modes of the  joint.
 	Currently this will return an empty matrix.
       */
-      const virtual matrixNxP & pdcalc();
+      const virtual matrixNxP & pdcalc(const vectorN & qi) = 0;
 
       /*! \brief Returns the spatial velocity. */
       const Spatial::Velocity & sv();
@@ -813,6 +825,9 @@ namespace dynamicsJRLJapan
 
 	  /* The spatial external force due to gravity by L.S*/
 	  Spatial::Force f_ext;
+
+	  /* The spatial plucker transform (XF)^{-1}=X^{T} by L.S*/
+	  Spatial::PluckerTransformTranspose XpiiT;
 
   };
 

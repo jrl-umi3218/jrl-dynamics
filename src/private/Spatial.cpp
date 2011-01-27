@@ -507,13 +507,61 @@ PluckerTransform* PluckerTransform::operator=( const PluckerTransform &a)
 	m_p = a.m_p;
 }
 
-//----------> To develop the Transpose of a Plucker Transform by L.S 
-void PluckerTransform::transpose( PluckerTransform &a)
+//----------> The Transpose of a Plucker Transform by L.S is not the actual Transpose of a pluckertransform X 
+//but it allows the implementation of the remaining operations on pluckertransforms since there is a difference 
+//between motion pluckertransform X and force pluckertransform XF; with XF = X^{-T}
+//Note that the operator* working as f_res = XT*f, takes X as input (XT=X) but the computation inside the operator is done for the case of XF^{-1}.f; XF^{-1}=X^{T} so this is truly expressing a Transpose
+//and that the operator* working as v_res = XT*v, takes X as input (XT=X)  but the computation inside the operator is done for the case of X^{-1}.v; X^{-1}=X.inverse so this is not expressing a Transpose
+
+PluckerTransform::PluckerTransform(PluckerTransformTranspose &X):
+  m_R(X.m_R),m_p(X.m_p) {}
+
+PluckerTransformTranspose::PluckerTransformTranspose()
+{}
+
+PluckerTransformTranspose::PluckerTransformTranspose(matrix3d lR,
+				   vector3d lp):
+  m_R(lR), m_p(lp) {}
+
+PluckerTransformTranspose::PluckerTransformTranspose(PluckerTransform &X):
+  m_R(X.m_R),m_p(X.m_p) {}
+
+Force PluckerTransformTranspose::operator*( Force &f)
 {
-  MAL_S3x3_TRANSPOSE_A_in_At(a.m_R,m_R);
-  vector3d NE_tmp;
-  NE_tmp = a.p()* -1.0;
-  MAL_S3x3_C_eq_A_by_B(m_p,a.m_R,NE_tmp);
+  Force c;
+  // Computes the angular velocity
+  vector3d NE_tmp,NE_tmp1,NE_tmp2,NE_tmp3;
+  matrix3d Rt;
+  Rt = MAL_S3x3_RET_TRANSPOSE(m_R);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp1,Rt,f.f());
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,NE_tmp1);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp3,Rt,f.n0());
+  NE_tmp2=NE_tmp3+NE_tmp;
+  c.n0(NE_tmp2);
+    
+  // Computes the linear velocity
+  MAL_S3x3_C_eq_A_by_B(NE_tmp,Rt,f.f());
+  c.f(NE_tmp);
+  return c;
+}
+
+Velocity PluckerTransformTranspose::operator*( Velocity &v)
+{
+  Velocity c;
+  // Computes the linear velocity
+  vector3d NE_tmp,NE_tmp1,NE_tmp2;
+  matrix3d Rt;
+  Rt = MAL_S3x3_RET_TRANSPOSE(m_R);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp1,Rt,v.w());
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,m_p,NE_tmp1);
+  MAL_S3x3_C_eq_A_by_B(NE_tmp2,Rt,v.v0());
+  NE_tmp2 = NE_tmp2+NE_tmp;
+    
+  c.v0(NE_tmp2);
+    
+  // Computes the angular velocity
+  c.w(MAL_S3x3_RET_A_by_B(Rt,v.w()));
+  return c;
 }
 
   }

@@ -97,3 +97,17 @@ bool JointTranslationPrivate::updateAcceleration(const vectorN&,
 {
   return true;
 }
+
+const matrixNxP & JointTranslationPrivate::pcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_phi,6,1);
+	m_phi(2,0)=1;
+	return m_phi;
+}
+
+const matrixNxP & JointTranslationPrivate::pdcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_dotphi,6,1);
+	MAL_MATRIX_FILL(m_dotphi,0);
+	return m_dotphi;
+}

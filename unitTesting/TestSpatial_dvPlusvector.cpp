@@ -45,6 +45,7 @@ void run_test()
 	JRL_DYNAMICS_ASSERT(dvang(0) == 13);
 	JRL_DYNAMICS_ASSERT(dvang(1) == 17);
 	JRL_DYNAMICS_ASSERT(dvang(2) == 23);
+	std::cout << "Test dvPluslvector has succeeded." << std::endl;
 }
 
 GENERATE_TEST()

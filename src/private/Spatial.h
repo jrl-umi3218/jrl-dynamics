@@ -45,6 +45,7 @@ namespace dynamicsJRLJapan
     class Motion;
     class Force;
     class PluckerTransform;
+	class PluckerTransformTranspose;
 
     class Velocity
     {
@@ -220,9 +221,33 @@ namespace dynamicsJRLJapan
       Acceleration operator*(Acceleration &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
-	  void transpose( PluckerTransform &a);
 
+	  friend class PluckerTransformTranspose;
 	  PluckerTransform* operator=( const PluckerTransform &a);
+	  PluckerTransform(PluckerTransformTranspose &X);
+
+      matrix3d R()
+      {return m_R;}
+      vector3d p()
+      {return m_p;}
+
+    private:
+      matrix3d m_R;
+      vector3d m_p;
+
+    };
+
+	class PluckerTransformTranspose
+    {
+    public:
+      PluckerTransformTranspose();
+      PluckerTransformTranspose(matrix3d lR, vector3d lp) ;
+	  PluckerTransformTranspose(PluckerTransform &X);
+
+	  friend class PluckerTransform;
+
+      Velocity operator*(Velocity &a);
+      Force operator*(Force &f);
 
       matrix3d R()
       {return m_R;}

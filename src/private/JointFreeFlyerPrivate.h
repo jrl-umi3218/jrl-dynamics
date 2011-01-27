@@ -76,8 +76,22 @@ namespace dynamicsJRLJapan
 
 
       /*! \brief Here the number of DOFs is 6. */
-      unsigned int numberDof() const
-      { return 6;};
+	  unsigned int numberDof() const
+	  { return 6; }
+      /*virtual unsigned int numberDof() 
+      {   m_nbDofs = 6;
+		  return m_nbDofs;
+	  }*/
+
+	    /*! \brief Returns the free modes of the  joint. 
+	Currently this will return an empty matrix.
+      */
+      const virtual matrixNxP & pcalc(const vectorN & qi);
+
+      /*! \brief Returns the derivative of the free modes of the  joint. 
+	Currently this will return an empty matrix.
+      */
+      const virtual matrixNxP & pdcalc(const vectorN & qi);
 
 
     private:

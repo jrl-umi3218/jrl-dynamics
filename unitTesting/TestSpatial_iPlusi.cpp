@@ -16,6 +16,7 @@ using namespace dynamicsJRLJapan;
 */
 void run_test()
 {
+	double Error_Tolerated = 0.0000001;
 	matrix3d lI1,lI2;
 	vector3d lh1,lh2;
 	double lm1,lm2;
@@ -76,23 +77,40 @@ void run_test()
 	std::cout << "lh = " << lh << std::endl;
 	std::cout << "lm = " << lm << std::endl;
 
-	JRL_DYNAMICS_ASSERT(lI(0,0) == 0.65);
-	JRL_DYNAMICS_ASSERT(lI(1,0) == -0.15);
-	JRL_DYNAMICS_ASSERT(lI(2,0) == 2);
+	std::cout << "lIerr0 = " << (lI(0,0) - 0.65) << std::endl;
+	std::cout << "lIerr1 = " << (lI(1,0) + 0.15) << std::endl;
+	std::cout << "lIerr2 = " << (lI(2,0) - 2) << std::endl;
+	std::cout << "lIerr3 = " << (lI(0,1) + 1.55) << std::endl;
+	std::cout << "lIerr4 = " << (lI(1,1) - 0.4 ) << std::endl;
+	std::cout << "lIerr5 = " << (lI(2,1) + 0.05) << std::endl;
+	std::cout << "lIerr3 = " << (lI(0,2) - 2) << std::endl;
+	std::cout << "lIerr4 = " << (lI(1,2) + 0.08) << std::endl;
+	std::cout << "lIerr5 = " << (lI(2,2) - 0.9) << std::endl;
 
-	JRL_DYNAMICS_ASSERT(lI(0,1) == -1.55);
-	JRL_DYNAMICS_ASSERT(lI(1,1) == 0.4);
-	JRL_DYNAMICS_ASSERT(lI(2,1) == -0.05);
 
-	JRL_DYNAMICS_ASSERT(lI(0,2) == 2);
-	JRL_DYNAMICS_ASSERT(lI(1,2) == -0.08);
-	JRL_DYNAMICS_ASSERT(lI(2,2) == 0.9);
+	JRL_DYNAMICS_ASSERT(lI(0,0) - 0.65 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(1,0) + 0.15 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(2,0) - 2 <= Error_Tolerated);
 
-	JRL_DYNAMICS_ASSERT(lh(0) == 2.5);
-	JRL_DYNAMICS_ASSERT(lh(1) == 4.5);
-	JRL_DYNAMICS_ASSERT(lh(2) == 7.5);
+	JRL_DYNAMICS_ASSERT(lI(0,1) + 1.55 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(1,1) - 0.4 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(2,1) + 0.05 <= Error_Tolerated);
 
-	JRL_DYNAMICS_ASSERT(lm == 0.3);
+	JRL_DYNAMICS_ASSERT(lI(0,2) - 2 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(1,2) + 0.08 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lI(2,2) - 0.9 <= Error_Tolerated);
+
+	std::cout << "lherr0 = " << (lh(0) - 2.5) << std::endl;
+	std::cout << "lherr1 = " << (lh(1) - 4.5) << std::endl;
+	std::cout << "lherr2 = " << (lh(2) - 7.5) << std::endl;
+
+	JRL_DYNAMICS_ASSERT(lh(0) - 2.5 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lh(1) - 4.5 <= Error_Tolerated);
+	JRL_DYNAMICS_ASSERT(lh(2) - 7.5 <= Error_Tolerated);
+
+	std::cout << "lmerr = " << (lm - 0.3) << std::endl;
+
+	JRL_DYNAMICS_ASSERT(lm - 0.3 <= Error_Tolerated);
 	std::cout << "Test iPlusi has succeeded." << std::endl;
 }
 

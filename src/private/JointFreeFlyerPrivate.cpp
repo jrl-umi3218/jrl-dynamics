@@ -111,3 +111,23 @@ bool JointFreeflyerPrivate::updateAcceleration(const vectorN & ,
   return true;
 }
 
+const matrixNxP & JointFreeflyerPrivate::pcalc(const vectorN & qi)
+{
+	MAL_MATRIX_RESIZE(m_phi,6,6);
+	for(unsigned int i=0;i<6;i++)
+		m_phi(i,i)=1;
+   return m_phi;
+
+}
+
+const matrixNxP & JointFreeflyerPrivate::pdcalc(const vectorN & qi)
+{
+	for(unsigned int i=0;i<6;i++)
+	{	
+		MAL_MATRIX_RESIZE(m_dotphi,6,6);
+		MAL_MATRIX_FILL(m_dotphi,0);
+	}
+  return m_dotphi;
+
+}
+ 
