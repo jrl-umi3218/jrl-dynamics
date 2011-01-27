@@ -75,16 +75,6 @@ namespace dynamicsJRLJapan
     /*! Nb of dofs for this joint. */
     unsigned int m_nbDofs;
 
-	 /*! \brief Store the constraints on motion 
-	also known as \f$[\phi \f$] or called the modes
-      */
-      matrixNxP m_phi;
-    
-      /*! \brief Store the derivative of the constraints on motion
-	also known as \f$[\phi \f$]
-      */
-      matrixNxP m_dotphi;
-
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
@@ -445,7 +435,7 @@ namespace dynamicsJRLJapan
        The acceleratoin is determined by the configuration of the robot
        and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
-    CjrlRigidAcceleration jointAcceleration();
+    CjrlRigidAcceleration jointAcceleration() const;
 	
 	/*added function for possible avoidance of the error: pure virtual function call*/
 	//void ClearALL();
@@ -801,6 +791,7 @@ namespace dynamicsJRLJapan
       /*! \brief Store the spatial inertia of the related body. */
       Spatial::Inertia m_sI;
 
+  protected:
       /*! \brief Store the constraints on motion
 	also known as \f$[\phi \f$] or called the modes
       */
@@ -811,6 +802,7 @@ namespace dynamicsJRLJapan
       */
       matrixNxP m_dotphi;
 
+  private:
       /*! \brief Store Zeta the momentum */
       vectorN m_Zeta;
 

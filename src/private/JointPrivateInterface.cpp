@@ -182,6 +182,7 @@ void JointPrivate::resizeJacobianJointWrtConfig(int lNbDofs)
 
 }
 
+
 void JointPrivate::computeJacobianJointWrtConfig()
 {
   DynamicBodyPrivate * FinalBody = (DynamicBodyPrivate *)m_Body;

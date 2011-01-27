@@ -786,3 +786,7 @@ const matrixNxP & DynMultiBodyPrivate::currentForces() const
   return m_Forces;
 }
 
+const vectorN & DynMultiBodyPrivate::currentJointTorques() const
+{
+  return m_JointTorques;
+}

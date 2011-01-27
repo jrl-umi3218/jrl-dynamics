@@ -80,6 +80,9 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
     robotRoot2EndJoint = EndJoint->jointsFromRootToThis();
 
+	//std::cout << "length of route of the start joint = " << robotRoot2StartJoint.size() << std::endl;
+	//std::cout << "length of route of the end joint = " << robotRoot2EndJoint.size() << std::endl;
+
     unsigned int offset = 1;
     unsigned int minChain = ( robotRoot2StartJoint.size() <robotRoot2EndJoint.size() )
             ?robotRoot2StartJoint.size() :robotRoot2EndJoint.size();
@@ -105,6 +108,8 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
             rank = aJoint->rankInConfiguration()-6+outOffset;
 
         tempDP = tempP - aBody->p;
+
+		//std::cout << "rank of endjoint_route = " << rank << std::endl;
 
         switch ( aJoint->type() )
         {
@@ -152,6 +157,9 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
         else
             rank = aJoint->rankInConfiguration()-6+outOffset;
 
+		
+		//std::cout << "rank of startjoint_route = " << rank << std::endl;
+
         tempDP = tempP - aBody->p;
 
         switch ( aJoint->type() )
@@ -193,6 +201,8 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     if ( includeFreeFlyer )
     {
         tempDP = tempP - StartJoint->linkedDBody()->p;
+
+		//std::cout << "x_endjoint - x_startjoint = " << tempDP << std::endl;
 
         unsigned int ii,jj;
         for (ii=0;ii<6;ii++)
