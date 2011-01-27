@@ -1,23 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" href="$a00024.html" title="jrl/dynamics/dll.hh" alt="" coords="1085,161,1221,188"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00018.html" title="jrl/mal/matrixabstractlayer.hh" alt="" coords="1245,161,1453,188"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00017.html" title="abstract&#45;robot&#45;dynamics/humanoid&#45;dynamic&#45;robot.hh" alt="" coords="2181,238,2547,265"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00022.html" title="abstract&#45;robot&#45;dynamics/robot&#45;dynamics&#45;object&#45;constructor.hh" alt="" coords="2141,161,2565,188"/>
-<area shape="rect" href="$a00028.html" title="geometricdata.hh" alt="" coords="1700,84,1836,110"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00021.html" title="jrl/mal/matrixabstractlayerdoc.hh" alt="" coords="616,238,848,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00024.html" title="jrl/mal/matrixabstractlayersmall.hh" alt="" coords="872,238,1115,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00019.html" title="jrl/mal/matrixabstractlayerboost.hh" alt="" coords="688,316,933,342"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00026.html" title="jrl/mal/matrixabstractlayervector3jrlmath.hh" alt="" coords="1189,238,1491,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00027.html" title="jrl/mal/matrixabstractlayervector4jrlmath.hh" alt="" coords="1515,238,1816,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00022.html" title="jrl/mal/matrixabstractlayermatrix3x3jrlmath.hh" alt="" coords="1840,238,2157,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00023.html" title="jrl/mal/matrixabstractlayermatrix4x4jrlmath.hh" alt="" coords="5,238,323,265"/>
-<area shape="rect" href="jrl&#45;mal.doxytag$a00020.html" title="jrl/mal/matrixabstractlayercheck.hh" alt="" coords="347,238,592,265"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00015.html" title="abstract&#45;robot&#45;dynamics/fwd.hh" alt="" coords="2159,548,2383,574"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00013.html" title="abstract&#45;robot&#45;dynamics/dynamic&#45;robot.hh" alt="" coords="2216,316,2512,342"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00016.html" title="abstract&#45;robot&#45;dynamics/hand.hh" alt="" coords="1707,316,1941,342"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00014.html" title="abstract&#45;robot&#45;dynamics/foot.hh" alt="" coords="1965,316,2192,342"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00019.html" title="abstract&#45;robot&#45;dynamics/joint.hh" alt="" coords="1836,393,2065,420"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00020.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;acceleration.hh" alt="" coords="1795,470,2107,497"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00021.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;velocity.hh" alt="" coords="2131,470,2411,497"/>
-<area shape="rect" href="abstract&#45;robot&#45;dynamics.doxytag$a00012.html" title="abstract&#45;robot&#45;dynamics/body.hh" alt="" coords="1488,470,1720,497"/>
+<area shape="rect" href="$a00024.html" title="jrl/dynamics/dll.hh" alt="" coords="5,84,141,111"/>
+<area shape="rect" href="jrl-mal.doxytag$a00018.html" title="jrl/mal/matrixabstractlayer.hh" alt="" coords="251,84,459,111"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00017.html" title="abstract&#45;robot&#45;dynamics/humanoid&#45;dynamic&#45;robot.hh" alt="" coords="1225,161,1591,188"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00022.html" title="abstract&#45;robot&#45;dynamics/robot&#45;dynamics&#45;object&#45;constructor.hh" alt="" coords="507,84,931,111"/>
+<area shape="rect" href="jrl-mal.doxytag$a00019.html" title="jrl/mal/matrixabstractlayerboost.hh" alt="" coords="131,161,376,188"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00015.html" title="abstract&#45;robot&#45;dynamics/fwd.hh" alt="" coords="943,393,1167,420"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00019.html" title="abstract&#45;robot&#45;dynamics/joint.hh" alt="" coords="992,239,1221,265"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00020.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;acceleration.hh" alt="" coords="1321,316,1633,343"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00021.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;velocity.hh" alt="" coords="687,316,967,343"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00012.html" title="abstract&#45;robot&#45;dynamics/body.hh" alt="" coords="991,316,1223,343"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00013.html" title="abstract&#45;robot&#45;dynamics/dynamic&#45;robot.hh" alt="" coords="451,239,747,265"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00016.html" title="abstract&#45;robot&#45;dynamics/hand.hh" alt="" coords="967,161,1201,188"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00014.html" title="abstract&#45;robot&#45;dynamics/foot.hh" alt="" coords="695,161,921,188"/>
 </map>
