@@ -63,15 +63,14 @@ namespace dynamicsJRLJapan
       friend Velocity operator*(double ad, Velocity &a);
       friend Velocity operator+(vectorN & ,Velocity &);
 
-      vector3d v0()
-      { return m_v0;}
-      void v0(const vector3d &lv0)
-      { m_v0 = lv0;}
+      // TODO: this non-const functions should not be necessary.
+      inline vector3d & v0()      { return m_v0;}
+      inline vector3d & w()      { return m_w;};
+      inline const vector3d & w() const     { return m_w;};
+      inline const vector3d & v0() const      { return m_v0;}
 
-      vector3d w()
-      { return m_w;};
-      void w(const vector3d& lw)
-      { m_w = lw;};
+      void v0(const vector3d &lv0)      { m_v0 = lv0;}
+      void w(const vector3d& lw)      { m_w = lw;};
 
     private:
       vector3d m_v0,m_w;
@@ -132,14 +131,14 @@ namespace dynamicsJRLJapan
       Force operator+(Force &a);
       Force operator-(Force &a);
       Force* operator=(vectorN &a);
-      Force operator*(double ad);
 
-      vector3d f()
-      {return m_f;};
-      vector3d n0()
-      {return m_n0;};
-      void f(vector3d &lf)
-      {m_f = lf;}
+	  Force operator*(double ad);
+	  // TODO: these two non-const functions should not be necessary.
+	  vector3d& f()      {return m_f;};
+      vector3d& n0()      {return m_n0;};
+      const vector3d& f() const      {return m_f;};
+      const vector3d& n0() const     {return m_n0;};
+      void f(vector3d &lf)      {m_f = lf;}
       void n0(vector3d &ln0)
       {m_n0 = ln0;}
 
