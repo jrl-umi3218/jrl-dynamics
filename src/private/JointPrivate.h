@@ -445,14 +445,18 @@ namespace dynamicsJRLJapan
        The acceleratoin is determined by the configuration of the robot
        and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
-    CjrlRigidAcceleration jointAcceleration() const ;
-
+    CjrlRigidAcceleration jointAcceleration();
+	
+	/*added function for possible avoidance of the error: pure virtual function call*/
+	//void ClearALL();
+    
     /**
        \brief Get the number of degrees of freedom of the joint.
     */
-    virtual unsigned int numberDof() const = 0
-	 { return m_nbDofs;};
-	//virtual unsigned int numberDof() = 0;
+    /*virtual unsigned int numberDof() const = 0
+	 { return m_nbDofs;};*/
+	virtual unsigned int numberDof() const 
+	 { return m_nbDofs;}
    
 
     /**
