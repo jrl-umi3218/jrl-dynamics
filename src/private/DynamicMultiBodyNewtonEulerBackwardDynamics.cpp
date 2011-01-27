@@ -48,14 +48,16 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 {
   JointPrivate * currentJoint = CurrentBody.getJointPrivate();
 
-  //currentJoint->updateTorqueAndForce();
   currentJoint->SupdateTorqueAndForce();
-  // Update the vector related to the computed quantities.
+  //currentJoint->updateTorqueAndForce();
+
+  /* Update the vector related to the computed quantities. */
   for(unsigned int i=0;i<m_StateVectorToJoint.size();i++)
     {
       unsigned int StateRankComputed=false;
 
       JointPrivate * aJoint = (JointPrivate *)m_JointVector[m_StateVectorToJoint[i]];
+      /* TODO: These two "if" should be "assert", isn't it? */
       if (aJoint!=0)
         {
 	  DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) aJoint->linkedBody();
@@ -64,7 +66,7 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 	      StateRankComputed = true;
 	      for(unsigned int k=0;k<3;k++)
                 {
-		  m_Forces(i,k)=aDB->m_Force[k];
+		  m_Forces(i,k)  = aDB->m_Force[k];
 		  m_Torques(i,k) = aDB->m_Torque[k];
                 }
             }
@@ -82,28 +84,4 @@ void DynMultiBodyPrivate::BackwardDynamics(DynamicBodyPrivate & CurrentBody )
 
   MAL_VECTOR_RESIZE(m_JointTorques,m_StateVectorToJoint.size());
   MAL_VECTOR_FILL(m_JointTorques,0);
-  
-  for (unsigned int j=0;j<m_JointVector.size();j++)
-  {
-	   unsigned int StateRankComputed=false;
-	   unsigned int index = m_JointVector[j]->rankInConfiguration();
-	   JointPrivate * aJoint = (JointPrivate *)m_JointVector[j]; 
-	  if (aJoint!=0)
-	  {
-		DynamicBodyPrivate *aDB = (DynamicBodyPrivate *) aJoint->linkedBody();
-		if (aDB!=0)
-		{
-		StateRankComputed = true;
-		for (unsigned int n=0;n<aJoint->numberDof();n++)
-		    m_JointTorques[index+n] = aDB->stau[n];
-			
-		}
-	  }
-	  if (!StateRankComputed)
-	  {
-		  for (unsigned int n=0;n<aJoint->numberDof();n++)
-		  m_JointTorques[index+n]=0;
-	  }
-  }
-
 }
