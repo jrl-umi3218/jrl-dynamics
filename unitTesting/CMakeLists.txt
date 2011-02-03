@@ -34,7 +34,7 @@ MACRO(JRL_DYNAMICS_ADD_TEST TEST PRIVATE_SOURCES)
 		LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
 	)
 	ADD_TEST(${TEST} ${TEST})
-	
+
 	# Make sure jrl-dynamics shared library is compiled before the test.
 	ADD_DEPENDENCIES(${TEST} dynJRL)
 	#MESSAGE(FATAL_ERROR ${${PROJECT_NAME}_test_CXXFLAGS})
@@ -82,16 +82,6 @@ PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobotDebugLayale jrl-mal)
 PKG_CONFIG_USE_DEPENDENCY(TestHumanoidDynamicRobotDebugLayale abstract-robot-dynamics)
 
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale ${PROJECT_NAME})
-
-
-#ADD_EXECUTABLE(	TestSot CommonTools.cpp TestSot.cpp)
-#ADD_DEPENDENCIES (TestSot ${PROJECT_NAME})
-#SET_TARGET_PROPERTIES(TestSot
-#  PROPERTIES
-#  COMPILE_FLAGS ${${PROJECT_NAME}_test_CXXFLAGS}
-#  LINK_FLAGS ${${PROJECT_NAME}_test_LDFLAGS}
-#  DEPENDS ${${PROJECT_NAME}_BINARY_DIR}/unitTesting/sample.wrl
-#  )
 
 
 ADD_EXECUTABLE(	TestAbstractInterface
@@ -148,7 +138,7 @@ ADD_TEST(TestTwoLinksModel TestTwoLinksModel)
 SET(TESTS_SPATIAL_SOURCES ../src/private/Spatial.cpp)
 
 #JRL_DYNAMICS_ADD_TEST(TestSpatial_doubleByv ${TESTS_SPATIAL_SOURCES})
-#RL_DYNAMICS_ADD_TEST(TestSpatial_vBydouble ${TESTS_SPATIAL_SOURCES})
+#JRL_DYNAMICS_ADD_TEST(TestSpatial_vBydouble ${TESTS_SPATIAL_SOURCES})
 #JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusv ${TESTS_SPATIAL_SOURCES})
 #JRL_DYNAMICS_ADD_TEST(TestSpatial_vPlusvector ${TESTS_SPATIAL_SOURCES})
 #JRL_DYNAMICS_ADD_TEST(TestSpatial_vectorPlusv ${TESTS_SPATIAL_SOURCES})
