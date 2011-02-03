@@ -56,7 +56,7 @@ namespace dynamicsJRLJapan
       Velocity operator+(vectorN &a);
       Velocity operator-(Velocity &a);
       Velocity operator*(double ad);
-	  Velocity* operator=(const vectorN &a);
+      Velocity& operator=(const vectorN &a);
       vectorN  operator^(vectorN &a);
       Force operator^(Momentum &a);
 
@@ -87,7 +87,7 @@ namespace dynamicsJRLJapan
       Acceleration operator+(Acceleration &a);
       Acceleration operator-(Acceleration &a);
       Acceleration operator+(vectorN &a);
-      Acceleration* operator=(vectorN &a);
+      Acceleration& operator=(vectorN &a);
 
       friend Acceleration operator+(vectorN & ,Acceleration &);
       vector3d dv0()
@@ -130,11 +130,11 @@ namespace dynamicsJRLJapan
       Force(vector3d lf, vector3d ln0);
       Force operator+(Force &a);
       Force operator-(Force &a);
-      Force* operator=(vectorN &a);
+      Force& operator=(vectorN &a);
 
-	  Force operator*(double ad);
-	  // TODO: these two non-const functions should not be necessary.
-	  vector3d& f()      {return m_f;};
+      Force operator*(double ad);
+      // TODO: these two non-const functions should not be necessary.
+      vector3d& f()      {return m_f;};
       vector3d& n0()      {return m_n0;};
       const vector3d& f() const      {return m_f;};
       const vector3d& n0() const     {return m_n0;};
@@ -221,9 +221,9 @@ namespace dynamicsJRLJapan
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
 
-	  friend class PluckerTransformTranspose;
-	  PluckerTransform* operator=( const PluckerTransform &a);
-	  PluckerTransform(PluckerTransformTranspose &X);
+      friend class PluckerTransformTranspose;
+      PluckerTransform& operator=( const PluckerTransform &a);
+      PluckerTransform(PluckerTransformTranspose &X);
 
       matrix3d R()
       {return m_R;}

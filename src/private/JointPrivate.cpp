@@ -206,7 +206,8 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
   m_FromRootToThis.push_back(this);
   m_inGlobalFrame = r.getinGlobalFrame();
 
-  const  MAL_S4x4_MATRIX_TYPE(double) & aGlobalPoseAtConstructionNormalized = r.initialPosition();
+  const  MAL_S4x4_MATRIX_TYPE(double) & aGlobalPoseAtConstructionNormalized
+    = r.initialPosition();
   m_globalPoseAtConstruction = aGlobalPoseAtConstructionNormalized;
   m_globalPoseAtConstructionNormalized  = aGlobalPoseAtConstructionNormalized ;
   m_Body = 0;
@@ -267,7 +268,7 @@ ostream & operator<<(ostream & os, const JointPrivate &r)
   return os;
 }
 
-void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
+void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR_TYPE(double) a6DVector)
 {
   // Update the orientation of the joint.
   // Takes the three euler joints
@@ -326,15 +327,17 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector)
   body->m_transformation = m_poseInParentFrame;
 }
 
-void JointPrivate::UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR_TYPE(double) & aLinearVelocity,
-					    MAL_S3_VECTOR_TYPE(double) & anAngularVelocity)
+void JointPrivate::
+UpdateVelocityFrom2x3DOFsVector(MAL_S3_VECTOR_TYPE(double) & aLinearVelocity,
+				MAL_S3_VECTOR_TYPE(double) & anAngularVelocity)
 {
   m_RigidVelocity.linearVelocity(aLinearVelocity);
   m_RigidVelocity.rotationVelocity(anAngularVelocity);
 }
 
 
-void JointPrivate::RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
+void JointPrivate::
+RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation)
 {
   vector3d wn3d;
   double norm_w = MAL_S3_VECTOR_NORM(inAxis);
@@ -405,7 +408,7 @@ void JointPrivate::updateAccelerationCoM()
   vector3d lc = currentBody->localCenterOfMass();
   vector3d NE_tmp2,NE_tmp3;
 
-  // *******************  Acceleration for the center of mass of body  i ************************
+  /* *******************  Acceleration for the center of mass of body  i ******************* */
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
 
@@ -464,7 +467,8 @@ void JointPrivate::updateTorqueAndForce()
   /* Force - Constant part: 2nd and 3rd term of eq.(7.146)
      m_i a_{c,i} - m_i g_i
    */
-  ODEBUG(" Body name: " << CurrentBody->getName() << " : " << lg << " mass: " << CurrentBody->mass());
+  ODEBUG(" Body name: " << CurrentBody->getName() << " : "
+	 << lg << " mass: " << CurrentBody->mass());
   tmp = CurrentBody->ldv_c - lg;
   ODEBUG(" Acceleration: " << CurrentBody->ldv_c);
   CurrentBody->m_Force =  tmp * CurrentBody->mass();
@@ -480,12 +484,10 @@ void JointPrivate::updateTorqueAndForce()
   MAL_S3_VECTOR_CROSS_PRODUCT(fifthterm,CurrentBody->lw,tmp);
 
   /* Torque - 4th term and 5th term
-  Torque_i = I_i * alpha_i +  w_i x I_i w_i) */
+     Torque_i = I_i * alpha_i +  w_i x I_i w_i) */
   MAL_S3x3_C_eq_A_by_B(tmp,lI,CurrentBody->ldw);
   CurrentBody->m_Torque =  tmp + fifthterm ;
 
-  //CurrentBody->m_Torque = CurrentBody->ldw + fifthterm;
-  //std::cout << "alpha_i: " << CurrentBody->ldw << std::endl;
   /* Compute with the force
    * eq. (7.146) Spong RMC p. 277
    * fi = R^i_{i+1} * f_{i+1} + m_i * a_{c,i} - m_i * g_i

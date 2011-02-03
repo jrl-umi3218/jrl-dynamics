@@ -3,6 +3,8 @@
  *
  * Florent Lamiraux
  * Olivier Stasse
+ * Layale Saab
+ * Nicolas Mansard
  *
  *
  * JRL/LAAS, CNRS/AIST
@@ -27,7 +29,7 @@
  */
 
 /* Class to implement a Joint object.
-*/
+ */
 
 #ifndef JOINTPRIVATE_H
 #define JOINTPRIVATE_H
@@ -52,19 +54,21 @@ namespace dynamicsJRLJapan
   {
   protected:
     /**
-	\brief Whether pose was specified in global frame or not
-	If true, the position of the joint has been defined in the global frame.
-	By convention, the axis of the joint is X-axis in joint frame.
+       \brief Whether pose was specified in global frame or not
+       If true, the position of the joint has been defined in the global frame.
+       By convention, the axis of the joint is X-axis in joint frame.
     */
     bool m_inGlobalFrame;
 
     /**
-       \brief Position of the joint in the global frame at construction (joint value is equal to 0).
+       \brief Position of the joint in the global frame at construction (joint
+       value is equal to 0).
     */
     matrix4d m_globalPoseAtConstruction;
 
     /**
-       \brief Normalized position of the joint in the global frame at construction (joint value is equal to 0).
+       \brief Normalized position of the joint in the global frame at
+       construction (joint value is equal to 0).
     */
     matrix4d m_globalPoseAtConstructionNormalized;
 
@@ -78,7 +82,8 @@ namespace dynamicsJRLJapan
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
 
-    /*! \brief True if the Joint is initially in global frame, false it is a local reference frame*/
+    /*! \brief True if the Joint is initially in global frame, false it is a
+        local reference frame*/
     bool getinGlobalFrame() const;
 
   private:
@@ -100,9 +105,10 @@ namespace dynamicsJRLJapan
     /*! Quantity of the rotation . */
     double m_quantity;
 
-    /*!
-      \brief 4x4 matrix for pose
-      This homogeneous matrix represents the position of this joint frame in the frame of the parent joint.
+    /*!  \brief 4x4 matrix for pose
+
+      This homogeneous matrix represents the position of this joint frame in
+      the frame of the parent joint.
     */
     matrix4d m_poseInParentFrame;
 
@@ -436,18 +442,14 @@ namespace dynamicsJRLJapan
        and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
     CjrlRigidAcceleration jointAcceleration() const;
-	
-	/*added function for possible avoidance of the error: pure virtual function call*/
-	//void ClearALL();
-    
+
     /**
        \brief Get the number of degrees of freedom of the joint.
-	   The number of Dof is updated in the constructor of each derivative type of private joint accordingly.
+       The number of Dof is updated in the constructor of each derivative type of private joint accordingly.
     */
 
-	virtual unsigned int numberDof() const 
-	 { return m_nbDofs;}
-   
+    virtual unsigned int numberDof() const
+    { return m_nbDofs;}
 
     /**
        \brief Returns the rank of the JointPrivate in the state vector.
@@ -582,7 +584,8 @@ namespace dynamicsJRLJapan
     /**
        \brief Get the Jacobian matrix of the joint position wrt the robot configuration.
 
-       The corresponding computation can be done by the robot for each of its joints or by the joint.
+       The corresponding computation can be done by the robot for each of its
+       joints or by the joint.
 
        \return a matrix \f$J \in {\bf R}^{6\times n_{dof}}\f$ defined by
        \f[
@@ -591,9 +594,11 @@ namespace dynamicsJRLJapan
        {\bf \omega_1} & {\bf \omega_2} & \cdots & {\bf \omega_{n_{dof}}}
        \end{array}\right)
        \f]
-       where \f${\bf v_i}\f$ and \f${\bf \omega_i}\f$ are respectively the linear and angular velocities of the joint
-       implied by the variation of degree of freedom \f$q_i\f$. The velocity of the joint returned by
-       CjrlJoint::jointVelocity can thus be obtained through the following formula:
+       where \f${\bf v_i}\f$ and \f${\bf \omega_i}\f$ are respectively the
+       linear and angular velocities of the joint implied by the variation of
+       degree of freedom \f$q_i\f$. The velocity of the joint returned by
+       CjrlJoint::jointVelocity can thus be obtained through the following
+       formula:
        \f[
        \left(\begin{array}{l} {\bf v} \\ {\bf \omega}\end{array}\right) = J {\bf \dot{q}}
        \f]
@@ -610,18 +615,20 @@ namespace dynamicsJRLJapan
        The output matrix outjacobian is automatically resized if necessary
 
     */
-    void getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outjacobian) const;
+    void getJacobianPointWrtConfig(const vector3d& inPointJointFrame,
+				   matrixNxP& outjacobian) const;
 
     /**
-       \brief Get the jacobian of the point specified in world frame by inPointWorldFrame.
-       The output matrix outjacobian must have appropriate size.
+       \brief Get the jacobian of the point specified in world frame by
+       inPointWorldFrame.  The output matrix outjacobian must have appropriate
+       size.
 
     */
     void getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFrame,
 					matrixNxP& outjacobian) const;
 
     /**
-	\brief resize the Jacobian with the number of DOFs.
+       \brief resize the Jacobian with the number of DOFs.
     */
     void resizeJacobianJointWrtConfig(int lNbDofs);
 
@@ -630,7 +637,8 @@ namespace dynamicsJRLJapan
     */
 
     /**
-       \brief compute the rotation matrix correponding to axis of rotation inAxis and angle inAngle.
+       \brief compute the rotation matrix correponding to axis of rotation
+       inAxis and angle inAngle.
     */
     void RodriguesRotation(vector3d& inAxis, double inAngle, matrix3d& outRotation);
 
@@ -668,8 +676,11 @@ namespace dynamicsJRLJapan
     { m_StateVectorPosition = aStateVectorPosition;}
 
     /**
-       \brief Compute the pose of the joint in the global frame or in local frame of parent
-       The relation between poses in the global frame and in local frame of parent joint is the following:
+       \brief Compute the pose of the joint in the global frame or in local
+       frame of parent.
+
+       The relation between poses in the global frame and in local frame of
+       parent joint is the following:
        \f[
        R^{global}_{joint} = R^{global}_{parent} R^{parent}_{joint}
        \f]
@@ -678,142 +689,162 @@ namespace dynamicsJRLJapan
        \li \f$R^{global}_{parent}\f$ is the pose of the parent joint in global frame,
        \li \f$R^{parent}_{joint}\f$ is the pose of the joint in parent joint local frame.
 
-       If the pose of the joint has been defined in global frame at construction, the local pose in parent frame is computed.
-       If the pose of the joint has been defined in local frame of parent joint at construction, the global pose is computed.
+       If the pose of the joint has been defined in global frame at
+       construction, the local pose in parent frame is computed.  If the pose
+       of the joint has been defined in local frame of parent joint at
+       construction, the global pose is computed.
     */
     void computeLocalAndGlobalPose();
 
 
 
-      /*! \name Methods related to Spatial notations.
-	@{ */
-      /*! \brief Returns the transformation of the joint
-	following a Plucker transformation according to table 1.5 of the HoR */
-      virtual Spatial::PluckerTransform xjcalc(const vectorN & qi);
-      /*! \brief Returns the position of the joint in the link reference frame
-	following a Plucker transformation according to table 1.5 of the HoR */
-      const Spatial::PluckerTransform & XL();
+    /*! \name Methods related to Spatial notations.
+      @{ */
 
-      /*! \brief Returns the position of the joint in the world reference frame
-	following a Plucker transformation according to table 1.5 of the HoR */
-      const Spatial::PluckerTransform & X0();
+    /*! \brief Returns the transformation of the joint
+      following a Plucker transformation according to table 1.5 of the HoR */
+    virtual Spatial::PluckerTransform xjcalc(const vectorN & qi);
 
-      /*! \brief Returns the free modes of the  joint.
-	Currently this will return an empty matrix.
-	This is a pure virtual function that will be implemented for each type of joint in each corresponding derivative code.
-      */
-      const virtual matrixNxP & pcalc(const vectorN & qi) = 0;
+    /*! \brief Returns the position of the joint in the link reference frame
+      following a Plucker transformation according to table 1.5 of the HoR */
+    const Spatial::PluckerTransform & XL();
 
-      /*! \brief Returns the derivative of the free modes of the  joint.
-	Currently this will return an empty matrix.
-	This is a pure virtual function that will be implemented for each type of joint in each corresponding derivative code
-	But this function is not computing the derivative only initialyzing it.
-      */
-      const virtual matrixNxP & pdcalc(const vectorN & qi) = 0;
+    /*! \brief Returns the position of the joint in the world reference frame
+      following a Plucker transformation according to table 1.5 of the HoR */
+    const Spatial::PluckerTransform & X0();
 
-      /*! \brief Returns the spatial velocity. */
-      const Spatial::Velocity & sv();
+    /*! \brief Returns the free modes of the joint.  Currently this will return
+      an empty matrix.  This is a pure virtual function that will be
+      implemented for each type of joint in each corresponding derivative code.
+    */
+    const virtual matrixNxP & pcalc(const vectorN & qi) = 0;
 
-      /*! \brief Returns the spatial accelaration. */
-      const Spatial::Acceleration & sa();
+    /*! \brief Returns the derivative of the free modes of the joint.
+      Currently this will return an empty matrix.  This is a pure virtual
+      function that will be implemented for each type of joint in each
+      corresponding derivative code But this function is not computing the
+      derivative only initialyzing it.
+    */
+    const virtual matrixNxP & pdcalc(const vectorN & qi) = 0;
 
-      friend ostream & operator<<(ostream & os, const JointPrivate &a);
+    /*! \brief Returns the spatial velocity. */
+    const Spatial::Velocity & sv();
 
-	  // Functions added by L.S to be conform to Featherstone's code RNEA using spatial vectors
+    /*! \brief Returns the spatial accelaration. */
+    const Spatial::Acceleration & sa();
 
-	  /*Rotation matrix for a free body (precisely here the FF) knowing its euler angles by L.S */
-	  void eulerXYZ(MAL_VECTOR(,double) & qi_ang, matrix3d & localRot);
+    friend ostream & operator<<(ostream & os, const JointPrivate &a);
 
-	  /*Rotation matrix for a revolute joint knowing the angle of rotation of its signle DOF by L.S */
-	  void rotx(const vectorN & qi_ang, matrix3d & localRot);
+    /* --- L-SAAB ---
+     * Functions added by L.S to be conform to Featherstone's
+     * code RNEA using spatial vectors.
+     */
 
-	  /*the 3d skew matrix by L.S */
-	  const MAL_S3x3_MATRIX(,double) & skew(MAL_S3_VECTOR(,double) & qi_pos);
+    /* Rotation matrix for a free body (precisely here the FF) knowing its
+     * euler angles by L.S */
+    void eulerXYZ(MAL_VECTOR_TYPE(double) & qi_ang, matrix3d & localRot);
 
-	  /*External force vector including only gravity terms by L.S */
-	  MAL_VECTOR(,double) & ComputeExtForce();
+    /* Rotation matrix for a revolute joint knowing the angle of rotation of
+     * its signle DOF by L.S */
+    void rotx(const vectorN & qi_ang, matrix3d & localRot);
 
-	  /*Compute the parent joint's spatial transformation matrix Xparent(i) to joint i, 
-	  and the absolute joint's spatial transformation matrix X0 to joint i for all types of joints,
-	  and the homogeneous transformation matrix of each joint*/
-	  bool SupdateTransformation(const vectorN& inRobotConfigVector);
+    /* The 3d skew matrix by L.S */
+    const MAL_S3x3_MATRIX_TYPE(double) & skew(MAL_S3_VECTOR_TYPE(double) & qi_pos);
 
-	  /*Update the spatial body velocity according to the given vector of DoF values*/
-	  bool SupdateVelocity(const vectorN& inRobotConfigVector,
-				  const vectorN& inRobotSpeedVector);
+    /* External force vector including only gravity terms by L.S */
+    MAL_VECTOR_TYPE(double) & ComputeExtForce();
 
-	  /*Update the world Com Position and the spatial body acceleration according to the given vector of DoF values and the spatial body force*/
-	  bool SupdateAcceleration(const vectorN& inRobotConfigVector,
-				      const vectorN& inRobotSpeedVector,
-				      const vectorN& inRobotAccelerationVector);
+    /* Compute the parent joint's spatial transformation matrix Xparent(i) to
+     * joint i, and the absolute joint's spatial transformation matrix X0 to
+     * joint i for all types of joints, and the homogeneous transformation
+     * matrix of each joint.
+     */
+    bool SupdateTransformation(const vectorN& inRobotConfigVector);
 
-	  /*Update the torque vector of the associated body and spatial parent body force according to the previously computed body*/
-	  void SupdateTorqueAndForce();
-	  
+    /* Update the spatial body velocity according to the given vector of DoF
+     * values. */
+    bool SupdateVelocity(const vectorN& inRobotConfigVector,
+			 const vectorN& inRobotSpeedVector);
+
+    /* Update the world Com Position and the spatial body acceleration
+     * according to the given vector of DoF values and the spatial body force.
+     */
+    bool SupdateAcceleration(const vectorN& inRobotConfigVector,
+			     const vectorN& inRobotSpeedVector,
+			     const vectorN& inRobotAccelerationVector);
+
+    /* Update the torque vector of the associated body and spatial parent body
+     * force according to the previously computed body.
+     */
+    void SupdateTorqueAndForce();
+
   private:
 
-      /*! \brief Position of the joint in the link
-	reference frame using Plucker coordinate.
-	@{ */
-      /*! \brief Initialize the position
-	using other parameters */
-      void initXL();
+    /*! \brief Position of the joint in the link
+      reference frame using Plucker coordinate.
+      @{ */
+    /*! \brief Initialize the position
+      using other parameters */
+    void initXL();
 
-      /*! \brief Store the position of the joint in the body reference frame. */
-      Spatial::PluckerTransform m_XL;
+    /*! \brief Store the position of the joint in the body reference frame. */
+    Spatial::PluckerTransform m_XL;
 
-      /*! \brief Store the position of the joint in the father joint reference frame. */
-      Spatial::PluckerTransform m_iXpi;
+    /*! \brief Store the position of the joint in the father joint reference frame. */
+    Spatial::PluckerTransform m_iXpi;
 
-      /*! \brief Store the position of the joint in the world
-	reference frame.  */
-      Spatial::PluckerTransform m_X0;
+    /*! \brief Store the position of the joint in the world
+      reference frame.  */
+    Spatial::PluckerTransform m_X0;
 
-      /*! \brief Store the velocity. */
-      Spatial::Velocity m_sv;
+    /*! \brief Store the velocity. */
+    Spatial::Velocity m_sv;
 
-      /*! \brief Store the spatial acceleration. */
-      Spatial::Acceleration m_sa;
+    /*! \brief Store the spatial acceleration. */
+    Spatial::Acceleration m_sa;
 
-      /*! \brief Store the spatial force. */
-      Spatial::Force m_sf;
+    /*! \brief Store the spatial force. */
+    Spatial::Force m_sf;
 
-      /*! \brief Store the spatial inertia of the related body. */
-      Spatial::Inertia m_sI;
+    /*! \brief Store the spatial inertia of the related body. */
+    Spatial::Inertia m_sI;
 
   protected:
-      /*! \brief Store the constraints on motion
-	also known as \f$[\phi \f$] or called the modes
-      */
-      matrixNxP m_phi;
+    /*! \brief Store the constraints on motion
+      also known as \f$[\phi \f$] or called the modes
+    */
+    matrixNxP m_phi;
 
-      /*! \brief Store the derivative of the constraints on motion
-	also known as \f$[\phi \f$]
-      */
-      matrixNxP m_dotphi;
+    /*! \brief Store the derivative of the constraints on motion
+      also known as \f$[\phi \f$]
+    */
+    matrixNxP m_dotphi;
 
   private:
-      /*! \brief Store Zeta the momentum */
-      vectorN m_Zeta;
+    /*! \brief Store Zeta the momentum */
+    vectorN m_Zeta;
 
-	  /*gravity constant by L.S*/
-	  //const double gravity_cst;
-	  MAL_S3x3_MATRIX(,double) sk;
+    /*gravity constant by L.S*/
+    //const double gravity_cst;
+    MAL_S3x3_MATRIX_TYPE(double) sk;
 
-	  /* The spatial transformation matrix from the joint frame to the current body frame by L.S */
-	  Spatial::PluckerTransform Xl_i;
+    /* The spatial transformation matrix from the joint frame to the current
+       body frame by L.S */
+    Spatial::PluckerTransform Xl_i;
 
-	  /* The spatial transformation matrix from the mother body frame to the joint frame by L.S */
-	  Spatial::PluckerTransform Xj_i;
+    /* The spatial transformation matrix from the mother body frame to the
+       joint frame by L.S */
+    Spatial::PluckerTransform Xj_i;
 
-	  /* The spatial transformation matrix from the world reference frame to the mother body frame by L.S*/
-	  Spatial::PluckerTransform X0i_j;
+    /* The spatial transformation matrix from the world reference frame to the
+       mother body frame by L.S*/
+    Spatial::PluckerTransform X0i_j;
 
-	  /* The spatial external force due to gravity by L.S*/
-	  Spatial::Force f_ext;
+    /* The spatial external force due to gravity by L.S*/
+    Spatial::Force f_ext;
 
-	  /* The spatial plucker transform (XF)^{-1}=X^{T} by L.S*/
-	  Spatial::PluckerTransformTranspose XpiiT;
+    /* The spatial plucker transform (XF)^{-1}=X^{T} by L.S*/
+    Spatial::PluckerTransformTranspose XpiiT;
 
   };
 

@@ -45,7 +45,8 @@ JointTranslationPrivate::JointTranslationPrivate(const JointTranslationPrivate &
 {
 }
 
-JointTranslationPrivate::JointTranslationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
+JointTranslationPrivate::
+JointTranslationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
 {
   type(JointPrivate::PRISMATIC_JOINT);
   m_inGlobalFrame = true;
@@ -98,17 +99,17 @@ bool JointTranslationPrivate::updateAcceleration(const vectorN&,
   return true;
 }
 
-const matrixNxP & JointTranslationPrivate::pcalc(const vectorN & qi)
+const matrixNxP & JointTranslationPrivate::pcalc(const vectorN & /*qi*/)
 {
-	MAL_MATRIX_RESIZE(m_phi,6,1);
-	MAL_MATRIX_FILL(m_phi,0);
-	m_phi(3,0)=1;
-	return m_phi;
+  MAL_MATRIX_RESIZE(m_phi,6,1);
+  MAL_MATRIX_FILL(m_phi,0);
+  m_phi(3,0)=1;
+  return m_phi;
 }
 
-const matrixNxP & JointTranslationPrivate::pdcalc(const vectorN & qi)
+const matrixNxP & JointTranslationPrivate::pdcalc(const vectorN & /*qi*/)
 {
-	MAL_MATRIX_RESIZE(m_dotphi,6,1);
-	MAL_MATRIX_FILL(m_dotphi,0);
-	return m_dotphi;
+  MAL_MATRIX_RESIZE(m_dotphi,6,1);
+  MAL_MATRIX_FILL(m_dotphi,0);
+  return m_dotphi;
 }

@@ -234,9 +234,9 @@ namespace dynamicsJRLJapan
     /*! Member to store the number of Dofs. */
     unsigned int m_NbDofs;
 
-	/*The vector of final joint torques by L.S*/
-	vectorN m_JointTorques;
-    
+    /*The vector of final joint torques by L.S*/
+    vectorN m_JointTorques;
+
     /** @} */
 
     /*! \name Methods related to the building of proxy values */
@@ -559,7 +559,8 @@ namespace dynamicsJRLJapan
     CjrlJoint* GetJointFromActuatedID(int JointID);
 
     /** Returns a vector to transfer from VRML ID to configuration ID . */
-    void GetJointIDInConfigurationFromActuatedID(std::vector<int> & VectorFromVRMLIDToConfigurationID);
+    void GetJointIDInConfigurationFromActuatedID(std::vector<int> &
+						 VectorFromVRMLIDToConfigurationID);
 
     /** Returns the ZMP value */
     inline const vector3d getZMP() const
@@ -567,7 +568,8 @@ namespace dynamicsJRLJapan
 
     /** @} */
 
-    /** \name Methods related to the construction of a tree, by specifying a root among the vertices of the undirected graph.
+    /** \name Methods related to the construction of a tree, by specifying a
+	root among the vertices of the undirected graph.
 	@{
     */
 
@@ -735,12 +737,11 @@ namespace dynamicsJRLJapan
 
 	 /**
        \brief Get the current joint torques of the robot.
-       
+
        \return the torque vector \f${\bf \tau }\f$.
     */
     virtual const vectorN& currentJointTorques() const;
 
-    
     /**
        @}
     */
@@ -773,7 +774,8 @@ namespace dynamicsJRLJapan
     /** ! \brief Get the jacobian for Center of Mass in the frame
      inFrameLocalPosition inside outJacobian. */
     bool getJacobianCenterOfMass(const CjrlJoint& inStartJoint,
-                                 matrixNxP& outjacobian, unsigned int offset = 0, bool inIncludeStartFreeFlyer = true);
+                                 matrixNxP& outjacobian, unsigned int offset = 0,
+				 bool inIncludeStartFreeFlyer = true);
 
     /** ! \brief Get the jacobian of the linear momentum with respect to the
 	center of Mass. */
@@ -833,7 +835,8 @@ namespace dynamicsJRLJapan
     /**
        \brief Compute the dynamics of the center of mass.
 
-       Compute the linear and  angular momentum and their time derivatives, at the center of mass.
+       Compute the linear and angular momentum and their time derivatives, at
+       the center of mass.
     */
     bool computeCenterOfMassDynamics() ;
 

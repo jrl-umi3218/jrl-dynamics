@@ -34,7 +34,7 @@
 using namespace dynamicsJRLJapan;
 
 JointFreeflyerPrivate::JointFreeflyerPrivate()
- :JointPrivate()
+  :JointPrivate()
 {
   m_dof6D.resize(6,false);
   m_nbDofs = 6;
@@ -42,7 +42,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate()
 }
 
 JointFreeflyerPrivate::JointFreeflyerPrivate(const JointFreeflyerPrivate &a)
- :JointPrivate(a)
+  :JointPrivate(a)
 {
   m_dof6D.resize(6,false);
 }
@@ -111,48 +111,35 @@ bool JointFreeflyerPrivate::updateAcceleration(const vectorN & ,
   return true;
 }
 
-const matrixNxP & JointFreeflyerPrivate::pcalc(const vectorN & qi)
+const matrixNxP & JointFreeflyerPrivate::pcalc(const vectorN & )
 {
-	MAL_S3_VECTOR(qlin,double);
-	MAL_S3_VECTOR_FILL(qlin,0);
-	MAL_MATRIX_RESIZE(m_phi,6,6);
-	//MAL_MATRIX_SET_IDENTITY(m_phi);
-	MAL_MATRIX_FILL(m_phi,0);
+  MAL_S3_VECTOR(qlin,double);
+  MAL_S3_VECTOR_FILL(qlin,0);
+  MAL_MATRIX_RESIZE(m_phi,6,6);
+  MAL_MATRIX_FILL(m_phi,0);
 
-	DynamicBodyPrivate* CurrentBody = (DynamicBodyPrivate*)(linkedBody());
-	MAL_S3x3_MATRIX(,double) currentBodyRt;
-	currentBodyRt = MAL_S3x3_RET_TRANSPOSE(CurrentBody->R);
-	for (unsigned int i=0;i<3;i++)
+  DynamicBodyPrivate* CurrentBody = (DynamicBodyPrivate*)(linkedBody());
+  MAL_S3x3_MATRIX_TYPE(double) currentBodyRt;
+  currentBodyRt = MAL_S3x3_RET_TRANSPOSE(CurrentBody->R);
+  for (unsigned int i=0;i<3;i++)
+    {
+      for (unsigned int j=0;j<3;j++)
 	{
-		for (unsigned int j=0;j<3;j++)
-		{
-			m_phi(i,j) = currentBodyRt(i,j);
-			m_phi(i+3,j+3) = currentBodyRt(i,j);
-		}
+	  m_phi(i,j) = currentBodyRt(i,j);
+	  m_phi(i+3,j+3) = currentBodyRt(i,j);
 	}
+    }
 
-	/*
-	for (unsigned int i=0;i<3;i++)
-	qlin(i)=qi(i);
-	MAL_S3x3_MATRIX(,double) Sx = JointPrivate::skew(qlin);
-	for (unsigned int i=0;i<3;i++)
-	{   
-		for (unsigned int j=0;j<3;j++)
-		m_phi(i,j+3)=Sx(i,j);
-	}
-	*/
-   return m_phi;
-
+  return m_phi;
 }
 
-const matrixNxP & JointFreeflyerPrivate::pdcalc(const vectorN & qi)
+const matrixNxP & JointFreeflyerPrivate::pdcalc(const vectorN & )
 {
-	for(unsigned int i=0;i<6;i++)
-	{	
-		MAL_MATRIX_RESIZE(m_dotphi,6,6);
-		MAL_MATRIX_FILL(m_dotphi,0);
-	}
+  for(unsigned int i=0;i<6;i++)
+    {
+      MAL_MATRIX_RESIZE(m_dotphi,6,6);
+      MAL_MATRIX_FILL(m_dotphi,0);
+    }
   return m_dotphi;
-
 }
- 
+

@@ -46,7 +46,8 @@ JointRotationPrivate::JointRotationPrivate(const JointRotationPrivate &a)
 {
 }
 
-JointRotationPrivate::JointRotationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
+JointRotationPrivate::
+JointRotationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
   :JointPrivate()
 {
   m_nbDofs=1;
@@ -262,19 +263,18 @@ bool JointRotationPrivate::updateAcceleration(const vectorN &,
   return true;
 }
 
-const matrixNxP & JointRotationPrivate::pcalc(const vectorN & qi)
+const matrixNxP & JointRotationPrivate::pcalc(const vectorN & /*qi*/)
 {
-	MAL_MATRIX_RESIZE(m_phi,6,1);
-	MAL_MATRIX_FILL(m_phi,0);
-	m_phi(3,0)=1;
+  MAL_MATRIX_RESIZE(m_phi,6,1);
+  MAL_MATRIX_FILL(m_phi,0);
+  m_phi(3,0)=1;
     return m_phi;
 
 }
 
-const matrixNxP & JointRotationPrivate::pdcalc(const vectorN & qi)
+const matrixNxP & JointRotationPrivate::pdcalc(const vectorN & /*qi*/)
 {
-	MAL_MATRIX_RESIZE(m_dotphi,6,1);
-	MAL_MATRIX_FILL(m_dotphi,0);
-
+  MAL_MATRIX_RESIZE(m_dotphi,6,1);
+  MAL_MATRIX_FILL(m_dotphi,0);
   return m_dotphi;
 }
