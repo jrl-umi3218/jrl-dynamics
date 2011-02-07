@@ -91,6 +91,12 @@ namespace dynamicsJRLJapan
       dynamic body private but a shared pointeur. */
     DynamicBodyPrivate * getLinkedDynamicBodyPrivate();
 
+    /*! \brief Return the dynamic body private linked with the parent joint 
+      if the latter one exists.
+      This is non-trivial as the related linked may not directly the
+      dynamic body private but a shared pointeur. */
+    DynamicBodyPrivate * getMotherDynamicBodyPrivate();
+
   private:
 
     /*! Nb of dofs for this joint. */
