@@ -36,7 +36,7 @@ using namespace dynamicsJRLJapan;
 JointTranslationPrivate::JointTranslationPrivate()
   :JointPrivate()
 {
-  m_nbDofs = 1;
+  setnumberDof(1);
   CreateLimitsArray();
 }
 

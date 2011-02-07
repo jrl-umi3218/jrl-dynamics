@@ -75,9 +75,9 @@ namespace dynamicsJRLJapan
 
     /*! Vector of childs */
     std::vector< JointPrivate*> m_Children;
-
-    /*! Nb of dofs for this joint. */
-    unsigned int m_nbDofs;
+    
+    /*! \brief Setter for the number degree of freedom */
+    void setnumberDof(unsigned int lNbDofs);
 
     /*! Create the arrays (when the type is known). */
     void CreateLimitsArray();
@@ -85,8 +85,16 @@ namespace dynamicsJRLJapan
     /*! \brief True if the Joint is initially in global frame, false it is a
         local reference frame*/
     bool getinGlobalFrame() const;
+    
+    /*! \brief Return the linked dynamic body private.
+      This is non-trivial as the related linked may not directly the
+      dynamic body private but a shared pointeur. */
+    DynamicBodyPrivate * getLinkedDynamicBodyPrivate();
 
   private:
+
+    /*! Nb of dofs for this joint. */
+    unsigned int m_nbDofs;
 
     /** Coefficient of the mass related to the subtree of this joint. */
     double m_STcoef;
@@ -696,8 +704,10 @@ namespace dynamicsJRLJapan
     */
     void computeLocalAndGlobalPose();
 
-
-
+    /*! Resize the spatial fields when setting the
+      number of DOFs */
+    void resizeSpatialFields();
+    
     /*! \name Methods related to Spatial notations.
       @{ */
 

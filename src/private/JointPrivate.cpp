@@ -167,6 +167,13 @@ JointPrivate::JointPrivate():
 JointPrivate::~JointPrivate()
 {}
 
+void JointPrivate::setnumberDof(unsigned int lNbDofs)
+{
+  m_nbDofs = lNbDofs;
+  CreateLimitsArray();
+  resizeSpatialFields();
+}
+
 void JointPrivate::CreateLimitsArray()
 {
   ODEBUG("CreateLimitsArray: "<< numberDof() << " " << getName());

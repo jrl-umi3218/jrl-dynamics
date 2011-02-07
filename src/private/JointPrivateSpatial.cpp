@@ -30,6 +30,7 @@
 
 #include "JointPrivate.h"
 #include "DynamicBodyPrivate.h"
+#include <jrl/dynamics/dynamicbody.hh>
 
 using namespace dynamicsJRLJapan;
 
@@ -53,6 +54,32 @@ const Spatial::PluckerTransform & JointPrivate::X0()
   return m_X0;
 }
 
+DynamicBodyPrivate * JointPrivate::getLinkedDynamicBodyPrivate() 
+{
+  DynamicBodyPrivate* currentBody = dynamic_cast<DynamicBodyPrivate*>(linkedBody());
+
+  if (currentBody==0)
+    {
+      DynamicBody * inBody = dynamic_cast<DynamicBody *>(linkedBody());
+      if (inBody!=0)
+	{
+	  currentBody = dynamic_cast<DynamicBodyPrivate *>(inBody->m_privateObj.get());
+	}
+    }
+  return currentBody;
+}
+
+void JointPrivate::resizeSpatialFields()
+{
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  if (currentBody!=0)
+    {
+      MAL_VECTOR_RESIZE(currentBody->sq, m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sdq, m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
+    }
+}
 /*! Spatial notations specifications */
 /* modified by L.S*/
 Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
@@ -62,7 +89,7 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
    * frame. */
 
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  MAL_VECTOR_RESIZE(currentBody->sq, m_nbDofs);
+  
 
   /* Read body variables in the state vector. */
   for(unsigned int i=0;i<m_nbDofs;i++)
@@ -313,7 +340,7 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   if (parentJoint()!=0)
     currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
-  MAL_VECTOR_RESIZE(currentBody->sdq, m_nbDofs);
+
   for(unsigned int i=0;i<m_nbDofs;i++)
     {
       currentBody->sdq[i] = inRobotSpeedVector(rankInConfiguration()+i);
@@ -362,7 +389,6 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
   if (parentJoint()!=0)
     currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
-  MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
   for(unsigned int i=0;i<m_nbDofs;i++)
 
     {
@@ -443,7 +469,6 @@ void JointPrivate::SupdateTorqueAndForce()
   vector3d fi,ni;
   fi=currentBody->sf.f();
   ni=currentBody->sf.n0();
-  MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
   MAL_VECTOR_DIM(t, double, 6);
   for (unsigned int j=0;j<3;j++)
     {

@@ -301,13 +301,14 @@ void JointPrivate::setLinkedBody(CjrlBody& inBody)
 {
   m_Body = &inBody;
   m_dynBody = (DynamicBodyPrivate*)m_Body;
-
+  resizeSpatialFields();
 }
 
 void JointPrivate::setLinkedDBody(DynamicBodyPrivate * inBody)
 {
   m_dynBody = inBody;
   m_Body = m_dynBody;
+  resizeSpatialFields();
 }
 
 void JointPrivate::SetFatherJoint(JointPrivate *aFather)

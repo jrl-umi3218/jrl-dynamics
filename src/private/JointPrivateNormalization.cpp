@@ -271,6 +271,7 @@ void JointPrivate::computeLocalAndGlobalPose()
     {
       MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstruction);
       MAL_S4x4_MATRIX_SET_IDENTITY(m_globalPoseAtConstructionNormalized);
+      initXL();
       return;
     }
 

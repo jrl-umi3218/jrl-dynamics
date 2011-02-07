@@ -37,7 +37,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate()
   :JointPrivate()
 {
   m_dof6D.resize(6,false);
-  m_nbDofs = 6;
+  setnumberDof(6);
   CreateLimitsArray();
 }
 
@@ -45,6 +45,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const JointFreeflyerPrivate &a)
   :JointPrivate(a)
 {
   m_dof6D.resize(6,false);
+  setnumberDof(6);
 }
 
 JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
@@ -62,7 +63,7 @@ JointFreeflyerPrivate::JointFreeflyerPrivate(const MAL_S4x4_MATRIX_TYPE(double) 
 
   axis(laxis);
   m_dof6D.resize(6,false);
-
+  setnumberDof(6);
 }
 
 JointFreeflyerPrivate::~JointFreeflyerPrivate()
