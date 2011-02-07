@@ -3,7 +3,7 @@ Test of the operator + by L.S
 */
 
 #include "Spatial.h"
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include <jrl/mal/matrixabstractlayer.hh>
 
 #include "CommonTools.h"
 #include "assertion.hh"
