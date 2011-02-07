@@ -69,6 +69,19 @@ DynamicBodyPrivate * JointPrivate::getLinkedDynamicBodyPrivate()
   return currentBody;
 }
 
+DynamicBodyPrivate * JointPrivate::getMotherDynamicBodyPrivate() 
+{
+  DynamicBodyPrivate* currentMotherBody = 0;
+  
+  if (parentJoint()!=0)
+    {
+      JointPrivate * aJP = dynamic_cast<JointPrivate *>(parentJoint());
+      if (aJP!=0)
+	currentMotherBody = aJP->getLinkedDynamicBodyPrivate();
+    }
+  return currentMotherBody;
+}
+
 void JointPrivate::resizeSpatialFields()
 {
   DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
@@ -88,7 +101,7 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
    * expressions for the local rotation matrix R of the body frame in the joint
    * frame. */
 
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
   
 
   /* Read body variables in the state vector. */
@@ -268,11 +281,8 @@ bool JointPrivate::updateAcceleration(const vectorN& /*inRobotConfigVector*/,
 /* Rigid transformation */
 bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-
-  DynamicBodyPrivate* currentMotherBody = 0;
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
   Xj_i = xjcalc(inRobotConfigVector);
   Xl_i = Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(currentBody->R_static),
@@ -334,12 +344,9 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
 				   const vectorN& inRobotSpeedVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
   vector3d NE_tmp, NE_tmp2;
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-
 
   for(unsigned int i=0;i<m_nbDofs;i++)
     {
@@ -383,11 +390,8 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
 				       const vectorN& /*inRobotSpeedVector*/,
 				       const vectorN& inRobotAccelerationVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
-
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
   for(unsigned int i=0;i<m_nbDofs;i++)
 
@@ -460,12 +464,9 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
 
 void JointPrivate::SupdateTorqueAndForce()
 {
-  DynamicBodyPrivate * currentBody = (DynamicBodyPrivate*)(linkedBody());
+  DynamicBodyPrivate * currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
-  DynamicBodyPrivate* currentMotherBody = 0;
-
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
   vector3d fi,ni;
   fi=currentBody->sf.f();
   ni=currentBody->sf.n0();
