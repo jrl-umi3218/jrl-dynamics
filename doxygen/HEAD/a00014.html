@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: dynamicsJRLJapan::JointAnchor Class Reference</title>
+<title>jrl-dynamics: dynamicsJRLJapan::Geometry::IndexedFaceSet Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -22,49 +22,190 @@
       <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
   </div>
-  <div class="navpath"><a class="el" href="a00031.html">dynamicsJRLJapan</a>::<a class="el" href="a00014.html">JointAnchor</a>
+  <div class="navpath"><a class="el" href="a00033.html">dynamicsJRLJapan</a>::<a class="el" href="a00034.html">Geometry</a>::<a class="el" href="a00014.html">IndexedFaceSet</a>
   </div>
 </div>
 <div class="contents">
-<h1>dynamicsJRLJapan::JointAnchor Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::JointAnchor" --><!-- doxytag: inherits="dynamicsJRLJapan::Joint" -->
-<p>Anchor joint.  
-<a href="#_details">More...</a></p>
-
-<p><code>#include &lt;jrl/dynamics/joint.hh&gt;</code></p>
+<h1>dynamicsJRLJapan::Geometry::IndexedFaceSet Struct Reference</h1><!-- doxytag: class="dynamicsJRLJapan::Geometry::IndexedFaceSet" -->
+<p><code>#include &lt;jrl/dynamics/geometricdata.hh&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for dynamicsJRLJapan::JointAnchor:</div>
+Collaboration diagram for dynamicsJRLJapan::Geometry::IndexedFaceSet:</div>
 <div class="dynsection">
-<div class="center"><img src="a00090.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_joint_anchor_inherit__map" alt="Inheritance graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_joint_anchor_inherit__map" id="dynamics_j_r_l_japan_1_1_joint_anchor_inherit__map">
-<area shape="rect" href="a00013.html" title="This class represents a robot joint." alt="" coords="28,84,199,111"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html" title="CjrlJoint" alt="" coords="80,7,147,33"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for dynamicsJRLJapan::JointAnchor:</div>
-<div class="dynsection">
-<div class="center"><img src="a00091.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_joint_anchor_coll__map" alt="Collaboration graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_joint_anchor_coll__map" id="dynamics_j_r_l_japan_1_1_joint_anchor_coll__map">
-<area shape="rect" href="a00013.html" title="This class represents a robot joint." alt="" coords="28,84,199,111"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html" title="CjrlJoint" alt="" coords="80,7,147,33"/></map>
+<div class="center"><img src="a00095.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_geometry_1_1_indexed_face_set_coll__map" alt="Collaboration graph"/></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
-<p><a href="a00092.html">List of all members.</a></p>
+<p><a href="a00096.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a9602f02696995707bd3afe854d5d11c6">JointAnchor</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#ac2d274624fb815ce852b46da30b86b5b">reset</a> ()</td></tr>
+<tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#ac433d2f9bbf5cb3025fad78a17b857f7">ccw</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a713e9eeb7378518b3cd8f5917724308f">colorIndex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#aef0a382bc385de3c76f4178dff14467b">colorPerVertex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#ae6160c8225132597dacf3d0ed6d2bc75">convex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="a00034.html#aba8152e368176253127281930a68ec18">polygonIndex</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a45e0aa31f230c1a3e4fba8324a22bbe9">coordIndex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#abbb3356b9e08b725f8f59182fd94d99a">creaseAngle</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a5f8b30c28ef304019ed97bd33f253f12">normalIndex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a407013529a0594b06728ab7fb65cb687">normalPerVertex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a8ec0a2bf9d0771303e5af4a29ebc5e84">solid</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a7a2d60baf041311c70c44cedfcd7ed9f">texCoordIndex</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html#a9372e165545fcd555e8c62f8cf141081">coord</a></td></tr>
 </table>
-<hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>Anchor joint. </p>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a9602f02696995707bd3afe854d5d11c6"></a><!-- doxytag: member="dynamicsJRLJapan::JointAnchor::JointAnchor" ref="a9602f02696995707bd3afe854d5d11c6" args="(const matrix4d &amp;inInitialPosition)" -->
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ac2d274624fb815ce852b46da30b86b5b"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::reset" ref="ac2d274624fb815ce852b46da30b86b5b" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">dynamicsJRLJapan::JointAnchor::JointAnchor </td>
+          <td class="memname">void dynamicsJRLJapan::Geometry::IndexedFaceSet::reset </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inInitialPosition</em></td>
+          <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="ac433d2f9bbf5cb3025fad78a17b857f7"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::ccw" ref="ac433d2f9bbf5cb3025fad78a17b857f7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00014.html#ac433d2f9bbf5cb3025fad78a17b857f7">dynamicsJRLJapan::Geometry::IndexedFaceSet::ccw</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a713e9eeb7378518b3cd8f5917724308f"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::colorIndex" ref="a713e9eeb7378518b3cd8f5917724308f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int&gt; <a class="el" href="a00014.html#a713e9eeb7378518b3cd8f5917724308f">dynamicsJRLJapan::Geometry::IndexedFaceSet::colorIndex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef0a382bc385de3c76f4178dff14467b"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::colorPerVertex" ref="aef0a382bc385de3c76f4178dff14467b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00014.html#aef0a382bc385de3c76f4178dff14467b">dynamicsJRLJapan::Geometry::IndexedFaceSet::colorPerVertex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae6160c8225132597dacf3d0ed6d2bc75"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::convex" ref="ae6160c8225132597dacf3d0ed6d2bc75" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00014.html#ae6160c8225132597dacf3d0ed6d2bc75">dynamicsJRLJapan::Geometry::IndexedFaceSet::convex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9372e165545fcd555e8c62f8cf141081"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::coord" ref="a9372e165545fcd555e8c62f8cf141081" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&gt; <a class="el" href="a00014.html#a9372e165545fcd555e8c62f8cf141081">dynamicsJRLJapan::Geometry::IndexedFaceSet::coord</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a45e0aa31f230c1a3e4fba8324a22bbe9"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::coordIndex" ref="a45e0aa31f230c1a3e4fba8324a22bbe9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="a00034.html#aba8152e368176253127281930a68ec18">polygonIndex</a>&gt; <a class="el" href="a00014.html#a45e0aa31f230c1a3e4fba8324a22bbe9">dynamicsJRLJapan::Geometry::IndexedFaceSet::coordIndex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abbb3356b9e08b725f8f59182fd94d99a"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::creaseAngle" ref="abbb3356b9e08b725f8f59182fd94d99a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="a00014.html#abbb3356b9e08b725f8f59182fd94d99a">dynamicsJRLJapan::Geometry::IndexedFaceSet::creaseAngle</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5f8b30c28ef304019ed97bd33f253f12"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::normalIndex" ref="a5f8b30c28ef304019ed97bd33f253f12" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int&gt; <a class="el" href="a00014.html#a5f8b30c28ef304019ed97bd33f253f12">dynamicsJRLJapan::Geometry::IndexedFaceSet::normalIndex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a407013529a0594b06728ab7fb65cb687"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::normalPerVertex" ref="a407013529a0594b06728ab7fb65cb687" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00014.html#a407013529a0594b06728ab7fb65cb687">dynamicsJRLJapan::Geometry::IndexedFaceSet::normalPerVertex</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8ec0a2bf9d0771303e5af4a29ebc5e84"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::solid" ref="a8ec0a2bf9d0771303e5af4a29ebc5e84" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00014.html#a8ec0a2bf9d0771303e5af4a29ebc5e84">dynamicsJRLJapan::Geometry::IndexedFaceSet::solid</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7a2d60baf041311c70c44cedfcd7ed9f"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::IndexedFaceSet::texCoordIndex" ref="a7a2d60baf041311c70c44cedfcd7ed9f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int&gt; <a class="el" href="a00014.html#a7a2d60baf041311c70c44cedfcd7ed9f">dynamicsJRLJapan::Geometry::IndexedFaceSet::texCoordIndex</a></td>
         </tr>
       </table>
 </div>

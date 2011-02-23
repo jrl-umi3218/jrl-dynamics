@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: dynamicsJRLJapan::Foot Class Reference</title>
+<title>jrl-dynamics: dynamicsJRLJapan::DynamicBody Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -22,55 +22,83 @@
       <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
   </div>
-  <div class="navpath"><a class="el" href="a00031.html">dynamicsJRLJapan</a>::<a class="el" href="a00009.html">Foot</a>
+  <div class="navpath"><a class="el" href="a00033.html">dynamicsJRLJapan</a>::<a class="el" href="a00009.html">DynamicBody</a>
   </div>
 </div>
 <div class="contents">
-<h1>dynamicsJRLJapan::Foot Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::Foot" --><!-- doxytag: inherits="CjrlFoot" -->
-<p><code>#include &lt;jrl/dynamics/foot.hh&gt;</code></p>
+<h1>dynamicsJRLJapan::DynamicBody Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::DynamicBody" --><!-- doxytag: inherits="CjrlBody" -->
+<p>This class implements a body.  
+<a href="#_details">More...</a></p>
+
+<p><code>#include &lt;jrl/dynamics/dynamicbody.hh&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for dynamicsJRLJapan::Foot:</div>
+Inheritance diagram for dynamicsJRLJapan::DynamicBody:</div>
 <div class="dynsection">
-<div class="center"><img src="a00068.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_foot_inherit__map" alt="Inheritance graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_foot_inherit__map" id="dynamics_j_r_l_japan_1_1_foot_inherit__map">
-<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html" title="CjrlFoot" alt="" coords="56,7,125,33"/></map>
+<div class="center"><img src="a00064.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_dynamic_body_inherit__map" alt="Inheritance graph"/></div>
+<map name="dynamics_j_r_l_japan_1_1_dynamic_body_inherit__map" id="dynamics_j_r_l_japan_1_1_dynamic_body_inherit__map">
+<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html" title="CjrlBody" alt="" coords="85,7,157,33"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for dynamicsJRLJapan::Foot:</div>
+Collaboration diagram for dynamicsJRLJapan::DynamicBody:</div>
 <div class="dynsection">
-<div class="center"><img src="a00069.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_foot_coll__map" alt="Collaboration graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_foot_coll__map" id="dynamics_j_r_l_japan_1_1_foot_coll__map">
-<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html" title="CjrlFoot" alt="" coords="11,7,80,33"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html" title="CjrlJoint" alt="" coords="104,7,171,33"/></map>
+<div class="center"><img src="a00065.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_dynamic_body_coll__map" alt="Collaboration graph"/></div>
+<map name="dynamics_j_r_l_japan_1_1_dynamic_body_coll__map" id="dynamics_j_r_l_japan_1_1_dynamic_body_coll__map">
+<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html" title="CjrlBody" alt="" coords="85,7,157,33"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
-<p><a href="a00070.html">List of all members.</a></p>
+<p><a href="a00066.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#af286230efa6f51503bda99ee5abd0eb7">Foot</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Default constructor.  <a href="#af286230efa6f51503bda99ee5abd0eb7"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a088406e5ac41540301e7492c284dfa89">Foot</a> (const <a class="el" href="a00009.html">Foot</a> &amp;inFoot)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#ab0dbfce2a8ca147f56aba13a73ff313a">~Foot</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destructor.  <a href="#ab0dbfce2a8ca147f56aba13a73ff313a"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a94338b18d193cb2e4ede83a71a27046f">associatedAnkle</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a62b064591e9c83faa8759756ed2e4363">setAssociatedAnkle</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlJoint</a> *inAssociatedAnkle)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a58d3a950f28fdd9015760c77b78fbfa5">getSoleSize</a> (double &amp;outLength, double &amp;outWidth) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get size of the rectagular sole.  <a href="#a58d3a950f28fdd9015760c77b78fbfa5"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a472865a98eb68e24eaec22994bb05dd7">setSoleSize</a> (const double &amp;inLength, const double &amp;inWidth)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set size of the rectagular sole.  <a href="#a472865a98eb68e24eaec22994bb05dd7"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a3c8a026a063ba677464eae3a7be1e755">getAnklePositionInLocalFrame</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outCoordinates) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get position of the ankle in the foot local coordinate frame.  <a href="#a3c8a026a063ba677464eae3a7be1e755"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#aa0dc5e235580ac154f909b1606294f6f">setAnklePositionInLocalFrame</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inCoordinates)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set position of the ankle in the foot local coordinate frame.  <a href="#aa0dc5e235580ac154f909b1606294f6f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#aaa06a253cba0f675e5d66d2bd4adb8ce">localCenterOfMass</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get position of center of mass in joint local reference frame.  <a href="#aaa06a253cba0f675e5d66d2bd4adb8ce"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a4987d958fefb0652cf2f0c7227ebc9bf">localCenterOfMass</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inlocalCenterOfMass)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set postion of center of mass in joint reference frame.  <a href="#a4987d958fefb0652cf2f0c7227ebc9bf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a2874bdee547d5c886fac63947ff12bef">inertiaMatrix</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Intertia matrix expressed in joint local reference frame.  <a href="#a2874bdee547d5c886fac63947ff12bef"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#aaf1a06d24c58257abf2ff2372a91a64f">inertiaMatrix</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;inInertiaMatrix)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set inertia matrix.  <a href="#aaf1a06d24c58257abf2ff2372a91a64f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a2f337aec10675003e126e2b79735f0c0">mass</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get mass.  <a href="#a2f337aec10675003e126e2b79735f0c0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a6d3590534464aed0516540bc4ce54078">mass</a> (double inMass)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set mass.  <a href="#a6d3590534464aed0516540bc4ce54078"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#aaf6c333181d1e565e4c65e4720543126">joint</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get const pointer to the joint the body is attached to.  <a href="#aaf6c333181d1e565e4c65e4720543126"></a><br/></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Constructor and destructor</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p><a class="anchor" id="amgrpe7842d077f4197a0a949b269f1500ffe"></a> </p>
+</div></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a109045c8ea88ddd7f1c655d040f4079b">~DynamicBody</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a69c69ff3b9d4126ad825a5b3ea62f0a6">DynamicBody</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#a2dc18aaf40d62ef57bed141105a4232d">DynamicBody</a> (const <a class="el" href="a00009.html">DynamicBody</a> &amp;inBody)</td></tr>
+<tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">boost::shared_ptr&lt; <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00009.html#ad743ed6ae065fc9adaa7f70f51f3aa59">m_privateObj</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>This class represents a foot of a humanoid robot. It assumes some geometrical information available. They are described in more details in the original class jrlFoot. </p>
+<p>This class implements a body. </p>
+<p>See <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> for documentation. </p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af286230efa6f51503bda99ee5abd0eb7"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::Foot" ref="af286230efa6f51503bda99ee5abd0eb7" args="()" -->
+<a class="anchor" id="a109045c8ea88ddd7f1c655d040f4079b"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::~DynamicBody" ref="a109045c8ea88ddd7f1c655d040f4079b" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">dynamicsJRLJapan::Foot::Foot </td>
+          <td class="memname">virtual dynamicsJRLJapan::DynamicBody::~DynamicBody </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a69c69ff3b9d4126ad825a5b3ea62f0a6"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::DynamicBody" ref="a69c69ff3b9d4126ad825a5b3ea62f0a6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dynamicsJRLJapan::DynamicBody::DynamicBody </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -80,54 +108,55 @@ Collaboration diagram for dynamicsJRLJapan::Foot:</div>
 </div>
 <div class="memdoc">
 
-<p>Default constructor. </p>
-
 </div>
 </div>
-<a class="anchor" id="a088406e5ac41540301e7492c284dfa89"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::Foot" ref="a088406e5ac41540301e7492c284dfa89" args="(const Foot &amp;inFoot)" -->
+<a class="anchor" id="a2dc18aaf40d62ef57bed141105a4232d"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::DynamicBody" ref="a2dc18aaf40d62ef57bed141105a4232d" args="(const DynamicBody &amp;inBody)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">dynamicsJRLJapan::Foot::Foot </td>
+          <td class="memname">dynamicsJRLJapan::DynamicBody::DynamicBody </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00009.html">Foot</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inFoot</em></td>
+          <td class="paramtype">const <a class="el" href="a00009.html">DynamicBody</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inBody</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab0dbfce2a8ca147f56aba13a73ff313a"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::~Foot" ref="ab0dbfce2a8ca147f56aba13a73ff313a" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual dynamicsJRLJapan::Foot::~Foot </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Destructor. </p>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a94338b18d193cb2e4ede83a71a27046f"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::associatedAnkle" ref="a94338b18d193cb2e4ede83a71a27046f" args="() const " -->
+<a class="anchor" id="aaf1a06d24c58257abf2ff2372a91a64f"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::inertiaMatrix" ref="aaf1a06d24c58257abf2ff2372a91a64f" args="(const matrix3d &amp;inInertiaMatrix)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlJoint</a>* dynamicsJRLJapan::Foot::associatedAnkle </td>
+          <td class="memname">virtual void dynamicsJRLJapan::DynamicBody::inertiaMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inInertiaMatrix</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set inertia matrix. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#afa06c288c011ea5b9028dafcb763950c">CjrlBody</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2874bdee547d5c886fac63947ff12bef"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::inertiaMatrix" ref="a2874bdee547d5c886fac63947ff12bef" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a>&amp; dynamicsJRLJapan::DynamicBody::inertiaMatrix </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -136,21 +165,21 @@ Collaboration diagram for dynamicsJRLJapan::Foot:</div>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns associated ankle. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#aa37d9969557df695cab47dcd75aa3ba8">CjrlFoot</a>.</p>
+<p>Get Intertia matrix expressed in joint local reference frame. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a5e29c3b59ab2d9ce9928f6c49387cae1">CjrlBody</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a3c8a026a063ba677464eae3a7be1e755"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::getAnklePositionInLocalFrame" ref="a3c8a026a063ba677464eae3a7be1e755" args="(vector3d &amp;outCoordinates) const " -->
+<a class="anchor" id="aaf6c333181d1e565e4c65e4720543126"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::joint" ref="aaf6c333181d1e565e4c65e4720543126" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void dynamicsJRLJapan::Foot::getAnklePositionInLocalFrame </td>
+          <td class="memname">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::DynamicBody::joint </td>
           <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>outCoordinates</em></td>
+          <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
           <td> const<code> [virtual]</code></td>
         </tr>
@@ -158,65 +187,21 @@ Collaboration diagram for dynamicsJRLJapan::Foot:</div>
 </div>
 <div class="memdoc">
 
-<p>Get position of the ankle in the foot local coordinate frame. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outCoordinates</em>&nbsp;</td><td>coordinates of the ankle joint center </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Get const pointer to the joint the body is attached to. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a4fb45079eb23ad85990ca24cd0512417">CjrlFoot</a>.</p>
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a08b18dbeded84752ed3cb0ae5b45644b">CjrlBody</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a58d3a950f28fdd9015760c77b78fbfa5"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::getSoleSize" ref="a58d3a950f28fdd9015760c77b78fbfa5" args="(double &amp;outLength, double &amp;outWidth) const " -->
+<a class="anchor" id="a4987d958fefb0652cf2f0c7227ebc9bf"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::localCenterOfMass" ref="a4987d958fefb0652cf2f0c7227ebc9bf" args="(const vector3d &amp;inlocalCenterOfMass)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void dynamicsJRLJapan::Foot::getSoleSize </td>
-          <td>(</td>
-          <td class="paramtype">double &amp;&nbsp;</td>
-          <td class="paramname"> <em>outLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double &amp;&nbsp;</td>
-          <td class="paramname"> <em>outWidth</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get size of the rectagular sole. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outLength</em>&nbsp;</td><td>length of the sole (see Figure) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>outWidth</em>&nbsp;</td><td>width of the sole (see Figure) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a1e3dafe856d5c0165b625b718cc77afc">CjrlFoot</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa0dc5e235580ac154f909b1606294f6f"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::setAnklePositionInLocalFrame" ref="aa0dc5e235580ac154f909b1606294f6f" args="(const vector3d &amp;inCoordinates)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void dynamicsJRLJapan::Foot::setAnklePositionInLocalFrame </td>
+          <td class="memname">virtual void dynamicsJRLJapan::DynamicBody::localCenterOfMass </td>
           <td>(</td>
           <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inCoordinates</em></td>
+          <td class="paramname"> <em>inlocalCenterOfMass</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [virtual]</code></td>
         </tr>
@@ -224,74 +209,87 @@ Collaboration diagram for dynamicsJRLJapan::Foot:</div>
 </div>
 <div class="memdoc">
 
-<p>Set position of the ankle in the foot local coordinate frame. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inCoordinates</em>&nbsp;</td><td>coordinates of the ankle joint center </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Set postion of center of mass in joint reference frame. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a2674fe5c7ec764f707e0cee1dd89a4b8">CjrlFoot</a>.</p>
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a07d60810737b02c71e3f2eb7570ca2f9">CjrlBody</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a62b064591e9c83faa8759756ed2e4363"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::setAssociatedAnkle" ref="a62b064591e9c83faa8759756ed2e4363" args="(const CjrlJoint *inAssociatedAnkle)" -->
+<a class="anchor" id="aaa06a253cba0f675e5d66d2bd4adb8ce"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::localCenterOfMass" ref="aaa06a253cba0f675e5d66d2bd4adb8ce" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void dynamicsJRLJapan::Foot::setAssociatedAnkle </td>
+          <td class="memname">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a>&amp; dynamicsJRLJapan::DynamicBody::localCenterOfMass </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlJoint</a> *&nbsp;</td>
-          <td class="paramname"> <em>inAssociatedAnkle</em></td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get position of center of mass in joint local reference frame. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a196ea0c4b329de502b1bc2960392d922">CjrlBody</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6d3590534464aed0516540bc4ce54078"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::mass" ref="a6d3590534464aed0516540bc4ce54078" args="(double inMass)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void dynamicsJRLJapan::DynamicBody::mass </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>inMass</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Returns associated ankle. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#ab67fbe787ad96c762aa844c9db28d72d">CjrlFoot</a>.</p>
+<p>Set mass. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a548e496f9ac809efa8f785e2ba7302ce">CjrlBody</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a472865a98eb68e24eaec22994bb05dd7"></a><!-- doxytag: member="dynamicsJRLJapan::Foot::setSoleSize" ref="a472865a98eb68e24eaec22994bb05dd7" args="(const double &amp;inLength, const double &amp;inWidth)" -->
+<a class="anchor" id="a2f337aec10675003e126e2b79735f0c0"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::mass" ref="a2f337aec10675003e126e2b79735f0c0" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void dynamicsJRLJapan::Foot::setSoleSize </td>
+          <td class="memname">virtual double dynamicsJRLJapan::DynamicBody::mass </td>
           <td>(</td>
-          <td class="paramtype">const double &amp;&nbsp;</td>
-          <td class="paramname"> <em>inLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const double &amp;&nbsp;</td>
-          <td class="paramname"> <em>inWidth</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td><code> [virtual]</code></td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Set size of the rectagular sole. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inLength</em>&nbsp;</td><td>length of the sole (see Figure) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>inWidth</em>&nbsp;</td><td>width of the sole (see Figure) </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Get mass. </p>
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a8e080db8b090537777c6c6bb90e7beeb">CjrlFoot</a>.</p>
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a449fc62906cbd9f85cf6ae6d590e25e4">CjrlBody</a>.</p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="ad743ed6ae065fc9adaa7f70f51f3aa59"></a><!-- doxytag: member="dynamicsJRLJapan::DynamicBody::m_privateObj" ref="ad743ed6ae065fc9adaa7f70f51f3aa59" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::shared_ptr&lt;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a>&gt; <a class="el" href="a00009.html#ad743ed6ae065fc9adaa7f70f51f3aa59">dynamicsJRLJapan::DynamicBody::m_privateObj</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>

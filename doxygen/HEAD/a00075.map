@@ -1,3 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" href="abstract-robot-dynamics.doxytag$a00005.html" title="CjrlHand" alt="" coords="56,7,131,33"/>
+<area shape="rect" href="$a00022.html" title="dynamicsJRLJapan::Geometry::Shape" alt="" coords="1541,257,1797,284"/>
+<area shape="rect" href="$a00014.html" title="dynamicsJRLJapan::Geometry::IndexedFaceSet" alt="" coords="1044,125,1359,152"/>
+<area shape="rect" href="$a00007.html" title="dynamicsJRLJapan::Geometry::Appearance" alt="" coords="1056,257,1347,284"/>
+<area shape="rect" href="$a00020.html" title="dynamicsJRLJapan::Geometry::Material" alt="" coords="516,308,780,335"/>
+<area shape="rect" href="$a00023.html" title="dynamicsJRLJapan::Geometry::Texture" alt="" coords="519,207,777,233"/>
+<area shape="rect" title="STL class." alt="" coords="265,359,351,385"/>
+<area shape="rect" title="STL class." alt="" coords="5,359,189,385"/>
+<area shape="rect" href="$a00024.html" title="dynamicsJRLJapan::Geometry::TextureTransform" alt="" coords="487,257,809,284"/>
 </map>
