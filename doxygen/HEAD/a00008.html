@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: dynamicsJRLJapan::BodyGeometricalData Class Reference</title>
+<title>jrl-dynamics: Building a robot</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -9,334 +9,90 @@
   <div class="tabs">
     <ul>
       <li><a href="main.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
-  <div class="tabs">
-    <ul>
-      <li><a href="annotated.html"><span>Class&nbsp;List</span></a></li>
-      <li><a href="classes.html"><span>Class&nbsp;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
-      <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
-    </ul>
-  </div>
-  <div class="navpath"><a class="el" href="a00033.html">dynamicsJRLJapan</a>::<a class="el" href="a00008.html">BodyGeometricalData</a>
+  <div class="navpath"><a class="el" href="main.html">dynamicsJRLJapan</a>&nbsp;&raquo;&nbsp;<a class="el" href="a00013.html">User Documentation</a>
   </div>
 </div>
 <div class="contents">
-<h1>dynamicsJRLJapan::BodyGeometricalData Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::BodyGeometricalData" -->
-<p><code>#include &lt;jrl/dynamics/geometricdata.hh&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for dynamicsJRLJapan::BodyGeometricalData:</div>
-<div class="dynsection">
-<div class="center"><img src="a00075.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_body_geometrical_data_coll__map" alt="Collaboration graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_body_geometrical_data_coll__map" id="dynamics_j_r_l_japan_1_1_body_geometrical_data_coll__map">
-<area shape="rect" href="a00022.html" title="dynamicsJRLJapan::Geometry::Shape" alt="" coords="1541,257,1797,284"/><area shape="rect" href="a00014.html" title="dynamicsJRLJapan::Geometry::IndexedFaceSet" alt="" coords="1044,125,1359,152"/><area shape="rect" href="a00007.html" title="dynamicsJRLJapan::Geometry::Appearance" alt="" coords="1056,257,1347,284"/><area shape="rect" href="a00020.html" title="dynamicsJRLJapan::Geometry::Material" alt="" coords="516,308,780,335"/><area shape="rect" href="a00023.html" title="dynamicsJRLJapan::Geometry::Texture" alt="" coords="519,207,777,233"/><area shape="rect" title="STL class." alt="" coords="265,359,351,385"/><area shape="rect" title="STL class." alt="" coords="5,359,189,385"/><area shape="rect" href="a00024.html" title="dynamicsJRLJapan::Geometry::TextureTransform" alt="" coords="487,257,809,284"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
-<p><a href="a00076.html">List of all members.</a></p>
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#aa96c10a67d190a39055125a954fbd8b9">BodyGeometricalData</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#afbaca0e01f92d5cac5c50de7987046b6">~BodyGeometricalData</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a9ee7452724308c1ca4420565a7947542">getRotationForDisplay</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a378e3223b7c443d6134e979ed2dfc51f">setRotationForDisplay</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;RotationForDisplay)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a227969b33a6d66d28528ae4a99dc64a1">getURLs</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a9e92f0048abe361e0d2f98c81fa765fb">resetURL</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#aa026be2f93bab1c58df995a6a5f2fe38">addURL</a> (const std::string &amp;URLtoVRML)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const std::vector<br class="typebreak"/>
-&lt; <a class="el" href="a00022.html">Geometry::Shape</a> &gt; &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#ac9d0eec37c5c8f51036899de9fa435e5">getShapes</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a8fb04410d86cf599b6f4e505fc6bbf52">addShape</a> (<a class="el" href="a00022.html">Geometry::Shape</a> aShape)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00008.html">BodyGeometricalData</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a18c775fd9753624fdf5a18de57f2eb53">operator=</a> (const <a class="el" href="a00008.html">BodyGeometricalData</a> &amp;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a0dc628b246e7423f86ea3f629b24709f">setBodyName</a> (const std::string &amp;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const std::string &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a37040426c6093c8114a865285785b4b7">getBodyName</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::string &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#ad7e8efa98f162e3c56e3497cffa6e129">getBodyName</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a2e45df3d7d3c6c9a35fc9b68d028fa02">setRelatedJointName</a> (const std::string &amp;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const std::string &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#aaeb58f94901d73433b840edd84e158c6">getRelatedJointName</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::string &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#aaf8bdfc31fa25cd05a0f4971ab2d0ef0">getRelatedJointName</a> ()</td></tr>
-</table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa96c10a67d190a39055125a954fbd8b9"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::BodyGeometricalData" ref="aa96c10a67d190a39055125a954fbd8b9" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">dynamicsJRLJapan::BodyGeometricalData::BodyGeometricalData </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="afbaca0e01f92d5cac5c50de7987046b6"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::~BodyGeometricalData" ref="afbaca0e01f92d5cac5c50de7987046b6" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">dynamicsJRLJapan::BodyGeometricalData::~BodyGeometricalData </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
+<h1><a class="anchor" id="pbuildingarobot">Building a robot </a></h1><h2><a class="anchor" id="secobjectfactory">
+Object Factory</a></h2>
+<p>A robot model is handled using the class dynamicRobot, and it is build using the following components: </p>
+<ul>
+<li>
+Bodies </li>
+<li>
+Joints </li>
+</ul>
+<p>A humanoid robot (humanoidDynamicRobot) is a particular robot which has in addition the following components: </p>
+<ul>
+<li>
+Hand  </li>
+<li>
+Foot  </li>
+</ul>
+<p>All those components are created using an object factory. The class ObjectFactory provides such a factory.<br/>
+</p>
+<h3><a class="anchor" id="subsecbhr">
+Building a humanoid robot</a></h3>
+<p>Creating an empty humanoid robot is therefore very simple:</p>
+<div class="fragment"><pre class="fragment"><a class="code" href="a00029.html" title="Hooks for to create objects.">dynamicsJRLJapan::ObjectFactory</a> robotDynamicsObjectConstructor; 
+<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00008.html">CjrlHumanoidDynamicRobot</a> * aHDR = robotDynamicsObjectConstructor.<a class="code" href="a00029.html#ab3b8eea3071f6fa9374fbce8e5dd04f4">createHumanoidDynamicRobot</a>();
+</pre></div><h3><a class="anchor" id="subsecbj">
+Building a revolute joint</a></h3>
+<p>The same way a joint can be created by specifying the pose of the joint when the robot is at state <img class="formulaInl" alt="$ {\bf x} = [{\bf r} \; {\bf q} \; \dot{\bf r} \; \dot{\bf q} \; \ddot{\bf r} \; \ddot{\bf q}]= [{\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0} \; {\bf 0}]$" src="form_17.png"/>. Therefore if the first joint is at the origin of the reference frame, the following code snippet can be used: </p>
+<div class="fragment"><pre class="fragment"><a class="codeRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> pose;
+<a class="codeRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a72469b5fcd8f779d201adfe0d19eea04">MAL_S4x4_MATRIX_SET_IDENTITY</a>(pose);
 
-</div>
-</div>
-<hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a8fb04410d86cf599b6f4e505fc6bbf52"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::addShape" ref="a8fb04410d86cf599b6f4e505fc6bbf52" args="(Geometry::Shape aShape)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::addShape </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00022.html">Geometry::Shape</a>&nbsp;</td>
-          <td class="paramname"> <em>aShape</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa026be2f93bab1c58df995a6a5f2fe38"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::addURL" ref="aa026be2f93bab1c58df995a6a5f2fe38" args="(const std::string &amp;URLtoVRML)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::addURL </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&nbsp;</td>
-          <td class="paramname"> <em>URLtoVRML</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad7e8efa98f162e3c56e3497cffa6e129"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getBodyName" ref="ad7e8efa98f162e3c56e3497cffa6e129" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string&amp; dynamicsJRLJapan::BodyGeometricalData::getBodyName </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a37040426c6093c8114a865285785b4b7"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getBodyName" ref="a37040426c6093c8114a865285785b4b7" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string&amp; dynamicsJRLJapan::BodyGeometricalData::getBodyName </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaf8bdfc31fa25cd05a0f4971ab2d0ef0"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getRelatedJointName" ref="aaf8bdfc31fa25cd05a0f4971ab2d0ef0" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string&amp; dynamicsJRLJapan::BodyGeometricalData::getRelatedJointName </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaeb58f94901d73433b840edd84e158c6"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getRelatedJointName" ref="aaeb58f94901d73433b840edd84e158c6" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string&amp; dynamicsJRLJapan::BodyGeometricalData::getRelatedJointName </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9ee7452724308c1ca4420565a7947542"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getRotationForDisplay" ref="a9ee7452724308c1ca4420565a7947542" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a>&amp; dynamicsJRLJapan::BodyGeometricalData::getRotationForDisplay </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac9d0eec37c5c8f51036899de9fa435e5"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getShapes" ref="ac9d0eec37c5c8f51036899de9fa435e5" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt;<a class="el" href="a00022.html">Geometry::Shape</a> &gt;&amp; dynamicsJRLJapan::BodyGeometricalData::getShapes </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a227969b33a6d66d28528ae4a99dc64a1"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::getURLs" ref="a227969b33a6d66d28528ae4a99dc64a1" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt; std::string &gt;&amp; dynamicsJRLJapan::BodyGeometricalData::getURLs </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a18c775fd9753624fdf5a18de57f2eb53"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::operator=" ref="a18c775fd9753624fdf5a18de57f2eb53" args="(const BodyGeometricalData &amp;)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00008.html">BodyGeometricalData</a>&amp; dynamicsJRLJapan::BodyGeometricalData::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00008.html">BodyGeometricalData</a> &amp;&nbsp;</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9e92f0048abe361e0d2f98c81fa765fb"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::resetURL" ref="a9e92f0048abe361e0d2f98c81fa765fb" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::resetURL </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0dc628b246e7423f86ea3f629b24709f"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::setBodyName" ref="a0dc628b246e7423f86ea3f629b24709f" args="(const std::string &amp;)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::setBodyName </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&nbsp;</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2e45df3d7d3c6c9a35fc9b68d028fa02"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::setRelatedJointName" ref="a2e45df3d7d3c6c9a35fc9b68d028fa02" args="(const std::string &amp;)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::setRelatedJointName </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&nbsp;</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a378e3223b7c443d6134e979ed2dfc51f"></a><!-- doxytag: member="dynamicsJRLJapan::BodyGeometricalData::setRotationForDisplay" ref="a378e3223b7c443d6134e979ed2dfc51f" args="(const matrix3d &amp;RotationForDisplay)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::BodyGeometricalData::setRotationForDisplay </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>RotationForDisplay</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-</div>
+<span class="comment">// Create Joint 1</span>
+<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* j1=0;
+j1 = anObjectFactory-&gt;createJointRotation(pose);
+</pre></div><p>IMPORTANT: It is assumed that the revolute joint axis is aligned with the <img class="formulaInl" alt="$x$" src="form_18.png"/>-axis of its own frame. This normalization is very similar to the one of Davit-Hartenberg, and is compatible with KineoWorks. The position of the joint and the kinematic tree specified below allow the library to derive all the needed parameters automatically.</p>
+<h3><a class="anchor" id="subsecbj">
+Building a revolute joint</a></h3>
+<p>The same way a body can be build </p>
+<div class="fragment"><pre class="fragment"><span class="comment">// Create Link 1</span>
+<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a>* l1=0;
+l1= anObjectFactory-&gt;createBody();
+</pre></div><p>The body mass is specified with: </p>
+<div class="fragment"><pre class="fragment">l1-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a449fc62906cbd9f85cf6ae6d590e25e4">mass</a>(m_SetOfParameters.m[0]);
+</pre></div><p>The inertia matrix can be specified using: </p>
+<div class="fragment"><pre class="fragment"><a class="codeRef" doxygen="jrl-mal.doxytag:" href="a00022.html#ae9abe813816afcb910b34b14c9f5875f">matrix3d</a> I;
+<a class="codeRef" doxygen="jrl-mal.doxytag:" href="a00022.html#abd848b8cad5622229f8745f85e32af78">MAL_S3x3_MATRIX_SET_IDENTITY</a>(I);
+l1-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a5e29c3b59ab2d9ce9928f6c49387cae1">inertiaMatrix</a>(I);
+</pre></div><p>Finally the center of mass for the body l1 is written: </p>
+<div class="fragment"><pre class="fragment"><a class="codeRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> lc ;
+lc(0) = 0.0;
+lc(1) = 0.0;
+lc(2) = 0.25;
+l1-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html#a196ea0c4b329de502b1bc2960392d922">localCenterOfMass</a>(lc);
+</pre></div><p>A body is related with the joint which is the parent of all the other joints on the body. It is specified with: </p>
+<div class="fragment"><pre class="fragment"><span class="comment">// Relate joint1 and link1</span>
+j1-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html#abc5c294d1f40b310072d696dda862636">setLinkedBody</a>(*l1);
+</pre></div><h2><a class="anchor" id="secspeckintree">
+Specifying the kinematic tree</a></h2>
+<p>The library handles robots as kinematic trees. Therefore each joint has a father or is the root of the robot kinematic tree.</p>
+<h3><a class="anchor" id="subsecspecroot">
+Specifying the root</a></h3>
+<p>To specify the root of the kinematic for the humanoid robot created above: </p>
+<div class="fragment"><pre class="fragment"><span class="comment">// Joint 1 is root of the tree.</span>
+aHDR-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00005.html#ac0a4dbb973e58871e13a2648991ba80c">rootJoint</a>(*j1);
+</pre></div><h3><a class="anchor" id="subsecspecfather">
+Adding a child in the kinematic chain</a></h3>
+<p>A joint is set as the son of another joint with: </p>
+<div class="fragment"><pre class="fragment"><a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* j2=0;
+j2 = anObjectFactory-&gt;createJointRotation(pose);
+j1-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html#a7056f229703bfaf74663e886c62c6de6">addChildJoint</a>(*j2);
+</pre></div><h3><a class="anchor" id="subsecinitkt">
+Initialization</a></h3>
+<p>In order to compute quantities, it is important to initialize the internal structure of the library by calling the following method: </p>
+<div class="fragment"><pre class="fragment">aHDR-&gt;<a class="codeRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00005.html#a1074fbf14f08bc4da2c6690815d3e1c9">initialize</a>();
+</pre></div> </div>
 </body>
 </html>

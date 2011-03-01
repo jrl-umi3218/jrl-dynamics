@@ -1,5 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="abstract-robot-dynamics.doxytag$a00008.html" title="CjrlHumanoidDynamicRobot" alt="" coords="5,103,205,129"/>
-<area shape="rect" href="abstract-robot-dynamics.doxytag$a00005.html" title="CjrlDynamicRobot" alt="" coords="212,7,345,33"/>
-<area shape="rect" href="$a00010.html" title="Classes to implement a non abstract class for a robot with dynamic properties from..." alt="" coords="229,103,416,129"/>
+<area shape="rect" href="$a00022.html" title="This class represents a robot joint." alt="" coords="31,84,201,111"/>
+<area shape="rect" href="abstract-robot-dynamics.doxytag$a00009.html" title="CjrlJoint" alt="" coords="83,7,149,33"/>
 </map>

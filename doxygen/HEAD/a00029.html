@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: dynamicsfactory.hh File Reference</title>
+<title>jrl-dynamics: dynamicsJRLJapan::ObjectFactory Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -9,49 +9,238 @@
   <div class="tabs">
     <ul>
       <li><a href="main.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div class="tabs">
     <ul>
-      <li><a href="files.html"><span>File&nbsp;List</span></a></li>
-      <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
+      <li><a href="annotated.html"><span>Class&nbsp;List</span></a></li>
+      <li><a href="classes.html"><span>Class&nbsp;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
+  </div>
+  <div class="navpath"><a class="el" href="a00050.html">dynamicsJRLJapan</a>::<a class="el" href="a00029.html">ObjectFactory</a>
   </div>
 </div>
 <div class="contents">
-<h1>dynamicsfactory.hh File Reference</h1><code>#include &quot;<a class="el" href="a00026.html">jrl/dynamics/dll.hh</a>&quot;</code><br/>
-<code>#include &lt;vector&gt;</code><br/>
-<code>#include &lt;<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00018.html">jrl/mal/matrixabstractlayer.hh</a>&gt;</code><br/>
-<code>#include &quot;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00021.html">abstract-robot-dynamics/humanoid-dynamic-robot.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00026.html">abstract-robot-dynamics/robot-dynamics-object-constructor.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="a00029.html">geometricdata.hh</a>&quot;</code><br/>
-<code>#include &lt;string&gt;</code><br/>
-<code>#include &lt;ostream&gt;</code><br/>
+<h1>dynamicsJRLJapan::ObjectFactory Class Reference<br/>
+<small>
+[<a class="el" href="a00054.html">User Classes</a>]</small>
+</h1><!-- doxytag: class="dynamicsJRLJapan::ObjectFactory" --><!-- doxytag: inherits="CjrlRobotDynamicsObjectFactory" -->
+<p>Hooks for to create objects.  
+<a href="#_details">More...</a></p>
+
+<p><code>#include &lt;jrl/dynamics/dynamicsfactory.hh&gt;</code></p>
 <div class="dynheader">
-Include dependency graph for dynamicsfactory.hh:</div>
+Inheritance diagram for dynamicsJRLJapan::ObjectFactory:</div>
 <div class="dynsection">
-<div class="center"><img src="a00041.png" border="0" usemap="#dynamicsfactory_8hh_map" alt=""/></div>
-<map name="dynamicsfactory_8hh_map" id="dynamicsfactory_8hh">
-<area shape="rect" href="a00026.html" title="jrl/dynamics/dll.hh" alt="" coords="5,84,141,111"/><area shape="rect" doxygen="jrl-mal.doxytag:" href="a00018.html" title="jrl/mal/matrixabstractlayer.hh" alt="" coords="251,84,459,111"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00021.html" title="abstract&#45;robot&#45;dynamics/humanoid&#45;dynamic&#45;robot.hh" alt="" coords="1225,161,1591,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00026.html" title="abstract&#45;robot&#45;dynamics/robot&#45;dynamics&#45;object&#45;constructor.hh" alt="" coords="507,84,931,111"/><area shape="rect" doxygen="jrl-mal.doxytag:" href="a00019.html" title="jrl/mal/matrixabstractlayerboost.hh" alt="" coords="131,161,376,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00019.html" title="abstract&#45;robot&#45;dynamics/fwd.hh" alt="" coords="943,393,1167,420"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00023.html" title="abstract&#45;robot&#45;dynamics/joint.hh" alt="" coords="992,239,1221,265"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00024.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;acceleration.hh" alt="" coords="1321,316,1633,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00025.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;velocity.hh" alt="" coords="687,316,967,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00014.html" title="abstract&#45;robot&#45;dynamics/body.hh" alt="" coords="991,316,1223,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00017.html" title="abstract&#45;robot&#45;dynamics/dynamic&#45;robot.hh" alt="" coords="451,239,747,265"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00020.html" title="abstract&#45;robot&#45;dynamics/hand.hh" alt="" coords="967,161,1201,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00018.html" title="abstract&#45;robot&#45;dynamics/foot.hh" alt="" coords="695,161,921,188"/></map>
-</div>
+<div class="center"><img src="a00089.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_object_factory_inherit__map" alt="Inheritance graph"/></div>
+<map name="dynamics_j_r_l_japan_1_1_object_factory_inherit__map" id="dynamics_j_r_l_japan_1_1_object_factory_inherit__map">
+<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html" title="CjrlRobotDynamicsObjectFactory" alt="" coords="7,7,233,33"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
+Collaboration diagram for dynamicsJRLJapan::ObjectFactory:</div>
 <div class="dynsection">
-<div class="center"><img src="a00042.png" border="0" usemap="#dynamicsfactory_8hhdep_map" alt=""/></div>
-</div>
+<div class="center"><img src="a00090.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_object_factory_coll__map" alt="Collaboration graph"/></div>
+<map name="dynamics_j_r_l_japan_1_1_object_factory_coll__map" id="dynamics_j_r_l_japan_1_1_object_factory_coll__map">
+<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html" title="CjrlRobotDynamicsObjectFactory" alt="" coords="7,7,233,33"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+
+<p><a href="a00091.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="2"><h2>Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00021.html">dynamicsJRLJapan::ObjectFactory</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Hooks for to create objects.  <a href="a00021.html#_details">More...</a><br/></td></tr>
-<tr><td colspan="2"><h2>Namespaces</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">namespace &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00033.html">dynamicsJRLJapan</a></td></tr>
-<tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">DYN_JRL_JAPAN_EXPORT int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00033.html#ab03683e5dd852720ca5610c24e9ce303">dynamicsJRLJapan::parseOpenHRPVRMLFile</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00008.html">CjrlHumanoidDynamicRobot</a> &amp;ajrlHumanoidDynamicRobot, std::string &amp;OpenHRPVRMLFile, std::string &amp;MapJointToRankFileName, std::string &amp;FileOfSpecificities)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">DYN_JRL_JAPAN_EXPORT int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00033.html#a55d77e994d0eb3ef9f3d9ac719771db3">dynamicsJRLJapan::parseOpenHRPVRMLFile</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00008.html">CjrlHumanoidDynamicRobot</a> &amp;ajrlHumanoidDynamicRobot, std::string &amp;OpenHRPVRMLFile, std::string &amp;MapJointToRankFileName, std::string &amp;FileOfSpecificities, std::vector&lt; BodyGeometricalData &gt; &amp;GeometricalDataonBodies, bool ReadGeometricalInformation=false)</td></tr>
+<tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00008.html">CjrlHumanoidDynamicRobot</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#ab3b8eea3071f6fa9374fbce8e5dd04f4">createHumanoidDynamicRobot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00005.html">CjrlDynamicRobot</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#aa845d9924b24c71b67e19562eaecf16c">createDynamicRobot</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#aeed739c82a3445c3023e25419d927331">createJointFreeflyer</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a76a73e0b9c0f8d2a055a76d5088a35d3">createJointRotation</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a043bc57c4ae58eed894eb78bcd8b7598">createJointTranslation</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a35f585957396910691b60d8d7778ca6b">createJointAnchor</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#aca86997045238bac368b2b5fcc4920e9">createBody</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlHand</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a468dd8944519725c0c3351a0a882b114">createHand</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inWrist)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00006.html">CjrlFoot</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#ade232c3004b8f80624f3c4a064ce69f2">createFoot</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inAnkle)</td></tr>
 </table>
+<hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>Hooks for to create objects. </p>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="aca86997045238bac368b2b5fcc4920e9"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createBody" ref="aca86997045238bac368b2b5fcc4920e9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a>* dynamicsJRLJapan::ObjectFactory::createBody </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#aa11c6ad1c60a3272777a619a5802089d">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa845d9924b24c71b67e19562eaecf16c"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createDynamicRobot" ref="aa845d9924b24c71b67e19562eaecf16c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00005.html">CjrlDynamicRobot</a>* dynamicsJRLJapan::ObjectFactory::createDynamicRobot </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a814742f8e3f0b966ad5af58543479289">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade232c3004b8f80624f3c4a064ce69f2"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createFoot" ref="ade232c3004b8f80624f3c4a064ce69f2" args="(const CjrlJoint *inAnkle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00006.html">CjrlFoot</a>* dynamicsJRLJapan::ObjectFactory::createFoot </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
+          <td class="paramname"> <em>inAnkle</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#afef4cb7570cf220ce1b5b0a153a113a2">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a468dd8944519725c0c3351a0a882b114"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createHand" ref="a468dd8944519725c0c3351a0a882b114" args="(const CjrlJoint *inWrist)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlHand</a>* dynamicsJRLJapan::ObjectFactory::createHand </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
+          <td class="paramname"> <em>inWrist</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a2735714ab560f18ff6adb724aef7934d">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab3b8eea3071f6fa9374fbce8e5dd04f4"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createHumanoidDynamicRobot" ref="ab3b8eea3071f6fa9374fbce8e5dd04f4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00008.html">CjrlHumanoidDynamicRobot</a>* dynamicsJRLJapan::ObjectFactory::createHumanoidDynamicRobot </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a72ec622182c97e3830c7c4c46de9d606">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35f585957396910691b60d8d7778ca6b"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createJointAnchor" ref="a35f585957396910691b60d8d7778ca6b" args="(const matrix4d &amp;inInitialPosition)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::ObjectFactory::createJointAnchor </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inInitialPosition</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeed739c82a3445c3023e25419d927331"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createJointFreeflyer" ref="aeed739c82a3445c3023e25419d927331" args="(const matrix4d &amp;inInitialPosition)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::ObjectFactory::createJointFreeflyer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inInitialPosition</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a77e6a3d5a7ad95c4576e4968409f8a73">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a76a73e0b9c0f8d2a055a76d5088a35d3"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createJointRotation" ref="a76a73e0b9c0f8d2a055a76d5088a35d3" args="(const matrix4d &amp;inInitialPosition)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::ObjectFactory::createJointRotation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inInitialPosition</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#aa0ba10098d53e7d3fe13a7fabafafbf1">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a043bc57c4ae58eed894eb78bcd8b7598"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createJointTranslation" ref="a043bc57c4ae58eed894eb78bcd8b7598" args="(const matrix4d &amp;inInitialPosition)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::ObjectFactory::createJointTranslation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>inInitialPosition</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a6de82f3daf46fb2ca7a8381e83d17dd9">CjrlRobotDynamicsObjectFactory</a>.</p>
+
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: geometricdata.hh File Reference</title>
+<title>jrl-dynamics: dynamicsJRLJapan::Geometry::Shape Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -9,66 +9,197 @@
   <div class="tabs">
     <ul>
       <li><a href="main.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div class="tabs">
     <ul>
-      <li><a href="files.html"><span>File&nbsp;List</span></a></li>
-      <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
+      <li><a href="annotated.html"><span>Class&nbsp;List</span></a></li>
+      <li><a href="classes.html"><span>Class&nbsp;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
+  </div>
+  <div class="navpath"><a class="el" href="a00050.html">dynamicsJRLJapan</a>::<a class="el" href="a00051.html">Geometry</a>::<a class="el" href="a00030.html">Shape</a>
   </div>
 </div>
 <div class="contents">
-<h1>geometricdata.hh File Reference</h1><code>#include &quot;<a class="el" href="a00026.html">jrl/dynamics/dll.hh</a>&quot;</code><br/>
-<code>#include &lt;vector&gt;</code><br/>
-<code>#include &lt;string&gt;</code><br/>
-<code>#include &lt;ostream&gt;</code><br/>
-<code>#include &lt;<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00018.html">jrl/mal/matrixabstractlayer.hh</a>&gt;</code><br/>
-<code>#include &quot;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00021.html">abstract-robot-dynamics/humanoid-dynamic-robot.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00026.html">abstract-robot-dynamics/robot-dynamics-object-constructor.hh</a>&quot;</code><br/>
+<h1>dynamicsJRLJapan::Geometry::Shape Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::Geometry::Shape" -->
+<p><code>#include &lt;jrl/dynamics/geometricdata.hh&gt;</code></p>
 <div class="dynheader">
-Include dependency graph for geometricdata.hh:</div>
+Collaboration diagram for dynamicsJRLJapan::Geometry::Shape:</div>
 <div class="dynsection">
-<div class="center"><img src="a00044.png" border="0" usemap="#geometricdata_8hh_map" alt=""/></div>
-<map name="geometricdata_8hh_map" id="geometricdata_8hh">
-<area shape="rect" href="a00026.html" title="jrl/dynamics/dll.hh" alt="" coords="5,84,141,111"/><area shape="rect" doxygen="jrl-mal.doxytag:" href="a00018.html" title="jrl/mal/matrixabstractlayer.hh" alt="" coords="429,84,637,111"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00021.html" title="abstract&#45;robot&#45;dynamics/humanoid&#45;dynamic&#45;robot.hh" alt="" coords="1404,161,1769,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00026.html" title="abstract&#45;robot&#45;dynamics/robot&#45;dynamics&#45;object&#45;constructor.hh" alt="" coords="685,84,1109,111"/><area shape="rect" doxygen="jrl-mal.doxytag:" href="a00019.html" title="jrl/mal/matrixabstractlayerboost.hh" alt="" coords="309,161,555,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00019.html" title="abstract&#45;robot&#45;dynamics/fwd.hh" alt="" coords="1121,393,1345,420"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00023.html" title="abstract&#45;robot&#45;dynamics/joint.hh" alt="" coords="1171,239,1400,265"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00024.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;acceleration.hh" alt="" coords="1500,316,1812,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00025.html" title="abstract&#45;robot&#45;dynamics/rigid&#45;velocity.hh" alt="" coords="865,316,1145,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00014.html" title="abstract&#45;robot&#45;dynamics/body.hh" alt="" coords="1169,316,1401,343"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00017.html" title="abstract&#45;robot&#45;dynamics/dynamic&#45;robot.hh" alt="" coords="629,239,925,265"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00020.html" title="abstract&#45;robot&#45;dynamics/hand.hh" alt="" coords="1145,161,1380,188"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00018.html" title="abstract&#45;robot&#45;dynamics/foot.hh" alt="" coords="873,161,1100,188"/></map>
-</div>
-<div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dynsection">
-<div class="center"><img src="a00045.png" border="0" usemap="#geometricdata_8hhdep_map" alt=""/></div>
-<map name="geometricdata_8hhdep_map" id="geometricdata_8hhdep">
-<area shape="rect" href="a00031.html" title="humanoiddynamicrobot.hh" alt="" coords="5,84,197,111"/></map>
-</div>
+<div class="center"><img src="a00125.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_geometry_1_1_shape_coll__map" alt="Collaboration graph"/></div>
+<map name="dynamics_j_r_l_japan_1_1_geometry_1_1_shape_coll__map" id="dynamics_j_r_l_japan_1_1_geometry_1_1_shape_coll__map">
+<area shape="rect" href="a00021.html" title="dynamicsJRLJapan::Geometry::IndexedFaceSet" alt="" coords="991,120,1305,147"/><area shape="rect" href="a00014.html" title="dynamicsJRLJapan::Geometry::Appearance" alt="" coords="1003,245,1293,272"/><area shape="rect" href="a00028.html" title="dynamicsJRLJapan::Geometry::Material" alt="" coords="516,207,780,233"/><area shape="rect" href="a00031.html" title="dynamicsJRLJapan::Geometry::Texture" alt="" coords="519,257,777,284"/><area shape="rect" title="STL class." alt="" coords="265,257,351,284"/><area shape="rect" title="STL class." alt="" coords="5,257,189,284"/><area shape="rect" href="a00032.html" title="dynamicsJRLJapan::Geometry::TextureTransform" alt="" coords="487,308,809,335"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+
+<p><a href="a00126.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="2"><h2>Classes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00014.html">dynamicsJRLJapan::Geometry::IndexedFaceSet</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00020.html">dynamicsJRLJapan::Geometry::Material</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00023.html">dynamicsJRLJapan::Geometry::Texture</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00024.html">dynamicsJRLJapan::Geometry::TextureTransform</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00007.html">dynamicsJRLJapan::Geometry::Appearance</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html">dynamicsJRLJapan::Geometry::Shape</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html">dynamicsJRLJapan::BodyGeometricalData</a></td></tr>
-<tr><td colspan="2"><h2>Namespaces</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">namespace &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00033.html">dynamicsJRLJapan</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">namespace &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00034.html">dynamicsJRLJapan::Geometry</a></td></tr>
-<tr><td colspan="2"><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#afb4871ff0ac9fad6297a92cc91f33902">_DYNAMICS_JRL_GEOMETRIC_DATA_H_</a></td></tr>
-<tr><td colspan="2"><h2>Typedefs</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; int &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00034.html#aba8152e368176253127281930a68ec18">dynamicsJRLJapan::Geometry::polygonIndex</a></td></tr>
-<tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00034.html#a0457230d4dcb11bdc0390d4f70dd9d8f">dynamicsJRLJapan::Geometry::operator&lt;&lt;</a> (std::ostream &amp;, const Material &amp;)</td></tr>
+<tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#ad9bcaf2791b0c0528d28625f9c5a63fb">Shape</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#a755ae98161f1812ff5706e81a5ad318f">~Shape</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#a7379e761d2b4ebb7d94af04cb24ab3d4">setAppearance</a> (<a class="el" href="a00014.html">Appearance</a> &amp;anAppearance)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00014.html">Appearance</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#a33cca6a304da269b3d611b8fb1088f50">getAppearance</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00014.html">Appearance</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#ac36b174bc8c49ff654ea11c474b2b68e">getAppearance</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#af2a96bde8a9dee0a7d9ec92f6099e686">setIndexedFaceSet</a> (<a class="el" href="a00021.html">IndexedFaceSet</a> &amp;anIndexedFaceSet)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00021.html">IndexedFaceSet</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#a032e5265d7699ee912feac519f667ece">getIndexedFaceSet</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00021.html">IndexedFaceSet</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#aa7512327ff77c8617852bbd466638d1c">getIndexedFaceSet</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00030.html#a58edb569fc7f0ac49f54633d9d183bd7">reset</a> ()</td></tr>
 </table>
-<hr/><h2>Define Documentation</h2>
-<a class="anchor" id="afb4871ff0ac9fad6297a92cc91f33902"></a><!-- doxytag: member="geometricdata.hh::_DYNAMICS_JRL_GEOMETRIC_DATA_H_" ref="afb4871ff0ac9fad6297a92cc91f33902" args="" -->
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ad9bcaf2791b0c0528d28625f9c5a63fb"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::Shape" ref="ad9bcaf2791b0c0528d28625f9c5a63fb" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define _DYNAMICS_JRL_GEOMETRIC_DATA_H_</td>
+          <td class="memname">dynamicsJRLJapan::Geometry::Shape::Shape </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a755ae98161f1812ff5706e81a5ad318f"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::~Shape" ref="a755ae98161f1812ff5706e81a5ad318f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dynamicsJRLJapan::Geometry::Shape::~Shape </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ac36b174bc8c49ff654ea11c474b2b68e"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::getAppearance" ref="ac36b174bc8c49ff654ea11c474b2b68e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00014.html">Appearance</a>&amp; dynamicsJRLJapan::Geometry::Shape::getAppearance </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a33cca6a304da269b3d611b8fb1088f50"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::getAppearance" ref="a33cca6a304da269b3d611b8fb1088f50" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="a00014.html">Appearance</a>&amp; dynamicsJRLJapan::Geometry::Shape::getAppearance </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa7512327ff77c8617852bbd466638d1c"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::getIndexedFaceSet" ref="aa7512327ff77c8617852bbd466638d1c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00021.html">IndexedFaceSet</a>&amp; dynamicsJRLJapan::Geometry::Shape::getIndexedFaceSet </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a032e5265d7699ee912feac519f667ece"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::getIndexedFaceSet" ref="a032e5265d7699ee912feac519f667ece" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="a00021.html">IndexedFaceSet</a>&amp; dynamicsJRLJapan::Geometry::Shape::getIndexedFaceSet </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a58edb569fc7f0ac49f54633d9d183bd7"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::reset" ref="a58edb569fc7f0ac49f54633d9d183bd7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dynamicsJRLJapan::Geometry::Shape::reset </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7379e761d2b4ebb7d94af04cb24ab3d4"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::setAppearance" ref="a7379e761d2b4ebb7d94af04cb24ab3d4" args="(Appearance &amp;anAppearance)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dynamicsJRLJapan::Geometry::Shape::setAppearance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00014.html">Appearance</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>anAppearance</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af2a96bde8a9dee0a7d9ec92f6099e686"></a><!-- doxytag: member="dynamicsJRLJapan::Geometry::Shape::setIndexedFaceSet" ref="af2a96bde8a9dee0a7d9ec92f6099e686" args="(IndexedFaceSet &amp;anIndexedFaceSet)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dynamicsJRLJapan::Geometry::Shape::setIndexedFaceSet </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00021.html">IndexedFaceSet</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>anIndexedFaceSet</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
         </tr>
       </table>
 </div>

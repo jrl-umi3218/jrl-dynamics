@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>jrl-dynamics: dynamicsJRLJapan::Hand Class Reference</title>
+<title>jrl-dynamics: The Recursive Newton-Euler Algorithm algorithm using spatial vectors</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -9,381 +9,75 @@
   <div class="tabs">
     <ul>
       <li><a href="main.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
-  <div class="tabs">
-    <ul>
-      <li><a href="annotated.html"><span>Class&nbsp;List</span></a></li>
-      <li><a href="classes.html"><span>Class&nbsp;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
-      <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
-    </ul>
-  </div>
-  <div class="navpath"><a class="el" href="a00033.html">dynamicsJRLJapan</a>::<a class="el" href="a00012.html">Hand</a>
+  <div class="navpath"><a class="el" href="main.html">dynamicsJRLJapan</a>&nbsp;&raquo;&nbsp;<a class="el" href="a00007.html">Algorithms</a>
   </div>
 </div>
 <div class="contents">
-<h1>dynamicsJRLJapan::Hand Class Reference</h1><!-- doxytag: class="dynamicsJRLJapan::Hand" --><!-- doxytag: inherits="CjrlHand" -->
-<p>This class represents a hand.  
-<a href="#_details">More...</a></p>
 
-<p><code>#include &lt;jrl/dynamics/hand.hh&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for dynamicsJRLJapan::Hand:</div>
-<div class="dynsection">
-<div class="center"><img src="a00077.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_hand_inherit__map" alt="Inheritance graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_hand_inherit__map" id="dynamics_j_r_l_japan_1_1_hand_inherit__map">
-<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html" title="CjrlHand" alt="" coords="56,7,131,33"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for dynamicsJRLJapan::Hand:</div>
-<div class="dynsection">
-<div class="center"><img src="a00078.png" border="0" usemap="#dynamics_j_r_l_japan_1_1_hand_coll__map" alt="Collaboration graph"/></div>
-<map name="dynamics_j_r_l_japan_1_1_hand_coll__map" id="dynamics_j_r_l_japan_1_1_hand_coll__map">
-<area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html" title="CjrlHand" alt="" coords="9,7,84,33"/><area shape="rect" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html" title="CjrlJoint" alt="" coords="108,7,175,33"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 
-<p><a href="a00079.html">List of all members.</a></p>
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#aafcde66cfb61d063b33915defda14c7c">Hand</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor.  <a href="#aafcde66cfb61d063b33915defda14c7c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a4c4c6fce6146f0a32af54c74af2c7787">~Hand</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destructor.  <a href="#a4c4c6fce6146f0a32af54c74af2c7787"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a746cae06a2239d608748274fbb131ab9">associatedWrist</a> () const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the wrist joint to which the hand is attached.  <a href="#a746cae06a2239d608748274fbb131ab9"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a71ee94909194663a8cc86ff3c3d86c11">setAssociatedWrist</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inWrist)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the wrist joint to which the hand is attached.  <a href="#a71ee94909194663a8cc86ff3c3d86c11"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#ab53bd9a0f47777ea9ad157314c9873cd">getCenter</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outCenter) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the center of the hand.  <a href="#ab53bd9a0f47777ea9ad157314c9873cd"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#ab87607cc113388f9be133221c4843a39">setCenter</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inCenter)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the center of the hand.  <a href="#ab87607cc113388f9be133221c4843a39"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#acfbf415358245f1ba3a613fef7e6a0e2">getThumbAxis</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outThumbAxis) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get thumb axis when had is in open position.  <a href="#acfbf415358245f1ba3a613fef7e6a0e2"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a13b263fade29c0b2759ca78e2c151836">setThumbAxis</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inThumbAxis)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set thumb axis in wrist frame when had is in open position.  <a href="#a13b263fade29c0b2759ca78e2c151836"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a77752a101bd6886b1fbeb885073b47b3">getForeFingerAxis</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outForeFingerAxis) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get forefinger axis.  <a href="#a77752a101bd6886b1fbeb885073b47b3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a6004a7b1490b14275b58bdfeb980b176">setForeFingerAxis</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inForeFingerAxis)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set forefinger axis.  <a href="#a6004a7b1490b14275b58bdfeb980b176"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a3f41af3e22dbf384053f6671cd0ab2b3">getPalmNormal</a> (<a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;outPalmNormal) const </td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get palm normal.  <a href="#a3f41af3e22dbf384053f6671cd0ab2b3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00012.html#a797e7e86946963837b6adc8d81853e18">setPalmNormal</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;inPalmNormal)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set palm normal.  <a href="#a797e7e86946963837b6adc8d81853e18"></a><br/></td></tr>
-</table>
-<hr/><a name="_details"></a><h2>Detailed Description</h2>
-<p>This class represents a hand. </p>
-<p>A hand has a central point referenced in the wrist joint frame, three axis and a scalar value ranging between 0 and 1 to describe the grasping degree (0 for open and 1 for closed hand) </p>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aafcde66cfb61d063b33915defda14c7c"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::Hand" ref="aafcde66cfb61d063b33915defda14c7c" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">dynamicsJRLJapan::Hand::Hand </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Constructor. </p>
-
-</div>
-</div>
-<a class="anchor" id="a4c4c6fce6146f0a32af54c74af2c7787"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::~Hand" ref="a4c4c6fce6146f0a32af54c74af2c7787" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual dynamicsJRLJapan::Hand::~Hand </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Destructor. </p>
-
-</div>
-</div>
-<hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a746cae06a2239d608748274fbb131ab9"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::associatedWrist" ref="a746cae06a2239d608748274fbb131ab9" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a>* dynamicsJRLJapan::Hand::associatedWrist </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get the wrist joint to which the hand is attached. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a3efba925c25c481a56ba0b3650a3ea71">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab53bd9a0f47777ea9ad157314c9873cd"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getCenter" ref="ab53bd9a0f47777ea9ad157314c9873cd" args="(vector3d &amp;outCenter) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::getCenter </td>
-          <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>outCenter</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get the center of the hand. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outCenter</em>&nbsp;</td><td>Center of the hand in the frame of the wrist. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a1ec84461770a89466b58ed1c5f17af57">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a77752a101bd6886b1fbeb885073b47b3"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getForeFingerAxis" ref="a77752a101bd6886b1fbeb885073b47b3" args="(vector3d &amp;outForeFingerAxis) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::getForeFingerAxis </td>
-          <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>outForeFingerAxis</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get forefinger axis. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outForeFingerAxis</em>&nbsp;</td><td>axis of the forefinger in wrist frame in open position </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#ac2a4c68066a9e8cede8db22dab001805">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3f41af3e22dbf384053f6671cd0ab2b3"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getPalmNormal" ref="a3f41af3e22dbf384053f6671cd0ab2b3" args="(vector3d &amp;outPalmNormal) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::getPalmNormal </td>
-          <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>outPalmNormal</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get palm normal. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outPalmNormal</em>&nbsp;</td><td>normal to the palm in the frame of the wrist. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a05d06971b4650177051e34a30f8ad86d">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="acfbf415358245f1ba3a613fef7e6a0e2"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::getThumbAxis" ref="acfbf415358245f1ba3a613fef7e6a0e2" args="(vector3d &amp;outThumbAxis) const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::getThumbAxis </td>
-          <td>(</td>
-          <td class="paramtype"><a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>outThumbAxis</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const<code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get thumb axis when had is in open position. </p>
-<dl><dt><b>Return values:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>outThumbAxis</em>&nbsp;</td><td>Axis of the thumb in wrist frame in open position </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#aeb2aff8b3abb42a34c4c959649881629">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a71ee94909194663a8cc86ff3c3d86c11"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setAssociatedWrist" ref="a71ee94909194663a8cc86ff3c3d86c11" args="(const CjrlJoint *inWrist)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void dynamicsJRLJapan::Hand::setAssociatedWrist </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
-          <td class="paramname"> <em>inWrist</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get the wrist joint to which the hand is attached. </p>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a7eebc27a82d3ac8079e0a4a27979809e">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab87607cc113388f9be133221c4843a39"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setCenter" ref="ab87607cc113388f9be133221c4843a39" args="(const vector3d &amp;inCenter)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::setCenter </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inCenter</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set the center of the hand. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inCenter</em>&nbsp;</td><td>Center of the hand in the frame of the wrist. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a858198e4ba0c28fc6d775f82b3918cc3">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6004a7b1490b14275b58bdfeb980b176"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setForeFingerAxis" ref="a6004a7b1490b14275b58bdfeb980b176" args="(const vector3d &amp;inForeFingerAxis)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::setForeFingerAxis </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inForeFingerAxis</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set forefinger axis. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inForeFingerAxis</em>&nbsp;</td><td>axis of the forefinger in wrist frame in open position </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#aeb843d6671894b9097dc81c2ce4c85fb">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a797e7e86946963837b6adc8d81853e18"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setPalmNormal" ref="a797e7e86946963837b6adc8d81853e18" args="(const vector3d &amp;inPalmNormal)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::setPalmNormal </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inPalmNormal</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set palm normal. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inPalmNormal</em>&nbsp;</td><td>normal to the palm in the frame of the wrist. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#a202a7b9daf81e29fcacbafec5cc36f44">CjrlHand</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a13b263fade29c0b2759ca78e2c151836"></a><!-- doxytag: member="dynamicsJRLJapan::Hand::setThumbAxis" ref="a13b263fade29c0b2759ca78e2c151836" args="(const vector3d &amp;inThumbAxis)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dynamicsJRLJapan::Hand::setThumbAxis </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00025.html#ad42c70b06fdda7014746a4be61325380">vector3d</a> &amp;&nbsp;</td>
-          <td class="paramname"> <em>inThumbAxis</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set thumb axis in wrist frame when had is in open position. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>inThumbAxis</em>&nbsp;</td><td>Axis of the thumb in wrist frame in open position </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html#aed81c104f6786448bb874b2d8cb66f63">CjrlHand</a>.</p>
-
-</div>
-</div>
+<h1><a class="anchor" id="pagerneaspatial">The Recursive Newton-Euler Algorithm algorithm using spatial vectors </a></h1><p>We recall here briefly this algorithm for a better understanding.</p>
+<p><img class="formulaInl" alt="$inputs: {\bf q},\dot{\bf q}, \ddot{\bf q}, \textit{model}, {^0{\bf f}{^e}{_i}}$" src="form_22.png"/> <br/>
+ <img class="formulaInl" alt="$output: \tau, {\bf f} $" src="form_23.png"/> <br/>
+ <img class="formulaInl" alt="$\textit{model data}: N_B, jtype(i), p(i), {\bf X}_L(i), I_i $" src="form_24.png"/> <br/>
+ <br/>
+ </p>
+<ol>
+<li>
+<img class="formulaInl" alt="${\bf v}_0 = {\bf 0}$" src="form_25.png"/>  </li>
+<li>
+<img class="formulaInl" alt="${\bf a}_o = -{\bf a}_g$" src="form_26.png"/> </li>
+<li>
+<img class="formulaInl" alt="$for \; i=1\; to \; N_b \; then$" src="form_27.png"/><br/>
+ <ol>
+<li>
+<img class="formulaInl" alt="${\bf X}_J(i) = xjcalc(jtype(i),{\bf q}_i)$" src="form_28.png"/> </li>
+<li>
+<img class="formulaInl" alt="${^i{\bf X}}_{p(i)} = {\bf X}_J(i){\bf X}_L(i)$" src="form_29.png"/> </li>
+<li>
+<img class="formulaInl" alt="$\text{if } p(i)\neq 0 \text{ then }$" src="form_30.png"/> <ol>
+<li>
+<img class="formulaInl" alt="${^i{\bf X}_0} = {^i{\bf X}_{p(i)}} {^{p(i)}{\bf X}_0} $" src="form_31.png"/> </li>
+</ol>
+</li>
+<li>
+<img class="formulaInl" alt="$ \text{end}$" src="form_32.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\bf \Phi}_i = pcalc(jtype(i),{\bf q}_i)$" src="form_33.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\mathring{\bf \Phi}}c_i = pdcalc(jtype(i),{\bf q}_i)$" src="form_34.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\bf v}_i = {^i{\bf X}_{p(i)}}{\bf v}_{p(i)} + \Phi_i\dot{\bf q}_i$" src="form_35.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\bf \zeta}_i = {\mathring{\bf \Phi}}c_i \dot{\bf q}_i + {\bf v}_i \times \Phi_i\dot{\bf q}_i $" src="form_36.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\bf a}_i = {^i{\bf X}_{p(i)}} {\bf a}_{p(i)} + \Phi_i \ddot{\bf q}_i + {\bf \zeta}_i $" src="form_37.png"/> </li>
+<li>
+<img class="formulaInl" alt="$ {\bf f}_i = {\bf I}_i {\bf a}_i + {\bf v}_i \times {\bf I}_i {\bf v}_i $" src="form_38.png"/> </li>
+</ol>
+</li>
+<li>
+<p class="startli"><img class="formulaInl" alt="$ for \; i=N_b\; to \; 1 \; do $" src="form_39.png"/> </p>
+<ol>
+<li>
+<img class="formulaInl" alt="$ {\bf \tau}_i = \Phi_i^T {\bf f}_i $" src="form_40.png"/>  </li>
+<li>
+<img class="formulaInl" alt="$ \text{if } p(i)\neq 0 \text{ then } $" src="form_41.png"/> <ol>
+<li>
+<img class="formulaInl" alt="${\bf f}_p(i) = {\bf f}_{p(i)} + {^i}{\bf X}_{p(i)}^T $" src="form_42.png"/> </li>
+</ol>
+</li>
+<li>
+<img class="formulaInl" alt="$ \text{end} $" src="form_43.png"/> </li>
+</ol>
+<p class="endli"></p>
+</li>
+</ol>
 </div>
 </body>
 </html>
