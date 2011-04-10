@@ -178,7 +178,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		      fscanfd(fp,&m_HipLength[i][0]);
 		      fscanfd(fp,&m_HipLength[i][1]);
 		      fscanfd(fp,&m_HipLength[i][2]);
-		      ODEBUG("Found FemurLength: " << m_HipLength[i]);
+		      ODEBUG("Found HipLength: " << m_HipLength[i]);
 		    }
 
 		  if (look_for(fp,"FemurLength"))
@@ -274,7 +274,7 @@ int HumanoidSpecificities::ReadXML(string &aFileName)
 		  if (look_for(fp,"JointNb"))
 		    {
 		      fscanfi(fp, &m_WristsJointNb[i]);
-		      ODEBUG("JointNb: " << m_ArmsJointNb[i]);
+		      ODEBUG("JointNb: " << m_WristsJointNb[i]);
 		    }
 
 		  if (look_for(fp,"JointsID"))

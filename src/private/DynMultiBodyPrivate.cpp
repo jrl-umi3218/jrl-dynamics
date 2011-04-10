@@ -248,7 +248,7 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
   py = ( g * positionCoMPondere[1]*m_mass +
 	 zmpz * dP[1] + dL[0])/(m_mass * g + dP[2]);
 
-  ODEBUG(" CalculateZMP : Masse :"<< mass << " g:" << g  << " "
+  ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << g  << " "
 	 << dP << " " << dL << " " << positionCoMPondere );
 
 

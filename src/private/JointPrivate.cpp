@@ -327,7 +327,6 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR_TYPE(double) a6DVector)
 
   ODEBUG("m_poseInParentFrame : " << m_poseInParentFrame <<
 	 " A: "<<endl << A <<
-	 " tmp " << endl << tmp <<
 	 "C " << endl << C <<
 	 "D " << endl << D <<
 	 "B " << endl << B );
@@ -405,7 +404,7 @@ void JointPrivate::updateMomentum()
   MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
   MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
   currentBody->L = NE_tmp3 + NE_tmp2;
-  ODEBUG("L: " << lL);
+  ODEBUG("L: " << currentBody->L);
 
 }
 

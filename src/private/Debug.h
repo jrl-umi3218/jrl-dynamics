@@ -87,7 +87,7 @@
 #define ODEBUG(x) cerr << __FILE__ << ":" << __LINE__ <<  x << endl
 #define ODEBUGL(x,level) {\
   if (DEBUG_MODE>level) \
-    cerr << __FILE << ":" << __LINE__ <<  x << endl; }
+    cerr << __FILE__ << ":" << __LINE__ <<  x << endl; }
 #else
 #define ODEBUG(x)
 #define ODEBUGL(x)
@@ -96,7 +96,7 @@
 #ifdef DEBUG_MODE
 #define ODEBUG4(x,y) { ofstream DebugFile; \
     DebugFile.open(y,ofstream::app); \
-    DebugFile << __FILE << ":" << __LINE__ \
+    DebugFile << __FILE__ << ":" << __LINE__ \
 	      << x << endl; DebugFile.close();}
 #define _DEBUG_4_ACTIVATED_ 1
 
@@ -116,7 +116,7 @@ DebugFile.close();}
 #define ODEBUG4(x,y) { \
 ofstream DebugFile; \
 DebugFile.open(y,ofstream::app); \
-DebugFile <<  __FILE << ":" << __LINE__ << x << endl; \
+DebugFile <<  __FILE__ << ":" << __LINE__ << x << endl; \
 DebugFile.close();}
 #define _DEBUG_4_ACTIVATED_ 1
 

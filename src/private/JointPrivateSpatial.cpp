@@ -370,7 +370,7 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   else
     currentBody->sv  = a;
 
-  ODEBUG("sv: " << currentBody->sv );
+//  ODEBUG("sv: " << currentBody->sv );
 
   /*new code by L.S*/
 

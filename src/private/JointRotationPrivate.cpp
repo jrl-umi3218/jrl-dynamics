@@ -123,7 +123,7 @@ bool JointRotationPrivate::updateTransformation(const vectorN & inDofVector)
   for( unsigned int i=0;i<3;i++)
     MAL_S4x4_MATRIX_ACCESS_I_J(body->m_transformation,i,3) = body->p(i);
 
-  ODEBUG("a:" << endl << currentBody->a );
+  ODEBUG("a:" << endl << body->a );
 
   return 0;
 }
