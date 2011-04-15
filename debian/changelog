@@ -1,3 +1,9 @@
+jrl-dynamics (1.19.3-9) lucid; urgency=low
+
+  * Try another solution for LD_LIBRARY_PATH
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Fri, 15 Apr 2011 17:51:04 +0900
+
 jrl-dynamics (1.19.3-8) lucid; urgency=low
 
   * dpkg-shlideps is specified its directory to search for jrl-dynamics.

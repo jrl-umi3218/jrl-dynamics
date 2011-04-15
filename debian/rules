@@ -7,7 +7,7 @@
 # This special exception was added by Craig Small in version 0.37 of dh-make.
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
 CFLAGS = -O3 -DNDEBUG
 CXXFLAGS = -O3 -DNDEBUG
@@ -18,7 +18,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_BUILD_TYPE=RELEASE -DGENERATE_DOC=ON -DCMAKE_INSTALL_PREFIX=/opt/openrobots
 
 override_dh_shlibdeps:
-	dpkg-shlibdeps -v -Tdebian/libjrl-dynamics1.19.3.substvars \
+	LD_LIBRARY_PATH=/opt/openrobots/lib:/usr/lib/libfakeroot/:/usr/lib64/libfakeroot:/usr/lib32/libfakeroot dpkg-shlibdeps -v -Tdebian/libjrl-dynamics1.19.3.substvars \
 	-S/build/buildd/jrl-dynamics-1.19.3/debian/tmp/opt/openrobots/lib/ \
 	debian/libjrl-dynamics1.19.3/opt/openrobots/bin/CreateMapleModel \
 	debian/libjrl-dynamics1.19.3/opt/openrobots/bin/CreateVRMLPoseFile \
