@@ -1,3 +1,58 @@
+jrl-dynamics (1.19.3-8) lucid; urgency=low
+
+  * dpkg-shlideps is specified its directory to search for jrl-dynamics.
+	This is due to our non-conventional way of install jrl-dynamics.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 18:42:42 +0900
+
+jrl-dynamics (1.19.3-7) lucid; urgency=low
+
+  * New test to fix shlib pb.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 17:24:10 +0900
+
+jrl-dynamics (1.19.3-6) lucid; urgency=low
+
+  * Trying to fix shlib pb.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 13:12:16 +0900
+
+jrl-dynamics (1.19.3-5) lucid; urgency=low
+
+  * Fix various variables 
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 02:38:22 +0900
+
+jrl-dynamics (1.19.3-4) lucid; urgency=low
+
+  * Fix previous LD_LIBRARY_PATH with a pb with recursive reference.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 01:09:57 +0900
+
+jrl-dynamics (1.19.3-3) lucid; urgency=low
+
+  * Fix LD_LIBRARY_PATH for ubuntu binary generation.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Mon, 11 Apr 2011 00:42:15 +0900
+
+jrl-dynamics (1.19.3-2) lucid; urgency=low
+
+  * Fix debian package pb for documentation.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Sun, 10 Apr 2011 21:12:06 +0900
+
+jrl-dynamics (1.19.3-1) lucid; urgency=low
+
+  * Integration of spatial computation.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Sun, 10 Apr 2011 19:56:54 +0900
+
+jrl-dynamics (1.19.2-1) lucid; urgency=low
+
+  * Fix name normalization and fix small bugs related to geometry reading.
+
+ -- olivier-stasse <olivier.stasse@aist.go.jp>  Wed, 20 Dec 2012 00:14:33 +0200
+
 jrl-dynamics (1.19.1.99-2) lucid; urgency=low
 
   * Fix version number in control file.
