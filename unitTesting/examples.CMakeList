@@ -36,24 +36,26 @@ MACRO(LIST2STRING _VAR_ARG _LIST_ARG)
 ENDMACRO(LIST2STRING)
 
 # --- MATRIXABSTRACTLAYER -------------------------------------
-SET(_MatrixAbstractLayer_FOUND 0)
-SET(_MatrixAbstractLayer_REQUIRED "MatrixAbstractLayer >= 1.8.0")
-PKG_CHECK_MODULES(_MatrixAbstractLayer REQUIRED ${_MatrixAbstractLayer_REQUIRED})
+SET(_jrl_mal_FOUND 0)
+SET(_jrl_mal_REQUIRED "jrl-mal >= 1.9.2")
+MESSAGE(STATUS "Looking for " ${_jrl_mal_REQUIRED})
+PKG_CHECK_MODULES(_jrl_mal REQUIRED ${_jrl_mal_REQUIRED})
 
-IF(NOT ${_MatrixAbstractLayer_FOUND})
-  MESSAGE(FATAL_ERROR "Check that package MatrixAbstractLayer is installed in a directory pointed out by PKG_CONFIG_PATH.")
-ENDIF(NOT ${_MatrixAbstractLayer_FOUND})
+IF(NOT ${_jrl_mal_FOUND})
+  MESSAGE(FATAL_ERROR "Check that package jrl_mal is installed in a directory pointed out by PKG_CONFIG_PATH.")
+ENDIF(NOT ${_jrl_mal_FOUND})
 
-SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_MatrixAbstractLayer_CFLAGS}")
-SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_MatrixAbstractLayer_LDFLAGS}")
+SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_jrl_mal_CFLAGS}")
+SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_jrl_mal_LDFLAGS}")
 
 # --- DYNAMICSJRLJAPAN ---------------------------------------
-SET(_dynamicsJRLJapan_FOUND 0)
-SET(_dynamicsJRLJapan_REQUIRED "dynamicsJRLJapan >= 1.16.1")
-PKG_CHECK_MODULES(_dynamicsJRLJapan ${_dynamicsJRLJapan_REQUIRED})
+SET(_jrl_dynamics_FOUND 0)
+SET(_jrl_dynamics_REQUIRED "jrl-dynamics >= 1.19.3")
+MESSAGE(STATUS "Looking for " ${_jrl_dynamics_REQUIRED})
+PKG_CHECK_MODULES(_jrl_dynamics ${_jrl_dynamics_REQUIRED})
 
-SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_dynamicsJRLJapan_CFLAGS}")
-SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_dynamicsJRLJapan_LDFLAGS}")
+SET(${PROJECT_NAME}_CXX_FLAGS "${${PROJECT_NAME}_CXX_FLAGS} ${_jrl_dynamics_CFLAGS}")
+SET(${PROJECT_NAME}_LINK_FLAGS "${${PROJECT_NAME}_LINK_FLAGS} ${_jrl_dynamics_LDFLAGS}")
 
 # -------------------------------------------------------------------
 # --- UTILS ---------------------------------------------------------
