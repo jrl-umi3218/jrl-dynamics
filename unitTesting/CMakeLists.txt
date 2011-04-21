@@ -74,7 +74,7 @@ ADD_CUSTOM_COMMAND(TARGET TestHumanoidDynamicRobotDebugLayale POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/unitTesting/sampleLinkJointRank.xml
   ${CMAKE_BINARY_DIR}/unitTesting
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/unitTesting/examples.CMakeList
-  ${CMAKE_BINARY_DIR}/unitTesting/CMakeLists.txt
+  ${CMAKE_BINARY_DIR}/unitTesting/CMakeLists.txt.example
 )
 target_link_libraries(TestHumanoidDynamicRobotDebugLayale jrl-dynamics)
 ADD_DEPENDENCIES (TestHumanoidDynamicRobotDebugLayale jrl-dynamics)
@@ -186,7 +186,7 @@ INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES}
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
 
 
-INSTALL(FILES ${CMAKE_BINARY_DIR}/unitTesting/CMakeLists.txt
+INSTALL(FILES ${CMAKE_BINARY_DIR}/unitTesting/CMakeLists.txt.example
   DESTINATION share/jrl-dynamics/examples/
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
 
