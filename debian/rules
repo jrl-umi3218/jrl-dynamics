@@ -16,7 +16,7 @@ export LD_LIBRARY_PATH
 
 override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_BUILD_TYPE=RELEASE -DGENERATE_DOC=ON -DCMAKE_INSTALL_PREFIX=/opt/openrobots
-x
+
 override_dh_shlibdeps:
 	LD_LIBRARY_PATH=/opt/openrobots/lib:/usr/lib/libfakeroot/:/usr/lib64/libfakeroot:/usr/lib32/libfakeroot dpkg-shlibdeps -v -Tdebian/libjrl-dynamics1.19.3.substvars \
 	-S/build/buildd/jrl-dynamics-1.19.3/debian/tmp/opt/openrobots/lib/ \
