@@ -16,7 +16,6 @@ Section: libs
 Homepage: http://github.com/jrl-umi3218/jrl-dynamics
 
 Package: libjrl-dynamics1.19.3
-Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: JRL dynamics computation
