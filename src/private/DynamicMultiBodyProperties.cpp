@@ -124,10 +124,16 @@ bool DynMultiBodyPrivate::getProperty(const std::string &inProperty,std::string 
       aos << m_TimeStep;
       outValue=aos.str();
     }
+  else if (inProperty=="Iteration")
+    {
+      ostringstream aos;
+      aos << m_IterationNumber;
+      outValue = aos.str();
+    }
   else
-  {
-	  std::cout << " Unknown getProperty '" << inProperty << "'" << std::endl;
-  }
+    {
+      std::cout << " Unknown getProperty '" << inProperty << "'" << std::endl;
+    }
   outValue="false";
   return false;
 }
