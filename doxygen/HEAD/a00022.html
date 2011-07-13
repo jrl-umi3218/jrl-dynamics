@@ -71,16 +71,16 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 <tr><td colspan="2"><div class="groupHeader">Joint kinematics</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p><a class="anchor" id="amgrp829b00841d48b92646605da7bf8e1c93"></a> </p>
 </div></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a6532306505325c39e3801fe649a395b4">initialPosition</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the initial position of the joint.  <a href="#a6532306505325c39e3801fe649a395b4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a815152bafaacb7538576dd4844d9aee0">initialPosition</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the initial position of the joint.  <a href="#a815152bafaacb7538576dd4844d9aee0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a51fd3726fa63dd3287e9606dbf51cf16">updateTransformation</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00019.html#aae58ddf3e4db6ecec278b41e6c958bbd">vectorN</a> &amp;inDofVector)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Update this joint's transformation according to degree of freedom value from argument robot configuration.  <a href="#a51fd3726fa63dd3287e9606dbf51cf16"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a01559660b61246b1503d1d3032f74a03">currentTransformation</a> () const </td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the current transformation of the joint.  <a href="#a01559660b61246b1503d1d3032f74a03"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00011.html">CjrlRigidVelocity</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a9d502512dfc3b19aeba7a831ab1c3d94">jointVelocity</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the velocity <img class="formulaInl" alt="$({\bf v}, {\bf \omega})$" src="form_6.png"/> of the joint.  <a href="#a9d502512dfc3b19aeba7a831ab1c3d94"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00010.html">CjrlRigidAcceleration</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a4adfe43449f8546ae0fd5a240508c0ba">jointAcceleration</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the acceleration of the joint.  <a href="#a4adfe43449f8546ae0fd5a240508c0ba"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00011.html">CjrlRigidVelocity</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#a7ff7d7a4ceba317baf394b14654c839c">jointVelocity</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the velocity <img class="formulaInl" alt="$({\bf v}, {\bf \omega})$" src="form_6.png"/> of the joint.  <a href="#a7ff7d7a4ceba317baf394b14654c839c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00010.html">CjrlRigidAcceleration</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#ac03119f856cb9d316b598404c69dee89">jointAcceleration</a> () const </td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the acceleration of the joint.  <a href="#ac03119f856cb9d316b598404c69dee89"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual unsigned int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00022.html#ac95a63059e45b24ec365cbda10f90042">numberDof</a> () const </td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of degrees of freedom of the joint.  <a href="#ac95a63059e45b24ec365cbda10f90042"></a><br/></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Bounds of the degrees of freedom</div></td></tr>
@@ -325,7 +325,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 
 </div>
 </div>
-<a class="anchor" id="a6532306505325c39e3801fe649a395b4"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::initialPosition" ref="a6532306505325c39e3801fe649a395b4" args="()" -->
+<a class="anchor" id="a815152bafaacb7538576dd4844d9aee0"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::initialPosition" ref="a815152bafaacb7538576dd4844d9aee0" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -334,7 +334,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -342,6 +342,8 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 
 <p>Get the initial position of the joint. </p>
 <p>The initial position of the joint is the position of the local frame of the joint. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html#a8ab5f2b0a60a205de49a856b8050f918">CjrlJoint</a>.</p>
 
 </div>
 </div>
@@ -375,7 +377,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 
 </div>
 </div>
-<a class="anchor" id="a4adfe43449f8546ae0fd5a240508c0ba"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::jointAcceleration" ref="a4adfe43449f8546ae0fd5a240508c0ba" args="()" -->
+<a class="anchor" id="ac03119f856cb9d316b598404c69dee89"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::jointAcceleration" ref="ac03119f856cb9d316b598404c69dee89" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -384,7 +386,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -392,6 +394,8 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 
 <p>Get the acceleration of the joint. </p>
 <p>The acceleratoin is determined by the configuration of the robot and its first and second time derivative: <img class="formulaInl" alt="$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})$" src="form_10.png"/>. </p>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html#a623b01d424ede4f810f7a6d37b3f5d9e">CjrlJoint</a>.</p>
 
 </div>
 </div>
@@ -417,7 +421,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 
 </div>
 </div>
-<a class="anchor" id="a9d502512dfc3b19aeba7a831ab1c3d94"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::jointVelocity" ref="a9d502512dfc3b19aeba7a831ab1c3d94" args="()" -->
+<a class="anchor" id="a7ff7d7a4ceba317baf394b14654c839c"></a><!-- doxytag: member="dynamicsJRLJapan::Joint::jointVelocity" ref="a7ff7d7a4ceba317baf394b14654c839c" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -426,7 +430,7 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -435,6 +439,8 @@ Collaboration diagram for dynamicsJRLJapan::Joint:</div>
 <p>Get the velocity <img class="formulaInl" alt="$({\bf v}, {\bf \omega})$" src="form_6.png"/> of the joint. </p>
 <p>The velocity is determined by the configuration of the robot and its time derivative: <img class="formulaInl" alt="$({\bf q},{\bf \dot{q}})$" src="form_7.png"/>.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the linear velocity <img class="formulaInl" alt="${\bf v}$" src="form_8.png"/> of the origin of the joint frame and the angular velocity <img class="formulaInl" alt="${\bf \omega}$" src="form_9.png"/> of the joint frame. </dd></dl>
+
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html#a882f7e9acb26b8d4da55c9d795996454">CjrlJoint</a>.</p>
 
 </div>
 </div>
