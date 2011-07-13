@@ -116,7 +116,7 @@ namespace dynamicsJRLJapan {
        The initial position of the joint is the position of the local frame of
        the joint.
     */
-    virtual const matrix4d& initialPosition();
+    virtual const matrix4d& initialPosition() const;
 
     /**
     \brief Update this joint's transformation according to degree of freedom value from argument robot configuration. This does not update the transformations of child joints.
@@ -144,14 +144,14 @@ namespace dynamicsJRLJapan {
        \return the linear velocity \f${\bf v}\f$ of the origin of the joint frame
        and the angular velocity \f${\bf \omega}\f$ of the joint frame.
     */
-    virtual CjrlRigidVelocity jointVelocity();
+    virtual CjrlRigidVelocity jointVelocity() const;
 
     /**
        \brief Get the acceleration of the joint.
 
        The acceleratoin is determined by the configuration of the robot and its first and second time derivative: \f$({\bf q},{\bf \dot{q}}, {\bf \ddot{q}})\f$.
     */
-    virtual CjrlRigidAcceleration jointAcceleration();
+    virtual CjrlRigidAcceleration jointAcceleration() const;
 
     /**
        \brief Get the number of degrees of freedom of the joint.
