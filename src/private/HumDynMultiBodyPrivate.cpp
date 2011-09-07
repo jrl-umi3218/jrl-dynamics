@@ -41,18 +41,38 @@ using namespace dynamicsJRLJapan;
 
 
 
-HumDynMultiBodyPrivate::HumDynMultiBodyPrivate() : DynMultiBodyPrivate()
+HumDynMultiBodyPrivate::HumDynMultiBodyPrivate() : DynMultiBodyPrivate(),
+						   m_LeftWristJoint(0),
+						   m_RightWristJoint(0),
+						   m_LeftFoot(0),
+						   m_RightFoot(0),
+						   m_LeftAnkleJoint(0),
+						   m_RightAnkleJoint(0),
+						   m_leftHand(0),
+						   m_rightHand(0),
+						   m_GazeJoint(0),
+						   m_WaistJoint(0),
+						   m_ChestJoint(0),
+						   m_HS(0)
 {
-  m_rightHand = m_leftHand = 0;
-  m_RightFoot = m_LeftFoot = 0;
-  m_WaistJoint = m_ChestJoint = m_GazeJoint=NULL;
-  m_HS = NULL;
 }
 
 
 HumDynMultiBodyPrivate::HumDynMultiBodyPrivate(const DynMultiBodyPrivate& inDynamicMultiBody,
 						   string aFileNameForHumanoidSpecificities) :
-  DynMultiBodyPrivate(inDynamicMultiBody)
+  DynMultiBodyPrivate(inDynamicMultiBody),
+  m_LeftWristJoint(0),
+  m_RightWristJoint(0),
+  m_LeftFoot(0),
+  m_RightFoot(0),
+  m_LeftAnkleJoint(0),
+  m_RightAnkleJoint(0),
+  m_leftHand(0),
+  m_rightHand(0),
+  m_GazeJoint(0),
+  m_WaistJoint(0),
+  m_ChestJoint(0),
+  m_HS(0)
 {
   SetHumanoidSpecificitiesFile(aFileNameForHumanoidSpecificities);
 }
