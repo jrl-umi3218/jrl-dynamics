@@ -111,7 +111,7 @@ namespace dynamicsJRLJapan
     vectorN sq, sdq, sddq, stau;
     matrix3d localR;
     Spatial::Inertia sIa;
-    Spatial::PluckerTransform sX0i,sXpii;
+    Spatial::PluckerTransform sX0i,sXpii,sXilc;
     Spatial::Velocity sv;
     Spatial::Acceleration sa;
     Spatial::Force sf;
