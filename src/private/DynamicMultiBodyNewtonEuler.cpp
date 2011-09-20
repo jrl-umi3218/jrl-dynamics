@@ -95,6 +95,8 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   positionCoMPondere[0] = 0;
   positionCoMPondere[1] = 0;
   positionCoMPondere[2] = 0;
+  MAL_S3_VECTOR_FILL(ldv_c_g,0);
+  
 
   currentNode = m_listOfBodies[labelTheRoot]->child;
 
@@ -143,8 +145,15 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	}
 
       /* Update the acceleration of the joint's CoM. */
-      if (m_ComputeAccCoM)
-	currentJoint->updateAccelerationCoM();
+      //      if (m_ComputeAccCoM)
+	{
+	  currentJoint->updateAccelerationCoM();
+	  Spatial::PluckerTransform sX0lc = currentBody->sX0i * currentBody->sXilc;
+	  Spatial::Acceleration sa0 = sX0lc * currentBody->sa;
+	  ldv_c_g += sa0.dv0() * currentBody->getMass();
+	  ODEBUG4INC(sa0.dv0() , "Accelerations.dat", " ");
+	}
+		  
 
       // TO DO if necessary : cross velocity (whatever it means -- ???).
       int step=0;
@@ -199,6 +208,8 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
     }
   while(currentNode!=labelTheRoot);
 
+  ODEBUG4INC( " ", "Accelerations.dat", std::endl);
+
   if (m_ComputeBackwardDynamics)
     {
       for (unsigned int j=0;j<m_JointVector.size();j++)
@@ -238,7 +249,11 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
     }
 
   positionCoMPondere = positionCoMPondere/m_mass;
+  ldv_c_g = ldv_c_g / m_mass;
 
+  ODEBUG4INC(ldv_c_g , "AccelerationCoM.dat", " ");
+  ODEBUG4INC(" " , "AccelerationCoM.dat", endl);
+  ODEBUG4INC(" " , "CoMs.dat", endl);
   // Zero Momentum Point Computation.
   if (m_ComputeZMP)
     {
@@ -258,7 +273,9 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 	  m_ZMP(1) = py;
 	  m_ZMP(2) = pz;
 
-	  ODEBUG4(m_ZMP<< " | " << m_dP << " | " << m_dL << "|" << m_IterationNumber,"DebugDataZMP.dat");
+	  ODEBUG4(m_ZMP<< " " << m_P << " " << m_L << " " <<
+		  m_dP << " " << m_dL << " " << m_IterationNumber,
+		  "DebugDataZMP.dat");
 
         }
       else
