@@ -136,11 +136,9 @@ const matrixNxP & JointFreeflyerPrivate::pcalc(const vectorN & )
 
 const matrixNxP & JointFreeflyerPrivate::pdcalc(const vectorN & )
 {
-  for(unsigned int i=0;i<6;i++)
-    {
-      MAL_MATRIX_RESIZE(m_dotphi,6,6);
-      MAL_MATRIX_FILL(m_dotphi,0);
-    }
+  
+  MAL_MATRIX_RESIZE(m_dotphi,6,6);
+  MAL_MATRIX_FILL(m_dotphi,0);
   return m_dotphi;
 }
 
