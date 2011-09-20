@@ -141,12 +141,13 @@ namespace dynamicsJRLJapan
       void f(vector3d &lf)      {m_f = lf;}
       void n0(vector3d &ln0)
       {m_n0 = ln0;}
-
+      
+      
     private:
 
       vector3d m_f, m_n0;
     };
-
+    
     class Motion
     {
     public:
@@ -230,13 +231,27 @@ namespace dynamicsJRLJapan
       vector3d p()
       {return m_p;}
 
+      std::ostream & display(std::ostream &  os) const
+	{
+	  os << " R: " << m_R << std::endl;
+	  os << " p: " << m_p << std::endl;
+	  return os;
+	}
+
     private:
       matrix3d m_R;
       vector3d m_p;
 
     };
+    
+    template <typename T>
+    inline std::ostream & operator<< (std::ostream & os, const T & m) 
+      {
+	return m.display(os);
+      }
+			       
 
-	class PluckerTransformTranspose
+    class PluckerTransformTranspose
     {
     public:
       PluckerTransformTranspose();
