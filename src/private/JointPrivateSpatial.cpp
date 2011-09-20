@@ -212,6 +212,12 @@ void JointPrivate::initXL()
   m_XL = Spatial::PluckerTransform(lR,lp);
   /* Assuming at first an identity matrix for Xj(i). */
   m_iXpi = m_XL;
+  
+  matrix3d lR_c;
+  MAL_S3x3_MATRIX_SET_IDENTITY(lR_c);
+  linkedDBody()->sXilc = Spatial::PluckerTransform(lR_c,
+						 linkedBody()->localCenterOfMass());
+
 }
 
 /* Update functions by O.S */
@@ -336,7 +342,10 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
   for( unsigned int i=0;i<3;i++)
     MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) = currentBody->p(i);
 
+  MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,currentBody->localCenterOfMass());
+  currentBody->w_c  = m_wlc + currentBody->p;
 
+  ODEBUG4INC(currentBody->w_c , "CoMs.dat", " ");
   return true;
 }
 
@@ -355,7 +364,6 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   // In the global frame.
   ODEBUG("dq: "<< currentBody->sdq );
 
-  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
   // Computes the angular velocity
 
   pcalc(inRobotConfigVector);
@@ -369,8 +377,6 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
     }
   else
     currentBody->sv  = a;
-
-//  ODEBUG("sv: " << currentBody->sv );
 
   /*new code by L.S*/
 
@@ -425,8 +431,6 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
   currentBody->sIa = Spatial::Inertia(lI,lh,lmass);
 
   // Update world com position
-  MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,lc);
-  currentBody->w_c  = m_wlc + currentBody->p;
   const double gravity_cst = -9.81;//0;
   vector3d g;
   MAL_S3_VECTOR_FILL(g,0);
