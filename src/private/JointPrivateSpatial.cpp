@@ -30,6 +30,7 @@
 
 #include "JointPrivate.h"
 #include "DynamicBodyPrivate.h"
+#include <jrl/dynamics/dynamicbody.hh>
 
 using namespace dynamicsJRLJapan;
 
@@ -53,6 +54,45 @@ const Spatial::PluckerTransform & JointPrivate::X0()
   return m_X0;
 }
 
+DynamicBodyPrivate * JointPrivate::getLinkedDynamicBodyPrivate() 
+{
+  DynamicBodyPrivate* currentBody = dynamic_cast<DynamicBodyPrivate*>(linkedBody());
+
+  if (currentBody==0)
+    {
+      DynamicBody * inBody = dynamic_cast<DynamicBody *>(linkedBody());
+      if (inBody!=0)
+	{
+	  currentBody = dynamic_cast<DynamicBodyPrivate *>(inBody->m_privateObj.get());
+	}
+    }
+  return currentBody;
+}
+
+DynamicBodyPrivate * JointPrivate::getMotherDynamicBodyPrivate() 
+{
+  DynamicBodyPrivate* currentMotherBody = 0;
+  
+  if (parentJoint()!=0)
+    {
+      JointPrivate * aJP = dynamic_cast<JointPrivate *>(parentJoint());
+      if (aJP!=0)
+	currentMotherBody = aJP->getLinkedDynamicBodyPrivate();
+    }
+  return currentMotherBody;
+}
+
+void JointPrivate::resizeSpatialFields()
+{
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  if (currentBody!=0)
+    {
+      MAL_VECTOR_RESIZE(currentBody->sq, m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sdq, m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
+    }
+}
 /*! Spatial notations specifications */
 /* modified by L.S*/
 Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
@@ -61,8 +101,8 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
    * expressions for the local rotation matrix R of the body frame in the joint
    * frame. */
 
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  MAL_VECTOR_RESIZE(currentBody->sq, m_nbDofs);
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  
 
   /* Read body variables in the state vector. */
   for(unsigned int i=0;i<m_nbDofs;i++)
@@ -172,6 +212,12 @@ void JointPrivate::initXL()
   m_XL = Spatial::PluckerTransform(lR,lp);
   /* Assuming at first an identity matrix for Xj(i). */
   m_iXpi = m_XL;
+  
+  matrix3d lR_c;
+  MAL_S3x3_MATRIX_SET_IDENTITY(lR_c);
+  linkedDBody()->sXilc = Spatial::PluckerTransform(lR_c,
+						 linkedBody()->localCenterOfMass());
+
 }
 
 /* Update functions by O.S */
@@ -241,11 +287,8 @@ bool JointPrivate::updateAcceleration(const vectorN& /*inRobotConfigVector*/,
 /* Rigid transformation */
 bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-
-  DynamicBodyPrivate* currentMotherBody = 0;
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
   Xj_i = xjcalc(inRobotConfigVector);
   Xl_i = Spatial::PluckerTransform(MAL_S3x3_RET_TRANSPOSE(currentBody->R_static),
@@ -299,7 +342,10 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
   for( unsigned int i=0;i<3;i++)
     MAL_S4x4_MATRIX_ACCESS_I_J(currentBody->m_transformation,i,3) = currentBody->p(i);
 
+  MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,currentBody->localCenterOfMass());
+  currentBody->w_c  = m_wlc + currentBody->p;
 
+  ODEBUG4INC(currentBody->w_c , "CoMs.dat", " ");
   return true;
 }
 
@@ -307,13 +353,10 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
 bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
 				   const vectorN& inRobotSpeedVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
   vector3d NE_tmp, NE_tmp2;
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
 
-  MAL_VECTOR_RESIZE(currentBody->sdq, m_nbDofs);
   for(unsigned int i=0;i<m_nbDofs;i++)
     {
       currentBody->sdq[i] = inRobotSpeedVector(rankInConfiguration()+i);
@@ -321,7 +364,6 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   // In the global frame.
   ODEBUG("dq: "<< currentBody->sdq );
 
-  matrix3d RstaticT = MAL_S3x3_RET_TRANSPOSE(currentBody->R_static);
   // Computes the angular velocity
 
   pcalc(inRobotConfigVector);
@@ -335,8 +377,6 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
     }
   else
     currentBody->sv  = a;
-
-  ODEBUG("sv: " << currentBody->sv );
 
   /*new code by L.S*/
 
@@ -356,13 +396,9 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
 				       const vectorN& /*inRobotSpeedVector*/,
 				       const vectorN& inRobotAccelerationVector)
 {
-  DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* currentMotherBody = 0;
+  DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-
-  MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
   for(unsigned int i=0;i<m_nbDofs;i++)
 
     {
@@ -395,8 +431,6 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
   currentBody->sIa = Spatial::Inertia(lI,lh,lmass);
 
   // Update world com position
-  MAL_S3x3_C_eq_A_by_B(m_wlc,currentBody->R,lc);
-  currentBody->w_c  = m_wlc + currentBody->p;
   const double gravity_cst = -9.81;//0;
   vector3d g;
   MAL_S3_VECTOR_FILL(g,0);
@@ -434,16 +468,12 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
 
 void JointPrivate::SupdateTorqueAndForce()
 {
-  DynamicBodyPrivate * currentBody = (DynamicBodyPrivate*)(linkedBody());
+  DynamicBodyPrivate * currentBody = getLinkedDynamicBodyPrivate();
+  DynamicBodyPrivate* currentMotherBody = getMotherDynamicBodyPrivate();
 
-  DynamicBodyPrivate* currentMotherBody = 0;
-
-  if (parentJoint()!=0)
-    currentMotherBody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
   vector3d fi,ni;
   fi=currentBody->sf.f();
   ni=currentBody->sf.n0();
-  MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
   MAL_VECTOR_DIM(t, double, 6);
   for (unsigned int j=0;j<3;j++)
     {

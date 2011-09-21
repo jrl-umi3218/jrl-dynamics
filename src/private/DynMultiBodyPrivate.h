@@ -82,7 +82,7 @@ namespace dynamicsJRLJapan
 
     /** Weighted CoM position. */
     vector3d positionCoMPondere;
-
+    vector3d ldv_c_g;
     /** Splitted inertial matrices. */
     matrixNxP m_MHStarB;
     matrixNxP m_MHStarLeftFoot;

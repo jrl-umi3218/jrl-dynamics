@@ -7,18 +7,29 @@ Build-Depends: debhelper (>= 7.0.50~), cmake (>=2.6),
 	       liblapack-dev (>= 1.2),
 	       gfortran (>= 4:4.4.3),
 	       libboost-dev (>= 1.33.1),
-	       libjrl-mal-dev (>= 1.9.0.99),
-	       libabstract-robot-dynamics-dev (>= 1.16.0.99)
+	       libjrl-mal-dev (>= 1.9.2),
+	       libabstract-robot-dynamics-dev (>= 1.16.2)
 Standards-Version: 3.8.4
 Vcs-Git: git://github.com/jrl-umi3218/jrl-dynamics.git
 Vcs-Browser: http://github.com/jrl-umi3218/jrl-dynamics
 Section: libs
 Homepage: http://github.com/jrl-umi3218/jrl-dynamics
 
-Package: libjrl-dynamics1.19.1.99
+Package: libjrl-dynamics-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends:  libjrl-dynamics1.19.3 (= ${binary:Version}), ${misc:Depends}
+Description: JRL dynamics computation
+ This package is an implementation of the abstract interface
+ defines by the package abstract robot dynamics. It implements
+ the Recursive Newton-Euler Algorithm (RNEA) for controlling robots.
+ This current implementation is limited to robot with rotation only.
+ .
+ This package contains development files (headers and pkg-config file).
+
+Package: libjrl-dynamics1.19.3
+Architecture: any
+Depends: libabstract-robot-dynamics-dev (>= 1.16.2), libboost-dev (>= 1.33.1), libjrl-mal-dev (>= 1.9.2), ${shlibs:Depends}, ${misc:Depends}
 Description: JRL dynamics computation
  This package is an implementation of the abstract interface
  defines by the package abstract robot dynamics. It implements
@@ -27,17 +38,6 @@ Description: JRL dynamics computation
  .
  This package contains versioned shared libraries.
 
-Package: libjrl-dynamics-dev
-Section: libdevel
-Architecture: any
-Depends: libabstract-robot-dynamics-dev (>= 1.16.0.99), libboost-dev (>= 1.33.1), libjrl-mal-dev (>= 1.9.0.99), libjrl-dynamics1.19.1.99 (= ${binary:Version}), ${misc:Depends}
-Description: JRL dynamics computation
- This package is an implementation of the abstract interface
- defines by the package abstract robot dynamics. It implements
- the Recursive Newton-Euler Algorithm (RNEA) for controlling robots.
- This current implementation is limited to robot with rotation only.
- .
- This package contains development files (headers and pkg-config file).
 
 Package: libjrl-dynamics-doc
 Section: doc

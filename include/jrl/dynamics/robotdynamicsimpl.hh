@@ -29,13 +29,14 @@
 #ifndef ROBOT_DYNAMICS_IMPL_H
 #define ROBOT_DYNAMICS_IMPL_H
 
-#include <MatrixAbstractLayer/MatrixAbstractLayer.h>
+#include <jrl/mal/matrixabstractlayer.hh>
 
-#include "Joint.h"
-#include "DynamicBody.h"
-#include "dynamicsJRLJapan/dynamicRobot.h"
-#include "dynamicsJRLJapan/humanoidDynamicRobot.h"
-#include "Hand.h"
+#include "jrl/dynamics/joint.hh"
+#include "jrl/dynamics/dynamicrobot.hh"
+#include "jrl/dynamics/dynamicbody.hh"
+#include "jrl/dynamics/humanoiddynamicrobot.hh"
+#include "jrl/dynamics/foot.hh"
+#include "jrl/dynamics/hand.hh"
 
 typedef jrlDelegate::dynamicRobot CimplDynamicRobot;
 typedef jrlDelegate::humanoidDynamicRobot CimplHumanoidDynamicRobot;

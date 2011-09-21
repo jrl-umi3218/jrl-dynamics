@@ -39,8 +39,8 @@
 namespace jrlDelegate {
 
   /** \ingroup userclasses
-   \brief Classes to implement a non abstract class for a robot with dynamic properties
-   from an object factory.
+      \brief Classes to implement a non abstract class for a robot with dynamic properties
+      from an object factory.
   */
   class dynamicRobot : public virtual CjrlDynamicRobot
   {
@@ -58,15 +58,15 @@ namespace jrlDelegate {
     */
     dynamicRobot(CjrlRobotDynamicsObjectFactory *inObjectFactory)
       : m_DR (inObjectFactory->createDynamicRobot())
-      {}
+    {}
 
     dynamicRobot(dynamicRobot *inDRNA)
       : m_DR (inDRNA)
-      {}
+    {}
 
     dynamicRobot()
       : m_DR ()
-      {}
+    {}
 
     /**
        \brief Initialize data-structure necessary to dynamic computations
@@ -82,10 +82,10 @@ namespace jrlDelegate {
        \brief Destructor
     */
     virtual ~dynamicRobot()
-      {
-	assert(m_DR != 0);
-	delete m_DR;
-      };
+    {
+      assert(m_DR != 0);
+      delete m_DR;
+    };
 
     /**
        @}
@@ -118,12 +118,12 @@ namespace jrlDelegate {
        \brief Get a vector containing all the joints.
     */
     virtual std::vector< CjrlJoint* > jointVector()
-      {
-	assert(m_DR != 0);
+    {
+      assert(m_DR != 0);
 
-	return m_DR->jointVector();
+      return m_DR->jointVector();
 
-      }
+    }
 
     /**
        \brief Get the chain of joints between two joints
@@ -132,11 +132,11 @@ namespace jrlDelegate {
     */
     virtual std::vector<CjrlJoint*> jointsBetween(const CjrlJoint& inStartJoint,
 						  const CjrlJoint& inEndJoint) const
-      {
-	assert(m_DR != 0);
-	return m_DR->jointsBetween(inStartJoint,inEndJoint);
+    {
+      assert(m_DR != 0);
+      return m_DR->jointsBetween(inStartJoint,inEndJoint);
 
-      }
+    }
 
     /**
        \brief Get the upper bound for ith dof.
@@ -313,16 +313,16 @@ namespace jrlDelegate {
       return m_DR->currentTorques();
     }
 
-	 /**
+    /**
        \brief Get the current joint torques of the robot.
        
        \return the torque vector \f${\bf \tau }\f$.
     */
-	virtual const vectorN& currentJointTorques() const 
-	{
-		assert(m_DR !=0);
-		return m_DR->currentJointTorques();
-	}
+    virtual const vectorN& currentJointTorques() const 
+    {
+      assert(m_DR !=0);
+      return m_DR->currentJointTorques();
+    }
 
     /**
        @}
@@ -592,7 +592,7 @@ namespace jrlDelegate {
     */
 
     /**
-	\brief Returns the list of actuated joints.
+       \brief Returns the list of actuated joints.
     */
     virtual const std::vector<CjrlJoint*>& getActuatedJoints() const
     {

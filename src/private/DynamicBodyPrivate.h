@@ -72,8 +72,8 @@ namespace dynamicsJRLJapan
 
     /*! Information coded as matrices:
 
-    - \a R = current body's orientation,
-    - \a R_static = static body's orientation (related to its mother).
+      - \a R = current body's orientation,
+      - \a R_static = static body's orientation (related to its mother).
     */
     matrix3d  R,R_static;
 
@@ -107,18 +107,18 @@ namespace dynamicsJRLJapan
       w_a, ldv,
       ldv_c;
 
-	/*L.S*/
-	vectorN sq, sdq, sddq, stau;
-	matrix3d localR;
-	Spatial::Inertia sIa;
-	Spatial::PluckerTransform sX0i,sXpii;
-	Spatial::Velocity sv;
-	Spatial::Acceleration sa;
-	Spatial::Force sf;
+    /*L.S*/
+    vectorN sq, sdq, sddq, stau;
+    matrix3d localR;
+    Spatial::Inertia sIa;
+    Spatial::PluckerTransform sX0i,sXpii,sXilc;
+    Spatial::Velocity sv;
+    Spatial::Acceleration sa;
+    Spatial::Force sf;
 
     /*! Transformation
       (It is redundant, but required to implement CjrlJoint::currentTransformation)
-     */
+    */
     matrix4d m_transformation;
 
     /*! Linear and angular momentums. */
@@ -135,7 +135,7 @@ namespace dynamicsJRLJapan
 
     /*! \name Assignment operator
       @{
-     */
+    */
     /*! From a dynamical body. */
     DynamicBodyPrivate & operator=(const DynamicBodyPrivate & r);
     /*! From a body */

@@ -76,9 +76,9 @@ void HumDynMultiBodyPrivate::SetHumanoidSpecificitiesFile(string &aFileNameForHu
       // Takes the left one.
       m_HS->GetHipLength(1,HipLength);
 
-      ODEBUG(WaistToHip[0] << " "
-	      << WaistToHip[1] << " "
-	      << WaistToHip[2] << " ");
+      ODEBUG(HipLength[0] << " "
+	      << HipLength[1] << " "
+	      << HipLength[2] << " ");
       m_Dt(0) = HipLength[0];
       m_Dt(1) = HipLength[1];
       m_Dt(2) = HipLength[2];

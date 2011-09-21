@@ -79,6 +79,9 @@ DynMultiBodyPrivate::DynMultiBodyPrivate()
   RESETDEBUG4("DebugDataPL.dat");
   RESETDEBUG4("DebugDataZMP.dat");
   RESETDEBUG4("DebugDataDMB_ZMP.dat");
+  RESETDEBUG5("Accelerations.dat");
+  RESETDEBUG5("AccelerationCoM.dat");
+  RESETDEBUG5("CoMs.dat");
 }
 
 DynMultiBodyPrivate::~DynMultiBodyPrivate()
@@ -243,15 +246,39 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
 {
   double g= 9.81;
 
-  px = ( g * positionCoMPondere[0]*m_mass +
-	 zmpz * dP[0] - dL[1])/(m_mass * g + dP[2]);
-  py = ( g * positionCoMPondere[1]*m_mass +
-	 zmpz * dP[1] + dL[0])/(m_mass * g + dP[2]);
+  // Take the root 
+  DynamicBodyPrivate * aDBP= m_RootOfTheJointsTree->linkedDBody();
+  // Compute the position vector from Waist to the multibody CoM
+  vector3d p_c = positionCoMPondere - aDBP->p;
+  // Set a rotation matrix to identity
+  matrix3d RI;
+  MAL_S3x3_MATRIX_SET_IDENTITY(RI);
+  // Build the Plucker transform from Waist to CoM
+  Spatial::PluckerTransform wXc(RI,p_c);
+  // Write the Spatial forces in the CoM reference frame
+  Spatial::Force af = wXc * aDBP->sf;
+  // Extract Momentum derivatives.
+  vector3d ldP = af.f();
+  vector3d ldL = af.n0();
 
-  ODEBUG(" CalculateZMP : Masse :"<< mass << " g:" << g  << " "
-	 << dP << " " << dL << " " << positionCoMPondere );
+  ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << g  << " "
+	 << " f: " << aDBP->sf.f() 
+	 << " t: " << aDBP->sf.n0() << " dP: " 
+	  << ldP << " dL: " << ldL << " CoM:" << positionCoMPondere << 
+	  " ldv_c_g: " <<ldv_c_g);
+  ODEBUG(" ldL[1] " << ldL[1] << endl <<
+	  "CoM: " << positionCoMPondere << endl <<
+	  "ldv_c_g[0]: " << ldv_c_g[0] << endl <<
+	  "ldv_c_g[2]: " << ldv_c_g[2] << endl <<
+	  "wXc: " << wXc );
+	  
+  //
+  px = positionCoMPondere[0] - ( ldL[1] + 
+				m_mass * ( positionCoMPondere[2] + 0.64 )* ldv_c_g[0] )/(m_mass * (g + ldv_c_g[2]));
+  py = positionCoMPondere[1] + (ldL[0] 
+				- m_mass *( positionCoMPondere[2] + 0.64 )* ldv_c_g[1] )/(m_mass * (g + ldv_c_g[2]));
 
-
+  ODEBUG(" px: " << px << " py: " << py);
 }
 
 string DynMultiBodyPrivate::GetName(int JointID)
@@ -662,7 +689,6 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR_TYPE(double)& inVeloc
 const MAL_VECTOR_TYPE(double)& DynMultiBodyPrivate::currentVelocity() const
 {
   return m_Velocity;
-
 }
 /**
    \brief Set the current acceleration of the robot.
@@ -704,8 +730,6 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR_TYPE(double)& inA
 	      lindex++;
             }
 
-	  //((JointPrivate *)m_JointVector[i])->UpdateVelocityFrom2x3DOFsVector(alinearVelocity,
-	  //								       anAngularVelocity);
 	  lindex+=3;
         }
       // Update only the quantity when it is a revolute or a prismatic joint.

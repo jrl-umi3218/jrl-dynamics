@@ -167,6 +167,13 @@ JointPrivate::JointPrivate():
 JointPrivate::~JointPrivate()
 {}
 
+void JointPrivate::setnumberDof(unsigned int lNbDofs)
+{
+  m_nbDofs = lNbDofs;
+  CreateLimitsArray();
+  resizeSpatialFields();
+}
+
 void JointPrivate::CreateLimitsArray()
 {
   ODEBUG("CreateLimitsArray: "<< numberDof() << " " << getName());
@@ -320,7 +327,6 @@ void JointPrivate::UpdatePoseFrom6DOFsVector(MAL_VECTOR_TYPE(double) a6DVector)
 
   ODEBUG("m_poseInParentFrame : " << m_poseInParentFrame <<
 	 " A: "<<endl << A <<
-	 " tmp " << endl << tmp <<
 	 "C " << endl << C <<
 	 "D " << endl << D <<
 	 "B " << endl << B );
@@ -380,12 +386,13 @@ void JointPrivate::updateMomentum()
   vector3d NE_tmp,NE_tmp2, NE_tmp3;
   matrix3d NE_Rt;
   // Computes momentum matrix P.
-  ODEBUG("w: " << currentBody->w );
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->w, m_wlc);
+  ODEBUG("w: " << currentBody->sv.w() );
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->sv.w(), 
+			      currentBody->w_c);
   ODEBUG("cl^w: " << NE_tmp);
   ODEBUG("mass: " << currentBody->getMass());
-  ODEBUG("v0: " << currentBody->v0 );
-  currentBody->P=  (currentBody->v0 +
+  ODEBUG("v0: " << currentBody->sv.v0() );
+  currentBody->P=  (currentBody->sv.v0() +
 	   NE_tmp )* currentBody->getMass();
   ODEBUG("P: " << currentBody->P);
   // Computes angular momentum matrix L
@@ -398,7 +405,7 @@ void JointPrivate::updateMomentum()
   MAL_S3x3_C_eq_A_by_B(NE_tmp, currentBody->getInertie(),NE_tmp2);
   MAL_S3x3_C_eq_A_by_B(NE_tmp2, currentBody->R,NE_tmp);
   currentBody->L = NE_tmp3 + NE_tmp2;
-  ODEBUG("L: " << lL);
+  ODEBUG("L: " << currentBody->L);
 
 }
 
@@ -409,19 +416,19 @@ void JointPrivate::updateAccelerationCoM()
   vector3d NE_tmp2,NE_tmp3;
 
   /* *******************  Acceleration for the center of mass of body  i ******************* */
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->lw,lc);
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->lw,NE_tmp2);
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->sv.w(),lc);
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->sv.w(),NE_tmp2);
 
   // NE_tmp2 = dw_I x r_{i,i+1}
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->ldw,lc);
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp2,currentBody->sa.dw(),lc);
 
-  currentBody->ldv_c = currentBody->ldv + NE_tmp2 + NE_tmp3;
+  currentBody->ldv_c = currentBody->sa.dv0() + NE_tmp2 + NE_tmp3;
 
   ODEBUG(currentBody->getName() << " CoM linear acceleration / local frame");
   ODEBUG(" lc = " << lc);
   ODEBUG(" w_i x (w_i x lc) = " << NE_tmp3 << " | (lwd x lc) = " << NE_tmp2);
-  ODEBUG(" lw: " << currentBody->lw << " ldw: " << currentBody->ldw);
-  ODEBUG(" ldv: " << currentBody->ldv);
+  ODEBUG(" lw: " << currentBody->sv.w() << " ldw: " << currentBody->sa.dw());
+  ODEBUG(" ldv: " << currentBody->sa.dv0());
   ODEBUG(" R_static: " << currentBody->R_static);
   ODEBUG(" b: " << currentBody->b);
   ODEBUG(" currentBody->Riip1t: " << currentBody->Riip1t);

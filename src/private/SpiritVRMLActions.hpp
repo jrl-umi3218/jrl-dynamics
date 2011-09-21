@@ -218,7 +218,7 @@ namespace dynamicsJRLJapan
       // Generic action for display
       struct fDisplay_t {
 
-	void operator()(const char &) const
+	void operator()(const char & c) const
 	{
 	  ODEBUG("Display " << c  );
 	}

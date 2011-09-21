@@ -33,6 +33,174 @@
 using namespace std;
 using namespace dynamicsJRLJapan;
 
+/* Store configuration file names*/
+typedef struct 
+{
+  string SpecificitiesFileName;
+  string Path;
+  string Name;
+  string MapFromCjrlJointToRank;
+  string RobotFileName;
+  string PosFileName;
+} ConfigurationFiles_t;
+
+/* X-Y-Z Euler angles position, derivative, second derivative */
+class EulerAngles_t {
+public:
+  vector3d xyz;
+  vector3d dxdydz;
+  vector3d ddxddyddz;
+
+  void computeAngularVelocity(vector3d w)
+  {
+    matrix3d Rz,Ry,Rx;
+    matrix3d dRz,dRy,dRx,Final;
+
+    double cz=0.0, sz=0.0, cy=0.0, sy=0.0,
+      cx=0.0, sx=0.0;
+
+    cx = cos(xyz(0)); sx = sin(xyz(0));
+    cy = cos(xyz(1)); sy = sin(xyz(1));
+    cz = cos(xyz(2)); sz = sin(xyz(2));
+
+    Rx(1,1) = Rx(2,2) = cx; 
+    Rx(0,0) = 1.0;
+    Rx(1,2) = -sx; Rx(2,1) = sx;
+
+    Ry(0,0) = cy; Rx(0,2) = sy;
+    Ry(1,1) = 1.0;
+    Ry(2,0) = -sy; Ry(2,2) = cy;
+
+    Rz(0,0) = cz; Rz(0,1) = -sz;
+    Rz(1,0) = sz; Rz(1,1) = cz;
+    Rz(2,2) = 1.0;
+
+    dRz(0,0) = 1.0;
+    dRz(1,1) = -dxdydz(2)*sz; dRz(1,2) = dxdydz(2)*cz;
+    dRz(2,1) = -dRz(1,2); dRz(2,2) = dRz(1,1);
+
+    dRy(0,0) = -dxdydz(1)*sy; dRy(0,2) = dxdydz(1)*cy;
+    dRy(1,1) = 1.0;
+    dRy(2,1) = -dxdydz(1)*cy; dRy(2,2) = -dxdydz(1)*sy;
+    
+    dRx(0,0) = -dxdydz(0)*sy; dRy(0,1) = -dxdydz(0)*cy;
+    dRx(1,0) = dxdydz(0)*cy; dRy(1,1) = -dxdydz(0)*sy;
+    dRx(2,2) = 1.0;
+    
+    Final = dRz * Ry * Rx + Rz * dRy * Rx + Rz * Ry * dRx;
+    //cout << "xyz-euler: " << xyz << endl;
+    //cout << "dxdydz-euler: " << dxdydz << endl;
+    w(0) = Final(2,1);
+    w(1) = Final(0,2);
+    w(2) = Final(1,0);
+  }
+};
+
+/* Store the current state of a robot */
+class RobotState_t 
+{
+private:
+  unsigned int m_NbDofs;
+  EulerAngles_t m_EulerAngles;
+
+public:
+  MAL_VECTOR(aCurrentConf,double);
+  MAL_VECTOR(aPrevCurrentConf,double);
+  MAL_VECTOR(aCurrentSpeed,double);
+  MAL_VECTOR(aPrevCurrentSpeed,double);
+  MAL_VECTOR(aCurrentAcceleration,double);
+
+  
+  void setNbDofs(unsigned int NbDofs)
+  { 
+    m_NbDofs = NbDofs;
+    MAL_VECTOR_RESIZE(aCurrentConf,m_NbDofs);
+    MAL_VECTOR_RESIZE(aPrevCurrentConf,m_NbDofs);
+    MAL_VECTOR_RESIZE(aCurrentSpeed,m_NbDofs);
+    MAL_VECTOR_RESIZE(aPrevCurrentSpeed,m_NbDofs);
+    MAL_VECTOR_RESIZE(aCurrentAcceleration,m_NbDofs);    
+  };
+
+  void reset()
+  {
+    int lindex=0;
+    for(unsigned int i=0;i<m_NbDofs;i++)
+      aCurrentConf[lindex++] = 0.0;
+
+  }
+
+  void updateConfFromFreeFlyer(vector<double> &Waist)
+  {
+    if (MAL_VECTOR_SIZE(aCurrentConf)<6)
+      throw("RobotState_t::UpdateConfFromFreeFlyer: current configuration <6.");
+
+    for(unsigned int i=0;i<Waist.size();i++)
+      aCurrentConf[i]=Waist[i];
+  }
+
+  void updateConfFromActualData(vector<double> ActualData)
+  {
+    
+    if (ActualData.size()<m_NbDofs-6)
+      throw("RobotState_t::UpdateConfFromActualData: ActualData < NbOfDofs-6 of the robot.");
+
+    for(unsigned int i=0;i<m_NbDofs-6;i++)
+      aCurrentConf[i+6] = ActualData[i+1];
+  }
+
+  void updateRobot(CjrlHumanoidDynamicRobot *aHDR)
+  {
+    aHDR->currentConfiguration(aCurrentConf);
+    aHDR->currentVelocity(aCurrentSpeed);
+    aHDR->currentAcceleration(aCurrentAcceleration);
+  }
+
+  void updateCurrentRobotState(double SamplingPeriod,
+			       long unsigned int & NbIt)
+  {
+    if (NbIt>=1)
+      {
+	for(unsigned int i=0;i<6;i++)
+	  aCurrentSpeed[i]=(aCurrentConf[i]-aPrevCurrentConf[i])/SamplingPeriod;
+	
+	for(unsigned int i=0;i<3;i++)
+	  {
+	    // Set the current euler angles values.
+	    m_EulerAngles.xyz(i) = aCurrentConf[i+3];
+	    // Set the current euler angles derivatives.
+	    m_EulerAngles.dxdydz(i) = aCurrentSpeed[i+3];
+	  }
+	vector3d w;
+
+	// Compute proper angular velocity.
+	m_EulerAngles.computeAngularVelocity(w);
+
+	for(unsigned int i=0;i<3;i++)
+	  aCurrentSpeed[i+3]=w(i);
+	
+	for(unsigned int i=6;i<36;i++)
+	  aCurrentSpeed[i]=(aCurrentConf[i]-aPrevCurrentConf[i])/SamplingPeriod;
+      }
+    else
+      for(unsigned int i=0;i<36;i++)
+	aCurrentSpeed[i]=0.0;
+    
+    if (NbIt>=2)
+      {
+	for(unsigned int i=0;i<6;i++)
+	  aCurrentAcceleration[i]=(aCurrentSpeed[i]-aPrevCurrentSpeed[i])/SamplingPeriod;
+	
+	for(unsigned int i=6;i<36;i++)
+	  aCurrentAcceleration[i]=(aCurrentSpeed[i]-aPrevCurrentSpeed[i])/SamplingPeriod;
+      }
+    else
+      for(unsigned int i=0;i<36;i++)
+	aCurrentAcceleration[i]=0.0;
+  }
+
+};
+
+
 void ExtractRefWaist(ifstream &RefStateFile,
 		     double *WaistFromRef,
 		     double *RotationFreeFlyer,
@@ -65,38 +233,39 @@ void ExtractRefWaist(ifstream &RefStateFile,
     }
 }
 
-void ExtractActualWaist(const CjrlJoint *LeftFoot2,
-			const CjrlJoint *RightFoot2,
-			CjrlJoint *Waist2,
+
+void ExtractActualWaist(CjrlHumanoidDynamicRobot * aHDR2,
 			matrix4d &AbsSupportFootPos,
-			double * ,
+			vector<double> & ,
 			double * ,
 			int NbIt,
-			double* WaistFromActual,
+			vector<double>& WaistFromActual,
 			int &PreviousSupportFoot)
 {
+  CjrlJoint *Waist2 = aHDR2->waist();
 
   int CurrentSupportFoot=PreviousSupportFoot;
 
   matrix4d CurrentSupportFootPosInWorld,
     CurrentWaistPosInSupportFoot, CurrentAbsWaistPos;
 
-  matrix4d TrLF2 = LeftFoot2->currentTransformation();
-  matrix4d TrRF2 = RightFoot2->currentTransformation();
+  matrix4d TrLF2 = aHDR2->leftFoot()->associatedAnkle()->currentTransformation();
+  matrix4d TrRF2 = aHDR2->rightFoot()->associatedAnkle()->currentTransformation();
   matrix4d CurrentWaistInWorld2 = Waist2->currentTransformation();
   if (
       (MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)<
        MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)) &&
-      (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)-0.105)>1e-3))
+      (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)-MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3))>1e-19))
     {
       CurrentSupportFootPosInWorld = TrLF2;
       CurrentSupportFoot = 1;
-          }
+    }
   else
     {
       if ((MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)>
 	   MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3)) &&
-	  (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)-0.105)>1e-3))
+	  (fabs(MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3)-
+		MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3))>1e-19))
 	{
 	  CurrentSupportFootPosInWorld = TrRF2;
 	  CurrentSupportFoot = -1;
@@ -114,8 +283,6 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 	    }
 	}
     }
-  //  cout << "CurrentWaistInWorld2" << CurrentWaistInWorld2 << endl;
-  //  cout << "CurrentSupportFootPosInWorld" << CurrentSupportFootPosInWorld<< endl;
 
   matrix4d CurrentWorldPosInSupportFoot;
 
@@ -147,8 +314,6 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 	  // Put Current support foot in absolute ref.
 	  AbsSupportFootPos = MAL_S4x4_RET_A_by_B(AbsSupportFootPos,
 						  CurrentSupportFootPosInWorld);
-
-	  cout << "Choice 5" <<endl;
 	}
 
       if ((CurrentSupportFoot==-1) && (PreviousSupportFoot==1))
@@ -159,13 +324,10 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 						  tmp);
 	  AbsSupportFootPos = MAL_S4x4_RET_A_by_B(AbsSupportFootPos,
 						  CurrentSupportFootPosInWorld);
-	  cout << "Choice 6" <<endl;
 	}
 
     }
-  //  cout << "AbsSupportFootPos : " << AbsSupportFootPos << endl;
   MAL_S4x4_C_eq_A_by_B(CurrentAbsWaistPos,AbsSupportFootPos,CurrentWaistPosInSupportFoot);
-  //  cout << "CurrentAbsWaistPos: " << CurrentAbsWaistPos << endl;
 
   {
     const double & nx = MAL_S4x4_MATRIX_ACCESS_I_J(CurrentAbsWaistPos,2,2);
@@ -186,8 +348,10 @@ void ExtractActualWaist(const CjrlJoint *LeftFoot2,
 
 }
 
-void SaveWaistPositions(double *WaistRef,
-			double *WaistActual)
+
+void SaveWaistPositions(vector<double> &WaistRef,
+			vector<double> &WaistActual,
+			int PreviousSupportFoot)
 {
   ofstream RebuildWaist;
   RebuildWaist.open("RebuildWaist.dat",ofstream::app);
@@ -197,20 +361,16 @@ void SaveWaistPositions(double *WaistRef,
   for(unsigned int i=0;i<6;i++)
     RebuildWaist  << WaistActual[i] << " ";
 
+  RebuildWaist << PreviousSupportFoot << " ";
   RebuildWaist << endl;
 
   RebuildWaist.close();
 
 }
 
-int main(int argc, char *argv[])
+void dealWithArguments(int argc, char *argv[],
+		       ConfigurationFiles_t &SetOfConfigurationFiles)
 {
-  string aSpecificitiesFileName;
-  string aPath;
-  string aName;
-  string aMapFromCjrlJointToRank;
-
-  string PosFileName;
   if (argc!=6)
     {
       const char *envrobotpath="ROBOTPATH";
@@ -222,112 +382,79 @@ int main(int argc, char *argv[])
 
       if ((robotpath==0) || (robotname==0))
 	{
-	  cerr << " This program takes 6 arguments: " << endl;
+	  cerr << " This program takes 5 arguments: " << endl;
 	  cerr << "./TestHumanoidDynamicRobot PATH_TO_VRML_FILE VRML_FILE_NAME "<< endl;
 	  cerr << " PATH_TO_SPECIFICITIES_XML PATH PATH_TO_MAP_JOINT_2_RANK" << endl;
-	  cerr << " ReferenceLogFile ActualLogFile" << endl;
+	  cerr << " PosFileName" << endl;
 	  exit(-1);
 	}
       else
 	{
-	  aPath=robotpath;
-	  aName=robotname;
-	  aName+="JRLmainSmallOld.wrl";
-	  aSpecificitiesFileName = robotpath;
-	  aSpecificitiesFileName += robotname;
-	  aSpecificitiesFileName += "SpecificitiesSmallOld.xml";
-	  aMapFromCjrlJointToRank = robotpath;
-	  aMapFromCjrlJointToRank += robotname;
-	  aMapFromCjrlJointToRank += "LinkJointRankSmallOld.xml";
-
+	  SetOfConfigurationFiles.Path=robotpath;
+	  SetOfConfigurationFiles.Name=robotname;
+	  SetOfConfigurationFiles.Name+="JRLmainSmallOld.wrl";
+	  SetOfConfigurationFiles.SpecificitiesFileName = robotpath;
+	  SetOfConfigurationFiles.SpecificitiesFileName += robotname;
+	  SetOfConfigurationFiles.SpecificitiesFileName += "SpecificitiesSmallOld.xml";
+	  SetOfConfigurationFiles.MapFromCjrlJointToRank = robotpath;
+	  SetOfConfigurationFiles.MapFromCjrlJointToRank += robotname;
+	  SetOfConfigurationFiles.MapFromCjrlJointToRank += "LinkJointRankSmallOld.xml";
 	}
 
       if (argc==2)
 	{
-	  PosFileName = argv[1];
+	  SetOfConfigurationFiles.PosFileName = argv[1];
 	}
     }
   else
     {
-      aPath=argv[1];
-      aName=argv[2];
-      aSpecificitiesFileName = argv[3];
-      aMapFromCjrlJointToRank = argv[4];
-      PosFileName = argv[5];
+      SetOfConfigurationFiles.Path=argv[1];
+      SetOfConfigurationFiles.Name=argv[2];
+      SetOfConfigurationFiles.SpecificitiesFileName = argv[3];
+      SetOfConfigurationFiles.MapFromCjrlJointToRank = argv[4];
+      SetOfConfigurationFiles.PosFileName = argv[5];
     }
+}
 
+void createRobots(ConfigurationFiles_t & aSetOfConfigurationFiles,
+		  CjrlHumanoidDynamicRobot * &aHDR,
+		  CjrlHumanoidDynamicRobot * &aHDR2 )
+{
+  // Instanciate robots.
   dynamicsJRLJapan::ObjectFactory dynFactory;
-  CjrlHumanoidDynamicRobot * aHDR  = dynFactory.createHumanoidDynamicRobot();
-  CjrlHumanoidDynamicRobot * aHDR2 = dynFactory.createHumanoidDynamicRobot();
+  aHDR  = dynFactory.createHumanoidDynamicRobot();
+  aHDR2 = dynFactory.createHumanoidDynamicRobot();
 
   if (aHDR==0)
     {
       cerr<< "Dynamic cast on HDR failed " << endl;
       exit(-1);
-  }
-  cout << "Robot's model file:" << aPath << aName << endl;
-  cout << "Specificities file:" << aSpecificitiesFileName << endl;
-  cout << "Map from joint to rank:" << aMapFromCjrlJointToRank << endl;
-  string RobotFileName = aPath + aName;
-  parseOpenHRPVRMLFile(*aHDR,RobotFileName,
-		       aMapFromCjrlJointToRank,aSpecificitiesFileName);
-  parseOpenHRPVRMLFile(*aHDR2,RobotFileName,
-		       aMapFromCjrlJointToRank,aSpecificitiesFileName);
-
-  // Display tree of the joints.
-
-  int NbOfDofs = aHDR->numberDof();
-  std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
-  MAL_VECTOR_DIM(aCurrentConf,double,NbOfDofs);
-  MAL_VECTOR_DIM(aPrevCurrentConf,double,NbOfDofs);
-  MAL_VECTOR_DIM(aCurrentSpeed,double,NbOfDofs);
-  MAL_VECTOR_DIM(aPrevCurrentSpeed,double,NbOfDofs);
-  MAL_VECTOR_DIM(aCurrentAcceleration,double,NbOfDofs);
-  int lindex=0;
-  for(int i=0;i<6;i++)
-    aCurrentConf[lindex++] = 0.0;
-
-  for(int i=0;i<(NbOfDofs-6 < 40 ? NbOfDofs-6 : 40) ;i++)
-    aCurrentConf[lindex++] = 0.0;
-
-  aHDR->currentConfiguration(aCurrentConf);
-
-  aHDR2->currentConfiguration(aCurrentConf);
-
-  const CjrlJoint * LeftFoot = aHDR->leftFoot()->associatedAnkle();
-  const CjrlJoint * RightFoot = aHDR->rightFoot()->associatedAnkle();
-
-  const CjrlJoint * LeftFoot2 = aHDR2->leftFoot()->associatedAnkle();
-  const CjrlJoint * RightFoot2 = aHDR2->rightFoot()->associatedAnkle();
-
-  CjrlJoint * Waist2 = aHDR2->waist();
-
-  // Added here (oscar)
-  CjrlJoint * Waist1 = aHDR->waist();
-
-
-  // Read the data file.
-  ifstream PosFile;
-  PosFile.open(PosFileName.c_str(),ifstream::in);
-  if (!PosFile.is_open())
-    {
-      cerr << "Unable to open position file: " <<
-	PosFile << endl;
-      exit(-1);
     }
 
-  ofstream RebuildZMP;
-  RebuildZMP.open("RebuildZMP.dat",ofstream::out);
-  RebuildZMP.close();
+  cout << "Robot's model file:" 
+       << aSetOfConfigurationFiles.Path 
+       << aSetOfConfigurationFiles.Name << endl;
+  cout << "Specificities file:" 
+       << aSetOfConfigurationFiles.SpecificitiesFileName << endl;
+  cout << "Map from joint to rank:" 
+       << aSetOfConfigurationFiles.MapFromCjrlJointToRank << endl;
+  aSetOfConfigurationFiles.RobotFileName = aSetOfConfigurationFiles.Path + 
+    aSetOfConfigurationFiles.Name;
+  parseOpenHRPVRMLFile(*aHDR,
+		       aSetOfConfigurationFiles.RobotFileName,
+		       aSetOfConfigurationFiles.MapFromCjrlJointToRank,
+		       aSetOfConfigurationFiles.SpecificitiesFileName);
+  parseOpenHRPVRMLFile(*aHDR2,
+		       aSetOfConfigurationFiles.RobotFileName,
+		       aSetOfConfigurationFiles.MapFromCjrlJointToRank,
+		       aSetOfConfigurationFiles.SpecificitiesFileName);
+}
 
-  ofstream RebuildForces;
-  RebuildForces.open("RebuildForces.dat",ofstream::out);
-  RebuildForces.close();
+void initializeRobots(CjrlHumanoidDynamicRobot * aHDR,
+		      CjrlHumanoidDynamicRobot * aHDR2 )
 
-  ofstream RebuildWaist;
-  RebuildWaist.open("RebuildWaist.dat",ofstream::out);
-  RebuildWaist.close();
-
+{
+  // Initialize the various properties of the Robots.
   // Set properties for the first model.
   {
     string inProperty[4]={"TimeStep","ComputeAcceleration",
@@ -345,21 +472,155 @@ int main(int argc, char *argv[])
       aHDR2->setProperty(inProperty[i],inValue[i]);
 
   }
+}
+
+void saveZMP(CjrlHumanoidDynamicRobot *aHDR,
+	     CjrlHumanoidDynamicRobot *aHDR2,
+	     RobotState_t &robotState,
+	     vector<double> ActualData)
+{
+  ofstream RebuildZMP;
+  ofstream RebuildZMPW;
+
+  const CjrlJoint * LeftFoot = aHDR->leftFoot()->associatedAnkle();
+  const CjrlJoint * RightFoot = aHDR->rightFoot()->associatedAnkle();
+
+  const CjrlJoint * LeftFoot2 = aHDR2->leftFoot()->associatedAnkle();
+  const CjrlJoint * RightFoot2 = aHDR2->rightFoot()->associatedAnkle();
+  CjrlJoint * Waist1 = aHDR->waist();
+
+  vector3d ZMPval;
+  ZMPval = aHDR->zeroMomentumPoint();
+  vector3d COMval;
+  COMval = aHDR->positionCenterOfMass();
+      
+  matrix4d TrLF = LeftFoot->currentTransformation();
+  matrix4d TrRF = RightFoot->currentTransformation();
+  matrix4d TrLF2 = LeftFoot2->currentTransformation();
+  matrix4d TrRF2 = RightFoot2->currentTransformation();
+  
+  
+  RebuildZMP.open("RebuildZMP.dat",ofstream::app);
+  RebuildZMPW.open("RebuildZMPW.dat",ofstream::app);
+  
+  matrix4d waMwo, waMankle;
+  double   woZfoot, waZfoot;
+  
+  matrix4d woMwa    = Waist1->currentTransformation();
+  matrix4d woMankle = RightFoot->currentTransformation();
+  
+  MAL_S4x4_INVERSE(woMwa,waMwo,double);
+  MAL_S4x4_C_eq_A_by_B(waMankle,waMwo,woMankle);
+  
+  woZfoot = -0.105*MAL_S4x4_MATRIX_ACCESS_I_J(woMankle,2,2) + MAL_S4x4_MATRIX_ACCESS_I_J(woMankle,2,3);
+  waZfoot = -0.105*MAL_S4x4_MATRIX_ACCESS_I_J(waMankle,2,2) + MAL_S4x4_MATRIX_ACCESS_I_J(waMankle,2,3);
+  
+  MAL_S4_VECTOR(woZMP, double);
+  MAL_S4_VECTOR(waZMP, double);
+  
+  woZMP(0) = ZMPval(0); woZMP(1)=ZMPval(1); woZMP(2)=woZfoot; woZMP(3)=1;
+  waZMP = waMwo * woZMP;
+  
+  RebuildZMPW << ZMPval(0) << " " << ZMPval(1) << " 0. " 
+	      << COMval(0) << " " << COMval(1) << " " << COMval(2) << " " 
+    	      << robotState.aCurrentConf(0) << " " 
+	      << robotState.aCurrentConf(1) << " " 
+	      << robotState.aCurrentConf(2) << " " 
+	      << robotState.aCurrentSpeed(0) << " " 
+	      << robotState.aCurrentSpeed(1) << " " 
+	      << robotState.aCurrentSpeed(2) << " " 
+	      << robotState.aCurrentAcceleration(0) << " " 
+	      << robotState.aCurrentAcceleration(1) << " " 
+	      << robotState.aCurrentAcceleration(2) << " " 
+	      << endl; // wrt World TMOULARD
+  
+  //RebuildZMP << waZMP(0) << " " << waZMP(1) << " 0." << endl; // wrt Waist TMOULARD
+  RebuildZMP << ActualData[0] << " " << waZMP(0) << " " << waZMP(1) << " " << waZMP(2) << endl; // wrt Waist ORAMOS
+  
+  RebuildZMP.close();
+  RebuildZMPW.close();
+}
+
+int main(int argc, char *argv[])
+{
+  // Handle arguments
+  ConfigurationFiles_t aSetOfConfigurationFiles;
+  dealWithArguments(argc, argv, aSetOfConfigurationFiles);
+
+  // Build the two robots.
+  dynamicsJRLJapan::ObjectFactory dynFactory;
+  CjrlHumanoidDynamicRobot * aHDR  = 0, * aHDR2= 0;
+
+  createRobots(aSetOfConfigurationFiles,aHDR,aHDR2);
+
+  // Set their specific properties.
+  // HDR2 is used to compute the geometrical relation
+  // between feet and waist.
+  // HDR does the dynamic computation.
+  initializeRobots(aHDR,aHDR2);
+
+  // Initialize Robot State.
+  RobotState_t robotState;
+
+  int NbOfDofs = aHDR->numberDof();
+  
+  robotState.setNbDofs(NbOfDofs);
+
+  std::cout << "NbOfDofs :" << NbOfDofs << std::endl;
+  robotState.reset();
+
+  aHDR->currentConfiguration(robotState.aCurrentConf);
+  aHDR2->currentConfiguration(robotState.aCurrentConf);
+
+  // Added here (oscar)
+  CjrlJoint * Waist1 = aHDR->waist();
+
+
+  // Read the data file.
+  ifstream PosFile;
+  PosFile.open(aSetOfConfigurationFiles.PosFileName.c_str(),
+	       ifstream::in);
+  if (!PosFile.is_open())
+    {
+      cerr << "Unable to open position file: " <<
+	PosFile << endl;
+      exit(-1);
+    }
+
+  ofstream RebuildZMP;
+  RebuildZMP.open("RebuildZMP.dat",ofstream::out);
+  RebuildZMP.close();
+
+  ofstream RebuildZMPW;
+  RebuildZMPW.open("RebuildZMPW.dat",ofstream::out);
+  RebuildZMPW.close();
+
+  ofstream RebuildForces;
+  RebuildForces.open("RebuildForces.dat",ofstream::out);
+  RebuildForces.close();
+
+  ofstream RebuildWaist;
+  RebuildWaist.open("RebuildWaist.dat",ofstream::out);
+  RebuildWaist.close();
+
 
   double SamplingPeriod = 0.005;
 
   unsigned long int NbIt=0;
-  double WaistFromRef[6]={0.0,0.0,0.0,
-			  0.0,0.0,0.0};
-  double WaistFromActual[6];
+  vector<double> WaistFromRef,WaistFromActual;
+  WaistFromRef.resize(6);
+  WaistFromActual.resize(6);
+  for(unsigned int i=0;i<6;i++)
+    {WaistFromRef[i] = WaistFromActual[i] = 0.0;}
+  
   matrix4d AbsSupportFootPos;
   // We set the first support foot as being the left one.
   int PreviousSupportFoot=-1;
-
+  vector<double> ActualData;
+  ActualData.resize(41);
+  
   while(!PosFile.eof())
     {
-      double ActualData[41];
-
       double RotationFreeFlyer[9];
 
       for(unsigned int i=0;i<41;i++)
@@ -367,126 +628,36 @@ int main(int argc, char *argv[])
 	  PosFile >> ActualData[i];
 	}
 
+      // Uses new data with free flyer to the origin
+      robotState.updateConfFromFreeFlyer(WaistFromRef);      
+      robotState.updateConfFromActualData(ActualData);
 
-      for(unsigned int i=0;i<6;i++)
-	aCurrentConf[i]=WaistFromRef[i];
-
-      for(unsigned int i=1;i<30;i++)
-	aCurrentConf[i+6]=ActualData[i+1];
-
-      if (NbIt>=1)
-	{
-	  for(unsigned int i=6;i<36;i++)
-	    aCurrentSpeed[i]=(aCurrentConf[i]-aPrevCurrentConf[i])/SamplingPeriod;
-	}
-      else
-	  for(unsigned int i=0;i<36;i++)
-	    aCurrentSpeed[i]=0.0;
-
-      if (NbIt>=2)
-	{
-	  for(unsigned int i=6;i<36;i++)
-	    aCurrentAcceleration[i]=(aCurrentSpeed[i]-aPrevCurrentSpeed[i])/SamplingPeriod;
-	}
-      else
-	  for(unsigned int i=0;i<36;i++)
-	    aCurrentAcceleration[i]=0.0;
-
-      aHDR2->currentConfiguration(aCurrentConf);
-      aHDR2->currentVelocity(aCurrentSpeed);
-      aHDR2->currentAcceleration(aCurrentAcceleration);
-
+      // To update the position of WaistFromActual 
+      // in the world reference frame
+      robotState.updateRobot(aHDR2);
       aHDR2->computeForwardKinematics();
-
-      ExtractActualWaist(LeftFoot2,
-			 RightFoot2,
-			 Waist2,
+      ExtractActualWaist(aHDR2,
 			 AbsSupportFootPos,
 			 WaistFromRef,
 			 RotationFreeFlyer,
 			 NbIt,
 			 WaistFromActual,
 			 PreviousSupportFoot);
+      SaveWaistPositions(WaistFromRef, WaistFromActual,PreviousSupportFoot);
 
-      SaveWaistPositions(WaistFromRef, WaistFromActual);
+      // Update robot state with the new waist position.
+      robotState.updateConfFromFreeFlyer(WaistFromActual);
+      robotState.updateCurrentRobotState(SamplingPeriod,NbIt);
 
-      if (1)
-	{
-	  for(unsigned int i=0;i<6;i++)
-	    aCurrentConf[i] = WaistFromActual[i];
-	}
-      else
-	{
-	   for(unsigned int i=0;i<6;i++)
-	     aCurrentConf[i] = WaistFromRef[i];
-	}
-
-
-      aHDR->currentConfiguration(aCurrentConf);
-      aHDR->currentVelocity(aCurrentSpeed);
-      aHDR->currentAcceleration(aCurrentAcceleration);
+      // and then update HDR and do dynamical computation
+      robotState.updateRobot(aHDR);
       aHDR->computeForwardKinematics();
 
-      vector3d ZMPval;
-      ZMPval = aHDR->zeroMomentumPoint();
+      // Save ZMP from HDR in two files with world or waist coordinates.
+      saveZMP(aHDR,aHDR2,robotState,ActualData);
 
-      matrix4d TrLF = LeftFoot->currentTransformation();
-      matrix4d TrRF = RightFoot->currentTransformation();
-      matrix4d TrLF2 = LeftFoot2->currentTransformation();
-      matrix4d TrRF2 = RightFoot2->currentTransformation();
-
-
-      RebuildZMP.open("RebuildZMP.dat",ofstream::app);
-      //RebuildZMP << ActualData[0] << " " << ZMPval(0) << " " << ZMPval(1) << " " << ZMPval(2) << endl;                 // 1-2
-      //RebuildZMP << ActualData[0] << " " << ZMPval(0) << " " << ZMPval(1) << " " << -0.645 << endl;                 // 1-2
-      //RebuildZMP << ActualData[0] << " " << ZMPval(0) << " " << ZMPval(1) << " " <<  MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,2,3) - 0.105 << endl; // 1-2
-
-      matrix4d waMwo, waMankle;
-      double   woZfoot, waZfoot;
-
-      matrix4d woMwa    = Waist1->currentTransformation();
-      matrix4d woMankle = RightFoot->currentTransformation();
-
-      MAL_S4x4_INVERSE(woMwa,waMwo,double);
-      MAL_S4x4_C_eq_A_by_B(waMankle,waMwo,woMankle);
-
-      woZfoot = -0.105*MAL_S4x4_MATRIX_ACCESS_I_J(woMankle,2,2) + MAL_S4x4_MATRIX_ACCESS_I_J(woMankle,2,3);
-      waZfoot = -0.105*MAL_S4x4_MATRIX_ACCESS_I_J(waMankle,2,2) + MAL_S4x4_MATRIX_ACCESS_I_J(waMankle,2,3);
-
-      MAL_S4_VECTOR(woZMP, double);
-      MAL_S4_VECTOR(waZMP, double);
-
-      woZMP(0) = ZMPval(0); woZMP(1)=ZMPval(1); woZMP(2)=woZfoot; woZMP(3)=1;
-      waZMP = waMwo * woZMP;
-
-      RebuildZMP << ActualData[0] << " " << waZMP(0) << " " << waZMP(1) << " " <<  waZMP(2) << endl; // wrt Waist
-      //RebuildZMP << ActualData[0] << " " << ZMPval(0) << " " << ZMPval(1) << " " <<  woZfoot << endl; // wrt World
-      //RebuildZMP << ActualData[0] << " " << ZMPval(0) << " " << ZMPval(1) << " " <<  waZfoot << endl; // wrt World (x,y), waist (z)
-
-
-      //std::cout << "waist: " <<   Waist1->currentTransformation();
-
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,0,3) << " "          // 3
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,1,3) << " "          // 4
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF,2,3) << " "          // 5
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,0,3) << " "          // 6
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,1,3) << " "          // 7
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF,2,3) << " "          // 8
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,0,3) << " "   // 9
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,1,3) << " "   // 10
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(AbsSupportFootPos,2,3) << " "   // 11
-      //  	  << PreviousSupportFoot << " "                           // 12
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,0,3) << " "         // 13
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,1,3) << " "         // 14
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrLF2,2,3) << " "         // 15
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,0,3) << " "         // 16
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,1,3) << " "         // 17
-      //  	  << MAL_S4x4_MATRIX_ACCESS_I_J(TrRF2,2,3) << endl;       // 18
-
-      RebuildZMP.close();
-
-      aPrevCurrentConf = aCurrentConf;
-      aPrevCurrentSpeed = aCurrentSpeed;
+      robotState.aPrevCurrentConf = robotState.aCurrentConf;
+      robotState.aPrevCurrentSpeed = robotState.aCurrentSpeed;
 
       NbIt++;
     }

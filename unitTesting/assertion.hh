@@ -8,13 +8,16 @@
 //
 // See the COPYING file for more information.
 
+#include <jrl/dynamics/config.hh>
+
 #ifndef JRL_DYNAMICS_ASSERTION_HH
 # define JRL_DYNAMICS_ASSERTION_HH
 # include <boost/scope_exit.hpp>
 
 /// \brief Launch an exception.
-//# define JRL_DYNAMICS_THROW_EXCEPTION_(MSG) \
-//throw ::dynamicsJRLJapan::Exception (MSG, __FILE__, __LINE__)
+/* # define JRL_DYNAMICS_THROW_EXCEPTION_(MSG)			\
+throw ::dynamicsJRLJapan::Exception (MSG, __FILE__, __LINE__)
+*/
 
 /// \brief Launch an exception (generic macro).
 # define JRL_DYNAMICS_THROW_EXCEPTION(TYPE, MSG) \
@@ -40,7 +43,7 @@ unsigned line) throw () \
 
 namespace dynamicsJRLJapan
 {
-  JRL_DYNAMICS_MAKE_EXCEPTION (, AssertionError);
+  JRL_DYNAMICS_MAKE_EXCEPTION (JRL_DYNAMICS_DLLLOCAL, AssertionError);
 } // end of namespace dynamicsJRLJapan.
 
 /// \brief Define JRL_DYNAMICS_ASSERT.

@@ -30,7 +30,7 @@
 */
 #include <string>
 #include <exception>
-
+#include <fstream>
 
 #define LTHROW(x) \
   { \
@@ -78,6 +78,11 @@
     DebugFile << __FILE__ << ":" << __LINE__ << ":" << x << endl;	\
     DebugFile.close();}
 
+#define ODEBUG5INC(x,y,z) { ofstream DebugFile;	\
+    DebugFile.open(y,ofstream::app);		\
+    DebugFile << x << z;	\
+    DebugFile.close();}
+
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << __FILE__ << ":" << __LINE__ << x << endl
 #define ODEBUG3Q(x) cerr << x << endl
@@ -87,7 +92,7 @@
 #define ODEBUG(x) cerr << __FILE__ << ":" << __LINE__ <<  x << endl
 #define ODEBUGL(x,level) {\
   if (DEBUG_MODE>level) \
-    cerr << __FILE << ":" << __LINE__ <<  x << endl; }
+    cerr << __FILE__ << ":" << __LINE__ <<  x << endl; }
 #else
 #define ODEBUG(x)
 #define ODEBUGL(x)
@@ -96,7 +101,7 @@
 #ifdef DEBUG_MODE
 #define ODEBUG4(x,y) { ofstream DebugFile; \
     DebugFile.open(y,ofstream::app); \
-    DebugFile << __FILE << ":" << __LINE__ \
+    DebugFile << __FILE__ << ":" << __LINE__ \
 	      << x << endl; DebugFile.close();}
 #define _DEBUG_4_ACTIVATED_ 1
 
@@ -116,13 +121,18 @@ DebugFile.close();}
 #define ODEBUG4(x,y) { \
 ofstream DebugFile; \
 DebugFile.open(y,ofstream::app); \
-DebugFile <<  __FILE << ":" << __LINE__ << x << endl; \
+DebugFile <<  __FILE__ << ":" << __LINE__ << x << endl; \
 DebugFile.close();}
 #define _DEBUG_4_ACTIVATED_ 1
+
+#define ODEBUG4INC(x,y,z) { ofstream DebugFile;	\
+    DebugFile.open(y,ofstream::app);		\
+    DebugFile << x << z;	\
+    DebugFile.close();}
 
 #else
 
 #define RESETDEBUG4(y)
 #define ODEBUG4(x,y)
-
+#define ODEBUG4INC(x,y,z)
 #endif

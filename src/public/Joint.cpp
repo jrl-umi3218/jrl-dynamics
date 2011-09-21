@@ -141,7 +141,7 @@ unsigned int Joint::rankInConfiguration() const
 }
 
 
-const matrix4d& Joint::initialPosition()
+const matrix4d& Joint::initialPosition() const
 {
   return DERIVPRIVATE->initialPosition();
 }
@@ -159,13 +159,13 @@ const matrix4d &Joint::currentTransformation() const
 }
 
 
-CjrlRigidVelocity Joint::jointVelocity()
+CjrlRigidVelocity Joint::jointVelocity() const
 {
   return DERIVPRIVATE->jointVelocity();
 }
 
 
-CjrlRigidAcceleration Joint::jointAcceleration()
+CjrlRigidAcceleration Joint::jointAcceleration() const
 {
   return DERIVPRIVATE->jointAcceleration();
 }

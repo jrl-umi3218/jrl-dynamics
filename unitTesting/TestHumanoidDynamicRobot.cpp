@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
       exit(-1);
     }
   string RobotFileName = aPath+aName;
+  cout << "RobotFileName:" << RobotFileName <<endl;
   dynamicsJRLJapan::parseOpenHRPVRMLFile(*aHDR,RobotFileName,aMapFromJointToRank,aSpecificitiesFileName);
 
   // Display tree of the joints.
