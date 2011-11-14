@@ -243,7 +243,7 @@ namespace dynamicsJRLJapan
 	    | TCBChildren_r  
 	    ;
 
-	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+alnum_p] >>
+	  TransformBlock_r = ((str_p("DEF")>> lexeme_d[+(alnum_p|'_')] >>
 			       (str_p("Transform"))
 			       |(str_p("Transform")[self.actions.fDisplay]
 				 )))
@@ -251,7 +251,8 @@ namespace dynamicsJRLJapan
 	    >> *(TransformLine_r |
 		 TransformInstanceRotation_r |
 		 TransformInstanceTranslation_r |
-		 TransformInstanceScale_r)
+		 TransformInstanceScale_r |
+		 TransformChildren_r )
 	    >> ch_p('}');
 
 	  // Fields of Proto []block.
@@ -757,10 +758,22 @@ namespace dynamicsJRLJapan
 	  ShapeBlock_r = AppearanceHeader_r[self.actions.fDisplay] |
 	    GeometryHeader_r;
 
-	  Shape_r = str_p("Shape")[self.actions.fDisplay]
+	  ShapeUSE_r = 
+	     str_p("USE")  >>
+	    (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fDisplay];
+	    
+	  ShapeDEF_r = 
+	    (
+	     str_p("Shape")[self.actions.fDisplay] |
+	     ( str_p("DEF")  >>
+	     (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fDisplay]
+	      >> str_p("Shape")[self.actions.fDisplay])
+	     )
 	    >> ch_p('{')
 	    >> *ShapeBlock_r
 	    >> ch_p('}');
+
+	  Shape_r = ShapeUSE_r | ShapeDEF_r;
 
 	  BodySubBlock_r =CenterOfMass_r |
 	    Mass_r |
@@ -768,7 +781,7 @@ namespace dynamicsJRLJapan
 
 	  ShapeInlineUrl_r = str_p("url")
 	    >> ch_p('"')
-	    >> (lexeme_d[+(alnum_p|ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fAddURL]
+	    >> (lexeme_d[+(alnum_p|ch_p('-') | ch_p('_')|ch_p('.')|ch_p('/'))])[self.actions.fAddURL]
 	    >> ch_p('"');
 
 	  ShapeBlockInline_r = ch_p('{') >>
@@ -782,9 +795,11 @@ namespace dynamicsJRLJapan
 	    Shape_r[self.actions.fStoreShape]         |
 	    TransformBlock_r;
 
-	  BodyChildren_r = str_p("children")
-	    >> (ch_p('[') >> *BodyChildrenField_r >> ch_p(']')) |
-	        Shape_r[self.actions.fStoreShape];
+	  BodyChildren_r = 
+	    str_p("children")>> 
+	    (((ch_p('[') >> *BodyChildrenField_r >> ch_p(']')) |
+	      TransformBlock_r ) | 
+	     Shape_r[self.actions.fStoreShape]);
 
 	  // Define the entry rules for body and hint
 	  BodyBlock_r =  (str_p("Segment"))
@@ -820,16 +835,16 @@ namespace dynamicsJRLJapan
 
           HumanoidName_r = str_p("name")
 	    >> ch_p('"')
-	    >> (lexeme_d[+(alnum_p)])
+	    >> (lexeme_d[+(alnum_p)])[self.actions.fHumanoidName]
 	    >> ch_p('"');
 
 	  HumanoidInfoLine_r = ch_p('"')
-	    >> *((lexeme_d[+(alnum_p|':'|'.'|',')]))
+	    >> *((lexeme_d[+(alnum_p|':'|'.'|','|'['|']'|'('|')'|'_')]))
 	    >> ch_p('"');
 
 	  HumanoidInfo_r = (str_p("info"))
 	    >> ch_p('[')
-	    >> *(HumanoidInfoLine_r)
+	    >> *(HumanoidInfoLine_r)[self.actions.fHumanoidInfoLine]
 	    >> ch_p(']');
 
 	  // Define the entry rules for huanoid.
@@ -1011,6 +1026,8 @@ namespace dynamicsJRLJapan
 	  BOOST_SPIRIT_DEBUG_RULE( GeometryCylinder_r);
 	  BOOST_SPIRIT_DEBUG_RULE( GeometrySphere_r);
 	  BOOST_SPIRIT_DEBUG_RULE( Shape_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeUSE_r);
+	  BOOST_SPIRIT_DEBUG_RULE( ShapeDEF_r);
 	  BOOST_SPIRIT_DEBUG_RULE( ShapeBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE(AppearanceBlock_r);
 	  BOOST_SPIRIT_DEBUG_RULE( AppearanceHeader_r);
@@ -1108,7 +1125,8 @@ namespace dynamicsJRLJapan
 
 	rule<ScannerT> imagetexture_r, texture_r;
 
-	rule<ScannerT> Shape_r, ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r,
+	rule<ScannerT> Shape_r, ShapeUSE_r, ShapeDEF_r,
+	  ShapeBlock_r,AppearanceBlock_r, AppearanceHeader_r,
 	  AppearanceUse_r, AppearanceDef_r, AppearanceBlockTitle_r, MaterialBlock_r,
 	  DiffuseColor_r, SpecularColor_r, EmissiveColor_r, Shininess_r;
 

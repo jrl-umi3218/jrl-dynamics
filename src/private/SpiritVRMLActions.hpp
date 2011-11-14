@@ -175,6 +175,8 @@ namespace dynamicsJRLJapan
 	fProtoName(*this),
 	fProtoExposedField(*this),
 	fDEFName(*this),
+	fHumanoidName(*this),
+	fHumanoidInfoLine(*this),
 	fJointType(*this),
 	fJointID(*this),
 	fJointXAxis(*this,0),
@@ -532,6 +534,48 @@ namespace dynamicsJRLJapan
 	Actions & m_actions;
       } fDEFName;
 
+      // Extract the name of the humanoid.
+      struct fHumanoidName_t {
+
+	explicit fHumanoidName_t(Actions &actions):
+	  m_actions(actions)
+	{};
+
+	template <typename IteratorT>
+	void operator()(const IteratorT & begin,
+			const IteratorT & end) const
+	{
+
+	  string x(begin, end);
+	  //m_actions.m_DataForParsing.aName = x;
+	  if (m_actions.m_Verbose>1)
+	    std::cout<< "HumanoidName:" << x<<"|" << endl;
+	}
+      private:
+	Actions & m_actions;
+      } fHumanoidName;
+
+      // Extract the info lines.
+      struct fHumanoidInfoLine_t {
+
+	explicit fHumanoidInfoLine_t(Actions &actions):
+	  m_actions(actions)
+	{};
+
+	template <typename IteratorT>
+	void operator()(const IteratorT & begin,
+			const IteratorT & end) const
+	{
+
+	  string x(begin, end);
+	  //m_actions.m_DataForParsing.aName = x;
+	  if (m_actions.m_Verbose>1)
+	    std::cout<< "HumanoidInfoLine:" << x<<"|" << endl;
+	}
+      private:
+	Actions & m_actions;
+      } fHumanoidInfoLine;
+
       // In case of Joint type.
       struct fJointType_t {
 
@@ -634,7 +678,7 @@ namespace dynamicsJRLJapan
 	template <typename IteratorT>
 	void operator()(IteratorT, IteratorT) const
 	{
-	  ODEBUG3("JointAxisvec3d :"
+	  ODEBUG("JointAxisvec3d :"
 		 << m_actions.m_DataForParsing.m_Genericvec3d(0) << " "
 		 << m_actions.m_DataForParsing.m_Genericvec3d(1) << " "
 		 << m_actions.m_DataForParsing.m_Genericvec3d(2) );
@@ -775,10 +819,11 @@ namespace dynamicsJRLJapan
 	    {
 	      if (m_actions.m_Verbose>1)
 		{
+		  ODEBUG("Moments of inertia:");
 		  for(int i=0;i<9;i++)
 		    {
-		      ODEBUG(aDataForParsing.mi[i]);
-		      if (i%3==2)
+		      ODEBUG(" " << aDataForParsing.mi[i]);
+		      if (i%3==0)
 			cout<< endl;
 		    }
 		}
@@ -1096,7 +1141,8 @@ namespace dynamicsJRLJapan
 		      m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coordIndex.size());
 	      ODEBUG("coord.size()=" <<
 		      m_actions.m_DataForParsing.m_Shape.getIndexedFaceSet().coord.size());
-	      m_actions.m_DataForParsing.m_ListOfURLs[lindex]->addShape(m_actions.m_DataForParsing.m_Shape);
+	      if ((int)m_actions.m_DataForParsing.m_ListOfURLs.size()>lindex)
+		m_actions.m_DataForParsing.m_ListOfURLs[lindex]->addShape(m_actions.m_DataForParsing.m_Shape);
 	      ODEBUG(m_actions.m_DataForParsing.m_Shape.getAppearance().getMaterial());
 	      m_actions.m_DataForParsing.m_Shape.reset();
 	    }
