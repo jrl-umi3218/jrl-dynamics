@@ -121,7 +121,8 @@ namespace dynamicsJRLJapan
 	     i++)
 	  delete m_ListOfURLs[i];
 
-	delete m_LOUIndex;
+	if (m_LOUIndex!=0)
+	  delete m_LOUIndex;
       }
 
 
