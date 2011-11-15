@@ -525,8 +525,8 @@ namespace dynamicsJRLJapan
     /** Get the Linear Momentum for the body JointID in the VRML numbering system */
     vector3d GetP(int JointID);
 
-    /*! \brief Read the specificities for the link between joint names and rank. */
-    void ReadSpecificities(string aFileName);
+    /*! \brief Read the link between joint names and rank. */
+    void ReadLinkJointNameAndRank(string aFileName);
 
     /** Set the time step to compute the Momentum derivative */
     inline void SetTimeStep(double inTimeStep)

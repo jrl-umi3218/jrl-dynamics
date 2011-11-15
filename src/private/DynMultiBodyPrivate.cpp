@@ -404,7 +404,7 @@ void DynMultiBodyPrivate::ComputeNumberOfJoints()
   MAL_MATRIX_RESIZE(m_attCalcJointJacobian,6,m_NbDofs);
 }
 
-void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
+void DynMultiBodyPrivate::ReadLinkJointNameAndRank(string aFileName)
 {
   FILE *fp;
   fp = fopen(aFileName.c_str(),"r");
@@ -422,7 +422,7 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
       if (look_for(fp,"Nb"))
         {
 	  int r = fscanf(fp,"%d", &m_LinksBetweenJointNamesAndRankNb);
-	  if (r<0)
+	  if ((r<0) && (!feof(fp)))
 	    perror("fscanf");
 	  ODEBUG("Links: " << m_LinksBetweenJointNamesAndRankNb);
         }
@@ -433,12 +433,14 @@ void DynMultiBodyPrivate::ReadSpecificities(string aFileName)
 	      char Buffer[128];
 	      memset(Buffer,0,128);
 	      int r = fscanf(fp,"%s",Buffer);
-	      if (r<0)
+
+	      if ((r<0) && (!feof(fp)))
 		perror("fscanf");
 
 	      strcpy(aNameAndRank.LinkName,Buffer);
 	      r= fscanf(fp,"%u", &aNameAndRank.RankInConfiguration);
-	      if (r<0)
+
+	      if ((r<0) && (!feof(fp)))
 		perror("fscanf");
 
 	      look_for(fp,"</Link>");
