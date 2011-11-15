@@ -208,7 +208,7 @@ void DynMultiBodyPrivate::CreatesTreeStructure(const char * option)
 
   if (option!=0)
     {
-      ReadSpecificities(option);
+      ReadLinkJointNameAndRank(option);
     }
 
   ConvertIDInActuatedToBodyID.resize(m_listOfBodies.size());
