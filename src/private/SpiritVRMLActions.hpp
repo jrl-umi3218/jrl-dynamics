@@ -1135,7 +1135,9 @@ namespace dynamicsJRLJapan
 	{
 
 	  int lindex = *m_actions.m_DataForParsing.m_LOUIndex;
-	  if (lindex!=-1)
+	  if ((lindex>=0) &&
+	      (lindex<(int)m_actions.m_DataForParsing.m_ListOfURLs.size()) &&
+	      (m_actions.m_DataForParsing.m_ListOfURLs.size()>0))
 	    {
 	      ODEBUG(" Store inside :"<< lindex );
 	      ODEBUG("coordIndex.size()=" <<
