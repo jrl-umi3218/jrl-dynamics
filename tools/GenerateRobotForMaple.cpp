@@ -58,7 +58,7 @@ namespace dynamicsJRLJapan {
   }
   double Tools::GenerateRobotForMaple::FilterPrecision(double x)
   {
-    if (isnan(x))
+    if (bool::math::isnan(x))
       return 0.0;
 
     if (fabs(x)<1e-8)
