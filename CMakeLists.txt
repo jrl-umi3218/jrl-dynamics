@@ -31,6 +31,7 @@ cmake_minimum_required(VERSION 2.6)
 
 INCLUDE(cmake/base.cmake)
 INCLUDE(cmake/cpack.cmake)
+INCLUDE(cmake/eigen.cmake)
 
 # name of the project
 SET(PROJECT_NAME jrl-dynamics)
@@ -59,10 +60,13 @@ include/jrl/dynamics/geometricdata.hh
 )
 
 SETUP_PROJECT()
+SEARCH_FOR_EIGEN()
 
 # Dependencies
 ADD_REQUIRED_DEPENDENCY("jrl-mal >= 1.9.0")
 ADD_REQUIRED_DEPENDENCY("abstract-robot-dynamics >= 1.16")
+#SEARCH_FOR_EIGEN()
+#Set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -I/usr/local/include/eigen3)
 
 INCLUDE(CheckFunctionExists)
 CHECK_FUNCTION_EXISTS("getline" HAVE_GETLINE)

@@ -273,11 +273,11 @@ void JointPrivate::getJacobianWorldPointWrtConfig(const vector3d& inPointWorldFr
 */
 void JointPrivate::getJacobianPointWrtConfig(const vector3d& inPointJointFrame, matrixNxP& outJ) const
 {
-  if (outJ.size1() !=6 || outJ.size2() != m_J.size2())
+  if (MAL_MATRIX_NB_ROWS(outJ) !=6 || MAL_MATRIX_NB_COLS(outJ) != MAL_MATRIX_NB_COLS(m_J))
     {
-      outJ.resize(6,m_J.size2(),false);
+      MAL_MATRIX_RESIZE(outJ,6,MAL_MATRIX_NB_COLS(m_J));
     }
-  outJ.clear();
+  MAL_MATRIX_CLEAR(outJ);
 
 
   DynamicBodyPrivate * FinalBody = (DynamicBodyPrivate *)m_Body;
