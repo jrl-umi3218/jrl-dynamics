@@ -29,6 +29,7 @@
 /* System includes */
 #include <iostream>
 #include <fstream>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 /*! Includes of the framework */
 #include "GenerateRobotForMaple.h"
@@ -58,7 +59,7 @@ namespace dynamicsJRLJapan {
   }
   double Tools::GenerateRobotForMaple::FilterPrecision(double x)
   {
-    if (bool::math::isnan(x))
+    if (boost::math::isnan(x))
       return 0.0;
 
     if (fabs(x)<1e-8)
