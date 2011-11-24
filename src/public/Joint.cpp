@@ -105,6 +105,16 @@ JointAnchor::JointAnchor(const matrix4d& inInitialPosition)
 
 #define DERIVPRIVATE dynamic_cast<JointPrivate *>(m_privateObj.get())
 
+const std::string& Joint::getName() const
+{
+  return DERIVPRIVATE->getName();
+}
+
+void Joint::setName(const std::string & name)
+{
+  DERIVPRIVATE->setName(name);
+}
+
 CjrlJoint* Joint::parentJoint() const
 {
   return DERIVPRIVATE->parentJoint();

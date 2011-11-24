@@ -62,6 +62,15 @@ namespace dynamicsJRLJapan {
 
   public:
 
+    /// \name Joint name
+    /// \{
+    
+    /// \brief Get joint name
+    virtual const std::string& getName() const;
+    /// \brief Set joint name
+    virtual void setName(const std::string & name);
+
+    /// \}
     /**
        @}
     */

@@ -281,7 +281,7 @@ namespace dynamicsJRLJapan
     { m_type = atype; }
 
     /*! Set the name */
-    inline void setName(string & aname)
+    inline void setName(const string & aname)
     { m_Name = aname; }
 
     /*! Get the name */
