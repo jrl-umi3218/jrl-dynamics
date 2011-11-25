@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" href="$a00030.html" title="dynamicsJRLJapan::Geometry::Shape" alt="" coords="1452,269,1695,299"/>
+<area shape="rect" href="$a00021.html" title="dynamicsJRLJapan::Geometry::IndexedFaceSet" alt="" coords="975,132,1276,161"/>
+<area shape="rect" href="$a00014.html" title="dynamicsJRLJapan::Geometry::Appearance" alt="" coords="988,269,1263,299"/>
+<area shape="rect" href="$a00028.html" title="dynamicsJRLJapan::Geometry::Material" alt="" coords="479,323,732,352"/>
+<area shape="rect" href="$a00031.html" title="dynamicsJRLJapan::Geometry::Texture" alt="" coords="480,216,731,245"/>
+<area shape="rect" title="STL class." alt="" coords="245,375,325,404"/>
+<area shape="rect" title="STL class." alt="" coords="7,375,172,404"/>
+<area shape="rect" href="$a00032.html" title="dynamicsJRLJapan::Geometry::TextureTransform" alt="" coords="452,269,759,299"/>
+</map>
