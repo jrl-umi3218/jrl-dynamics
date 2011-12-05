@@ -173,6 +173,13 @@ namespace dynamicsJRLJapan
 
   public:
 
+    const Spatial::PluckerTransform & getiXpi(void) const { return m_iXpi; };
+    const Spatial::PluckerTransform & getXL(void) const { return m_XL; };
+    const Spatial::PluckerTransform & getXj(void) const { return m_Xj; };
+    const Spatial::PluckerTransform & getXj_i(void) const { return Xj_i; };
+    const matrixNxP & getS(void) const { return m_phi; };
+    const matrixNxP & getdotS(void) const { return m_dotphi; };
+
     /** */
     double subTreeCoef();
     /** */
@@ -805,6 +812,7 @@ namespace dynamicsJRLJapan
 
     /*! \brief Store the position of the joint in the body reference frame. */
     Spatial::PluckerTransform m_XL;
+    Spatial::PluckerTransform m_Xj;
 
     /*! \brief Store the position of the joint in the father joint reference frame. */
     Spatial::PluckerTransform m_iXpi;

@@ -374,6 +374,9 @@ namespace dynamicsJRLJapan
     virtual  ~DynMultiBodyPrivate();
 
 
+    std::vector<DynamicBodyPrivate *> getListOfBodies(){ return m_listOfBodies; };
+
+
     //-----------------------------
     // Forward model computation
     //-----------------------------
