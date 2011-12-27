@@ -85,14 +85,14 @@ namespace dynamicsJRLJapan
     return aHDR;
   }
 
-  CjrlHand* ObjectFactory::createHand(const CjrlJoint* inWrist)
+  CjrlHand* ObjectFactory::createHand(CjrlJoint* inWrist)
   {
     CjrlHand* hand = new Hand();
     hand->setAssociatedWrist(inWrist);
     return hand;
   }
 
-  CjrlFoot* ObjectFactory::createFoot(const CjrlJoint* inAnkle)
+  CjrlFoot* ObjectFactory::createFoot(CjrlJoint* inAnkle)
   {
     Foot* foot = new Foot();
     foot->setAssociatedAnkle(inAnkle);

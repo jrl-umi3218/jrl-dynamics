@@ -54,12 +54,12 @@ namespace dynamicsJRLJapan
         /**
             \brief Get the wrist joint to which the hand is attached
         */
-        virtual const CjrlJoint* associatedWrist() const;
+        virtual CjrlJoint* associatedWrist() const;
 
         /**
             \brief Get the wrist joint to which the hand is attached
         */
-        virtual void setAssociatedWrist(const CjrlJoint * inWrist );
+        virtual void setAssociatedWrist(CjrlJoint * inWrist );
 
 	/**
 	   \brief Get the center of the hand
@@ -124,7 +124,7 @@ namespace dynamicsJRLJapan
 
     private:
 
-        const CjrlJoint* attAssociatedWrist;
+	CjrlJoint* attAssociatedWrist;
 
         vector3d attOkayAxis;
 

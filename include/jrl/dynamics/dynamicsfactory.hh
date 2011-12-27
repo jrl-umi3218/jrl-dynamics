@@ -75,9 +75,9 @@ namespace dynamicsJRLJapan
 
     CjrlBody * createBody();
 
-    CjrlHand* createHand(const CjrlJoint* inWrist);
+    CjrlHand* createHand(CjrlJoint* inWrist);
 
-    CjrlFoot* createFoot(const CjrlJoint* inAnkle);
+    CjrlFoot* createFoot(CjrlJoint* inAnkle);
   };
 
 

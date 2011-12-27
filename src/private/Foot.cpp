@@ -43,12 +43,12 @@ Foot::~Foot()
 {
 }
 
-const CjrlJoint * Foot::associatedAnkle() const
+CjrlJoint * Foot::associatedAnkle() const
 {
   return m_Ankle;
 }
 
-void Foot::setAssociatedAnkle(const CjrlJoint * inAssociatedAnkle)
+void Foot::setAssociatedAnkle(CjrlJoint * inAssociatedAnkle)
 {
   m_Ankle = inAssociatedAnkle;
 }

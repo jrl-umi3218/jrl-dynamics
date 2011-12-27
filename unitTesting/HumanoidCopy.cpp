@@ -88,7 +88,7 @@ void HumanoidCopy::CopyFoot(CjrlFoot *InitFoot,
 {
   
   const CjrlJoint * anAnkleSrc = InitFoot->associatedAnkle();
-  const CjrlJoint * anAnkleDst = m_JointsMap[anAnkleSrc];
+  CjrlJoint * anAnkleDst = m_JointsMap[anAnkleSrc];
   NewFoot = robotDynamicsObjectConstructor.createFoot(anAnkleDst);
 
   double outLength, outWidth;
@@ -104,7 +104,7 @@ void HumanoidCopy::CopyHand(CjrlHand *InitHand,
 			    CjrlHand *&NewHand)
 {
 
-  const CjrlJoint *aWrist = m_JointsMap[InitHand->associatedWrist()];
+  CjrlJoint *aWrist = m_JointsMap[InitHand->associatedWrist()];
   NewHand = robotDynamicsObjectConstructor.createHand(aWrist);
 
   vector3d data;

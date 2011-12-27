@@ -36,7 +36,7 @@ Hand::Hand()
   attAssociatedWrist = 0;
 }
 
-void Hand::setAssociatedWrist(const CjrlJoint * inWristJoint)
+void Hand::setAssociatedWrist(CjrlJoint * inWristJoint)
 {
   attAssociatedWrist=inWristJoint;
 }
@@ -45,7 +45,7 @@ Hand::~Hand()
 {
 }
 
-const CjrlJoint* Hand::associatedWrist() const
+CjrlJoint* Hand::associatedWrist() const
 {
     return attAssociatedWrist;
 }
