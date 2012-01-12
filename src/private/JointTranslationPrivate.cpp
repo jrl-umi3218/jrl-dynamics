@@ -47,7 +47,11 @@ JointTranslationPrivate::JointTranslationPrivate(const JointTranslationPrivate &
 
 JointTranslationPrivate::
 JointTranslationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
+  :JointPrivate()
 {
+  setnumberDof(1);
+  CreateLimitsArray();
+
   type(JointPrivate::PRISMATIC_JOINT);
   m_inGlobalFrame = true;
   m_globalPoseAtConstruction = inInitialPosition;
