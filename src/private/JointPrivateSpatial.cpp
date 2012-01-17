@@ -124,6 +124,8 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 	}
       eulerXYZ(qang, currentBody->localR);
     }
+  else
+    MAL_S3x3_MATRIX_SET_IDENTITY(currentBody->localR);
   MAL_S3x3_MATRIX_TYPE(double) Rt = MAL_S3x3_RET_TRANSPOSE(currentBody->localR);
   MAL_S3_VECTOR_TYPE(double) t;
   MAL_S3_VECTOR_FILL(t,0);
@@ -385,10 +387,6 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   m_Zeta = MAL_RET_A_by_B(m_dotphi,currentBody->sdq);
   m_Zeta = m_Zeta + b;
 
-  vector3d vl,va;
-  vl=currentBody->sv.v0();
-  va=currentBody->sv.w();
-
   return true;
 }
 
@@ -449,12 +447,6 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
   sh = currentBody->sIa*currentBody->sv;
   sf1 = currentBody->sv^sh;
 
-  vector3d fh,nh;
-  fh=sh.v();
-  nh=sh.w();
-  vector3d f,n;
-  f=sf.f();
-  n=sf.n0();
   /* ----------> force = X.f developed such that XF.f = (X)^{-T}.f or in this
                  case X=currentBody->sX0i cf. Springer Handbook of Robotics
                  Table 2.1. */

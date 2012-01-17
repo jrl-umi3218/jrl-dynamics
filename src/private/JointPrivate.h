@@ -836,10 +836,10 @@ namespace dynamicsJRLJapan
     */
     matrixNxP m_dotphi;
 
-  private:
     /*! \brief Store Zeta the momentum */
     vectorN m_Zeta;
 
+  private:
     /*gravity constant by L.S*/
     //const double gravity_cst;
     MAL_S3x3_MATRIX_TYPE(double) sk;

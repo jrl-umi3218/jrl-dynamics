@@ -45,6 +45,7 @@ JointAnchorPrivate::JointAnchorPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inIni
   MAL_S3_VECTOR_ACCESS(laxis,2) = 0.0;
 
   axis(laxis);
+  setnumberDof(0);
 }
 
 JointAnchorPrivate::~JointAnchorPrivate()
