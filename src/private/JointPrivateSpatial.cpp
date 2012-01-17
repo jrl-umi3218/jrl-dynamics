@@ -87,10 +87,18 @@ void JointPrivate::resizeSpatialFields()
   DynamicBodyPrivate* currentBody = getLinkedDynamicBodyPrivate();
   if (currentBody!=0)
     {
-      MAL_VECTOR_RESIZE(currentBody->sq, m_nbDofs);
-      MAL_VECTOR_RESIZE(currentBody->sdq, m_nbDofs);
-      MAL_VECTOR_RESIZE(currentBody->sddq,m_nbDofs);
-      MAL_VECTOR_RESIZE(currentBody->stau,m_nbDofs);
+      // We must ensure that there is at least one dof per joint,
+      // to make the anchor joint work properly.
+      unsigned nbDofs = std::max (m_nbDofs, 1u);
+      MAL_VECTOR_RESIZE(currentBody->sq, nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sdq, nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->sddq, nbDofs);
+      MAL_VECTOR_RESIZE(currentBody->stau, nbDofs);
+
+      MAL_VECTOR_FILL(currentBody->sq, 0.);
+      MAL_VECTOR_FILL(currentBody->sdq, 0.);
+      MAL_VECTOR_FILL(currentBody->sddq, 0.);
+      MAL_VECTOR_FILL(currentBody->stau, 0.);
     }
 }
 /*! Spatial notations specifications */
