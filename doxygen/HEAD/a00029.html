@@ -60,8 +60,8 @@ Collaboration diagram for dynamicsJRLJapan::ObjectFactory:</div>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a043bc57c4ae58eed894eb78bcd8b7598">createJointTranslation</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a35f585957396910691b60d8d7778ca6b">createJointAnchor</a> (const <a class="elRef" doxygen="jrl-mal.doxytag:" href="a00023.html#a211846ce7e4e1babf086b2d54bc34e1b">matrix4d</a> &amp;inInitialPosition)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00004.html">CjrlBody</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#aca86997045238bac368b2b5fcc4920e9">createBody</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlHand</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a468dd8944519725c0c3351a0a882b114">createHand</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inWrist)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00006.html">CjrlFoot</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#ade232c3004b8f80624f3c4a064ce69f2">createFoot</a> (const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inAnkle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlHand</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#a1c6bafe51c45d759e24ed10db72e07ff">createHand</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inWrist)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00006.html">CjrlFoot</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00029.html#ad0b38bc694069b6b2a474a13a6634713">createFoot</a> (<a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *inAnkle)</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Hooks for to create objects. </p>
@@ -104,14 +104,14 @@ Collaboration diagram for dynamicsJRLJapan::ObjectFactory:</div>
 
 </div>
 </div>
-<a class="anchor" id="ade232c3004b8f80624f3c4a064ce69f2"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createFoot" ref="ade232c3004b8f80624f3c4a064ce69f2" args="(const CjrlJoint *inAnkle)" -->
+<a class="anchor" id="ad0b38bc694069b6b2a474a13a6634713"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createFoot" ref="ad0b38bc694069b6b2a474a13a6634713" args="(CjrlJoint *inAnkle)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00006.html">CjrlFoot</a>* dynamicsJRLJapan::ObjectFactory::createFoot </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
+          <td class="paramtype"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
           <td class="paramname"> <em>inAnkle</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [virtual]</code></td>
@@ -120,18 +120,18 @@ Collaboration diagram for dynamicsJRLJapan::ObjectFactory:</div>
 </div>
 <div class="memdoc">
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#afef4cb7570cf220ce1b5b0a153a113a2">CjrlRobotDynamicsObjectFactory</a>.</p>
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#aa78506a363d12e45a754465394acdf04">CjrlRobotDynamicsObjectFactory</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a468dd8944519725c0c3351a0a882b114"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createHand" ref="a468dd8944519725c0c3351a0a882b114" args="(const CjrlJoint *inWrist)" -->
+<a class="anchor" id="a1c6bafe51c45d759e24ed10db72e07ff"></a><!-- doxytag: member="dynamicsJRLJapan::ObjectFactory::createHand" ref="a1c6bafe51c45d759e24ed10db72e07ff" args="(CjrlJoint *inWrist)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00007.html">CjrlHand</a>* dynamicsJRLJapan::ObjectFactory::createHand </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
+          <td class="paramtype"><a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00009.html">CjrlJoint</a> *&nbsp;</td>
           <td class="paramname"> <em>inWrist</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td><code> [virtual]</code></td>
@@ -140,7 +140,7 @@ Collaboration diagram for dynamicsJRLJapan::ObjectFactory:</div>
 </div>
 <div class="memdoc">
 
-<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a2735714ab560f18ff6adb724aef7934d">CjrlRobotDynamicsObjectFactory</a>.</p>
+<p>Implements <a class="elRef" doxygen="abstract-robot-dynamics.doxytag:" href="a00012.html#a789a6a8d160af0e7dbb0b71b31b5e6ec">CjrlRobotDynamicsObjectFactory</a>.</p>
 
 </div>
 </div>
