@@ -27,6 +27,7 @@
 
 /*! System includes */
 #include <iostream>
+#include <stdexcept>
 #include <sstream>
 #include <fstream>
 #include <string.h>
@@ -123,19 +124,33 @@ int DynMultiBodyPrivate::BuildLinkFromActuatedIDs()
   ODEBUG("Went through here.");
   m_ActuatedJoints.resize(m_ActuatedIDToConfiguration.size());
 
-  for(unsigned int IndexInActuatedIDs=0;
-      IndexInActuatedIDs<m_ActuatedIDToConfiguration.size();
-      IndexInActuatedIDs++)
+  for (unsigned int IndexInActuatedIDs = 0;
+       IndexInActuatedIDs < m_ActuatedIDToConfiguration.size ();
+       IndexInActuatedIDs++)
     {
       bool FoundActuatedJoint = false;
-      unsigned int IndexInJointVector=0;
-      for(IndexInJointVector=0;IndexInJointVector<m_JointVector.size();IndexInJointVector++)
-	if (m_JointVector[IndexInJointVector]->rankInConfiguration()== (unsigned int)
-	    m_ActuatedIDToConfiguration[IndexInActuatedIDs])
-	  {
-	    FoundActuatedJoint = true;
-	    break;
-	  }
+      unsigned int IndexInJointVector = 0;
+      for(; IndexInJointVector < m_JointVector.size (); IndexInJointVector++)
+	{
+	  // Ignore anchor joints.
+	  if (m_JointVector[IndexInJointVector]->numberDof () == 0)
+	    continue;
+
+	  // Make sure the joint is valid.
+	  if (!m_JointVector[IndexInJointVector])
+	    throw std::runtime_error ("null joint found");
+
+	  unsigned rank =
+	    m_JointVector[IndexInJointVector]->rankInConfiguration ();
+	  unsigned actuatedIdToConfiguration =
+	    m_ActuatedIDToConfiguration[IndexInActuatedIDs];
+
+	  if (rank == actuatedIdToConfiguration)
+	    {
+	      FoundActuatedJoint = true;
+	      break;
+	    }
+	}
       if (FoundActuatedJoint)
 	{
 	  m_ActuatedJoints[IndexInActuatedIDs] = m_JointVector[IndexInJointVector];
