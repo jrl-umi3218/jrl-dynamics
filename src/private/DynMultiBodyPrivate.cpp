@@ -638,7 +638,9 @@ bool DynMultiBodyPrivate::currentVelocity(const MAL_VECTOR_TYPE(double)& inVeloc
   int lindex=0;
   for (unsigned int i=0;i<m_JointVector.size();i++)
     {
-
+      // Ignore anchor joints.
+      if (m_JointVector[i]->numberDof () == 0)
+	continue;
       lindex = m_JointVector[i]->rankInConfiguration();
 
       // Update the pose of the joint when it is a free joint
