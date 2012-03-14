@@ -719,6 +719,9 @@ bool DynMultiBodyPrivate::currentAcceleration(const MAL_VECTOR_TYPE(double)& inA
   int lindex=0;
   for (unsigned int i=0;i<m_JointVector.size();i++)
     {
+      // Ignore anchor joints.
+      if (m_JointVector[i]->numberDof () == 0)
+	continue;
 
       lindex = m_JointVector[i]->rankInConfiguration();
 
