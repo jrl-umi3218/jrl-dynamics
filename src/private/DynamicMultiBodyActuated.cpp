@@ -46,11 +46,12 @@ using namespace dynamicsJRLJapan;
 /* Implements Actuated methods of DynamicsMultiBody */
 void DynMultiBodyPrivate::setActuatedJoints(std::vector<CjrlJoint *>& lActuatedJoints)
 {
-  bool Same=true;
+  bool Same=false;
 
   if (m_ActuatedJoints.size()==
       lActuatedJoints.size())
     {
+      Same=true;
       for(unsigned int i=0;i<m_ActuatedJoints.size();i++)
 	if (m_ActuatedJoints[i] != lActuatedJoints[i])
 	  Same=false;
