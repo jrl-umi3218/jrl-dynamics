@@ -108,6 +108,11 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     {
       aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2EndJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration()+outOffset;
       else
@@ -158,6 +163,11 @@ bool DynMultiBodyPrivate::getJacobian ( const CjrlJoint& inStartJoint,
     {
       aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2StartJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration()+outOffset;
       else
@@ -286,6 +296,11 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     {
       aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2EndJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration()+outOffset;
       else
@@ -321,6 +336,11 @@ bool DynMultiBodyPrivate::getPositionJacobian ( const CjrlJoint& inStartJoint,
     {
       aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2StartJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration() +outOffset;
       else
@@ -424,6 +444,11 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     {
       aJoint= ( JointPrivate * ) robotRoot2EndJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2EndJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration() +outOffset;
       else
@@ -449,6 +474,11 @@ bool DynMultiBodyPrivate::getOrientationJacobian ( const CjrlJoint& inStartJoint
     {
       aJoint = ( JointPrivate * ) robotRoot2StartJoint[i];
       aBody=  aJoint->linkedDBody();
+
+      // Ignore anchor joints.
+      if (robotRoot2StartJoint[i]->numberDof () == 0)
+	continue;
+
       if ( includeFreeFlyer )
 	rank = aJoint->rankInConfiguration() +outOffset;
       else
