@@ -215,6 +215,11 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       for (unsigned int j=0;j<m_JointVector.size();j++)
 	{
 	  unsigned int StateRankComputed=false;
+
+	  // Do nothing if it is an anchor joint.
+	  if (m_JointVector[j]->numberDof () == 0)
+	    continue;
+
 	  unsigned int index = m_JointVector[j]->rankInConfiguration();
 	  JointPrivate * aJoint = (JointPrivate *)m_JointVector[j];
 	  if (aJoint!=0)
