@@ -177,6 +177,13 @@ namespace dynamicsJRLJapan
 
   public:
 
+    const Spatial::PluckerTransform & getiXpi(void) const { return m_iXpi; };
+    const Spatial::PluckerTransform & getXL(void) const { return m_XL; };
+    const Spatial::PluckerTransform & getXj(void) const { return m_Xj; };
+    const Spatial::PluckerTransform & getXj_i(void) const { return Xj_i; };
+    const matrixNxP & getS(void) const { return m_phi; };
+    const matrixNxP & getdotS(void) const { return m_dotphi; };
+
     /** */
     double subTreeCoef();
     /** */
@@ -847,6 +854,8 @@ namespace dynamicsJRLJapan
     void SupdateTorqueAndForce();
 
   private:
+
+    Spatial::PluckerTransform m_Xj;
 
     /*! \brief Position of the joint in the link
       reference frame using Plucker coordinate.
