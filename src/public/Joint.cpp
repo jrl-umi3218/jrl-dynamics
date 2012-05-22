@@ -230,6 +230,26 @@ void Joint::upperVelocityBound(unsigned int inDofRank, double inUpperBound)
   DERIVPRIVATE->upperVelocityBound(inDofRank, inUpperBound);
 }
 
+double Joint::lowerTorqueBound(unsigned int inDofRank) const
+{
+  return DERIVPRIVATE->lowerTorqueBound(inDofRank);
+}
+
+double Joint::upperTorqueBound(unsigned int inDofRank) const
+{
+  return DERIVPRIVATE->upperTorqueBound(inDofRank);
+}
+
+void Joint::lowerTorqueBound(unsigned int inDofRank, double inLowerBound)
+{
+  DERIVPRIVATE->lowerTorqueBound(inDofRank, inLowerBound);
+}
+
+void Joint::upperTorqueBound(unsigned int inDofRank, double inUpperBound)
+{
+  DERIVPRIVATE->upperTorqueBound(inDofRank, inUpperBound);
+}
+
 const matrixNxP& Joint::jacobianJointWrtConfig() const
 {
   return DERIVPRIVATE->jacobianJointWrtConfig();

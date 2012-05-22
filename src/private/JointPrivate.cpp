@@ -81,6 +81,8 @@ JointPrivate::JointPrivate(int ltype, MAL_S3_VECTOR_TYPE(double) & laxis,
   m_UpperLimits(),
   m_LowerVelocityLimits(),
   m_UpperVelocityLimits(),
+  m_LowerTorqueLimits(),
+  m_UpperTorqueLimits(),
   m_EquivalentInertia(),
   m_RigidVelocity(),
   m_J(),
@@ -165,6 +167,8 @@ JointPrivate::JointPrivate(const JointPrivate &r)
       m_UpperLimits[i] = r.upperBound(i);
       m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
       m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
+      m_LowerTorqueLimits[i] = r.lowerTorqueBound(i);
+      m_UpperTorqueLimits[i] = r.upperTorqueBound(i);
     }
 
   /*! Initialize spatial quantities */
@@ -217,12 +221,16 @@ void JointPrivate::CreateLimitsArray()
       m_UpperLimits.resize(numberDof());
       m_LowerVelocityLimits.resize(numberDof());
       m_UpperVelocityLimits.resize(numberDof());
+      m_LowerTorqueLimits.resize(numberDof());
+      m_UpperTorqueLimits.resize(numberDof());
       for (unsigned int i=0; i<numberDof(); i++)
         {
 	  m_LowerLimits[i] = 0;
 	  m_UpperLimits[i] = 0;
 	  m_LowerVelocityLimits[i] = 0;
 	  m_UpperVelocityLimits[i] = 0;
+	  m_LowerTorqueLimits[i] = 0;
+	  m_UpperTorqueLimits[i] = 0;
         }
     }
   else
@@ -231,6 +239,8 @@ void JointPrivate::CreateLimitsArray()
       m_UpperLimits.clear();
       m_LowerVelocityLimits.clear();
       m_UpperVelocityLimits.clear();
+      m_LowerTorqueLimits.clear();
+      m_UpperTorqueLimits.clear();
     }
 }
 
@@ -261,6 +271,8 @@ JointPrivate & JointPrivate::operator=(const JointPrivate & r)
       m_UpperLimits[i] = r.upperBound(i);
       m_LowerVelocityLimits[i] = r.lowerVelocityBound(i);
       m_UpperVelocityLimits[i] = r.upperVelocityBound(i);
+      m_LowerTorqueLimits[i] = r.lowerTorqueBound(i);
+      m_UpperTorqueLimits[i] = r.upperTorqueBound(i);
     }
 
 
@@ -299,11 +311,12 @@ ostream & operator<<(ostream & os, const JointPrivate &r)
 
   os << "In global frame :" << r.getinGlobalFrame() << endl;
 
-  os << "Position & Velocity Limits: " << endl;
+  os << "Position, Velocity, and Torque Limits: " << endl;
   for(unsigned int i=0;i<r.numberDof();i++)
     {
       os << i << " [ " << r.lowerBound(i) << " , "  << r.upperBound(i) << "]"
 	 << " [ " << r.lowerVelocityBound(i) << " , "  << r.upperVelocityBound(i) << "]"
+	 << " [ " << r.lowerTorqueBound(i) << " , "  << r.upperTorqueBound(i) << "]"
 	 << endl;
     }
   return os;

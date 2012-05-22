@@ -150,6 +150,10 @@ namespace dynamicsJRLJapan
     std::vector<double> m_LowerVelocityLimits;
     std::vector<double> m_UpperVelocityLimits;
 
+    /*! Limits of the joint torque. */
+    std::vector<double> m_LowerTorqueLimits;
+    std::vector<double> m_UpperTorqueLimits;
+
     double m_EquivalentInertia;
 
     /*! Rigid Velocity */
@@ -552,6 +556,30 @@ namespace dynamicsJRLJapan
       return 0.0;
     };
 
+    /**
+       \brief Set the upper torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inUpperTorqueBound Upper bound.
+    */
+    inline void upperTorqueBound(unsigned int inDofRank, double inUpperTorqueBound)
+    {
+      if (inDofRank<m_UpperTorqueLimits.size())
+	m_UpperTorqueLimits[inDofRank] = inUpperTorqueBound;
+    };
+
+    /**
+       \brief Get the lower torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double lowerTorqueBound(unsigned int inDofRank) const
+    {
+      if (inDofRank<m_LowerTorqueLimits.size())
+	return m_LowerTorqueLimits[inDofRank];
+      return 0.0;
+    };
+
     /** \brief Returns the equivalent inertia */
     inline double equivalentInertia() const
     {
@@ -586,6 +614,30 @@ namespace dynamicsJRLJapan
     {
       if (inDofRank<m_LowerVelocityLimits.size())
 	m_LowerVelocityLimits[inDofRank] = inLowerVelocityBound;
+    };
+
+    /**
+       \brief Get the upper torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    inline double upperTorqueBound(unsigned int inDofRank) const
+    {
+      if (inDofRank<m_UpperTorqueLimits.size())
+	return m_UpperTorqueLimits[inDofRank];
+      return 0.0;
+    };
+
+    /**
+       \brief Set the lower torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inLowerTorqueBound lower bound
+    */
+    inline void lowerTorqueBound(unsigned int inDofRank, double inLowerTorqueBound)
+    {
+      if (inDofRank<m_LowerTorqueLimits.size())
+	m_LowerTorqueLimits[inDofRank] = inLowerTorqueBound;
     };
 
     /*! @} */

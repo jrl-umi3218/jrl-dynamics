@@ -236,6 +236,36 @@ namespace dynamicsJRLJapan {
     virtual void upperVelocityBound(unsigned int inDofRank, double inUpperBound);
 
     /**
+       \brief Get the lower torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    virtual double lowerTorqueBound(unsigned int inDofRank) const;
+
+    /**
+       \brief Get the upper veocity bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+    */
+    virtual double upperTorqueBound(unsigned int inDofRank) const;
+
+    /**
+       \brief Set the lower torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inLowerBound lower bound
+    */
+    virtual void lowerTorqueBound(unsigned int inDofRank, double inLowerBound);
+
+    /**
+       \brief Set the upper torque bound of a given degree of freedom of the joint.
+
+       \param inDofRank Id of the dof in the joint
+       \param inUpperBound Upper bound.
+    */
+    virtual void upperTorqueBound(unsigned int inDofRank, double inUpperBound);
+
+    /**
        @}
     */
 
