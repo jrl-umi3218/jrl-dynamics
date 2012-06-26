@@ -248,15 +248,15 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
 
   // Take the root 
   DynamicBodyPrivate * aDBP= m_RootOfTheJointsTree->linkedDBody();
-  // Compute the position vector from Waist to the multibody CoM
-  vector3d p_c = positionCoMPondere - aDBP->p;
-  // Set a rotation matrix to identity
-  matrix3d RI;
-  MAL_S3x3_MATRIX_SET_IDENTITY(RI);
+  // Get the rotation matrix from waist to world frame.
+  matrix3d wRwa = aDBP->R;
+  matrix3d waRw = wRwa.Transpose ();
+  // Compute multibody CoM position vector in the Waist frame
+  vector3d waPc = waRw * (positionCoMPondere - aDBP->p);
   // Build the Plucker transform from Waist to CoM
-  Spatial::PluckerTransform wXc(RI,p_c);
+  Spatial::PluckerTransform cXw (wRwa, waPc);
   // Write the Spatial forces in the CoM reference frame
-  Spatial::Force af = wXc * aDBP->sf;
+  Spatial::Force af = cXw * aDBP->sf;
   // Extract Momentum derivatives.
   vector3d ldP = af.f();
   vector3d ldL = af.n0();
@@ -270,9 +270,10 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
 	  "CoM: " << positionCoMPondere << endl <<
 	  "ldv_c_g[0]: " << ldv_c_g[0] << endl <<
 	  "ldv_c_g[2]: " << ldv_c_g[2] << endl <<
-	  "wXc: " << wXc );
+	  "cXw: " << cXw );
 	  
   //
+
   px = positionCoMPondere[0] - ( ldL[1] + 
 				m_mass * positionCoMPondere[2]* ldv_c_g[0] )/(m_mass * (g + ldv_c_g[2]));
   py = positionCoMPondere[1] + (ldL[0] 
