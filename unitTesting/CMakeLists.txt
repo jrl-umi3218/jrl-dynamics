@@ -202,3 +202,5 @@ INSTALL(FILES ${${PROJECT_NAME}_EXAMPLES_DATA}
   DESTINATION share/jrl-dynamics/examples/data
   PERMISSIONS OWNER_READ GROUP_READ WORLD_READ OWNER_WRITE OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE )
 
+ADD_EXECUTABLE(makeMetapodSampleModel makeMetapodSampleModel.cc)
+TARGET_LINK_LIBRARIES(makeMetapodSampleModel jrl-dynamics metapod-model-maker ${Boost_LIBRARIES})

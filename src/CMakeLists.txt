@@ -74,3 +74,6 @@ INSTALL(TARGETS jrl-dynamics DESTINATION lib)
 
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics jrl-mal)
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics abstract-robot-dynamics)
+
+ADD_LIBRARY(metapod-model-maker SHARED private/metapodModelMaker.cc)
+TARGET_LINK_LIBRARIES(metapod-model-maker jrl-dynamics)

@@ -31,6 +31,7 @@ cmake_minimum_required(VERSION 2.6)
 
 INCLUDE(cmake/base.cmake)
 INCLUDE(cmake/cpack.cmake)
+INCLUDE(cmake/boost.cmake)
 
 # name of the project
 SET(PROJECT_NAME jrl-dynamics)
@@ -40,6 +41,8 @@ SET(PROJECT_URL "git@github.com:jrl-umi3218/jrl-dynamics.git")
 
 SET(CXX_DISABLE_WERROR True)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+SEARCH_FOR_BOOST()
 
 # To deal with the headers.
 #--------------------------
