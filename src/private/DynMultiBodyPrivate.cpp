@@ -258,8 +258,15 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
   // Write the Spatial forces in the CoM reference frame
   Spatial::Force af = cXw * aDBP->sf;
   // Extract Momentum derivatives.
-  vector3d ldP = af.f();
-  vector3d ldL = af.n0();
+  dP = af.f();
+  dL = af.n0();
+  // Express spatial resultant force in world frame.
+  vector3d waPw = waRw * (- aDBP->p);
+  Spatial::PluckerTransform wXwa (wRwa, waPw);
+  af = wXwa * aDBP->sf;
+  // Compute ZMP
+  px = - af.n0()[1] / af.f()[2];
+  py =   af.n0()[0] / af.f()[2];
 
   ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << g  << " "
 	 << " f: " << aDBP->sf.f() 
@@ -271,14 +278,6 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
 	  "ldv_c_g[0]: " << ldv_c_g[0] << endl <<
 	  "ldv_c_g[2]: " << ldv_c_g[2] << endl <<
 	  "cXw: " << cXw );
-	  
-  //
-
-  px = positionCoMPondere[0] - ( ldL[1] + 
-				m_mass * positionCoMPondere[2]* ldv_c_g[0] )/(m_mass * (g + ldv_c_g[2]));
-  py = positionCoMPondere[1] + (ldL[0] 
-				- m_mass * positionCoMPondere[2] * ldv_c_g[1] )/(m_mass * (g + ldv_c_g[2]));
-
   ODEBUG(" px: " << px << " py: " << py);
 }
 
