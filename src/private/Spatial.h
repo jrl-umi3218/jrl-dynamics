@@ -100,6 +100,13 @@ namespace dynamicsJRLJapan
       void dw(const vector3d &ldw)
       { m_dw = ldw; };
 
+      std::ostream & display(std::ostream &  os) const
+	{
+	  os << " ldv0: " << m_dv0 << std::endl;
+	  os << " ldw: " << m_dw << std::endl;
+	  return os;
+	}
+
     private:
       vector3d m_dv0, m_dw;
     };
