@@ -95,6 +95,10 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
   positionCoMPondere[0] = 0;
   positionCoMPondere[1] = 0;
   positionCoMPondere[2] = 0;
+  matrix3d I;
+  I.setZero ();
+  vector3d h (0,0,0);
+  sIa = Spatial::Inertia (I, h, 0);
   MAL_S3_VECTOR_FILL(ldv_c_g,0);
   
 
@@ -125,7 +129,12 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       if (m_ComputeCoM)
         {
 	  currentJoint->updateWorldCoMPosition();
-	  positionCoMPondere +=  currentBody->w_c * currentBody->getMass();
+	  // Use spatial algebra to first compute total spatial
+	  // inertia, then retrieve com from it.
+	  Spatial::PluckerTransform sXi0;
+	  sXi0.inverse (currentBody->sX0i);
+	  Spatial::Inertia sIai0 = sXi0 * currentBody->sIa;
+	  sIa = sIa + sIai0;
         }
 
       /* Update the momentum. */
@@ -253,8 +262,8 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
       SkewCoM(2,2) = 0;
     }
 
-  positionCoMPondere = positionCoMPondere/m_mass;
   ldv_c_g = ldv_c_g / m_mass;
+  positionCoMPondere = sIa.h() / m_mass;
 
   ODEBUG4INC(ldv_c_g , "AccelerationCoM.dat", " ");
   ODEBUG4INC(" " , "AccelerationCoM.dat", endl);
