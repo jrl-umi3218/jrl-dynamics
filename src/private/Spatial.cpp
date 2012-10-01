@@ -441,6 +441,25 @@ namespace dynamicsJRLJapan
       return c;
     }
 
+    inline matrix3d skew(const vector3d & v)
+    {
+      matrix3d m;
+      m(0,0) = 0;    m(0,1) = -v[2]; m(0,2) = v[1];
+      m(1,0) = v[2]; m(1,1) = 0    ; m(1,2) = -v[0];
+      m(2,0) = -v[1];m(2,1)=  v[0] ; m(2,2) =  0 ;
+      return m;
+    }
+
+    Inertia PluckerTransform::operator*( Inertia &I)
+    {
+      vector3d tmp = I.h() - m_p*I.m();
+
+      return Inertia (m_R*(I.I()
+			   + skew(m_p)*skew(I.h())
+			   + skew(tmp)*skew(m_p))*m_R.Transpose(),
+		      m_R*tmp,
+		      I.m());
+    }
 
     Force  PluckerTransform::operator*( Force &f)
     {

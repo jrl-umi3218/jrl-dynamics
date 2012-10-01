@@ -226,6 +226,7 @@ namespace dynamicsJRLJapan
       PluckerTransform operator*(PluckerTransform &a);
       Velocity operator*(Velocity &a);
       Acceleration operator*(Acceleration &a);
+      Inertia operator*(Inertia &a);
       Force operator*(Force &f);
       void inverse(PluckerTransform &a);
 
