@@ -55,7 +55,7 @@ MAL_MATRIX_TYPE(double) &DynMultiBodyPrivate::getJacobianOfTheCoM()
 */
 const MAL_S3_VECTOR_TYPE(double)& DynMultiBodyPrivate::accelerationCenterOfMass()
 {
-  return m_AccelerationCenterOfMass;
+  return ldv_c_g;
 }
 
 /**
