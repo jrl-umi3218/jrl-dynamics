@@ -31,6 +31,7 @@
 
 #include <jrl/mal/matrixabstractlayer.hh>
 
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include "jrl/dynamics/joint.hh"
 #include "jrl/dynamics/dynamicrobot.hh"
 #include "jrl/dynamics/dynamicbody.hh"

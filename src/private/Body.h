@@ -40,6 +40,7 @@
 #include <string>
 //#include "linalg.h"
 #include "jrl/mal/matrixabstractlayer.hh"
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include "abstract-robot-dynamics/body.hh"
 #include "JointPrivate.h"
 

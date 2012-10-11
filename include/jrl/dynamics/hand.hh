@@ -28,6 +28,7 @@
 
 #include "jrl/mal/matrixabstractlayer.hh"
 
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include <abstract-robot-dynamics/hand.hh>
 //#include "dynamicsJRLJapan/deprecated.h"
 #include "jrl/dynamics/dll.hh"

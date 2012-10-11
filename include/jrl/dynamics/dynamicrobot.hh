@@ -32,6 +32,7 @@
 
 #include <cassert>
 #include <jrl/dynamics/dll.hh>
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include <abstract-robot-dynamics/joint.hh>
 #include <abstract-robot-dynamics/dynamic-robot.hh>
 #include <abstract-robot-dynamics/robot-dynamics-object-constructor.hh>

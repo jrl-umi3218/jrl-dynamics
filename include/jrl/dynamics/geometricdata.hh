@@ -31,6 +31,7 @@
 #include <ostream>
 
 #include <jrl/mal/matrixabstractlayer.hh>
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include "abstract-robot-dynamics/humanoid-dynamic-robot.hh"
 #include "abstract-robot-dynamics/robot-dynamics-object-constructor.hh"
 

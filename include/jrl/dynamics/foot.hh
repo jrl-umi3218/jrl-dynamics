@@ -25,6 +25,7 @@
 #define _DYN_JRL_JAPAN_FOOT_H_
 #include "jrl/mal/matrixabstractlayer.hh"
 
+#include "abstract-robot-dynamics/traits/default-pointer.hh"
 #include "abstract-robot-dynamics/foot.hh"
 #include "jrl/dynamics/dll.hh"
 
