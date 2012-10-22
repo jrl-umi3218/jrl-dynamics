@@ -81,7 +81,6 @@ namespace dynamicsJRLJapan
     matrix3d SkewCoM;
 
     /** Weighted CoM position. */
-    Spatial::Inertia sIa;
     vector3d positionCoMPondere;
     vector3d ldv_c_g;
     /** Splitted inertial matrices. */
