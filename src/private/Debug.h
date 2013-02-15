@@ -69,6 +69,7 @@
 #undef ODEBUG
 #endif
 
+#ifdef DEBUG_MODE
 #define RESETDEBUG5(y) { ofstream DebugFile;	\
     DebugFile.open(y,ofstream::out);		\
     DebugFile.close();}
@@ -82,6 +83,14 @@
     DebugFile.open(y,ofstream::app);		\
     DebugFile << x << z;	\
     DebugFile.close();}
+
+#else
+
+#define RESETDEBUG5(y)
+#define ODEBUG5(x,y)
+#define ODEBUG5INC(x,y,z)
+#endif // DEBUG_MODE
+
 
 #define ODEBUG2(x)
 #define ODEBUG3(x) cerr << __FILE__ << ":" << __LINE__ << x << endl
