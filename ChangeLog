@@ -1,47 +1,972 @@
-Changes from 1.18.0 to 1.19.0:
-* Wed Aug 11 08:07:01 2010 +0900 Olivier Stasse Remove debug messages.
-* Tue Aug 10 21:02:20 2010 +0900 Olivier Stasse Fix bug for generating a compilable robot for new robotbuilder.
-* Tue Aug 10 20:11:22 2010 +0900 Olivier Stasse Install GeometricData.h in include directory.
-* Tue Aug 10 19:43:08 2010 +0900 Olivier Stasse Add generation of HPP elements for building a robot directly in C++
-* Tue Aug 10 06:49:40 2010 +0900 Olivier Stasse Files for the robotbuilder generator.
-* Tue Aug 10 06:49:40 2010 +0900 Olivier Stasse Insert a robot builder generator.
-* Mon Aug 9 20:12:00 2010 +0900 Francois Keith Correct the installation command
-* Mon Aug 9 19:37:41 2010 +0900 Francois Keith Remove a useless using namespace boost::spirit::classic
-* Mon Aug 9 19:18:14 2010 +0900 Francois Keith Correct the compilation order
-* Mon Aug 9 16:50:44 2010 +0900 Olivier Stasse Allows reading of geometrical information.
-* Mon Aug 9 07:24:28 2010 +0900 stasse Handles properly list of BodyGeometricalData
-* Fri Aug 6 21:04:29 2010 +0900 Olivier Stasse Improving grammar.
-* Fri Aug 6 12:38:12 2010 +0900 stasse Add Geometrical Data.
-* Thu Aug 5 08:47:15 2010 +0900 Olivier Stasse Fix GeometricData.
-* Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical data.
-* Wed Aug 4 19:38:40 2010 +0900 Olivier Stasse Add reading of geometrical parts.
-* Wed Aug 4 19:38:40 2010 +0900 stasse First test for Inline.
-* Wed Aug 4 19:38:39 2010 +0900 stasse Beautification of grammar rules
-* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Win32: Remove a too verbose warning
-* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Change the order of inclusion of headers to be compatible with boost 1.39
-* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Use directly 'grammar' instead of its full name.
-* Tue Aug 3 21:48:33 2010 +0900 Francois Keith Remove useless copy constructors taking a ref in param.
-* Tue Aug 3 21:32:07 2010 +0900 Francois Keith Win32: Remove a too verbose warning
-* Tue Aug 3 21:29:37 2010 +0900 Francois Keith Change the order of inclusion of headers to be compatible with boost 1.39
-* Tue Aug 3 21:21:23 2010 +0900 Francois Keith Use directly 'grammar' instead of its full name.
-* Tue Aug 3 21:18:49 2010 +0900 Francois Keith Remove useless copy constructors taking a ref in param.
-* Tue Aug 3 19:33:07 2010 +0900 Olivier Stasse For handling errors during parsing.
-* Tue Aug 3 19:33:07 2010 +0900 Olivier Stasse Implements new version of VRML parser to move towards openvrml.
-* Tue Aug 3 19:33:06 2010 +0900 stasse Provides new contructors for copy of all Joints flavors.
-* Tue Aug 3 19:33:06 2010 +0900 Olivier Stasse Implements a broken version.
-* Tue Aug 3 19:33:06 2010 +0900 stasse New parser for VRML files.
-* Mon Jul 26 22:35:46 2010 +0000 Olivier Stasse Same than before but for the user's CMakeLists.txt.
-* Mon Jul 26 22:34:40 2010 +0000 Olivier Stasse Change name of TestCopy[..]AbstractInterface into a shorter name.
-* Mon Jul 26 22:33:26 2010 +0000 Olivier Stasse Install everything in /usr/share/openrobots
-* Mon Jul 26 22:30:41 2010 +0000 Olivier Stasse Set SHORT_NAMES to yes.
-* Mon Jul 26 05:15:36 2010 +0000 Olivier Stasse Fix the CMakeLists.txt for users.
-* Mon Jul 26 05:15:36 2010 +0000 Olivier Stasse Rename examples.CMakeList file during install process.
-* Mon Jul 26 05:15:35 2010 +0000 Olivier Stasse Fix wrong install macro for installing documentation.
-* Tue Jul 20 18:16:59 2010 +0900 stasse Bump 1.18.0.99
-* Mon Aug 30 23:10:58 2010 +0900 stasse Release 1.19.1
-* Fri Aug 27 19:29:53 2010 +0900 Olivier Stasse Add initial pose to sample robot.
-* Thu Aug 26 15:57:05 2010 +0900 Olivier Stasse Add CHEST specification.
-* Thu Aug 19 20:18:05 2010 +0900 Olivier Stasse Add torques computation along trajectories.
-* Fri Aug 13 13:59:13 2010 +0900 stasse Add names for bodies and links, as well as specificities.
-* Fri Aug 13 13:58:17 2010 +0900 stasse Read names for body and joints and externalize them.
-* Thu Aug 12 19:18:25 2010 +0900 stasse Fix a pb when the parser send polygon with size 0 for robot hpp builder.
+CHANGELOG
+----------------------
+
+[v1.23.0]
+ * Synchronize
+ * ODEBUG5 is only allowed in DEBUG_MODE now.
+ * Revert "Compute center of mass using spatial algebra."
+ * Fix center of mass acceleration getter.
+ * Compute center of mass using spatial algebra.
+ * Add transformation operator for spatial inertia.
+ * Add display method for spatial acceleration.
+ * Fix ZMP computation.
+
+[v1.22.0]
+ * Synchronize submodule cmake.
+ * Corrected the getProperty function.
+ * Fix Zmp computation method.
+ * Implement setter and getter methods for actuator torque bounds.
+ * Fix method setActuatedJoints when passing a vector of a different size from current actuated joint vector
+ * Ignore anchor joints in jacobian computation.
+ * Disregard anchor joints in Newton-Euler algorithm.
+ * Fix currentAcceleration when anchor joints are used.
+ * Synchronize.
+ * Fix currentVelocity when anchor joints are used.
+ * Ignore anchor joints in DynMultiBodyPrivate::BuildLinkFromActuatedIDs()
+ * Remove hard-coded value in multibody ZMP expression.
+ * Fix JointPrivateSpatial initialization when using an anchor joint.
+ * Fix anchor joint.
+ * Properly initialize translation joints (dof number and bounds).
+ * Fix initialization list in JointPrivate.
+
+[v1.21.0]
+ * associated ankle and wrist are not const anymore in foot and hand classes.
+
+[v1.20.1]
+ * Update NEWS.
+
+[v1.20]
+ * Add methods to set and get name from joints.
+ * Fix previous commit with isnan. (make test successfull)
+ * isnan replace by boost::math::isnan.
+ * Add test to insert shape.
+ * In HumDynMultiBodyPrivate constructors, set pointers to 0.
+ * Do not redefind macro JRLDEPRECATED
+ * Synchronize cmake submodule
+ * Emacs indentation
+ * Protect delete in SpiritVRMLActions.hpp
+ * Read tree with the new method which relates joint name and their rank.
+ * Rename the method reading the link between joint name and rank.
+ * Clean aborted project on new parser for specificities and link rank joint
+ * Improve the parser grammar with some new cases.
+ * Synchronize.
+ * Synchronize.
+ * Add << operator for display.
+ * Fix computation of ZMP: use force and torques at the CoM and not at the Waist anymore.
+ * Fix the file reading and the computation.
+ * Fix computation of velocity and acceleration for body CoM.
+ * Fix momentum computation.
+ * Remove useless code.
+ * Propagate CoM acceleration computation.
+ * Add Plucker transform to compute acceleration of the body CoM.
+ * Add CoM acceleration for the robot.
+ * Compute ZMP through CoM acceleration computed from each body.
+ * Add incremental debug log in Debug.h
+ * Working version of readposfile for stab.
+ * Remove file automatically generated.
+ * Synchronize
+ * Add the template.
+ * Synchronize
+ * Synchronize
+ * Fix prototypes of virtual methods in Joint in order to make the class concrete.
+ * Synchronize
+ * Add boolean to parse geometrical information.
+ * Synchronize
+ * Display the robot model name.
+ * Synchronize
+ * Allows to get iteration number through the interface.
+
+[v1.19.4]
+ * Synchronize submodule cmake.
+ * [debian] Change rules to generate appropriate shlibs
+ * [debian] Removed libdevel option in jrl-dynamics.
+ * [debian] Authorize lib-jrldynamics with debian packages >= 8
+ * [debian] Changes dpkg-shlibdeps to dh_shlibdeps.
+ * Update rules and install files
+ * Fix type in debian/rules
+ * Synchronize
+ * Update debian/rules and Synchronize
+ * Add a test to check robotdynamicsimpl.hh header.
+ * Update robotdynamicsimpl.hh to neq style jrl-mal.
+ * Installed CMakeLists.txt in unitTesting is renamed as CMakeLists.txt.example.
+ * [debian] Change shlibs for proper debian dependency.
+ * Fix CMakeLists.txt generated for the user.
+ * [debian] This commit is working on launchpad. v1.19.3-9
+ * [debian] Fix the debian package generation for launchpad. Not complete yet.
+ * Correct the informations displayed when using the debug mode
+
+[v1.19.3]
+ * Make necessary changes to start generating documentation.
+ * Add spatial tests.
+ * Make use of the new method getMotherDynamicBodyPrivate.
+ * Add method getMotherDynamicBodyPrivate.
+ * Fix pbs related to previous commit.
+ * Trying to correct unitest for spatial dynamic ... not working.
+ * Code reformating before merging.
+
+[spatial-beta1]
+ * Corrected a bug in the call of the dyn-inv.
+ * Syntaxt correction, and comments.
+ * Current compiling version with the joint torque computation in backward dynamics.
+ * Added non-const function.
+ * Adding a field in multibody for the jointTorques and debugging its computation - at the current commit the version compiles but bugs at the simulation. The current Forces and Torques are currently affected as the spatial torque for the FreeFlyer joint and as the spatial forces and torques for the other joints. This is only temporary in order to get the correct computation of the dynamicDrift signal in sotDynamic and should be computed later from the multibody jointTorques.
+ * Testing the computation of the generalized inertia matrix which is not validated.
+ * Rectifying and validating the Spatial test for vxm
+ * This test was used for the validation of the spatial dynJRL and the scilab algorithm.
+ * This version computes the inverse dynamics using Spatial Algebra and one example that was not correctly computed in the normal version is now validated with the scilab algorithm considering the leg model of HRP2 - Resetting the declaration of the function numberDof() as virtual only because of compilation errors with a pure virtual declaration but there's no need to declare as a pure virtual function - Rectifying a bug in the computation of the variables m_phi and m_dotphi in the respective functions pcalc & pdcalc - Rectifying the computation of the cross product vxm referring to the equation (2.16) in the Springer Handbook Of Robotics and replacing it in table 2.1 - The test of this cross product is not yet modified considering the modifications.
+ * Adding Tests to the spatial algebra and validating all the tests - Declaring m_phi and m_dotphi as protected variables of the JointPrivate Class and computing these variables respectively by the virtual functions pcalc and pdcalc in each child joint class.    ====> this commit does not compile. kept as it, to preserve the following cherry picks.
+ * Additional correction waited by last cherry-pick.
+ * Add missing file unitTesting/assertion.hh.
+ * Adding all the validated tests of the spatial algebra - Still 5 more to come for now - The tests iPlusi gives an error with assert while the printed output is correct so this should be fixed.
+ * Modifying the test add in Cmakelists so that it includes the necessary private source code - Changing Spatial.ccp/.h back to how it was written by O.S with bug corrections.
+ * Add TestSpatial and export symbol
+ * Current Compiling Version - The code of RNEA using spatial algebra is not complete and not validated - The tests for the spatial alegbra are not added.
+ * Adding the tests of the Saptial Algebra - Work Still in progress
+ * Rectifying a bug in the inverse function call
+ * Changing the update functions calls in inverse dynamics to the Spatial update functions.
+ * Redefining the argument of the function JointPrivate::updateTransformation as it was before after no more useful modification
+ * Corrected some mistakes in the previous cherry-pick.
+ * Creating a new branch of dynamicsJRLJapan dedicated to the development of RNEA using spatial algebra - The current working version is compiled with an error on the library creation - Modification and development still in progress and the algorithm not validated.
+ * Synchronize.
+
+[v1.19.2]
+ * Update to changes in abstract interface. const added to specific joint getters.
+ * Fix a problem when the robot has a fixed base.
+ * Final fix for new grammar including new fields.
+ * Add new SpiritVRMLActions.
+ * Fix grammar problem for new extensions and old ones.
+ * Revert "Improving the parser and the generation of robots for AMELIF."
+ * Synchronize
+ * Improving the parser and the generation of robots for AMELIF.
+ * Fix cmake url.
+ * Change cmake url
+ * Synchronize cmake
+ * Synchronize
+ * Synchronize
+ * Synchronize
+ * Synchronize
+ * Synchronize
+ * Synchronize
+ * Synchronize for pkgdatarootdir
+ * Synchronize.
+ * Correct parsing command for ReadOpenHRPFileAndExport
+ * Fix directory to install examples.
+ * Fix cmake bugs for generating debian package for ubuntu 8.04.
+ * Fix warnings.
+ * Fix warnings.
+ * Introduces MAL_*_TYPE
+ * Add CPACK capabilities to jrl-dynamics.
+ * Synchronize + install headers through a header at the highest level.
+ * Fix problem related to headers installation.
+ * Teach CMake to install jrl-dynamics shared library.
+ * Remove extra ; to comply with -pedantic
+ * Correct the compilation/link flags
+ * Changed generation of .pc
+ * Add missing opition SHARED required to build a dynamic library
+ * Fix numerous warnings.
+ * Synchronize.
+ * Add doxyfile for submodule.
+ * Put back trailing white-spaces for output reference for regression.
+ * Reinforce submodule policy.
+ * Correct and simplify the links for the tools
+ * Correct the name and the handling of the API (dll.h)
+ * Fix warnings.
+ * Fix warnings.
+ * Remove extra semi-colon.
+ * Remove extra semi-colon.
+ * Remove trailing whitespace.
+ * Remove extra semi-colon.
+ * Synchronize.
+ * Fix include path to matche branch topic/submodule of abstract-robot-dynamics.
+ * Adapt to new headers of abstract robot dynamics.
+ * Change dependencies and pc files to stick to new standard.
+ * Remove any reference to ProjectionCenter and SoleCenter.
+ * Install headers in the correct location.
+ * Reinforce new policy on API filenames
+ * Add cmake submodule.
+ * Fix include path to matche branch topic/submodule of abstract-robot-dynamics.
+ * Adapt to new headers of abstract robot dynamics.
+ * Change dependencies and pc files to stick to new standard.
+ * Remove any reference to ProjectionCenter and SoleCenter.
+ * Install headers in the correct location.
+ * Reinforce new policy on API filenames
+ * Fix debian/watch file.
+ * Fix fscanf warning.
+ * Fix version number.
+ * Fix version number in control file.
+ * Fix version number in debian package.
+ * Rename install file.
+ * Fix build requirements.
+ * Clean dependencies in Debian package.
+ * Update build number of Debian package.
+ * Add missing build requirement.
+ * Add missing build requirements.
+ * Update build number in debian package.
+ * Add missing build requirements.
+ * Fix distro name in changelog.
+ * Fix Lintian errors.
+ * Add watch file.
+ * Fix Latex in documentation.
+ * Enhance Debian package.
+ * Fix documentation procedures creation.
+ * Fix incoherent name of package source.
+ * Fix name of dependent abstract package.
+ * Correct names of debian packages.
+ * Fix documentation.
+ * Genereate source package (through CMake for 8.04 compat)
+ * First debianization
+ * Fix README filename in CMakeLists.txt
+ * Uniformize documentation.
+ * Fix license to LGPLv3.
+ * Fix header license to LGPL v3.
+ * Include new tests asked by user.
+ * Fix loud grammar.
+ * Add private member for spatial computation.
+ * Complete algorithm documentation for RNEA Spatial.
+ * Add some feedback information.
+ * Fix transparency for material.
+ * Fix grammar for normal detection.
+ * Add action for normals.
+ * Win32: Remove the installation of the library with the version number
+ * Fix position,orientation pb to generate automatically a robot for HPP.
+ * Add texture, normalIndex, textureIndex in the grammar.
+ * Add debugging information.
+ * Fix bug on triangles when setting a specific material.
+ * Add ChangeLog between 1.19.0 and 1.19.1
+ * Bump to 1.19.1.99
+
+[v1.19.1]
+
+[1.19.1]
+ * Release 1.19.1
+ * Add initial pose to sample robot.
+ * Add CHEST specification.
+ * Add torques computation along trajectories.
+ * Add names for bodies and links, as well as specificities.
+ * Read names for body and joints and externalize them.
+ * Fix a pb when the parser send polygon with size 0 for robot hpp builder.
+
+[1.19.0]
+ * Release 1.19.0
+ * Edit the ChangeLog, README and CMakeLists.txt files.
+ * Add ChangeLog and install CreateHPPBuilder.
+ * Remove debug messages.
+ * Fix bug for generating a compilable robot for new robotbuilder.
+ * Install GeometricData.h in include directory.
+ * Add generation of HPP elements for building a robot directly in C++
+ * Files for the robotbuilder generator.
+ * Insert a robot builder generator.
+ * Correct the installation command
+ * Remove a useless using namespace boost::spirit::classic
+ * Correct the compilation order
+ * Allows reading of geometrical information.
+ * Handles properly list of BodyGeometricalData
+ * Improving grammar.
+ * Add Geometrical Data.
+ * Fix GeometricData.
+ * Add reading of geometrical data.
+ * Add reading of geometrical parts.
+ * First test for Inline.
+ * Beautification of grammar rules
+ * Win32: Remove a too verbose warning
+ * Change the order of inclusion of headers to be compatible with boost 1.39
+ * Use directly 'grammar' instead of its full name.
+ * Remove useless copy constructors taking a ref in param.
+ * Win32: Remove a too verbose warning
+ * Change the order of inclusion of headers to be compatible with boost 1.39
+ * Use directly 'grammar' instead of its full name.
+ * Remove useless copy constructors taking a ref in param.
+ * For handling errors during parsing.
+ * Implements new version of VRML parser to move towards openvrml.
+ * Provides new contructors for copy of all Joints flavors.
+ * Implements a broken version.
+ * New parser for VRML files.
+ * Same than before but for the user's CMakeLists.txt.
+ * Change name of TestCopy[..]AbstractInterface into a shorter name.
+ * Install everything in /usr/share/openrobots
+ * Set SHORT_NAMES to yes.
+ * Fix the CMakeLists.txt for users.
+ * Rename examples.CMakeList file during install process.
+ * Fix wrong install macro for installing documentation.
+ * Bump 1.18.0.99
+ * Release 1.18.0
+ * Normalize package name.
+ * Fix dependency problem in the packages name.
+ * Put gravity to 9.81 for ZMP...
+ * Roll back previous modifications on gravity.
+ * Change directory to install examples.
+ * Add install for an example directory.
+ * Code cleaning.
+ * Test an acceleration around the X-axis of the free flyer.
+ * Highlight for a current bug.
+ * Proper initialization of the free flyer.
+ * Code cleaning.
+ * Initialize properly the attached joint.
+ * Update unitary testing to reflect the problem of direction for gravity.
+ * Fix the direction of the gravity.
+ * Add package target.
+ * Fix a problem with numberDof handling.
+ * Code cleaning.
+ * Read onePoseFile to extract information.
+ * Add exception.
+ * Fix warning at compile time.
+ * Fix syntax error for T3D.
+ * Fix wrong matrix access for T3D.
+ * Fix syntax errors for spatial computation.
+ * Fix wrong access syntax for T3D.
+ * Add uninstall target.
+ * Fix bug for singularities with the axis-angle representation.
+ * Code cleaning. Removed useless operation.
+ * Minor fix (indentation).
+ * Minor fix (indentation).
+ * Add function to check theta-U representation.
+ * Utheta representation for computing axis...
+ * Fix a problem of initialization for Rotation display.
+ * Fix wrong test to write Euler Angles in Maple model.
+ * Fix bug in order of the initialization. Configuration set for the robot before putting the value to zero. Result in sporadic nan.
+ * Minor fix (tab)
+ * Fix bug in maple generation.
+ * Fix debugging output.
+ * Add missing files for JointPrivate.
+ * First version of the RNEA forward loop in spatial coordinates.
+ * Implements computation of Zeta and skew spatial operator.
+ * Adding missing documentation on RNEA.
+ * [doc/src] Adding doc + fields for spatial algorithm
+ * [doc] Simple explanations on building a robot.
+ * Fix a bug related to m_privateObj.
+ * Additional documentation for user and developers.
+ * Update the documentation.
+ * Remove JointPrivate used for shared pointer.
+ * The force computation used so far is shared with the other joints.
+ * Additional doc.
+ * Fix bug related to torque and force computation.
+ * Fix pb for computing backward dynamics.
+ * Adding pcalc and calc methods for spatial support.
+ * Moved the backward dynamics compution to Joint Private.
+ * Update documentation.
+ * Update the Spatial formulation of RNEA.
+ * Adding spatial algebra.
+ * Modification to include spatial files.
+ * Remove part which has not been checked for prismatic joint.
+ * Refactoring of the Inverse Dynamics.
+ * Refactoring to handle multiple types of joints.
+ * Rationalize Joints handling.
+ * Fix normalization output for dm4d.
+ * Fix problem for parsing *Bush* models.
+ * Win32 compatibility
+ * Push version to 1.17.0.99
+
+[1.17.0]
+ * Release 1.17.0
+ * Add the file deprecated.cpp implementing methods computeJacobianCenterofmass() and jacobianCenterOfmass() of class jrl_delegate::dynamicRobot
+ * take implementation of deprecated methods out of dynamicRobot.h into deprecated.cpp
+ * Qualify method computeJacobianCenterOfMass() as deprecated
+ * Remove deprecated methods except CoM jacobian related ones
+ * Generate doc by default
+ * Test more complex with accelerations.
+ * Add scilab scripts to check torque and force computation.
+ * Torque and force computation fix.
+ * Torque computation around the joint axis now.
+ * Debugging torque computation.
+ * Fix torque computation.
+ * Branch to check model.
+ * getProperty and isSupported are constant member functions
+ * A better output for failure during get/setProperty.
+ * ResetIteration is a property that is set, not get.
+ * Fix acceleration in analytical model for unitary test.
+ * Add a protection to avoid out-of-range access
+ * Correct dangerous typo in a if/then/else test
+ * Introduce a new unitary test which check forces and torques.
+ * Fix linear acceleration computation.
+ * Fix a problem with the default mapping policy.
+ * Reinforce tabulation rules.
+ * Fix linear acceleration computation.
+ * Fix gravity in backward dynamics + add output for acc.
+ * Linear Acceleration
+ * adding the linear acceleration local frame
+ * Fix linear acceleration of bodies and CoM in local frame.
+ * Add linear acceleration in local frame.
+ * Fix relative/global accelerations.
+ * Fix velocity computation.
+ * computation of local angular velocity
+ * w_a is used for other stuff Revert back to the previous definition.
+ * Fix w_a computation (again)
+ * Fix w_a computation
+ * New version of the debugging test
+ * Fix (again) angular velocity.
+ * Makes TestHumanoidDynamicRobotDebugLayale.
+ * adding a test for debugging but compilation still in process
+ * Setting the property computeAccelerationCom to true in the unitTesting for the computation of NewtonEuler Algorithm
+ * Fix wrong computation of w_a.
+ * Fix acceleration computation and add explicit local/global computations.
+ * Display a warning message when trying to set/get a property that does not exist
+ * Add missing initialization of vectors and matrices after resizing
+ * Correct and clarify torque computation.
+ * Fix a bug in the torque computation.
+ * Removal of the label "Separator" (which is VRML V1.0) and correction of the indentation of the created file
+ * Some objects can be described by many .wrl files. Now all of them are taken into account by the parser, and the tools have been updated.
+ * Correct the parser for Amelif
+ * Warning suppression
+ * Correct the robot generation for Amelif.
+ * Cleaning debug messages.
+ * Fix Euler angles computation and validation against HRP-2 10/14.
+ * Modification to avoid any static rotation around X-axis with Maple.
+ * Adding tags.
+ * Debugging Maple model generation.
+ * Generate bash script to call Maple on command-line.
+ * Generate files for Maple.
+ * First version providing some real file.
+ * Program to generate a maple model of a robot.
+ * Correct the name of the object.
+ * Compiling version of maple model generation.
+ * Introduce mapple generation code.
+ * Improve port for AMELIF.
+ * Dump current version as 1.16.3.99
+
+[1.16.3]
+ * Release 1.16.3
+ * Normalize output for left and right ankles.
+ * Normalize output for unit testing.
+ * Adding Wrist specificiation in specificities file.
+ * Desactivate Spirit 2.1 based parser of Specificities.
+ * Going out of my local minimum.
+ * Add test during development for parser.
+ * Parser for Specificities file with new structure
+ * New parser for specificities.
+ * Modify DynMultiBodyPrivate::jointBetween()'s behavior to include root joint in returned vector of joints (previously omitted).
+ * Refactoring to remove as much as possible all french names.
+ * Remove warnings in copy through abstract interface.
+ * Remove warnings for Spirit using boost 1.41
+ * Fix wrong error handling.
+ * Fix bug in Normalized rotation matrix calculation
+ * Reinforce the protection while parsing: avoing accessing to non existing limbs of the robot  (e.g. the head for the beheaded robot in the unitTests)
+ * Remove all references to HRP-2.
+ * Filter out output of TestHumanoidDynamicRobot.
+ * Cleanup HumanoidSpecificities from useless argument.
+ * Add the missing win32 macro
+ * Correct specificities for sample robot.
+ * Update information in README and update the output for sample.wrl
+ * Fix zeroing of jacobian part in argument matrix Place debug output under verbose>1 condition
+ * Fix access matrix from matrix4d to matrix3d
+ * Fix reading the rotation necessary for proper display.
+ * Introduce rotation for display.
+ * Code clean up but still a problem with fix rotation.
+ * Display ankle position.
+ * Fix compilation pb + compensate for initial rotation.
+ * First commit to generate a VRML-2 file to be seen in Blender.
+ * Fix indentation and Jacobian initialization.
+ * Fix bugs in jacobian computation methods of file DynamicMultiBodyArticularJacobia:  -outOffset was not taken into account  -ouput matrix was cleared before filling partial derivative vectors, which is not its job.
+ * Add support for ComputeSkewCom property
+ * Fix compatibility with T3D.
+ * Fix a bug related to gazeDirection.
+ * Add Torque computation + test
+ * Add new tests of methods not covered yet + report file.
+ * Modification to add the report file.
+ * Better formulation of the force computation.
+ * Add report file when testing.
+ * Remove gcov compilation flags.
+ * Remove allocation and copy of articular Jacobian.
+ * Correct a wrong rotation of the Inertia Matrix.
+ * Add debug lines and cleanup some parts.
+ * Document fields.
+ * Display Jacobian as an output.
+ * Fix the compilation pb with GenerateRobotForAMELIF.
+ * Fix the update of rotation axis for Bodies.
+ * Add debug messages.
+ * Fix tools to generate a model for AMELIF.
+ * Put back previous version of backward dynamics.
+ * Adding License.
+ * Cleanup and message.
+ * Clean-up access to spirit parser.
+ * Add an ODEBUG message without FILE and line number.
+ * Cleaning up useless dummy variables.
+ * Adding tools to generate AMELIF model of robot
+ * Add generation of files for AMELIF.
+ * Added #include cstdio to comply with new G++.
+ * Disable classic and too verbose warnings in order to reveal important ones (for win32)
+ * Add modifications and files to test torque and force computation.
+ * Fix force and torque computation with the latest modifications.
+ * Remove comment on field which has been removed.
+ * Remove an old macro than seems useless and that was already defined in visual studio files (win32 users)
+ * Modify CMakeLists.txt to compile correctly the unitaryTests.
+ * Add new files for new testing capabilities.
+ * Expand copy test to cover hands, feet, specificities and actuated joints.
+ * Dump current as 1.16.2.99
+
+[1.16.2]
+ * Release 1.16.2
+ * Update the file for compatibility.
+ * Fix the normalization when constructing not from parsing.
+ * Fix implementation of normalization around x-axis.
+ * Initialize correctly R_static for each joint.
+ * Clean-up initialPosition.
+ * Do not read VRML file if empty filename is given.
+ * Assert that pointer to implementation is not NULL.
+ * Replace wrong access to 3x3 matrix by access to 4x4.
+ * Fix wrong macro call.
+ * Added a STATUS file.
+ * Test standard alignment along X-axis.
+ * Creates DynamicBody and not Body when calling createBody() abstract interface.
+ * Propagate clean-up.
+ * Minor fix - Tabulation.
+ * This commit implements the alignment of the joint along the X-axis.
+ * All the files can be compiled independently.
+ * Clean-up CoM fields.
+ * Reorganize the compilation scheme in a more standard way.
+ * Remove redundant methods to access localCoM.
+
+[1.16.1]
+ * Release 1.16.1
+ * Remove trailing whitespaces.
+ * Fix a bug in DynMultiBodyPrivate::InitializeFromJointsTree.
+
+[1.16.0]
+ * Release 1.16.0
+ * Declare jacobianCenterOfMass() as deprecated, as in abstract interface.
+ * Add implementation of anchor joint.
+ * Fix the model with missing axis.
+ * Update binary output relative to recent modifications.
+ * Fix computation of the global pose of the joint during initialization.
+ * Remove debugging display
+ * Fix computation in the case of global initialization.
+ * Correct GENERATE_DOC option definition
+
+[usability-test]
+ * Fixed a bug in the torque computation.
+ * Fixes wrong test in DEBUG mode.
+ * mismatch new double* [] -> delete (detected by valgrind) in getJacobianCenterOfMass
+ * Add optimization flags when building in release mode with g++
+ * Add an option allowing to (dis)able doxygen documentation generation
+ * fixed a bug in Joint::upperVelocityBound(unsigned int, double)
+ * Update the unitary test to also check the feet data.
+ * Correct the computation of the information related to the feet.
+ * Adding a method to compute correctly the actuated joints vector.
+ * Adding setAssociatedWrist.
+ * Adding MatrixAbstractLayer in the include of the robotDynamicsImplementation.
+ * Fix a bug while reading Specificities.xml for data related to hands. It seems that jrlMathTools is resilient to indexes above its limits. jrlMathTools returns m_z in the following case: vector3d v; v(3) = 1.0; // Ok with jrlMathTools. This is error prone. Future modification will probably generate a segfault/warning during compile time to avoid pb.
+ * Bug correction + adding the reset number as a property.
+ * New test on the hands.
+ * Removed NDEBUG from exported flags in dynamicsJRLJapan.pc. Removed warnings from the pimples classes.
+ * Updated package.dox.cmake
+ * Robustify unitary test.
+ * Removed hard-coded HRP-2 information regarding the hands. They are now nicely read by the specificities file, or given through the accessors. Fixed a bug regarding the chest specification. Robustify the output for the unitary test.
+ * The new library computes joint initial position with all rotation around X. This calls for a new output.
+ * Unitary test to create a robot from the abstract inteface. First working version with the new interface.
+ * Provide direct object instead of pimples.
+ * Fix none initialized value which makes Valgrind unhappy.
+ * Follow up of the previous commit.
+ * Cleanup MultiBody by removing getMasse.
+ * Now initialPosition returns the true value specified by the abstract interface.
+ * Code beautification
+ * Fix index name in the computation of the inertia matrix.
+ * Removed m_FromRootToThisJoint.
+ * Changed the filename to have it properly installed
+ * Unitary test for dynamicsJRLJapan based on sample.wrl. This test generates an output from the reading of sample.wrl and test from a reference file.
+ * For Win32 users, finding a significative warning with -Wall is as fun as looking for a needle in a haystack
+ * Define a macro for a clean deprecation
+ * Export object factory.
+ * Add Access functions to ankles.
+ * Forward modifications in abstract interfaces.
+ * Object factory constructs feet and hands.
+ * Modify derivation of jrlDelegate::humanoidDynamicRobot
+ * Apply modifications in abstractRobotDynamics
+ * Fix doxygen warnings
+ * Re-indent headers after inserting a namespace.
+ * Rename classes jrl...NA -> jrlDelegate::...
+ * Fix a bug in access to matrix3d elements.
+ * Remove DynamicMultiBody and HumanoidDynamicMultiBody classes.
+ * Correcting inertia matrix computation + Unitary test.
+ * Parser default settings and unitary tests output.
+ * sample.wrl: Removed every geometrical parts. The previous commit did not do that correctly.
+ * 1/ SpiritVRMLReader.cpp: Adding rules to improve the grammar of the parser.
+ * Adding LinkJointRank file.
+ * Putting back friend in NA classes. Adding a sample wrl file for unitary test. Modifying the parser to read the sample file.
+ * Installation of generic pimple classes. Removed friend parserVRML.
+ * Updating test with the new abstract interface.
+ * Create directly instances of the private implementation. Going through the pimples just add an indirect call, they are just for class inheritance.
+ * Limit of the refactoring: Please do not change the grammar tokens having the same name that the class you want to change. It mess up the parser.
+ * Now the private classes derived from the abstract inteface (as before).
+ * DynamicMultiBody.h: putting m_privateObj private and not public. Added a protected constructor to have a proper initialization of the shared pointer. HumanoidDynamicMultiBody.h: Apply this new strategy
+ * Fixing discrepencies between corrected abstract interface and pimples classes. ComputeSpecializedKinematics in getSpecializedKinematics createhumanoidDynamicRobot in createHumanoidDynamicRobot
+ * Modifications to comply with new abstract interface i.e. homogeneization of createHumanoidDynamicRobot.
+ * Now this class is definitely a pimple and do not include any template.
+ * The object factory derives now from the abstract object factory. The template are now useless, and are transformed in pimples. Those pimples are for convenience only, as they derived only from the abstract interface, they could be move into the abstract interface.
+ * Make the object factory derived from the abstract class.
+ * Be stricter in searching for include files.
+ * Add missing file dynamicsGetLine.h.cmake.
+ * Tell cmake to install dll.h.
+ * Remove unused function.
+ * Replace dynamics-config.h by two files.
+ * Do not put in .gitignore files that should be removed.
+ * Make HumanoidDynamicMultiBody virtually derive from DynamicMultiBody.
+ * Prefix include file dynamicsJRLJapan.
+ * Do not try to include files that are not installed anymore.
+ * Add information in INSTALL file.
+ * Implement New classes Joint and DynamicBody.
+ * Change name of class in private implementation.
+ * Move some header files in private part.
+ * HumanoidDynamicMultiBody now exclusively implements CjrlHumanoidDynamicRobot.
+ * Class Dynamic MultiBody class now exclusively implements CjrlDynamicRobot.
+ * Fix order of include flags in compilation.
+ * Install again headers implementing abstract interface.
+ * Moving in the template for Non Abstract implementation.
+ * ODEBUG definition removed from files.
+ * All ODEBUG macros are now in Debug.h....
+ * Adding access through MAL_S4x4_ACCESS_I_J.
+ * T3D compatibility for ComputeZMP.cpp.
+ * Removed local inverse matrix.
+ * T3D compatibility with samples.
+ * dynamics-config.h generated now in ./src.
+ * Adding header dynamicsJRLJapan.h.
+ * First working commit with the new abstract interface.
+ * Add comments to changelog.
+ * Reinforce abstract interface policy.
+ * Adding Ref computation for feet in RebuildZMP.dat.
+ * Reconstructing ZMP from log files and more.
+
+[pg3d-teleop.v1]
+ * Fixed the computation of the inertia Matrix.
+ * Added correct resizing of the inertia matrix.
+ * Removed wrong access to RMC fields + InertiaMatrix test..
+ * Added files to be ignored by git.
+ * Removed uncessary fields for resolved momentum and spatial notations.
+ * Dump current version as 1.15.0.99
+ * Release 1.15.0 for SOT v 1.1.0.
+ * IVIGIT.
+
+[hs-1.0]
+ * [DynamicHumanoidRobot] Adding actuated joints.
+ * Adding infamous functional extension through StepSequence.
+ * Adding InverseKinematics.
+ * Adding missing methods.
+ * Adding Inverse Kinematics to HumanoidDynamicMultiBody.h.
+ * HumanoidDynamicMultiBody augmented with HRPSpecificities interface.
+
+[Morisawa3d]
+ * Dump current version as 1.15.0.99
+ * Release 1.15.0 for SOT v 1.1.0.
+
+[1.15.0]
+ * Adding a new method for optimized code in hrp2dynamics.
+ * License is send back to file License.txt.
+ * Adding LGPL License file.
+ * Forcing unitary test to link with library compiled in build. Implementing inertia matrix computation and related test.
+ * IVIGIT.
+ * Version-compatible modification of DynamicMultiBody.h/.cpp Adapted to change in abstractDynamicRobot interfaces
+ * Dump current version as 1.14.0.99
+
+[1.14]
+ * Release 1.14.
+ * [unitTesting] Reinforce T3d compatibility.
+ * [unitTesting] T3D compatibility.
+ * [src] Code cleaning and changing interface for angularMomentum.
+ * [include] Clean up interface
+ * Add missing comma in Requires field of .pc file.
+
+[v2009.04.15]
+ * [src] Adding Angular Momemtum computed with respect to a point.
+ * [unitTesting] Changed some joint reading to test other models.
+ * [src] Implementation of Angular Momentum.
+ * [src] Code cleaning Removed old methods and the one not used through the interface.
+ * Homogeneize html style file.
+ * Dump current version as 1.13.1.99
+
+[1.13.1]
+ * Release 1.13.1
+ * make HumanoidDynamicMultiBody::waist effective
+ * Delete the inclusions of jrlMathTools hard coded
+ * Cancel previous commit : jrlMathTools must not appear in dynamicsJRLJapan
+ * Restore the include of jrlConstants : required to define M_PI
+ * Dump current version as 1.13.99
+
+[1.13]
+ * Release 1.13
+ * [unitTesting] Removed dependency to jrlMathTools
+ * [src] Removed debug output
+ * [src] Joint <-> Rank file specification for Kinematic Tree.
+ * Correction of the test due to the modification of jrlMathTools
+ * Dump current version as 1.12.99
+
+[1.12]
+ * Release 1.12
+ * Fixed doc dependency to abstractRobotDynamics
+ * Changed the order regarding the compiling options.
+ * bump current to 1.11.99
+
+[1.11]
+ * Release 1.11
+ * Replaced vector<> with std::vector<> because gik-genom would not recognize vector type in includes from dynamicsJRLJapan.
+ * Change the path where to look for the package.dox generated by CMake, so that nobody has to commit anymore its own package.dox.
+ * doc/package.dox was not in the package anymore (accidental removal ?)
+ * Add link to abstractRobotDynamics documentation
+ * minor optimizations
+ * Minor optimizations + version number incrementation
+ * Win32 compatibility : correct the doxygen computation command
+ * Dump current version as 1.10.99
+ * Release 1.10
+ * The required files path is no longer hard written and must precised in argument
+ * Bug correction : avoid access to index -1 of the array
+ * Win32 compatibility : Remplace 'double t[][];' by  'double ** t = new ...';
+ * Faster computations of jacobians in DynamicMultiBody. This concerns methods: getJacobian() getPositionJacobian() getOrientationJacobian() getJacobianCenterOfMass()
+ * Adaptation to abstractRobotDynamics changes
+
+[1.10]
+ * Release 1.10
+
+[2.0.0]
+ * Bump version 2.0.0
+ * Adding more informations in the usual test.
+ * Joint::m_StateVectorPosition is initialized in constructors
+ * Remove some of the tests UNIX/Win32 introduced with the soname introduction. Since Win32 doesn't handle soname, we keep the copy of the dll/lib  where the project version is precised
+ * Keep the win32 compatibility
+ * Adding modification for complete support of soname.
+ * Adding the soname, soversion and rpath.
+ * Correct doc
+ * Correct a minor bug in src/fileReader.cpp
+ * jrlMathTools/constants.h becomes jrlMathTools/jrlConstants.h
+ * Replace the definition of M_PI by an inclusion of "jrlMathTools/constants.h"
+ * Correction of the CXX_FLAGS for the compilation of the unitTest Modification of the installation procedure for (win32) (the library are created in the src folder)
+ * Deletion of dynamicJRLJapan_API.h Its content goes into dynamics-config.h.cmake
+ * Correct the linkage with each projects : with the sources, with the test_unit, with the other modules (what will appear in dynamicsJRLJapan.pc)
+ * Replace the -L/-l options by LIBDIR_KW/LIDINCLUSION_KW options (works for both WIN32 & UNIX)
+ * add the dependencies between the projects and add the correct links
+ * handle the post build operation for Win32 /!\ the symlink creation is not handle yet (for Win32)
+ * Change the inclusion of libraries add the "\LIBPATH" for WIN32 native that will replace the "-L" for unix native
+ * add the LINK_FLAG in SET_TARGET_PROPERTIES
+ * add the necessary spaces in the set Project requirement
+ * add the M_PI definition in the tests (Windows lack)
+ * correct API
+ * Add the missing headers to the project
+ * Add the definition of M_PI (Windows lack)
+ * add the API to each header file
+ * Add an API for Windows
+ * Fixed warnings, and compilation issues.
+ * Fixed compilation flags.
+ * Modification for recent changes in header files inclusion. Changed sligthly the cmake installation procedure.
+ * slight modification for library installation.
+ * Clean up the compiling options and the installation process.
+ * Modifications for proper dependencies between versions.
+ * Modifications to propagate the compile and linking options.
+ * add preprocessor definitions to make it Win32 compatible
+ * Fixed the prefix pb.
+ * Fixed a bug: no CMakeLists.txt in include anymore.
+ * Added missing file.
+ * Adding files to have CMake capabilities.
+ * Modifications to make the library compatible with the new format of HRP2JRLmain.wrl in OpenHRP-3.
+ * Imlementation of abstract modifications.
+ * bug fix: destructor of Body was called twice by destructors of          DynamicMultiBody and MultiBody
+ * Bump current 1.9.99
+
+[1.9]
+ * Welcome 1.9
+ * Added a new file to test properly the acceleration.
+ * Modifies the internal computation to include properly the acceleration vector. Long time due...
+ * m_LeftFootJoint and m_RightFootJoint are initialized to NULL xin constructor
+ * bounds are initialized to zero by default
+ * add implementations of CjrlJoint::{upper|lower}VelocityBound()
+ * modification for fixed robots.
+ * dynamicsJRLJapan is almost bullet proof against valgrind with valgrind --v --tool=memcheck --leak-check=full on unitary test TestHumanoidDynamicRobot. There is still a conditionnal jump on initialized value inside skip.ipp from the Spirit parser + various warning from printf. This is not due to the library code.
+ * fixed wrong computation of free-flyer contribution in jacobian of center of mass
+ * Modification to fix some memory leak. Still some tracking to do.
+ * Modifications to comply with valgrind. No bug shall survive (8()-
+ * modification to support fixed robots.
+ * modifications to use fixed joints
+ * HumanoidDynamicsMultiBody::m_HS is initialized by constructor
+ * If m_HS == NULL, HumanoidDynamicMultiBody::footHeight() returns 0
+ * bump current revision to 1.8.99
+
+[1.8]
+ * Make the 1.8 release. Require abstract interfaces 1.9 and update ChangeLog.
+ * Joint::m_Name is set automatically if it is empty.   It is required since some of methods assume that names are set.
+ * Bug correction: str_p -> ch_p for caracter rule encoding in the Spirit parser.
+ * OS: Added a unitary test to compare the output of the same robot model with two different map between the links and the command vector.
+ * OS: Allow to handle reduced map between the command vector and the joint space. More precisely it is possible to have a reduced configuration vector compare to the number of joints. First step towards handling non actuated joints.
+ * fixed bugs in DynamicMultiBody::NewtonEulerAlgorithm()  * computation of DynamicBody::w  * computation of linear momentum
+ * Replaced \brief by \name in definition of category "Implementation of properties".
+ * OS: Added property management to dynamicsJRLJapan
+ * Export docdir.
+ * Update the installation instructions (mention autogen).
+ * OS: support the new setJointOrderInConfig
+ * Bodies in DynamicMultiBody and MultiBody are managed by pointers.  hppJoint->kppJoint()->attachedBody() and hppJoint()->jrlJoint()->linkedBody()  return the same object by this modification.
+ * bump current revision to 1.7.99
+
+[1.7]
+ * Provide replacement for getline() if the system doesn't have it.
+ * Add -I path to the autoconf configuration header.
+ * Do not compile glut unit tests if glut was not found in default paths.
+ * Ignore generated autoheader.
+ * add autoheader and force libtoolize
+ * Add some portability checks and bump revision to 1.7
+ * wrap long lines in ChangeLog
+ * bug fix: Joint::currentTransformation() for freeflyer joint was not updated
+ * Update of absolute COM position during forward dynamics computation
+ * HRP2 specific implementations of {get|set}HandClench() are removed.   They are moved to hrp2Dynamics package.
+ * DynamicMultiBody::m_jacobianOfTheCoM is moved back to private   write access can be done through DynamicMultiBody::getJacobianOfTheCoM()
+ * DynamicMultiBody::m_JacobianOfTheCoM is moved from private to protected   to override computeJacobianCenterOfMass()
+ * OS: Minor bugs fixed     Data dumping removed,     Warnings fixed in unitTesting.
+ * OS:  Reinforced the coding policy regarding members (prefixed by m_) and non-members variables inside the code.  Commented the code specific to a particular matrix library (ublas),  to be removed at last.  Fixed some warnings.
+ * DynamicBody::m_transformation is updated in DynamicMultiBody::NewtonEulerAlgorithm()
+ * add DynamicBody::m_transformation   It's redundant(DynamicBody::R and DynamicBody::p exist), but required   to fix memory leak in Joint::currentTransformation()
+ * bug fix: Joint::updateTransformation()   DynamicBody::R_static has not been used to compute DynamicBody::R
+ * bug fix: DynamicMultiBody::computeJacobianCenterOfMass()   CoM in the local frame should be used as 1st argument of   getJacobianPointWrtConfig()
+ * Replaced HRP2 com jacobian computation  by generic computation
+ * add typedef for CimplHand
+ * add rightHand(CjrlHand *) and leftHand(CjrlHand *) to HumanoidDynamicMultiBody
+ * bugfix: DynamicMultiBody::JointFromRank() returns wrong pointer
+ * Fixed some warning at compilation.
+ * Changed arguments of test programs. TestBuildFromJointTree --help TestCopyJointTreeThroughAbstractInterface --help for information.
+ * 35. Implementation of the joint construction through the abstract interfaces. 	  A dynamic model of robot can now be built using either of two methods: 	   1. through VRML parser, 	   2. through the robot dynamics abstract interface. See documentation of DynamicMultiBody for information.
+ * TestBuildFromJointTreeMathieu now uses MAL for access to matrix4d elements. This ensures compatibility with t3d implementation.
+ * OS : code cleaning in DynamicMultiBody.cpp and fix a stupid bug in Joint.cpp.
+ * Unit test TestBuildFromJointTreeMathieu now integrally builds the copy of the humanoid robot through the abstract interface.
+ * OS: Added a new strategy when no file is provided to build the matching between Joints and rank in the state vector. The rank in this case is the order of construction in the tree structure.
+ * fix bug
+ * OS: Testing the defaut numbering for Mathieu's case.
+ * OS: Simple modification for a default numbering in case the VRML ID   are not available. This is typically the case when building from   a tree of joints.
+ * Bug fixed The variable 'masse' holding the total masse of the robot was not initialized in Multibody.cpp
+ * Added dependence to MatrixAbstractLayer (removed from abstractRobotDynamics).
+ * Revision number follows the X.Y.99 format.
+ * Removed personal hardcoded paths
+ * The joints need to be identified with an ID which is inside the VRML, or should be provided otherwise. This might need to be abstract in jrlCIR-dynamics.
+ *   -- modified the TestBuildFromJointTreeMathieu.cpp to build joint from constructor and not copy. But there is a probleme : jointVector is not updated 	status : standby
+ * Modification to use the automatic revision number for naming the library and the overall released package.
+ * 	32. correct make file to compile untesting using the current (devel) version 	31. made new version number
+ * --minor bug in displaying joint
+ * --correct minor bug to compile
+ * 	-- add a test to debug in unitTesting : TestBuildFromJointTreeMathieu.cpp
+ * Upgraded the file to track down a bug found by Florent.
+ * Fixed a bug on the initialization from a tree of joints.
+ * It is now possible to add several times the same joint, it will be taken into account only once.
+
+[1.6]
+ * make the 1.6 release
+ * Removed unused and misleading function   inline void HumanoidDynamicMultiBody::gaze(vector3d& outVector, vector3d& outPoint) const
+ * Class HumanoidDynamicMultiBody now virtually derives from DynamicMultiBody. Changes for users:   - HumanoidDynamicMultiBody::getDynamicMultiBody() has been removed.   - Prototypes of HumanoidDynamicMultiBody constructors have been slightly modified.
+ * - Fixed some warnings when compiling with -Wall option. - Removed the robotDynamicsJRLJapan inclusion. - Fixed some path hardcoded in the examples, and some GLUT bugs when clicking on one of the test.
+ * Put back the initialization of the
+ * Modification to handle creation of a robot from a Joint Kinematic Tree. The procedure is the following: 1- Build a tree of joints 2- Specify the joint's rank (using  new methods). 3- Call InitializeFromJointsTree.
+ * Made constructors of concrete joints (free-flyer, rotation and translation) public. These classes do not seem to be used anyway.
+
+[1.5]
+ * catch up recent changes
+ * Remove unused and useless BOOST_PATH variable
+ * clean up .pc file
+ * remove empty AUTHORS file
+ * remove empty NEWS file
+ * add autogen script
+ * OS: Suppressed some debugging messages...
+ * Changes for compatibility to abstract JRL dynamics: parentJoint(), childJoint(), addChildJoint()
+ * OS: Added the files necessary for the Spirit VRML reader
+ * OS: Added the modification to take into account the new Spirit VRML Parser.
+ * Remove const in Joint::addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.Remove const in addChildJoint (const CjrlJoint& inJoint) in order to be able to modify joints in kinematic chain.
+ * Joint::parentJoint() and Joint::childJoint(unsigned int inJointRank) return pointer to CjrlJoint instead of reference.
+ * Added file include/dynamicsJRLJapan/robotDynamicsImpl.h Move headers to include/dynamicsJRLJapan instead of include/robotDynamicsJRLJapan
+ * * add files to .gitignore * fix bug in jacobian computation of free joint   (Joint::getJacobianWorldPointWrtConfig())
+ * Export in dynamicsJRLJapan.pc name of classes implementing   - abstractRobotDynamics::CjrlDynamicRobot,   - abstractRobotDynamics::CjrlHumanoidDynamicRobot   - freeFlying joint,   - rotation joint,   - translation joint. Use name "dynamicsJRLJapan" as package name and documentation directory installation.
+ * add Joint::getJacobianWorldPointWrtConfig() to remove duplicated codes in    jacobian computation functions.
+ * actual implementations for interface related to fixed joints are moved from HumanoidDynamicMultiBody to DynamicMultiBody. Those methods of HumanoidDynamicMultiBody just call those of DynamicsMultiBody.
+ * * CjrlJoint::jointsFromRootToThis() for the root joint should return a vector   which constaints itself. * remove redundant computation in Joint::getJacobianPointWrtConfig()
+ * update picture in footer
+
+[1.4]
+ * Make the 1.4 release - require interfaces 1.5
+ * Added Reference to jrlRobotDynamics in documentation.
+ * add default implementatios for     CjrlDynamicRobot::upperBoundDof(int, const vectorN&) and     CjrlDynamicRobot::lowerBoundDof(int, const vectorN&) They just call CjrlDynamicRobot::upperBoundDof(int) or                CjrlDynamicRobot::lowerBoundDof(int)
+ * bug fix: values of rotation field in VRML should be set to Joint::m_pose add Joint::getStaticRotation() and Joint::setStaticRotation()
+
+[1.3.1]
+ * Make the 1.3.1 release, require abstract interfaces 1.4.
+ * added a hack in HumanoidDynamicRobot to address the following issue: The HRP2Specificities.xml file is used to identify  groups of joints, like arm joints, leg joints, etc. In the current version of this file, the issue lies in the arms groups. Here is the identification of the right arm joints:
+ * add DynamicMultiBody::FiniteDifferenceStateEstimate(),     DynamicMultiBody::SaveCurrentStateAsPastState(),     HumanoidDynamicMultiBody::FiniteDifferenceStateEstimate() and     HumanoidDynamicMultiBody::SaveCurrentStateAsPastState()
+
+[1.3]
+ * Make the 1.3 release.
+ * Add -release libtool flag to identify .so revisions.
+ * Added separate doc and install-doc target.
+ * nextJointKeyWord() skips comment lines
+ * fix bug in calculation of dq(DynamicMultiBody::FiniteDifferenceStateUpdate())
+ * fix bug in calculation of w(DynamicMultiBody::FiniteDifferenceStateUpdate()
+
+[1.2]
+ * Make the 1.2 release and depend on the 1.3 version of the abstract interface.
+ * HumanoidDynamicMultiBody
+ * Removed useless file to avoid conflicts.
+
+[1.1]
+ * Make the 1.1 release
+ * Protect <algorithm> with \ so that doxygen doesn't interpret this as an xml tag.
+ * Typo in doxygen comments.
+ * -- add FLAGS in dynamicsJRLJapan.pc.in
+ * OS: Fixed a bizarre test on currentConfiguration size.
+ * In computeJacobianJoinWrtConfig, the free flyer contribution to the jacobian was erroneous. Fixed.(bug report and solution by Sylvain Miossec)
+ * completed FiniteDifferenceStateUpdate method to make it update velocity and acceleration vectors returned by methods specified in the robot abstract interface
+ * minor change: added const qualifiers to parameters of gaze set method
+ * added a member vector to DynamicMultiBody to hold the conversion between a dof rank and the corresponding joint other minor changes
+ * implemented upperBoundDof() and lowerBoundDof() to get a degree of freedom's bounds
+ * implemented getJacobianPointWrtConfig()
+ *  + slight speed up of FiniteDifferenceStateUpdate()
+ * **In Joint and derived classes JointRotation, JointTranslation and JointFreeflyer
+ * OS: Added the reading of the limit for the joints.
+ * in the conversion from euler angles to rotation, replaced the successive rotations with the direct formulae (old code commented to preserve clarity)
+ * updated according to modifications on the abstract interface
+ * Made the freeflyer's angles compatible with OpenHRP convention
+ * OS:  Suppressed some multiple declarations mixing up the ZMP computation in the new 	control scheme.
+ * OS: Added the modification of the test corresponding to the new control scheme.
+ * OS: Added the corresponding methods.
+ * OS: Added control to modify the stream of computation. 	You can switch on and off the computation of velocity, acceleration, momentum, 	ZMP, force.
+ * version complying with the dynamics abstract interface supporting finite difference kinematics and dynamics update
+ * added update of COM position in applyConfiguration() in DynamicMultiBody
+ * OS: Fixed the filling of the Jacobian of the CoM to be more robust.
+ * OS: Add some example to use the zeroMomentumPoint() 	method for this implementation.
+ * OS: Fixed a problem of dynamic cast related to the method applyConfiguration.
+ * Made the necessary changes to support the new method applyConfiguration(...) in the abstract interface.
+ * OS: Fix the HumanoidDynamicMultibody object for foot Height.
+ * OS: Display the result of footHeight.
+ * OS: Fixed an interface of Humanoid Specificities to get all the dimensions 	for the foot size.
+ * OS: Fixed the footHeight method.
+ * OS: Update the test program
+ * OS: Fixed a pb regarding link between joint and rank data structure.
+ * OS: Added a small  glut example Signed-off-by: Olivier Stasse <stasse@dhcpt1059.a02.aist.go.jp>
+ * OS: Added the glut example
+ * OS: Update also the velocity.
+ * OS: Fixed a problem related to the currentConfiguration update.
+ * OS: associate methods
+ * OS: Introduced a new link JOINT <-> rank in configuration
+ * - corrected Joint::UpdatePoseFrom6DOFsVector(MAL_VECTOR(,double) a6DVector) - added missing member declarations in DynamicBody.h - disabled Debug output in Joint and in DynamicMultiBody
+ * corrected computeJacobianJointWrtConfig method: - angular part of the jacobian had a typo - last joint contribution was missing
+ * OS: First trial to insert force and torque computation. 	The force has been validated by a trivial test : 	sum of force = sum of the masses * g 	The torques are yet to be validate.
+ * OS: Bug while setting the link Joint -> Body fixed.
+ * fixed a bug in  fixedJoints(unsigned int rank). (previous code  commented)
+ * OS: Fixed the forgotten conversion from degrees to radians.
+ * fixed a bug caused by addition of mass get method replaced a MAL_VEC(,double) by a vectorN in DynamicMultiBody.h
+ * hard-coded value of HRP2 foot height in the method HumanoidDynamicMultiBod:: footHeight() A call to this method displays a reminder of the temporary implementation.
+ * added wrapper-implementation for mass() (it uses the already existing getMasse() in Class Multibody)
+ * OS: Modified TestPb1.cpp to display the joints from the root.
+ * OS: Added an example from a user.
+ * OS: Creates  automatically the link between the semantic read by HumanoidSpecificties 	and the joints of the robot.
+ * fixedJoint get method according to abstract layer
+ * Updated installation instructions.
+ * 	8. Removed Makefile.in and configure from version control. 	7. Added @ROBOTDYNAMICS_CFLAGS@ and @ROBOTDYNAMICS_LIBS@ in unitTesting/Makefile.am 	One symbol is still undefined: 	undefined symbol: dgesvd_       (src/.libs/libdynamicsJRLJapan.so) 	6. Moved inclusion of MatrixAbstractLayer.h before other inclusion to make sure 	matrices and vectors are defined.
+ * OS: Fixed a problem of declaration for HumanoidDynamicMultiBody.
+ * Just check for abstractRobotDynamics in configure since the latter now depends on MAL 1.1 which is now properly configured with matrices options.
+ * Require only abstract interfaces, as the latter depends on MatrixAbstractLayer 1.1 which is now configured with the chosen matrices options.
+ * Depend on t3d >= 2.2 (this is the version that defines R3D).
+ * Remove generated file.
+ * Fix t3d package search.
+ * OS: Added const values to gazeOrigin and gazeDirection
+ * OS: Added linear and angular bodies computation
+ * ChangeLog actualized
+ * 2007/03/07 	5. The use macros used in Body.h, DynamicBody.h, DynamicMultiBody.h, 	HumanoidDynamicMultiBody.h, Joint.h and MultiBody to define the matrix 	and vector used have been replaced by the typedef: vectorN, matrixNxP, 	vector3d, matrix3d,vector4d and matrix4d. 	4. The templates have been removed to fit the abstract interface at the 	include, source and test files. 	3. Changed configure.ac in such a way that option --with-t3d without 	path provokes call to pkg-config. 	2. In CrjlJoint& HumanoidDynamicMultiBody::fixedJoint, removed 	const to fit the abstract interface. 	1. In CjrlJoint& HumanoidDynamicMultiBody::fixedJoint, removed 	const to fit the abstract interface.
+ * added implementaions of gazeOrigin(), gazeDirection() and clearFixedJoints() in humanoidDynamicRobot (according to last commits made on the abstract classes)
+ * OS: Fix the computation of the Jacobien for the Root.
+ * OS: Small modification on Makefile.am Signed-off-by: Olivier Stasse <stasse@dhcpt1059.a02.aist.go.jp>
+ * OS: Renaming to avoid confusion Signed-off-by: Olivier Stasse <stasse@dhcpt1059.a02.aist.go.jp>
+ * OS: Added the amsmath packaged into the documentation. 	One error is remaining Signed-off-by: Olivier Stasse <stasse@dhcpt1059.a02.aist.go.jp>
+ * OS: Removed a forgotten directory regarding the interfaces
+ * OS: Added the setter and getter for the mass in Body.h
+ * OS: Added rankInConfiguration()
+ * OS: - Includes the Jacobian proper computation.     - Includes the Jacobian of the CoM (specific to HRP-2 right-now and 	generated automatically from Mapple).     - Includes the constructor to use the CjrlRobotDynamicsObjectConstructor template 	see the example in unitTesting.
+ * OS: Changed the namespace to reflect the naming.
+ * OS: Fixed some bug regarding the installation process.
+ * OS: Homogeneous naming: suppressed the jrlCIR prefix to have dynamicsJRLJapan
+ * Initial commit
