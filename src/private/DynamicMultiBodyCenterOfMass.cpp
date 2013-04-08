@@ -105,7 +105,13 @@ bool DynMultiBodyPrivate::getJacobianCenterOfMass ( const CjrlJoint& inStartJoin
       std::vector<CjrlJoint *> robotRoot2StartJoint = StartJoint->jointsFromRootToThis();
 
       for ( i = 1; i<robotRoot2StartJoint.size();i++ )
-	jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
+	{
+	  // Skip fixed joints.
+	  if (robotRoot2StartJoint[i]->numberDof() == 0)
+	    continue;
+
+	  jointsigns[robotRoot2StartJoint[i]->rankInConfiguration() ] = -1;
+	}
 
       std::vector<vector3d> tempoS;
       std::vector<double> liftedS;
