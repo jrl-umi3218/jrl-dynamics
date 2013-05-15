@@ -824,6 +824,24 @@ namespace dynamicsJRLJapan
 			 const vectorN& inConfig);
 
     /**
+        \brief Get the upper velocity bound for ith dof.
+    */
+    double upperVelocityBoundDof(unsigned int inRankInConfiguration);
+    /**
+        \brief Get the lower velocity bound for ith dof.
+    */
+    double lowerVelocityBoundDof(unsigned int inRankInConfiguration);
+
+    /**
+        \brief Get the upper torque bound for ith dof.
+    */
+    double upperTorqueBoundDof(unsigned int inRankInConfiguration);
+    /**
+        \brief Get the lower torque bound for ith dof.
+    */
+    double lowerTorqueBoundDof(unsigned int inRankInConfiguration);
+
+    /**
        \brief Compute forward kinematics.
 
        Update the position, velocity and accelerations of each

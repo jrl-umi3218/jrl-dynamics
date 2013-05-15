@@ -807,6 +807,28 @@ double DynMultiBodyPrivate::lowerBoundDof(unsigned int inRankInConfiguration,
 {
   return lowerBoundDof(inRankInConfiguration);
 }
+
+double DynMultiBodyPrivate::upperVelocityBoundDof(unsigned int inRankInConfiguration)
+{
+  return m_ConfigurationToJoints[inRankInConfiguration]->upperVelocityBound(0);
+}
+
+double DynMultiBodyPrivate::lowerVelocityBoundDof(unsigned int inRankInConfiguration)
+{
+  return m_ConfigurationToJoints[inRankInConfiguration]->lowerVelocityBound(0);
+}
+
+double DynMultiBodyPrivate::upperTorqueBoundDof(unsigned int inRankInConfiguration)
+{
+  return m_ConfigurationToJoints[inRankInConfiguration]->upperTorqueBound(0);
+}
+
+double DynMultiBodyPrivate::lowerTorqueBoundDof(unsigned int inRankInConfiguration)
+{
+  return m_ConfigurationToJoints[inRankInConfiguration]->lowerTorqueBound(0);
+}
+
+
 const matrixNxP & DynMultiBodyPrivate::currentTorques() const
 {
   return m_Torques;

@@ -180,6 +180,43 @@ namespace jrlDelegate {
     }
 
     /**
+       \brief Get the upper velocity bound for ith dof.
+    */
+    virtual double upperVelocityBoundDof(unsigned int inRankInConfiguration)
+    {
+      assert(m_DR != 0);
+      return m_DR->upperVelocityBoundDof(inRankInConfiguration);
+    }
+
+    /**
+       \brief Get the lower velocity bound for ith dof.
+    */
+    virtual double lowerVelocityBoundDof(unsigned int inRankInConfiguration)
+    {
+      assert(m_DR != 0);
+      return m_DR->lowerVelocityBoundDof(inRankInConfiguration);
+    }
+
+    /**
+       \brief Get the upper torque bound for ith dof.
+    */
+    virtual double upperTorqueBoundDof(unsigned int inRankInConfiguration)
+    {
+      assert(m_DR != 0);
+      return m_DR->upperTorqueBoundDof(inRankInConfiguration);
+    }
+
+    /**
+       \brief Get the lower torque bound for ith dof.
+    */
+    virtual double lowerTorqueBoundDof(unsigned int inRankInConfiguration)
+    {
+      assert(m_DR != 0);
+      return m_DR->lowerTorqueBoundDof(inRankInConfiguration);
+    }
+
+
+    /**
        \brief Get the number of degrees of freedom of the robot.
     */
     virtual unsigned int numberDof() const
