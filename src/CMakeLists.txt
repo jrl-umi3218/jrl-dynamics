@@ -70,7 +70,7 @@ include/jrl/dynamics/geometricdata.hh
 
 ADD_LIBRARY(jrl-dynamics SHARED ${SOURCES})
 SET_TARGET_PROPERTIES(jrl-dynamics PROPERTIES SOVERSION ${PROJECT_VERSION})
-INSTALL(TARGETS jrl-dynamics DESTINATION lib)
+INSTALL(TARGETS jrl-dynamics DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics jrl-mal)
 PKG_CONFIG_USE_DEPENDENCY(jrl-dynamics abstract-robot-dynamics)
