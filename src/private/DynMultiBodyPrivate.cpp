@@ -271,9 +271,9 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
   ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << g  << " "
 	 << " f: " << aDBP->sf.f() 
 	 << " t: " << aDBP->sf.n0() << " dP: " 
-	  << ldP << " dL: " << ldL << " CoM:" << positionCoMPondere << 
+	  << dP << " dL: " << dL << " CoM:" << positionCoMPondere << 
 	  " ldv_c_g: " <<ldv_c_g);
-  ODEBUG(" ldL[1] " << ldL[1] << endl <<
+  ODEBUG(" ldL[1] " << dL[1] << endl <<
 	  "CoM: " << positionCoMPondere << endl <<
 	  "ldv_c_g[0]: " << ldv_c_g[0] << endl <<
 	  "ldv_c_g[2]: " << ldv_c_g[2] << endl <<
