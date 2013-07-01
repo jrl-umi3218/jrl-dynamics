@@ -198,7 +198,7 @@ MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::GetwBody(int BodyID)
   dr[0] = 0.0;
   dr[1] = 0.0;
   dr[2] = 0.0;
-  return dr;
+  return dr;//git clone --recursive git://github.com/jrl-umi3218/jrl-dynamics.git
 }
 
 MAL_S3_VECTOR_TYPE(double) DynMultiBodyPrivate::Getw(int JointID)
@@ -242,9 +242,9 @@ void DynMultiBodyPrivate::Setp(int JointID, MAL_S3_VECTOR_TYPE(double) apos)
 void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
                                     MAL_S3_VECTOR_TYPE(double) dP,
                                     MAL_S3_VECTOR_TYPE(double) dL,
-                                    double zmpz)
+                                    double)
 {
-  double g= 9.81;
+  //double g= 9.81;
 
   // Take the root 
   DynamicBodyPrivate * aDBP= m_RootOfTheJointsTree->linkedDBody();
@@ -268,7 +268,7 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
   px = - af.n0()[1] / af.f()[2];
   py =   af.n0()[0] / af.f()[2];
 
-  ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << g  << " "
+  ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << 9.81  << " "
 	 << " f: " << aDBP->sf.f() 
 	 << " t: " << aDBP->sf.n0() << " dP: " 
 	  << dP << " dL: " << dL << " CoM:" << positionCoMPondere << 
