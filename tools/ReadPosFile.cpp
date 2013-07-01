@@ -573,7 +573,7 @@ int main(int argc, char *argv[])
   aHDR2->currentConfiguration(robotState.aCurrentConf);
 
   // Added here (oscar)
-  CjrlJoint * Waist1 = aHDR->waist();
+  //CjrlJoint * Waist1 = aHDR->waist();
 
 
   // Read the data file.
