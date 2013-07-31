@@ -230,21 +230,6 @@ void JointPrivate::initXL()
 
 }
 
-/* Update functions by O.S */
-/* Rigid transformation */
-bool JointPrivate::updateTransformation(const vectorN& inRobotConfigVector)
-{
-  Spatial::PluckerTransform Xj = xjcalc(inRobotConfigVector);
-  m_iXpi = Xj * m_XL;
-
-  if (m_FatherJoint!=0)
-    {
-      Spatial::PluckerTransform piX0 = m_FatherJoint->X0();
-      m_X0 = m_iXpi * piX0;
-    }
-  return true;
-}
-
 /* Velocity update */
 bool JointPrivate::updateVelocity(const vectorN& /*inRobotConfigVector*/,
 				  const vectorN& inRobotSpeedVector)

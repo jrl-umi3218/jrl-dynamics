@@ -1,5 +1,9 @@
                                                                 -*- outline -*-
 
+New in 1.24, 2013-07-31:
+* unused method Joint::updateTransformation has been removed.
+* virtual methods to get actuator velocity/torque bounds have been added.
+    
 New in 1.20.1, 2011-11-25:
 * FIXME.
 * Update to changes in abstract interface, const added to specific joint getters

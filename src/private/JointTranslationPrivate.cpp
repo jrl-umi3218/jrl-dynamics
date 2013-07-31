@@ -69,27 +69,6 @@ JointTranslationPrivate(const MAL_S4x4_MATRIX_TYPE(double) &inInitialPosition)
 JointTranslationPrivate::~JointTranslationPrivate()
 {}
 
-bool JointTranslationPrivate::updateTransformation(const vectorN& inDofVector)
-{
-  vector3d vek,wn3d;
-  DynamicBodyPrivate* body = (DynamicBodyPrivate*)(linkedBody());
-  DynamicBodyPrivate* parentbody = (DynamicBodyPrivate*)(parentJoint()->linkedBody());
-
-  body->q = inDofVector(rankInConfiguration());
-  quantity( body->q);
-
-  for (unsigned int i = 0; i<3; i++)
-    vek[i] *= body->q;
-
-  body->R = parentbody->R;
-
-  MAL_S3x3_C_eq_A_by_B(wn3d, body->R, vek);
-
-  body->p = parentbody->p+ MAL_S3x3_RET_A_by_B(parentbody->R,body->b) + wn3d;
-
-  return true;
-}
-
 bool JointTranslationPrivate::updateVelocity(const vectorN&,
 					     const vectorN&)
 {

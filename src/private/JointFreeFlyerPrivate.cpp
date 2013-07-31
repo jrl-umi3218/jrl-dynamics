@@ -70,16 +70,6 @@ JointFreeflyerPrivate::~JointFreeflyerPrivate()
 {
 }
 
-bool JointFreeflyerPrivate::updateTransformation(const vectorN & inDofVector)
-{
-
-  for (unsigned int i=0; i<6; i++)
-    m_dof6D(i) = inDofVector(rankInConfiguration() + i);
-
-  UpdatePoseFrom6DOFsVector(m_dof6D);
-  return true;
-}
-
 bool JointFreeflyerPrivate::updateVelocity(const vectorN &,
 					   const vectorN & inRobotSpeedVector)
 {

@@ -112,7 +112,6 @@ void DynMultiBodyPrivate::NewtonEulerAlgorithm(MAL_S3_VECTOR(&PosForRoot,double)
 
       /* Position and orientation in reference frame. */
       currentJoint->SupdateTransformation(m_Configuration);
-      // currentJoint->updateTransformation(m_Configuration);
       if (m_ComputeVelocity)
 	{
 	  currentJoint->SupdateVelocity(m_Configuration,m_Velocity);

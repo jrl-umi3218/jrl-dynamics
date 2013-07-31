@@ -65,11 +65,6 @@ namespace dynamicsJRLJapan
       /*! Default destructor */
       virtual ~JointRotationPrivate();
 
-      /*! \brief Compute position and orientation for state vector given inDofVector. */
-      bool updateTransformation(const vectorN & inDofVector);
- 
-	  
-
       /*! \brief Computes speed in joint and global reference frame. */
       bool updateVelocity(const vectorN& inRobotConfigVector,
 			  const vectorN& inRobotSpeedVector);

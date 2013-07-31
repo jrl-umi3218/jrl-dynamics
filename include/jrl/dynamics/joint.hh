@@ -128,13 +128,6 @@ namespace dynamicsJRLJapan {
     virtual const matrix4d& initialPosition() const;
 
     /**
-    \brief Update this joint's transformation according to degree of freedom value from argument robot configuration. This does not update the transformations of child joints.
-    \param inDofVector is a robot configuration vector.
-    \return false if argument vector's size is not equal to the robot's number of degrees of freedom
-     */
-    virtual bool updateTransformation(const vectorN& inDofVector);
-
-    /**
        \brief Get the current transformation of the joint.
 
        The current transformation of the joint is the transformation

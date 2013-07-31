@@ -52,11 +52,6 @@ JointAnchorPrivate::~JointAnchorPrivate()
 {
 }
 
-bool JointAnchorPrivate::updateTransformation(const vectorN&)
-{
-  return true;
-}
-
 bool JointAnchorPrivate::updateVelocity(const vectorN&,
 					const vectorN&)
 {

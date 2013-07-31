@@ -157,12 +157,6 @@ const matrix4d& Joint::initialPosition() const
 }
 
 
-bool Joint::updateTransformation(const vectorN& inDofVector)
-{
-  return DERIVPRIVATE->updateTransformation(inDofVector);
-}
-
-
 const matrix4d &Joint::currentTransformation() const
 {
   return DERIVPRIVATE->currentTransformation();

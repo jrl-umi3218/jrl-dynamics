@@ -41,7 +41,6 @@
       
       An optimized derivation of the RNEA is possible by overloading the following methods:
       <ul> 
-        <li> updateTransformation() </li>
 	<li> updateVelocity() </li>
 	<li> updateAcceleration() </li>
 	<li> updateWorlCoMPosition() </li>

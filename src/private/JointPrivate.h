@@ -395,13 +395,6 @@ namespace dynamicsJRLJapan
     /*! \name Methods related to inverse dynamics computation.
       @{ */
     /**
-       \brief Update this joint and body transformation according to the given vector of DoF values,
-       and the parent joint's transformation if this is not a free flyer joint.
-       \return false if the required number of dof values is not met.
-    */
-    virtual bool updateTransformation(const vectorN& inDofVector);
-
-    /**
        \brief Update the joint and body velocity according to the given vector of DoF values,
        and the parent joint's transformation if this is not a free flyer joint.
        \return false if the required number of dof values is not met.
