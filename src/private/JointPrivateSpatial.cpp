@@ -242,7 +242,8 @@ bool JointPrivate::updateVelocity(const vectorN& /*inRobotConfigVector*/,
   Spatial::Velocity psv = m_FatherJoint->sv();
 
   m_sv = (m_iXpi * psv);
-  vectorN a = MAL_RET_A_by_B(m_phi,localSpeed);
+  vectorN a;
+  a = MAL_RET_A_by_B(m_phi,localSpeed);
   m_sv = m_sv + a;
 
   m_Zeta = MAL_RET_A_by_B(m_dotphi,localSpeed);
@@ -259,7 +260,8 @@ bool JointPrivate::updateAcceleration(const vectorN& /*inRobotConfigVector*/,
   for(unsigned int i=0;i<numberDof();i++)
     localAcc(i) = inRobotSpeedVector(rankInConfiguration()+i);
 
-  vectorN a2 = MAL_RET_A_by_B(m_phi,localAcc);
+  vectorN a2;
+  a2 = MAL_RET_A_by_B(m_phi,localAcc);
 
   // Udpate acceleration.
   Spatial::Acceleration psa= m_FatherJoint->sa();
@@ -362,7 +364,8 @@ bool JointPrivate::SupdateVelocity(const vectorN& inRobotConfigVector,
   // Computes the angular velocity
 
   pcalc(inRobotConfigVector);
-  vectorN a = MAL_RET_A_by_B(m_phi,currentBody->sdq);
+  vectorN a;
+  a = MAL_RET_A_by_B(m_phi,currentBody->sdq);
 
   if (currentMotherBody!=0)
     {
@@ -397,7 +400,8 @@ bool JointPrivate::SupdateAcceleration(const vectorN& /*inRobotConfigVector*/,
     }
 
   // Udpate acceleration.
-  vectorN a2 = MAL_RET_A_by_B(m_phi,currentBody->sddq);
+  vectorN a2;
+  a2 = MAL_RET_A_by_B(m_phi,currentBody->sddq);
   a2 = a2 + m_Zeta;
 
   if (currentMotherBody!=0)
