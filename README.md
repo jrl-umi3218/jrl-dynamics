@@ -1,5 +1,9 @@
-jrl-mal
-=======
+jrl-dynamics
+============
+
+[![Build Status](https://travis-ci.org/jrl-umi3218/jrl-dynamics.png)](https://travis-ci.org/jrl-umi3218/jrl-dynamics)
+[![Coverage Status](https://coveralls.io/repos/jrl-umi3218/jrl-dynamics/badge.png?branch=master)](https://coveralls.io/r/jrl-umi3218/jrl-dynamics?branch=master)
+
 
 This software implements the interfaces for dynamics computation
 specified in the [abstract-robot-dynamics package][abstract-robot-dynamics].
