@@ -265,8 +265,14 @@ void DynMultiBodyPrivate::CalculateZMP(double &px, double &py,
   Spatial::PluckerTransform wXwa (wRwa, waPw);
   af = wXwa * aDBP->sf;
   // Compute ZMP
-  px = - af.n0()[1] / af.f()[2];
-  py =   af.n0()[0] / af.f()[2];
+  if (af.f()[2] == 0.0)
+  {
+    px = 0.0;
+    py = 0.0;
+  }else{
+    px = - af.n0()[1] / af.f()[2];
+    py =   af.n0()[0] / af.f()[2];
+  }
 
   ODEBUG(" CalculateZMP : Masse :"<< m_mass << " g:" << 9.81  << " "
 	 << " f: " << aDBP->sf.f() 
