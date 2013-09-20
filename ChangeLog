@@ -1,7 +1,25 @@
 CHANGELOG
 ----------------------
 
+[Current]
+ * Synchronize
+ * Synchronize
+ * Update README.md
+ * [travis] Add push token
+ * Synchronize
+ * [travis] Add Travis and coveralls.io support
+
+[v1.24]
+ * unused method Joint::updateTransformation has been removed
+ * Synchronize cmake submodule
+ * Correct debug output.
+ * Update lib installation path (multiarch portability).
+ * Synchronize
+ * Add virtual methods to get actuator velocity/torque bounds from the mb.
+ * Ignore fixed joints when computing center of mass jacobian.
+
 [v1.23.0]
+ * Update ChangeLog
  * Synchronize
  * ODEBUG5 is only allowed in DEBUG_MODE now.
  * Revert "Compute center of mass using spatial algebra."
