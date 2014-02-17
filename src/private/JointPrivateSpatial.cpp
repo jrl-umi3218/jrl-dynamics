@@ -120,9 +120,17 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
   MAL_VECTOR_RESIZE(qlin,3);
   MAL_VECTOR_RESIZE(qang,3);
 
-  if (m_nbDofs == 1)
+  MAL_S3_VECTOR_TYPE(double) t;
+  MAL_S3_VECTOR_FILL(t,0);
+
+  if (this->type() == JointPrivate::REVOLUTE_JOINT)
     rotx(currentBody->sq, currentBody->localR);
-  else if (m_nbDofs == 6)
+  else if (this->type() == JointPrivate::PRISMATIC_JOINT)
+    {
+      MAL_S3x3_MATRIX_SET_IDENTITY(currentBody->localR);
+      MAL_S3_VECTOR_ACCESS(t, 0) = currentBody->sq(0);
+    }
+  else if (this->type() == FREE_JOINT)
     {
       for (int i = 0; i <3; i++)
 	{
@@ -132,11 +140,12 @@ Spatial::PluckerTransform JointPrivate::xjcalc(const vectorN & qi)
 	}
       eulerXYZ(qang, currentBody->localR);
     }
-  else
+  else if (this->type() == FIX_JOINT)
     MAL_S3x3_MATRIX_SET_IDENTITY(currentBody->localR);
+  else
+    throw std::runtime_error (" joint type not handled ");
+
   MAL_S3x3_MATRIX_TYPE(double) Rt = MAL_S3x3_RET_TRANSPOSE(currentBody->localR);
-  MAL_S3_VECTOR_TYPE(double) t;
-  MAL_S3_VECTOR_FILL(t,0);
 
   return Spatial::PluckerTransform(Rt,t);
 }
@@ -315,7 +324,8 @@ bool JointPrivate::SupdateTransformation(const vectorN& inRobotConfigVector)
       MAL_S3x3_C_eq_A_by_B(Rtmp ,currentMotherBody->R , currentBody->R_static);
       // For its position.
       currentBody->p = currentMotherBody->p
-	+ MAL_S3x3_RET_A_by_B(currentMotherBody->R,currentBody->b);
+	+ MAL_S3x3_RET_A_by_B(currentMotherBody->R,currentBody->b)
+	+ MAL_S3x3_RET_A_by_B(Rtmp,Xj_i.p());
       // Update the translation/rotation axis of joint.
       MAL_S3x3_C_eq_A_by_B(currentBody->w_a,Rtmp, currentBody->a);
     }
