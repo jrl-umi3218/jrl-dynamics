@@ -1,9 +1,0 @@
-Document: jrl-dynamics
-Title: Debian jrl-dynamics Manual
-Author: Olivier Stasse <olivier.stasse@gmail.com>
-Abstract: Doxygen documentation of jrl-dynamics.
-Section: Programming
-
-Format: HTML
-Index: /opt/openrobots/share/doc/jrl-dynamics/html/index.html
-Files: /opt/openrobots/share/doc/jrl-dynamics/html/*.html	
