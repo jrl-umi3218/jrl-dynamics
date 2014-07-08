@@ -2,6 +2,11 @@ CHANGELOG
 ----------------------
 
 [Current]
+ * Merge pull request #6 from francois-keith/master
+ * Correct the direct geometric model of the prismatic joints.
+ * Synchronize.
+
+[v1.24.1]
  * Synchronize
  * Synchronize
  * Update README.md
