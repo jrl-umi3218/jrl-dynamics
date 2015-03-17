@@ -432,19 +432,23 @@ void JointPrivate::updateMomentum()
   DynamicBodyPrivate* currentBody = (DynamicBodyPrivate*)(linkedBody());
   vector3d NE_tmp,NE_tmp2, NE_tmp3;
   matrix3d NE_Rt;
+  MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
+
+  // Global velocities (angular and linear)
+  vector3d gv= currentBody->R*currentBody->sv.v0();
+  vector3d gw=currentBody->R*currentBody->sv.w();
   // Computes momentum matrix P.
-  ODEBUG("w: " << currentBody->sv.w() );
-  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,currentBody->sv.w(), 
+  ODEBUG("w: " << gw );
+  MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp,gw,
 			      currentBody->w_c);
   ODEBUG("cl^w: " << NE_tmp);
   ODEBUG("mass: " << currentBody->getMass());
-  ODEBUG("v0: " << currentBody->sv.v0() );
-  currentBody->P=  (currentBody->sv.v0() +
+  ODEBUG("v0: " << gv );
+  currentBody->P=  (gv +
 	   NE_tmp )* currentBody->getMass();
   ODEBUG("P: " << currentBody->P);
   // Computes angular momentum matrix L
   // Lk = xc x Pk + R * I * Rt * w
-  MAL_S3x3_TRANSPOSE_A_in_At(currentBody->R,NE_Rt);
 
   MAL_S3_VECTOR_CROSS_PRODUCT(NE_tmp3,currentBody->w_c,currentBody->P);
 
